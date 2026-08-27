@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   FileText,
   CircleCheck,
@@ -6,67 +7,172 @@ import {
   FileClock,
 } from "lucide-react";
 
-const stats = [
-  {
-    title: "Total Submissions",
-    value: 6,
-    subtitle: "All time",
-    icon: FileText,
-    bg: "bg-blue-50",
-    color: "text-blue-600",
-  },
-  {
-    title: "Approved",
-    value: 4,
-    subtitle: "Approved activities",
-    icon: CircleCheck,
-    bg: "bg-green-50",
-    color: "text-green-500",
-  },
-  {
-    title: "Under Review",
-    value: 1,
-    subtitle: "Awaiting review",
-    icon: Clock3,
-    bg: "bg-orange-50",
-    color: "text-orange-500",
-  },
-  {
-    title: "Drafts",
-    value: 1,
-    subtitle: "Work in progress",
-    icon: FileClock,
-    bg: "bg-purple-50",
-    color: "text-purple-500",
-  },
-];
+import { getDocumentsDashboard } from "../../api/document.api";
 
 const ExtraCurricularStats = () => {
+  const [stats, setStats] = useState({
+    totalSubmissions: 0,
+    approved: 0,
+    underReview: 0,
+    drafts: 0,
+  });
+
+  const [loading, setLoading] = useState(true);
+
+  // ==========================================================
+  // FETCH EXTRA-CURRICULAR STATS
+  // ==========================================================
+
+  useEffect(() => {
+    const fetchExtraCurricularStats = async () => {
+      try {
+        setLoading(true);
+
+        const data = await getDocumentsDashboard(
+          "EXTRA_CURRICULAR"
+        );
+
+        console.log(
+          "ExtraCurricularStats API response:",
+          data
+        );
+
+        const documents = Array.isArray(data?.documents)
+          ? data.documents
+          : [];
+
+        /*
+         * API is already requesting only
+         * EXTRA_CURRICULAR documents.
+         *
+         * We still filter here as an extra
+         * safety check.
+         */
+
+        const extraCurricularDocuments =
+          documents.filter(
+            (document) =>
+              document.category === "EXTRA_CURRICULAR"
+          );
+
+        /*
+         * Current StudentDocument data does not
+         * provide a status field that we can safely
+         * use for:
+         *
+         * APPROVED
+         * UNDER_REVIEW
+         * DRAFT
+         *
+         * Therefore only Total Submissions is
+         * calculated dynamically for now.
+         */
+
+        setStats({
+          totalSubmissions:
+            extraCurricularDocuments.length,
+
+          approved: 0,
+
+          underReview: 0,
+
+          drafts: 0,
+        });
+      } catch (error) {
+        console.error(
+          "ExtraCurricularStats: Failed to fetch extra-curricular documents:",
+          error
+        );
+
+        setStats({
+          totalSubmissions: 0,
+          approved: 0,
+          underReview: 0,
+          drafts: 0,
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchExtraCurricularStats();
+  }, []);
+
+  // ==========================================================
+  // STAT ITEMS
+  // ==========================================================
+
+  const statItems = [
+    {
+      title: "Total Submissions",
+      value: stats.totalSubmissions,
+      subtitle: "All time",
+      icon: FileText,
+      bg: "bg-blue-50",
+      color: "text-blue-600",
+    },
+
+    {
+      title: "Approved",
+      value: stats.approved,
+      subtitle: "Approved activities",
+      icon: CircleCheck,
+      bg: "bg-green-50",
+      color: "text-green-500",
+    },
+
+    {
+      title: "Under Review",
+      value: stats.underReview,
+      subtitle: "Awaiting review",
+      icon: Clock3,
+      bg: "bg-orange-50",
+      color: "text-orange-500",
+    },
+
+    {
+      title: "Drafts",
+      value: stats.drafts,
+      subtitle: "Work in progress",
+      icon: FileClock,
+      bg: "bg-purple-50",
+      color: "text-purple-500",
+    },
+  ];
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
     <div className="grid grid-cols-4 gap-3">
-      {stats.map((item, index) => {
+      {statItems.map((item, index) => {
         const Icon = item.icon;
 
         return (
           <div
             key={index}
-            className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-4 flex items-center gap-3"
+            className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-4 flex items-center gap-3 hover:shadow-md transition-all"
           >
-            {/* Icon */}
+            {/* ICON */}
+
             <div
-              className={`w-12 h-12 rounded-full ${item.bg} flex items-center justify-center`}
+              className={`w-11 h-11 rounded-full ${item.bg} flex items-center justify-center`}
             >
-              <Icon className={`w-6 h-6 ${item.color}`} />
+              <Icon
+                className={`w-5 h-5 ${item.color}`}
+              />
             </div>
 
-            {/* Content */}
+            {/* CONTENT */}
+
             <div>
               <p className="text-xs font-medium text-slate-500">
                 {item.title}
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-800 leading-none mt-1">
-                {item.value}
+              <h2 className="text-2xl font-bold text-slate-800 leading-none mt-0.5">
+                {loading ? "—" : item.value}
               </h2>
 
               <p className="text-xs text-slate-400 mt-1">

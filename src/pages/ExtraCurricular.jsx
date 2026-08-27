@@ -7,66 +7,183 @@ import ExtraCurricularBanner from "../components/ExtraCurricular/ExtraCurricular
 import ExtraCurricularStats from "../components/ExtraCurricular/ExtraCurricularStats";
 import ExtraCurricularActivityList from "../components/ExtraCurricular/ExtraCurricularActivityList";
 import UploadExtraCurricularCard from "../components/ExtraCurricular/UploadExtraCurricularCard";
-import ExtraCurricularTips from "../components/ExtraCurricular/ExtraCurricularTips";
 import UploadExtraCurricularModal from "../components/ExtraCurricular/UploadExtraCurricularModal";
+import ExtraCurricularDocumentViewerModal from "../components/ExtraCurricular/ExtraCurricularDocumentViewerModal";
 
 const ExtraCurricular = () => {
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] =
+    useState(false);
+
+  const [isViewerOpen, setIsViewerOpen] =
+    useState(false);
+
+  const [selectedDocument, setSelectedDocument] =
+    useState(null);
+
+  const [refreshKey, setRefreshKey] =
+    useState(0);
+
+  // ==========================================================
+  // OPEN UPLOAD MODAL
+  // ==========================================================
+
+  const handleUploadClick = () => {
+    setIsUploadModalOpen(true);
+  };
+
+  // ==========================================================
+  // UPLOAD SUCCESS
+  // ==========================================================
+
+  const handleUploadSuccess = () => {
+    setIsUploadModalOpen(false);
+
+    setRefreshKey(
+      (previous) => previous + 1
+    );
+  };
+
+  // ==========================================================
+  // OPEN DOCUMENT PREVIEW
+  // ==========================================================
+
+  const handleViewDocument = (document) => {
+    if (!document) {
+      return;
+    }
+
+    setSelectedDocument(document);
+    setIsViewerOpen(true);
+  };
+
+  // ==========================================================
+  // CLOSE DOCUMENT PREVIEW
+  // ==========================================================
+
+  const handleCloseViewer = () => {
+    setIsViewerOpen(false);
+    setSelectedDocument(null);
+  };
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Sidebar */}
+
+      {/* ==================================================
+          SIDEBAR
+      ================================================== */}
+
       <Sidebar />
 
-      {/* Main Content */}
+      {/* ==================================================
+          MAIN CONTENT
+      ================================================== */}
+
       <div className="ml-[290px] min-h-screen flex flex-col">
-        {/* Header */}
+
+        {/* ==================================================
+            HEADER
+        ================================================== */}
+
         <Header />
 
-        {/* Page Content */}
+        {/* ==================================================
+            PAGE CONTENT
+        ================================================== */}
+
         <main className="flex-1 p-6">
 
-          {/* Banner */}
+          {/* ==================================================
+              BANNER
+          ================================================== */}
+
           <div className="mb-3">
             <ExtraCurricularBanner />
           </div>
 
-          {/* Stats */}
+          {/* ==================================================
+              STATS
+          ================================================== */}
+
           <div className="mb-3">
-            <ExtraCurricularStats />
+
+            <ExtraCurricularStats
+              key={`stats-${refreshKey}`}
+            />
+
           </div>
 
-          {/* Main Content */}
+          {/* ==================================================
+              MAIN GRID
+          ================================================== */}
+
           <div className="grid grid-cols-12 gap-3 items-start">
 
-            {/* Left Section */}
+            {/* ==================================================
+                LEFT SECTION
+            ================================================== */}
+
             <div className="col-span-8">
+
               <ExtraCurricularActivityList
-                onUploadClick={() => setIsUploadModalOpen(true)}
+                key={`list-${refreshKey}`}
+                onUploadClick={
+                  handleUploadClick
+                }
+                onView={
+                  handleViewDocument
+                }
               />
+
             </div>
 
-            {/* Right Section */}
-            <div className="col-span-4 flex flex-col gap-3">
+            {/* ==================================================
+                RIGHT SECTION
+            ================================================== */}
+
+            <div className="col-span-4">
 
               <UploadExtraCurricularCard
-                onUploadClick={() => setIsUploadModalOpen(true)}
+                onUploadClick={
+                  handleUploadClick
+                }
               />
-
-              <ExtraCurricularTips />
 
             </div>
 
           </div>
 
         </main>
+
       </div>
 
-      {/* Upload Modal */}
+      {/* ======================================================
+          UPLOAD MODAL
+      ====================================================== */}
+
       <UploadExtraCurricularModal
         isOpen={isUploadModalOpen}
-        onClose={() => setIsUploadModalOpen(false)}
+
+        onClose={() =>
+          setIsUploadModalOpen(false)
+        }
+
+        onSuccess={
+          handleUploadSuccess
+        }
       />
+
+      {/* ======================================================
+          DOCUMENT VIEWER
+      ====================================================== */}
+
+      <ExtraCurricularDocumentViewerModal
+        isOpen={isViewerOpen}
+        document={selectedDocument}
+        onClose={
+          handleCloseViewer
+        }
+      />
+
     </div>
   );
 };
