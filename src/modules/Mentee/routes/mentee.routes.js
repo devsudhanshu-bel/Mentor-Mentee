@@ -5,6 +5,7 @@ import { authorize } from "../../../middleware/role.middleware.js";
 
 import profileRoutes from "./profile/profile.routes.js";
 import documentRoutes from "../documents/routes/document.routes.js";
+import academicRoutes from "../academics/routes/academic.routes.js";
 
 const router = express.Router();
 
@@ -26,5 +27,11 @@ router.use("/profile", profileRoutes);
 ========================================================== */
 
 router.use("/documents", documentRoutes);
+
+/* ==========================================================
+   Academic Routes
+========================================================== */
+
+router.use("/academics", academicRoutes);
 
 export default router;

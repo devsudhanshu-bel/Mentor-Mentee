@@ -59,6 +59,19 @@ enum CommunicationEmailPreference {
   PERSONAL_EMAIL
 }
 
+enum AcademicSemesterStatus {
+  LOCKED
+  CURRENT
+  COMPLETED
+  FAILED
+}
+
+enum AcademicEntryStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
+}
+
 /**
  * ==========================================================
  * USERS
@@ -144,7 +157,11 @@ model StudentProfile {
 
   academicStanding String?
 
+  academicSetupCompleted Boolean @default(false)
+
   currentMentor String?
+
+  academicSemesters AcademicSemester[]
 
   createdAt DateTime @default(now())
 
@@ -310,6 +327,94 @@ model StudentDocument {
   updatedAt DateTime @updatedAt
 
   @@index([studentProfileId])
-
   @@map("student_documents")
+}
+
+/**
+ * ==========================================================
+ * ACADEMIC SEMESTER
+ * ==========================================================
+ */
+
+model AcademicSemester {
+  id String @id @default(cuid())
+
+  studentProfileId String
+
+  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  semesterNumber Int
+
+  academicYear String?
+
+  term String?
+
+  status AcademicSemesterStatus @default(LOCKED)
+
+  entryStatus AcademicEntryStatus @default(DRAFT)
+
+  sgpa Float?
+
+  totalCredits Int @default(0)
+
+  creditsEarned Int @default(0)
+
+  backlogs Int @default(0)
+
+  subjects AcademicSubject[]
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentProfileId, semesterNumber])
+  @@index([studentProfileId])
+  @@map("academic_semesters")
+}
+
+/**
+ * ==========================================================
+ * ACADEMIC SUBJECT
+ * ==========================================================
+ */
+
+model AcademicSubject {
+  id String @id @default(cuid())
+
+  academicSemesterId String
+
+  academicSemester AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+
+  courseCode String
+
+  courseName String
+
+  credits Int
+
+  cia1 Float?
+
+  cia2 Float?
+
+  cia3 Float?
+
+  mse Float?
+
+  ese Float?
+
+  maximumMarks Float?
+
+  totalMarksObtained Float?
+
+  grade String?
+
+  gradePoint Float?
+
+  attendance Float?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([academicSemesterId])
+  @@map("academic_subjects")
 }
