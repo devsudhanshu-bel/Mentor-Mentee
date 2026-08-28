@@ -29,11 +29,17 @@ const getCurrentSemesterNumber = (semester) => {
   if (semester === null || semester === undefined) return 1;
 
   const value = String(semester).trim().toUpperCase();
+
   const numeric = Number(value.replace(/[^0-9]/g, ""));
-  if (numeric >= 1 && numeric <= 8) return numeric;
+
+  if (numeric >= 1 && numeric <= 8) {
+    return numeric;
+  }
 
   for (const [roman, number] of Object.entries(ROMAN_TO_NUMBER)) {
-    if (value.includes(roman)) return number;
+    if (value.includes(roman)) {
+      return number;
+    }
   }
 
   return 1;
@@ -41,9 +47,11 @@ const getCurrentSemesterNumber = (semester) => {
 
 const validateSemesterNumber = (semesterNumber) => {
   const number = Number(semesterNumber);
+
   if (!Number.isInteger(number) || number < 1 || number > 8) {
     throw new ApiError(400, "Semester number must be between 1 and 8");
   }
+
   return number;
 };
 
@@ -53,6 +61,7 @@ const normaliseSubject = (subject) => {
   }
 
   const credits = Number(subject.credits);
+
   if (!Number.isFinite(credits) || credits <= 0) {
     throw new ApiError(400, `Invalid credits for ${subject.courseCode}`);
   }
@@ -69,6 +78,7 @@ const normaliseSubject = (subject) => {
           .reduce((sum, value) => sum + Number(value), 0);
 
   const grade = subject.grade?.trim() || null;
+
   const gradePoint =
     subject.gradePoint !== undefined &&
     subject.gradePoint !== null &&
@@ -80,8 +90,11 @@ const normaliseSubject = (subject) => {
 
   return {
     courseCode: String(subject.courseCode).trim().toUpperCase(),
+
     courseName: String(subject.courseName).trim(),
+
     credits,
+
     cia1:
       subject.cia1 === "" || subject.cia1 == null ? null : Number(subject.cia1),
 
@@ -91,15 +104,20 @@ const normaliseSubject = (subject) => {
       subject.cia3 === "" || subject.cia3 == null ? null : Number(subject.cia3),
 
     ese: subject.ese === "" || subject.ese == null ? null : Number(subject.ese),
+
     maximumMarks:
       subject.maximumMarks === "" || subject.maximumMarks == null
         ? null
         : Number(subject.maximumMarks),
+
     totalMarksObtained: Number.isFinite(totalMarksObtained)
       ? totalMarksObtained
       : null,
+
     grade,
+
     gradePoint: Number.isFinite(gradePoint) ? gradePoint : null,
+
     attendance:
       subject.attendance === "" || subject.attendance == null
         ? null
@@ -112,10 +130,12 @@ const calculateSemester = (subjects) => {
     (sum, subject) => sum + subject.credits,
     0,
   );
+
   const creditsEarned = subjects.reduce(
     (sum, subject) => sum + (subject.grade === "F" ? 0 : subject.credits),
     0,
   );
+
   const backlogs = subjects.filter((subject) => subject.grade === "F").length;
 
   const gradedSubjects = subjects.filter((subject) =>
@@ -136,36 +156,58 @@ const calculateSemester = (subjects) => {
     totalCredits,
     creditsEarned,
     backlogs,
+
     sgpa: gradedCredits
       ? Number((weightedPoints / gradedCredits).toFixed(2))
       : null,
+
     status: backlogs === 0 ? "COMPLETED" : "FAILED",
   };
 };
 
 class AcademicService {
+  // =========================================================
+  // GET ACADEMIC PROFILE
+  // =========================================================
+
   async getProfile(userId) {
     const profile = await prisma.studentProfile.findUnique({
       where: { userId },
+
       include: {
         academicSemesters: {
-          orderBy: { semesterNumber: "asc" },
-          include: { subjects: { orderBy: { courseCode: "asc" } } },
+          orderBy: {
+            semesterNumber: "asc",
+          },
+
+          include: {
+            subjects: {
+              orderBy: {
+                courseCode: "asc",
+              },
+            },
+          },
         },
       },
     });
 
-    if (!profile) throw new ApiError(404, "Student profile not found");
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
 
     const currentSemester = getCurrentSemesterNumber(profile.semester);
+
     const records = profile.academicSemesters;
+
     const recordMap = new Map(
       records.map((record) => [record.semesterNumber, record]),
     );
 
     const semesters = Array.from({ length: 8 }, (_, index) => {
       const semesterNumber = index + 1;
+
       const record = recordMap.get(semesterNumber);
+
       let status = "LOCKED";
 
       if (record) {
@@ -184,10 +226,15 @@ class AcademicService {
       return {
         semesterNumber,
         status,
+
         hasRecord: Boolean(record),
+
         sgpa: record?.sgpa ?? null,
+
         totalCredits: record?.totalCredits ?? 0,
+
         creditsEarned: record?.creditsEarned ?? 0,
+
         backlogs: record?.backlogs ?? 0,
       };
     });
@@ -200,41 +247,67 @@ class AcademicService {
 
     return {
       studentProfileId: profile.id,
+
       currentSemester,
+
       setupCompleted: profile.academicSetupCompleted,
+
       completedPreviousSemesters,
+
       semesters,
+
       overall: {
         currentCGPA: profile.currentCGPA,
+
         totalCredits: profile.totalCredits,
+
         overallAttendance: profile.overallAttendance,
+
         academicStanding: profile.academicStanding,
       },
     };
   }
 
+  // =========================================================
+  // GET SEMESTER
+  // =========================================================
+
   async getSemester(userId, semesterNumber) {
     const number = validateSemesterNumber(semesterNumber);
+
     const profile = await prisma.studentProfile.findUnique({
       where: { userId },
     });
-    if (!profile) throw new ApiError(404, "Student profile not found");
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
 
     const currentSemester = getCurrentSemesterNumber(profile.semester);
+
     const record = await prisma.academicSemester.findUnique({
       where: {
         studentProfileId_semesterNumber: {
           studentProfileId: profile.id,
+
           semesterNumber: number,
         },
       },
-      include: { subjects: { orderBy: { courseCode: "asc" } } },
+
+      include: {
+        subjects: {
+          orderBy: {
+            courseCode: "asc",
+          },
+        },
+      },
     });
 
     const currentRecord = await prisma.academicSemester.findUnique({
       where: {
         studentProfileId_semesterNumber: {
           studentProfileId: profile.id,
+
           semesterNumber: currentSemester,
         },
       },
@@ -244,35 +317,55 @@ class AcademicService {
       number < currentSemester ||
       (number === currentSemester + 1 && currentRecord?.status === "COMPLETED");
 
-    if (!unlocked) throw new ApiError(403, "This semester is currently locked");
+    if (!unlocked) {
+      throw new ApiError(403, "This semester is currently locked");
+    }
 
     return (
       record || {
         id: null,
+
         semesterNumber: number,
+
         status: number === currentSemester ? "CURRENT" : "LOCKED",
+
         entryStatus: "DRAFT",
+
         sgpa: null,
+
         totalCredits: 0,
+
         creditsEarned: 0,
+
         backlogs: 0,
+
         subjects: [],
       }
     );
   }
 
+  // =========================================================
+  // SAVE SEMESTER
+  // =========================================================
+
   async saveSemester(userId, body) {
     const semesterNumber = validateSemesterNumber(body.semesterNumber);
+
     const profile = await prisma.studentProfile.findUnique({
       where: { userId },
     });
-    if (!profile) throw new ApiError(404, "Student profile not found");
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
 
     const currentSemester = getCurrentSemesterNumber(profile.semester);
+
     const existingCurrent = await prisma.academicSemester.findUnique({
       where: {
         studentProfileId_semesterNumber: {
           studentProfileId: profile.id,
+
           semesterNumber: currentSemester,
         },
       },
@@ -283,13 +376,16 @@ class AcademicService {
       (semesterNumber === currentSemester + 1 &&
         existingCurrent?.status === "COMPLETED");
 
-    if (!allowed) throw new ApiError(403, "This semester is currently locked");
+    if (!allowed) {
+      throw new ApiError(403, "This semester is currently locked");
+    }
 
     if (!Array.isArray(body.subjects) || body.subjects.length === 0) {
       throw new ApiError(400, "At least one subject is required");
     }
 
     const subjects = body.subjects.map(normaliseSubject);
+
     const calculated = calculateSemester(subjects);
 
     const result = await prisma.$transaction(async (tx) => {
@@ -297,70 +393,102 @@ class AcademicService {
         where: {
           studentProfileId_semesterNumber: {
             studentProfileId: profile.id,
-            semesterNumber,
+
+            semesterNumber: semesterNumber,
           },
         },
+
         create: {
           studentProfileId: profile.id,
+
           semesterNumber,
+
           academicYear: body.academicYear || null,
+
           term: body.term || null,
+
           status: calculated.status,
+
           entryStatus: "SUBMITTED",
+
           ...calculated,
         },
+
         update: {
           academicYear: body.academicYear || null,
+
           term: body.term || null,
+
           status: calculated.status,
+
           entryStatus: "SUBMITTED",
+
           ...calculated,
         },
       });
 
       await tx.academicSubject.deleteMany({
-        where: { academicSemesterId: semester.id },
+        where: {
+          academicSemesterId: semester.id,
+        },
       });
+
       await tx.academicSubject.createMany({
         data: subjects.map((subject) => ({
           academicSemesterId: semester.id,
+
           ...subject,
         })),
       });
 
       const allSemesters = await tx.academicSemester.findMany({
-        where: { studentProfileId: profile.id },
-        include: { subjects: true },
+        where: {
+          studentProfileId: profile.id,
+        },
+
+        include: {
+          subjects: true,
+        },
       });
 
       const graded = allSemesters
         .flatMap((item) => item.subjects)
         .filter((subject) => subject.gradePoint != null);
+
       const cgpaCredits = graded.reduce(
         (sum, subject) => sum + subject.credits,
         0,
       );
+
       const cgpaPoints = graded.reduce(
         (sum, subject) => sum + subject.credits * subject.gradePoint,
         0,
       );
+
       const totalCredits = allSemesters.reduce(
         (sum, item) => sum + item.creditsEarned,
         0,
       );
+
       const attendanceValues = allSemesters
         .flatMap((item) => item.subjects.map((subject) => subject.attendance))
         .filter((value) => value != null);
 
       await tx.studentProfile.update({
-        where: { id: profile.id },
+        where: {
+          id: profile.id,
+        },
+
         data: {
           academicSetupCompleted:
             profile.academicSetupCompleted || semesterNumber < currentSemester,
+
           totalCredits,
+
           currentCGPA: cgpaCredits
             ? Number((cgpaPoints / cgpaCredits).toFixed(2))
             : null,
+
           overallAttendance: attendanceValues.length
             ? Number(
                 (
@@ -369,18 +497,420 @@ class AcademicService {
                 ).toFixed(2),
               )
             : null,
+
           academicStanding:
             calculated.backlogs === 0 ? "Excellent" : "Needs Attention",
         },
       });
 
       return tx.academicSemester.findUnique({
-        where: { id: semester.id },
-        include: { subjects: { orderBy: { courseCode: "asc" } } },
+        where: {
+          id: semester.id,
+        },
+
+        include: {
+          subjects: {
+            orderBy: {
+              courseCode: "asc",
+            },
+          },
+        },
       });
     });
 
     return result;
+  }
+
+  // =========================================================
+  // BACKLOG MANAGEMENT
+  // =========================================================
+
+  async getBacklogs(userId) {
+    const profile = await prisma.studentProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    const backlogs = await prisma.academicBacklog.findMany({
+      where: {
+        studentProfileId: profile.id,
+      },
+
+      orderBy: [
+        {
+          status: "asc",
+        },
+        {
+          semesterNumber: "asc",
+        },
+        {
+          createdAt: "asc",
+        },
+      ],
+    });
+
+    return {
+      backlogs,
+
+      activeCount: backlogs.filter((backlog) => backlog.status === "ACTIVE")
+        .length,
+
+      clearedCount: backlogs.filter((backlog) => backlog.status === "CLEARED")
+        .length,
+    };
+  }
+
+  // =========================================================
+  // CREATE BACKLOG
+  // =========================================================
+
+  async createBacklog(userId, body) {
+    const profile = await prisma.studentProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    // -------------------------------------------------------
+    // SUBJECT CODE
+    // -------------------------------------------------------
+
+    const subjectCode = String(body.subjectCode || "")
+      .trim()
+      .toUpperCase();
+
+    // -------------------------------------------------------
+    // SUBJECT NAME
+    // -------------------------------------------------------
+
+    const subjectName = String(body.subjectName || "").trim();
+
+    // -------------------------------------------------------
+    // SEMESTER
+    // -------------------------------------------------------
+
+    const semesterNumber = Number(body.semesterNumber);
+
+    // -------------------------------------------------------
+    // VALIDATION
+    // -------------------------------------------------------
+
+    if (!subjectCode) {
+      throw new ApiError(400, "Subject code is required");
+    }
+
+    if (!subjectName) {
+      throw new ApiError(400, "Subject name is required");
+    }
+
+    if (
+      !Number.isInteger(semesterNumber) ||
+      semesterNumber < 1 ||
+      semesterNumber > 8
+    ) {
+      throw new ApiError(400, "Semester number must be between 1 and 8");
+    }
+
+    // -------------------------------------------------------
+    // DUPLICATE ACTIVE BACKLOG CHECK
+    // -------------------------------------------------------
+
+    const existingBacklog = await prisma.academicBacklog.findFirst({
+      where: {
+        studentProfileId: profile.id,
+
+        subjectCode: {
+          equals: subjectCode,
+
+          mode: "insensitive",
+        },
+
+        semesterNumber,
+
+        status: "ACTIVE",
+      },
+    });
+
+    if (existingBacklog) {
+      throw new ApiError(
+        409,
+        "This subject is already listed as an active backlog for this semester",
+      );
+    }
+
+    // -------------------------------------------------------
+    // CREATE
+    // -------------------------------------------------------
+
+    const backlog = await prisma.academicBacklog.create({
+      data: {
+        studentProfileId: profile.id,
+
+        subjectCode,
+
+        subjectName,
+
+        semesterNumber,
+
+        status: "ACTIVE",
+      },
+    });
+
+    return backlog;
+  }
+
+  // =========================================================
+  // UPDATE BACKLOG
+  // =========================================================
+
+  async updateBacklog(userId, backlogId, body) {
+    const profile = await prisma.studentProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    const backlog = await prisma.academicBacklog.findFirst({
+      where: {
+        id: backlogId,
+
+        studentProfileId: profile.id,
+      },
+    });
+
+    if (!backlog) {
+      throw new ApiError(404, "Backlog record not found");
+    }
+
+    if (backlog.status === "CLEARED") {
+      throw new ApiError(400, "A cleared backlog cannot be edited");
+    }
+
+    // -------------------------------------------------------
+    // SUBJECT CODE
+    // -------------------------------------------------------
+
+    const subjectCode = String(body.subjectCode || "")
+      .trim()
+      .toUpperCase();
+
+    // -------------------------------------------------------
+    // SUBJECT NAME
+    // -------------------------------------------------------
+
+    const subjectName = String(body.subjectName || "").trim();
+
+    // -------------------------------------------------------
+    // SEMESTER
+    // -------------------------------------------------------
+
+    const semesterNumber = Number(body.semesterNumber);
+
+    // -------------------------------------------------------
+    // VALIDATION
+    // -------------------------------------------------------
+
+    if (!subjectCode) {
+      throw new ApiError(400, "Subject code is required");
+    }
+
+    if (!subjectName) {
+      throw new ApiError(400, "Subject name is required");
+    }
+
+    if (
+      !Number.isInteger(semesterNumber) ||
+      semesterNumber < 1 ||
+      semesterNumber > 8
+    ) {
+      throw new ApiError(400, "Semester number must be between 1 and 8");
+    }
+
+    // -------------------------------------------------------
+    // DUPLICATE CHECK
+    // -------------------------------------------------------
+
+    const duplicate = await prisma.academicBacklog.findFirst({
+      where: {
+        studentProfileId: profile.id,
+
+        subjectCode: {
+          equals: subjectCode,
+
+          mode: "insensitive",
+        },
+
+        semesterNumber,
+
+        status: "ACTIVE",
+
+        NOT: {
+          id: backlogId,
+        },
+      },
+    });
+
+    if (duplicate) {
+      throw new ApiError(
+        409,
+        "This subject is already listed as an active backlog for this semester",
+      );
+    }
+
+    // -------------------------------------------------------
+    // UPDATE
+    // -------------------------------------------------------
+
+    const updatedBacklog = await prisma.academicBacklog.update({
+      where: {
+        id: backlogId,
+      },
+
+      data: {
+        subjectCode,
+
+        subjectName,
+
+        semesterNumber,
+      },
+    });
+
+    return updatedBacklog;
+  }
+
+  // =========================================================
+  // DELETE BACKLOG
+  // =========================================================
+
+  async deleteBacklog(userId, backlogId) {
+    const profile = await prisma.studentProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    const backlog = await prisma.academicBacklog.findFirst({
+      where: {
+        id: backlogId,
+
+        studentProfileId: profile.id,
+      },
+    });
+
+    if (!backlog) {
+      throw new ApiError(404, "Backlog record not found");
+    }
+
+    await prisma.academicBacklog.delete({
+      where: {
+        id: backlogId,
+      },
+    });
+
+    return {
+      id: backlogId,
+      deleted: true,
+    };
+  }
+
+  // =========================================================
+  // CLEAR BACKLOG
+  // =========================================================
+
+  async clearBacklog(userId, backlogId, body) {
+    const profile = await prisma.studentProfile.findUnique({
+      where: { userId },
+    });
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    const backlog = await prisma.academicBacklog.findFirst({
+      where: {
+        id: backlogId,
+
+        studentProfileId: profile.id,
+      },
+    });
+
+    if (!backlog) {
+      throw new ApiError(404, "Backlog record not found");
+    }
+
+    if (backlog.status === "CLEARED") {
+      throw new ApiError(400, "This backlog has already been cleared");
+    }
+
+    const clearedSemesterNumber = Number(body.clearedSemesterNumber);
+
+    const clearedGrade = String(body.clearedGrade || "").trim();
+
+    const clearedMarks =
+      body.clearedMarks === "" ||
+      body.clearedMarks === null ||
+      body.clearedMarks === undefined
+        ? null
+        : Number(body.clearedMarks);
+
+    // -------------------------------------------------------
+    // VALIDATION
+    // -------------------------------------------------------
+
+    if (
+      !Number.isInteger(clearedSemesterNumber) ||
+      clearedSemesterNumber < 1 ||
+      clearedSemesterNumber > 8
+    ) {
+      throw new ApiError(400, "Cleared semester must be between 1 and 8");
+    }
+
+    if (!clearedGrade) {
+      throw new ApiError(400, "Cleared grade is required");
+    }
+
+    if (
+      clearedMarks !== null &&
+      (!Number.isFinite(clearedMarks) || clearedMarks < 0)
+    ) {
+      throw new ApiError(
+        400,
+        "Cleared marks must be a valid non-negative number",
+      );
+    }
+
+    // -------------------------------------------------------
+    // MARK AS CLEARED
+    // -------------------------------------------------------
+
+    const updatedBacklog = await prisma.academicBacklog.update({
+      where: {
+        id: backlogId,
+      },
+
+      data: {
+        status: "CLEARED",
+
+        clearedSemesterNumber,
+
+        clearedGrade,
+
+        clearedMarks,
+
+        clearedAt: new Date(),
+      },
+    });
+
+    return updatedBacklog;
   }
 }
 

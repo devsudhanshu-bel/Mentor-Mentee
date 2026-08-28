@@ -7,11 +7,212 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/**
- * ==========================================================
- * ENUMS
- * ==========================================================
- */
+model User {
+  id             String          @id @default(cuid())
+  fullName       String
+  username       String          @unique
+  email          String          @unique
+  password       String
+  role           Role
+  isActive       Boolean         @default(true)
+  lastLogin      DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  studentProfile StudentProfile?
+
+  @@map("users")
+}
+
+model StudentProfile {
+  id                     String                 @id @default(cuid())
+  userId                 String                 @unique
+  registerNumber         String?                @unique
+  admissionNumber        String?                @unique
+  profileImage           String?
+  dateOfBirth            DateTime?
+  gender                 Gender?
+  bloodGroup             BloodGroup?
+  nationality            String?
+  religion               String?
+  department             String?
+  programme              String?
+  semester               String?
+  section                String?
+  studentType            StudentType?
+  address                String?
+  permanentAddress       String?
+  yearsAtUniversity      String?
+  totalCredits           Int?
+  currentCGPA            Float?
+  overallAttendance      Float?
+  academicStanding       String?
+  currentMentor          String?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  academicSetupCompleted Boolean                @default(false)
+  academicSemesters      AcademicSemester[]
+  academicBacklogs AcademicBacklog[]
+  contactDetails         StudentContactDetails?
+  documents              StudentDocument[]
+  parentDetails          StudentParentDetails?
+  user                   User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("student_profiles")
+}
+
+model StudentParentDetails {
+  id                     String         @id @default(cuid())
+  studentProfileId       String         @unique
+  fatherName             String?
+  fatherOccupation       String?
+  fatherCompany          String?
+  fatherAnnualIncome     String?
+  fatherQualification    String?
+  fatherEmail            String?
+  fatherPhone            String?
+  fatherAddress          String?
+  motherName             String?
+  motherOccupation       String?
+  motherQualification    String?
+  motherAnnualIncome     String?
+  motherEmail            String?
+  motherPhone            String?
+  motherAddress          String?
+  guardianName           String?
+  guardianRelationship   String?
+  guardianPhone          String?
+  guardianAlternatePhone String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  studentProfile         StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@map("student_parent_details")
+}
+
+model StudentContactDetails {
+  id                           String                        @id @default(cuid())
+  studentProfileId             String                        @unique
+  permanentAddress             String?
+  currentAddress               String?
+  addressType                  AddressType?
+  durationAtCurrentAddress     String?
+  personalMobile               String?
+  alternateMobile              String?
+  personalEmail                String?
+  alternateEmail               String?
+  whatsappNumber               String?
+  telegramUsername             String?
+  linkedInProfile              String?
+  githubProfile                String?
+  preferredContactMethod       PreferredContactMethod?
+  preferredContactTime         String?
+  communicationEmailPreference CommunicationEmailPreference?
+  allowWhatsappCommunication   Boolean                       @default(false)
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @updatedAt
+  studentProfile               StudentProfile                @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@map("student_contact_details")
+}
+
+model StudentDocument {
+  id                 String           @id @default(cuid())
+  studentProfileId   String
+  documentName       String
+  category           DocumentCategory
+  description        String?
+  fileType           String
+  fileSize           Int
+  cloudinaryPublicId String
+  fileUrl            String
+  uploadedAt         DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  resourceType       String
+  studentProfile     StudentProfile   @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@index([studentProfileId])
+  @@map("student_documents")
+}
+
+model AcademicSemester {
+  id               String                 @id @default(cuid())
+  studentProfileId String
+  semesterNumber   Int
+  academicYear     String?
+  term             String?
+  status           AcademicSemesterStatus @default(LOCKED)
+  entryStatus      AcademicEntryStatus    @default(DRAFT)
+  sgpa             Float?
+  totalCredits     Int                    @default(0)
+  creditsEarned    Int                    @default(0)
+  backlogs         Int                    @default(0)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  studentProfile   StudentProfile         @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+  subjects         AcademicSubject[]
+
+  @@unique([studentProfileId, semesterNumber])
+  @@index([studentProfileId])
+  @@map("academic_semesters")
+}
+
+model AcademicSubject {
+  id                 String           @id @default(cuid())
+  academicSemesterId String
+  courseCode         String
+  courseName         String
+  credits            Int
+  cia1               Float?
+  cia2               Float?
+  cia3               Float?
+  mse                Float?
+  ese                Float?
+  maximumMarks       Float?
+  totalMarksObtained Float?
+  grade              String?
+  gradePoint         Float?
+  attendance         Float?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  academicSemester   AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+
+  @@index([academicSemesterId])
+  @@map("academic_subjects")
+}
+
+model AcademicBacklog {
+  id String @id @default(cuid())
+
+  studentProfileId String
+
+  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  subjectCode String
+
+  subjectName String
+
+  semesterNumber Int
+
+  status AcademicBacklogStatus @default(ACTIVE)
+
+  clearedSemesterNumber Int?
+
+  clearedGrade String?
+
+  clearedMarks Float?
+
+  clearedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  @@index([studentProfileId])
+
+  @@index([studentProfileId, status])
+
+  @@map("academic_backlogs")
+}
 
 enum Role {
   ADMIN
@@ -72,220 +273,6 @@ enum AcademicEntryStatus {
   VERIFIED
 }
 
-/**
- * ==========================================================
- * USERS
- * ==========================================================
- */
-
-model User {
-  id String @id @default(cuid())
-
-  fullName String
-
-  username String @unique
-
-  email String @unique
-
-  password String
-
-  role Role
-
-  isActive Boolean @default(true)
-
-  lastLogin DateTime?
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  studentProfile StudentProfile?
-
-  @@map("users")
-}
-
-/**
- * ==========================================================
- * STUDENT PROFILE
- * ==========================================================
- */
-
-model StudentProfile {
-  id String @id @default(cuid())
-
-  userId String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  registerNumber String? @unique
-
-  admissionNumber String? @unique
-
-  profileImage String?
-
-  dateOfBirth DateTime?
-
-  gender Gender?
-
-  bloodGroup BloodGroup?
-
-  nationality String?
-
-  religion String?
-
-  department String?
-
-  programme String?
-
-  semester String?
-
-  section String?
-
-  studentType StudentType?
-
-  address String? @db.Text
-
-  permanentAddress String? @db.Text
-
-  yearsAtUniversity String?
-
-  totalCredits Int?
-
-  currentCGPA Float?
-
-  overallAttendance Float?
-
-  academicStanding String?
-
-  academicSetupCompleted Boolean @default(false)
-
-  currentMentor String?
-
-  academicSemesters AcademicSemester[]
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  parentDetails StudentParentDetails?
-
-  contactDetails StudentContactDetails?
-
-  documents StudentDocument[]
-
-  @@map("student_profiles")
-}
-
-/**
- * ==========================================================
- * STUDENT PARENT DETAILS
- * ==========================================================
- */
-
-model StudentParentDetails {
-  id String @id @default(cuid())
-
-  studentProfileId String @unique
-
-  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
-
-  fatherName String?
-
-  fatherOccupation String?
-
-  fatherCompany String?
-
-  fatherAnnualIncome String?
-
-  fatherQualification String?
-
-  fatherEmail String?
-
-  fatherPhone String?
-
-  fatherAddress String? @db.Text
-
-  motherName String?
-
-  motherOccupation String?
-
-  motherQualification String?
-
-  motherAnnualIncome String?
-
-  motherEmail String?
-
-  motherPhone String?
-
-  motherAddress String? @db.Text
-
-  guardianName String?
-
-  guardianRelationship String?
-
-  guardianPhone String?
-
-  guardianAlternatePhone String?
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  @@map("student_parent_details")
-}
-
-/**
- * ==========================================================
- * STUDENT CONTACT DETAILS
- * ==========================================================
- */
-
-model StudentContactDetails {
-  id String @id @default(cuid())
-
-  studentProfileId String @unique
-
-  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
-
-  permanentAddress String? @db.Text
-
-  currentAddress String? @db.Text
-
-  addressType AddressType?
-
-  durationAtCurrentAddress String?
-
-  personalMobile String?
-
-  alternateMobile String?
-
-  personalEmail String?
-
-  alternateEmail String?
-
-  whatsappNumber String?
-
-  telegramUsername String?
-
-  linkedInProfile String?
-
-  githubProfile String?
-
-  preferredContactMethod PreferredContactMethod?
-
-  preferredContactTime String?
-
-  communicationEmailPreference CommunicationEmailPreference?
-
-  allowWhatsappCommunication Boolean @default(false)
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  @@map("student_contact_details")
-}
-
 enum DocumentCategory {
   ACADEMICS
   CERTIFICATES
@@ -299,122 +286,7 @@ enum DocumentCategory {
   OTHER
 }
 
-model StudentDocument {
-  id String @id @default(cuid())
-
-  studentProfileId String
-
-  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
-
-  documentName String
-
-  category DocumentCategory
-
-  description String? @db.Text
-
-  fileType String
-
-  fileSize Int
-
-  resourceType String
-
-  cloudinaryPublicId String
-
-  fileUrl String
-
-  uploadedAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  @@index([studentProfileId])
-  @@map("student_documents")
-}
-
-/**
- * ==========================================================
- * ACADEMIC SEMESTER
- * ==========================================================
- */
-
-model AcademicSemester {
-  id String @id @default(cuid())
-
-  studentProfileId String
-
-  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
-
-  semesterNumber Int
-
-  academicYear String?
-
-  term String?
-
-  status AcademicSemesterStatus @default(LOCKED)
-
-  entryStatus AcademicEntryStatus @default(DRAFT)
-
-  sgpa Float?
-
-  totalCredits Int @default(0)
-
-  creditsEarned Int @default(0)
-
-  backlogs Int @default(0)
-
-  subjects AcademicSubject[]
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  @@unique([studentProfileId, semesterNumber])
-  @@index([studentProfileId])
-  @@map("academic_semesters")
-}
-
-/**
- * ==========================================================
- * ACADEMIC SUBJECT
- * ==========================================================
- */
-
-model AcademicSubject {
-  id String @id @default(cuid())
-
-  academicSemesterId String
-
-  academicSemester AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
-
-  courseCode String
-
-  courseName String
-
-  credits Int
-
-  cia1 Float?
-
-  cia2 Float?
-
-  cia3 Float?
-
-  mse Float?
-
-  ese Float?
-
-  maximumMarks Float?
-
-  totalMarksObtained Float?
-
-  grade String?
-
-  gradePoint Float?
-
-  attendance Float?
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
-
-  @@index([academicSemesterId])
-  @@map("academic_subjects")
+enum AcademicBacklogStatus {
+  ACTIVE
+  CLEARED
 }
