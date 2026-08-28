@@ -5,15 +5,23 @@ const EMPTY_SUBJECT = {
   courseCode: "",
   courseName: "",
   credits: "",
+
+  // Subject classification
+  subjectType: "",
+
+  // Marks
   cia1: "",
-  cia2: "",
-  cia3: "",
   mse: "",
+  cia3: "",
   ese: "",
   maxMarks: "",
   totalMarks: "",
+
+  // Grade
   grade: "",
   gradePoint: "",
+
+  // Attendance
   attendance: "",
 };
 
@@ -33,6 +41,9 @@ const SubjectEntryForm = ({
 
   const subject = subjects[currentSubject];
 
+  // =========================================================
+  // Update current subject field
+  // =========================================================
   const updateField = (field, value) => {
     setSubjects((previous) =>
       previous.map((item, index) =>
@@ -48,39 +59,72 @@ const SubjectEntryForm = ({
 
   const isLastSubject = currentSubject === subjectCount - 1;
 
-  const handleNext = () => {
+  // =========================================================
+  // Validate current subject
+  // =========================================================
+  const validateSubject = () => {
     if (!subject.courseCode.trim()) {
       alert("Please enter the course code.");
-      return;
+      return false;
     }
 
     if (!subject.courseName.trim()) {
       alert("Please enter the course name.");
-      return;
+      return false;
     }
 
     if (!subject.credits) {
       alert("Please enter the credits.");
-      return;
+      return false;
+    }
+
+    if (!subject.subjectType) {
+      alert("Please select the subject type.");
+      return false;
     }
 
     if (!subject.totalMarks) {
       alert("Please enter the total marks obtained.");
-      return;
+      return false;
     }
 
     if (!subject.maxMarks) {
       alert("Please enter the maximum marks.");
-      return;
+      return false;
     }
 
     if (!subject.grade) {
       alert("Please select the grade.");
-      return;
+      return false;
     }
 
-    if (!subject.gradePoint) {
+    if (
+      subject.gradePoint === "" ||
+      subject.gradePoint === null ||
+      subject.gradePoint === undefined
+    ) {
       alert("Please enter the grade point.");
+      return false;
+    }
+
+    // =======================================================
+    // Grade point uses 4-point scale
+    // =======================================================
+    if (Number(subject.gradePoint) < 0 || Number(subject.gradePoint) > 4) {
+      alert("Grade point must be between 0 and 4.");
+      return false;
+    }
+
+    return true;
+  };
+
+  // =========================================================
+  // Next / Finish
+  // =========================================================
+  const handleNext = () => {
+    const isValid = validateSubject();
+
+    if (!isValid) {
       return;
     }
 
@@ -92,6 +136,9 @@ const SubjectEntryForm = ({
     setCurrentSubject((previous) => previous + 1);
   };
 
+  // =========================================================
+  // Back
+  // =========================================================
   const handleBack = () => {
     if (currentSubject === 0) {
       onBack();
@@ -101,6 +148,9 @@ const SubjectEntryForm = ({
     setCurrentSubject((previous) => previous - 1);
   };
 
+  // =========================================================
+  // Styles
+  // =========================================================
   const inputClass =
     "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
 
@@ -108,7 +158,9 @@ const SubjectEntryForm = ({
 
   return (
     <div className="rounded-2xl bg-white shadow-xl">
-      {/* Header */}
+      {/* =====================================================
+          Header
+         ===================================================== */}
       <div className="flex items-start justify-between border-b border-slate-100 px-6 py-5">
         <div className="flex items-start gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
@@ -127,7 +179,9 @@ const SubjectEntryForm = ({
         </div>
       </div>
 
-      {/* Progress */}
+      {/* =====================================================
+          Progress
+         ===================================================== */}
       <div className="px-6 pt-5">
         <div className="mb-2 flex items-center justify-between">
           <span className="text-xs font-semibold text-slate-600">
@@ -149,9 +203,13 @@ const SubjectEntryForm = ({
         </div>
       </div>
 
-      {/* Form */}
+      {/* =====================================================
+          Form
+         ===================================================== */}
       <div className="grid grid-cols-1 gap-5 px-6 py-6 md:grid-cols-2">
-        {/* Course Code */}
+        {/* ===================================================
+            Course Code
+           =================================================== */}
         <div>
           <label className={labelClass}>Course Code *</label>
 
@@ -166,7 +224,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* Course Name */}
+        {/* ===================================================
+            Course Name
+           =================================================== */}
         <div>
           <label className={labelClass}>Course Name *</label>
 
@@ -179,7 +239,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* Credits */}
+        {/* ===================================================
+            Credits
+           =================================================== */}
         <div>
           <label className={labelClass}>Credits *</label>
 
@@ -194,7 +256,34 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* CIA 1 */}
+        {/* ===================================================
+            Subject Type
+           =================================================== */}
+        <div>
+          <label className={labelClass}>Subject Type *</label>
+
+          <select
+            value={subject.subjectType}
+            onChange={(e) => updateField("subjectType", e.target.value)}
+            className={inputClass}
+          >
+            <option value="">Select subject type</option>
+
+            <option value="CORE">Core Subject</option>
+
+            <option value="ELECTIVE">Elective Subject</option>
+
+            <option value="OPEN_ELECTIVE">Open Elective</option>
+
+            <option value="ABILITY_ENHANCEMENT">
+              Ability Enhancement Course
+            </option>
+          </select>
+        </div>
+
+        {/* ===================================================
+            CIA 1
+           =================================================== */}
         <div>
           <label className={labelClass}>CIA 1</label>
 
@@ -208,7 +297,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* MSE */}
+        {/* ===================================================
+            MSE
+           =================================================== */}
         <div>
           <label className={labelClass}>MSE</label>
 
@@ -222,7 +313,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* CIA 3 */}
+        {/* ===================================================
+            CIA 3
+           =================================================== */}
         <div>
           <label className={labelClass}>CIA 3</label>
 
@@ -236,7 +329,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ESE */}
+        {/* ===================================================
+            ESE
+           =================================================== */}
         <div>
           <label className={labelClass}>ESE</label>
 
@@ -250,7 +345,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* Maximum Marks */}
+        {/* ===================================================
+            Maximum Marks
+           =================================================== */}
         <div>
           <label className={labelClass}>Maximum Marks *</label>
 
@@ -264,7 +361,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* Total Marks */}
+        {/* ===================================================
+            Total Marks
+           =================================================== */}
         <div>
           <label className={labelClass}>Total Marks Obtained *</label>
 
@@ -278,7 +377,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* Grade */}
+        {/* ===================================================
+            Grade
+           =================================================== */}
         <div>
           <label className={labelClass}>Grade *</label>
 
@@ -288,6 +389,7 @@ const SubjectEntryForm = ({
             className={inputClass}
           >
             <option value="">Select grade</option>
+
             <option value="O">O</option>
             <option value="A+">A+</option>
             <option value="A">A</option>
@@ -299,14 +401,16 @@ const SubjectEntryForm = ({
           </select>
         </div>
 
-        {/* Grade Point */}
+        {/* ===================================================
+            Grade Point
+           =================================================== */}
         <div>
           <label className={labelClass}>Grade Point *</label>
 
           <input
             type="number"
             min="0"
-            max="10"
+            max="4"
             step="0.1"
             value={subject.gradePoint}
             onChange={(e) => updateField("gradePoint", e.target.value)}
@@ -315,7 +419,9 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* Attendance */}
+        {/* ===================================================
+            Attendance
+           =================================================== */}
         <div>
           <label className={labelClass}>Attendance (%)</label>
 
@@ -331,7 +437,9 @@ const SubjectEntryForm = ({
         </div>
       </div>
 
-      {/* Footer */}
+      {/* =====================================================
+          Footer
+         ===================================================== */}
       <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4">
         <button
           type="button"
