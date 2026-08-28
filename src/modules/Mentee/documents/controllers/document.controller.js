@@ -21,6 +21,44 @@ class DocumentController {
         error
       );
 
+      // ========================================================
+      // CLOUDINARY RATE LIMIT
+      // ========================================================
+
+      if (
+        error?.http_code === 429 ||
+        error?.statusCode === 429 ||
+        error?.status === 429
+      ) {
+        return res.status(429).json({
+          success: false,
+          message:
+            "Cloudinary upload limit has been reached. Please try again later.",
+          code: "CLOUDINARY_RATE_LIMIT",
+        });
+      }
+
+      // ========================================================
+      // CLOUDINARY ERROR
+      // ========================================================
+
+      if (
+        error?.name === "UnexpectedResponse" &&
+        error?.http_code
+      ) {
+        return res.status(error.http_code).json({
+          success: false,
+          message:
+            error?.message ||
+            "Cloudinary returned an unexpected response.",
+          code: "CLOUDINARY_ERROR",
+        });
+      }
+
+      // ========================================================
+      // NORMAL ERROR HANDLER
+      // ========================================================
+
       next(error);
     }
   }
@@ -104,6 +142,40 @@ class DocumentController {
         error
       );
 
+      // ========================================================
+      // CLOUDINARY RATE LIMIT
+      // ========================================================
+
+      if (
+        error?.http_code === 429 ||
+        error?.statusCode === 429 ||
+        error?.status === 429
+      ) {
+        return res.status(429).json({
+          success: false,
+          message:
+            "Cloudinary upload limit has been reached. Please try again later.",
+          code: "CLOUDINARY_RATE_LIMIT",
+        });
+      }
+
+      // ========================================================
+      // CLOUDINARY ERROR
+      // ========================================================
+
+      if (
+        error?.name === "UnexpectedResponse" &&
+        error?.http_code
+      ) {
+        return res.status(error.http_code).json({
+          success: false,
+          message:
+            error?.message ||
+            "Cloudinary returned an unexpected response.",
+          code: "CLOUDINARY_ERROR",
+        });
+      }
+
       next(error);
     }
   }
@@ -127,6 +199,40 @@ class DocumentController {
         "DocumentController.deleteDocument error:",
         error
       );
+
+      // ========================================================
+      // CLOUDINARY RATE LIMIT
+      // ========================================================
+
+      if (
+        error?.http_code === 429 ||
+        error?.statusCode === 429 ||
+        error?.status === 429
+      ) {
+        return res.status(429).json({
+          success: false,
+          message:
+            "Cloudinary request limit has been reached. Please try again later.",
+          code: "CLOUDINARY_RATE_LIMIT",
+        });
+      }
+
+      // ========================================================
+      // CLOUDINARY ERROR
+      // ========================================================
+
+      if (
+        error?.name === "UnexpectedResponse" &&
+        error?.http_code
+      ) {
+        return res.status(error.http_code).json({
+          success: false,
+          message:
+            error?.message ||
+            "Cloudinary returned an unexpected response.",
+          code: "CLOUDINARY_ERROR",
+        });
+      }
 
       next(error);
     }
