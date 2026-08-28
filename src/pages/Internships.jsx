@@ -4,60 +4,90 @@ import Sidebar from "../components/layouts/Sidebar";
 import Header from "../components/layouts/Header";
 
 import InternshipStats from "../components/Internships/InternshipStats";
-import ApplicationStatus from "../components/Internships/ApplicationStatus";
-import LatestApplications from "../components/Internships/LatestApplications";
-import UpcomingDeadlines from "../components/Internships/UpcomingDeadlines";
 import OngoingInternship from "../components/Internships/OngoingInternship";
-import InternshipResources from "../components/Internships/InternshipResources";
+import InternshipHistory from "../components/Internships/InternshipHistory";
+import ResumeCard from "../components/Internships/ResumeCard";
 
 const Internships = () => {
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Sidebar */}
+
+      {/* ====================================================
+          SIDEBAR
+      ==================================================== */}
+
       <Sidebar />
 
-      {/* Main Content */}
+      {/* ====================================================
+          MAIN CONTENT
+      ==================================================== */}
+
       <div className="ml-[290px] min-h-screen flex flex-col">
-        {/* Header */}
+
+        {/* ==================================================
+            HEADER
+        ================================================== */}
+
         <Header />
 
-        {/* Internship Page */}
+        {/* ==================================================
+            PAGE CONTENT
+        ================================================== */}
+
         <main className="flex-1 px-4 py-4 space-y-4">
-          {/* ================= Top Section ================= */}
+
+          {/* ==================================================
+              STATS
+          ================================================== */}
+
           <InternshipStats />
 
-          {/* ================= Second Row ================= */}
-          <div className="grid grid-cols-12 gap-4">
-            {/* Application Status */}
-            <div className="col-span-12 xl:col-span-4">
-              <ApplicationStatus />
-            </div>
+          {/* ==================================================
+              CURRENT INTERNSHIP + RESUME
+          ================================================== */}
 
-            {/* Latest Applications */}
-            <div className="col-span-12 xl:col-span-4">
-              <LatestApplications />
-            </div>
+          <div className="grid grid-cols-12 gap-4 items-start">
 
-            {/* Upcoming Deadlines */}
-            <div className="col-span-12 xl:col-span-4">
-              <UpcomingDeadlines />
-            </div>
-          </div>
+            {/* ==================================================
+                ONGOING INTERNSHIP
+            ================================================== */}
 
-          {/* ================= Third Row ================= */}
-          <div className="grid grid-cols-12 gap-4">
-            {/* Ongoing Internship */}
             <div className="col-span-12 xl:col-span-8">
+
               <OngoingInternship />
+
             </div>
 
-            {/* Resources */}
+            {/* ==================================================
+                RESUME
+            ================================================== */}
+
             <div className="col-span-12 xl:col-span-4">
-              <InternshipResources />
+
+              <ResumeCard />
+
             </div>
+
           </div>
+
+          {/* ==================================================
+              INTERNSHIP HISTORY
+          ================================================== */}
+
+          <div className="grid grid-cols-12">
+
+            <div className="col-span-12">
+
+              <InternshipHistory />
+
+            </div>
+
+          </div>
+
         </main>
+
       </div>
+
     </div>
   );
 };
