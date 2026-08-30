@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-/* Hide Scrollbar */
+/* =========================================================
+   HIDE SCROLLBAR
+   ========================================================= */
 
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
@@ -9,4 +11,19 @@
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* =========================================================
+   REMOVE NUMBER INPUT SPINNERS
+   ========================================================= */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
 }

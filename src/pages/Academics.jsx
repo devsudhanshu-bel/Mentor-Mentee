@@ -14,8 +14,6 @@ import AcademicSuccessModal from "../components/Academics/AcademicSuccessModal";
 
 import SemesterSummary from "../components/Academics/SemesterSummary";
 import GradeDistribution from "../components/Academics/GradeDistribution";
-import AttendanceOverview from "../components/Academics/AttendanceOverview";
-import PerformanceInsights from "../components/Academics/PerformanceInsights";
 
 import SGPATrend from "../components/Academics/SGPATrend";
 import SubjectsChart from "../components/Academics/SubjectsChart";
@@ -288,22 +286,30 @@ const Academics = () => {
   // =========================================================
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Sidebar */}
+      {/* =====================================================
+          SIDEBAR
+         ===================================================== */}
       <Sidebar />
 
-      {/* Main Content */}
+      {/* =====================================================
+          MAIN CONTENT
+         ===================================================== */}
       <div className="ml-[290px] flex min-h-screen flex-col">
         <Header />
 
         <main className="flex-1 space-y-5 px-4 py-4">
-          {/* Academic Banner */}
+          {/* =================================================
+              ACADEMIC BANNER
+             ================================================= */}
           <AcademicBanner
             academicData={academicData}
             selectedSemesterData={selectedSemesterData}
             activeSemester={activeSemester}
           />
 
-          {/* Academic Information + Semester Tabs */}
+          {/* =================================================
+              ACADEMIC INFORMATION + SEMESTER TABS
+             ================================================= */}
           <AcademicInfo
             currentSemester={currentSemester}
             semesterData={semesterRecords}
@@ -311,45 +317,55 @@ const Academics = () => {
             onSemesterChange={handleSemesterChange}
           />
 
-          {/* Main Grid */}
-          <div className="grid grid-cols-12 items-start gap-4">
-            {/* =================================================
-                LEFT SIDE
-               ================================================= */}
-            <div className="col-span-12 space-y-4 xl:col-span-9">
-              {/* Semester Table */}
-              <SemesterTable semesterNumber={activeSemester} />
+          {/* =================================================
+              SEMESTER TABLE
+              
+              FULL WIDTH
+              
+              This is intentionally separated from the
+              analytics section so that the height of the
+              table does not affect the positioning of the
+              analytics cards.
+             ================================================= */}
+          <div className="w-full">
+            <SemesterTable semesterNumber={activeSemester} />
+          </div>
 
-              {/* Charts */}
-              <div className="grid grid-cols-12 gap-2">
-                <div className="col-span-12 lg:col-span-6">
-                  <SGPATrend academicData={academicData} />
-                </div>
-
-                <div className="col-span-12 lg:col-span-6">
-                  <SubjectsChart
-                    semesterData={selectedSemesterData}
-                    academicData={academicData}
-                  />
-                </div>
+          {/* =================================================
+    ANALYTICS SECTION
+    All cards stay at the same height and level.
+    Table above remains completely dynamic.
+   ================================================= */}
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 items-stretch">
+            {/* Semester Summary */}
+            <div className="min-w-0 h-[215px]">
+              <div className="h-full [&>*]:h-full">
+                <SemesterSummary semesterData={selectedSemesterData} />
               </div>
             </div>
 
-            {/* =================================================
-                RIGHT SIDE
-               ================================================= */}
-            <div className="col-span-12 space-y-4 xl:col-span-3">
-              {/* Semester Summary */}
-              <SemesterSummary semesterData={selectedSemesterData} />
+            {/* Grade Distribution */}
+            <div className="min-w-0 h-[215px]">
+              <div className="h-full [&>*]:h-full">
+                <GradeDistribution semesterData={selectedSemesterData} />
+              </div>
+            </div>
 
-              {/* Grade Distribution */}
-              <GradeDistribution semesterData={selectedSemesterData} />
+            {/* SGPA Trend */}
+            <div className="min-w-0 h-[215px]">
+              <div className="h-full [&>*]:h-full">
+                <SGPATrend academicData={academicData} />
+              </div>
+            </div>
 
-              {/* Attendance Overview */}
-              <AttendanceOverview semesterData={selectedSemesterData} />
-
-              {/* Performance Insights */}
-              <PerformanceInsights semesterData={selectedSemesterData} />
+            {/* Subjects */}
+            <div className="min-w-0 h-[215px]">
+              <div className="h-full [&>*]:h-full">
+                <SubjectsChart
+                  semesterData={selectedSemesterData}
+                  academicData={academicData}
+                />
+              </div>
             </div>
           </div>
         </main>
@@ -422,7 +438,9 @@ const Academics = () => {
 
                     subjects: subjects.map((subject) => ({
                       courseCode: subject.courseCode,
+
                       courseName: subject.courseName,
+
                       credits: Number(subject.credits),
 
                       subjectType: subject.subjectType,

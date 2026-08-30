@@ -103,6 +103,7 @@ const AcademicBanner = ({
         semester?.semesterNumber ?? semester?.semester ?? 0,
       );
 
+      // Only completed semesters before current semester
       if (semesterNumber < 1 || semesterNumber >= currentSemester) {
         return;
       }
@@ -130,6 +131,8 @@ const AcademicBanner = ({
 
       let semesterSGPA = semester?.sgpa ?? semester?.SGPA ?? semester?.gpa;
 
+      // Calculate SGPA from subjects if backend
+      // does not provide it.
       if (
         semesterSGPA === null ||
         semesterSGPA === undefined ||
@@ -167,7 +170,8 @@ const AcademicBanner = ({
         return;
       }
 
-      // Existing 10-point records → 4-point scale
+      // Convert old 10-point SGPA
+      // into 4-point scale.
       if (semesterSGPA > 4) {
         semesterSGPA = (semesterSGPA / 10) * 4;
       }
@@ -271,6 +275,10 @@ const AcademicBanner = ({
     );
   };
 
+  // =========================================================
+  // SELECTED SEMESTER SGPA
+  // =========================================================
+
   const getSelectedSemesterSGPA = (subjects) => {
     const semester =
       selectedSemesterData?.semester ||
@@ -327,7 +335,117 @@ const AcademicBanner = ({
   };
 
   // =========================================================
-  // DOWNLOAD MARKS CARD
+  // NUMBER TO WORDS
+  // =========================================================
+
+  const numberToWords = (number) => {
+    const num = Math.round(Number(number) || 0);
+
+    if (num === 0) {
+      return "Zero";
+    }
+
+    const ones = [
+      "",
+      "One",
+      "Two",
+      "Three",
+      "Four",
+      "Five",
+      "Six",
+      "Seven",
+      "Eight",
+      "Nine",
+      "Ten",
+      "Eleven",
+      "Twelve",
+      "Thirteen",
+      "Fourteen",
+      "Fifteen",
+      "Sixteen",
+      "Seventeen",
+      "Eighteen",
+      "Nineteen",
+    ];
+
+    const tens = [
+      "",
+      "",
+      "Twenty",
+      "Thirty",
+      "Forty",
+      "Fifty",
+      "Sixty",
+      "Seventy",
+      "Eighty",
+      "Ninety",
+    ];
+
+    const convertBelowThousand = (value) => {
+      let result = "";
+
+      if (value >= 100) {
+        result += ones[Math.floor(value / 100)] + " Hundred";
+
+        value %= 100;
+
+        if (value > 0) {
+          result += " and ";
+        }
+      }
+
+      if (value >= 20) {
+        result += tens[Math.floor(value / 10)];
+
+        value %= 10;
+
+        if (value > 0) {
+          result += " " + ones[value];
+        }
+      } else if (value > 0) {
+        result += ones[value];
+      }
+
+      return result;
+    };
+
+    if (num < 1000) {
+      return convertBelowThousand(num);
+    }
+
+    if (num < 1000000) {
+      const thousands = Math.floor(num / 1000);
+
+      const remainder = num % 1000;
+
+      let result = convertBelowThousand(thousands) + " Thousand";
+
+      if (remainder > 0) {
+        result += " " + convertBelowThousand(remainder);
+      }
+
+      return result;
+    }
+
+    if (num < 100000000) {
+      const lakhs = Math.floor(num / 100000);
+
+      const remainder = num % 100000;
+
+      let result = convertBelowThousand(lakhs) + " Lakh";
+
+      if (remainder > 0) {
+        result += " " + numberToWords(remainder);
+      }
+
+      return result;
+    }
+
+    return String(num);
+  };
+
+  // =========================================================
+  // DOWNLOAD SELECTED SEMESTER MARKS CARD
   // =========================================================
 
   const handleDownloadTranscript = () => {
@@ -342,7 +460,39 @@ const AcademicBanner = ({
         return;
       }
 
+      // =====================================================
+      // SELECTED SEMESTER CALCULATIONS
+      // =====================================================
+
       const semesterSGPA = getSelectedSemesterSGPA(subjects);
+
+      const totalMarksObtained = subjects.reduce((total, subject) => {
+        const value = Number(
+          subject?.totalMarksObtained ??
+            subject?.totalMarks ??
+            subject?.obtained ??
+            0,
+        );
+
+        return total + (Number.isFinite(value) ? value : 0);
+      }, 0);
+
+      const maximumMarks = subjects.reduce((total, subject) => {
+        const value = Number(subject?.maximumMarks ?? subject?.max ?? 0);
+
+        return total + (Number.isFinite(value) ? value : 0);
+      }, 0);
+
+      const totalMarksInWords = numberToWords(totalMarksObtained);
+
+      const totalSemesterCredits = subjects.reduce(
+        (sum, subject) => sum + Number(subject?.credits || 0),
+        0,
+      );
+
+      // =====================================================
+      // PDF INITIALIZATION
+      // =====================================================
 
       const pdf = new jsPDF({
         orientation: "portrait",
@@ -353,6 +503,10 @@ const AcademicBanner = ({
       const pageWidth = pdf.internal.pageSize.getWidth();
 
       const pageHeight = pdf.internal.pageSize.getHeight();
+
+      // =====================================================
+      // HEADER
+      // =====================================================
 
       pdf.setFillColor(8, 43, 115);
 
@@ -377,6 +531,10 @@ const AcademicBanner = ({
       });
 
       let y = 43;
+
+      // =====================================================
+      // STUDENT INFORMATION
+      // =====================================================
 
       pdf.setTextColor(8, 43, 115);
 
@@ -436,6 +594,10 @@ const AcademicBanner = ({
 
       y += 12;
 
+      // =====================================================
+      // COURSE DETAILS
+      // =====================================================
+
       pdf.setFont("helvetica", "bold");
 
       pdf.setFontSize(11);
@@ -448,9 +610,22 @@ const AcademicBanner = ({
 
       const tableX = 10;
 
-      const columnWidths = [25, 48, 12, 15, 15, 15, 15, 18, 15, 18];
+      const columnWidths = [
+        10, // Sl No.
+        23, // Code
+        43, // Course
+        10, // Cr.
+        14, // CIA 1
+        14, // MSE
+        14, // CIA 3
+        14, // ESE
+        17, // Total
+        14, // Grade
+        17, // GP
+      ];
 
       const headers = [
+        "Sl No.",
         "Code",
         "Course",
         "Cr.",
@@ -467,6 +642,10 @@ const AcademicBanner = ({
 
       const tableWidth = columnWidths.reduce((a, b) => a + b, 0);
 
+      // =====================================================
+      // TABLE HEADER
+      // =====================================================
+
       pdf.setFillColor(11, 99, 246);
 
       pdf.rect(tableX, y, tableWidth, rowHeight, "F");
@@ -474,6 +653,8 @@ const AcademicBanner = ({
       pdf.setTextColor(255, 255, 255);
 
       pdf.setFontSize(7);
+
+      pdf.setFont("helvetica", "bold");
 
       let x = tableX;
 
@@ -487,11 +668,38 @@ const AcademicBanner = ({
 
       y += rowHeight;
 
+      // =====================================================
+      // SUBJECT ROWS
+      // =====================================================
+
       subjects.forEach((subject, index) => {
-        if (y > 270) {
+        if (y > 250) {
           pdf.addPage();
 
           y = 20;
+
+          // Re-draw header on new page
+          pdf.setFillColor(11, 99, 246);
+
+          pdf.rect(tableX, y, tableWidth, rowHeight, "F");
+
+          pdf.setTextColor(255, 255, 255);
+
+          pdf.setFont("helvetica", "bold");
+
+          pdf.setFontSize(7);
+
+          let headerX = tableX;
+
+          headers.forEach((header, headerIndex) => {
+            pdf.text(header, headerX + columnWidths[headerIndex] / 2, y + 6, {
+              align: "center",
+            });
+
+            headerX += columnWidths[headerIndex];
+          });
+
+          y += rowHeight;
         }
 
         if (index % 2 === 0) {
@@ -507,15 +715,28 @@ const AcademicBanner = ({
         x = tableX;
 
         const row = [
-          subject?.courseCode || "-",
-          subject?.courseName || "-",
+          index + 1,
+          subject?.courseCode || subject?.code || "-",
+
+          subject?.courseName || subject?.name || "-",
+
           subject?.credits ?? "-",
+
           subject?.cia1 ?? "-",
+
           subject?.mse ?? "-",
+
           subject?.cia3 ?? "-",
+
           subject?.ese ?? "-",
-          subject?.totalMarksObtained ?? subject?.totalMarks ?? "-",
+
+          subject?.totalMarksObtained ??
+            subject?.totalMarks ??
+            subject?.obtained ??
+            "-",
+
           subject?.grade || "-",
+
           subject?.gradePoint ?? "-",
         ];
 
@@ -532,7 +753,7 @@ const AcademicBanner = ({
 
           let text = String(value);
 
-          if (cellIndex === 1 && text.length > 25) {
+          if (cellIndex === 2 && text.length > 25) {
             text = text.substring(0, 23) + "...";
           }
 
@@ -546,16 +767,122 @@ const AcademicBanner = ({
         y += rowHeight;
       });
 
-      y += 12;
+      // =====================================================
+      // TOTAL MARKS ROW
+      // =====================================================
 
-      const totalSemesterCredits = subjects.reduce(
-        (sum, subject) => sum + Number(subject?.credits || 0),
-        0,
+      y += 4;
+
+      const totalRowHeight = 11;
+
+      pdf.setFillColor(248, 250, 252);
+
+      pdf.rect(tableX, y, tableWidth, totalRowHeight, "F");
+
+      pdf.setDrawColor(180, 190, 205);
+
+      pdf.rect(tableX, y, tableWidth, totalRowHeight);
+
+      // Total label area:
+      // Code + Course + Credits + CIA1 + MSE + CIA3 + ESE
+      const totalLabelWidth = columnWidths
+        .slice(0, 7)
+        .reduce((a, b) => a + b, 0);
+
+      pdf.setTextColor(50, 60, 75);
+
+      pdf.setFont("helvetica", "bold");
+
+      pdf.setFontSize(7);
+
+      pdf.text("Total Marks (In Words):", tableX + 3, y + 7);
+
+      pdf.setFont("helvetica", "normal");
+
+      pdf.text(totalMarksInWords, tableX + 43, y + 7);
+
+      // Vertical separator
+      pdf.line(
+        tableX + totalLabelWidth,
+        y,
+        tableX + totalLabelWidth,
+        y + totalRowHeight,
       );
+
+      // Total Obtained
+      const obtainedX = tableX + totalLabelWidth;
+
+      pdf.setFont("helvetica", "bold");
+
+      pdf.text(
+        String(totalMarksObtained),
+        obtainedX + columnWidths[7] / 2,
+        y + 7,
+        {
+          align: "center",
+        },
+      );
+
+      pdf.line(
+        obtainedX + columnWidths[7],
+        y,
+        obtainedX + columnWidths[7],
+        y + totalRowHeight,
+      );
+
+      // Total Maximum
+      const maxX = obtainedX + columnWidths[7];
+
+      pdf.text(String(maximumMarks), maxX + columnWidths[8] / 2, y + 7, {
+        align: "center",
+      });
+
+      pdf.line(
+        maxX + columnWidths[8],
+        y,
+        maxX + columnWidths[8],
+        y + totalRowHeight,
+      );
+
+      // =====================================================
+      // TOTAL MARKS SUMMARY
+      // =====================================================
+
+      y += totalRowHeight + 8;
 
       pdf.setFillColor(239, 246, 255);
 
-      pdf.roundedRect(15, y, pageWidth - 30, 28, 3, 3, "F");
+      pdf.roundedRect(15, y, pageWidth - 30, 25, 3, 3, "F");
+
+      pdf.setTextColor(8, 43, 115);
+
+      pdf.setFont("helvetica", "bold");
+
+      pdf.setFontSize(10);
+
+      pdf.text("Marks Summary", 22, y + 8);
+
+      pdf.setFontSize(8.5);
+
+      pdf.setFont("helvetica", "normal");
+
+      pdf.text(
+        `Total Marks: ${totalMarksObtained} / ${maximumMarks}`,
+        22,
+        y + 17,
+      );
+
+      pdf.text(`In Words: ${totalMarksInWords}`, 95, y + 17);
+
+      // =====================================================
+      // SEMESTER SUMMARY
+      // =====================================================
+
+      y += 34;
+
+      pdf.setFillColor(239, 246, 255);
+
+      pdf.roundedRect(15, y, pageWidth - 30, 30, 3, 3, "F");
 
       pdf.setTextColor(8, 43, 115);
 
@@ -569,19 +896,31 @@ const AcademicBanner = ({
 
       pdf.setFontSize(9);
 
-      pdf.text(`Total Subjects: ${subjects.length}`, 22, y + 17);
+      // Row 1
+      pdf.text(`Total Subjects: ${subjects.length}`, 22, y + 18);
 
-      pdf.text(`Total Credits: ${totalSemesterCredits}`, 85, y + 17);
+      pdf.text(`Total Credits: ${totalSemesterCredits}`, 85, y + 18);
 
       pdf.text(
         `SGPA: ${semesterSGPA !== null ? semesterSGPA.toFixed(2) : "--"} / 4`,
         150,
-        y + 17,
+        y + 18,
       );
+
+      // Row 2 — CGPA
+      pdf.setFont("helvetica", "bold");
+
+      pdf.text(`CGPA: ${displayedCGPA} / 4`, 22, y + 25);
+
+      // =====================================================
+      // FOOTER
+      // =====================================================
 
       pdf.setDrawColor(220, 226, 235);
 
       pdf.line(15, pageHeight - 18, pageWidth - 15, pageHeight - 18);
+
+      pdf.setFont("helvetica", "normal");
 
       pdf.setFontSize(7);
 
@@ -595,6 +934,10 @@ const AcademicBanner = ({
           align: "center",
         },
       );
+
+      // =====================================================
+      // SAVE PDF
+      // =====================================================
 
       pdf.save(`Semester_${activeSemester}_Marks_Card.pdf`);
     } catch (error) {
@@ -629,9 +972,13 @@ const AcademicBanner = ({
 
               <div className="flex items-center gap-3 mt-1 text-[13px] text-slate-600">
                 <span>2362177</span>
+
                 <span>•</span>
+
                 <span>B.Tech - AI & Data Science Engineering</span>
+
                 <span>•</span>
+
                 <span>Semester {currentSemesterLabel}</span>
               </div>
 
@@ -782,7 +1129,7 @@ const AcademicBanner = ({
         onBacklogChange={handleBacklogChange}
       />
 
-      {/* COMPLETELY SEPARATE CLEARED MODAL */}
+      {/* CLEARED BACKLOG MODAL */}
       <ClearedBacklogModal
         isOpen={showClearedBacklogModal}
         onClose={() => setShowClearedBacklogModal(false)}

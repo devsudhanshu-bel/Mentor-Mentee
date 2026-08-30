@@ -8,6 +8,10 @@ const CATEGORY_COLORS = {
   "Ability Enhancement Courses": "#22C55E",
 };
 
+// =========================================================
+// NORMALIZE SUBJECT CATEGORY
+// =========================================================
+
 const normalizeCategory = (subject) => {
   const rawCategory =
     subject?.subjectType ?? subject?.type ?? subject?.category ?? "";
@@ -55,10 +59,15 @@ const normalizeCategory = (subject) => {
   return "Core Subjects";
 };
 
+// =========================================================
+// COMPONENT
+// =========================================================
+
 const SubjectsChart = ({ semesterData = null, academicData = null }) => {
   // =========================================================
-  // Selected semester
+  // SELECTED SEMESTER
   // =========================================================
+
   const semester =
     semesterData?.semester ||
     semesterData?.data?.semester ||
@@ -66,14 +75,16 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
     semesterData;
 
   // =========================================================
-  // Subjects
+  // SUBJECTS
   // =========================================================
+
   const subjects =
     semester?.subjects || semester?.courses || semesterData?.subjects || [];
 
   // =========================================================
-  // Calculate category distribution
+  // CATEGORY DISTRIBUTION
   // =========================================================
+
   const data = useMemo(() => {
     if (!Array.isArray(subjects) || subjects.length === 0) {
       return [];
@@ -102,18 +113,20 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
   }, [subjects]);
 
   // =========================================================
-  // Total subjects
+  // TOTAL SUBJECTS
   // =========================================================
+
   const totalSubjects = useMemo(() => {
     return subjects.length;
   }, [subjects]);
 
   // =========================================================
-  // Empty state
+  // EMPTY STATE
   // =========================================================
+
   if (!totalSubjects) {
     return (
-      <div className="h-[220px] rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="h-[215px] w-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
         <h3 className="mb-3 text-[15px] font-semibold text-[#0B63F6]">
           Subjects
         </h3>
@@ -128,29 +141,46 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
   }
 
   // =========================================================
-  // Main chart
+  // MAIN CHART
   // =========================================================
+
   return (
-    <div className="h-[220px] rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      {/* Header */}
-      <h3 className="mb-3 text-[15px] font-semibold text-[#0B63F6]">
+    <div className="h-[215px] w-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      {/* =====================================================
+          HEADER
+         ===================================================== */}
+
+      <h3 className="mb-2 text-[15px] font-semibold text-[#0B63F6]">
         Subjects
       </h3>
 
       <div className="flex h-[165px] items-center justify-between">
         {/* ===================================================
-            Donut
+            DONUT
            =================================================== */}
-        <div className="relative h-[150px] w-[150px]">
+
+        <div className="relative h-[130px] w-[130px] shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 dataKey="value"
-                innerRadius={48}
-                outerRadius={72}
+
+                /*
+                 * Reduced from:
+                 * innerRadius={48}
+                 * outerRadius={72}
+                 *
+                 * This gives the donut more breathing
+                 * room inside the card.
+                 */
+                innerRadius={42}
+                outerRadius={60}
+
                 paddingAngle={2}
                 stroke="none"
+                cx="50%"
+                cy="50%"
               >
                 {data.map((entry, index) => (
                   <Cell key={`${entry.name}-${index}`} fill={entry.color} />
@@ -160,23 +190,25 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
           </ResponsiveContainer>
 
           {/* =================================================
-              Center
+              CENTER VALUE
              ================================================= */}
+
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[30px] font-bold leading-none text-[#0B3B8F]">
+            <span className="text-[27px] font-bold leading-none text-[#0B3B8F]">
               {totalSubjects}
             </span>
 
-            <span className="mt-1 text-[11px] text-slate-500">
+            <span className="mt-1 text-[10px] text-slate-500">
               Total Subjects
             </span>
           </div>
         </div>
 
         {/* ===================================================
-            Legend
+            LEGEND
            =================================================== */}
-        <div className="w-[175px] space-y-3 text-[11px]">
+
+        <div className="w-[165px] space-y-3 text-[11px]">
           {data.map((item) => (
             <div
               key={item.name}

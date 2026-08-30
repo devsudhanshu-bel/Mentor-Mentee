@@ -1,11 +1,5 @@
-import React from "react";
-import {
-  CalendarDays,
-  ChevronDown,
-  CheckCircle2,
-  Lock,
-  Plus,
-} from "lucide-react";
+import React, { useMemo } from "react";
+import { CheckCircle2, Lock, Plus } from "lucide-react";
 
 const semesters = [
   "Semester I",
@@ -24,38 +18,51 @@ const AcademicInfo = ({
   activeSemester = 1,
   onSemesterChange,
 }) => {
-  // ---------------------------------------------------------
-  // Convert "Semester I" → 1
-  // ---------------------------------------------------------
+  // =========================================================
+  // GET SEMESTER NUMBER
+  // =========================================================
+
   const getSemesterNumber = (semesterName) => {
     const index = semesters.indexOf(semesterName);
     return index + 1;
   };
 
-  // ---------------------------------------------------------
-  // Find backend record for a semester
-  // ---------------------------------------------------------
+  // =========================================================
+  // FIND SEMESTER RECORD
+  // =========================================================
+
   const getSemesterRecord = (semesterNumber) => {
+    if (!Array.isArray(semesterData)) {
+      return null;
+    }
+
     return semesterData.find(
       (semester) => Number(semester?.semesterNumber) === Number(semesterNumber),
     );
   };
 
-  // ---------------------------------------------------------
-  // Handle tab click
-  // ---------------------------------------------------------
+  // =========================================================
+  // SELECTED SEMESTER
+  // =========================================================
+
+  const selectedRecord = useMemo(
+    () => getSemesterRecord(activeSemester),
+    [semesterData, activeSemester],
+  );
+
+  // =========================================================
+  // HANDLE SEMESTER CLICK
+  // =========================================================
+
   const handleSemesterClick = (semesterNumber) => {
-    // Current + future semesters are locked.
+    // Current and future semesters are locked
     if (semesterNumber >= Number(currentSemester)) {
       return;
     }
 
     const record = getSemesterRecord(semesterNumber);
 
-    // -------------------------------------------------------
-    // No academic record yet
-    // → Open subject-entry flow
-    // -------------------------------------------------------
+    // No saved record
     if (!record?.hasRecord) {
       onSemesterChange?.(semesterNumber, {
         mode: "ENTRY",
@@ -64,10 +71,7 @@ const AcademicInfo = ({
       return;
     }
 
-    // -------------------------------------------------------
-    // Existing record
-    // → Display semester
-    // -------------------------------------------------------
+    // Existing semester
     onSemesterChange?.(semesterNumber, {
       mode: "VIEW",
     });
@@ -76,37 +80,23 @@ const AcademicInfo = ({
   return (
     <div className="space-y-4">
       {/* =====================================================
-          Heading
-         ===================================================== */}
-      <div className="flex items-start justify-between">
-        <div>
-          <h2 className="text-[20px] font-bold text-[#082B73]">
-            Academic Information
-          </h2>
+          HEADER
+          ===================================================== */}
 
-          <p className="mt-1 text-[13px] text-slate-500">
-            View your academic performance and course details
-          </p>
-        </div>
+      <div>
+        <h2 className="text-[20px] font-bold text-[#082B73]">
+          Academic Information
+        </h2>
 
-        {/* Academic Year */}
-        <button
-          type="button"
-          className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-5 py-3 shadow-sm transition hover:border-blue-500"
-        >
-          <CalendarDays size={18} className="text-[#0B63F6]" />
-
-          <span className="text-[14px] font-medium text-slate-700">
-            Academic Year
-          </span>
-
-          <ChevronDown size={16} className="text-slate-500" />
-        </button>
+        <p className="mt-1 text-[13px] text-slate-500">
+          View your academic performance and course details
+        </p>
       </div>
 
       {/* =====================================================
-          Semester Tabs
-         ===================================================== */}
+          SEMESTER TABS
+          ===================================================== */}
+
       <div className="flex overflow-hidden rounded-xl border border-slate-200 bg-white">
         {semesters.map((semester) => {
           const semesterNumber = getSemesterNumber(semester);
@@ -130,24 +120,29 @@ const AcademicInfo = ({
               disabled={isLocked}
               onClick={() => handleSemesterClick(semesterNumber)}
               className={`
-                relative flex-1 py-3 text-[13px] font-medium
-                transition-all duration-200
+                  relative
+                  flex-1
+                  py-3
+                  text-[13px]
+                  font-medium
+                  transition-all
+                  duration-200
 
-                ${
-                  isActive
-                    ? "bg-[#0B63F6] text-white"
-                    : isLocked
-                      ? "cursor-not-allowed bg-slate-50 text-slate-400"
-                      : hasRecord
-                        ? "cursor-pointer bg-white text-slate-700 hover:bg-slate-50"
-                        : "cursor-pointer bg-white text-slate-500 hover:bg-blue-50 hover:text-[#0B63F6]"
-                }
+                  ${
+                    isActive
+                      ? "bg-[#0B63F6] text-white"
+                      : isLocked
+                        ? "cursor-not-allowed bg-slate-50 text-slate-400"
+                        : hasRecord
+                          ? "cursor-pointer bg-white text-slate-700 hover:bg-slate-50"
+                          : "cursor-pointer bg-white text-slate-500 hover:bg-blue-50 hover:text-[#0B63F6]"
+                  }
 
-                ${semesterNumber !== 8 ? "border-r border-slate-200" : ""}
-              `}
+                  ${semesterNumber !== 8 ? "border-r border-slate-200" : ""}
+                `}
             >
               <span className="flex items-center justify-center gap-1.5">
-                {/* Saved semester */}
+                {/* SAVED SEMESTER */}
                 {hasRecord && (
                   <CheckCircle2
                     size={13}
@@ -155,7 +150,7 @@ const AcademicInfo = ({
                   />
                 )}
 
-                {/* Current / future */}
+                {/* LOCKED SEMESTER */}
                 {isLocked && (
                   <Lock
                     size={13}
@@ -163,7 +158,7 @@ const AcademicInfo = ({
                   />
                 )}
 
-                {/* Previous semester without record */}
+                {/* UNSAVED SEMESTER */}
                 {!isLocked && !hasRecord && (
                   <Plus
                     size={13}
@@ -174,14 +169,19 @@ const AcademicInfo = ({
                 {semester}
               </span>
 
-              {/* Current label */}
+              {/* CURRENT LABEL */}
               {isCurrent && (
                 <span
                   className={`
-                    absolute bottom-0 left-0 right-0
-                    text-[8px] font-semibold
-                    ${isActive ? "text-blue-100" : "text-slate-400"}
-                  `}
+                      absolute
+                      bottom-0
+                      left-0
+                      right-0
+                      text-[8px]
+                      font-semibold
+
+                      ${isActive ? "text-blue-100" : "text-slate-400"}
+                    `}
                 >
                   CURRENT
                 </span>
