@@ -51,7 +51,7 @@ model StudentProfile {
   updatedAt              DateTime               @updatedAt
   academicSetupCompleted Boolean                @default(false)
   academicSemesters      AcademicSemester[]
-  academicBacklogs AcademicBacklog[]
+  academicBacklogs       AcademicBacklog[]
   contactDetails         StudentContactDetails?
   documents              StudentDocument[]
   parentDetails          StudentParentDetails?
@@ -157,11 +157,13 @@ model AcademicSemester {
 }
 
 model AcademicSubject {
-  id                 String           @id @default(cuid())
+  id                 String @id @default(cuid())
   academicSemesterId String
-  courseCode         String
-  courseName         String
-  credits            Int
+
+  courseCode String
+  courseName String
+  credits    Int
+
   cia1               Float?
   cia2               Float?
   cia3               Float?
@@ -171,10 +173,15 @@ model AcademicSubject {
   totalMarksObtained Float?
   grade              String?
   gradePoint         Float?
-  attendance         Float?
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
-  academicSemester   AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+
+  attendance      Float?
+  classesHeld     Int    @default(0)
+  classesAttended Int    @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  academicSemester AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
 
   @@index([academicSemesterId])
   @@map("academic_subjects")
@@ -208,9 +215,7 @@ model AcademicBacklog {
   updatedAt DateTime @updatedAt
 
   @@index([studentProfileId])
-
   @@index([studentProfileId, status])
-
   @@map("academic_backlogs")
 }
 

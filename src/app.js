@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
+import attendanceRoutes from "./modules/Mentee/attendance/routes/attendance.routes.js";
 
 const app = express();
 
@@ -23,7 +24,7 @@ app.use(
   cors({
     origin: process.env.CLIENT_URL || "*",
     credentials: true,
-  })
+  }),
 );
 
 /* ==========================================================
@@ -60,6 +61,7 @@ app.use("/api/auth", authRoutes);
 
 // Mentee
 app.use("/api/mentee", menteeRoutes);
+app.use("/api/attendance", attendanceRoutes);
 
 /* ==========================================================
    404 Handler

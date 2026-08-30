@@ -522,6 +522,301 @@ class AcademicService {
   }
 
   // =========================================================
+  // UPDATE EXISTING SEMESTER
+  // =========================================================
+
+  async updateSemester(userId, semesterNumber, body) {
+    // -------------------------------------------------------
+    // Validate semester number
+    // -------------------------------------------------------
+
+    const number = validateSemesterNumber(semesterNumber);
+
+    // -------------------------------------------------------
+    // Find student profile
+    // -------------------------------------------------------
+
+    const profile = await prisma.studentProfile.findUnique({
+      where: {
+        userId,
+      },
+    });
+
+    if (!profile) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    // -------------------------------------------------------
+    // Determine current semester
+    // -------------------------------------------------------
+
+    const currentSemester = getCurrentSemesterNumber(profile.semester);
+
+    // -------------------------------------------------------
+    // Only previous semesters can be edited.
+    //
+    // Current and future semesters remain locked.
+    // -------------------------------------------------------
+
+    if (number >= currentSemester) {
+      throw new ApiError(
+        403,
+        `Semester ${number} is currently locked and cannot be edited`,
+      );
+    }
+
+    // -------------------------------------------------------
+    // Check whether the semester actually exists
+    // -------------------------------------------------------
+
+    const existingSemester = await prisma.academicSemester.findUnique({
+      where: {
+        studentProfileId_semesterNumber: {
+          studentProfileId: profile.id,
+
+          semesterNumber: number,
+        },
+      },
+
+      include: {
+        subjects: true,
+      },
+    });
+
+    if (!existingSemester) {
+      throw new ApiError(
+        404,
+        `Academic record for Semester ${number} does not exist`,
+      );
+    }
+
+    // -------------------------------------------------------
+    // Validate subjects
+    // -------------------------------------------------------
+
+    if (!Array.isArray(body.subjects) || body.subjects.length === 0) {
+      throw new ApiError(400, "At least one subject is required");
+    }
+
+    // -------------------------------------------------------
+    // Normalise subjects
+    // -------------------------------------------------------
+
+    const subjects = body.subjects.map(normaliseSubject);
+
+    // -------------------------------------------------------
+    // Recalculate semester values
+    //
+    // This means editing a mark/grade/credit will
+    // automatically recalculate:
+    //
+    // - Total Credits
+    // - Credits Earned
+    // - Backlogs
+    // - SGPA
+    // - Semester Status
+    // -------------------------------------------------------
+
+    const calculated = calculateSemester(subjects);
+
+    // -------------------------------------------------------
+    // Transaction
+    // -------------------------------------------------------
+
+    const result = await prisma.$transaction(async (tx) => {
+      // -------------------------------------------------
+      // Update semester
+      // -------------------------------------------------
+
+      const semester = await tx.academicSemester.update({
+        where: {
+          id: existingSemester.id,
+        },
+
+        data: {
+          academicYear:
+            body.academicYear !== undefined
+              ? body.academicYear
+              : existingSemester.academicYear,
+
+          term: body.term !== undefined ? body.term : existingSemester.term,
+
+          status: calculated.status,
+
+          entryStatus: "SUBMITTED",
+
+          ...calculated,
+        },
+      });
+
+      // -------------------------------------------------
+      // Remove old subjects
+      //
+      // We replace ONLY subjects belonging to this
+      // semester.
+      //
+      // No other semester is touched.
+      // -------------------------------------------------
+
+      await tx.academicSubject.deleteMany({
+        where: {
+          academicSemesterId: semester.id,
+        },
+      });
+
+      // -------------------------------------------------
+      // Insert edited subjects
+      // -------------------------------------------------
+
+      await tx.academicSubject.createMany({
+        data: subjects.map((subject) => ({
+          academicSemesterId: semester.id,
+
+          ...subject,
+        })),
+      });
+
+      // -------------------------------------------------
+      // Recalculate student-wide academic values
+      // -------------------------------------------------
+
+      const allSemesters = await tx.academicSemester.findMany({
+        where: {
+          studentProfileId: profile.id,
+        },
+
+        include: {
+          subjects: true,
+        },
+      });
+
+      // -------------------------------------------------
+      // CGPA calculation
+      // -------------------------------------------------
+
+      const gradedSubjects = allSemesters
+        .flatMap((item) => item.subjects)
+        .filter(
+          (subject) =>
+            subject.gradePoint !== null && subject.gradePoint !== undefined,
+        );
+
+      const cgpaCredits = gradedSubjects.reduce(
+        (sum, subject) => sum + Number(subject.credits || 0),
+        0,
+      );
+
+      const cgpaPoints = gradedSubjects.reduce(
+        (sum, subject) =>
+          sum + Number(subject.credits || 0) * Number(subject.gradePoint || 0),
+        0,
+      );
+
+      const currentCGPA =
+        cgpaCredits > 0 ? Number((cgpaPoints / cgpaCredits).toFixed(2)) : null;
+
+      // -------------------------------------------------
+      // Total credits
+      // -------------------------------------------------
+
+      const totalCredits = allSemesters.reduce(
+        (sum, semesterRecord) =>
+          sum + Number(semesterRecord.creditsEarned || 0),
+        0,
+      );
+
+      // -------------------------------------------------
+      // Attendance
+      // -------------------------------------------------
+
+      const attendanceValues = allSemesters
+        .flatMap((semesterRecord) =>
+          semesterRecord.subjects.map((subject) => subject.attendance),
+        )
+        .filter((value) => value !== null && value !== undefined);
+
+      const overallAttendance =
+        attendanceValues.length > 0
+          ? Number(
+              (
+                attendanceValues.reduce(
+                  (sum, value) => sum + Number(value),
+                  0,
+                ) / attendanceValues.length
+              ).toFixed(2),
+            )
+          : null;
+
+      // -------------------------------------------------
+      // Overall backlog count
+      // -------------------------------------------------
+
+      const overallBacklogs = allSemesters.reduce(
+        (total, semesterRecord) => total + Number(semesterRecord.backlogs || 0),
+        0,
+      );
+
+      // -------------------------------------------------
+      // Academic standing
+      // -------------------------------------------------
+
+      let academicStanding = "Excellent";
+
+      if (overallBacklogs > 0) {
+        academicStanding = "Needs Attention";
+      } else if (currentCGPA !== null && currentCGPA < 2) {
+        academicStanding = "Needs Improvement";
+      } else if (currentCGPA !== null && currentCGPA < 2.5) {
+        academicStanding = "Satisfactory";
+      } else if (currentCGPA !== null && currentCGPA < 3) {
+        academicStanding = "Good";
+      } else if (currentCGPA !== null && currentCGPA < 3.5) {
+        academicStanding = "Very Good";
+      }
+
+      // -------------------------------------------------
+      // Update StudentProfile
+      // -------------------------------------------------
+
+      await tx.studentProfile.update({
+        where: {
+          id: profile.id,
+        },
+
+        data: {
+          totalCredits,
+
+          currentCGPA,
+
+          overallAttendance,
+
+          academicStanding,
+        },
+      });
+
+      // -------------------------------------------------
+      // Return updated semester
+      // -------------------------------------------------
+
+      return tx.academicSemester.findUnique({
+        where: {
+          id: semester.id,
+        },
+
+        include: {
+          subjects: {
+            orderBy: {
+              courseCode: "asc",
+            },
+          },
+        },
+      });
+    });
+
+    return result;
+  }
+
+  // =========================================================
   // BACKLOG MANAGEMENT
   // =========================================================
 
