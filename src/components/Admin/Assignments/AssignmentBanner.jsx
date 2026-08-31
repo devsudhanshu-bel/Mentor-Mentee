@@ -1,106 +1,155 @@
 import React from "react";
-import {
-  Download,
-  Shuffle,
-  Plus,
-} from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
-const AssignmentBanner = () => {
+const AssignmentBanner = ({ onChangeTerm }) => {
   return (
-    <div className="mb-5 flex items-start justify-between">
-      {/* ================= Left ================= */}
+    <div className="flex w-full items-start justify-between">
+      {/* ============================================================
+          LEFT CONTENT
+          ============================================================ */}
 
-      <div>
-        <h1 className="text-[34px] font-bold tracking-tight text-slate-900">
-          Assignments
+      <div className="pt-1">
+        <h1
+          className="
+            text-[26px]
+            font-bold
+            leading-7
+            tracking-tight
+            text-slate-900
+          "
+        >
+          Assign Students to Mentors
         </h1>
 
-        <p className="mt-1 text-[15px] text-slate-500">
-          Assign students to mentors and manage allocation across departments.
+        <p
+          className="
+            mt-1.5
+            text-[11px]
+            font-medium
+            leading-5
+            text-slate-500
+          "
+        >
+          Assign students to available mentors for Odd Semester 2026
+          (3rd Year, All Sections)
         </p>
       </div>
 
-      {/* ================= Right ================= */}
+      {/* ============================================================
+          CURRENT TERM CARD
+          ============================================================ */}
 
-      <div className="flex items-center gap-3">
-        {/* Bulk Assign */}
+      <div
+        className="
+          flex
+          h-[72px]
+          w-[338px]
+          shrink-0
+          items-center
+          justify-between
+          rounded-xl
+          border
+          border-slate-200
+          bg-white
+          px-4
+          shadow-sm
+        "
+      >
+        {/* ================= Term Information ================= */}
+
+        <div className="flex items-center gap-3">
+          {/* Calendar */}
+
+          <div
+            className="
+              flex
+              h-10
+              w-10
+              shrink-0
+              items-center
+              justify-center
+              rounded-xl
+              bg-slate-50
+              text-slate-500
+            "
+          >
+            <CalendarDays
+              size={18}
+              strokeWidth={1.8}
+            />
+          </div>
+
+          {/* Text */}
+
+          <div className="flex flex-col">
+            <span
+              className="
+                text-[9px]
+                font-medium
+                leading-4
+                text-slate-400
+              "
+            >
+              Current Term
+            </span>
+
+            <span
+              className="
+                text-[12px]
+                font-bold
+                leading-4
+                text-slate-800
+              "
+            >
+              Odd Semester 2026
+            </span>
+
+            <span
+              className="
+                text-[9px]
+                font-medium
+                leading-4
+                text-slate-400
+              "
+            >
+              Jul 15, 2026 - Dec 20, 2026
+            </span>
+          </div>
+        </div>
+
+        {/* ================= Change Term ================= */}
 
         <button
+          type="button"
+          onClick={onChangeTerm}
           className="
             flex
-            h-11
+            h-10
+            min-w-[116px]
             items-center
+            justify-center
             gap-2
-            rounded-xl
+            rounded-lg
             border
-            border-blue-200
+            border-blue-100
             bg-white
-            px-5
-            text-sm
+            px-4
+            text-[10px]
             font-semibold
             text-blue-600
             transition-all
             duration-200
-            hover:border-blue-600
+            hover:border-blue-300
             hover:bg-blue-50
+            active:scale-[0.98]
           "
         >
-          <Download size={17} />
-          Bulk Assign
-        </button>
+          <CalendarDays
+            size={14}
+            strokeWidth={2}
+          />
 
-        {/* Random Distribution */}
-
-        <button
-          className="
-            flex
-            h-11
-            items-center
-            gap-2
-            rounded-xl
-            border
-            border-blue-200
-            bg-white
-            px-5
-            text-sm
-            font-semibold
-            text-blue-600
-            transition-all
-            duration-200
-            hover:border-blue-600
-            hover:bg-blue-50
-          "
-        >
-          <Shuffle size={17} />
-          Random Distribution
-        </button>
-
-        {/* Assign Students */}
-
-        <button
-          className="
-            flex
-            h-11
-            items-center
-            gap-2
-            rounded-xl
-            bg-gradient-to-r
-            from-blue-600
-            to-indigo-600
-            px-5
-            text-sm
-            font-semibold
-            text-white
-            shadow-lg
-            shadow-blue-200
-            transition-all
-            duration-200
-            hover:scale-[1.02]
-            hover:shadow-xl
-          "
-        >
-          <Plus size={18} />
-          Assign Students
+          <span>Change Term</span>
         </button>
       </div>
     </div>
