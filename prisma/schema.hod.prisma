@@ -1,0 +1,597 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEW_DATABASE_URL")
+}
+
+// ============================================================
+// DEPARTMENT
+// ============================================================
+
+model Department {
+  id String @id @default(cuid())
+
+  name String
+  code String @unique
+
+  // The teacher who currently serves as HOD.
+  hodTeacherId String?  @unique
+  hodTeacher   Teacher? @relation("DepartmentHod", fields: [hodTeacherId], references: [id], onDelete: SetNull)
+
+  teachers      Teacher[]
+  students      Student[]
+  academicYears AcademicYear[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("departments")
+}
+
+// ============================================================
+// USER ACCOUNT
+//
+// Authentication identity is separate from academic identity.
+// ============================================================
+
+model UserAccount {
+  id String @id @default(cuid())
+
+  username String  @unique
+  email    String? @unique
+  password String?
+
+  role     UserRole
+  isActive Boolean  @default(true)
+
+  lastLogin DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  teacher Teacher?
+  student Student?
+
+  otpVerifications OtpVerification[]
+
+  createdAtActions         MentorAssignment[]      @relation("AssignmentPerformedBy")
+  transferRequestsCreated  MentorTransferRequest[] @relation("TransferCreatedBy")
+  transferRequestsReviewed MentorTransferRequest[] @relation("TransferReviewedBy")
+  importBatchesUploaded    ImportBatch[]           @relation("ImportUploadedBy")
+  detentionsResumed        Detention[]             @relation("DetentionResumedBy")
+
+  @@map("user_accounts")
+}
+
+// ============================================================
+// TEACHER
+// ============================================================
+
+model Teacher {
+  id String @id @default(cuid())
+
+  employeeCode String @unique
+
+  fullName String
+  email    String?
+  phone    String?
+
+  designation String?
+
+  maxMentees Int     @default(30)
+  isActive   Boolean @default(true)
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  userAccountId String?      @unique
+  userAccount   UserAccount? @relation(fields: [userAccountId], references: [id], onDelete: SetNull)
+
+  // HOD relationship.
+  headedDepartment Department? @relation("DepartmentHod")
+
+  mentorAssignments MentorAssignment[]
+
+  transferRequestsInitiated         MentorTransferRequest[] @relation("TeacherInitiatedTransfer")
+  transferRequestsAsCurrentMentor   MentorTransferRequest[] @relation("CurrentMentor")
+  transferRequestsAsRequestedMentor MentorTransferRequest[] @relation("RequestedMentor")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([departmentId])
+  @@index([isActive])
+  @@map("teachers")
+}
+
+// ============================================================
+// STUDENT
+//
+// Permanent academic identity.
+// Academic progression is stored through StudentEnrollment.
+// ============================================================
+
+model Student {
+  id String @id @default(cuid())
+
+  registerNumber  String  @unique
+  admissionNumber String?
+
+  fullName String
+  email    String?
+  phone    String?
+
+  dateOfBirth DateTime?
+  gender      Gender?
+
+  status StudentStatus @default(INVITED)
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  userAccountId String?      @unique
+  userAccount   UserAccount? @relation(fields: [userAccountId], references: [id], onDelete: SetNull)
+
+  enrollments       StudentEnrollment[]
+  mentorAssignments MentorAssignment[]
+  transferRequests  MentorTransferRequest[]
+  detentions        Detention[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([departmentId])
+  @@index([status])
+  @@map("students")
+}
+
+// ============================================================
+// OTP VERIFICATION
+// ============================================================
+
+model OtpVerification {
+  id String @id @default(cuid())
+
+  userAccountId String
+  userAccount   UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  otpHash String
+  purpose OtpPurpose
+
+  expiresAt  DateTime
+  verifiedAt DateTime?
+
+  attempts Int @default(0)
+
+  createdAt DateTime @default(now())
+
+  @@index([userAccountId])
+  @@index([expiresAt])
+  @@map("otp_verifications")
+}
+
+// ============================================================
+// ACADEMIC YEAR
+// ============================================================
+
+model AcademicYear {
+  id String @id @default(cuid())
+
+  name String
+
+  startDate DateTime
+  endDate   DateTime
+
+  status AcademicYearStatus @default(UPCOMING)
+
+  departmentId String
+  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
+
+  terms         AcademicTerm[]
+  importBatches ImportBatch[]
+
+  createdAt            DateTime              @default(now())
+  updatedAt            DateTime              @updatedAt
+  academicTermRequests AcademicTermRequest[]
+
+  @@unique([departmentId, name])
+  @@index([departmentId])
+  @@index([status])
+  @@map("academic_years")
+}
+
+// ============================================================
+// ACADEMIC TERM
+// ============================================================
+
+model AcademicTerm {
+  id String @id @default(cuid())
+
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  semesterNumber Int
+  name           String?
+
+  startDate DateTime
+  endDate   DateTime
+
+  status AcademicTermStatus @default(UPCOMING)
+
+  enrollments       StudentEnrollment[]
+  mentorAssignments MentorAssignment[]
+  transferRequests  MentorTransferRequest[]
+  detentions        Detention[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([academicYearId, semesterNumber])
+  @@index([academicYearId])
+  @@index([status])
+  @@map("academic_terms")
+}
+
+// ============================================================
+// STUDENT ENROLLMENT
+//
+// Preserves complete academic history.
+// ============================================================
+
+model StudentEnrollment {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+
+  termId String
+  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
+
+  semesterNumber Int
+
+  status EnrollmentStatus @default(ACTIVE)
+
+  enrolledAt  DateTime  @default(now())
+  completedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, termId])
+  @@index([studentId])
+  @@index([termId])
+  @@index([status])
+  @@map("student_enrollments")
+}
+
+// ============================================================
+// MENTOR ASSIGNMENT
+//
+// Historical assignments are preserved.
+//
+// Business rule:
+// Only ONE ACTIVE mentor may exist for a student in a term.
+// This is enforced in the service transaction.
+// ============================================================
+
+model MentorAssignment {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+
+  teacherId String
+  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Restrict)
+
+  termId String
+  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
+
+  status MentorAssignmentStatus @default(ACTIVE)
+
+  assignedAt DateTime  @default(now())
+  endedAt    DateTime?
+
+  assignedBy     String
+  assignedByUser UserAccount @relation("AssignmentPerformedBy", fields: [assignedBy], references: [id], onDelete: Restrict)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId, termId])
+  @@index([teacherId, termId])
+  @@index([termId])
+  @@index([status])
+  @@map("mentor_assignments")
+}
+
+// ============================================================
+// MENTOR TRANSFER REQUEST
+//
+// Sources:
+//
+// 1. TEACHER
+//    Teacher sends request to HOD.
+//
+// 2. IN_PERSON
+//    Student visits HOD physically.
+//    HOD creates the request on the student's behalf.
+// ============================================================
+
+model MentorTransferRequest {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+
+  currentMentorId String?
+  currentMentor   Teacher? @relation("CurrentMentor", fields: [currentMentorId], references: [id], onDelete: SetNull)
+
+  requestedMentorId String?
+  requestedMentor   Teacher? @relation("RequestedMentor", fields: [requestedMentorId], references: [id], onDelete: SetNull)
+
+  termId String
+  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
+
+  requestSource MentorTransferRequestSource
+
+  initiatedByTeacherId String?
+  initiatedByTeacher   Teacher? @relation("TeacherInitiatedTransfer", fields: [initiatedByTeacherId], references: [id], onDelete: SetNull)
+
+  initiatedByUserId String
+  initiatedByUser   UserAccount @relation("TransferCreatedBy", fields: [initiatedByUserId], references: [id], onDelete: Restrict)
+
+  reason String?
+
+  status MentorTransferStatus @default(PENDING)
+
+  reviewedBy     String?
+  reviewedByUser UserAccount? @relation("TransferReviewedBy", fields: [reviewedBy], references: [id], onDelete: SetNull)
+
+  reviewedAt      DateTime?
+  rejectionReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId])
+  @@index([currentMentorId])
+  @@index([requestedMentorId])
+  @@index([initiatedByTeacherId])
+  @@index([initiatedByUserId])
+  @@index([termId])
+  @@index([status])
+  @@index([requestSource])
+  @@map("mentor_transfer_requests")
+}
+
+// ============================================================
+// STUDENT DETENTION
+// ============================================================
+
+model Detention {
+  id String @id @default(cuid())
+
+  studentId String
+  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
+
+  termId String
+  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
+
+  reason String?
+
+  status DetentionStatus @default(ACTIVE)
+
+  detainedAt DateTime @default(now())
+
+  resumedAt DateTime?
+
+  resumedBy     String?
+  resumedByUser UserAccount? @relation("DetentionResumedBy", fields: [resumedBy], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([studentId])
+  @@index([termId])
+  @@index([status])
+  @@map("detentions")
+}
+
+// ============================================================
+// IMPORT BATCH
+// ============================================================
+
+model ImportBatch {
+  id String @id @default(cuid())
+
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  fileName String?
+
+  totalRecords    Int @default(0)
+  successfulCount Int @default(0)
+  failedCount     Int @default(0)
+
+  status ImportBatchStatus @default(PROCESSING)
+
+  uploadedBy     String
+  uploadedByUser UserAccount @relation("ImportUploadedBy", fields: [uploadedBy], references: [id], onDelete: Restrict)
+
+  createdAt   DateTime  @default(now())
+  completedAt DateTime?
+
+  errors ImportError[]
+
+  @@index([academicYearId])
+  @@index([status])
+  @@index([uploadedBy])
+  @@map("import_batches")
+}
+
+// ============================================================
+// IMPORT ERROR
+// ============================================================
+
+model ImportError {
+  id String @id @default(cuid())
+
+  importBatchId String
+  importBatch   ImportBatch @relation(fields: [importBatchId], references: [id], onDelete: Restrict)
+
+  rowNumber Int
+
+  field   String?
+  value   String?
+  message String
+
+  createdAt DateTime @default(now())
+
+  @@index([importBatchId])
+  @@map("import_errors")
+}
+
+// ============================================================
+// ENUMS
+// ============================================================
+
+enum UserRole {
+  ADMIN
+  HOD
+  TEACHER
+  STUDENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum StudentStatus {
+  INVITED
+  ACTIVE
+  DETAINED
+  GRADUATED
+  INACTIVE
+}
+
+enum AcademicYearStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum AcademicTermStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  LOCKED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  DETAINED
+  WITHDRAWN
+}
+
+enum MentorAssignmentStatus {
+  ACTIVE
+  ENDED
+  TRANSFERRED
+  REMOVED
+}
+
+enum MentorTransferStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum MentorTransferRequestSource {
+  TEACHER
+  IN_PERSON
+}
+
+enum DetentionStatus {
+  ACTIVE
+  RESUMED
+  CANCELLED
+}
+
+enum ImportBatchStatus {
+  PROCESSING
+  COMPLETED
+  COMPLETED_WITH_ERRORS
+  FAILED
+}
+
+enum OtpPurpose {
+  ACCOUNT_ACTIVATION
+  LOGIN
+  PASSWORD_RESET
+}
+
+enum AcademicTermRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+// ============================================================
+// ACADEMIC TERM REQUEST
+//
+// HOD can propose a new academic term.
+//
+// The request must be approved by Super Admin before an
+// official AcademicTerm is created.
+//
+// Flow:
+//
+// HOD
+//   ↓
+// AcademicTermRequest (PENDING)
+//   ↓
+// Super Admin
+//   ├── APPROVED → AcademicTerm created
+//   └── REJECTED
+// ============================================================
+
+model AcademicTermRequest {
+  id String @id @default(cuid())
+
+  academicYearId String
+  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
+
+  semesterNumber Int
+  name           String?
+
+  proposedStartDate DateTime
+  proposedEndDate   DateTime
+
+  reason String?
+
+  requestedBy String
+
+  status AcademicTermRequestStatus @default(PENDING)
+
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([academicYearId])
+  @@index([status])
+  @@index([requestedBy])
+  @@map("academic_term_requests")
+}
