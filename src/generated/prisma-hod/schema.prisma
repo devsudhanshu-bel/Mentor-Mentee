@@ -1,0 +1,269 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma-hod"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEW_DATABASE_URL")
+}
+
+model academic_backlogs {
+  id                    String                @id
+  studentProfileId      String
+  subjectCode           String
+  subjectName           String
+  semesterNumber        Int
+  status                AcademicBacklogStatus @default(ACTIVE)
+  clearedSemesterNumber Int?
+  clearedGrade          String?
+  clearedMarks          Float?
+  clearedAt             DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime
+  student_profiles      student_profiles      @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@index([studentProfileId])
+  @@index([studentProfileId, status])
+}
+
+model academic_semesters {
+  id                String                 @id
+  studentProfileId  String
+  semesterNumber    Int
+  academicYear      String?
+  term              String?
+  status            AcademicSemesterStatus @default(LOCKED)
+  entryStatus       AcademicEntryStatus    @default(DRAFT)
+  sgpa              Float?
+  totalCredits      Int                    @default(0)
+  creditsEarned     Int                    @default(0)
+  backlogs          Int                    @default(0)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime
+  student_profiles  student_profiles       @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+  academic_subjects academic_subjects[]
+
+  @@unique([studentProfileId, semesterNumber])
+  @@index([studentProfileId])
+}
+
+model academic_subjects {
+  id                 String             @id
+  academicSemesterId String
+  courseCode         String
+  courseName         String
+  credits            Int
+  cia1               Float?
+  cia2               Float?
+  cia3               Float?
+  mse                Float?
+  ese                Float?
+  maximumMarks       Float?
+  totalMarksObtained Float?
+  grade              String?
+  gradePoint         Float?
+  attendance         Float?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime
+  classesAttended    Int                @default(0)
+  classesHeld        Int                @default(0)
+  academic_semesters academic_semesters @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+
+  @@index([academicSemesterId])
+}
+
+model student_contact_details {
+  id                           String                        @id
+  studentProfileId             String                        @unique
+  permanentAddress             String?
+  currentAddress               String?
+  addressType                  AddressType?
+  durationAtCurrentAddress     String?
+  personalMobile               String?
+  alternateMobile              String?
+  personalEmail                String?
+  alternateEmail               String?
+  whatsappNumber               String?
+  telegramUsername             String?
+  linkedInProfile              String?
+  githubProfile                String?
+  preferredContactMethod       PreferredContactMethod?
+  preferredContactTime         String?
+  communicationEmailPreference CommunicationEmailPreference?
+  allowWhatsappCommunication   Boolean                       @default(false)
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime
+  student_profiles             student_profiles              @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+}
+
+model student_documents {
+  id                 String           @id
+  studentProfileId   String
+  documentName       String
+  category           DocumentCategory
+  description        String?
+  fileType           String
+  fileSize           Int
+  cloudinaryPublicId String
+  fileUrl            String
+  uploadedAt         DateTime         @default(now())
+  updatedAt          DateTime
+  resourceType       String
+  student_profiles   student_profiles @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@index([studentProfileId])
+}
+
+model student_parent_details {
+  id                     String           @id
+  studentProfileId       String           @unique
+  fatherName             String?
+  fatherOccupation       String?
+  fatherCompany          String?
+  fatherAnnualIncome     String?
+  fatherQualification    String?
+  fatherEmail            String?
+  fatherPhone            String?
+  fatherAddress          String?
+  motherName             String?
+  motherOccupation       String?
+  motherQualification    String?
+  motherAnnualIncome     String?
+  motherEmail            String?
+  motherPhone            String?
+  motherAddress          String?
+  guardianName           String?
+  guardianRelationship   String?
+  guardianPhone          String?
+  guardianAlternatePhone String?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime
+  student_profiles       student_profiles @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+}
+
+model student_profiles {
+  id                      String                   @id
+  userId                  String                   @unique
+  registerNumber          String?                  @unique
+  admissionNumber         String?                  @unique
+  profileImage            String?
+  dateOfBirth             DateTime?
+  gender                  Gender?
+  bloodGroup              BloodGroup?
+  nationality             String?
+  religion                String?
+  department              String?
+  programme               String?
+  semester                String?
+  section                 String?
+  studentType             StudentType?
+  address                 String?
+  permanentAddress        String?
+  yearsAtUniversity       String?
+  totalCredits            Int?
+  currentCGPA             Float?
+  overallAttendance       Float?
+  academicStanding        String?
+  currentMentor           String?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime
+  academicSetupCompleted  Boolean                  @default(false)
+  academic_backlogs       academic_backlogs[]
+  academic_semesters      academic_semesters[]
+  student_contact_details student_contact_details?
+  student_documents       student_documents[]
+  student_parent_details  student_parent_details?
+  users                   users                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model users {
+  id               String            @id
+  fullName         String
+  username         String            @unique
+  email            String            @unique
+  password         String
+  role             Role
+  isActive         Boolean           @default(true)
+  lastLogin        DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime
+  student_profiles student_profiles?
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum AcademicBacklogStatus {
+  ACTIVE
+  CLEARED
+}
+
+enum AcademicEntryStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
+}
+
+enum AcademicSemesterStatus {
+  LOCKED
+  CURRENT
+  COMPLETED
+  FAILED
+}
+
+enum AddressType {
+  HOME
+  HOSTEL
+  RENTED
+  OTHER
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+enum CommunicationEmailPreference {
+  UNIVERSITY_EMAIL
+  PERSONAL_EMAIL
+}
+
+enum DocumentCategory {
+  ACADEMICS
+  CERTIFICATES
+  INTERNSHIPS
+  PROJECTS
+  RESEARCH
+  CO_CURRICULAR
+  EXTRA_CURRICULAR
+  AWARDS
+  PERSONAL
+  OTHER
+}
+
+enum PreferredContactMethod {
+  MOBILE
+  EMAIL
+  WHATSAPP
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  STUDENT
+}
+
+enum StudentType {
+  DAY_SCHOLAR
+  HOSTELLER
+}

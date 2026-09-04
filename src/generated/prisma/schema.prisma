@@ -1,0 +1,281 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(cuid())
+  fullName       String
+  username       String          @unique
+  email          String          @unique
+  password       String
+  role           Role
+  isActive       Boolean         @default(true)
+  lastLogin      DateTime?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  studentProfile StudentProfile?
+
+  @@map("users")
+}
+
+model StudentProfile {
+  id                     String                 @id @default(cuid())
+  userId                 String                 @unique
+  registerNumber         String?                @unique
+  admissionNumber        String?                @unique
+  profileImage           String?
+  dateOfBirth            DateTime?
+  gender                 Gender?
+  bloodGroup             BloodGroup?
+  nationality            String?
+  religion               String?
+  department             String?
+  programme              String?
+  semester               String?
+  section                String?
+  studentType            StudentType?
+  address                String?
+  permanentAddress       String?
+  yearsAtUniversity      String?
+  totalCredits           Int?
+  currentCGPA            Float?
+  overallAttendance      Float?
+  academicStanding       String?
+  currentMentor          String?
+  createdAt              DateTime               @default(now())
+  updatedAt              DateTime               @updatedAt
+  academicSetupCompleted Boolean                @default(false)
+  academicBacklogs       AcademicBacklog[]
+  academicSemesters      AcademicSemester[]
+  contactDetails         StudentContactDetails?
+  documents              StudentDocument[]
+  parentDetails          StudentParentDetails?
+  user                   User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("student_profiles")
+}
+
+model StudentParentDetails {
+  id                     String         @id @default(cuid())
+  studentProfileId       String         @unique
+  fatherName             String?
+  fatherOccupation       String?
+  fatherCompany          String?
+  fatherAnnualIncome     String?
+  fatherQualification    String?
+  fatherEmail            String?
+  fatherPhone            String?
+  fatherAddress          String?
+  motherName             String?
+  motherOccupation       String?
+  motherQualification    String?
+  motherAnnualIncome     String?
+  motherEmail            String?
+  motherPhone            String?
+  motherAddress          String?
+  guardianName           String?
+  guardianRelationship   String?
+  guardianPhone          String?
+  guardianAlternatePhone String?
+  createdAt              DateTime       @default(now())
+  updatedAt              DateTime       @updatedAt
+  studentProfile         StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@map("student_parent_details")
+}
+
+model StudentContactDetails {
+  id                           String                        @id @default(cuid())
+  studentProfileId             String                        @unique
+  permanentAddress             String?
+  currentAddress               String?
+  addressType                  AddressType?
+  durationAtCurrentAddress     String?
+  personalMobile               String?
+  alternateMobile              String?
+  personalEmail                String?
+  alternateEmail               String?
+  whatsappNumber               String?
+  telegramUsername             String?
+  linkedInProfile              String?
+  githubProfile                String?
+  preferredContactMethod       PreferredContactMethod?
+  preferredContactTime         String?
+  communicationEmailPreference CommunicationEmailPreference?
+  allowWhatsappCommunication   Boolean                       @default(false)
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime                      @updatedAt
+  studentProfile               StudentProfile                @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@map("student_contact_details")
+}
+
+model StudentDocument {
+  id                 String           @id @default(cuid())
+  studentProfileId   String
+  documentName       String
+  category           DocumentCategory
+  description        String?
+  fileType           String
+  fileSize           Int
+  cloudinaryPublicId String
+  fileUrl            String
+  uploadedAt         DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  resourceType       String
+  studentProfile     StudentProfile   @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@index([studentProfileId])
+  @@map("student_documents")
+}
+
+model AcademicSemester {
+  id               String                 @id @default(cuid())
+  studentProfileId String
+  semesterNumber   Int
+  academicYear     String?
+  term             String?
+  status           AcademicSemesterStatus @default(LOCKED)
+  entryStatus      AcademicEntryStatus    @default(DRAFT)
+  sgpa             Float?
+  totalCredits     Int                    @default(0)
+  creditsEarned    Int                    @default(0)
+  backlogs         Int                    @default(0)
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+  studentProfile   StudentProfile         @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+  subjects         AcademicSubject[]
+
+  @@unique([studentProfileId, semesterNumber])
+  @@index([studentProfileId])
+  @@map("academic_semesters")
+}
+
+model AcademicSubject {
+  id                 String           @id @default(cuid())
+  academicSemesterId String
+  courseCode         String
+  courseName         String
+  credits            Int
+  cia1               Float?
+  cia2               Float?
+  cia3               Float?
+  mse                Float?
+  ese                Float?
+  maximumMarks       Float?
+  totalMarksObtained Float?
+  grade              String?
+  gradePoint         Float?
+  attendance         Float?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  classesAttended    Int              @default(0)
+  classesHeld        Int              @default(0)
+  academicSemester   AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+
+  @@index([academicSemesterId])
+  @@map("academic_subjects")
+}
+
+model AcademicBacklog {
+  id                    String                @id @default(cuid())
+  studentProfileId      String
+  subjectCode           String
+  subjectName           String
+  semesterNumber        Int
+  status                AcademicBacklogStatus @default(ACTIVE)
+  clearedSemesterNumber Int?
+  clearedGrade          String?
+  clearedMarks          Float?
+  clearedAt             DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  studentProfile        StudentProfile        @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+
+  @@index([studentProfileId])
+  @@index([studentProfileId, status])
+  @@map("academic_backlogs")
+}
+
+enum Role {
+  ADMIN
+  MENTOR
+  STUDENT
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+enum StudentType {
+  DAY_SCHOLAR
+  HOSTELLER
+}
+
+enum AddressType {
+  HOME
+  HOSTEL
+  RENTED
+  OTHER
+}
+
+enum PreferredContactMethod {
+  MOBILE
+  EMAIL
+  WHATSAPP
+}
+
+enum CommunicationEmailPreference {
+  UNIVERSITY_EMAIL
+  PERSONAL_EMAIL
+}
+
+enum AcademicSemesterStatus {
+  LOCKED
+  CURRENT
+  COMPLETED
+  FAILED
+}
+
+enum AcademicEntryStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
+}
+
+enum DocumentCategory {
+  ACADEMICS
+  CERTIFICATES
+  INTERNSHIPS
+  PROJECTS
+  RESEARCH
+  CO_CURRICULAR
+  EXTRA_CURRICULAR
+  AWARDS
+  PERSONAL
+  OTHER
+}
+
+enum AcademicBacklogStatus {
+  ACTIVE
+  CLEARED
+}

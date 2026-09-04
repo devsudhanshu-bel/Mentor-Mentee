@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma-hod"
 }
 
 datasource db {
@@ -7,462 +8,187 @@ datasource db {
   url      = env("NEW_DATABASE_URL")
 }
 
-// ============================================================
-// DEPARTMENT
-// ============================================================
+model academic_backlogs {
+  id                    String                @id
+  studentProfileId      String
+  subjectCode           String
+  subjectName           String
+  semesterNumber        Int
+  status                AcademicBacklogStatus @default(ACTIVE)
+  clearedSemesterNumber Int?
+  clearedGrade          String?
+  clearedMarks          Float?
+  clearedAt             DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime
+  student_profiles      student_profiles      @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
 
-model Department {
-  id String @id @default(cuid())
-
-  name String
-  code String @unique
-
-  // The teacher who currently serves as HOD.
-  hodTeacherId String?  @unique
-  hodTeacher   Teacher? @relation("DepartmentHod", fields: [hodTeacherId], references: [id], onDelete: SetNull)
-
-  teachers      Teacher[]
-  students      Student[]
-  academicYears AcademicYear[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("departments")
+  @@index([studentProfileId])
+  @@index([studentProfileId, status])
 }
 
-// ============================================================
-// USER ACCOUNT
-//
-// Authentication identity is separate from academic identity.
-// ============================================================
+model academic_semesters {
+  id                String                 @id
+  studentProfileId  String
+  semesterNumber    Int
+  academicYear      String?
+  term              String?
+  status            AcademicSemesterStatus @default(LOCKED)
+  entryStatus       AcademicEntryStatus    @default(DRAFT)
+  sgpa              Float?
+  totalCredits      Int                    @default(0)
+  creditsEarned     Int                    @default(0)
+  backlogs          Int                    @default(0)
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime
+  student_profiles  student_profiles       @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
+  academic_subjects academic_subjects[]
 
-model UserAccount {
-  id String @id @default(cuid())
-
-  username String  @unique
-  email    String? @unique
-  password String?
-
-  role     UserRole
-  isActive Boolean  @default(true)
-
-  lastLogin DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  teacher Teacher?
-  student Student?
-
-  otpVerifications OtpVerification[]
-
-  createdAtActions         MentorAssignment[]      @relation("AssignmentPerformedBy")
-  transferRequestsCreated  MentorTransferRequest[] @relation("TransferCreatedBy")
-  transferRequestsReviewed MentorTransferRequest[] @relation("TransferReviewedBy")
-  importBatchesUploaded    ImportBatch[]           @relation("ImportUploadedBy")
-  detentionsResumed        Detention[]             @relation("DetentionResumedBy")
-
-  @@map("user_accounts")
+  @@unique([studentProfileId, semesterNumber])
+  @@index([studentProfileId])
 }
 
-// ============================================================
-// TEACHER
-// ============================================================
+model academic_subjects {
+  id                 String             @id
+  academicSemesterId String
+  courseCode         String
+  courseName         String
+  credits            Int
+  cia1               Float?
+  cia2               Float?
+  cia3               Float?
+  mse                Float?
+  ese                Float?
+  maximumMarks       Float?
+  totalMarksObtained Float?
+  grade              String?
+  gradePoint         Float?
+  attendance         Float?
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime
+  classesAttended    Int                @default(0)
+  classesHeld        Int                @default(0)
+  academic_semesters academic_semesters @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
 
-model Teacher {
-  id String @id @default(cuid())
-
-  employeeCode String @unique
-
-  fullName String
-  email    String?
-  phone    String?
-
-  designation String?
-
-  maxMentees Int     @default(30)
-  isActive   Boolean @default(true)
-
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-
-  userAccountId String?      @unique
-  userAccount   UserAccount? @relation(fields: [userAccountId], references: [id], onDelete: SetNull)
-
-  // HOD relationship.
-  headedDepartment Department? @relation("DepartmentHod")
-
-  mentorAssignments MentorAssignment[]
-
-  transferRequestsInitiated         MentorTransferRequest[] @relation("TeacherInitiatedTransfer")
-  transferRequestsAsCurrentMentor   MentorTransferRequest[] @relation("CurrentMentor")
-  transferRequestsAsRequestedMentor MentorTransferRequest[] @relation("RequestedMentor")
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([departmentId])
-  @@index([isActive])
-  @@map("teachers")
+  @@index([academicSemesterId])
 }
 
-// ============================================================
-// STUDENT
-//
-// Permanent academic identity.
-// Academic progression is stored through StudentEnrollment.
-// ============================================================
-
-model Student {
-  id String @id @default(cuid())
-
-  registerNumber  String  @unique
-  admissionNumber String?
-
-  fullName String
-  email    String?
-  phone    String?
-
-  dateOfBirth DateTime?
-  gender      Gender?
-
-  status StudentStatus @default(INVITED)
-
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-
-  userAccountId String?      @unique
-  userAccount   UserAccount? @relation(fields: [userAccountId], references: [id], onDelete: SetNull)
-
-  enrollments       StudentEnrollment[]
-  mentorAssignments MentorAssignment[]
-  transferRequests  MentorTransferRequest[]
-  detentions        Detention[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([departmentId])
-  @@index([status])
-  @@map("students")
+model student_contact_details {
+  id                           String                        @id
+  studentProfileId             String                        @unique
+  permanentAddress             String?
+  currentAddress               String?
+  addressType                  AddressType?
+  durationAtCurrentAddress     String?
+  personalMobile               String?
+  alternateMobile              String?
+  personalEmail                String?
+  alternateEmail               String?
+  whatsappNumber               String?
+  telegramUsername             String?
+  linkedInProfile              String?
+  githubProfile                String?
+  preferredContactMethod       PreferredContactMethod?
+  preferredContactTime         String?
+  communicationEmailPreference CommunicationEmailPreference?
+  allowWhatsappCommunication   Boolean                       @default(false)
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime
+  student_profiles             student_profiles              @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
 }
 
-// ============================================================
-// OTP VERIFICATION
-// ============================================================
+model student_documents {
+  id                 String           @id
+  studentProfileId   String
+  documentName       String
+  category           DocumentCategory
+  description        String?
+  fileType           String
+  fileSize           Int
+  cloudinaryPublicId String
+  fileUrl            String
+  uploadedAt         DateTime         @default(now())
+  updatedAt          DateTime
+  resourceType       String
+  student_profiles   student_profiles @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
 
-model OtpVerification {
-  id String @id @default(cuid())
-
-  userAccountId String
-  userAccount   UserAccount @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
-
-  otpHash String
-  purpose OtpPurpose
-
-  expiresAt  DateTime
-  verifiedAt DateTime?
-
-  attempts Int @default(0)
-
-  createdAt DateTime @default(now())
-
-  @@index([userAccountId])
-  @@index([expiresAt])
-  @@map("otp_verifications")
+  @@index([studentProfileId])
 }
 
-// ============================================================
-// ACADEMIC YEAR
-// ============================================================
-
-model AcademicYear {
-  id String @id @default(cuid())
-
-  name String
-
-  startDate DateTime
-  endDate   DateTime
-
-  status AcademicYearStatus @default(UPCOMING)
-
-  departmentId String
-  department   Department @relation(fields: [departmentId], references: [id], onDelete: Restrict)
-
-  terms         AcademicTerm[]
-  importBatches ImportBatch[]
-
-  createdAt            DateTime              @default(now())
-  updatedAt            DateTime              @updatedAt
-  academicTermRequests AcademicTermRequest[]
-
-  @@unique([departmentId, name])
-  @@index([departmentId])
-  @@index([status])
-  @@map("academic_years")
+model student_parent_details {
+  id                     String           @id
+  studentProfileId       String           @unique
+  fatherName             String?
+  fatherOccupation       String?
+  fatherCompany          String?
+  fatherAnnualIncome     String?
+  fatherQualification    String?
+  fatherEmail            String?
+  fatherPhone            String?
+  fatherAddress          String?
+  motherName             String?
+  motherOccupation       String?
+  motherQualification    String?
+  motherAnnualIncome     String?
+  motherEmail            String?
+  motherPhone            String?
+  motherAddress          String?
+  guardianName           String?
+  guardianRelationship   String?
+  guardianPhone          String?
+  guardianAlternatePhone String?
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime
+  student_profiles       student_profiles @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
 }
 
-// ============================================================
-// ACADEMIC TERM
-// ============================================================
-
-model AcademicTerm {
-  id String @id @default(cuid())
-
-  academicYearId String
-  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
-
-  semesterNumber Int
-  name           String?
-
-  startDate DateTime
-  endDate   DateTime
-
-  status AcademicTermStatus @default(UPCOMING)
-
-  enrollments       StudentEnrollment[]
-  mentorAssignments MentorAssignment[]
-  transferRequests  MentorTransferRequest[]
-  detentions        Detention[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([academicYearId, semesterNumber])
-  @@index([academicYearId])
-  @@index([status])
-  @@map("academic_terms")
+model student_profiles {
+  id                      String                   @id
+  userId                  String                   @unique
+  registerNumber          String?                  @unique
+  admissionNumber         String?                  @unique
+  profileImage            String?
+  dateOfBirth             DateTime?
+  gender                  Gender?
+  bloodGroup              BloodGroup?
+  nationality             String?
+  religion                String?
+  department              String?
+  programme               String?
+  semester                String?
+  section                 String?
+  studentType             StudentType?
+  address                 String?
+  permanentAddress        String?
+  yearsAtUniversity       String?
+  totalCredits            Int?
+  currentCGPA             Float?
+  overallAttendance       Float?
+  academicStanding        String?
+  currentMentor           String?
+  createdAt               DateTime                 @default(now())
+  updatedAt               DateTime
+  academicSetupCompleted  Boolean                  @default(false)
+  academic_backlogs       academic_backlogs[]
+  academic_semesters      academic_semesters[]
+  student_contact_details student_contact_details?
+  student_documents       student_documents[]
+  student_parent_details  student_parent_details?
+  users                   users                    @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-// ============================================================
-// STUDENT ENROLLMENT
-//
-// Preserves complete academic history.
-// ============================================================
-
-model StudentEnrollment {
-  id String @id @default(cuid())
-
-  studentId String
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
-
-  termId String
-  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
-
-  semesterNumber Int
-
-  status EnrollmentStatus @default(ACTIVE)
-
-  enrolledAt  DateTime  @default(now())
-  completedAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([studentId, termId])
-  @@index([studentId])
-  @@index([termId])
-  @@index([status])
-  @@map("student_enrollments")
-}
-
-// ============================================================
-// MENTOR ASSIGNMENT
-//
-// Historical assignments are preserved.
-//
-// Business rule:
-// Only ONE ACTIVE mentor may exist for a student in a term.
-// This is enforced in the service transaction.
-// ============================================================
-
-model MentorAssignment {
-  id String @id @default(cuid())
-
-  studentId String
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
-
-  teacherId String
-  teacher   Teacher @relation(fields: [teacherId], references: [id], onDelete: Restrict)
-
-  termId String
-  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
-
-  status MentorAssignmentStatus @default(ACTIVE)
-
-  assignedAt DateTime  @default(now())
-  endedAt    DateTime?
-
-  assignedBy     String
-  assignedByUser UserAccount @relation("AssignmentPerformedBy", fields: [assignedBy], references: [id], onDelete: Restrict)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([studentId, termId])
-  @@index([teacherId, termId])
-  @@index([termId])
-  @@index([status])
-  @@map("mentor_assignments")
-}
-
-// ============================================================
-// MENTOR TRANSFER REQUEST
-//
-// Sources:
-//
-// 1. TEACHER
-//    Teacher sends request to HOD.
-//
-// 2. IN_PERSON
-//    Student visits HOD physically.
-//    HOD creates the request on the student's behalf.
-// ============================================================
-
-model MentorTransferRequest {
-  id String @id @default(cuid())
-
-  studentId String
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
-
-  currentMentorId String?
-  currentMentor   Teacher? @relation("CurrentMentor", fields: [currentMentorId], references: [id], onDelete: SetNull)
-
-  requestedMentorId String?
-  requestedMentor   Teacher? @relation("RequestedMentor", fields: [requestedMentorId], references: [id], onDelete: SetNull)
-
-  termId String
-  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
-
-  requestSource MentorTransferRequestSource
-
-  initiatedByTeacherId String?
-  initiatedByTeacher   Teacher? @relation("TeacherInitiatedTransfer", fields: [initiatedByTeacherId], references: [id], onDelete: SetNull)
-
-  initiatedByUserId String
-  initiatedByUser   UserAccount @relation("TransferCreatedBy", fields: [initiatedByUserId], references: [id], onDelete: Restrict)
-
-  reason String?
-
-  status MentorTransferStatus @default(PENDING)
-
-  reviewedBy     String?
-  reviewedByUser UserAccount? @relation("TransferReviewedBy", fields: [reviewedBy], references: [id], onDelete: SetNull)
-
-  reviewedAt      DateTime?
-  rejectionReason String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([studentId])
-  @@index([currentMentorId])
-  @@index([requestedMentorId])
-  @@index([initiatedByTeacherId])
-  @@index([initiatedByUserId])
-  @@index([termId])
-  @@index([status])
-  @@index([requestSource])
-  @@map("mentor_transfer_requests")
-}
-
-// ============================================================
-// STUDENT DETENTION
-// ============================================================
-
-model Detention {
-  id String @id @default(cuid())
-
-  studentId String
-  student   Student @relation(fields: [studentId], references: [id], onDelete: Restrict)
-
-  termId String
-  term   AcademicTerm @relation(fields: [termId], references: [id], onDelete: Restrict)
-
-  reason String?
-
-  status DetentionStatus @default(ACTIVE)
-
-  detainedAt DateTime @default(now())
-
-  resumedAt DateTime?
-
-  resumedBy     String?
-  resumedByUser UserAccount? @relation("DetentionResumedBy", fields: [resumedBy], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([studentId])
-  @@index([termId])
-  @@index([status])
-  @@map("detentions")
-}
-
-// ============================================================
-// IMPORT BATCH
-// ============================================================
-
-model ImportBatch {
-  id String @id @default(cuid())
-
-  academicYearId String
-  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
-
-  fileName String?
-
-  totalRecords    Int @default(0)
-  successfulCount Int @default(0)
-  failedCount     Int @default(0)
-
-  status ImportBatchStatus @default(PROCESSING)
-
-  uploadedBy     String
-  uploadedByUser UserAccount @relation("ImportUploadedBy", fields: [uploadedBy], references: [id], onDelete: Restrict)
-
-  createdAt   DateTime  @default(now())
-  completedAt DateTime?
-
-  errors ImportError[]
-
-  @@index([academicYearId])
-  @@index([status])
-  @@index([uploadedBy])
-  @@map("import_batches")
-}
-
-// ============================================================
-// IMPORT ERROR
-// ============================================================
-
-model ImportError {
-  id String @id @default(cuid())
-
-  importBatchId String
-  importBatch   ImportBatch @relation(fields: [importBatchId], references: [id], onDelete: Restrict)
-
-  rowNumber Int
-
-  field   String?
-  value   String?
-  message String
-
-  createdAt DateTime @default(now())
-
-  @@index([importBatchId])
-  @@map("import_errors")
-}
-
-// ============================================================
-// ENUMS
-// ============================================================
-
-enum UserRole {
-  ADMIN
-  HOD
-  TEACHER
-  STUDENT
+model users {
+  id               String            @id
+  fullName         String
+  username         String            @unique
+  email            String            @unique
+  password         String
+  role             Role
+  isActive         Boolean           @default(true)
+  lastLogin        DateTime?
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime
+  student_profiles student_profiles?
 }
 
 enum Gender {
@@ -471,127 +197,73 @@ enum Gender {
   OTHER
 }
 
-enum StudentStatus {
-  INVITED
+enum AcademicBacklogStatus {
   ACTIVE
-  DETAINED
-  GRADUATED
-  INACTIVE
+  CLEARED
 }
 
-enum AcademicYearStatus {
-  UPCOMING
-  ACTIVE
-  COMPLETED
-  ARCHIVED
+enum AcademicEntryStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
 }
 
-enum AcademicTermStatus {
-  UPCOMING
-  ACTIVE
-  COMPLETED
+enum AcademicSemesterStatus {
   LOCKED
-}
-
-enum EnrollmentStatus {
-  ACTIVE
+  CURRENT
   COMPLETED
   FAILED
-  DETAINED
-  WITHDRAWN
 }
 
-enum MentorAssignmentStatus {
-  ACTIVE
-  ENDED
-  TRANSFERRED
-  REMOVED
+enum AddressType {
+  HOME
+  HOSTEL
+  RENTED
+  OTHER
 }
 
-enum MentorTransferStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  CANCELLED
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
 }
 
-enum MentorTransferRequestSource {
-  TEACHER
-  IN_PERSON
+enum CommunicationEmailPreference {
+  UNIVERSITY_EMAIL
+  PERSONAL_EMAIL
 }
 
-enum DetentionStatus {
-  ACTIVE
-  RESUMED
-  CANCELLED
+enum DocumentCategory {
+  ACADEMICS
+  CERTIFICATES
+  INTERNSHIPS
+  PROJECTS
+  RESEARCH
+  CO_CURRICULAR
+  EXTRA_CURRICULAR
+  AWARDS
+  PERSONAL
+  OTHER
 }
 
-enum ImportBatchStatus {
-  PROCESSING
-  COMPLETED
-  COMPLETED_WITH_ERRORS
-  FAILED
+enum PreferredContactMethod {
+  MOBILE
+  EMAIL
+  WHATSAPP
 }
 
-enum OtpPurpose {
-  ACCOUNT_ACTIVATION
-  LOGIN
-  PASSWORD_RESET
+enum Role {
+  ADMIN
+  MENTOR
+  STUDENT
 }
 
-enum AcademicTermRequestStatus {
-  PENDING
-  APPROVED
-  REJECTED
-  CANCELLED
-}
-
-// ============================================================
-// ACADEMIC TERM REQUEST
-//
-// HOD can propose a new academic term.
-//
-// The request must be approved by Super Admin before an
-// official AcademicTerm is created.
-//
-// Flow:
-//
-// HOD
-//   ↓
-// AcademicTermRequest (PENDING)
-//   ↓
-// Super Admin
-//   ├── APPROVED → AcademicTerm created
-//   └── REJECTED
-// ============================================================
-
-model AcademicTermRequest {
-  id String @id @default(cuid())
-
-  academicYearId String
-  academicYear   AcademicYear @relation(fields: [academicYearId], references: [id], onDelete: Restrict)
-
-  semesterNumber Int
-  name           String?
-
-  proposedStartDate DateTime
-  proposedEndDate   DateTime
-
-  reason String?
-
-  requestedBy String
-
-  status AcademicTermRequestStatus @default(PENDING)
-
-  reviewedBy      String?
-  reviewedAt      DateTime?
-  rejectionReason String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([academicYearId])
-  @@index([status])
-  @@index([requestedBy])
-  @@map("academic_term_requests")
+enum StudentType {
+  DAY_SCHOLAR
+  HOSTELLER
 }

@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -50,8 +51,8 @@ model StudentProfile {
   createdAt              DateTime               @default(now())
   updatedAt              DateTime               @updatedAt
   academicSetupCompleted Boolean                @default(false)
-  academicSemesters      AcademicSemester[]
   academicBacklogs       AcademicBacklog[]
+  academicSemesters      AcademicSemester[]
   contactDetails         StudentContactDetails?
   documents              StudentDocument[]
   parentDetails          StudentParentDetails?
@@ -157,13 +158,11 @@ model AcademicSemester {
 }
 
 model AcademicSubject {
-  id                 String @id @default(cuid())
+  id                 String           @id @default(cuid())
   academicSemesterId String
-
-  courseCode String
-  courseName String
-  credits    Int
-
+  courseCode         String
+  courseName         String
+  credits            Int
   cia1               Float?
   cia2               Float?
   cia3               Float?
@@ -173,46 +172,31 @@ model AcademicSubject {
   totalMarksObtained Float?
   grade              String?
   gradePoint         Float?
-
-  attendance      Float?
-  classesHeld     Int    @default(0)
-  classesAttended Int    @default(0)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  academicSemester AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+  attendance         Float?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  classesAttended    Int              @default(0)
+  classesHeld        Int              @default(0)
+  academicSemester   AcademicSemester @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
 
   @@index([academicSemesterId])
   @@map("academic_subjects")
 }
 
 model AcademicBacklog {
-  id String @id @default(cuid())
-
-  studentProfileId String
-
-  studentProfile StudentProfile @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
-
-  subjectCode String
-
-  subjectName String
-
-  semesterNumber Int
-
-  status AcademicBacklogStatus @default(ACTIVE)
-
+  id                    String                @id @default(cuid())
+  studentProfileId      String
+  subjectCode           String
+  subjectName           String
+  semesterNumber        Int
+  status                AcademicBacklogStatus @default(ACTIVE)
   clearedSemesterNumber Int?
-
-  clearedGrade String?
-
-  clearedMarks Float?
-
-  clearedAt DateTime?
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
+  clearedGrade          String?
+  clearedMarks          Float?
+  clearedAt             DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  studentProfile        StudentProfile        @relation(fields: [studentProfileId], references: [id], onDelete: Cascade)
 
   @@index([studentProfileId])
   @@index([studentProfileId, status])
