@@ -1,7 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { ChevronDown } from "lucide-react";
 
-const FilterSelect = ({ label, value, options, onChange }) => {
+// ============================================================
+// GENERIC FILTER SELECT
+// ============================================================
+
+const FilterSelect = ({
+  label,
+  value,
+  options = [],
+  onChange,
+  disabled = false,
+  placeholder = "Select",
+}) => {
   return (
     <div className="flex min-w-0 flex-col gap-1.5">
       <label className="text-[11px] font-semibold leading-none text-slate-700">
@@ -10,9 +21,10 @@ const FilterSelect = ({ label, value, options, onChange }) => {
 
       <div className="relative">
         <select
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          className="
+          value={value ?? ""}
+          onChange={(event) => onChange(event.target.value)}
+          disabled={disabled}
+          className={`
             h-9
             w-full
             appearance-none
@@ -24,19 +36,21 @@ const FilterSelect = ({ label, value, options, onChange }) => {
             pr-8
             text-[12px]
             font-medium
-            text-slate-700
             outline-none
             transition-all
             duration-200
-            hover:border-blue-300
-            focus:border-blue-500
-            focus:ring-2
-            focus:ring-blue-100
-          "
+            ${
+              disabled
+                ? "cursor-not-allowed bg-slate-50 text-slate-400"
+                : "text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            }
+          `}
         >
+          <option value="">{placeholder}</option>
+
           {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
+            <option key={option.value} value={option.value}>
+              {option.label}
             </option>
           ))}
         </select>
@@ -58,22 +72,128 @@ const FilterSelect = ({ label, value, options, onChange }) => {
   );
 };
 
-const AssignmentFilters = () => {
-  const [filters, setFilters] = useState({
-    academicYear: "2026-27",
-    term: "Odd Semester 2026",
-    department: "Computer Science & Engg.",
-    year: "3rd Year",
-    section: "All Sections",
-    view: "assign",
-  });
+// ============================================================
+// SEMESTER → YEAR LABEL
+// ============================================================
 
-  const updateFilter = (key, value) => {
-    setFilters((previous) => ({
-      ...previous,
-      [key]: value,
-    }));
+const getYearLabel = (semester) => {
+  const value = Number(semester);
+
+  if (!Number.isFinite(value)) {
+    return `Semester ${semester}`;
+  }
+
+  if (value === 1 || value === 2) {
+    return "1st Year";
+  }
+
+  if (value === 3 || value === 4) {
+    return "2nd Year";
+  }
+
+  if (value === 5 || value === 6) {
+    return "3rd Year";
+  }
+
+  if (value === 7 || value === 8) {
+    return "4th Year";
+  }
+
+  return `Semester ${value}`;
+};
+
+// ============================================================
+// ASSIGNMENT FILTERS
+// ============================================================
+
+const AssignmentFilters = ({ filters = {}, filterOptions = {}, onChange }) => {
+  const {
+    academicYears = [],
+    terms = [],
+    departments = [],
+    years = [],
+    sections = [],
+  } = filterOptions;
+
+  // ============================================================
+  // ACADEMIC YEAR OPTIONS
+  // ============================================================
+
+  const academicYearOptions = academicYears.map((year) => ({
+    value: year.id,
+    label: year.name,
+  }));
+
+  // ============================================================
+  // TERM OPTIONS
+  // ============================================================
+
+  const termOptions = terms.map((term) => ({
+    value: term.id,
+    label: term.name,
+  }));
+
+  // ============================================================
+  // DEPARTMENT OPTIONS
+  // ============================================================
+
+  const departmentOptions = departments.map((department) => ({
+    value: department.id,
+    label: department.name,
+  }));
+
+  // ============================================================
+  // YEAR OPTIONS
+  // ============================================================
+
+  const yearOptions = years
+    .map((semester) => ({
+      value: String(semester),
+      label: getYearLabel(semester),
+    }))
+    .filter(
+      (option, index, array) =>
+        array.findIndex((item) => item.label === option.label) === index,
+    );
+
+  // ============================================================
+  // SECTION OPTIONS
+  // ============================================================
+
+  const sectionOptions = sections.map((section) => ({
+    value: section,
+    label: section,
+  }));
+
+  // ============================================================
+  // HANDLERS
+  // ============================================================
+
+  const handleAcademicYearChange = (value) => {
+    const selected = academicYears.find((year) => year.id === value);
+
+    onChange("academicYearId", value, selected);
   };
+
+  const handleTermChange = (value) => {
+    onChange("termId", value);
+  };
+
+  const handleDepartmentChange = (value) => {
+    onChange("departmentId", value);
+  };
+
+  const handleYearChange = (value) => {
+    onChange("semesterNumber", value);
+  };
+
+  const handleSectionChange = (value) => {
+    onChange("section", value);
+  };
+
+  // ============================================================
+  // RENDER
+  // ============================================================
 
   return (
     <div
@@ -87,164 +207,93 @@ const AssignmentFilters = () => {
         shadow-sm
       "
     >
-      <div className="grid grid-cols-6 gap-4">
-        {/* ================= Academic Year ================= */}
+      <div className="grid grid-cols-5 gap-4">
+        {/* ======================================================
+            1. ACADEMIC YEAR
+            ====================================================== */}
 
         <FilterSelect
           label="Academic Year"
-          value={filters.academicYear}
-          onChange={(value) =>
-            updateFilter("academicYear", value)
+          value={filters.academicYearId}
+          options={academicYearOptions}
+          onChange={handleAcademicYearChange}
+          disabled={academicYearOptions.length === 0}
+          placeholder={
+            academicYearOptions.length > 0
+              ? "Select Academic Year"
+              : "No academic years"
           }
-          options={[
-            "2026-27",
-            "2025-26",
-            "2024-25",
-            "2023-24",
-          ]}
         />
 
-        {/* ================= Term ================= */}
+        {/* ======================================================
+            2. TERM
+            ====================================================== */}
 
         <FilterSelect
           label="Term"
-          value={filters.term}
-          onChange={(value) =>
-            updateFilter("term", value)
+          value={filters.termId}
+          options={termOptions}
+          onChange={handleTermChange}
+          disabled={!filters.academicYearId || termOptions.length === 0}
+          placeholder={
+            !filters.academicYearId
+              ? "Select Academic Year"
+              : termOptions.length > 0
+                ? "Select Term"
+                : "No terms"
           }
-          options={[
-            "Odd Semester 2026",
-            "Even Semester 2026",
-            "Odd Semester 2025",
-            "Even Semester 2025",
-          ]}
         />
 
-        {/* ================= Department ================= */}
+        {/* ======================================================
+            3. DEPARTMENT
+            ====================================================== */}
 
         <FilterSelect
           label="Department"
-          value={filters.department}
-          onChange={(value) =>
-            updateFilter("department", value)
+          value={filters.departmentId}
+          options={departmentOptions}
+          onChange={handleDepartmentChange}
+          disabled={!filters.termId || departmentOptions.length === 0}
+          placeholder={
+            !filters.termId
+              ? "Select Term"
+              : departmentOptions.length > 0
+                ? "Select Department"
+                : "No departments"
           }
-          options={[
-            "Computer Science & Engg.",
-            "Information Science",
-            "Electronics & Communication",
-            "Mechanical Engineering",
-          ]}
         />
 
-        {/* ================= Year ================= */}
+        {/* ======================================================
+            4. YEAR
+            ====================================================== */}
 
         <FilterSelect
           label="Year"
-          value={filters.year}
-          onChange={(value) =>
-            updateFilter("year", value)
+          value={filters.semesterNumber}
+          options={yearOptions}
+          onChange={handleYearChange}
+          disabled={!filters.departmentId || yearOptions.length === 0}
+          placeholder={
+            !filters.departmentId
+              ? "Select Department"
+              : yearOptions.length > 0
+                ? "Select Year"
+                : "No years"
           }
-          options={[
-            "1st Year",
-            "2nd Year",
-            "3rd Year",
-            "4th Year",
-          ]}
         />
 
-        {/* ================= Section ================= */}
+        {/* ======================================================
+            5. SECTION
+            ====================================================== */}
 
         <FilterSelect
           label="Section"
           value={filters.section}
-          onChange={(value) =>
-            updateFilter("section", value)
-          }
-          options={[
-            "All Sections",
-            "A",
-            "B",
-            "C",
-            "D",
-          ]}
+          options={sectionOptions}
+          onChange={handleSectionChange}
+          disabled={!filters.semesterNumber || sectionOptions.length === 0}
+          placeholder="All Sections"
         />
-
-        {/* ================= View ================= */}
-
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <label className="text-[11px] font-semibold leading-none text-slate-700">
-            View
-          </label>
-
-          <div
-            className="
-              flex
-              h-9
-              w-full
-              overflow-hidden
-              rounded-lg
-              border
-              border-slate-200
-              bg-white
-            "
-          >
-            <button
-              type="button"
-              onClick={() => updateFilter("view", "assign")}
-              className={`
-                flex-1
-                text-[12px]
-                font-medium
-                transition-all
-                duration-200
-                ${
-                  filters.view === "assign"
-                    ? `
-                      border
-                      border-blue-500
-                      bg-white
-                      text-blue-600
-                    `
-                    : `
-                      border-transparent
-                      text-slate-600
-                      hover:bg-slate-50
-                    `
-                }
-              `}
-            >
-              Assign
-            </button>
-
-            <button
-              type="button"
-              onClick={() => updateFilter("view", "review")}
-              className={`
-                flex-1
-                text-[12px]
-                font-medium
-                transition-all
-                duration-200
-                ${
-                  filters.view === "review"
-                    ? `
-                      border
-                      border-blue-500
-                      bg-white
-                      text-blue-600
-                    `
-                    : `
-                      border-transparent
-                      text-slate-600
-                      hover:bg-slate-50
-                    `
-                }
-              `}
-            >
-              Review
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
