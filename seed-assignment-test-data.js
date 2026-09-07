@@ -1,0 +1,487 @@
+import "dotenv/config";
+import { randomUUID } from "crypto";
+
+import hodPrisma from "./src/config/prisma.hod.js";
+import { hashPassword } from "./src/utils/hash.js";
+
+// ============================================================
+// TEST CONFIGURATION
+// ============================================================
+
+const PASSWORD = "Password@123";
+
+const IDS = {
+  department: "test-assignment-dept-cse",
+
+  academicYear: "test-assignment-ay-2026",
+
+  academicTerm: "test-assignment-term-2026",
+
+  mentors: [
+    "test-assignment-mentor-001",
+    "test-assignment-mentor-002",
+    "test-assignment-mentor-003",
+    "test-assignment-mentor-004",
+  ],
+
+  mentorUsers: [
+    "test-assignment-mentor-user-001",
+    "test-assignment-mentor-user-002",
+    "test-assignment-mentor-user-003",
+    "test-assignment-mentor-user-004",
+  ],
+
+  students: [
+    "test-assignment-student-001",
+    "test-assignment-student-002",
+    "test-assignment-student-003",
+    "test-assignment-student-004",
+    "test-assignment-student-005",
+    "test-assignment-student-006",
+    "test-assignment-student-007",
+    "test-assignment-student-008",
+    "test-assignment-student-009",
+    "test-assignment-student-010",
+  ],
+};
+
+// ============================================================
+// MAIN
+// ============================================================
+
+async function seedAssignmentTestData() {
+  try {
+    console.log("");
+    console.log("==============================================");
+    console.log("🌱 ASSIGNMENT TEST DATA SEED");
+    console.log("==============================================");
+    console.log("");
+
+    // ========================================================
+    // HASH PASSWORD
+    // ========================================================
+
+    const hashedPassword = await hashPassword(PASSWORD);
+
+    // ========================================================
+    // 1. DEPARTMENT
+    // ========================================================
+
+    console.log("🏫 Creating test department...");
+
+    const department = await hodPrisma.departments.upsert({
+      where: {
+        id: IDS.department,
+      },
+
+      update: {
+        name: "Computer Science & Engineering",
+        code: "CSE-TEST",
+        updatedAt: new Date(),
+      },
+
+      create: {
+        id: IDS.department,
+        name: "Computer Science & Engineering",
+        code: "CSE-TEST",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    console.log(`✅ Department: ${department.name}`);
+
+    // ========================================================
+    // 2. ACADEMIC YEAR
+    // ========================================================
+
+    console.log("");
+    console.log("📅 Creating test academic year...");
+
+    const academicYear = await hodPrisma.academic_years.upsert({
+      where: {
+        id: IDS.academicYear,
+      },
+
+      update: {
+        name: "2026-27",
+        startDate: new Date("2026-06-01"),
+        endDate: new Date("2027-05-31"),
+        status: "ACTIVE",
+        departmentId: department.id,
+        updatedAt: new Date(),
+      },
+
+      create: {
+        id: IDS.academicYear,
+        name: "2026-27",
+        startDate: new Date("2026-06-01"),
+        endDate: new Date("2027-05-31"),
+        status: "ACTIVE",
+        departmentId: department.id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    console.log(`✅ Academic Year: ${academicYear.name}`);
+
+    // ========================================================
+    // 3. ACTIVE ACADEMIC TERM
+    // ========================================================
+
+    console.log("");
+    console.log("📚 Creating active academic term...");
+
+    const academicTerm = await hodPrisma.academic_terms.upsert({
+      where: {
+        id: IDS.academicTerm,
+      },
+
+      update: {
+        academicYearId: academicYear.id,
+        semesterNumber: 6,
+        name: "Odd Semester 2026",
+        startDate: new Date("2026-06-01"),
+        endDate: new Date("2026-12-31"),
+        status: "ACTIVE",
+        updatedAt: new Date(),
+      },
+
+      create: {
+        id: IDS.academicTerm,
+        academicYearId: academicYear.id,
+        semesterNumber: 6,
+        name: "Odd Semester 2026",
+        startDate: new Date("2026-06-01"),
+        endDate: new Date("2026-12-31"),
+        status: "ACTIVE",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    console.log(`✅ Active Term: ${academicTerm.name}`);
+
+    // ========================================================
+    // 4. MENTOR USER ACCOUNTS + TEACHER PROFILES
+    // ========================================================
+
+    console.log("");
+    console.log("👨‍🏫 Creating 4 mentor accounts...");
+
+    const mentorData = [
+      {
+        index: 1,
+        mentorId: IDS.mentors[0],
+        userId: IDS.mentorUsers[0],
+        username: "mentor1",
+        employeeCode: "CSE-M001",
+        fullName: "Test Mentor 1",
+        email: "mentor1@gmail.com",
+        phone: "9000000001",
+        designation: "Assistant Professor",
+      },
+
+      {
+        index: 2,
+        mentorId: IDS.mentors[1],
+        userId: IDS.mentorUsers[1],
+        username: "mentor2",
+        employeeCode: "CSE-M002",
+        fullName: "Test Mentor 2",
+        email: "mentor2@gmail.com",
+        phone: "9000000002",
+        designation: "Assistant Professor",
+      },
+
+      {
+        index: 3,
+        mentorId: IDS.mentors[2],
+        userId: IDS.mentorUsers[2],
+        username: "mentor3",
+        employeeCode: "CSE-M003",
+        fullName: "Test Mentor 3",
+        email: "mentor3@gmail.com",
+        phone: "9000000003",
+        designation: "Associate Professor",
+      },
+
+      {
+        index: 4,
+        mentorId: IDS.mentors[3],
+        userId: IDS.mentorUsers[3],
+        username: "mentor4",
+        employeeCode: "CSE-M004",
+        fullName: "Test Mentor 4",
+        email: "mentor4@gmail.com",
+        phone: "9000000004",
+        designation: "Assistant Professor",
+      },
+    ];
+
+    for (const mentor of mentorData) {
+      // ------------------------------------------------------
+      // USER ACCOUNT
+      // ------------------------------------------------------
+
+      const userAccount = await hodPrisma.user_accounts.upsert({
+        where: {
+          id: mentor.userId,
+        },
+
+        update: {
+          username: mentor.username,
+          email: mentor.email,
+          password: hashedPassword,
+          role: "MENTOR",
+          isActive: true,
+          updatedAt: new Date(),
+        },
+
+        create: {
+          id: mentor.userId,
+          username: mentor.username,
+          email: mentor.email,
+          password: hashedPassword,
+          role: "MENTOR",
+          isActive: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+      // ------------------------------------------------------
+      // TEACHER PROFILE
+      // ------------------------------------------------------
+
+      const teacher = await hodPrisma.teachers.upsert({
+        where: {
+          id: mentor.mentorId,
+        },
+
+        update: {
+          employeeCode: mentor.employeeCode,
+          fullName: mentor.fullName,
+          email: mentor.email,
+          phone: mentor.phone,
+          designation: mentor.designation,
+
+          maxMentees: 5,
+
+          isActive: true,
+
+          departmentId: department.id,
+
+          userAccountId: userAccount.id,
+
+          updatedAt: new Date(),
+        },
+
+        create: {
+          id: mentor.mentorId,
+          employeeCode: mentor.employeeCode,
+          fullName: mentor.fullName,
+          email: mentor.email,
+          phone: mentor.phone,
+          designation: mentor.designation,
+
+          maxMentees: 5,
+
+          isActive: true,
+
+          departmentId: department.id,
+
+          userAccountId: userAccount.id,
+
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+      console.log(`   ✅ ${teacher.employeeCode} → ${teacher.email}`);
+    }
+
+    // ========================================================
+    // 5. STUDENTS
+    // ========================================================
+
+    console.log("");
+    console.log("👨‍🎓 Creating 10 test students...");
+
+    for (let i = 0; i < 10; i++) {
+      const studentId = IDS.students[i];
+
+      const studentNumber = String(i + 1).padStart(3, "0");
+
+      const registerNumber = `CSE26TEST${studentNumber}`;
+
+      const fullName = `Test Student ${i + 1}`;
+
+      const student = await hodPrisma.students.upsert({
+        where: {
+          id: studentId,
+        },
+
+        update: {
+          registerNumber,
+          fullName,
+
+          // Same profile email intentionally.
+          // We are NOT creating user_accounts
+          // for these students.
+          email: "student@gmail.com",
+
+          phone: `91000000${String(i + 1).padStart(2, "0")}`,
+
+          programme: "B.Tech Computer Science and Engineering",
+
+          semester: "6",
+
+          section: i < 5 ? "A" : "B",
+
+          status: "ACTIVE",
+
+          departmentId: department.id,
+
+          academicSetupCompleted: true,
+
+          updatedAt: new Date(),
+        },
+
+        create: {
+          id: studentId,
+
+          registerNumber,
+
+          fullName,
+
+          email: "student@gmail.com",
+
+          phone: `91000000${String(i + 1).padStart(2, "0")}`,
+
+          programme: "B.Tech Computer Science and Engineering",
+
+          semester: "6",
+
+          section: i < 5 ? "A" : "B",
+
+          status: "ACTIVE",
+
+          departmentId: department.id,
+
+          academicSetupCompleted: true,
+
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+
+      // ======================================================
+      // ACTIVE ENROLLMENT
+      // ======================================================
+
+      await hodPrisma.student_enrollments.upsert({
+        where: {
+          studentId_termId: {
+            studentId: student.id,
+            termId: academicTerm.id,
+          },
+        },
+
+        update: {
+          semesterNumber: 6,
+          status: "ACTIVE",
+          enrolledAt: new Date(),
+          updatedAt: new Date(),
+        },
+
+        create: {
+          id: `test-assignment-enrollment-${studentNumber}`,
+
+          studentId: student.id,
+
+          termId: academicTerm.id,
+
+          semesterNumber: 6,
+
+          status: "ACTIVE",
+
+          enrolledAt: new Date(),
+
+          createdAt: new Date(),
+
+          updatedAt: new Date(),
+        },
+      });
+
+      console.log(`   ✅ ${registerNumber} → ${fullName}`);
+    }
+
+    // ========================================================
+    // SUMMARY
+    // ========================================================
+
+    console.log("");
+    console.log("==============================================");
+    console.log("🎉 TEST DATA CREATED SUCCESSFULLY");
+    console.log("==============================================");
+    console.log("");
+
+    console.log("🏫 DEPARTMENT");
+    console.log(`   Name : ${department.name}`);
+    console.log(`   ID   : ${department.id}`);
+
+    console.log("");
+
+    console.log("📚 ACTIVE TERM");
+    console.log(`   Name : ${academicTerm.name}`);
+    console.log(`   ID   : ${academicTerm.id}`);
+
+    console.log("");
+
+    console.log("👨‍🏫 MENTORS");
+    console.log("   Count    : 4");
+    console.log("   Capacity : 5 each");
+    console.log("   Password : Password@123");
+    console.log("");
+    console.log("   mentor1@gmail.com");
+    console.log("   mentor2@gmail.com");
+    console.log("   mentor3@gmail.com");
+    console.log("   mentor4@gmail.com");
+
+    console.log("");
+
+    console.log("👨‍🎓 STUDENTS");
+    console.log("   Count : 10");
+    console.log("   Email : student@gmail.com");
+    console.log("   Semester : 6");
+    console.log("   Sections : A (5), B (5)");
+
+    console.log("");
+
+    console.log("🔐 ADMIN");
+    console.log("   Existing account:");
+    console.log("   Email    : admin@gmail.com");
+    console.log("   Password : Password@123");
+
+    console.log("");
+
+    console.log("==============================================");
+    console.log("🚀 READY FOR ASSIGNMENT TESTING");
+    console.log("==============================================");
+    console.log("");
+  } catch (error) {
+    console.error("");
+    console.error("❌ TEST DATA SEED FAILED");
+    console.error("");
+    console.error(error);
+    console.error("");
+
+    process.exitCode = 1;
+  } finally {
+    await hodPrisma.$disconnect();
+  }
+}
+
+seedAssignmentTestData();

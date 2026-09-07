@@ -6,9 +6,9 @@ import asyncHandler from "../../../utils/asyncHandler.js";
 
 class AuthController {
   login = asyncHandler(async (req, res) => {
-    const { identifier, password } = req.body;
+    const { email, password } = req.body;
 
-    const result = await AuthService.login(identifier, password);
+    const result = await AuthService.login(email, password);
 
     return res
       .status(200)

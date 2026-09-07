@@ -121,27 +121,247 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
-exports.Prisma.Academic_backlogsScalarFieldEnum = {
+exports.Prisma.Academic_term_requestsScalarFieldEnum = {
   id: 'id',
-  studentProfileId: 'studentProfileId',
-  subjectCode: 'subjectCode',
-  subjectName: 'subjectName',
+  academicYearId: 'academicYearId',
+  semesterNumber: 'semesterNumber',
+  name: 'name',
+  proposedStartDate: 'proposedStartDate',
+  proposedEndDate: 'proposedEndDate',
+  reason: 'reason',
+  requestedBy: 'requestedBy',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Academic_termsScalarFieldEnum = {
+  id: 'id',
+  academicYearId: 'academicYearId',
+  semesterNumber: 'semesterNumber',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Academic_yearsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  status: 'status',
+  departmentId: 'departmentId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DepartmentsScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  code: 'code',
+  hodTeacherId: 'hodTeacherId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DetentionsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  termId: 'termId',
+  reason: 'reason',
+  status: 'status',
+  detainedAt: 'detainedAt',
+  resumedAt: 'resumedAt',
+  resumedBy: 'resumedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Import_batchesScalarFieldEnum = {
+  id: 'id',
+  academicYearId: 'academicYearId',
+  fileName: 'fileName',
+  totalRecords: 'totalRecords',
+  successfulCount: 'successfulCount',
+  failedCount: 'failedCount',
+  status: 'status',
+  uploadedBy: 'uploadedBy',
+  createdAt: 'createdAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.Import_errorsScalarFieldEnum = {
+  id: 'id',
+  importBatchId: 'importBatchId',
+  rowNumber: 'rowNumber',
+  field: 'field',
+  value: 'value',
+  message: 'message',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.Mentor_assignmentsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  teacherId: 'teacherId',
+  termId: 'termId',
+  status: 'status',
+  assignedAt: 'assignedAt',
+  endedAt: 'endedAt',
+  assignedBy: 'assignedBy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Mentor_transfer_requestsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  currentMentorId: 'currentMentorId',
+  requestedMentorId: 'requestedMentorId',
+  termId: 'termId',
+  requestSource: 'requestSource',
+  initiatedByTeacherId: 'initiatedByTeacherId',
+  initiatedByUserId: 'initiatedByUserId',
+  reason: 'reason',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  rejectionReason: 'rejectionReason',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Otp_verificationsScalarFieldEnum = {
+  id: 'id',
+  userAccountId: 'userAccountId',
+  otpHash: 'otpHash',
+  purpose: 'purpose',
+  expiresAt: 'expiresAt',
+  verifiedAt: 'verifiedAt',
+  attempts: 'attempts',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.Student_enrollmentsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  termId: 'termId',
   semesterNumber: 'semesterNumber',
   status: 'status',
-  clearedSemesterNumber: 'clearedSemesterNumber',
-  clearedGrade: 'clearedGrade',
-  clearedMarks: 'clearedMarks',
-  clearedAt: 'clearedAt',
+  enrolledAt: 'enrolledAt',
+  completedAt: 'completedAt',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.StudentsScalarFieldEnum = {
+  id: 'id',
+  registerNumber: 'registerNumber',
+  admissionNumber: 'admissionNumber',
+  fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  profileImage: 'profileImage',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  bloodGroup: 'bloodGroup',
+  nationality: 'nationality',
+  religion: 'religion',
+  programme: 'programme',
+  semester: 'semester',
+  section: 'section',
+  studentType: 'studentType',
+  address: 'address',
+  permanentAddress: 'permanentAddress',
+  yearsAtUniversity: 'yearsAtUniversity',
+  totalCredits: 'totalCredits',
+  currentCGPA: 'currentCGPA',
+  overallAttendance: 'overallAttendance',
+  academicStanding: 'academicStanding',
+  academicSetupCompleted: 'academicSetupCompleted',
+  status: 'status',
+  departmentId: 'departmentId',
+  userAccountId: 'userAccountId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Student_contact_detailsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  permanentAddress: 'permanentAddress',
+  currentAddress: 'currentAddress',
+  addressType: 'addressType',
+  durationAtCurrentAddress: 'durationAtCurrentAddress',
+  personalMobile: 'personalMobile',
+  alternateMobile: 'alternateMobile',
+  personalEmail: 'personalEmail',
+  alternateEmail: 'alternateEmail',
+  whatsappNumber: 'whatsappNumber',
+  telegramUsername: 'telegramUsername',
+  linkedInProfile: 'linkedInProfile',
+  githubProfile: 'githubProfile',
+  preferredContactMethod: 'preferredContactMethod',
+  preferredContactTime: 'preferredContactTime',
+  communicationEmailPreference: 'communicationEmailPreference',
+  allowWhatsappCommunication: 'allowWhatsappCommunication',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Student_parent_detailsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  fatherName: 'fatherName',
+  fatherOccupation: 'fatherOccupation',
+  fatherCompany: 'fatherCompany',
+  fatherAnnualIncome: 'fatherAnnualIncome',
+  fatherQualification: 'fatherQualification',
+  fatherEmail: 'fatherEmail',
+  fatherPhone: 'fatherPhone',
+  fatherAddress: 'fatherAddress',
+  motherName: 'motherName',
+  motherOccupation: 'motherOccupation',
+  motherCompany: 'motherCompany',
+  motherAnnualIncome: 'motherAnnualIncome',
+  motherQualification: 'motherQualification',
+  motherEmail: 'motherEmail',
+  motherPhone: 'motherPhone',
+  motherAddress: 'motherAddress',
+  guardianName: 'guardianName',
+  guardianRelationship: 'guardianRelationship',
+  guardianPhone: 'guardianPhone',
+  guardianAlternatePhone: 'guardianAlternatePhone',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Student_documentsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  documentName: 'documentName',
+  category: 'category',
+  description: 'description',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  cloudinaryPublicId: 'cloudinaryPublicId',
+  fileUrl: 'fileUrl',
+  resourceType: 'resourceType',
+  uploadedAt: 'uploadedAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.Academic_semestersScalarFieldEnum = {
   id: 'id',
-  studentProfileId: 'studentProfileId',
+  studentId: 'studentId',
+  academicYearId: 'academicYearId',
   semesterNumber: 'semesterNumber',
-  academicYear: 'academicYear',
-  term: 'term',
   status: 'status',
   entryStatus: 'entryStatus',
   sgpa: 'sgpa',
@@ -168,114 +388,66 @@ exports.Prisma.Academic_subjectsScalarFieldEnum = {
   grade: 'grade',
   gradePoint: 'gradePoint',
   attendance: 'attendance',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
   classesAttended: 'classesAttended',
-  classesHeld: 'classesHeld'
-};
-
-exports.Prisma.Student_contact_detailsScalarFieldEnum = {
-  id: 'id',
-  studentProfileId: 'studentProfileId',
-  permanentAddress: 'permanentAddress',
-  currentAddress: 'currentAddress',
-  addressType: 'addressType',
-  durationAtCurrentAddress: 'durationAtCurrentAddress',
-  personalMobile: 'personalMobile',
-  alternateMobile: 'alternateMobile',
-  personalEmail: 'personalEmail',
-  alternateEmail: 'alternateEmail',
-  whatsappNumber: 'whatsappNumber',
-  telegramUsername: 'telegramUsername',
-  linkedInProfile: 'linkedInProfile',
-  githubProfile: 'githubProfile',
-  preferredContactMethod: 'preferredContactMethod',
-  preferredContactTime: 'preferredContactTime',
-  communicationEmailPreference: 'communicationEmailPreference',
-  allowWhatsappCommunication: 'allowWhatsappCommunication',
+  classesHeld: 'classesHeld',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.Student_documentsScalarFieldEnum = {
+exports.Prisma.Academic_backlogsScalarFieldEnum = {
   id: 'id',
-  studentProfileId: 'studentProfileId',
-  documentName: 'documentName',
-  category: 'category',
-  description: 'description',
-  fileType: 'fileType',
-  fileSize: 'fileSize',
-  cloudinaryPublicId: 'cloudinaryPublicId',
-  fileUrl: 'fileUrl',
-  uploadedAt: 'uploadedAt',
-  updatedAt: 'updatedAt',
-  resourceType: 'resourceType'
-};
-
-exports.Prisma.Student_parent_detailsScalarFieldEnum = {
-  id: 'id',
-  studentProfileId: 'studentProfileId',
-  fatherName: 'fatherName',
-  fatherOccupation: 'fatherOccupation',
-  fatherCompany: 'fatherCompany',
-  fatherAnnualIncome: 'fatherAnnualIncome',
-  fatherQualification: 'fatherQualification',
-  fatherEmail: 'fatherEmail',
-  fatherPhone: 'fatherPhone',
-  fatherAddress: 'fatherAddress',
-  motherName: 'motherName',
-  motherOccupation: 'motherOccupation',
-  motherQualification: 'motherQualification',
-  motherAnnualIncome: 'motherAnnualIncome',
-  motherEmail: 'motherEmail',
-  motherPhone: 'motherPhone',
-  motherAddress: 'motherAddress',
-  guardianName: 'guardianName',
-  guardianRelationship: 'guardianRelationship',
-  guardianPhone: 'guardianPhone',
-  guardianAlternatePhone: 'guardianAlternatePhone',
+  studentId: 'studentId',
+  subjectCode: 'subjectCode',
+  subjectName: 'subjectName',
+  semesterNumber: 'semesterNumber',
+  status: 'status',
+  clearedSemesterNumber: 'clearedSemesterNumber',
+  clearedGrade: 'clearedGrade',
+  clearedMarks: 'clearedMarks',
+  clearedAt: 'clearedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
-exports.Prisma.Student_profilesScalarFieldEnum = {
+exports.Prisma.TeachersScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
-  registerNumber: 'registerNumber',
-  admissionNumber: 'admissionNumber',
-  profileImage: 'profileImage',
-  dateOfBirth: 'dateOfBirth',
-  gender: 'gender',
-  bloodGroup: 'bloodGroup',
-  nationality: 'nationality',
-  religion: 'religion',
-  department: 'department',
-  programme: 'programme',
-  semester: 'semester',
-  section: 'section',
-  studentType: 'studentType',
-  address: 'address',
-  permanentAddress: 'permanentAddress',
-  yearsAtUniversity: 'yearsAtUniversity',
-  totalCredits: 'totalCredits',
-  currentCGPA: 'currentCGPA',
-  overallAttendance: 'overallAttendance',
-  academicStanding: 'academicStanding',
-  currentMentor: 'currentMentor',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
-  academicSetupCompleted: 'academicSetupCompleted'
-};
-
-exports.Prisma.UsersScalarFieldEnum = {
-  id: 'id',
+  employeeCode: 'employeeCode',
   fullName: 'fullName',
+  email: 'email',
+  phone: 'phone',
+  designation: 'designation',
+  maxMentees: 'maxMentees',
+  isActive: 'isActive',
+  departmentId: 'departmentId',
+  userAccountId: 'userAccountId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.User_accountsScalarFieldEnum = {
+  id: 'id',
   username: 'username',
   email: 'email',
   password: 'password',
   role: 'role',
   isActive: 'isActive',
   lastLogin: 'lastLogin',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Term_change_requestsScalarFieldEnum = {
+  id: 'id',
+  currentTermId: 'currentTermId',
+  requestedTermName: 'requestedTermName',
+  requestedSemesterNumber: 'requestedSemesterNumber',
+  requestedStartDate: 'requestedStartDate',
+  requestedEndDate: 'requestedEndDate',
+  requestedBy: 'requestedBy',
+  status: 'status',
+  reviewedBy: 'reviewedBy',
+  reviewedAt: 'reviewedAt',
+  reviewComment: 'reviewComment',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -294,22 +466,101 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.AcademicBacklogStatus = exports.$Enums.AcademicBacklogStatus = {
-  ACTIVE: 'ACTIVE',
-  CLEARED: 'CLEARED'
+exports.AcademicTermRequestStatus = exports.$Enums.AcademicTermRequestStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
 };
 
-exports.AcademicSemesterStatus = exports.$Enums.AcademicSemesterStatus = {
-  LOCKED: 'LOCKED',
-  CURRENT: 'CURRENT',
+exports.AcademicTermStatus = exports.$Enums.AcademicTermStatus = {
+  UPCOMING: 'UPCOMING',
+  ACTIVE: 'ACTIVE',
   COMPLETED: 'COMPLETED',
+  LOCKED: 'LOCKED'
+};
+
+exports.AcademicYearStatus = exports.$Enums.AcademicYearStatus = {
+  UPCOMING: 'UPCOMING',
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.DetentionStatus = exports.$Enums.DetentionStatus = {
+  ACTIVE: 'ACTIVE',
+  RESUMED: 'RESUMED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.ImportBatchStatus = exports.$Enums.ImportBatchStatus = {
+  PROCESSING: 'PROCESSING',
+  COMPLETED: 'COMPLETED',
+  COMPLETED_WITH_ERRORS: 'COMPLETED_WITH_ERRORS',
   FAILED: 'FAILED'
 };
 
-exports.AcademicEntryStatus = exports.$Enums.AcademicEntryStatus = {
-  DRAFT: 'DRAFT',
-  SUBMITTED: 'SUBMITTED',
-  VERIFIED: 'VERIFIED'
+exports.MentorAssignmentStatus = exports.$Enums.MentorAssignmentStatus = {
+  ACTIVE: 'ACTIVE',
+  ENDED: 'ENDED',
+  TRANSFERRED: 'TRANSFERRED',
+  REMOVED: 'REMOVED'
+};
+
+exports.MentorTransferRequestSource = exports.$Enums.MentorTransferRequestSource = {
+  TEACHER: 'TEACHER',
+  IN_PERSON: 'IN_PERSON'
+};
+
+exports.MentorTransferStatus = exports.$Enums.MentorTransferStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.OtpPurpose = exports.$Enums.OtpPurpose = {
+  ACCOUNT_ACTIVATION: 'ACCOUNT_ACTIVATION',
+  LOGIN: 'LOGIN',
+  PASSWORD_RESET: 'PASSWORD_RESET'
+};
+
+exports.EnrollmentStatus = exports.$Enums.EnrollmentStatus = {
+  ACTIVE: 'ACTIVE',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED',
+  DETAINED: 'DETAINED',
+  WITHDRAWN: 'WITHDRAWN'
+};
+
+exports.Gender = exports.$Enums.Gender = {
+  MALE: 'MALE',
+  FEMALE: 'FEMALE',
+  OTHER: 'OTHER'
+};
+
+exports.BloodGroup = exports.$Enums.BloodGroup = {
+  A_POSITIVE: 'A_POSITIVE',
+  A_NEGATIVE: 'A_NEGATIVE',
+  B_POSITIVE: 'B_POSITIVE',
+  B_NEGATIVE: 'B_NEGATIVE',
+  AB_POSITIVE: 'AB_POSITIVE',
+  AB_NEGATIVE: 'AB_NEGATIVE',
+  O_POSITIVE: 'O_POSITIVE',
+  O_NEGATIVE: 'O_NEGATIVE'
+};
+
+exports.StudentType = exports.$Enums.StudentType = {
+  DAY_SCHOLAR: 'DAY_SCHOLAR',
+  HOSTELLER: 'HOSTELLER'
+};
+
+exports.StudentStatus = exports.$Enums.StudentStatus = {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE',
+  DETAINED: 'DETAINED',
+  GRADUATED: 'GRADUATED',
+  INACTIVE: 'INACTIVE'
 };
 
 exports.AddressType = exports.$Enums.AddressType = {
@@ -343,43 +594,53 @@ exports.DocumentCategory = exports.$Enums.DocumentCategory = {
   OTHER: 'OTHER'
 };
 
-exports.Gender = exports.$Enums.Gender = {
-  MALE: 'MALE',
-  FEMALE: 'FEMALE',
-  OTHER: 'OTHER'
+exports.AcademicSemesterStatus = exports.$Enums.AcademicSemesterStatus = {
+  LOCKED: 'LOCKED',
+  CURRENT: 'CURRENT',
+  COMPLETED: 'COMPLETED',
+  FAILED: 'FAILED'
 };
 
-exports.BloodGroup = exports.$Enums.BloodGroup = {
-  A_POSITIVE: 'A_POSITIVE',
-  A_NEGATIVE: 'A_NEGATIVE',
-  B_POSITIVE: 'B_POSITIVE',
-  B_NEGATIVE: 'B_NEGATIVE',
-  AB_POSITIVE: 'AB_POSITIVE',
-  AB_NEGATIVE: 'AB_NEGATIVE',
-  O_POSITIVE: 'O_POSITIVE',
-  O_NEGATIVE: 'O_NEGATIVE'
+exports.AcademicEntryStatus = exports.$Enums.AcademicEntryStatus = {
+  DRAFT: 'DRAFT',
+  SUBMITTED: 'SUBMITTED',
+  VERIFIED: 'VERIFIED'
 };
 
-exports.StudentType = exports.$Enums.StudentType = {
-  DAY_SCHOLAR: 'DAY_SCHOLAR',
-  HOSTELLER: 'HOSTELLER'
+exports.AcademicBacklogStatus = exports.$Enums.AcademicBacklogStatus = {
+  ACTIVE: 'ACTIVE',
+  CLEARED: 'CLEARED'
 };
 
-exports.Role = exports.$Enums.Role = {
+exports.UserRole = exports.$Enums.UserRole = {
+  SYSTEM_ADMIN: 'SYSTEM_ADMIN',
   ADMIN: 'ADMIN',
   MENTOR: 'MENTOR',
   STUDENT: 'STUDENT'
 };
 
 exports.Prisma.ModelName = {
-  academic_backlogs: 'academic_backlogs',
+  academic_term_requests: 'academic_term_requests',
+  academic_terms: 'academic_terms',
+  academic_years: 'academic_years',
+  departments: 'departments',
+  detentions: 'detentions',
+  import_batches: 'import_batches',
+  import_errors: 'import_errors',
+  mentor_assignments: 'mentor_assignments',
+  mentor_transfer_requests: 'mentor_transfer_requests',
+  otp_verifications: 'otp_verifications',
+  student_enrollments: 'student_enrollments',
+  students: 'students',
+  student_contact_details: 'student_contact_details',
+  student_parent_details: 'student_parent_details',
+  student_documents: 'student_documents',
   academic_semesters: 'academic_semesters',
   academic_subjects: 'academic_subjects',
-  student_contact_details: 'student_contact_details',
-  student_documents: 'student_documents',
-  student_parent_details: 'student_parent_details',
-  student_profiles: 'student_profiles',
-  users: 'users'
+  academic_backlogs: 'academic_backlogs',
+  teachers: 'teachers',
+  user_accounts: 'user_accounts',
+  term_change_requests: 'term_change_requests'
 };
 
 /**

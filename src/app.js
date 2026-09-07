@@ -8,6 +8,9 @@ import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
 import attendanceRoutes from "./modules/Mentee/attendance/routes/attendance.routes.js";
 
+import assignmentRoutes from "./modules/admin/assignments/assignment.routes.js";
+import termChangeRoutes from "./modules/admin/term-change/termChange.routes.js";
+
 const app = express();
 
 /* ==========================================================
@@ -61,7 +64,21 @@ app.use("/api/auth", authRoutes);
 
 // Mentee
 app.use("/api/mentee", menteeRoutes);
+
+// Attendance
 app.use("/api/attendance", attendanceRoutes);
+
+/* ==========================================================
+   Admin - Assignments
+========================================================== */
+
+app.use("/api/admin/assignments", assignmentRoutes);
+
+/* ==========================================================
+   Admin - Term Change
+========================================================== */
+
+app.use("/api/admin/term-change", termChangeRoutes);
 
 /* ==========================================================
    404 Handler

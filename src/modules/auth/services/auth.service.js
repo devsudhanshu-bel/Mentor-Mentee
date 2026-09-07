@@ -1,4 +1,4 @@
-import prisma from "../../../config/prisma.js";
+import hodPrisma from "../../../config/prisma.hod.js";
 
 import ApiError from "../../../utils/ApiError.js";
 
@@ -9,18 +9,34 @@ import { generateAccessToken } from "../../../utils/jwt.js";
 class AuthService {
   /**
    * Login User
+   *
+   * Authentication is handled exclusively through
+   * the HOD/Auth database (user_accounts).
+   *
+   * Login identifier:
+   * - Email only
+   *
+   * Role:
+   * - Retrieved from user_accounts
    */
-  async login(identifier, password) {
+  async login(email, password) {
+    //--------------------------------------------------
+    // Validate Login Input
+    //--------------------------------------------------
+
+    if (!email || !password) {
+      throw new ApiError(400, "Email and password are required");
+    }
+
+    const normalizedEmail = email.trim().toLowerCase();
+
     //--------------------------------------------------
     // Find User
     //--------------------------------------------------
 
-    const user = await prisma.user.findFirst({
+    const user = await hodPrisma.user_accounts.findUnique({
       where: {
-        OR: [
-          { username: identifier },
-          { email: identifier },
-        ],
+        email: normalizedEmail,
       },
     });
 
@@ -33,20 +49,18 @@ class AuthService {
     //--------------------------------------------------
 
     if (!user.isActive) {
-      throw new ApiError(
-        403,
-        "Your account has been disabled"
-      );
+      throw new ApiError(403, "Your account has been disabled");
     }
 
     //--------------------------------------------------
     // Verify Password
     //--------------------------------------------------
 
-    const isPasswordCorrect = await comparePassword(
-      password,
-      user.password
-    );
+    if (!user.password) {
+      throw new ApiError(401, "Invalid credentials");
+    }
+
+    const isPasswordCorrect = await comparePassword(password, user.password);
 
     if (!isPasswordCorrect) {
       throw new ApiError(401, "Invalid credentials");
@@ -56,7 +70,7 @@ class AuthService {
     // Update Last Login
     //--------------------------------------------------
 
-    await prisma.user.update({
+    await hodPrisma.user_accounts.update({
       where: {
         id: user.id,
       },
@@ -77,7 +91,6 @@ class AuthService {
 
     const safeUser = {
       id: user.id,
-      fullName: user.fullName,
       username: user.username,
       email: user.email,
       role: user.role,
