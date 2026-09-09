@@ -1,20 +1,17 @@
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 /* ========================= AUTH ========================= */
 
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import ChangePassword from "./pages/auth/ChangePassword";
 
 /* ========================= PROTECTED ROUTE ========================= */
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 /* ========================= COMMON ROUTE ========================= */
+
 import ScrollToTop from "./components/common/ScrollToTop";
 
 /* ========================= STUDENT ========================= */
@@ -51,7 +48,8 @@ import StudentCoCurricular from "./pages/Mentors/Students/CoCurricular";
 import StudentDocuments from "./pages/Mentors/Students/Documents";
 import StudentCertificates from "./pages/Mentors/Students/Certificates";
 
-/* ========================= Admin ========================= */
+/* ========================= ADMIN ========================= */
+
 import AdminDashboard from "./pages/Admin/Dashboard";
 import AdminMentors from "./pages/Admin/Mentors";
 import MentorDetails from "./pages/Admin/MentorDetails";
@@ -69,116 +67,89 @@ import AdminProfile from "./pages/Admin/Profile";
 function App() {
   return (
     <BrowserRouter>
-    <ScrollToTop />
+      <ScrollToTop />
+
       <Routes>
-        {/* ========================= DEFAULT ========================= */}
+        {/* ==================================================
+            DEFAULT
+            ================================================== */}
 
-        <Route
-          path="/"
-          element={<Navigate to="/login" replace />}
-        />
+        <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* ========================= AUTH ========================= */}
+        {/* ==================================================
+            AUTH
+            ================================================== */}
 
-        <Route
-          path="/login"
-          element={<Login />}
-        />
+        <Route path="/login" element={<Login />} />
 
-        <Route
-          path="/register"
-          element={<Register />}
-        />
+        <Route path="/register" element={<Register />} />
 
-        {/* ========================= STUDENT ROUTES ========================= */}
+        {/* ==================================================
+            CHANGE PASSWORD
+            ==================================================
+            
+            Authenticated users only.
+
+            allowPasswordChange=true means a student with
+            mustChangePassword=true is allowed to enter this
+            route instead of being redirected back here.
+            
+            ================================================== */}
 
         <Route
           element={
-            <ProtectedRoute allowedRoles={["STUDENT"]} />
+            <ProtectedRoute
+              allowedRoles={["STUDENT"]}
+              allowPasswordChange={true}
+            />
           }
         >
-          <Route
-            path="/student/dashboard"
-            element={<Dashboard />}
-          />
+          <Route path="/change-password" element={<ChangePassword />} />
+        </Route>
 
-          <Route
-            path="/student/profile"
-            element={<Profile />}
-          />
+        {/* ==================================================
+            STUDENT ROUTES
+            ================================================== */}
 
-          <Route
-            path="/student/academics"
-            element={<Academics />}
-          />
+        <Route element={<ProtectedRoute allowedRoles={["STUDENT"]} />}>
+          <Route path="/student/dashboard" element={<Dashboard />} />
 
-          <Route
-            path="/student/attendance"
-            element={<Attendance />}
-          />
+          <Route path="/student/profile" element={<Profile />} />
 
-          <Route
-            path="/student/mentor-meetings"
-            element={<Mentor />}
-          />
+          <Route path="/student/academics" element={<Academics />} />
 
-          <Route
-            path="/student/internships"
-            element={<Internships />}
-          />
+          <Route path="/student/attendance" element={<Attendance />} />
 
-          <Route
-            path="/student/research"
-            element={<Research />}
-          />
+          <Route path="/student/mentor-meetings" element={<Mentor />} />
 
-          <Route
-            path="/student/co-curricular"
-            element={<CoCurricular />}
-          />
+          <Route path="/student/internships" element={<Internships />} />
+
+          <Route path="/student/research" element={<Research />} />
+
+          <Route path="/student/co-curricular" element={<CoCurricular />} />
 
           <Route
             path="/student/extra-curricular"
             element={<ExtraCurricular />}
           />
 
-          <Route
-            path="/student/awards"
-            element={<Awards />}
-          />
+          <Route path="/student/awards" element={<Awards />} />
 
-          <Route
-            path="/student/certificates"
-            element={<Certificates />}
-          />
+          <Route path="/student/certificates" element={<Certificates />} />
 
-          <Route
-            path="/student/documents"
-            element={<Documents />}
-          />
+          <Route path="/student/documents" element={<Documents />} />
 
-          <Route
-            path="/student/settings"
-            element={<Settings />}
-          />
+          <Route path="/student/settings" element={<Settings />} />
         </Route>
 
-        {/* ========================= MENTOR ROUTES ========================= */}
+        {/* ==================================================
+            MENTOR ROUTES
+            ================================================== */}
 
-        <Route
-          element={
-            <ProtectedRoute allowedRoles={["MENTOR"]} />
-          }
-        >
-          <Route
-            path="/mentor/dashboard"
-            element={<MentorDashboard />}
-          />
+        <Route element={<ProtectedRoute allowedRoles={["MENTOR"]} />}>
+          <Route path="/mentor/dashboard" element={<MentorDashboard />} />
 
-          <Route
-            path="/mentor/students"
-            element={<MentorStudents />}
-          />
+          <Route path="/mentor/students" element={<MentorStudents />} />
 
           <Route
             path="/mentor/students/:id/overview"
@@ -220,48 +191,30 @@ function App() {
             element={<StudentCertificates />}
           />
 
-          <Route
-            path="/mentor/meetings"
-            element={<MentorMeetings />}
-          />
+          <Route path="/mentor/meetings" element={<MentorMeetings />} />
 
-          <Route
-            path="/mentor/profile"
-            element={<MentorProfile />}
-          />
-
+          <Route path="/mentor/profile" element={<MentorProfile />} />
         </Route>
 
-        {/* ========================= ADMIN ROUTES ========================= */}
+        {/* ==================================================
+            ADMIN ROUTES
+            ================================================== */}
 
-        <Route
-          element={
-            <ProtectedRoute allowedRoles={["ADMIN"]} />
-          }
-        >
-          <Route
-            path="/admin/dashboard"
-            element={<AdminDashboard />}
-          />
+        <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
-          <Route
-            path="/admin/mentors"
-            element={<AdminMentors />}
-          />
+          <Route path="/admin/mentors" element={<AdminMentors />} />
 
-          <Route
-            path="/admin/mentor/:id"
-            element={<MentorDetails />}
-          />
+          <Route path="/admin/mentor/:id" element={<MentorDetails />} />
 
-          {/* ===== Admin Student ===== */}
+          {/* ==================================================
+              ADMIN STUDENT
+              ================================================== */}
 
           <Route
             path="/admin/mentor/:mentorId/student/:studentId/overview"
             element={<AdminStudentDetails />}
           />
-
-          {/* Future */}
 
           <Route
             path="/admin/mentor/:mentorId/student/:studentId/academics"
@@ -298,25 +251,16 @@ function App() {
             element={<AdminStudentCertificates />}
           />
 
-          <Route
-            path="/admin/assignments"
-            element={<Assignments />}
-          />    
+          <Route path="/admin/assignments" element={<Assignments />} />
 
-          <Route
-            path="/admin/admin-profile"
-            element={<AdminProfile />}
-          />                
+          <Route path="/admin/admin-profile" element={<AdminProfile />} />
         </Route>
 
+        {/* ==================================================
+            404
+            ================================================== */}
 
-
-        {/* ========================= 404 ========================= */}
-
-        <Route
-          path="*"
-          element={<Navigate to="/login" replace />}
-        />
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );

@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
+
+import { Plus } from "lucide-react";
 
 import AdminSidebar from "../../components/layouts/AdminSidebar";
 import AdminHeader from "../../components/layouts/AdminHeader";
@@ -6,8 +8,13 @@ import AdminHeader from "../../components/layouts/AdminHeader";
 import AssignmentBanner from "../../components/Admin/Assignments/AssignmentBanner";
 import AssignmentFilters from "../../components/Admin/Assignments/AssignmentFilters";
 import AssignmentWorkspace from "../../components/Admin/Assignments/AssignmentWorkspace";
+import AddStudentModal from "../../components/Admin/Assignments/Students/AddStudentModal";
 
 import { getAssignmentContext } from "../../api/assignment.api";
+
+// ============================================================
+// EMPTY FILTER OPTIONS
+// ============================================================
 
 const EMPTY_FILTER_OPTIONS = {
   academicYears: [],
@@ -16,6 +23,10 @@ const EMPTY_FILTER_OPTIONS = {
   years: [],
   sections: [],
 };
+
+// ============================================================
+// INITIAL FILTERS
+// ============================================================
 
 const INITIAL_FILTERS = {
   academicYearId: "",
@@ -27,16 +38,20 @@ const INITIAL_FILTERS = {
   view: "assign",
 };
 
+// ============================================================
+// ASSIGNMENTS PAGE
+// ============================================================
+
 const Assignments = () => {
-  // ============================================================
+  // ==========================================================
   // FILTER STATE
-  // ============================================================
+  // ==========================================================
 
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
-  // ============================================================
+  // ==========================================================
   // BACKEND CONTEXT
-  // ============================================================
+  // ==========================================================
 
   const [context, setContext] = useState(null);
 
@@ -44,9 +59,29 @@ const Assignments = () => {
 
   const [error, setError] = useState("");
 
-  // ============================================================
+  // ==========================================================
+  // REFRESH KEY
+  // ==========================================================
+  //
+  // Used to explicitly reload the assignment context after:
+  //
+  // - student import
+  // - assignment changes
+  // - manual refresh
+  //
+  // ==========================================================
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  // ==========================================================
+  // ADD STUDENTS MODAL
+  // ==========================================================
+
+  const [showAddStudentsModal, setShowAddStudentsModal] = useState(false);
+
+  // ==========================================================
   // LOAD ASSIGNMENT CONTEXT
-  // ============================================================
+  // ==========================================================
 
   useEffect(() => {
     let cancelled = false;
@@ -54,7 +89,12 @@ const Assignments = () => {
     const loadContext = async () => {
       try {
         setLoading(true);
+
         setError("");
+
+        // ==================================================
+        // API REQUEST
+        // ==================================================
 
         const data = await getAssignmentContext({
           academicYearId: filters.academicYearId || undefined,
@@ -74,11 +114,15 @@ const Assignments = () => {
           return;
         }
 
+        // ==================================================
+        // SAVE CONTEXT
+        // ==================================================
+
         setContext(data);
 
-        // ======================================================
+        // ==================================================
         // INITIAL ACADEMIC YEAR
-        // ======================================================
+        // ==================================================
 
         if (!filters.academicYearId && !filters.academicYear) {
           const firstAcademicYear = data?.filterOptions?.academicYears?.[0];
@@ -94,17 +138,9 @@ const Assignments = () => {
           }
         }
 
-        // ======================================================
+        // ==================================================
         // INITIAL TERM
-        // ======================================================
-        //
-        // Once the academic year is selected,
-        // automatically select the first available term.
-        //
-        // This keeps the banner and workspace populated
-        // without hardcoding any term.
-        //
-        // ======================================================
+        // ==================================================
 
         if (filters.academicYearId && !filters.termId) {
           const firstTerm = data?.filterOptions?.terms?.[0];
@@ -148,157 +184,154 @@ const Assignments = () => {
     filters.departmentId,
     filters.semesterNumber,
     filters.section,
+    refreshKey,
   ]);
 
-  // ============================================================
+  // ==========================================================
+  // FILTER OPTIONS
+  // ==========================================================
+
+  const filterOptions = useMemo(() => {
+    return {
+      ...EMPTY_FILTER_OPTIONS,
+
+      ...(context?.filterOptions || {}),
+    };
+  }, [context]);
+
+  // ==========================================================
   // FILTER CHANGE
-  // ============================================================
+  // ==========================================================
 
   const handleFilterChange = (key, value, option = null) => {
     setFilters((previous) => {
       const next = {
         ...previous,
+
         [key]: value,
       };
 
-      // ======================================================
-      // ACADEMIC YEAR
-      // ======================================================
+      // ====================================================
+      // ACADEMIC YEAR CHANGE
+      // ====================================================
 
       if (key === "academicYearId") {
-        next.academicYearId = value;
-
         next.academicYear = option?.name || "";
 
         next.termId = "";
+
         next.departmentId = "";
+
         next.semesterNumber = "";
+
         next.section = "";
       }
 
-      // ======================================================
-      // TERM
-      // ======================================================
+      // ====================================================
+      // TERM CHANGE
+      // ====================================================
 
       if (key === "termId") {
-        next.termId = value;
-
         next.departmentId = "";
+
         next.semesterNumber = "";
+
         next.section = "";
       }
 
-      // ======================================================
-      // DEPARTMENT
-      // ======================================================
+      // ====================================================
+      // DEPARTMENT CHANGE
+      // ====================================================
 
       if (key === "departmentId") {
-        next.departmentId = value;
-
         next.semesterNumber = "";
+
         next.section = "";
       }
 
-      // ======================================================
-      // YEAR / SEMESTER
-      // ======================================================
+      // ====================================================
+      // SEMESTER CHANGE
+      // ====================================================
 
       if (key === "semesterNumber") {
-        next.semesterNumber = value;
-
         next.section = "";
-      }
-
-      // ======================================================
-      // SECTION
-      // ======================================================
-
-      if (key === "section") {
-        next.section = value;
-      }
-
-      // ======================================================
-      // VIEW
-      // ======================================================
-
-      if (key === "view") {
-        next.view = value;
       }
 
       return next;
     });
   };
 
-  // ============================================================
-  // FILTER OPTIONS
-  // ============================================================
+  // ==========================================================
+  // REFRESH ASSIGNMENT DATA
+  // ==========================================================
 
-  const filterOptions = context?.filterOptions || EMPTY_FILTER_OPTIONS;
+  const handleRefresh = () => {
+    setError("");
 
-  // ============================================================
-  // SELECTED TERM
-  // ============================================================
-  //
-  // IMPORTANT:
-  //
-  // This is the term selected by the HOD in the cascade.
-  // AssignmentBanner receives THIS exact object.
-  //
-  // ============================================================
-
-  const selectedTerm =
-    filterOptions.terms?.find((term) => term.id === filters.termId) ||
-    context?.term ||
-    null;
-
-  // ============================================================
-  // SELECTED ACADEMIC YEAR
-  // ============================================================
-
-  const selectedAcademicYear =
-    filterOptions.academicYears?.find(
-      (year) => year.id === filters.academicYearId,
-    ) ||
-    context?.academicYear ||
-    null;
-
-  // ============================================================
-  // REFRESH
-  // ============================================================
-
-  const handleRefresh = async () => {
-    try {
-      setError("");
-
-      const data = await getAssignmentContext({
-        academicYearId: filters.academicYearId || undefined,
-
-        academicYear: filters.academicYear || undefined,
-
-        termId: filters.termId || undefined,
-
-        departmentId: filters.departmentId || undefined,
-
-        semesterNumber: filters.semesterNumber || undefined,
-
-        section: filters.section || undefined,
-      });
-
-      setContext(data);
-    } catch (err) {
-      console.error("Assignment refresh error:", err);
-
-      setError(
-        err?.response?.data?.message ||
-          err?.message ||
-          "Failed to refresh assignment data.",
-      );
-    }
+    setRefreshKey((previous) => previous + 1);
   };
 
-  // ============================================================
-  // PAGE
-  // ============================================================
+  // ==========================================================
+  // STUDENTS IMPORTED SUCCESSFULLY
+  // ==========================================================
+
+  const handleStudentsImported = () => {
+    // ------------------------------------------------------
+    // Close modal
+    // ------------------------------------------------------
+
+    setShowAddStudentsModal(false);
+
+    // ------------------------------------------------------
+    // Clear existing context
+    // ------------------------------------------------------
+
+    setContext(null);
+
+    // ------------------------------------------------------
+    // Reload assignment data
+    // ------------------------------------------------------
+
+    setRefreshKey((previous) => previous + 1);
+  };
+
+  // ==========================================================
+  // SELECTED TERM
+  // ==========================================================
+
+  const selectedTerm = useMemo(() => {
+    return (
+      filterOptions.terms?.find((term) => term.id === filters.termId) || null
+    );
+  }, [filterOptions.terms, filters.termId]);
+
+  // ==========================================================
+  // SELECTED ACADEMIC YEAR
+  // ==========================================================
+
+  const selectedAcademicYear = useMemo(() => {
+    return (
+      filterOptions.academicYears?.find(
+        (year) => year.id === filters.academicYearId,
+      ) || null
+    );
+  }, [filterOptions.academicYears, filters.academicYearId]);
+
+  // ==========================================================
+  // SELECTED DEPARTMENT
+  // ==========================================================
+
+  const selectedDepartment = useMemo(() => {
+    return (
+      filterOptions.departments?.find(
+        (department) => department.id === filters.departmentId,
+      ) || null
+    );
+  }, [filterOptions.departments, filters.departmentId]);
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -309,16 +342,53 @@ const Assignments = () => {
       <AdminSidebar />
 
       {/* ======================================================
-          MAIN AREA
+          MAIN CONTENT
       ====================================================== */}
 
       <div className="ml-[290px] min-h-screen">
+        {/* ====================================================
+            HEADER
+        ==================================================== */}
+
         <AdminHeader />
+
+        {/* ====================================================
+            PAGE CONTENT
+        ==================================================== */}
 
         <main className="p-6">
           <div className="mx-auto flex max-w-[1700px] flex-col gap-6">
             {/* ==================================================
-                BANNER
+                PAGE ACTION BAR
+            ================================================== */}
+
+            <div className="flex items-center justify-between">
+              <div>
+                <h1 className="text-2xl font-bold text-slate-900">
+                  Mentor Assignments
+                </h1>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  Manage student-to-mentor assignments.
+                </p>
+              </div>
+
+              {/* =================================================
+                  ADD STUDENTS
+              ================================================= */}
+
+              <button
+                type="button"
+                onClick={() => setShowAddStudentsModal(true)}
+                className="flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 hover:shadow-md"
+              >
+                <Plus size={18} />
+                Add Students
+              </button>
+            </div>
+
+            {/* ==================================================
+                ASSIGNMENT BANNER
             ================================================== */}
 
             <AssignmentBanner
@@ -338,23 +408,11 @@ const Assignments = () => {
             />
 
             {/* ==================================================
-                API ERROR
+                ERROR
             ================================================== */}
 
             {error && (
-              <div
-                className="
-                  rounded-lg
-                  border
-                  border-red-200
-                  bg-red-50
-                  px-4
-                  py-3
-                  text-xs
-                  font-medium
-                  text-red-600
-                "
-              >
+              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
                 {error}
               </div>
             )}
@@ -372,6 +430,19 @@ const Assignments = () => {
           </div>
         </main>
       </div>
+
+      {/* ========================================================
+          ADD STUDENTS MODAL
+      ======================================================== */}
+
+      <AddStudentModal
+        open={showAddStudentsModal}
+        onClose={() => setShowAddStudentsModal(false)}
+        departments={filterOptions.departments || []}
+        selectedDepartmentId={filters.departmentId}
+        termId={filters.termId}
+        onSuccess={handleStudentsImported}
+      />
     </div>
   );
 };

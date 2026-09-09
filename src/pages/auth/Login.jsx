@@ -12,50 +12,64 @@ const Login = () => {
 
   const [loading, setLoading] = useState(false);
 
-  //--------------------------------------------------
-  // Backend Login
-  //--------------------------------------------------
+  // ========================================================
+  // BACKEND LOGIN
+  // ========================================================
 
   const handleLogin = async (data) => {
     try {
       setLoading(true);
 
-      const response = await login(
-        data.email,
-        data.password
-      );
+      const response = await login(data.email, data.password);
 
-      const { token, user } = response.data;
+      const { user } = response.data;
 
-      // Store Authentication
-      localStorage.setItem("accessToken", token);
-      localStorage.setItem("user", JSON.stringify(user));
-      localStorage.setItem("isAuthenticated", "true");
-      localStorage.setItem("userRole", user.role);
+      // ====================================================
+      // REDIRECT BASED ON ROLE
+      // ====================================================
 
-      // Redirect Based On Role
       switch (user.role) {
+        // --------------------------------------------------
+        // ADMIN
+        // --------------------------------------------------
+
         case "ADMIN":
           navigate("/admin/dashboard");
           break;
+
+        // --------------------------------------------------
+        // MENTOR
+        // --------------------------------------------------
 
         case "MENTOR":
           navigate("/mentor/dashboard");
           break;
 
+        // --------------------------------------------------
+        // STUDENT
+        // --------------------------------------------------
+
         case "STUDENT":
-          navigate("/student/dashboard");
+          if (user.mustChangePassword) {
+            navigate("/change-password");
+          } else {
+            navigate("/student/dashboard");
+          }
           break;
+
+        // --------------------------------------------------
+        // FALLBACK
+        // --------------------------------------------------
 
         default:
           navigate("/");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Login error:", error);
 
       alert(
         error.response?.data?.message ||
-          "Unable to login. Please check your credentials."
+          "Unable to login. Please check your credentials.",
       );
     } finally {
       setLoading(false);
@@ -64,7 +78,9 @@ const Login = () => {
 
   return (
     <div className="grid min-h-screen lg:grid-cols-[56%_44%] bg-[#F8FAFC]">
-      {/* ========================= Left Section ========================= */}
+      {/* ==================================================
+          LEFT SECTION
+          ================================================== */}
 
       <div className="relative flex flex-col bg-[#EEF5FF]">
         <div className="flex-1">
@@ -74,13 +90,12 @@ const Login = () => {
         <FeatureStrip />
       </div>
 
-      {/* ========================= Right Section ========================= */}
+      {/* ==================================================
+          RIGHT SECTION
+          ================================================== */}
 
       <div className="relative flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50">
-        <LoginCard
-          onLogin={handleLogin}
-          loading={loading}
-        />
+        <LoginCard onLogin={handleLogin} loading={loading} />
       </div>
     </div>
   );
