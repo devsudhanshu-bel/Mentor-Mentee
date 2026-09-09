@@ -431,6 +431,7 @@ exports.Prisma.User_accountsScalarFieldEnum = {
   password: 'password',
   role: 'role',
   isActive: 'isActive',
+  mustChangePassword: 'mustChangePassword',
   lastLogin: 'lastLogin',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

@@ -1,15 +1,16 @@
 import jwt from "jsonwebtoken";
-import prisma from "../config/prisma.js";
+
+import hodPrisma from "../config/prisma.hod.js";
 
 import ApiError from "../utils/ApiError.js";
 import asyncHandler from "../utils/asyncHandler.js";
 
 export const authenticate = asyncHandler(async (req, res, next) => {
-  let token = null;
+  // ========================================================
+  // GET TOKEN
+  // ========================================================
 
-  /* ==========================================================
-     Get Token
-  ========================================================== */
+  let token = null;
 
   const authHeader = req.headers.authorization;
 
@@ -17,7 +18,6 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     token = authHeader.split(" ")[1];
   }
 
-  // Future Support (Cookies)
   if (!token && req.cookies?.accessToken) {
     token = req.cookies.accessToken;
   }
@@ -26,29 +26,29 @@ export const authenticate = asyncHandler(async (req, res, next) => {
     throw new ApiError(401, "Access token is missing");
   }
 
-  /* ==========================================================
-     Verify JWT
-  ========================================================== */
+  // ========================================================
+  // VERIFY TOKEN
+  // ========================================================
 
   let decoded;
 
-try {
-  decoded = jwt.verify(token, process.env.JWT_SECRET);
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (error) {
+    console.error("❌ JWT Error:", error.message);
 
-  console.log("✅ Decoded:", decoded);
+    throw new ApiError(401, "Invalid or expired token");
+  }
 
-} catch (error) {
-  console.log("❌ JWT Error Name:", error.name);
-  console.log("❌ JWT Error Message:", error.message);
+  if (!decoded?.id) {
+    throw new ApiError(401, "Invalid authentication token");
+  }
 
-  throw new ApiError(401, "Invalid or expired token");
-}
+  // ========================================================
+  // FETCH USER FROM HOD AUTH DATABASE
+  // ========================================================
 
-  /* ==========================================================
-     Fetch User
-  ========================================================== */
-
-  const user = await prisma.user.findUnique({
+  const user = await hodPrisma.user_accounts.findUnique({
     where: {
       id: decoded.id,
     },
@@ -58,13 +58,17 @@ try {
     throw new ApiError(401, "User not found");
   }
 
+  // ========================================================
+  // ACCOUNT STATUS
+  // ========================================================
+
   if (!user.isActive) {
     throw new ApiError(403, "Your account has been disabled");
   }
 
-  /* ==========================================================
-     Remove Password
-  ========================================================== */
+  // ========================================================
+  // SAFE USER
+  // ========================================================
 
   const { password, ...safeUser } = user;
 

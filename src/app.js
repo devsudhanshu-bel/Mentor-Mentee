@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
 import attendanceRoutes from "./modules/Mentee/attendance/routes/attendance.routes.js";
+import studentRoutes from "./modules/admin/students/student.routes.js";
 
 import assignmentRoutes from "./modules/admin/assignments/assignment.routes.js";
 import termChangeRoutes from "./modules/admin/term-change/termChange.routes.js";
@@ -79,6 +80,7 @@ app.use("/api/admin/assignments", assignmentRoutes);
 ========================================================== */
 
 app.use("/api/admin/term-change", termChangeRoutes);
+app.use("/api/admin/students", studentRoutes);
 
 /* ==========================================================
    404 Handler

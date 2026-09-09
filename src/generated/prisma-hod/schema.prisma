@@ -550,7 +550,12 @@ model user_accounts {
 
   role UserRole
 
-  isActive  Boolean   @default(true)
+  isActive Boolean @default(true)
+
+  // Forces the user to change the temporary/default password
+  // during their first successful login.
+  mustChangePassword Boolean @default(false)
+
   lastLogin DateTime?
 
   createdAt DateTime @default(now())
