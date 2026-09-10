@@ -118,6 +118,11 @@ export type user_accounts = $Result.DefaultSelection<Prisma.$user_accountsPayloa
  * 
  */
 export type term_change_requests = $Result.DefaultSelection<Prisma.$term_change_requestsPayload>
+/**
+ * Model teacher_profiles
+ * 
+ */
+export type teacher_profiles = $Result.DefaultSelection<Prisma.$teacher_profilesPayload>
 
 /**
  * Enums
@@ -758,6 +763,16 @@ export class PrismaClient<
     * ```
     */
   get term_change_requests(): Prisma.term_change_requestsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.teacher_profiles`: Exposes CRUD operations for the **teacher_profiles** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Teacher_profiles
+    * const teacher_profiles = await prisma.teacher_profiles.findMany()
+    * ```
+    */
+  get teacher_profiles(): Prisma.teacher_profilesDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1219,7 +1234,8 @@ export namespace Prisma {
     academic_backlogs: 'academic_backlogs',
     teachers: 'teachers',
     user_accounts: 'user_accounts',
-    term_change_requests: 'term_change_requests'
+    term_change_requests: 'term_change_requests',
+    teacher_profiles: 'teacher_profiles'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1238,7 +1254,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests"
+      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2796,6 +2812,80 @@ export namespace Prisma {
           }
         }
       }
+      teacher_profiles: {
+        payload: Prisma.$teacher_profilesPayload<ExtArgs>
+        fields: Prisma.teacher_profilesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.teacher_profilesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.teacher_profilesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>
+          }
+          findFirst: {
+            args: Prisma.teacher_profilesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.teacher_profilesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>
+          }
+          findMany: {
+            args: Prisma.teacher_profilesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>[]
+          }
+          create: {
+            args: Prisma.teacher_profilesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>
+          }
+          createMany: {
+            args: Prisma.teacher_profilesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.teacher_profilesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>[]
+          }
+          delete: {
+            args: Prisma.teacher_profilesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>
+          }
+          update: {
+            args: Prisma.teacher_profilesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>
+          }
+          deleteMany: {
+            args: Prisma.teacher_profilesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.teacher_profilesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.teacher_profilesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>[]
+          }
+          upsert: {
+            args: Prisma.teacher_profilesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$teacher_profilesPayload>
+          }
+          aggregate: {
+            args: Prisma.Teacher_profilesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateTeacher_profiles>
+          }
+          groupBy: {
+            args: Prisma.teacher_profilesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Teacher_profilesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.teacher_profilesCountArgs<ExtArgs>
+            result: $Utils.Optional<Teacher_profilesCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2913,6 +3003,7 @@ export namespace Prisma {
     teachers?: teachersOmit
     user_accounts?: user_accountsOmit
     term_change_requests?: term_change_requestsOmit
+    teacher_profiles?: teacher_profilesOmit
   }
 
   /* Types for Logging */
@@ -3051,17 +3142,17 @@ export namespace Prisma {
    */
 
   export type Academic_yearsCountOutputType = {
+    academic_semesters: number
     academic_term_requests: number
     academic_terms: number
     import_batches: number
-    academic_semesters: number
   }
 
   export type Academic_yearsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    academic_semesters?: boolean | Academic_yearsCountOutputTypeCountAcademic_semestersArgs
     academic_term_requests?: boolean | Academic_yearsCountOutputTypeCountAcademic_term_requestsArgs
     academic_terms?: boolean | Academic_yearsCountOutputTypeCountAcademic_termsArgs
     import_batches?: boolean | Academic_yearsCountOutputTypeCountImport_batchesArgs
-    academic_semesters?: boolean | Academic_yearsCountOutputTypeCountAcademic_semestersArgs
   }
 
   // Custom InputTypes
@@ -3073,6 +3164,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the Academic_yearsCountOutputType
      */
     select?: Academic_yearsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Academic_yearsCountOutputType without action
+   */
+  export type Academic_yearsCountOutputTypeCountAcademic_semestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: academic_semestersWhereInput
   }
 
   /**
@@ -3094,13 +3192,6 @@ export namespace Prisma {
    */
   export type Academic_yearsCountOutputTypeCountImport_batchesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: import_batchesWhereInput
-  }
-
-  /**
-   * Academic_yearsCountOutputType without action
-   */
-  export type Academic_yearsCountOutputTypeCountAcademic_semestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: academic_semestersWhereInput
   }
 
 
@@ -3189,23 +3280,23 @@ export namespace Prisma {
    */
 
   export type StudentsCountOutputType = {
+    academicBacklogs: number
+    academicSemesters: number
     detentions: number
     mentor_assignments: number
     mentor_transfer_requests: number
-    student_enrollments: number
     documents: number
-    academicSemesters: number
-    academicBacklogs: number
+    student_enrollments: number
   }
 
   export type StudentsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    academicBacklogs?: boolean | StudentsCountOutputTypeCountAcademicBacklogsArgs
+    academicSemesters?: boolean | StudentsCountOutputTypeCountAcademicSemestersArgs
     detentions?: boolean | StudentsCountOutputTypeCountDetentionsArgs
     mentor_assignments?: boolean | StudentsCountOutputTypeCountMentor_assignmentsArgs
     mentor_transfer_requests?: boolean | StudentsCountOutputTypeCountMentor_transfer_requestsArgs
-    student_enrollments?: boolean | StudentsCountOutputTypeCountStudent_enrollmentsArgs
     documents?: boolean | StudentsCountOutputTypeCountDocumentsArgs
-    academicSemesters?: boolean | StudentsCountOutputTypeCountAcademicSemestersArgs
-    academicBacklogs?: boolean | StudentsCountOutputTypeCountAcademicBacklogsArgs
+    student_enrollments?: boolean | StudentsCountOutputTypeCountStudent_enrollmentsArgs
   }
 
   // Custom InputTypes
@@ -3217,6 +3308,20 @@ export namespace Prisma {
      * Select specific fields to fetch from the StudentsCountOutputType
      */
     select?: StudentsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * StudentsCountOutputType without action
+   */
+  export type StudentsCountOutputTypeCountAcademicBacklogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: academic_backlogsWhereInput
+  }
+
+  /**
+   * StudentsCountOutputType without action
+   */
+  export type StudentsCountOutputTypeCountAcademicSemestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: academic_semestersWhereInput
   }
 
   /**
@@ -3243,13 +3348,6 @@ export namespace Prisma {
   /**
    * StudentsCountOutputType without action
    */
-  export type StudentsCountOutputTypeCountStudent_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: student_enrollmentsWhereInput
-  }
-
-  /**
-   * StudentsCountOutputType without action
-   */
   export type StudentsCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: student_documentsWhereInput
   }
@@ -3257,15 +3355,8 @@ export namespace Prisma {
   /**
    * StudentsCountOutputType without action
    */
-  export type StudentsCountOutputTypeCountAcademicSemestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: academic_semestersWhereInput
-  }
-
-  /**
-   * StudentsCountOutputType without action
-   */
-  export type StudentsCountOutputTypeCountAcademicBacklogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: academic_backlogsWhereInput
+  export type StudentsCountOutputTypeCountStudent_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: student_enrollmentsWhereInput
   }
 
 
@@ -6093,11 +6184,11 @@ export namespace Prisma {
     departmentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    academic_semesters?: boolean | academic_years$academic_semestersArgs<ExtArgs>
     academic_term_requests?: boolean | academic_years$academic_term_requestsArgs<ExtArgs>
     academic_terms?: boolean | academic_years$academic_termsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     import_batches?: boolean | academic_years$import_batchesArgs<ExtArgs>
-    academic_semesters?: boolean | academic_years$academic_semestersArgs<ExtArgs>
     _count?: boolean | Academic_yearsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["academic_years"]>
 
@@ -6138,11 +6229,11 @@ export namespace Prisma {
 
   export type academic_yearsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "startDate" | "endDate" | "status" | "departmentId" | "createdAt" | "updatedAt", ExtArgs["result"]["academic_years"]>
   export type academic_yearsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    academic_semesters?: boolean | academic_years$academic_semestersArgs<ExtArgs>
     academic_term_requests?: boolean | academic_years$academic_term_requestsArgs<ExtArgs>
     academic_terms?: boolean | academic_years$academic_termsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     import_batches?: boolean | academic_years$import_batchesArgs<ExtArgs>
-    academic_semesters?: boolean | academic_years$academic_semestersArgs<ExtArgs>
     _count?: boolean | Academic_yearsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type academic_yearsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -6155,11 +6246,11 @@ export namespace Prisma {
   export type $academic_yearsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "academic_years"
     objects: {
+      academic_semesters: Prisma.$academic_semestersPayload<ExtArgs>[]
       academic_term_requests: Prisma.$academic_term_requestsPayload<ExtArgs>[]
       academic_terms: Prisma.$academic_termsPayload<ExtArgs>[]
       departments: Prisma.$departmentsPayload<ExtArgs>
       import_batches: Prisma.$import_batchesPayload<ExtArgs>[]
-      academic_semesters: Prisma.$academic_semestersPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -6564,11 +6655,11 @@ export namespace Prisma {
    */
   export interface Prisma__academic_yearsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    academic_semesters<T extends academic_years$academic_semestersArgs<ExtArgs> = {}>(args?: Subset<T, academic_years$academic_semestersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_semestersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     academic_term_requests<T extends academic_years$academic_term_requestsArgs<ExtArgs> = {}>(args?: Subset<T, academic_years$academic_term_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_term_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     academic_terms<T extends academic_years$academic_termsArgs<ExtArgs> = {}>(args?: Subset<T, academic_years$academic_termsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_termsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     departments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     import_batches<T extends academic_years$import_batchesArgs<ExtArgs> = {}>(args?: Subset<T, academic_years$import_batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$import_batchesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    academic_semesters<T extends academic_years$academic_semestersArgs<ExtArgs> = {}>(args?: Subset<T, academic_years$academic_semestersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_semestersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -7002,6 +7093,30 @@ export namespace Prisma {
   }
 
   /**
+   * academic_years.academic_semesters
+   */
+  export type academic_years$academic_semestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the academic_semesters
+     */
+    select?: academic_semestersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the academic_semesters
+     */
+    omit?: academic_semestersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: academic_semestersInclude<ExtArgs> | null
+    where?: academic_semestersWhereInput
+    orderBy?: academic_semestersOrderByWithRelationInput | academic_semestersOrderByWithRelationInput[]
+    cursor?: academic_semestersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Academic_semestersScalarFieldEnum | Academic_semestersScalarFieldEnum[]
+  }
+
+  /**
    * academic_years.academic_term_requests
    */
   export type academic_years$academic_term_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7071,30 +7186,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Import_batchesScalarFieldEnum | Import_batchesScalarFieldEnum[]
-  }
-
-  /**
-   * academic_years.academic_semesters
-   */
-  export type academic_years$academic_semestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the academic_semesters
-     */
-    select?: academic_semestersSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the academic_semesters
-     */
-    omit?: academic_semestersOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: academic_semestersInclude<ExtArgs> | null
-    where?: academic_semestersWhereInput
-    orderBy?: academic_semestersOrderByWithRelationInput | academic_semestersOrderByWithRelationInput[]
-    cursor?: academic_semestersWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Academic_semestersScalarFieldEnum | Academic_semestersScalarFieldEnum[]
   }
 
   /**
@@ -16526,15 +16617,15 @@ export namespace Prisma {
   }
 
   export type StudentsAvgAggregateOutputType = {
-    totalCredits: number | null
     currentCGPA: number | null
     overallAttendance: number | null
+    totalCredits: number | null
   }
 
   export type StudentsSumAggregateOutputType = {
-    totalCredits: number | null
     currentCGPA: number | null
     overallAttendance: number | null
+    totalCredits: number | null
   }
 
   export type StudentsMinAggregateOutputType = {
@@ -16544,29 +16635,29 @@ export namespace Prisma {
     fullName: string | null
     email: string | null
     phone: string | null
-    profileImage: string | null
     dateOfBirth: Date | null
     gender: $Enums.Gender | null
-    bloodGroup: $Enums.BloodGroup | null
-    nationality: string | null
-    religion: string | null
-    programme: string | null
-    semester: string | null
-    section: string | null
-    studentType: $Enums.StudentType | null
-    address: string | null
-    permanentAddress: string | null
-    yearsAtUniversity: string | null
-    totalCredits: number | null
-    currentCGPA: number | null
-    overallAttendance: number | null
-    academicStanding: string | null
-    academicSetupCompleted: boolean | null
     status: $Enums.StudentStatus | null
     departmentId: string | null
     userAccountId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    academicSetupCompleted: boolean | null
+    academicStanding: string | null
+    address: string | null
+    bloodGroup: $Enums.BloodGroup | null
+    currentCGPA: number | null
+    nationality: string | null
+    overallAttendance: number | null
+    permanentAddress: string | null
+    profileImage: string | null
+    programme: string | null
+    religion: string | null
+    section: string | null
+    semester: string | null
+    studentType: $Enums.StudentType | null
+    totalCredits: number | null
+    yearsAtUniversity: string | null
   }
 
   export type StudentsMaxAggregateOutputType = {
@@ -16576,29 +16667,29 @@ export namespace Prisma {
     fullName: string | null
     email: string | null
     phone: string | null
-    profileImage: string | null
     dateOfBirth: Date | null
     gender: $Enums.Gender | null
-    bloodGroup: $Enums.BloodGroup | null
-    nationality: string | null
-    religion: string | null
-    programme: string | null
-    semester: string | null
-    section: string | null
-    studentType: $Enums.StudentType | null
-    address: string | null
-    permanentAddress: string | null
-    yearsAtUniversity: string | null
-    totalCredits: number | null
-    currentCGPA: number | null
-    overallAttendance: number | null
-    academicStanding: string | null
-    academicSetupCompleted: boolean | null
     status: $Enums.StudentStatus | null
     departmentId: string | null
     userAccountId: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    academicSetupCompleted: boolean | null
+    academicStanding: string | null
+    address: string | null
+    bloodGroup: $Enums.BloodGroup | null
+    currentCGPA: number | null
+    nationality: string | null
+    overallAttendance: number | null
+    permanentAddress: string | null
+    profileImage: string | null
+    programme: string | null
+    religion: string | null
+    section: string | null
+    semester: string | null
+    studentType: $Enums.StudentType | null
+    totalCredits: number | null
+    yearsAtUniversity: string | null
   }
 
   export type StudentsCountAggregateOutputType = {
@@ -16608,43 +16699,43 @@ export namespace Prisma {
     fullName: number
     email: number
     phone: number
-    profileImage: number
     dateOfBirth: number
     gender: number
-    bloodGroup: number
-    nationality: number
-    religion: number
-    programme: number
-    semester: number
-    section: number
-    studentType: number
-    address: number
-    permanentAddress: number
-    yearsAtUniversity: number
-    totalCredits: number
-    currentCGPA: number
-    overallAttendance: number
-    academicStanding: number
-    academicSetupCompleted: number
     status: number
     departmentId: number
     userAccountId: number
     createdAt: number
     updatedAt: number
+    academicSetupCompleted: number
+    academicStanding: number
+    address: number
+    bloodGroup: number
+    currentCGPA: number
+    nationality: number
+    overallAttendance: number
+    permanentAddress: number
+    profileImage: number
+    programme: number
+    religion: number
+    section: number
+    semester: number
+    studentType: number
+    totalCredits: number
+    yearsAtUniversity: number
     _all: number
   }
 
 
   export type StudentsAvgAggregateInputType = {
-    totalCredits?: true
     currentCGPA?: true
     overallAttendance?: true
+    totalCredits?: true
   }
 
   export type StudentsSumAggregateInputType = {
-    totalCredits?: true
     currentCGPA?: true
     overallAttendance?: true
+    totalCredits?: true
   }
 
   export type StudentsMinAggregateInputType = {
@@ -16654,29 +16745,29 @@ export namespace Prisma {
     fullName?: true
     email?: true
     phone?: true
-    profileImage?: true
     dateOfBirth?: true
     gender?: true
-    bloodGroup?: true
-    nationality?: true
-    religion?: true
-    programme?: true
-    semester?: true
-    section?: true
-    studentType?: true
-    address?: true
-    permanentAddress?: true
-    yearsAtUniversity?: true
-    totalCredits?: true
-    currentCGPA?: true
-    overallAttendance?: true
-    academicStanding?: true
-    academicSetupCompleted?: true
     status?: true
     departmentId?: true
     userAccountId?: true
     createdAt?: true
     updatedAt?: true
+    academicSetupCompleted?: true
+    academicStanding?: true
+    address?: true
+    bloodGroup?: true
+    currentCGPA?: true
+    nationality?: true
+    overallAttendance?: true
+    permanentAddress?: true
+    profileImage?: true
+    programme?: true
+    religion?: true
+    section?: true
+    semester?: true
+    studentType?: true
+    totalCredits?: true
+    yearsAtUniversity?: true
   }
 
   export type StudentsMaxAggregateInputType = {
@@ -16686,29 +16777,29 @@ export namespace Prisma {
     fullName?: true
     email?: true
     phone?: true
-    profileImage?: true
     dateOfBirth?: true
     gender?: true
-    bloodGroup?: true
-    nationality?: true
-    religion?: true
-    programme?: true
-    semester?: true
-    section?: true
-    studentType?: true
-    address?: true
-    permanentAddress?: true
-    yearsAtUniversity?: true
-    totalCredits?: true
-    currentCGPA?: true
-    overallAttendance?: true
-    academicStanding?: true
-    academicSetupCompleted?: true
     status?: true
     departmentId?: true
     userAccountId?: true
     createdAt?: true
     updatedAt?: true
+    academicSetupCompleted?: true
+    academicStanding?: true
+    address?: true
+    bloodGroup?: true
+    currentCGPA?: true
+    nationality?: true
+    overallAttendance?: true
+    permanentAddress?: true
+    profileImage?: true
+    programme?: true
+    religion?: true
+    section?: true
+    semester?: true
+    studentType?: true
+    totalCredits?: true
+    yearsAtUniversity?: true
   }
 
   export type StudentsCountAggregateInputType = {
@@ -16718,29 +16809,29 @@ export namespace Prisma {
     fullName?: true
     email?: true
     phone?: true
-    profileImage?: true
     dateOfBirth?: true
     gender?: true
-    bloodGroup?: true
-    nationality?: true
-    religion?: true
-    programme?: true
-    semester?: true
-    section?: true
-    studentType?: true
-    address?: true
-    permanentAddress?: true
-    yearsAtUniversity?: true
-    totalCredits?: true
-    currentCGPA?: true
-    overallAttendance?: true
-    academicStanding?: true
-    academicSetupCompleted?: true
     status?: true
     departmentId?: true
     userAccountId?: true
     createdAt?: true
     updatedAt?: true
+    academicSetupCompleted?: true
+    academicStanding?: true
+    address?: true
+    bloodGroup?: true
+    currentCGPA?: true
+    nationality?: true
+    overallAttendance?: true
+    permanentAddress?: true
+    profileImage?: true
+    programme?: true
+    religion?: true
+    section?: true
+    semester?: true
+    studentType?: true
+    totalCredits?: true
+    yearsAtUniversity?: true
     _all?: true
   }
 
@@ -16837,29 +16928,29 @@ export namespace Prisma {
     fullName: string
     email: string | null
     phone: string | null
-    profileImage: string | null
     dateOfBirth: Date | null
     gender: $Enums.Gender | null
-    bloodGroup: $Enums.BloodGroup | null
-    nationality: string | null
-    religion: string | null
-    programme: string | null
-    semester: string | null
-    section: string | null
-    studentType: $Enums.StudentType | null
-    address: string | null
-    permanentAddress: string | null
-    yearsAtUniversity: string | null
-    totalCredits: number | null
-    currentCGPA: number | null
-    overallAttendance: number | null
-    academicStanding: string | null
-    academicSetupCompleted: boolean
     status: $Enums.StudentStatus
     departmentId: string
     userAccountId: string | null
     createdAt: Date
     updatedAt: Date
+    academicSetupCompleted: boolean
+    academicStanding: string | null
+    address: string | null
+    bloodGroup: $Enums.BloodGroup | null
+    currentCGPA: number | null
+    nationality: string | null
+    overallAttendance: number | null
+    permanentAddress: string | null
+    profileImage: string | null
+    programme: string | null
+    religion: string | null
+    section: string | null
+    semester: string | null
+    studentType: $Enums.StudentType | null
+    totalCredits: number | null
+    yearsAtUniversity: string | null
     _count: StudentsCountAggregateOutputType | null
     _avg: StudentsAvgAggregateOutputType | null
     _sum: StudentsSumAggregateOutputType | null
@@ -16888,40 +16979,40 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     phone?: boolean
-    profileImage?: boolean
     dateOfBirth?: boolean
     gender?: boolean
-    bloodGroup?: boolean
-    nationality?: boolean
-    religion?: boolean
-    programme?: boolean
-    semester?: boolean
-    section?: boolean
-    studentType?: boolean
-    address?: boolean
-    permanentAddress?: boolean
-    yearsAtUniversity?: boolean
-    totalCredits?: boolean
-    currentCGPA?: boolean
-    overallAttendance?: boolean
-    academicStanding?: boolean
-    academicSetupCompleted?: boolean
     status?: boolean
     departmentId?: boolean
     userAccountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    academicSetupCompleted?: boolean
+    academicStanding?: boolean
+    address?: boolean
+    bloodGroup?: boolean
+    currentCGPA?: boolean
+    nationality?: boolean
+    overallAttendance?: boolean
+    permanentAddress?: boolean
+    profileImage?: boolean
+    programme?: boolean
+    religion?: boolean
+    section?: boolean
+    semester?: boolean
+    studentType?: boolean
+    totalCredits?: boolean
+    yearsAtUniversity?: boolean
+    academicBacklogs?: boolean | students$academicBacklogsArgs<ExtArgs>
+    academicSemesters?: boolean | students$academicSemestersArgs<ExtArgs>
     detentions?: boolean | students$detentionsArgs<ExtArgs>
     mentor_assignments?: boolean | students$mentor_assignmentsArgs<ExtArgs>
     mentor_transfer_requests?: boolean | students$mentor_transfer_requestsArgs<ExtArgs>
+    contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
+    documents?: boolean | students$documentsArgs<ExtArgs>
     student_enrollments?: boolean | students$student_enrollmentsArgs<ExtArgs>
+    parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
-    contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
-    parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
-    documents?: boolean | students$documentsArgs<ExtArgs>
-    academicSemesters?: boolean | students$academicSemestersArgs<ExtArgs>
-    academicBacklogs?: boolean | students$academicBacklogsArgs<ExtArgs>
     _count?: boolean | StudentsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["students"]>
 
@@ -16932,29 +17023,29 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     phone?: boolean
-    profileImage?: boolean
     dateOfBirth?: boolean
     gender?: boolean
-    bloodGroup?: boolean
-    nationality?: boolean
-    religion?: boolean
-    programme?: boolean
-    semester?: boolean
-    section?: boolean
-    studentType?: boolean
-    address?: boolean
-    permanentAddress?: boolean
-    yearsAtUniversity?: boolean
-    totalCredits?: boolean
-    currentCGPA?: boolean
-    overallAttendance?: boolean
-    academicStanding?: boolean
-    academicSetupCompleted?: boolean
     status?: boolean
     departmentId?: boolean
     userAccountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    academicSetupCompleted?: boolean
+    academicStanding?: boolean
+    address?: boolean
+    bloodGroup?: boolean
+    currentCGPA?: boolean
+    nationality?: boolean
+    overallAttendance?: boolean
+    permanentAddress?: boolean
+    profileImage?: boolean
+    programme?: boolean
+    religion?: boolean
+    section?: boolean
+    semester?: boolean
+    studentType?: boolean
+    totalCredits?: boolean
+    yearsAtUniversity?: boolean
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
   }, ExtArgs["result"]["students"]>
@@ -16966,29 +17057,29 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     phone?: boolean
-    profileImage?: boolean
     dateOfBirth?: boolean
     gender?: boolean
-    bloodGroup?: boolean
-    nationality?: boolean
-    religion?: boolean
-    programme?: boolean
-    semester?: boolean
-    section?: boolean
-    studentType?: boolean
-    address?: boolean
-    permanentAddress?: boolean
-    yearsAtUniversity?: boolean
-    totalCredits?: boolean
-    currentCGPA?: boolean
-    overallAttendance?: boolean
-    academicStanding?: boolean
-    academicSetupCompleted?: boolean
     status?: boolean
     departmentId?: boolean
     userAccountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    academicSetupCompleted?: boolean
+    academicStanding?: boolean
+    address?: boolean
+    bloodGroup?: boolean
+    currentCGPA?: boolean
+    nationality?: boolean
+    overallAttendance?: boolean
+    permanentAddress?: boolean
+    profileImage?: boolean
+    programme?: boolean
+    religion?: boolean
+    section?: boolean
+    semester?: boolean
+    studentType?: boolean
+    totalCredits?: boolean
+    yearsAtUniversity?: boolean
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
   }, ExtArgs["result"]["students"]>
@@ -17000,44 +17091,44 @@ export namespace Prisma {
     fullName?: boolean
     email?: boolean
     phone?: boolean
-    profileImage?: boolean
     dateOfBirth?: boolean
     gender?: boolean
-    bloodGroup?: boolean
-    nationality?: boolean
-    religion?: boolean
-    programme?: boolean
-    semester?: boolean
-    section?: boolean
-    studentType?: boolean
-    address?: boolean
-    permanentAddress?: boolean
-    yearsAtUniversity?: boolean
-    totalCredits?: boolean
-    currentCGPA?: boolean
-    overallAttendance?: boolean
-    academicStanding?: boolean
-    academicSetupCompleted?: boolean
     status?: boolean
     departmentId?: boolean
     userAccountId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    academicSetupCompleted?: boolean
+    academicStanding?: boolean
+    address?: boolean
+    bloodGroup?: boolean
+    currentCGPA?: boolean
+    nationality?: boolean
+    overallAttendance?: boolean
+    permanentAddress?: boolean
+    profileImage?: boolean
+    programme?: boolean
+    religion?: boolean
+    section?: boolean
+    semester?: boolean
+    studentType?: boolean
+    totalCredits?: boolean
+    yearsAtUniversity?: boolean
   }
 
-  export type studentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "registerNumber" | "admissionNumber" | "fullName" | "email" | "phone" | "profileImage" | "dateOfBirth" | "gender" | "bloodGroup" | "nationality" | "religion" | "programme" | "semester" | "section" | "studentType" | "address" | "permanentAddress" | "yearsAtUniversity" | "totalCredits" | "currentCGPA" | "overallAttendance" | "academicStanding" | "academicSetupCompleted" | "status" | "departmentId" | "userAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["students"]>
+  export type studentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "registerNumber" | "admissionNumber" | "fullName" | "email" | "phone" | "dateOfBirth" | "gender" | "status" | "departmentId" | "userAccountId" | "createdAt" | "updatedAt" | "academicSetupCompleted" | "academicStanding" | "address" | "bloodGroup" | "currentCGPA" | "nationality" | "overallAttendance" | "permanentAddress" | "profileImage" | "programme" | "religion" | "section" | "semester" | "studentType" | "totalCredits" | "yearsAtUniversity", ExtArgs["result"]["students"]>
   export type studentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    academicBacklogs?: boolean | students$academicBacklogsArgs<ExtArgs>
+    academicSemesters?: boolean | students$academicSemestersArgs<ExtArgs>
     detentions?: boolean | students$detentionsArgs<ExtArgs>
     mentor_assignments?: boolean | students$mentor_assignmentsArgs<ExtArgs>
     mentor_transfer_requests?: boolean | students$mentor_transfer_requestsArgs<ExtArgs>
+    contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
+    documents?: boolean | students$documentsArgs<ExtArgs>
     student_enrollments?: boolean | students$student_enrollmentsArgs<ExtArgs>
+    parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
-    contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
-    parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
-    documents?: boolean | students$documentsArgs<ExtArgs>
-    academicSemesters?: boolean | students$academicSemestersArgs<ExtArgs>
-    academicBacklogs?: boolean | students$academicBacklogsArgs<ExtArgs>
     _count?: boolean | StudentsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type studentsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -17052,17 +17143,17 @@ export namespace Prisma {
   export type $studentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "students"
     objects: {
+      academicBacklogs: Prisma.$academic_backlogsPayload<ExtArgs>[]
+      academicSemesters: Prisma.$academic_semestersPayload<ExtArgs>[]
       detentions: Prisma.$detentionsPayload<ExtArgs>[]
       mentor_assignments: Prisma.$mentor_assignmentsPayload<ExtArgs>[]
       mentor_transfer_requests: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
+      contactDetails: Prisma.$student_contact_detailsPayload<ExtArgs> | null
+      documents: Prisma.$student_documentsPayload<ExtArgs>[]
       student_enrollments: Prisma.$student_enrollmentsPayload<ExtArgs>[]
+      parentDetails: Prisma.$student_parent_detailsPayload<ExtArgs> | null
       departments: Prisma.$departmentsPayload<ExtArgs>
       user_accounts: Prisma.$user_accountsPayload<ExtArgs> | null
-      contactDetails: Prisma.$student_contact_detailsPayload<ExtArgs> | null
-      parentDetails: Prisma.$student_parent_detailsPayload<ExtArgs> | null
-      documents: Prisma.$student_documentsPayload<ExtArgs>[]
-      academicSemesters: Prisma.$academic_semestersPayload<ExtArgs>[]
-      academicBacklogs: Prisma.$academic_backlogsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -17071,29 +17162,29 @@ export namespace Prisma {
       fullName: string
       email: string | null
       phone: string | null
-      profileImage: string | null
       dateOfBirth: Date | null
       gender: $Enums.Gender | null
-      bloodGroup: $Enums.BloodGroup | null
-      nationality: string | null
-      religion: string | null
-      programme: string | null
-      semester: string | null
-      section: string | null
-      studentType: $Enums.StudentType | null
-      address: string | null
-      permanentAddress: string | null
-      yearsAtUniversity: string | null
-      totalCredits: number | null
-      currentCGPA: number | null
-      overallAttendance: number | null
-      academicStanding: string | null
-      academicSetupCompleted: boolean
       status: $Enums.StudentStatus
       departmentId: string
       userAccountId: string | null
       createdAt: Date
       updatedAt: Date
+      academicSetupCompleted: boolean
+      academicStanding: string | null
+      address: string | null
+      bloodGroup: $Enums.BloodGroup | null
+      currentCGPA: number | null
+      nationality: string | null
+      overallAttendance: number | null
+      permanentAddress: string | null
+      profileImage: string | null
+      programme: string | null
+      religion: string | null
+      section: string | null
+      semester: string | null
+      studentType: $Enums.StudentType | null
+      totalCredits: number | null
+      yearsAtUniversity: string | null
     }, ExtArgs["result"]["students"]>
     composites: {}
   }
@@ -17488,17 +17579,17 @@ export namespace Prisma {
    */
   export interface Prisma__studentsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    academicBacklogs<T extends students$academicBacklogsArgs<ExtArgs> = {}>(args?: Subset<T, students$academicBacklogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_backlogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    academicSemesters<T extends students$academicSemestersArgs<ExtArgs> = {}>(args?: Subset<T, students$academicSemestersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_semestersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     detentions<T extends students$detentionsArgs<ExtArgs> = {}>(args?: Subset<T, students$detentionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$detentionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_assignments<T extends students$mentor_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests<T extends students$mentor_transfer_requestsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_transfer_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    contactDetails<T extends students$contactDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$contactDetailsArgs<ExtArgs>>): Prisma__student_contact_detailsClient<$Result.GetResult<Prisma.$student_contact_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    documents<T extends students$documentsArgs<ExtArgs> = {}>(args?: Subset<T, students$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     student_enrollments<T extends students$student_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, students$student_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_enrollmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    parentDetails<T extends students$parentDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$parentDetailsArgs<ExtArgs>>): Prisma__student_parent_detailsClient<$Result.GetResult<Prisma.$student_parent_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     departments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user_accounts<T extends students$user_accountsArgs<ExtArgs> = {}>(args?: Subset<T, students$user_accountsArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    contactDetails<T extends students$contactDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$contactDetailsArgs<ExtArgs>>): Prisma__student_contact_detailsClient<$Result.GetResult<Prisma.$student_contact_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    parentDetails<T extends students$parentDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$parentDetailsArgs<ExtArgs>>): Prisma__student_parent_detailsClient<$Result.GetResult<Prisma.$student_parent_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    documents<T extends students$documentsArgs<ExtArgs> = {}>(args?: Subset<T, students$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    academicSemesters<T extends students$academicSemestersArgs<ExtArgs> = {}>(args?: Subset<T, students$academicSemestersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_semestersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    academicBacklogs<T extends students$academicBacklogsArgs<ExtArgs> = {}>(args?: Subset<T, students$academicBacklogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_backlogsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -17534,29 +17625,29 @@ export namespace Prisma {
     readonly fullName: FieldRef<"students", 'String'>
     readonly email: FieldRef<"students", 'String'>
     readonly phone: FieldRef<"students", 'String'>
-    readonly profileImage: FieldRef<"students", 'String'>
     readonly dateOfBirth: FieldRef<"students", 'DateTime'>
     readonly gender: FieldRef<"students", 'Gender'>
-    readonly bloodGroup: FieldRef<"students", 'BloodGroup'>
-    readonly nationality: FieldRef<"students", 'String'>
-    readonly religion: FieldRef<"students", 'String'>
-    readonly programme: FieldRef<"students", 'String'>
-    readonly semester: FieldRef<"students", 'String'>
-    readonly section: FieldRef<"students", 'String'>
-    readonly studentType: FieldRef<"students", 'StudentType'>
-    readonly address: FieldRef<"students", 'String'>
-    readonly permanentAddress: FieldRef<"students", 'String'>
-    readonly yearsAtUniversity: FieldRef<"students", 'String'>
-    readonly totalCredits: FieldRef<"students", 'Int'>
-    readonly currentCGPA: FieldRef<"students", 'Float'>
-    readonly overallAttendance: FieldRef<"students", 'Float'>
-    readonly academicStanding: FieldRef<"students", 'String'>
-    readonly academicSetupCompleted: FieldRef<"students", 'Boolean'>
     readonly status: FieldRef<"students", 'StudentStatus'>
     readonly departmentId: FieldRef<"students", 'String'>
     readonly userAccountId: FieldRef<"students", 'String'>
     readonly createdAt: FieldRef<"students", 'DateTime'>
     readonly updatedAt: FieldRef<"students", 'DateTime'>
+    readonly academicSetupCompleted: FieldRef<"students", 'Boolean'>
+    readonly academicStanding: FieldRef<"students", 'String'>
+    readonly address: FieldRef<"students", 'String'>
+    readonly bloodGroup: FieldRef<"students", 'BloodGroup'>
+    readonly currentCGPA: FieldRef<"students", 'Float'>
+    readonly nationality: FieldRef<"students", 'String'>
+    readonly overallAttendance: FieldRef<"students", 'Float'>
+    readonly permanentAddress: FieldRef<"students", 'String'>
+    readonly profileImage: FieldRef<"students", 'String'>
+    readonly programme: FieldRef<"students", 'String'>
+    readonly religion: FieldRef<"students", 'String'>
+    readonly section: FieldRef<"students", 'String'>
+    readonly semester: FieldRef<"students", 'String'>
+    readonly studentType: FieldRef<"students", 'StudentType'>
+    readonly totalCredits: FieldRef<"students", 'Int'>
+    readonly yearsAtUniversity: FieldRef<"students", 'String'>
   }
     
 
@@ -17953,6 +18044,54 @@ export namespace Prisma {
   }
 
   /**
+   * students.academicBacklogs
+   */
+  export type students$academicBacklogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the academic_backlogs
+     */
+    select?: academic_backlogsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the academic_backlogs
+     */
+    omit?: academic_backlogsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: academic_backlogsInclude<ExtArgs> | null
+    where?: academic_backlogsWhereInput
+    orderBy?: academic_backlogsOrderByWithRelationInput | academic_backlogsOrderByWithRelationInput[]
+    cursor?: academic_backlogsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Academic_backlogsScalarFieldEnum | Academic_backlogsScalarFieldEnum[]
+  }
+
+  /**
+   * students.academicSemesters
+   */
+  export type students$academicSemestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the academic_semesters
+     */
+    select?: academic_semestersSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the academic_semesters
+     */
+    omit?: academic_semestersOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: academic_semestersInclude<ExtArgs> | null
+    where?: academic_semestersWhereInput
+    orderBy?: academic_semestersOrderByWithRelationInput | academic_semestersOrderByWithRelationInput[]
+    cursor?: academic_semestersWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Academic_semestersScalarFieldEnum | Academic_semestersScalarFieldEnum[]
+  }
+
+  /**
    * students.detentions
    */
   export type students$detentionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18025,49 +18164,6 @@ export namespace Prisma {
   }
 
   /**
-   * students.student_enrollments
-   */
-  export type students$student_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the student_enrollments
-     */
-    select?: student_enrollmentsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the student_enrollments
-     */
-    omit?: student_enrollmentsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: student_enrollmentsInclude<ExtArgs> | null
-    where?: student_enrollmentsWhereInput
-    orderBy?: student_enrollmentsOrderByWithRelationInput | student_enrollmentsOrderByWithRelationInput[]
-    cursor?: student_enrollmentsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Student_enrollmentsScalarFieldEnum | Student_enrollmentsScalarFieldEnum[]
-  }
-
-  /**
-   * students.user_accounts
-   */
-  export type students$user_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the user_accounts
-     */
-    select?: user_accountsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the user_accounts
-     */
-    omit?: user_accountsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: user_accountsInclude<ExtArgs> | null
-    where?: user_accountsWhereInput
-  }
-
-  /**
    * students.contactDetails
    */
   export type students$contactDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18084,25 +18180,6 @@ export namespace Prisma {
      */
     include?: student_contact_detailsInclude<ExtArgs> | null
     where?: student_contact_detailsWhereInput
-  }
-
-  /**
-   * students.parentDetails
-   */
-  export type students$parentDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the student_parent_details
-     */
-    select?: student_parent_detailsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the student_parent_details
-     */
-    omit?: student_parent_detailsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: student_parent_detailsInclude<ExtArgs> | null
-    where?: student_parent_detailsWhereInput
   }
 
   /**
@@ -18130,51 +18207,65 @@ export namespace Prisma {
   }
 
   /**
-   * students.academicSemesters
+   * students.student_enrollments
    */
-  export type students$academicSemestersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type students$student_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the academic_semesters
+     * Select specific fields to fetch from the student_enrollments
      */
-    select?: academic_semestersSelect<ExtArgs> | null
+    select?: student_enrollmentsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the academic_semesters
+     * Omit specific fields from the student_enrollments
      */
-    omit?: academic_semestersOmit<ExtArgs> | null
+    omit?: student_enrollmentsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: academic_semestersInclude<ExtArgs> | null
-    where?: academic_semestersWhereInput
-    orderBy?: academic_semestersOrderByWithRelationInput | academic_semestersOrderByWithRelationInput[]
-    cursor?: academic_semestersWhereUniqueInput
+    include?: student_enrollmentsInclude<ExtArgs> | null
+    where?: student_enrollmentsWhereInput
+    orderBy?: student_enrollmentsOrderByWithRelationInput | student_enrollmentsOrderByWithRelationInput[]
+    cursor?: student_enrollmentsWhereUniqueInput
     take?: number
     skip?: number
-    distinct?: Academic_semestersScalarFieldEnum | Academic_semestersScalarFieldEnum[]
+    distinct?: Student_enrollmentsScalarFieldEnum | Student_enrollmentsScalarFieldEnum[]
   }
 
   /**
-   * students.academicBacklogs
+   * students.parentDetails
    */
-  export type students$academicBacklogsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+  export type students$parentDetailsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     /**
-     * Select specific fields to fetch from the academic_backlogs
+     * Select specific fields to fetch from the student_parent_details
      */
-    select?: academic_backlogsSelect<ExtArgs> | null
+    select?: student_parent_detailsSelect<ExtArgs> | null
     /**
-     * Omit specific fields from the academic_backlogs
+     * Omit specific fields from the student_parent_details
      */
-    omit?: academic_backlogsOmit<ExtArgs> | null
+    omit?: student_parent_detailsOmit<ExtArgs> | null
     /**
      * Choose, which related nodes to fetch as well
      */
-    include?: academic_backlogsInclude<ExtArgs> | null
-    where?: academic_backlogsWhereInput
-    orderBy?: academic_backlogsOrderByWithRelationInput | academic_backlogsOrderByWithRelationInput[]
-    cursor?: academic_backlogsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Academic_backlogsScalarFieldEnum | Academic_backlogsScalarFieldEnum[]
+    include?: student_parent_detailsInclude<ExtArgs> | null
+    where?: student_parent_detailsWhereInput
+  }
+
+  /**
+   * students.user_accounts
+   */
+  export type students$user_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the user_accounts
+     */
+    select?: user_accountsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the user_accounts
+     */
+    omit?: user_accountsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: user_accountsInclude<ExtArgs> | null
+    where?: user_accountsWhereInput
   }
 
   /**
@@ -22207,8 +22298,8 @@ export namespace Prisma {
     backlogs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    students?: boolean | studentsDefaultArgs<ExtArgs>
     academic_years?: boolean | academic_semesters$academic_yearsArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
     subjects?: boolean | academic_semesters$subjectsArgs<ExtArgs>
     _count?: boolean | Academic_semestersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["academic_semesters"]>
@@ -22226,8 +22317,8 @@ export namespace Prisma {
     backlogs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    students?: boolean | studentsDefaultArgs<ExtArgs>
     academic_years?: boolean | academic_semesters$academic_yearsArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["academic_semesters"]>
 
   export type academic_semestersSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -22243,8 +22334,8 @@ export namespace Prisma {
     backlogs?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    students?: boolean | studentsDefaultArgs<ExtArgs>
     academic_years?: boolean | academic_semesters$academic_yearsArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["academic_semesters"]>
 
   export type academic_semestersSelectScalar = {
@@ -22264,25 +22355,25 @@ export namespace Prisma {
 
   export type academic_semestersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "academicYearId" | "semesterNumber" | "status" | "entryStatus" | "sgpa" | "totalCredits" | "creditsEarned" | "backlogs" | "createdAt" | "updatedAt", ExtArgs["result"]["academic_semesters"]>
   export type academic_semestersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    students?: boolean | studentsDefaultArgs<ExtArgs>
     academic_years?: boolean | academic_semesters$academic_yearsArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
     subjects?: boolean | academic_semesters$subjectsArgs<ExtArgs>
     _count?: boolean | Academic_semestersCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type academic_semestersIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    students?: boolean | studentsDefaultArgs<ExtArgs>
     academic_years?: boolean | academic_semesters$academic_yearsArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
   }
   export type academic_semestersIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    students?: boolean | studentsDefaultArgs<ExtArgs>
     academic_years?: boolean | academic_semesters$academic_yearsArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
   }
 
   export type $academic_semestersPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "academic_semesters"
     objects: {
-      students: Prisma.$studentsPayload<ExtArgs>
       academic_years: Prisma.$academic_yearsPayload<ExtArgs> | null
+      students: Prisma.$studentsPayload<ExtArgs>
       subjects: Prisma.$academic_subjectsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -22692,8 +22783,8 @@ export namespace Prisma {
    */
   export interface Prisma__academic_semestersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
-    students<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     academic_years<T extends academic_semesters$academic_yearsArgs<ExtArgs> = {}>(args?: Subset<T, academic_semesters$academic_yearsArgs<ExtArgs>>): Prisma__academic_yearsClient<$Result.GetResult<Prisma.$academic_yearsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    students<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     subjects<T extends academic_semesters$subjectsArgs<ExtArgs> = {}>(args?: Subset<T, academic_semesters$subjectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_subjectsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -25961,6 +26052,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs>
+    teacher_profiles?: boolean | teachers$teacher_profilesArgs<ExtArgs>
     departments_teachers_departmentIdTodepartments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | teachers$user_accountsArgs<ExtArgs>
     _count?: boolean | TeachersCountOutputTypeDefaultArgs<ExtArgs>
@@ -26022,6 +26114,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs>
+    teacher_profiles?: boolean | teachers$teacher_profilesArgs<ExtArgs>
     departments_teachers_departmentIdTodepartments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | teachers$user_accountsArgs<ExtArgs>
     _count?: boolean | TeachersCountOutputTypeDefaultArgs<ExtArgs>
@@ -26043,6 +26136,7 @@ export namespace Prisma {
       mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
+      teacher_profiles: Prisma.$teacher_profilesPayload<ExtArgs> | null
       departments_teachers_departmentIdTodepartments: Prisma.$departmentsPayload<ExtArgs>
       user_accounts: Prisma.$user_accountsPayload<ExtArgs> | null
     }
@@ -26458,6 +26552,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers<T extends teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers<T extends teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers<T extends teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    teacher_profiles<T extends teachers$teacher_profilesArgs<ExtArgs> = {}>(args?: Subset<T, teachers$teacher_profilesArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     departments_teachers_departmentIdTodepartments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user_accounts<T extends teachers$user_accountsArgs<ExtArgs> = {}>(args?: Subset<T, teachers$user_accountsArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -27012,6 +27107,25 @@ export namespace Prisma {
   }
 
   /**
+   * teachers.teacher_profiles
+   */
+  export type teachers$teacher_profilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    where?: teacher_profilesWhereInput
+  }
+
+  /**
    * teachers.user_accounts
    */
   export type teachers$user_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -27066,10 +27180,10 @@ export namespace Prisma {
     password: string | null
     role: $Enums.UserRole | null
     isActive: boolean | null
-    mustChangePassword: boolean | null
     lastLogin: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    mustChangePassword: boolean | null
   }
 
   export type User_accountsMaxAggregateOutputType = {
@@ -27079,10 +27193,10 @@ export namespace Prisma {
     password: string | null
     role: $Enums.UserRole | null
     isActive: boolean | null
-    mustChangePassword: boolean | null
     lastLogin: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    mustChangePassword: boolean | null
   }
 
   export type User_accountsCountAggregateOutputType = {
@@ -27092,10 +27206,10 @@ export namespace Prisma {
     password: number
     role: number
     isActive: number
-    mustChangePassword: number
     lastLogin: number
     createdAt: number
     updatedAt: number
+    mustChangePassword: number
     _all: number
   }
 
@@ -27107,10 +27221,10 @@ export namespace Prisma {
     password?: true
     role?: true
     isActive?: true
-    mustChangePassword?: true
     lastLogin?: true
     createdAt?: true
     updatedAt?: true
+    mustChangePassword?: true
   }
 
   export type User_accountsMaxAggregateInputType = {
@@ -27120,10 +27234,10 @@ export namespace Prisma {
     password?: true
     role?: true
     isActive?: true
-    mustChangePassword?: true
     lastLogin?: true
     createdAt?: true
     updatedAt?: true
+    mustChangePassword?: true
   }
 
   export type User_accountsCountAggregateInputType = {
@@ -27133,10 +27247,10 @@ export namespace Prisma {
     password?: true
     role?: true
     isActive?: true
-    mustChangePassword?: true
     lastLogin?: true
     createdAt?: true
     updatedAt?: true
+    mustChangePassword?: true
     _all?: true
   }
 
@@ -27219,10 +27333,10 @@ export namespace Prisma {
     password: string | null
     role: $Enums.UserRole
     isActive: boolean
-    mustChangePassword: boolean
     lastLogin: Date | null
     createdAt: Date
     updatedAt: Date
+    mustChangePassword: boolean
     _count: User_accountsCountAggregateOutputType | null
     _min: User_accountsMinAggregateOutputType | null
     _max: User_accountsMaxAggregateOutputType | null
@@ -27249,10 +27363,10 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    mustChangePassword?: boolean
     detentions?: boolean | user_accounts$detentionsArgs<ExtArgs>
     import_batches?: boolean | user_accounts$import_batchesArgs<ExtArgs>
     mentor_assignments?: boolean | user_accounts$mentor_assignmentsArgs<ExtArgs>
@@ -27271,10 +27385,10 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    mustChangePassword?: boolean
   }, ExtArgs["result"]["user_accounts"]>
 
   export type user_accountsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -27284,10 +27398,10 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    mustChangePassword?: boolean
   }, ExtArgs["result"]["user_accounts"]>
 
   export type user_accountsSelectScalar = {
@@ -27297,13 +27411,13 @@ export namespace Prisma {
     password?: boolean
     role?: boolean
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    mustChangePassword?: boolean
   }
 
-  export type user_accountsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "role" | "isActive" | "mustChangePassword" | "lastLogin" | "createdAt" | "updatedAt", ExtArgs["result"]["user_accounts"]>
+  export type user_accountsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "role" | "isActive" | "lastLogin" | "createdAt" | "updatedAt" | "mustChangePassword", ExtArgs["result"]["user_accounts"]>
   export type user_accountsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     detentions?: boolean | user_accounts$detentionsArgs<ExtArgs>
     import_batches?: boolean | user_accounts$import_batchesArgs<ExtArgs>
@@ -27337,10 +27451,10 @@ export namespace Prisma {
       password: string | null
       role: $Enums.UserRole
       isActive: boolean
-      mustChangePassword: boolean
       lastLogin: Date | null
       createdAt: Date
       updatedAt: Date
+      mustChangePassword: boolean
     }, ExtArgs["result"]["user_accounts"]>
     composites: {}
   }
@@ -27778,10 +27892,10 @@ export namespace Prisma {
     readonly password: FieldRef<"user_accounts", 'String'>
     readonly role: FieldRef<"user_accounts", 'UserRole'>
     readonly isActive: FieldRef<"user_accounts", 'Boolean'>
-    readonly mustChangePassword: FieldRef<"user_accounts", 'Boolean'>
     readonly lastLogin: FieldRef<"user_accounts", 'DateTime'>
     readonly createdAt: FieldRef<"user_accounts", 'DateTime'>
     readonly updatedAt: FieldRef<"user_accounts", 'DateTime'>
+    readonly mustChangePassword: FieldRef<"user_accounts", 'Boolean'>
   }
     
 
@@ -29504,6 +29618,1233 @@ export namespace Prisma {
 
 
   /**
+   * Model teacher_profiles
+   */
+
+  export type AggregateTeacher_profiles = {
+    _count: Teacher_profilesCountAggregateOutputType | null
+    _min: Teacher_profilesMinAggregateOutputType | null
+    _max: Teacher_profilesMaxAggregateOutputType | null
+  }
+
+  export type Teacher_profilesMinAggregateOutputType = {
+    id: string | null
+    teacherId: string | null
+    profileImage: string | null
+    qualification: string | null
+    specialization: string | null
+    office: string | null
+    officeHours: string | null
+    about: string | null
+    highlightOne: string | null
+    highlightTwo: string | null
+    highlightThree: string | null
+    linkedIn: string | null
+    googleScholar: string | null
+    researchGate: string | null
+    orcid: string | null
+    website: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Teacher_profilesMaxAggregateOutputType = {
+    id: string | null
+    teacherId: string | null
+    profileImage: string | null
+    qualification: string | null
+    specialization: string | null
+    office: string | null
+    officeHours: string | null
+    about: string | null
+    highlightOne: string | null
+    highlightTwo: string | null
+    highlightThree: string | null
+    linkedIn: string | null
+    googleScholar: string | null
+    researchGate: string | null
+    orcid: string | null
+    website: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Teacher_profilesCountAggregateOutputType = {
+    id: number
+    teacherId: number
+    profileImage: number
+    qualification: number
+    specialization: number
+    office: number
+    officeHours: number
+    about: number
+    highlightOne: number
+    highlightTwo: number
+    highlightThree: number
+    linkedIn: number
+    googleScholar: number
+    researchGate: number
+    orcid: number
+    website: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Teacher_profilesMinAggregateInputType = {
+    id?: true
+    teacherId?: true
+    profileImage?: true
+    qualification?: true
+    specialization?: true
+    office?: true
+    officeHours?: true
+    about?: true
+    highlightOne?: true
+    highlightTwo?: true
+    highlightThree?: true
+    linkedIn?: true
+    googleScholar?: true
+    researchGate?: true
+    orcid?: true
+    website?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Teacher_profilesMaxAggregateInputType = {
+    id?: true
+    teacherId?: true
+    profileImage?: true
+    qualification?: true
+    specialization?: true
+    office?: true
+    officeHours?: true
+    about?: true
+    highlightOne?: true
+    highlightTwo?: true
+    highlightThree?: true
+    linkedIn?: true
+    googleScholar?: true
+    researchGate?: true
+    orcid?: true
+    website?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Teacher_profilesCountAggregateInputType = {
+    id?: true
+    teacherId?: true
+    profileImage?: true
+    qualification?: true
+    specialization?: true
+    office?: true
+    officeHours?: true
+    about?: true
+    highlightOne?: true
+    highlightTwo?: true
+    highlightThree?: true
+    linkedIn?: true
+    googleScholar?: true
+    researchGate?: true
+    orcid?: true
+    website?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Teacher_profilesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which teacher_profiles to aggregate.
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of teacher_profiles to fetch.
+     */
+    orderBy?: teacher_profilesOrderByWithRelationInput | teacher_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: teacher_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` teacher_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` teacher_profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned teacher_profiles
+    **/
+    _count?: true | Teacher_profilesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Teacher_profilesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Teacher_profilesMaxAggregateInputType
+  }
+
+  export type GetTeacher_profilesAggregateType<T extends Teacher_profilesAggregateArgs> = {
+        [P in keyof T & keyof AggregateTeacher_profiles]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateTeacher_profiles[P]>
+      : GetScalarType<T[P], AggregateTeacher_profiles[P]>
+  }
+
+
+
+
+  export type teacher_profilesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: teacher_profilesWhereInput
+    orderBy?: teacher_profilesOrderByWithAggregationInput | teacher_profilesOrderByWithAggregationInput[]
+    by: Teacher_profilesScalarFieldEnum[] | Teacher_profilesScalarFieldEnum
+    having?: teacher_profilesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Teacher_profilesCountAggregateInputType | true
+    _min?: Teacher_profilesMinAggregateInputType
+    _max?: Teacher_profilesMaxAggregateInputType
+  }
+
+  export type Teacher_profilesGroupByOutputType = {
+    id: string
+    teacherId: string
+    profileImage: string | null
+    qualification: string | null
+    specialization: string | null
+    office: string | null
+    officeHours: string | null
+    about: string | null
+    highlightOne: string | null
+    highlightTwo: string | null
+    highlightThree: string | null
+    linkedIn: string | null
+    googleScholar: string | null
+    researchGate: string | null
+    orcid: string | null
+    website: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Teacher_profilesCountAggregateOutputType | null
+    _min: Teacher_profilesMinAggregateOutputType | null
+    _max: Teacher_profilesMaxAggregateOutputType | null
+  }
+
+  type GetTeacher_profilesGroupByPayload<T extends teacher_profilesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Teacher_profilesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Teacher_profilesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Teacher_profilesGroupByOutputType[P]>
+            : GetScalarType<T[P], Teacher_profilesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type teacher_profilesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    teacherId?: boolean
+    profileImage?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    office?: boolean
+    officeHours?: boolean
+    about?: boolean
+    highlightOne?: boolean
+    highlightTwo?: boolean
+    highlightThree?: boolean
+    linkedIn?: boolean
+    googleScholar?: boolean
+    researchGate?: boolean
+    orcid?: boolean
+    website?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teacher_profiles"]>
+
+  export type teacher_profilesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    teacherId?: boolean
+    profileImage?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    office?: boolean
+    officeHours?: boolean
+    about?: boolean
+    highlightOne?: boolean
+    highlightTwo?: boolean
+    highlightThree?: boolean
+    linkedIn?: boolean
+    googleScholar?: boolean
+    researchGate?: boolean
+    orcid?: boolean
+    website?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teacher_profiles"]>
+
+  export type teacher_profilesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    teacherId?: boolean
+    profileImage?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    office?: boolean
+    officeHours?: boolean
+    about?: boolean
+    highlightOne?: boolean
+    highlightTwo?: boolean
+    highlightThree?: boolean
+    linkedIn?: boolean
+    googleScholar?: boolean
+    researchGate?: boolean
+    orcid?: boolean
+    website?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["teacher_profiles"]>
+
+  export type teacher_profilesSelectScalar = {
+    id?: boolean
+    teacherId?: boolean
+    profileImage?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    office?: boolean
+    officeHours?: boolean
+    about?: boolean
+    highlightOne?: boolean
+    highlightTwo?: boolean
+    highlightThree?: boolean
+    linkedIn?: boolean
+    googleScholar?: boolean
+    researchGate?: boolean
+    orcid?: boolean
+    website?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type teacher_profilesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "teacherId" | "profileImage" | "qualification" | "specialization" | "office" | "officeHours" | "about" | "highlightOne" | "highlightTwo" | "highlightThree" | "linkedIn" | "googleScholar" | "researchGate" | "orcid" | "website" | "createdAt" | "updatedAt", ExtArgs["result"]["teacher_profiles"]>
+  export type teacher_profilesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type teacher_profilesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type teacher_profilesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+
+  export type $teacher_profilesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "teacher_profiles"
+    objects: {
+      teachers: Prisma.$teachersPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      teacherId: string
+      profileImage: string | null
+      qualification: string | null
+      specialization: string | null
+      office: string | null
+      officeHours: string | null
+      about: string | null
+      highlightOne: string | null
+      highlightTwo: string | null
+      highlightThree: string | null
+      linkedIn: string | null
+      googleScholar: string | null
+      researchGate: string | null
+      orcid: string | null
+      website: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["teacher_profiles"]>
+    composites: {}
+  }
+
+  type teacher_profilesGetPayload<S extends boolean | null | undefined | teacher_profilesDefaultArgs> = $Result.GetResult<Prisma.$teacher_profilesPayload, S>
+
+  type teacher_profilesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<teacher_profilesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Teacher_profilesCountAggregateInputType | true
+    }
+
+  export interface teacher_profilesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['teacher_profiles'], meta: { name: 'teacher_profiles' } }
+    /**
+     * Find zero or one Teacher_profiles that matches the filter.
+     * @param {teacher_profilesFindUniqueArgs} args - Arguments to find a Teacher_profiles
+     * @example
+     * // Get one Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends teacher_profilesFindUniqueArgs>(args: SelectSubset<T, teacher_profilesFindUniqueArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Teacher_profiles that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {teacher_profilesFindUniqueOrThrowArgs} args - Arguments to find a Teacher_profiles
+     * @example
+     * // Get one Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends teacher_profilesFindUniqueOrThrowArgs>(args: SelectSubset<T, teacher_profilesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Teacher_profiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {teacher_profilesFindFirstArgs} args - Arguments to find a Teacher_profiles
+     * @example
+     * // Get one Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends teacher_profilesFindFirstArgs>(args?: SelectSubset<T, teacher_profilesFindFirstArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Teacher_profiles that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {teacher_profilesFindFirstOrThrowArgs} args - Arguments to find a Teacher_profiles
+     * @example
+     * // Get one Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends teacher_profilesFindFirstOrThrowArgs>(args?: SelectSubset<T, teacher_profilesFindFirstOrThrowArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Teacher_profiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {teacher_profilesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.findMany()
+     * 
+     * // Get first 10 Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const teacher_profilesWithIdOnly = await prisma.teacher_profiles.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends teacher_profilesFindManyArgs>(args?: SelectSubset<T, teacher_profilesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Teacher_profiles.
+     * @param {teacher_profilesCreateArgs} args - Arguments to create a Teacher_profiles.
+     * @example
+     * // Create one Teacher_profiles
+     * const Teacher_profiles = await prisma.teacher_profiles.create({
+     *   data: {
+     *     // ... data to create a Teacher_profiles
+     *   }
+     * })
+     * 
+     */
+    create<T extends teacher_profilesCreateArgs>(args: SelectSubset<T, teacher_profilesCreateArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Teacher_profiles.
+     * @param {teacher_profilesCreateManyArgs} args - Arguments to create many Teacher_profiles.
+     * @example
+     * // Create many Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends teacher_profilesCreateManyArgs>(args?: SelectSubset<T, teacher_profilesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Teacher_profiles and returns the data saved in the database.
+     * @param {teacher_profilesCreateManyAndReturnArgs} args - Arguments to create many Teacher_profiles.
+     * @example
+     * // Create many Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Teacher_profiles and only return the `id`
+     * const teacher_profilesWithIdOnly = await prisma.teacher_profiles.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends teacher_profilesCreateManyAndReturnArgs>(args?: SelectSubset<T, teacher_profilesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Teacher_profiles.
+     * @param {teacher_profilesDeleteArgs} args - Arguments to delete one Teacher_profiles.
+     * @example
+     * // Delete one Teacher_profiles
+     * const Teacher_profiles = await prisma.teacher_profiles.delete({
+     *   where: {
+     *     // ... filter to delete one Teacher_profiles
+     *   }
+     * })
+     * 
+     */
+    delete<T extends teacher_profilesDeleteArgs>(args: SelectSubset<T, teacher_profilesDeleteArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Teacher_profiles.
+     * @param {teacher_profilesUpdateArgs} args - Arguments to update one Teacher_profiles.
+     * @example
+     * // Update one Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends teacher_profilesUpdateArgs>(args: SelectSubset<T, teacher_profilesUpdateArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Teacher_profiles.
+     * @param {teacher_profilesDeleteManyArgs} args - Arguments to filter Teacher_profiles to delete.
+     * @example
+     * // Delete a few Teacher_profiles
+     * const { count } = await prisma.teacher_profiles.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends teacher_profilesDeleteManyArgs>(args?: SelectSubset<T, teacher_profilesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Teacher_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {teacher_profilesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends teacher_profilesUpdateManyArgs>(args: SelectSubset<T, teacher_profilesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Teacher_profiles and returns the data updated in the database.
+     * @param {teacher_profilesUpdateManyAndReturnArgs} args - Arguments to update many Teacher_profiles.
+     * @example
+     * // Update many Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Teacher_profiles and only return the `id`
+     * const teacher_profilesWithIdOnly = await prisma.teacher_profiles.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends teacher_profilesUpdateManyAndReturnArgs>(args: SelectSubset<T, teacher_profilesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Teacher_profiles.
+     * @param {teacher_profilesUpsertArgs} args - Arguments to update or create a Teacher_profiles.
+     * @example
+     * // Update or create a Teacher_profiles
+     * const teacher_profiles = await prisma.teacher_profiles.upsert({
+     *   create: {
+     *     // ... data to create a Teacher_profiles
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Teacher_profiles we want to update
+     *   }
+     * })
+     */
+    upsert<T extends teacher_profilesUpsertArgs>(args: SelectSubset<T, teacher_profilesUpsertArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Teacher_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {teacher_profilesCountArgs} args - Arguments to filter Teacher_profiles to count.
+     * @example
+     * // Count the number of Teacher_profiles
+     * const count = await prisma.teacher_profiles.count({
+     *   where: {
+     *     // ... the filter for the Teacher_profiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends teacher_profilesCountArgs>(
+      args?: Subset<T, teacher_profilesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Teacher_profilesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Teacher_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Teacher_profilesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Teacher_profilesAggregateArgs>(args: Subset<T, Teacher_profilesAggregateArgs>): Prisma.PrismaPromise<GetTeacher_profilesAggregateType<T>>
+
+    /**
+     * Group by Teacher_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {teacher_profilesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends teacher_profilesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: teacher_profilesGroupByArgs['orderBy'] }
+        : { orderBy?: teacher_profilesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, teacher_profilesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetTeacher_profilesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the teacher_profiles model
+   */
+  readonly fields: teacher_profilesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for teacher_profiles.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__teacher_profilesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    teachers<T extends teachersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, teachersDefaultArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the teacher_profiles model
+   */
+  interface teacher_profilesFieldRefs {
+    readonly id: FieldRef<"teacher_profiles", 'String'>
+    readonly teacherId: FieldRef<"teacher_profiles", 'String'>
+    readonly profileImage: FieldRef<"teacher_profiles", 'String'>
+    readonly qualification: FieldRef<"teacher_profiles", 'String'>
+    readonly specialization: FieldRef<"teacher_profiles", 'String'>
+    readonly office: FieldRef<"teacher_profiles", 'String'>
+    readonly officeHours: FieldRef<"teacher_profiles", 'String'>
+    readonly about: FieldRef<"teacher_profiles", 'String'>
+    readonly highlightOne: FieldRef<"teacher_profiles", 'String'>
+    readonly highlightTwo: FieldRef<"teacher_profiles", 'String'>
+    readonly highlightThree: FieldRef<"teacher_profiles", 'String'>
+    readonly linkedIn: FieldRef<"teacher_profiles", 'String'>
+    readonly googleScholar: FieldRef<"teacher_profiles", 'String'>
+    readonly researchGate: FieldRef<"teacher_profiles", 'String'>
+    readonly orcid: FieldRef<"teacher_profiles", 'String'>
+    readonly website: FieldRef<"teacher_profiles", 'String'>
+    readonly createdAt: FieldRef<"teacher_profiles", 'DateTime'>
+    readonly updatedAt: FieldRef<"teacher_profiles", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * teacher_profiles findUnique
+   */
+  export type teacher_profilesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which teacher_profiles to fetch.
+     */
+    where: teacher_profilesWhereUniqueInput
+  }
+
+  /**
+   * teacher_profiles findUniqueOrThrow
+   */
+  export type teacher_profilesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which teacher_profiles to fetch.
+     */
+    where: teacher_profilesWhereUniqueInput
+  }
+
+  /**
+   * teacher_profiles findFirst
+   */
+  export type teacher_profilesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which teacher_profiles to fetch.
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of teacher_profiles to fetch.
+     */
+    orderBy?: teacher_profilesOrderByWithRelationInput | teacher_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for teacher_profiles.
+     */
+    cursor?: teacher_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` teacher_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` teacher_profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of teacher_profiles.
+     */
+    distinct?: Teacher_profilesScalarFieldEnum | Teacher_profilesScalarFieldEnum[]
+  }
+
+  /**
+   * teacher_profiles findFirstOrThrow
+   */
+  export type teacher_profilesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which teacher_profiles to fetch.
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of teacher_profiles to fetch.
+     */
+    orderBy?: teacher_profilesOrderByWithRelationInput | teacher_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for teacher_profiles.
+     */
+    cursor?: teacher_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` teacher_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` teacher_profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of teacher_profiles.
+     */
+    distinct?: Teacher_profilesScalarFieldEnum | Teacher_profilesScalarFieldEnum[]
+  }
+
+  /**
+   * teacher_profiles findMany
+   */
+  export type teacher_profilesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which teacher_profiles to fetch.
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of teacher_profiles to fetch.
+     */
+    orderBy?: teacher_profilesOrderByWithRelationInput | teacher_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing teacher_profiles.
+     */
+    cursor?: teacher_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` teacher_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` teacher_profiles.
+     */
+    skip?: number
+    distinct?: Teacher_profilesScalarFieldEnum | Teacher_profilesScalarFieldEnum[]
+  }
+
+  /**
+   * teacher_profiles create
+   */
+  export type teacher_profilesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a teacher_profiles.
+     */
+    data: XOR<teacher_profilesCreateInput, teacher_profilesUncheckedCreateInput>
+  }
+
+  /**
+   * teacher_profiles createMany
+   */
+  export type teacher_profilesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many teacher_profiles.
+     */
+    data: teacher_profilesCreateManyInput | teacher_profilesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * teacher_profiles createManyAndReturn
+   */
+  export type teacher_profilesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * The data used to create many teacher_profiles.
+     */
+    data: teacher_profilesCreateManyInput | teacher_profilesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * teacher_profiles update
+   */
+  export type teacher_profilesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a teacher_profiles.
+     */
+    data: XOR<teacher_profilesUpdateInput, teacher_profilesUncheckedUpdateInput>
+    /**
+     * Choose, which teacher_profiles to update.
+     */
+    where: teacher_profilesWhereUniqueInput
+  }
+
+  /**
+   * teacher_profiles updateMany
+   */
+  export type teacher_profilesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update teacher_profiles.
+     */
+    data: XOR<teacher_profilesUpdateManyMutationInput, teacher_profilesUncheckedUpdateManyInput>
+    /**
+     * Filter which teacher_profiles to update
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * Limit how many teacher_profiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * teacher_profiles updateManyAndReturn
+   */
+  export type teacher_profilesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * The data used to update teacher_profiles.
+     */
+    data: XOR<teacher_profilesUpdateManyMutationInput, teacher_profilesUncheckedUpdateManyInput>
+    /**
+     * Filter which teacher_profiles to update
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * Limit how many teacher_profiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * teacher_profiles upsert
+   */
+  export type teacher_profilesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the teacher_profiles to update in case it exists.
+     */
+    where: teacher_profilesWhereUniqueInput
+    /**
+     * In case the teacher_profiles found by the `where` argument doesn't exist, create a new teacher_profiles with this data.
+     */
+    create: XOR<teacher_profilesCreateInput, teacher_profilesUncheckedCreateInput>
+    /**
+     * In case the teacher_profiles was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<teacher_profilesUpdateInput, teacher_profilesUncheckedUpdateInput>
+  }
+
+  /**
+   * teacher_profiles delete
+   */
+  export type teacher_profilesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+    /**
+     * Filter which teacher_profiles to delete.
+     */
+    where: teacher_profilesWhereUniqueInput
+  }
+
+  /**
+   * teacher_profiles deleteMany
+   */
+  export type teacher_profilesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which teacher_profiles to delete
+     */
+    where?: teacher_profilesWhereInput
+    /**
+     * Limit how many teacher_profiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * teacher_profiles without action
+   */
+  export type teacher_profilesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the teacher_profiles
+     */
+    select?: teacher_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the teacher_profiles
+     */
+    omit?: teacher_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: teacher_profilesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -29696,29 +31037,29 @@ export namespace Prisma {
     fullName: 'fullName',
     email: 'email',
     phone: 'phone',
-    profileImage: 'profileImage',
     dateOfBirth: 'dateOfBirth',
     gender: 'gender',
-    bloodGroup: 'bloodGroup',
-    nationality: 'nationality',
-    religion: 'religion',
-    programme: 'programme',
-    semester: 'semester',
-    section: 'section',
-    studentType: 'studentType',
-    address: 'address',
-    permanentAddress: 'permanentAddress',
-    yearsAtUniversity: 'yearsAtUniversity',
-    totalCredits: 'totalCredits',
-    currentCGPA: 'currentCGPA',
-    overallAttendance: 'overallAttendance',
-    academicStanding: 'academicStanding',
-    academicSetupCompleted: 'academicSetupCompleted',
     status: 'status',
     departmentId: 'departmentId',
     userAccountId: 'userAccountId',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    academicSetupCompleted: 'academicSetupCompleted',
+    academicStanding: 'academicStanding',
+    address: 'address',
+    bloodGroup: 'bloodGroup',
+    currentCGPA: 'currentCGPA',
+    nationality: 'nationality',
+    overallAttendance: 'overallAttendance',
+    permanentAddress: 'permanentAddress',
+    profileImage: 'profileImage',
+    programme: 'programme',
+    religion: 'religion',
+    section: 'section',
+    semester: 'semester',
+    studentType: 'studentType',
+    totalCredits: 'totalCredits',
+    yearsAtUniversity: 'yearsAtUniversity'
   };
 
   export type StudentsScalarFieldEnum = (typeof StudentsScalarFieldEnum)[keyof typeof StudentsScalarFieldEnum]
@@ -29884,10 +31225,10 @@ export namespace Prisma {
     password: 'password',
     role: 'role',
     isActive: 'isActive',
-    mustChangePassword: 'mustChangePassword',
     lastLogin: 'lastLogin',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    mustChangePassword: 'mustChangePassword'
   };
 
   export type User_accountsScalarFieldEnum = (typeof User_accountsScalarFieldEnum)[keyof typeof User_accountsScalarFieldEnum]
@@ -29910,6 +31251,30 @@ export namespace Prisma {
   };
 
   export type Term_change_requestsScalarFieldEnum = (typeof Term_change_requestsScalarFieldEnum)[keyof typeof Term_change_requestsScalarFieldEnum]
+
+
+  export const Teacher_profilesScalarFieldEnum: {
+    id: 'id',
+    teacherId: 'teacherId',
+    profileImage: 'profileImage',
+    qualification: 'qualification',
+    specialization: 'specialization',
+    office: 'office',
+    officeHours: 'officeHours',
+    about: 'about',
+    highlightOne: 'highlightOne',
+    highlightTwo: 'highlightTwo',
+    highlightThree: 'highlightThree',
+    linkedIn: 'linkedIn',
+    googleScholar: 'googleScholar',
+    researchGate: 'researchGate',
+    orcid: 'orcid',
+    website: 'website',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Teacher_profilesScalarFieldEnum = (typeof Teacher_profilesScalarFieldEnum)[keyof typeof Teacher_profilesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -30138,6 +31503,27 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'StudentStatus'
+   */
+  export type EnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'StudentStatus[]'
+   */
+  export type ListEnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'BloodGroup'
    */
   export type EnumBloodGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BloodGroup'>
@@ -30148,20 +31534,6 @@ export namespace Prisma {
    * Reference to a field of type 'BloodGroup[]'
    */
   export type ListEnumBloodGroupFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'BloodGroup[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'StudentType'
-   */
-  export type EnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType'>
-    
-
-
-  /**
-   * Reference to a field of type 'StudentType[]'
-   */
-  export type ListEnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType[]'>
     
 
 
@@ -30180,23 +31552,16 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'StudentType'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type EnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType'>
     
 
 
   /**
-   * Reference to a field of type 'StudentStatus'
+   * Reference to a field of type 'StudentType[]'
    */
-  export type EnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentStatus'>
-    
-
-
-  /**
-   * Reference to a field of type 'StudentStatus[]'
-   */
-  export type ListEnumStudentStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentStatus[]'>
+  export type ListEnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType[]'>
     
 
 
@@ -30519,11 +31884,11 @@ export namespace Prisma {
     departmentId?: StringFilter<"academic_years"> | string
     createdAt?: DateTimeFilter<"academic_years"> | Date | string
     updatedAt?: DateTimeFilter<"academic_years"> | Date | string
+    academic_semesters?: Academic_semestersListRelationFilter
     academic_term_requests?: Academic_term_requestsListRelationFilter
     academic_terms?: Academic_termsListRelationFilter
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     import_batches?: Import_batchesListRelationFilter
-    academic_semesters?: Academic_semestersListRelationFilter
   }
 
   export type academic_yearsOrderByWithRelationInput = {
@@ -30535,11 +31900,11 @@ export namespace Prisma {
     departmentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    academic_semesters?: academic_semestersOrderByRelationAggregateInput
     academic_term_requests?: academic_term_requestsOrderByRelationAggregateInput
     academic_terms?: academic_termsOrderByRelationAggregateInput
     departments?: departmentsOrderByWithRelationInput
     import_batches?: import_batchesOrderByRelationAggregateInput
-    academic_semesters?: academic_semestersOrderByRelationAggregateInput
   }
 
   export type academic_yearsWhereUniqueInput = Prisma.AtLeast<{
@@ -30555,11 +31920,11 @@ export namespace Prisma {
     departmentId?: StringFilter<"academic_years"> | string
     createdAt?: DateTimeFilter<"academic_years"> | Date | string
     updatedAt?: DateTimeFilter<"academic_years"> | Date | string
+    academic_semesters?: Academic_semestersListRelationFilter
     academic_term_requests?: Academic_term_requestsListRelationFilter
     academic_terms?: Academic_termsListRelationFilter
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     import_batches?: Import_batchesListRelationFilter
-    academic_semesters?: Academic_semestersListRelationFilter
   }, "id" | "departmentId_name">
 
   export type academic_yearsOrderByWithAggregationInput = {
@@ -31275,40 +32640,40 @@ export namespace Prisma {
     fullName?: StringFilter<"students"> | string
     email?: StringNullableFilter<"students"> | string | null
     phone?: StringNullableFilter<"students"> | string | null
-    profileImage?: StringNullableFilter<"students"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"students"> | Date | string | null
     gender?: EnumGenderNullableFilter<"students"> | $Enums.Gender | null
-    bloodGroup?: EnumBloodGroupNullableFilter<"students"> | $Enums.BloodGroup | null
-    nationality?: StringNullableFilter<"students"> | string | null
-    religion?: StringNullableFilter<"students"> | string | null
-    programme?: StringNullableFilter<"students"> | string | null
-    semester?: StringNullableFilter<"students"> | string | null
-    section?: StringNullableFilter<"students"> | string | null
-    studentType?: EnumStudentTypeNullableFilter<"students"> | $Enums.StudentType | null
-    address?: StringNullableFilter<"students"> | string | null
-    permanentAddress?: StringNullableFilter<"students"> | string | null
-    yearsAtUniversity?: StringNullableFilter<"students"> | string | null
-    totalCredits?: IntNullableFilter<"students"> | number | null
-    currentCGPA?: FloatNullableFilter<"students"> | number | null
-    overallAttendance?: FloatNullableFilter<"students"> | number | null
-    academicStanding?: StringNullableFilter<"students"> | string | null
-    academicSetupCompleted?: BoolFilter<"students"> | boolean
     status?: EnumStudentStatusFilter<"students"> | $Enums.StudentStatus
     departmentId?: StringFilter<"students"> | string
     userAccountId?: StringNullableFilter<"students"> | string | null
     createdAt?: DateTimeFilter<"students"> | Date | string
     updatedAt?: DateTimeFilter<"students"> | Date | string
+    academicSetupCompleted?: BoolFilter<"students"> | boolean
+    academicStanding?: StringNullableFilter<"students"> | string | null
+    address?: StringNullableFilter<"students"> | string | null
+    bloodGroup?: EnumBloodGroupNullableFilter<"students"> | $Enums.BloodGroup | null
+    currentCGPA?: FloatNullableFilter<"students"> | number | null
+    nationality?: StringNullableFilter<"students"> | string | null
+    overallAttendance?: FloatNullableFilter<"students"> | number | null
+    permanentAddress?: StringNullableFilter<"students"> | string | null
+    profileImage?: StringNullableFilter<"students"> | string | null
+    programme?: StringNullableFilter<"students"> | string | null
+    religion?: StringNullableFilter<"students"> | string | null
+    section?: StringNullableFilter<"students"> | string | null
+    semester?: StringNullableFilter<"students"> | string | null
+    studentType?: EnumStudentTypeNullableFilter<"students"> | $Enums.StudentType | null
+    totalCredits?: IntNullableFilter<"students"> | number | null
+    yearsAtUniversity?: StringNullableFilter<"students"> | string | null
+    academicBacklogs?: Academic_backlogsListRelationFilter
+    academicSemesters?: Academic_semestersListRelationFilter
     detentions?: DetentionsListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
     mentor_transfer_requests?: Mentor_transfer_requestsListRelationFilter
+    contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
+    documents?: Student_documentsListRelationFilter
     student_enrollments?: Student_enrollmentsListRelationFilter
+    parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
-    contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
-    parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
-    documents?: Student_documentsListRelationFilter
-    academicSemesters?: Academic_semestersListRelationFilter
-    academicBacklogs?: Academic_backlogsListRelationFilter
   }
 
   export type studentsOrderByWithRelationInput = {
@@ -31318,40 +32683,40 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
-    profileImage?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
-    bloodGroup?: SortOrderInput | SortOrder
-    nationality?: SortOrderInput | SortOrder
-    religion?: SortOrderInput | SortOrder
-    programme?: SortOrderInput | SortOrder
-    semester?: SortOrderInput | SortOrder
-    section?: SortOrderInput | SortOrder
-    studentType?: SortOrderInput | SortOrder
-    address?: SortOrderInput | SortOrder
-    permanentAddress?: SortOrderInput | SortOrder
-    yearsAtUniversity?: SortOrderInput | SortOrder
-    totalCredits?: SortOrderInput | SortOrder
-    currentCGPA?: SortOrderInput | SortOrder
-    overallAttendance?: SortOrderInput | SortOrder
-    academicStanding?: SortOrderInput | SortOrder
-    academicSetupCompleted?: SortOrder
     status?: SortOrder
     departmentId?: SortOrder
     userAccountId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    academicSetupCompleted?: SortOrder
+    academicStanding?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
+    currentCGPA?: SortOrderInput | SortOrder
+    nationality?: SortOrderInput | SortOrder
+    overallAttendance?: SortOrderInput | SortOrder
+    permanentAddress?: SortOrderInput | SortOrder
+    profileImage?: SortOrderInput | SortOrder
+    programme?: SortOrderInput | SortOrder
+    religion?: SortOrderInput | SortOrder
+    section?: SortOrderInput | SortOrder
+    semester?: SortOrderInput | SortOrder
+    studentType?: SortOrderInput | SortOrder
+    totalCredits?: SortOrderInput | SortOrder
+    yearsAtUniversity?: SortOrderInput | SortOrder
+    academicBacklogs?: academic_backlogsOrderByRelationAggregateInput
+    academicSemesters?: academic_semestersOrderByRelationAggregateInput
     detentions?: detentionsOrderByRelationAggregateInput
     mentor_assignments?: mentor_assignmentsOrderByRelationAggregateInput
     mentor_transfer_requests?: mentor_transfer_requestsOrderByRelationAggregateInput
+    contactDetails?: student_contact_detailsOrderByWithRelationInput
+    documents?: student_documentsOrderByRelationAggregateInput
     student_enrollments?: student_enrollmentsOrderByRelationAggregateInput
+    parentDetails?: student_parent_detailsOrderByWithRelationInput
     departments?: departmentsOrderByWithRelationInput
     user_accounts?: user_accountsOrderByWithRelationInput
-    contactDetails?: student_contact_detailsOrderByWithRelationInput
-    parentDetails?: student_parent_detailsOrderByWithRelationInput
-    documents?: student_documentsOrderByRelationAggregateInput
-    academicSemesters?: academic_semestersOrderByRelationAggregateInput
-    academicBacklogs?: academic_backlogsOrderByRelationAggregateInput
   }
 
   export type studentsWhereUniqueInput = Prisma.AtLeast<{
@@ -31365,39 +32730,39 @@ export namespace Prisma {
     fullName?: StringFilter<"students"> | string
     email?: StringNullableFilter<"students"> | string | null
     phone?: StringNullableFilter<"students"> | string | null
-    profileImage?: StringNullableFilter<"students"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"students"> | Date | string | null
     gender?: EnumGenderNullableFilter<"students"> | $Enums.Gender | null
-    bloodGroup?: EnumBloodGroupNullableFilter<"students"> | $Enums.BloodGroup | null
-    nationality?: StringNullableFilter<"students"> | string | null
-    religion?: StringNullableFilter<"students"> | string | null
-    programme?: StringNullableFilter<"students"> | string | null
-    semester?: StringNullableFilter<"students"> | string | null
-    section?: StringNullableFilter<"students"> | string | null
-    studentType?: EnumStudentTypeNullableFilter<"students"> | $Enums.StudentType | null
-    address?: StringNullableFilter<"students"> | string | null
-    permanentAddress?: StringNullableFilter<"students"> | string | null
-    yearsAtUniversity?: StringNullableFilter<"students"> | string | null
-    totalCredits?: IntNullableFilter<"students"> | number | null
-    currentCGPA?: FloatNullableFilter<"students"> | number | null
-    overallAttendance?: FloatNullableFilter<"students"> | number | null
-    academicStanding?: StringNullableFilter<"students"> | string | null
-    academicSetupCompleted?: BoolFilter<"students"> | boolean
     status?: EnumStudentStatusFilter<"students"> | $Enums.StudentStatus
     departmentId?: StringFilter<"students"> | string
     createdAt?: DateTimeFilter<"students"> | Date | string
     updatedAt?: DateTimeFilter<"students"> | Date | string
+    academicSetupCompleted?: BoolFilter<"students"> | boolean
+    academicStanding?: StringNullableFilter<"students"> | string | null
+    address?: StringNullableFilter<"students"> | string | null
+    bloodGroup?: EnumBloodGroupNullableFilter<"students"> | $Enums.BloodGroup | null
+    currentCGPA?: FloatNullableFilter<"students"> | number | null
+    nationality?: StringNullableFilter<"students"> | string | null
+    overallAttendance?: FloatNullableFilter<"students"> | number | null
+    permanentAddress?: StringNullableFilter<"students"> | string | null
+    profileImage?: StringNullableFilter<"students"> | string | null
+    programme?: StringNullableFilter<"students"> | string | null
+    religion?: StringNullableFilter<"students"> | string | null
+    section?: StringNullableFilter<"students"> | string | null
+    semester?: StringNullableFilter<"students"> | string | null
+    studentType?: EnumStudentTypeNullableFilter<"students"> | $Enums.StudentType | null
+    totalCredits?: IntNullableFilter<"students"> | number | null
+    yearsAtUniversity?: StringNullableFilter<"students"> | string | null
+    academicBacklogs?: Academic_backlogsListRelationFilter
+    academicSemesters?: Academic_semestersListRelationFilter
     detentions?: DetentionsListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
     mentor_transfer_requests?: Mentor_transfer_requestsListRelationFilter
+    contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
+    documents?: Student_documentsListRelationFilter
     student_enrollments?: Student_enrollmentsListRelationFilter
+    parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
-    contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
-    parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
-    documents?: Student_documentsListRelationFilter
-    academicSemesters?: Academic_semestersListRelationFilter
-    academicBacklogs?: Academic_backlogsListRelationFilter
   }, "id" | "registerNumber" | "admissionNumber" | "userAccountId">
 
   export type studentsOrderByWithAggregationInput = {
@@ -31407,29 +32772,29 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrderInput | SortOrder
     phone?: SortOrderInput | SortOrder
-    profileImage?: SortOrderInput | SortOrder
     dateOfBirth?: SortOrderInput | SortOrder
     gender?: SortOrderInput | SortOrder
-    bloodGroup?: SortOrderInput | SortOrder
-    nationality?: SortOrderInput | SortOrder
-    religion?: SortOrderInput | SortOrder
-    programme?: SortOrderInput | SortOrder
-    semester?: SortOrderInput | SortOrder
-    section?: SortOrderInput | SortOrder
-    studentType?: SortOrderInput | SortOrder
-    address?: SortOrderInput | SortOrder
-    permanentAddress?: SortOrderInput | SortOrder
-    yearsAtUniversity?: SortOrderInput | SortOrder
-    totalCredits?: SortOrderInput | SortOrder
-    currentCGPA?: SortOrderInput | SortOrder
-    overallAttendance?: SortOrderInput | SortOrder
-    academicStanding?: SortOrderInput | SortOrder
-    academicSetupCompleted?: SortOrder
     status?: SortOrder
     departmentId?: SortOrder
     userAccountId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    academicSetupCompleted?: SortOrder
+    academicStanding?: SortOrderInput | SortOrder
+    address?: SortOrderInput | SortOrder
+    bloodGroup?: SortOrderInput | SortOrder
+    currentCGPA?: SortOrderInput | SortOrder
+    nationality?: SortOrderInput | SortOrder
+    overallAttendance?: SortOrderInput | SortOrder
+    permanentAddress?: SortOrderInput | SortOrder
+    profileImage?: SortOrderInput | SortOrder
+    programme?: SortOrderInput | SortOrder
+    religion?: SortOrderInput | SortOrder
+    section?: SortOrderInput | SortOrder
+    semester?: SortOrderInput | SortOrder
+    studentType?: SortOrderInput | SortOrder
+    totalCredits?: SortOrderInput | SortOrder
+    yearsAtUniversity?: SortOrderInput | SortOrder
     _count?: studentsCountOrderByAggregateInput
     _avg?: studentsAvgOrderByAggregateInput
     _max?: studentsMaxOrderByAggregateInput
@@ -31447,29 +32812,29 @@ export namespace Prisma {
     fullName?: StringWithAggregatesFilter<"students"> | string
     email?: StringNullableWithAggregatesFilter<"students"> | string | null
     phone?: StringNullableWithAggregatesFilter<"students"> | string | null
-    profileImage?: StringNullableWithAggregatesFilter<"students"> | string | null
     dateOfBirth?: DateTimeNullableWithAggregatesFilter<"students"> | Date | string | null
     gender?: EnumGenderNullableWithAggregatesFilter<"students"> | $Enums.Gender | null
-    bloodGroup?: EnumBloodGroupNullableWithAggregatesFilter<"students"> | $Enums.BloodGroup | null
-    nationality?: StringNullableWithAggregatesFilter<"students"> | string | null
-    religion?: StringNullableWithAggregatesFilter<"students"> | string | null
-    programme?: StringNullableWithAggregatesFilter<"students"> | string | null
-    semester?: StringNullableWithAggregatesFilter<"students"> | string | null
-    section?: StringNullableWithAggregatesFilter<"students"> | string | null
-    studentType?: EnumStudentTypeNullableWithAggregatesFilter<"students"> | $Enums.StudentType | null
-    address?: StringNullableWithAggregatesFilter<"students"> | string | null
-    permanentAddress?: StringNullableWithAggregatesFilter<"students"> | string | null
-    yearsAtUniversity?: StringNullableWithAggregatesFilter<"students"> | string | null
-    totalCredits?: IntNullableWithAggregatesFilter<"students"> | number | null
-    currentCGPA?: FloatNullableWithAggregatesFilter<"students"> | number | null
-    overallAttendance?: FloatNullableWithAggregatesFilter<"students"> | number | null
-    academicStanding?: StringNullableWithAggregatesFilter<"students"> | string | null
-    academicSetupCompleted?: BoolWithAggregatesFilter<"students"> | boolean
     status?: EnumStudentStatusWithAggregatesFilter<"students"> | $Enums.StudentStatus
     departmentId?: StringWithAggregatesFilter<"students"> | string
     userAccountId?: StringNullableWithAggregatesFilter<"students"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"students"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"students"> | Date | string
+    academicSetupCompleted?: BoolWithAggregatesFilter<"students"> | boolean
+    academicStanding?: StringNullableWithAggregatesFilter<"students"> | string | null
+    address?: StringNullableWithAggregatesFilter<"students"> | string | null
+    bloodGroup?: EnumBloodGroupNullableWithAggregatesFilter<"students"> | $Enums.BloodGroup | null
+    currentCGPA?: FloatNullableWithAggregatesFilter<"students"> | number | null
+    nationality?: StringNullableWithAggregatesFilter<"students"> | string | null
+    overallAttendance?: FloatNullableWithAggregatesFilter<"students"> | number | null
+    permanentAddress?: StringNullableWithAggregatesFilter<"students"> | string | null
+    profileImage?: StringNullableWithAggregatesFilter<"students"> | string | null
+    programme?: StringNullableWithAggregatesFilter<"students"> | string | null
+    religion?: StringNullableWithAggregatesFilter<"students"> | string | null
+    section?: StringNullableWithAggregatesFilter<"students"> | string | null
+    semester?: StringNullableWithAggregatesFilter<"students"> | string | null
+    studentType?: EnumStudentTypeNullableWithAggregatesFilter<"students"> | $Enums.StudentType | null
+    totalCredits?: IntNullableWithAggregatesFilter<"students"> | number | null
+    yearsAtUniversity?: StringNullableWithAggregatesFilter<"students"> | string | null
   }
 
   export type student_contact_detailsWhereInput = {
@@ -31860,8 +33225,8 @@ export namespace Prisma {
     backlogs?: IntFilter<"academic_semesters"> | number
     createdAt?: DateTimeFilter<"academic_semesters"> | Date | string
     updatedAt?: DateTimeFilter<"academic_semesters"> | Date | string
-    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
     academic_years?: XOR<Academic_yearsNullableScalarRelationFilter, academic_yearsWhereInput> | null
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
     subjects?: Academic_subjectsListRelationFilter
   }
 
@@ -31878,8 +33243,8 @@ export namespace Prisma {
     backlogs?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
-    students?: studentsOrderByWithRelationInput
     academic_years?: academic_yearsOrderByWithRelationInput
+    students?: studentsOrderByWithRelationInput
     subjects?: academic_subjectsOrderByRelationAggregateInput
   }
 
@@ -31900,8 +33265,8 @@ export namespace Prisma {
     backlogs?: IntFilter<"academic_semesters"> | number
     createdAt?: DateTimeFilter<"academic_semesters"> | Date | string
     updatedAt?: DateTimeFilter<"academic_semesters"> | Date | string
-    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
     academic_years?: XOR<Academic_yearsNullableScalarRelationFilter, academic_yearsWhereInput> | null
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
     subjects?: Academic_subjectsListRelationFilter
   }, "id" | "studentId_semesterNumber">
 
@@ -32184,6 +33549,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
+    teacher_profiles?: XOR<Teacher_profilesNullableScalarRelationFilter, teacher_profilesWhereInput> | null
     departments_teachers_departmentIdTodepartments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
   }
@@ -32206,6 +33572,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsOrderByRelationAggregateInput
+    teacher_profiles?: teacher_profilesOrderByWithRelationInput
     departments_teachers_departmentIdTodepartments?: departmentsOrderByWithRelationInput
     user_accounts?: user_accountsOrderByWithRelationInput
   }
@@ -32231,6 +33598,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
+    teacher_profiles?: XOR<Teacher_profilesNullableScalarRelationFilter, teacher_profilesWhereInput> | null
     departments_teachers_departmentIdTodepartments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
   }, "id" | "employeeCode" | "userAccountId">
@@ -32283,10 +33651,10 @@ export namespace Prisma {
     password?: StringNullableFilter<"user_accounts"> | string | null
     role?: EnumUserRoleFilter<"user_accounts"> | $Enums.UserRole
     isActive?: BoolFilter<"user_accounts"> | boolean
-    mustChangePassword?: BoolFilter<"user_accounts"> | boolean
     lastLogin?: DateTimeNullableFilter<"user_accounts"> | Date | string | null
     createdAt?: DateTimeFilter<"user_accounts"> | Date | string
     updatedAt?: DateTimeFilter<"user_accounts"> | Date | string
+    mustChangePassword?: BoolFilter<"user_accounts"> | boolean
     detentions?: DetentionsListRelationFilter
     import_batches?: Import_batchesListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
@@ -32304,10 +33672,10 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     role?: SortOrder
     isActive?: SortOrder
-    mustChangePassword?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    mustChangePassword?: SortOrder
     detentions?: detentionsOrderByRelationAggregateInput
     import_batches?: import_batchesOrderByRelationAggregateInput
     mentor_assignments?: mentor_assignmentsOrderByRelationAggregateInput
@@ -32328,10 +33696,10 @@ export namespace Prisma {
     password?: StringNullableFilter<"user_accounts"> | string | null
     role?: EnumUserRoleFilter<"user_accounts"> | $Enums.UserRole
     isActive?: BoolFilter<"user_accounts"> | boolean
-    mustChangePassword?: BoolFilter<"user_accounts"> | boolean
     lastLogin?: DateTimeNullableFilter<"user_accounts"> | Date | string | null
     createdAt?: DateTimeFilter<"user_accounts"> | Date | string
     updatedAt?: DateTimeFilter<"user_accounts"> | Date | string
+    mustChangePassword?: BoolFilter<"user_accounts"> | boolean
     detentions?: DetentionsListRelationFilter
     import_batches?: Import_batchesListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
@@ -32349,10 +33717,10 @@ export namespace Prisma {
     password?: SortOrderInput | SortOrder
     role?: SortOrder
     isActive?: SortOrder
-    mustChangePassword?: SortOrder
     lastLogin?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    mustChangePassword?: SortOrder
     _count?: user_accountsCountOrderByAggregateInput
     _max?: user_accountsMaxOrderByAggregateInput
     _min?: user_accountsMinOrderByAggregateInput
@@ -32368,10 +33736,10 @@ export namespace Prisma {
     password?: StringNullableWithAggregatesFilter<"user_accounts"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"user_accounts"> | $Enums.UserRole
     isActive?: BoolWithAggregatesFilter<"user_accounts"> | boolean
-    mustChangePassword?: BoolWithAggregatesFilter<"user_accounts"> | boolean
     lastLogin?: DateTimeNullableWithAggregatesFilter<"user_accounts"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"user_accounts"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"user_accounts"> | Date | string
+    mustChangePassword?: BoolWithAggregatesFilter<"user_accounts"> | boolean
   }
 
   export type term_change_requestsWhereInput = {
@@ -32466,6 +33834,126 @@ export namespace Prisma {
     reviewComment?: StringNullableWithAggregatesFilter<"term_change_requests"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"term_change_requests"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"term_change_requests"> | Date | string
+  }
+
+  export type teacher_profilesWhereInput = {
+    AND?: teacher_profilesWhereInput | teacher_profilesWhereInput[]
+    OR?: teacher_profilesWhereInput[]
+    NOT?: teacher_profilesWhereInput | teacher_profilesWhereInput[]
+    id?: StringFilter<"teacher_profiles"> | string
+    teacherId?: StringFilter<"teacher_profiles"> | string
+    profileImage?: StringNullableFilter<"teacher_profiles"> | string | null
+    qualification?: StringNullableFilter<"teacher_profiles"> | string | null
+    specialization?: StringNullableFilter<"teacher_profiles"> | string | null
+    office?: StringNullableFilter<"teacher_profiles"> | string | null
+    officeHours?: StringNullableFilter<"teacher_profiles"> | string | null
+    about?: StringNullableFilter<"teacher_profiles"> | string | null
+    highlightOne?: StringNullableFilter<"teacher_profiles"> | string | null
+    highlightTwo?: StringNullableFilter<"teacher_profiles"> | string | null
+    highlightThree?: StringNullableFilter<"teacher_profiles"> | string | null
+    linkedIn?: StringNullableFilter<"teacher_profiles"> | string | null
+    googleScholar?: StringNullableFilter<"teacher_profiles"> | string | null
+    researchGate?: StringNullableFilter<"teacher_profiles"> | string | null
+    orcid?: StringNullableFilter<"teacher_profiles"> | string | null
+    website?: StringNullableFilter<"teacher_profiles"> | string | null
+    createdAt?: DateTimeFilter<"teacher_profiles"> | Date | string
+    updatedAt?: DateTimeFilter<"teacher_profiles"> | Date | string
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }
+
+  export type teacher_profilesOrderByWithRelationInput = {
+    id?: SortOrder
+    teacherId?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
+    specialization?: SortOrderInput | SortOrder
+    office?: SortOrderInput | SortOrder
+    officeHours?: SortOrderInput | SortOrder
+    about?: SortOrderInput | SortOrder
+    highlightOne?: SortOrderInput | SortOrder
+    highlightTwo?: SortOrderInput | SortOrder
+    highlightThree?: SortOrderInput | SortOrder
+    linkedIn?: SortOrderInput | SortOrder
+    googleScholar?: SortOrderInput | SortOrder
+    researchGate?: SortOrderInput | SortOrder
+    orcid?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    teachers?: teachersOrderByWithRelationInput
+  }
+
+  export type teacher_profilesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    teacherId?: string
+    AND?: teacher_profilesWhereInput | teacher_profilesWhereInput[]
+    OR?: teacher_profilesWhereInput[]
+    NOT?: teacher_profilesWhereInput | teacher_profilesWhereInput[]
+    profileImage?: StringNullableFilter<"teacher_profiles"> | string | null
+    qualification?: StringNullableFilter<"teacher_profiles"> | string | null
+    specialization?: StringNullableFilter<"teacher_profiles"> | string | null
+    office?: StringNullableFilter<"teacher_profiles"> | string | null
+    officeHours?: StringNullableFilter<"teacher_profiles"> | string | null
+    about?: StringNullableFilter<"teacher_profiles"> | string | null
+    highlightOne?: StringNullableFilter<"teacher_profiles"> | string | null
+    highlightTwo?: StringNullableFilter<"teacher_profiles"> | string | null
+    highlightThree?: StringNullableFilter<"teacher_profiles"> | string | null
+    linkedIn?: StringNullableFilter<"teacher_profiles"> | string | null
+    googleScholar?: StringNullableFilter<"teacher_profiles"> | string | null
+    researchGate?: StringNullableFilter<"teacher_profiles"> | string | null
+    orcid?: StringNullableFilter<"teacher_profiles"> | string | null
+    website?: StringNullableFilter<"teacher_profiles"> | string | null
+    createdAt?: DateTimeFilter<"teacher_profiles"> | Date | string
+    updatedAt?: DateTimeFilter<"teacher_profiles"> | Date | string
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }, "id" | "teacherId">
+
+  export type teacher_profilesOrderByWithAggregationInput = {
+    id?: SortOrder
+    teacherId?: SortOrder
+    profileImage?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
+    specialization?: SortOrderInput | SortOrder
+    office?: SortOrderInput | SortOrder
+    officeHours?: SortOrderInput | SortOrder
+    about?: SortOrderInput | SortOrder
+    highlightOne?: SortOrderInput | SortOrder
+    highlightTwo?: SortOrderInput | SortOrder
+    highlightThree?: SortOrderInput | SortOrder
+    linkedIn?: SortOrderInput | SortOrder
+    googleScholar?: SortOrderInput | SortOrder
+    researchGate?: SortOrderInput | SortOrder
+    orcid?: SortOrderInput | SortOrder
+    website?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: teacher_profilesCountOrderByAggregateInput
+    _max?: teacher_profilesMaxOrderByAggregateInput
+    _min?: teacher_profilesMinOrderByAggregateInput
+  }
+
+  export type teacher_profilesScalarWhereWithAggregatesInput = {
+    AND?: teacher_profilesScalarWhereWithAggregatesInput | teacher_profilesScalarWhereWithAggregatesInput[]
+    OR?: teacher_profilesScalarWhereWithAggregatesInput[]
+    NOT?: teacher_profilesScalarWhereWithAggregatesInput | teacher_profilesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"teacher_profiles"> | string
+    teacherId?: StringWithAggregatesFilter<"teacher_profiles"> | string
+    profileImage?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    qualification?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    specialization?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    office?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    officeHours?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    about?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    highlightOne?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    highlightTwo?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    highlightThree?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    linkedIn?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    googleScholar?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    researchGate?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    orcid?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    website?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"teacher_profiles"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"teacher_profiles"> | Date | string
   }
 
   export type academic_term_requestsCreateInput = {
@@ -32693,11 +34181,11 @@ export namespace Prisma {
     status?: $Enums.AcademicYearStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsCreateNestedManyWithoutAcademic_yearsInput
     departments: departmentsCreateNestedOneWithoutAcademic_yearsInput
     import_batches?: import_batchesCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsUncheckedCreateInput = {
@@ -32709,10 +34197,10 @@ export namespace Prisma {
     departmentId: string
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsUpdateInput = {
@@ -32723,11 +34211,11 @@ export namespace Prisma {
     status?: EnumAcademicYearStatusFieldUpdateOperationsInput | $Enums.AcademicYearStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUpdateManyWithoutAcademic_yearsNestedInput
     departments?: departmentsUpdateOneRequiredWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsUncheckedUpdateInput = {
@@ -32739,10 +34227,10 @@ export namespace Prisma {
     departmentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsCreateManyInput = {
@@ -33472,38 +34960,38 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateInput = {
@@ -33513,38 +35001,38 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsUpdateInput = {
@@ -33554,38 +35042,38 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateInput = {
@@ -33595,38 +35083,38 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type studentsCreateManyInput = {
@@ -33636,29 +35124,29 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
   }
 
   export type studentsUpdateManyMutationInput = {
@@ -33668,27 +35156,27 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type studentsUncheckedUpdateManyInput = {
@@ -33698,29 +35186,29 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type student_contact_detailsCreateInput = {
@@ -34186,8 +35674,8 @@ export namespace Prisma {
     backlogs?: number
     createdAt?: Date | string
     updatedAt: Date | string
-    students: studentsCreateNestedOneWithoutAcademicSemestersInput
     academic_years?: academic_yearsCreateNestedOneWithoutAcademic_semestersInput
+    students: studentsCreateNestedOneWithoutAcademicSemestersInput
     subjects?: academic_subjectsCreateNestedManyWithoutAcademicSemesterInput
   }
 
@@ -34218,8 +35706,8 @@ export namespace Prisma {
     backlogs?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    students?: studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput
     academic_years?: academic_yearsUpdateOneWithoutAcademic_semestersNestedInput
+    students?: studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput
     subjects?: academic_subjectsUpdateManyWithoutAcademicSemesterNestedInput
   }
 
@@ -34555,6 +36043,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
@@ -34577,6 +36066,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersUpdateInput = {
@@ -34595,6 +36085,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
@@ -34617,6 +36108,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type teachersCreateManyInput = {
@@ -34669,10 +36161,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -34690,10 +36182,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -34711,10 +36203,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -34732,10 +36224,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -34753,10 +36245,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
   }
 
   export type user_accountsUpdateManyMutationInput = {
@@ -34766,10 +36258,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type user_accountsUncheckedUpdateManyInput = {
@@ -34779,10 +36271,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type term_change_requestsCreateInput = {
@@ -34893,6 +36385,152 @@ export namespace Prisma {
     reviewedBy?: NullableStringFieldUpdateOperationsInput | string | null
     reviewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     reviewComment?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type teacher_profilesCreateInput = {
+    id: string
+    profileImage?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    office?: string | null
+    officeHours?: string | null
+    about?: string | null
+    highlightOne?: string | null
+    highlightTwo?: string | null
+    highlightThree?: string | null
+    linkedIn?: string | null
+    googleScholar?: string | null
+    researchGate?: string | null
+    orcid?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    teachers: teachersCreateNestedOneWithoutTeacher_profilesInput
+  }
+
+  export type teacher_profilesUncheckedCreateInput = {
+    id: string
+    teacherId: string
+    profileImage?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    office?: string | null
+    officeHours?: string | null
+    about?: string | null
+    highlightOne?: string | null
+    highlightTwo?: string | null
+    highlightThree?: string | null
+    linkedIn?: string | null
+    googleScholar?: string | null
+    researchGate?: string | null
+    orcid?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type teacher_profilesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightOne?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightTwo?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightThree?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedIn?: NullableStringFieldUpdateOperationsInput | string | null
+    googleScholar?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGate?: NullableStringFieldUpdateOperationsInput | string | null
+    orcid?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teachers?: teachersUpdateOneRequiredWithoutTeacher_profilesNestedInput
+  }
+
+  export type teacher_profilesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightOne?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightTwo?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightThree?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedIn?: NullableStringFieldUpdateOperationsInput | string | null
+    googleScholar?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGate?: NullableStringFieldUpdateOperationsInput | string | null
+    orcid?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type teacher_profilesCreateManyInput = {
+    id: string
+    teacherId: string
+    profileImage?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    office?: string | null
+    officeHours?: string | null
+    about?: string | null
+    highlightOne?: string | null
+    highlightTwo?: string | null
+    highlightThree?: string | null
+    linkedIn?: string | null
+    googleScholar?: string | null
+    researchGate?: string | null
+    orcid?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type teacher_profilesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightOne?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightTwo?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightThree?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedIn?: NullableStringFieldUpdateOperationsInput | string | null
+    googleScholar?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGate?: NullableStringFieldUpdateOperationsInput | string | null
+    orcid?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type teacher_profilesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    teacherId?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightOne?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightTwo?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightThree?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedIn?: NullableStringFieldUpdateOperationsInput | string | null
+    googleScholar?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGate?: NullableStringFieldUpdateOperationsInput | string | null
+    orcid?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -35239,6 +36877,12 @@ export namespace Prisma {
     not?: NestedEnumAcademicYearStatusFilter<$PrismaModel> | $Enums.AcademicYearStatus
   }
 
+  export type Academic_semestersListRelationFilter = {
+    every?: academic_semestersWhereInput
+    some?: academic_semestersWhereInput
+    none?: academic_semestersWhereInput
+  }
+
   export type Academic_term_requestsListRelationFilter = {
     every?: academic_term_requestsWhereInput
     some?: academic_term_requestsWhereInput
@@ -35262,10 +36906,8 @@ export namespace Prisma {
     none?: import_batchesWhereInput
   }
 
-  export type Academic_semestersListRelationFilter = {
-    every?: academic_semestersWhereInput
-    some?: academic_semestersWhereInput
-    none?: academic_semestersWhereInput
+  export type academic_semestersOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type academic_term_requestsOrderByRelationAggregateInput = {
@@ -35277,10 +36919,6 @@ export namespace Prisma {
   }
 
   export type import_batchesOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type academic_semestersOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -35871,11 +37509,34 @@ export namespace Prisma {
     not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
   }
 
+  export type EnumStudentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentStatusFilter<$PrismaModel> | $Enums.StudentStatus
+  }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type EnumBloodGroupNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.BloodGroup | EnumBloodGroupFieldRefInput<$PrismaModel> | null
     in?: $Enums.BloodGroup[] | ListEnumBloodGroupFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.BloodGroup[] | ListEnumBloodGroupFieldRefInput<$PrismaModel> | null
     not?: NestedEnumBloodGroupNullableFilter<$PrismaModel> | $Enums.BloodGroup | null
+  }
+
+  export type FloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type EnumStudentTypeNullableFilter<$PrismaModel = never> = {
@@ -35896,37 +37557,15 @@ export namespace Prisma {
     not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
-  export type FloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type EnumStudentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentStatusFilter<$PrismaModel> | $Enums.StudentStatus
+  export type Academic_backlogsListRelationFilter = {
+    every?: academic_backlogsWhereInput
+    some?: academic_backlogsWhereInput
+    none?: academic_backlogsWhereInput
   }
 
   export type Student_contact_detailsNullableScalarRelationFilter = {
     is?: student_contact_detailsWhereInput | null
     isNot?: student_contact_detailsWhereInput | null
-  }
-
-  export type Student_parent_detailsNullableScalarRelationFilter = {
-    is?: student_parent_detailsWhereInput | null
-    isNot?: student_parent_detailsWhereInput | null
   }
 
   export type Student_documentsListRelationFilter = {
@@ -35935,17 +37574,16 @@ export namespace Prisma {
     none?: student_documentsWhereInput
   }
 
-  export type Academic_backlogsListRelationFilter = {
-    every?: academic_backlogsWhereInput
-    some?: academic_backlogsWhereInput
-    none?: academic_backlogsWhereInput
-  }
-
-  export type student_documentsOrderByRelationAggregateInput = {
-    _count?: SortOrder
+  export type Student_parent_detailsNullableScalarRelationFilter = {
+    is?: student_parent_detailsWhereInput | null
+    isNot?: student_parent_detailsWhereInput | null
   }
 
   export type academic_backlogsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type student_documentsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -35956,35 +37594,35 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    profileImage?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
-    bloodGroup?: SortOrder
-    nationality?: SortOrder
-    religion?: SortOrder
-    programme?: SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    studentType?: SortOrder
-    address?: SortOrder
-    permanentAddress?: SortOrder
-    yearsAtUniversity?: SortOrder
-    totalCredits?: SortOrder
-    currentCGPA?: SortOrder
-    overallAttendance?: SortOrder
-    academicStanding?: SortOrder
-    academicSetupCompleted?: SortOrder
     status?: SortOrder
     departmentId?: SortOrder
     userAccountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    academicSetupCompleted?: SortOrder
+    academicStanding?: SortOrder
+    address?: SortOrder
+    bloodGroup?: SortOrder
+    currentCGPA?: SortOrder
+    nationality?: SortOrder
+    overallAttendance?: SortOrder
+    permanentAddress?: SortOrder
+    profileImage?: SortOrder
+    programme?: SortOrder
+    religion?: SortOrder
+    section?: SortOrder
+    semester?: SortOrder
+    studentType?: SortOrder
+    totalCredits?: SortOrder
+    yearsAtUniversity?: SortOrder
   }
 
   export type studentsAvgOrderByAggregateInput = {
-    totalCredits?: SortOrder
     currentCGPA?: SortOrder
     overallAttendance?: SortOrder
+    totalCredits?: SortOrder
   }
 
   export type studentsMaxOrderByAggregateInput = {
@@ -35994,29 +37632,29 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    profileImage?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
-    bloodGroup?: SortOrder
-    nationality?: SortOrder
-    religion?: SortOrder
-    programme?: SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    studentType?: SortOrder
-    address?: SortOrder
-    permanentAddress?: SortOrder
-    yearsAtUniversity?: SortOrder
-    totalCredits?: SortOrder
-    currentCGPA?: SortOrder
-    overallAttendance?: SortOrder
-    academicStanding?: SortOrder
-    academicSetupCompleted?: SortOrder
     status?: SortOrder
     departmentId?: SortOrder
     userAccountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    academicSetupCompleted?: SortOrder
+    academicStanding?: SortOrder
+    address?: SortOrder
+    bloodGroup?: SortOrder
+    currentCGPA?: SortOrder
+    nationality?: SortOrder
+    overallAttendance?: SortOrder
+    permanentAddress?: SortOrder
+    profileImage?: SortOrder
+    programme?: SortOrder
+    religion?: SortOrder
+    section?: SortOrder
+    semester?: SortOrder
+    studentType?: SortOrder
+    totalCredits?: SortOrder
+    yearsAtUniversity?: SortOrder
   }
 
   export type studentsMinOrderByAggregateInput = {
@@ -36026,35 +37664,35 @@ export namespace Prisma {
     fullName?: SortOrder
     email?: SortOrder
     phone?: SortOrder
-    profileImage?: SortOrder
     dateOfBirth?: SortOrder
     gender?: SortOrder
-    bloodGroup?: SortOrder
-    nationality?: SortOrder
-    religion?: SortOrder
-    programme?: SortOrder
-    semester?: SortOrder
-    section?: SortOrder
-    studentType?: SortOrder
-    address?: SortOrder
-    permanentAddress?: SortOrder
-    yearsAtUniversity?: SortOrder
-    totalCredits?: SortOrder
-    currentCGPA?: SortOrder
-    overallAttendance?: SortOrder
-    academicStanding?: SortOrder
-    academicSetupCompleted?: SortOrder
     status?: SortOrder
     departmentId?: SortOrder
     userAccountId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    academicSetupCompleted?: SortOrder
+    academicStanding?: SortOrder
+    address?: SortOrder
+    bloodGroup?: SortOrder
+    currentCGPA?: SortOrder
+    nationality?: SortOrder
+    overallAttendance?: SortOrder
+    permanentAddress?: SortOrder
+    profileImage?: SortOrder
+    programme?: SortOrder
+    religion?: SortOrder
+    section?: SortOrder
+    semester?: SortOrder
+    studentType?: SortOrder
+    totalCredits?: SortOrder
+    yearsAtUniversity?: SortOrder
   }
 
   export type studentsSumOrderByAggregateInput = {
-    totalCredits?: SortOrder
     currentCGPA?: SortOrder
     overallAttendance?: SortOrder
+    totalCredits?: SortOrder
   }
 
   export type EnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -36067,6 +37705,24 @@ export namespace Prisma {
     _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
+  export type EnumStudentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentStatusWithAggregatesFilter<$PrismaModel> | $Enums.StudentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStudentStatusFilter<$PrismaModel>
+    _max?: NestedEnumStudentStatusFilter<$PrismaModel>
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type EnumBloodGroupNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.BloodGroup | EnumBloodGroupFieldRefInput<$PrismaModel> | null
     in?: $Enums.BloodGroup[] | ListEnumBloodGroupFieldRefInput<$PrismaModel> | null
@@ -36075,6 +37731,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumBloodGroupNullableFilter<$PrismaModel>
     _max?: NestedEnumBloodGroupNullableFilter<$PrismaModel>
+  }
+
+  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type EnumStudentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -36101,40 +37773,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type FloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type EnumStudentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentStatusWithAggregatesFilter<$PrismaModel> | $Enums.StudentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStudentStatusFilter<$PrismaModel>
-    _max?: NestedEnumStudentStatusFilter<$PrismaModel>
   }
 
   export type EnumAddressTypeNullableFilter<$PrismaModel = never> = {
@@ -36708,6 +38346,11 @@ export namespace Prisma {
     isNot?: departmentsWhereInput | null
   }
 
+  export type Teacher_profilesNullableScalarRelationFilter = {
+    is?: teacher_profilesWhereInput | null
+    isNot?: teacher_profilesWhereInput | null
+  }
+
   export type teachersCountOrderByAggregateInput = {
     id?: SortOrder
     employeeCode?: SortOrder
@@ -36790,10 +38433,10 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     isActive?: SortOrder
-    mustChangePassword?: SortOrder
     lastLogin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    mustChangePassword?: SortOrder
   }
 
   export type user_accountsMaxOrderByAggregateInput = {
@@ -36803,10 +38446,10 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     isActive?: SortOrder
-    mustChangePassword?: SortOrder
     lastLogin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    mustChangePassword?: SortOrder
   }
 
   export type user_accountsMinOrderByAggregateInput = {
@@ -36816,10 +38459,10 @@ export namespace Prisma {
     password?: SortOrder
     role?: SortOrder
     isActive?: SortOrder
-    mustChangePassword?: SortOrder
     lastLogin?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    mustChangePassword?: SortOrder
   }
 
   export type EnumUserRoleWithAggregatesFilter<$PrismaModel = never> = {
@@ -36886,6 +38529,69 @@ export namespace Prisma {
 
   export type term_change_requestsSumOrderByAggregateInput = {
     requestedSemesterNumber?: SortOrder
+  }
+
+  export type teacher_profilesCountOrderByAggregateInput = {
+    id?: SortOrder
+    teacherId?: SortOrder
+    profileImage?: SortOrder
+    qualification?: SortOrder
+    specialization?: SortOrder
+    office?: SortOrder
+    officeHours?: SortOrder
+    about?: SortOrder
+    highlightOne?: SortOrder
+    highlightTwo?: SortOrder
+    highlightThree?: SortOrder
+    linkedIn?: SortOrder
+    googleScholar?: SortOrder
+    researchGate?: SortOrder
+    orcid?: SortOrder
+    website?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type teacher_profilesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    teacherId?: SortOrder
+    profileImage?: SortOrder
+    qualification?: SortOrder
+    specialization?: SortOrder
+    office?: SortOrder
+    officeHours?: SortOrder
+    about?: SortOrder
+    highlightOne?: SortOrder
+    highlightTwo?: SortOrder
+    highlightThree?: SortOrder
+    linkedIn?: SortOrder
+    googleScholar?: SortOrder
+    researchGate?: SortOrder
+    orcid?: SortOrder
+    website?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type teacher_profilesMinOrderByAggregateInput = {
+    id?: SortOrder
+    teacherId?: SortOrder
+    profileImage?: SortOrder
+    qualification?: SortOrder
+    specialization?: SortOrder
+    office?: SortOrder
+    officeHours?: SortOrder
+    about?: SortOrder
+    highlightOne?: SortOrder
+    highlightTwo?: SortOrder
+    highlightThree?: SortOrder
+    linkedIn?: SortOrder
+    googleScholar?: SortOrder
+    researchGate?: SortOrder
+    orcid?: SortOrder
+    website?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type academic_yearsCreateNestedOneWithoutAcademic_term_requestsInput = {
@@ -37116,6 +38822,13 @@ export namespace Prisma {
     deleteMany?: student_enrollmentsScalarWhereInput | student_enrollmentsScalarWhereInput[]
   }
 
+  export type academic_semestersCreateNestedManyWithoutAcademic_yearsInput = {
+    create?: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput> | academic_semestersCreateWithoutAcademic_yearsInput[] | academic_semestersUncheckedCreateWithoutAcademic_yearsInput[]
+    connectOrCreate?: academic_semestersCreateOrConnectWithoutAcademic_yearsInput | academic_semestersCreateOrConnectWithoutAcademic_yearsInput[]
+    createMany?: academic_semestersCreateManyAcademic_yearsInputEnvelope
+    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+  }
+
   export type academic_term_requestsCreateNestedManyWithoutAcademic_yearsInput = {
     create?: XOR<academic_term_requestsCreateWithoutAcademic_yearsInput, academic_term_requestsUncheckedCreateWithoutAcademic_yearsInput> | academic_term_requestsCreateWithoutAcademic_yearsInput[] | academic_term_requestsUncheckedCreateWithoutAcademic_yearsInput[]
     connectOrCreate?: academic_term_requestsCreateOrConnectWithoutAcademic_yearsInput | academic_term_requestsCreateOrConnectWithoutAcademic_yearsInput[]
@@ -37143,7 +38856,7 @@ export namespace Prisma {
     connect?: import_batchesWhereUniqueInput | import_batchesWhereUniqueInput[]
   }
 
-  export type academic_semestersCreateNestedManyWithoutAcademic_yearsInput = {
+  export type academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput = {
     create?: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput> | academic_semestersCreateWithoutAcademic_yearsInput[] | academic_semestersUncheckedCreateWithoutAcademic_yearsInput[]
     connectOrCreate?: academic_semestersCreateOrConnectWithoutAcademic_yearsInput | academic_semestersCreateOrConnectWithoutAcademic_yearsInput[]
     createMany?: academic_semestersCreateManyAcademic_yearsInputEnvelope
@@ -37171,15 +38884,22 @@ export namespace Prisma {
     connect?: import_batchesWhereUniqueInput | import_batchesWhereUniqueInput[]
   }
 
-  export type academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput = {
-    create?: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput> | academic_semestersCreateWithoutAcademic_yearsInput[] | academic_semestersUncheckedCreateWithoutAcademic_yearsInput[]
-    connectOrCreate?: academic_semestersCreateOrConnectWithoutAcademic_yearsInput | academic_semestersCreateOrConnectWithoutAcademic_yearsInput[]
-    createMany?: academic_semestersCreateManyAcademic_yearsInputEnvelope
-    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-  }
-
   export type EnumAcademicYearStatusFieldUpdateOperationsInput = {
     set?: $Enums.AcademicYearStatus
+  }
+
+  export type academic_semestersUpdateManyWithoutAcademic_yearsNestedInput = {
+    create?: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput> | academic_semestersCreateWithoutAcademic_yearsInput[] | academic_semestersUncheckedCreateWithoutAcademic_yearsInput[]
+    connectOrCreate?: academic_semestersCreateOrConnectWithoutAcademic_yearsInput | academic_semestersCreateOrConnectWithoutAcademic_yearsInput[]
+    upsert?: academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput | academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput[]
+    createMany?: academic_semestersCreateManyAcademic_yearsInputEnvelope
+    set?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    disconnect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    delete?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    update?: academic_semestersUpdateWithWhereUniqueWithoutAcademic_yearsInput | academic_semestersUpdateWithWhereUniqueWithoutAcademic_yearsInput[]
+    updateMany?: academic_semestersUpdateManyWithWhereWithoutAcademic_yearsInput | academic_semestersUpdateManyWithWhereWithoutAcademic_yearsInput[]
+    deleteMany?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
   }
 
   export type academic_term_requestsUpdateManyWithoutAcademic_yearsNestedInput = {
@@ -37232,7 +38952,7 @@ export namespace Prisma {
     deleteMany?: import_batchesScalarWhereInput | import_batchesScalarWhereInput[]
   }
 
-  export type academic_semestersUpdateManyWithoutAcademic_yearsNestedInput = {
+  export type academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput = {
     create?: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput> | academic_semestersCreateWithoutAcademic_yearsInput[] | academic_semestersUncheckedCreateWithoutAcademic_yearsInput[]
     connectOrCreate?: academic_semestersCreateOrConnectWithoutAcademic_yearsInput | academic_semestersCreateOrConnectWithoutAcademic_yearsInput[]
     upsert?: academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput | academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput[]
@@ -37286,20 +39006,6 @@ export namespace Prisma {
     update?: import_batchesUpdateWithWhereUniqueWithoutAcademic_yearsInput | import_batchesUpdateWithWhereUniqueWithoutAcademic_yearsInput[]
     updateMany?: import_batchesUpdateManyWithWhereWithoutAcademic_yearsInput | import_batchesUpdateManyWithWhereWithoutAcademic_yearsInput[]
     deleteMany?: import_batchesScalarWhereInput | import_batchesScalarWhereInput[]
-  }
-
-  export type academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput = {
-    create?: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput> | academic_semestersCreateWithoutAcademic_yearsInput[] | academic_semestersUncheckedCreateWithoutAcademic_yearsInput[]
-    connectOrCreate?: academic_semestersCreateOrConnectWithoutAcademic_yearsInput | academic_semestersCreateOrConnectWithoutAcademic_yearsInput[]
-    upsert?: academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput | academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput[]
-    createMany?: academic_semestersCreateManyAcademic_yearsInputEnvelope
-    set?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    disconnect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    delete?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    update?: academic_semestersUpdateWithWhereUniqueWithoutAcademic_yearsInput | academic_semestersUpdateWithWhereUniqueWithoutAcademic_yearsInput[]
-    updateMany?: academic_semestersUpdateManyWithWhereWithoutAcademic_yearsInput | academic_semestersUpdateManyWithWhereWithoutAcademic_yearsInput[]
-    deleteMany?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
   }
 
   export type academic_yearsCreateNestedManyWithoutDepartmentsInput = {
@@ -37804,6 +39510,20 @@ export namespace Prisma {
     update?: XOR<XOR<academic_termsUpdateToOneWithWhereWithoutStudent_enrollmentsInput, academic_termsUpdateWithoutStudent_enrollmentsInput>, academic_termsUncheckedUpdateWithoutStudent_enrollmentsInput>
   }
 
+  export type academic_backlogsCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
+    createMany?: academic_backlogsCreateManyStudentsInputEnvelope
+    connect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+  }
+
+  export type academic_semestersCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
+    createMany?: academic_semestersCreateManyStudentsInputEnvelope
+    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+  }
+
   export type detentionsCreateNestedManyWithoutStudentsInput = {
     create?: XOR<detentionsCreateWithoutStudentsInput, detentionsUncheckedCreateWithoutStudentsInput> | detentionsCreateWithoutStudentsInput[] | detentionsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: detentionsCreateOrConnectWithoutStudentsInput | detentionsCreateOrConnectWithoutStudentsInput[]
@@ -37825,11 +39545,30 @@ export namespace Prisma {
     connect?: mentor_transfer_requestsWhereUniqueInput | mentor_transfer_requestsWhereUniqueInput[]
   }
 
+  export type student_contact_detailsCreateNestedOneWithoutStudentInput = {
+    create?: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: student_contact_detailsCreateOrConnectWithoutStudentInput
+    connect?: student_contact_detailsWhereUniqueInput
+  }
+
+  export type student_documentsCreateNestedManyWithoutStudentInput = {
+    create?: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput> | student_documentsCreateWithoutStudentInput[] | student_documentsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_documentsCreateOrConnectWithoutStudentInput | student_documentsCreateOrConnectWithoutStudentInput[]
+    createMany?: student_documentsCreateManyStudentInputEnvelope
+    connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
+  }
+
   export type student_enrollmentsCreateNestedManyWithoutStudentsInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
     createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
     connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+  }
+
+  export type student_parent_detailsCreateNestedOneWithoutStudentInput = {
+    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
+    connect?: student_parent_detailsWhereUniqueInput
   }
 
   export type departmentsCreateNestedOneWithoutStudentsInput = {
@@ -37844,37 +39583,18 @@ export namespace Prisma {
     connect?: user_accountsWhereUniqueInput
   }
 
-  export type student_contact_detailsCreateNestedOneWithoutStudentInput = {
-    create?: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: student_contact_detailsCreateOrConnectWithoutStudentInput
-    connect?: student_contact_detailsWhereUniqueInput
-  }
-
-  export type student_parent_detailsCreateNestedOneWithoutStudentInput = {
-    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
-    connect?: student_parent_detailsWhereUniqueInput
-  }
-
-  export type student_documentsCreateNestedManyWithoutStudentInput = {
-    create?: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput> | student_documentsCreateWithoutStudentInput[] | student_documentsUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: student_documentsCreateOrConnectWithoutStudentInput | student_documentsCreateOrConnectWithoutStudentInput[]
-    createMany?: student_documentsCreateManyStudentInputEnvelope
-    connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
-  }
-
-  export type academic_semestersCreateNestedManyWithoutStudentsInput = {
-    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
-    createMany?: academic_semestersCreateManyStudentsInputEnvelope
-    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-  }
-
-  export type academic_backlogsCreateNestedManyWithoutStudentsInput = {
+  export type academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput = {
     create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
     createMany?: academic_backlogsCreateManyStudentsInputEnvelope
     connect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+  }
+
+  export type academic_semestersUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
+    createMany?: academic_semestersCreateManyStudentsInputEnvelope
+    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
   }
 
   export type detentionsUncheckedCreateNestedManyWithoutStudentsInput = {
@@ -37898,23 +39618,10 @@ export namespace Prisma {
     connect?: mentor_transfer_requestsWhereUniqueInput | mentor_transfer_requestsWhereUniqueInput[]
   }
 
-  export type student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput = {
-    create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
-    createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
-    connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
-  }
-
   export type student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput = {
     create?: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
     connectOrCreate?: student_contact_detailsCreateOrConnectWithoutStudentInput
     connect?: student_contact_detailsWhereUniqueInput
-  }
-
-  export type student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput = {
-    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
-    connect?: student_parent_detailsWhereUniqueInput
   }
 
   export type student_documentsUncheckedCreateNestedManyWithoutStudentInput = {
@@ -37924,26 +39631,41 @@ export namespace Prisma {
     connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
   }
 
-  export type academic_semestersUncheckedCreateNestedManyWithoutStudentsInput = {
-    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
-    createMany?: academic_semestersCreateManyStudentsInputEnvelope
-    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+  export type student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
+    createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
+    connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
   }
 
-  export type academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput = {
-    create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
-    createMany?: academic_backlogsCreateManyStudentsInputEnvelope
-    connect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+  export type student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput = {
+    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
+    connect?: student_parent_detailsWhereUniqueInput
   }
 
   export type NullableEnumGenderFieldUpdateOperationsInput = {
     set?: $Enums.Gender | null
   }
 
+  export type EnumStudentStatusFieldUpdateOperationsInput = {
+    set?: $Enums.StudentStatus
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type NullableEnumBloodGroupFieldUpdateOperationsInput = {
     set?: $Enums.BloodGroup | null
+  }
+
+  export type NullableFloatFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type NullableEnumStudentTypeFieldUpdateOperationsInput = {
@@ -37958,20 +39680,32 @@ export namespace Prisma {
     divide?: number
   }
 
-  export type NullableFloatFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
+  export type academic_backlogsUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
+    upsert?: academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput | academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: academic_backlogsCreateManyStudentsInputEnvelope
+    set?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+    disconnect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+    delete?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+    connect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
+    update?: academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput | academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: academic_backlogsUpdateManyWithWhereWithoutStudentsInput | academic_backlogsUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
-  export type EnumStudentStatusFieldUpdateOperationsInput = {
-    set?: $Enums.StudentStatus
+  export type academic_semestersUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
+    upsert?: academic_semestersUpsertWithWhereUniqueWithoutStudentsInput | academic_semestersUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: academic_semestersCreateManyStudentsInputEnvelope
+    set?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    disconnect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    delete?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    update?: academic_semestersUpdateWithWhereUniqueWithoutStudentsInput | academic_semestersUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: academic_semestersUpdateManyWithWhereWithoutStudentsInput | academic_semestersUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
   }
 
   export type detentionsUpdateManyWithoutStudentsNestedInput = {
@@ -38016,6 +39750,30 @@ export namespace Prisma {
     deleteMany?: mentor_transfer_requestsScalarWhereInput | mentor_transfer_requestsScalarWhereInput[]
   }
 
+  export type student_contact_detailsUpdateOneWithoutStudentNestedInput = {
+    create?: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: student_contact_detailsCreateOrConnectWithoutStudentInput
+    upsert?: student_contact_detailsUpsertWithoutStudentInput
+    disconnect?: student_contact_detailsWhereInput | boolean
+    delete?: student_contact_detailsWhereInput | boolean
+    connect?: student_contact_detailsWhereUniqueInput
+    update?: XOR<XOR<student_contact_detailsUpdateToOneWithWhereWithoutStudentInput, student_contact_detailsUpdateWithoutStudentInput>, student_contact_detailsUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type student_documentsUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput> | student_documentsCreateWithoutStudentInput[] | student_documentsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_documentsCreateOrConnectWithoutStudentInput | student_documentsCreateOrConnectWithoutStudentInput[]
+    upsert?: student_documentsUpsertWithWhereUniqueWithoutStudentInput | student_documentsUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: student_documentsCreateManyStudentInputEnvelope
+    set?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
+    disconnect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
+    delete?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
+    connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
+    update?: student_documentsUpdateWithWhereUniqueWithoutStudentInput | student_documentsUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: student_documentsUpdateManyWithWhereWithoutStudentInput | student_documentsUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
+  }
+
   export type student_enrollmentsUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
@@ -38028,6 +39786,16 @@ export namespace Prisma {
     update?: student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput | student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput[]
     updateMany?: student_enrollmentsUpdateManyWithWhereWithoutStudentsInput | student_enrollmentsUpdateManyWithWhereWithoutStudentsInput[]
     deleteMany?: student_enrollmentsScalarWhereInput | student_enrollmentsScalarWhereInput[]
+  }
+
+  export type student_parent_detailsUpdateOneWithoutStudentNestedInput = {
+    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
+    upsert?: student_parent_detailsUpsertWithoutStudentInput
+    disconnect?: student_parent_detailsWhereInput | boolean
+    delete?: student_parent_detailsWhereInput | boolean
+    connect?: student_parent_detailsWhereUniqueInput
+    update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
   }
 
   export type departmentsUpdateOneRequiredWithoutStudentsNestedInput = {
@@ -38048,55 +39816,7 @@ export namespace Prisma {
     update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutStudentsInput, user_accountsUpdateWithoutStudentsInput>, user_accountsUncheckedUpdateWithoutStudentsInput>
   }
 
-  export type student_contact_detailsUpdateOneWithoutStudentNestedInput = {
-    create?: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: student_contact_detailsCreateOrConnectWithoutStudentInput
-    upsert?: student_contact_detailsUpsertWithoutStudentInput
-    disconnect?: student_contact_detailsWhereInput | boolean
-    delete?: student_contact_detailsWhereInput | boolean
-    connect?: student_contact_detailsWhereUniqueInput
-    update?: XOR<XOR<student_contact_detailsUpdateToOneWithWhereWithoutStudentInput, student_contact_detailsUpdateWithoutStudentInput>, student_contact_detailsUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type student_parent_detailsUpdateOneWithoutStudentNestedInput = {
-    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
-    upsert?: student_parent_detailsUpsertWithoutStudentInput
-    disconnect?: student_parent_detailsWhereInput | boolean
-    delete?: student_parent_detailsWhereInput | boolean
-    connect?: student_parent_detailsWhereUniqueInput
-    update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type student_documentsUpdateManyWithoutStudentNestedInput = {
-    create?: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput> | student_documentsCreateWithoutStudentInput[] | student_documentsUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: student_documentsCreateOrConnectWithoutStudentInput | student_documentsCreateOrConnectWithoutStudentInput[]
-    upsert?: student_documentsUpsertWithWhereUniqueWithoutStudentInput | student_documentsUpsertWithWhereUniqueWithoutStudentInput[]
-    createMany?: student_documentsCreateManyStudentInputEnvelope
-    set?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
-    disconnect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
-    delete?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
-    connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
-    update?: student_documentsUpdateWithWhereUniqueWithoutStudentInput | student_documentsUpdateWithWhereUniqueWithoutStudentInput[]
-    updateMany?: student_documentsUpdateManyWithWhereWithoutStudentInput | student_documentsUpdateManyWithWhereWithoutStudentInput[]
-    deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
-  }
-
-  export type academic_semestersUpdateManyWithoutStudentsNestedInput = {
-    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
-    upsert?: academic_semestersUpsertWithWhereUniqueWithoutStudentsInput | academic_semestersUpsertWithWhereUniqueWithoutStudentsInput[]
-    createMany?: academic_semestersCreateManyStudentsInputEnvelope
-    set?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    disconnect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    delete?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    update?: academic_semestersUpdateWithWhereUniqueWithoutStudentsInput | academic_semestersUpdateWithWhereUniqueWithoutStudentsInput[]
-    updateMany?: academic_semestersUpdateManyWithWhereWithoutStudentsInput | academic_semestersUpdateManyWithWhereWithoutStudentsInput[]
-    deleteMany?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
-  }
-
-  export type academic_backlogsUpdateManyWithoutStudentsNestedInput = {
+  export type academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
     upsert?: academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput | academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput[]
@@ -38108,6 +39828,20 @@ export namespace Prisma {
     update?: academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput | academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput[]
     updateMany?: academic_backlogsUpdateManyWithWhereWithoutStudentsInput | academic_backlogsUpdateManyWithWhereWithoutStudentsInput[]
     deleteMany?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
+  }
+
+  export type academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
+    upsert?: academic_semestersUpsertWithWhereUniqueWithoutStudentsInput | academic_semestersUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: academic_semestersCreateManyStudentsInputEnvelope
+    set?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    disconnect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    delete?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
+    update?: academic_semestersUpdateWithWhereUniqueWithoutStudentsInput | academic_semestersUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: academic_semestersUpdateManyWithWhereWithoutStudentsInput | academic_semestersUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
   }
 
   export type detentionsUncheckedUpdateManyWithoutStudentsNestedInput = {
@@ -38152,20 +39886,6 @@ export namespace Prisma {
     deleteMany?: mentor_transfer_requestsScalarWhereInput | mentor_transfer_requestsScalarWhereInput[]
   }
 
-  export type student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput = {
-    create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
-    upsert?: student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput | student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput[]
-    createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
-    set?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
-    disconnect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
-    delete?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
-    connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
-    update?: student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput | student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput[]
-    updateMany?: student_enrollmentsUpdateManyWithWhereWithoutStudentsInput | student_enrollmentsUpdateManyWithWhereWithoutStudentsInput[]
-    deleteMany?: student_enrollmentsScalarWhereInput | student_enrollmentsScalarWhereInput[]
-  }
-
   export type student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput = {
     create?: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
     connectOrCreate?: student_contact_detailsCreateOrConnectWithoutStudentInput
@@ -38174,16 +39894,6 @@ export namespace Prisma {
     delete?: student_contact_detailsWhereInput | boolean
     connect?: student_contact_detailsWhereUniqueInput
     update?: XOR<XOR<student_contact_detailsUpdateToOneWithWhereWithoutStudentInput, student_contact_detailsUpdateWithoutStudentInput>, student_contact_detailsUncheckedUpdateWithoutStudentInput>
-  }
-
-  export type student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput = {
-    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
-    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
-    upsert?: student_parent_detailsUpsertWithoutStudentInput
-    disconnect?: student_parent_detailsWhereInput | boolean
-    delete?: student_parent_detailsWhereInput | boolean
-    connect?: student_parent_detailsWhereUniqueInput
-    update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
   }
 
   export type student_documentsUncheckedUpdateManyWithoutStudentNestedInput = {
@@ -38200,32 +39910,28 @@ export namespace Prisma {
     deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
   }
 
-  export type academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput = {
-    create?: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput> | academic_semestersCreateWithoutStudentsInput[] | academic_semestersUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: academic_semestersCreateOrConnectWithoutStudentsInput | academic_semestersCreateOrConnectWithoutStudentsInput[]
-    upsert?: academic_semestersUpsertWithWhereUniqueWithoutStudentsInput | academic_semestersUpsertWithWhereUniqueWithoutStudentsInput[]
-    createMany?: academic_semestersCreateManyStudentsInputEnvelope
-    set?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    disconnect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    delete?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    connect?: academic_semestersWhereUniqueInput | academic_semestersWhereUniqueInput[]
-    update?: academic_semestersUpdateWithWhereUniqueWithoutStudentsInput | academic_semestersUpdateWithWhereUniqueWithoutStudentsInput[]
-    updateMany?: academic_semestersUpdateManyWithWhereWithoutStudentsInput | academic_semestersUpdateManyWithWhereWithoutStudentsInput[]
-    deleteMany?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
+  export type student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
+    upsert?: student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput | student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
+    set?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+    disconnect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+    delete?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+    connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+    update?: student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput | student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: student_enrollmentsUpdateManyWithWhereWithoutStudentsInput | student_enrollmentsUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: student_enrollmentsScalarWhereInput | student_enrollmentsScalarWhereInput[]
   }
 
-  export type academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput = {
-    create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
-    connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
-    upsert?: academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput | academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput[]
-    createMany?: academic_backlogsCreateManyStudentsInputEnvelope
-    set?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
-    disconnect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
-    delete?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
-    connect?: academic_backlogsWhereUniqueInput | academic_backlogsWhereUniqueInput[]
-    update?: academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput | academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput[]
-    updateMany?: academic_backlogsUpdateManyWithWhereWithoutStudentsInput | academic_backlogsUpdateManyWithWhereWithoutStudentsInput[]
-    deleteMany?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
+  export type student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput = {
+    create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
+    connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
+    upsert?: student_parent_detailsUpsertWithoutStudentInput
+    disconnect?: student_parent_detailsWhereInput | boolean
+    delete?: student_parent_detailsWhereInput | boolean
+    connect?: student_parent_detailsWhereUniqueInput
+    update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
   }
 
   export type studentsCreateNestedOneWithoutContactDetailsInput = {
@@ -38286,16 +39992,16 @@ export namespace Prisma {
     update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutDocumentsInput, studentsUpdateWithoutDocumentsInput>, studentsUncheckedUpdateWithoutDocumentsInput>
   }
 
-  export type studentsCreateNestedOneWithoutAcademicSemestersInput = {
-    create?: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
-    connectOrCreate?: studentsCreateOrConnectWithoutAcademicSemestersInput
-    connect?: studentsWhereUniqueInput
-  }
-
   export type academic_yearsCreateNestedOneWithoutAcademic_semestersInput = {
     create?: XOR<academic_yearsCreateWithoutAcademic_semestersInput, academic_yearsUncheckedCreateWithoutAcademic_semestersInput>
     connectOrCreate?: academic_yearsCreateOrConnectWithoutAcademic_semestersInput
     connect?: academic_yearsWhereUniqueInput
+  }
+
+  export type studentsCreateNestedOneWithoutAcademicSemestersInput = {
+    create?: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutAcademicSemestersInput
+    connect?: studentsWhereUniqueInput
   }
 
   export type academic_subjectsCreateNestedManyWithoutAcademicSemesterInput = {
@@ -38320,14 +40026,6 @@ export namespace Prisma {
     set?: $Enums.AcademicEntryStatus
   }
 
-  export type studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput = {
-    create?: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
-    connectOrCreate?: studentsCreateOrConnectWithoutAcademicSemestersInput
-    upsert?: studentsUpsertWithoutAcademicSemestersInput
-    connect?: studentsWhereUniqueInput
-    update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutAcademicSemestersInput, studentsUpdateWithoutAcademicSemestersInput>, studentsUncheckedUpdateWithoutAcademicSemestersInput>
-  }
-
   export type academic_yearsUpdateOneWithoutAcademic_semestersNestedInput = {
     create?: XOR<academic_yearsCreateWithoutAcademic_semestersInput, academic_yearsUncheckedCreateWithoutAcademic_semestersInput>
     connectOrCreate?: academic_yearsCreateOrConnectWithoutAcademic_semestersInput
@@ -38336,6 +40034,14 @@ export namespace Prisma {
     delete?: academic_yearsWhereInput | boolean
     connect?: academic_yearsWhereUniqueInput
     update?: XOR<XOR<academic_yearsUpdateToOneWithWhereWithoutAcademic_semestersInput, academic_yearsUpdateWithoutAcademic_semestersInput>, academic_yearsUncheckedUpdateWithoutAcademic_semestersInput>
+  }
+
+  export type studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput = {
+    create?: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutAcademicSemestersInput
+    upsert?: studentsUpsertWithoutAcademicSemestersInput
+    connect?: studentsWhereUniqueInput
+    update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutAcademicSemestersInput, studentsUpdateWithoutAcademicSemestersInput>, studentsUncheckedUpdateWithoutAcademicSemestersInput>
   }
 
   export type academic_subjectsUpdateManyWithoutAcademicSemesterNestedInput = {
@@ -38432,6 +40138,12 @@ export namespace Prisma {
     connect?: mentor_transfer_requestsWhereUniqueInput | mentor_transfer_requestsWhereUniqueInput[]
   }
 
+  export type teacher_profilesCreateNestedOneWithoutTeachersInput = {
+    create?: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
+    connectOrCreate?: teacher_profilesCreateOrConnectWithoutTeachersInput
+    connect?: teacher_profilesWhereUniqueInput
+  }
+
   export type departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput = {
     create?: XOR<departmentsCreateWithoutTeachers_teachers_departmentIdTodepartmentsInput, departmentsUncheckedCreateWithoutTeachers_teachers_departmentIdTodepartmentsInput>
     connectOrCreate?: departmentsCreateOrConnectWithoutTeachers_teachers_departmentIdTodepartmentsInput
@@ -38476,6 +40188,12 @@ export namespace Prisma {
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput | mentor_transfer_requestsCreateOrConnectWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput[]
     createMany?: mentor_transfer_requestsCreateManyTeachers_mentor_transfer_requests_requestedMentorIdToteachersInputEnvelope
     connect?: mentor_transfer_requestsWhereUniqueInput | mentor_transfer_requestsWhereUniqueInput[]
+  }
+
+  export type teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput = {
+    create?: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
+    connectOrCreate?: teacher_profilesCreateOrConnectWithoutTeachersInput
+    connect?: teacher_profilesWhereUniqueInput
   }
 
   export type departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput = {
@@ -38542,6 +40260,16 @@ export namespace Prisma {
     update?: mentor_transfer_requestsUpdateWithWhereUniqueWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput | mentor_transfer_requestsUpdateWithWhereUniqueWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput[]
     updateMany?: mentor_transfer_requestsUpdateManyWithWhereWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput | mentor_transfer_requestsUpdateManyWithWhereWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput[]
     deleteMany?: mentor_transfer_requestsScalarWhereInput | mentor_transfer_requestsScalarWhereInput[]
+  }
+
+  export type teacher_profilesUpdateOneWithoutTeachersNestedInput = {
+    create?: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
+    connectOrCreate?: teacher_profilesCreateOrConnectWithoutTeachersInput
+    upsert?: teacher_profilesUpsertWithoutTeachersInput
+    disconnect?: teacher_profilesWhereInput | boolean
+    delete?: teacher_profilesWhereInput | boolean
+    connect?: teacher_profilesWhereUniqueInput
+    update?: XOR<XOR<teacher_profilesUpdateToOneWithWhereWithoutTeachersInput, teacher_profilesUpdateWithoutTeachersInput>, teacher_profilesUncheckedUpdateWithoutTeachersInput>
   }
 
   export type departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput = {
@@ -38626,6 +40354,16 @@ export namespace Prisma {
     update?: mentor_transfer_requestsUpdateWithWhereUniqueWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput | mentor_transfer_requestsUpdateWithWhereUniqueWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput[]
     updateMany?: mentor_transfer_requestsUpdateManyWithWhereWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput | mentor_transfer_requestsUpdateManyWithWhereWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput[]
     deleteMany?: mentor_transfer_requestsScalarWhereInput | mentor_transfer_requestsScalarWhereInput[]
+  }
+
+  export type teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput = {
+    create?: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
+    connectOrCreate?: teacher_profilesCreateOrConnectWithoutTeachersInput
+    upsert?: teacher_profilesUpsertWithoutTeachersInput
+    disconnect?: teacher_profilesWhereInput | boolean
+    delete?: teacher_profilesWhereInput | boolean
+    connect?: teacher_profilesWhereUniqueInput
+    update?: XOR<XOR<teacher_profilesUpdateToOneWithWhereWithoutTeachersInput, teacher_profilesUpdateWithoutTeachersInput>, teacher_profilesUncheckedUpdateWithoutTeachersInput>
   }
 
   export type detentionsCreateNestedManyWithoutUser_accountsInput = {
@@ -38946,6 +40684,20 @@ export namespace Prisma {
     delete?: teachersWhereInput | boolean
     connect?: teachersWhereUniqueInput
     update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutUser_accountsInput, teachersUpdateWithoutUser_accountsInput>, teachersUncheckedUpdateWithoutUser_accountsInput>
+  }
+
+  export type teachersCreateNestedOneWithoutTeacher_profilesInput = {
+    create?: XOR<teachersCreateWithoutTeacher_profilesInput, teachersUncheckedCreateWithoutTeacher_profilesInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutTeacher_profilesInput
+    connect?: teachersWhereUniqueInput
+  }
+
+  export type teachersUpdateOneRequiredWithoutTeacher_profilesNestedInput = {
+    create?: XOR<teachersCreateWithoutTeacher_profilesInput, teachersUncheckedCreateWithoutTeacher_profilesInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutTeacher_profilesInput
+    upsert?: teachersUpsertWithoutTeacher_profilesInput
+    connect?: teachersWhereUniqueInput
+    update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutTeacher_profilesInput, teachersUpdateWithoutTeacher_profilesInput>, teachersUncheckedUpdateWithoutTeacher_profilesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -39286,18 +41038,23 @@ export namespace Prisma {
     not?: NestedEnumGenderNullableFilter<$PrismaModel> | $Enums.Gender | null
   }
 
+  export type NestedEnumStudentStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentStatusFilter<$PrismaModel> | $Enums.StudentStatus
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedEnumBloodGroupNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.BloodGroup | EnumBloodGroupFieldRefInput<$PrismaModel> | null
     in?: $Enums.BloodGroup[] | ListEnumBloodGroupFieldRefInput<$PrismaModel> | null
     notIn?: $Enums.BloodGroup[] | ListEnumBloodGroupFieldRefInput<$PrismaModel> | null
     not?: NestedEnumBloodGroupNullableFilter<$PrismaModel> | $Enums.BloodGroup | null
-  }
-
-  export type NestedEnumStudentTypeNullableFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel> | null
-    in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel> | null
-    notIn?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel> | null
-    not?: NestedEnumStudentTypeNullableFilter<$PrismaModel> | $Enums.StudentType | null
   }
 
   export type NestedFloatNullableFilter<$PrismaModel = never> = {
@@ -39311,16 +41068,11 @@ export namespace Prisma {
     not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedEnumStudentStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentStatusFilter<$PrismaModel> | $Enums.StudentStatus
+  export type NestedEnumStudentTypeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentType | EnumStudentTypeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.StudentType[] | ListEnumStudentTypeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumStudentTypeNullableFilter<$PrismaModel> | $Enums.StudentType | null
   }
 
   export type NestedEnumGenderNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -39333,6 +41085,24 @@ export namespace Prisma {
     _max?: NestedEnumGenderNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumStudentStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumStudentStatusWithAggregatesFilter<$PrismaModel> | $Enums.StudentStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumStudentStatusFilter<$PrismaModel>
+    _max?: NestedEnumStudentStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedEnumBloodGroupNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.BloodGroup | EnumBloodGroupFieldRefInput<$PrismaModel> | null
     in?: $Enums.BloodGroup[] | ListEnumBloodGroupFieldRefInput<$PrismaModel> | null
@@ -39341,6 +41111,22 @@ export namespace Prisma {
     _count?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedEnumBloodGroupNullableFilter<$PrismaModel>
     _max?: NestedEnumBloodGroupNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedFloatNullableFilter<$PrismaModel>
+    _min?: NestedFloatNullableFilter<$PrismaModel>
+    _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumStudentTypeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -39367,40 +41153,6 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedFloatNullableFilter<$PrismaModel>
-    _min?: NestedFloatNullableFilter<$PrismaModel>
-    _max?: NestedFloatNullableFilter<$PrismaModel>
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedEnumStudentStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.StudentStatus | EnumStudentStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    notIn?: $Enums.StudentStatus[] | ListEnumStudentStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumStudentStatusWithAggregatesFilter<$PrismaModel> | $Enums.StudentStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumStudentStatusFilter<$PrismaModel>
-    _max?: NestedEnumStudentStatusFilter<$PrismaModel>
   }
 
   export type NestedEnumAddressTypeNullableFilter<$PrismaModel = never> = {
@@ -39547,10 +41299,10 @@ export namespace Prisma {
     status?: $Enums.AcademicYearStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsCreateNestedManyWithoutAcademic_yearsInput
     departments: departmentsCreateNestedOneWithoutAcademic_yearsInput
     import_batches?: import_batchesCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsUncheckedCreateWithoutAcademic_term_requestsInput = {
@@ -39562,9 +41314,9 @@ export namespace Prisma {
     departmentId: string
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsCreateOrConnectWithoutAcademic_term_requestsInput = {
@@ -39591,10 +41343,10 @@ export namespace Prisma {
     status?: EnumAcademicYearStatusFieldUpdateOperationsInput | $Enums.AcademicYearStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUpdateManyWithoutAcademic_yearsNestedInput
     departments?: departmentsUpdateOneRequiredWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsUncheckedUpdateWithoutAcademic_term_requestsInput = {
@@ -39606,9 +41358,9 @@ export namespace Prisma {
     departmentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsCreateWithoutAcademic_termsInput = {
@@ -39619,10 +41371,10 @@ export namespace Prisma {
     status?: $Enums.AcademicYearStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsCreateNestedManyWithoutAcademic_yearsInput
     departments: departmentsCreateNestedOneWithoutAcademic_yearsInput
     import_batches?: import_batchesCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsUncheckedCreateWithoutAcademic_termsInput = {
@@ -39634,9 +41386,9 @@ export namespace Prisma {
     departmentId: string
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsCreateOrConnectWithoutAcademic_termsInput = {
@@ -39807,10 +41559,10 @@ export namespace Prisma {
     status?: EnumAcademicYearStatusFieldUpdateOperationsInput | $Enums.AcademicYearStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUpdateManyWithoutAcademic_yearsNestedInput
     departments?: departmentsUpdateOneRequiredWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsUncheckedUpdateWithoutAcademic_termsInput = {
@@ -39822,9 +41574,9 @@ export namespace Prisma {
     departmentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type detentionsUpsertWithWhereUniqueWithoutAcademic_termsInput = {
@@ -39957,6 +41709,46 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"student_enrollments"> | Date | string | null
     createdAt?: DateTimeFilter<"student_enrollments"> | Date | string
     updatedAt?: DateTimeFilter<"student_enrollments"> | Date | string
+  }
+
+  export type academic_semestersCreateWithoutAcademic_yearsInput = {
+    id: string
+    semesterNumber: number
+    status?: $Enums.AcademicSemesterStatus
+    entryStatus?: $Enums.AcademicEntryStatus
+    sgpa?: number | null
+    totalCredits?: number
+    creditsEarned?: number
+    backlogs?: number
+    createdAt?: Date | string
+    updatedAt: Date | string
+    students: studentsCreateNestedOneWithoutAcademicSemestersInput
+    subjects?: academic_subjectsCreateNestedManyWithoutAcademicSemesterInput
+  }
+
+  export type academic_semestersUncheckedCreateWithoutAcademic_yearsInput = {
+    id: string
+    studentId: string
+    semesterNumber: number
+    status?: $Enums.AcademicSemesterStatus
+    entryStatus?: $Enums.AcademicEntryStatus
+    sgpa?: number | null
+    totalCredits?: number
+    creditsEarned?: number
+    backlogs?: number
+    createdAt?: Date | string
+    updatedAt: Date | string
+    subjects?: academic_subjectsUncheckedCreateNestedManyWithoutAcademicSemesterInput
+  }
+
+  export type academic_semestersCreateOrConnectWithoutAcademic_yearsInput = {
+    where: academic_semestersWhereUniqueInput
+    create: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput>
+  }
+
+  export type academic_semestersCreateManyAcademic_yearsInputEnvelope = {
+    data: academic_semestersCreateManyAcademic_yearsInput | academic_semestersCreateManyAcademic_yearsInput[]
+    skipDuplicates?: boolean
   }
 
   export type academic_term_requestsCreateWithoutAcademic_yearsInput = {
@@ -40104,44 +41896,38 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type academic_semestersCreateWithoutAcademic_yearsInput = {
-    id: string
-    semesterNumber: number
-    status?: $Enums.AcademicSemesterStatus
-    entryStatus?: $Enums.AcademicEntryStatus
-    sgpa?: number | null
-    totalCredits?: number
-    creditsEarned?: number
-    backlogs?: number
-    createdAt?: Date | string
-    updatedAt: Date | string
-    students: studentsCreateNestedOneWithoutAcademicSemestersInput
-    subjects?: academic_subjectsCreateNestedManyWithoutAcademicSemesterInput
-  }
-
-  export type academic_semestersUncheckedCreateWithoutAcademic_yearsInput = {
-    id: string
-    studentId: string
-    semesterNumber: number
-    status?: $Enums.AcademicSemesterStatus
-    entryStatus?: $Enums.AcademicEntryStatus
-    sgpa?: number | null
-    totalCredits?: number
-    creditsEarned?: number
-    backlogs?: number
-    createdAt?: Date | string
-    updatedAt: Date | string
-    subjects?: academic_subjectsUncheckedCreateNestedManyWithoutAcademicSemesterInput
-  }
-
-  export type academic_semestersCreateOrConnectWithoutAcademic_yearsInput = {
+  export type academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput = {
     where: academic_semestersWhereUniqueInput
+    update: XOR<academic_semestersUpdateWithoutAcademic_yearsInput, academic_semestersUncheckedUpdateWithoutAcademic_yearsInput>
     create: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput>
   }
 
-  export type academic_semestersCreateManyAcademic_yearsInputEnvelope = {
-    data: academic_semestersCreateManyAcademic_yearsInput | academic_semestersCreateManyAcademic_yearsInput[]
-    skipDuplicates?: boolean
+  export type academic_semestersUpdateWithWhereUniqueWithoutAcademic_yearsInput = {
+    where: academic_semestersWhereUniqueInput
+    data: XOR<academic_semestersUpdateWithoutAcademic_yearsInput, academic_semestersUncheckedUpdateWithoutAcademic_yearsInput>
+  }
+
+  export type academic_semestersUpdateManyWithWhereWithoutAcademic_yearsInput = {
+    where: academic_semestersScalarWhereInput
+    data: XOR<academic_semestersUpdateManyMutationInput, academic_semestersUncheckedUpdateManyWithoutAcademic_yearsInput>
+  }
+
+  export type academic_semestersScalarWhereInput = {
+    AND?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
+    OR?: academic_semestersScalarWhereInput[]
+    NOT?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
+    id?: StringFilter<"academic_semesters"> | string
+    studentId?: StringFilter<"academic_semesters"> | string
+    academicYearId?: StringNullableFilter<"academic_semesters"> | string | null
+    semesterNumber?: IntFilter<"academic_semesters"> | number
+    status?: EnumAcademicSemesterStatusFilter<"academic_semesters"> | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFilter<"academic_semesters"> | $Enums.AcademicEntryStatus
+    sgpa?: FloatNullableFilter<"academic_semesters"> | number | null
+    totalCredits?: IntFilter<"academic_semesters"> | number
+    creditsEarned?: IntFilter<"academic_semesters"> | number
+    backlogs?: IntFilter<"academic_semesters"> | number
+    createdAt?: DateTimeFilter<"academic_semesters"> | Date | string
+    updatedAt?: DateTimeFilter<"academic_semesters"> | Date | string
   }
 
   export type academic_term_requestsUpsertWithWhereUniqueWithoutAcademic_yearsInput = {
@@ -40276,40 +42062,6 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"import_batches"> | Date | string | null
   }
 
-  export type academic_semestersUpsertWithWhereUniqueWithoutAcademic_yearsInput = {
-    where: academic_semestersWhereUniqueInput
-    update: XOR<academic_semestersUpdateWithoutAcademic_yearsInput, academic_semestersUncheckedUpdateWithoutAcademic_yearsInput>
-    create: XOR<academic_semestersCreateWithoutAcademic_yearsInput, academic_semestersUncheckedCreateWithoutAcademic_yearsInput>
-  }
-
-  export type academic_semestersUpdateWithWhereUniqueWithoutAcademic_yearsInput = {
-    where: academic_semestersWhereUniqueInput
-    data: XOR<academic_semestersUpdateWithoutAcademic_yearsInput, academic_semestersUncheckedUpdateWithoutAcademic_yearsInput>
-  }
-
-  export type academic_semestersUpdateManyWithWhereWithoutAcademic_yearsInput = {
-    where: academic_semestersScalarWhereInput
-    data: XOR<academic_semestersUpdateManyMutationInput, academic_semestersUncheckedUpdateManyWithoutAcademic_yearsInput>
-  }
-
-  export type academic_semestersScalarWhereInput = {
-    AND?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
-    OR?: academic_semestersScalarWhereInput[]
-    NOT?: academic_semestersScalarWhereInput | academic_semestersScalarWhereInput[]
-    id?: StringFilter<"academic_semesters"> | string
-    studentId?: StringFilter<"academic_semesters"> | string
-    academicYearId?: StringNullableFilter<"academic_semesters"> | string | null
-    semesterNumber?: IntFilter<"academic_semesters"> | number
-    status?: EnumAcademicSemesterStatusFilter<"academic_semesters"> | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFilter<"academic_semesters"> | $Enums.AcademicEntryStatus
-    sgpa?: FloatNullableFilter<"academic_semesters"> | number | null
-    totalCredits?: IntFilter<"academic_semesters"> | number
-    creditsEarned?: IntFilter<"academic_semesters"> | number
-    backlogs?: IntFilter<"academic_semesters"> | number
-    createdAt?: DateTimeFilter<"academic_semesters"> | Date | string
-    updatedAt?: DateTimeFilter<"academic_semesters"> | Date | string
-  }
-
   export type academic_yearsCreateWithoutDepartmentsInput = {
     id: string
     name: string
@@ -40318,10 +42070,10 @@ export namespace Prisma {
     status?: $Enums.AcademicYearStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsCreateNestedManyWithoutAcademic_yearsInput
     import_batches?: import_batchesCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsUncheckedCreateWithoutDepartmentsInput = {
@@ -40332,10 +42084,10 @@ export namespace Prisma {
     status?: $Enums.AcademicYearStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsCreateOrConnectWithoutDepartmentsInput = {
@@ -40363,6 +42115,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
@@ -40384,6 +42137,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutDepartments_departments_hodTeacherIdToteachersInput = {
@@ -40398,37 +42152,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
-    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutDepartmentsInput = {
@@ -40438,37 +42192,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutDepartmentsInput = {
@@ -40497,6 +42251,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
 
@@ -40517,6 +42272,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -40585,6 +42341,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
@@ -40606,6 +42363,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type studentsUpsertWithWhereUniqueWithoutDepartmentsInput = {
@@ -40634,29 +42392,29 @@ export namespace Prisma {
     fullName?: StringFilter<"students"> | string
     email?: StringNullableFilter<"students"> | string | null
     phone?: StringNullableFilter<"students"> | string | null
-    profileImage?: StringNullableFilter<"students"> | string | null
     dateOfBirth?: DateTimeNullableFilter<"students"> | Date | string | null
     gender?: EnumGenderNullableFilter<"students"> | $Enums.Gender | null
-    bloodGroup?: EnumBloodGroupNullableFilter<"students"> | $Enums.BloodGroup | null
-    nationality?: StringNullableFilter<"students"> | string | null
-    religion?: StringNullableFilter<"students"> | string | null
-    programme?: StringNullableFilter<"students"> | string | null
-    semester?: StringNullableFilter<"students"> | string | null
-    section?: StringNullableFilter<"students"> | string | null
-    studentType?: EnumStudentTypeNullableFilter<"students"> | $Enums.StudentType | null
-    address?: StringNullableFilter<"students"> | string | null
-    permanentAddress?: StringNullableFilter<"students"> | string | null
-    yearsAtUniversity?: StringNullableFilter<"students"> | string | null
-    totalCredits?: IntNullableFilter<"students"> | number | null
-    currentCGPA?: FloatNullableFilter<"students"> | number | null
-    overallAttendance?: FloatNullableFilter<"students"> | number | null
-    academicStanding?: StringNullableFilter<"students"> | string | null
-    academicSetupCompleted?: BoolFilter<"students"> | boolean
     status?: EnumStudentStatusFilter<"students"> | $Enums.StudentStatus
     departmentId?: StringFilter<"students"> | string
     userAccountId?: StringNullableFilter<"students"> | string | null
     createdAt?: DateTimeFilter<"students"> | Date | string
     updatedAt?: DateTimeFilter<"students"> | Date | string
+    academicSetupCompleted?: BoolFilter<"students"> | boolean
+    academicStanding?: StringNullableFilter<"students"> | string | null
+    address?: StringNullableFilter<"students"> | string | null
+    bloodGroup?: EnumBloodGroupNullableFilter<"students"> | $Enums.BloodGroup | null
+    currentCGPA?: FloatNullableFilter<"students"> | number | null
+    nationality?: StringNullableFilter<"students"> | string | null
+    overallAttendance?: FloatNullableFilter<"students"> | number | null
+    permanentAddress?: StringNullableFilter<"students"> | string | null
+    profileImage?: StringNullableFilter<"students"> | string | null
+    programme?: StringNullableFilter<"students"> | string | null
+    religion?: StringNullableFilter<"students"> | string | null
+    section?: StringNullableFilter<"students"> | string | null
+    semester?: StringNullableFilter<"students"> | string | null
+    studentType?: EnumStudentTypeNullableFilter<"students"> | $Enums.StudentType | null
+    totalCredits?: IntNullableFilter<"students"> | number | null
+    yearsAtUniversity?: StringNullableFilter<"students"> | string | null
   }
 
   export type teachersUpsertWithWhereUniqueWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -40700,10 +42458,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -40720,10 +42478,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -40745,37 +42503,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutDetentionsInput = {
@@ -40785,37 +42543,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutDetentionsInput = {
@@ -40876,10 +42634,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -40896,10 +42654,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -40927,37 +42685,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutDetentionsInput = {
@@ -40967,37 +42725,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type academic_termsUpsertWithoutDetentionsInput = {
@@ -41049,10 +42807,10 @@ export namespace Prisma {
     status?: $Enums.AcademicYearStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsCreateNestedManyWithoutAcademic_yearsInput
     departments: departmentsCreateNestedOneWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsUncheckedCreateWithoutImport_batchesInput = {
@@ -41064,9 +42822,9 @@ export namespace Prisma {
     departmentId: string
     createdAt?: Date | string
     updatedAt: Date | string
+    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_term_requests?: academic_term_requestsUncheckedCreateNestedManyWithoutAcademic_yearsInput
     academic_terms?: academic_termsUncheckedCreateNestedManyWithoutAcademic_yearsInput
-    academic_semesters?: academic_semestersUncheckedCreateNestedManyWithoutAcademic_yearsInput
   }
 
   export type academic_yearsCreateOrConnectWithoutImport_batchesInput = {
@@ -41081,10 +42839,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -41101,10 +42859,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -41166,10 +42924,10 @@ export namespace Prisma {
     status?: EnumAcademicYearStatusFieldUpdateOperationsInput | $Enums.AcademicYearStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUpdateManyWithoutAcademic_yearsNestedInput
     departments?: departmentsUpdateOneRequiredWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsUncheckedUpdateWithoutImport_batchesInput = {
@@ -41181,9 +42939,9 @@ export namespace Prisma {
     departmentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type user_accountsUpsertWithoutImport_batchesInput = {
@@ -41204,10 +42962,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -41224,10 +42982,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -41341,10 +43099,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -41361,10 +43119,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -41386,37 +43144,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutMentor_assignmentsInput = {
@@ -41426,37 +43184,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutMentor_assignmentsInput = {
@@ -41479,6 +43237,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
@@ -41500,6 +43259,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_assignmentsInput = {
@@ -41560,10 +43320,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -41580,10 +43340,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -41611,37 +43371,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutMentor_assignmentsInput = {
@@ -41651,37 +43411,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type teachersUpsertWithoutMentor_assignmentsInput = {
@@ -41710,6 +43470,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
@@ -41731,6 +43492,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type academic_termsUpsertWithoutMentor_assignmentsInput = {
@@ -41789,6 +43551,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
@@ -41810,6 +43573,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -41832,6 +43596,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
@@ -41853,6 +43618,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersInput = {
@@ -41867,10 +43633,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -41887,10 +43653,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -41920,6 +43686,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
   }
@@ -41941,6 +43708,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersInput = {
@@ -41955,10 +43723,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -41975,10 +43743,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -42000,37 +43768,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutMentor_transfer_requestsInput = {
@@ -42040,37 +43808,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutMentor_transfer_requestsInput = {
@@ -42139,6 +43907,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
@@ -42160,6 +43929,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type teachersUpsertWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersInput = {
@@ -42188,6 +43958,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
@@ -42209,6 +43980,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type user_accountsUpsertWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput = {
@@ -42229,10 +44001,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -42249,10 +44021,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -42288,6 +44060,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
@@ -42309,6 +44082,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type user_accountsUpsertWithoutMentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsInput = {
@@ -42329,10 +44103,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -42349,10 +44123,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -42380,37 +44154,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutMentor_transfer_requestsInput = {
@@ -42420,37 +44194,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type academic_termsUpsertWithoutMentor_transfer_requestsInput = {
@@ -42501,10 +44275,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -42521,10 +44295,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -42557,10 +44331,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -42577,10 +44351,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -42597,37 +44371,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutStudent_enrollmentsInput = {
@@ -42637,37 +44411,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutStudent_enrollmentsInput = {
@@ -42728,37 +44502,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutStudent_enrollmentsInput = {
@@ -42768,37 +44542,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type academic_termsUpsertWithoutStudent_enrollmentsInput = {
@@ -42840,6 +44614,84 @@ export namespace Prisma {
     detentions?: detentionsUncheckedUpdateManyWithoutAcademic_termsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutAcademic_termsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutAcademic_termsNestedInput
+  }
+
+  export type academic_backlogsCreateWithoutStudentsInput = {
+    id: string
+    subjectCode: string
+    subjectName: string
+    semesterNumber: number
+    status?: $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: number | null
+    clearedGrade?: string | null
+    clearedMarks?: number | null
+    clearedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type academic_backlogsUncheckedCreateWithoutStudentsInput = {
+    id: string
+    subjectCode: string
+    subjectName: string
+    semesterNumber: number
+    status?: $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: number | null
+    clearedGrade?: string | null
+    clearedMarks?: number | null
+    clearedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type academic_backlogsCreateOrConnectWithoutStudentsInput = {
+    where: academic_backlogsWhereUniqueInput
+    create: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type academic_backlogsCreateManyStudentsInputEnvelope = {
+    data: academic_backlogsCreateManyStudentsInput | academic_backlogsCreateManyStudentsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type academic_semestersCreateWithoutStudentsInput = {
+    id: string
+    semesterNumber: number
+    status?: $Enums.AcademicSemesterStatus
+    entryStatus?: $Enums.AcademicEntryStatus
+    sgpa?: number | null
+    totalCredits?: number
+    creditsEarned?: number
+    backlogs?: number
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academic_years?: academic_yearsCreateNestedOneWithoutAcademic_semestersInput
+    subjects?: academic_subjectsCreateNestedManyWithoutAcademicSemesterInput
+  }
+
+  export type academic_semestersUncheckedCreateWithoutStudentsInput = {
+    id: string
+    academicYearId?: string | null
+    semesterNumber: number
+    status?: $Enums.AcademicSemesterStatus
+    entryStatus?: $Enums.AcademicEntryStatus
+    sgpa?: number | null
+    totalCredits?: number
+    creditsEarned?: number
+    backlogs?: number
+    createdAt?: Date | string
+    updatedAt: Date | string
+    subjects?: academic_subjectsUncheckedCreateNestedManyWithoutAcademicSemesterInput
+  }
+
+  export type academic_semestersCreateOrConnectWithoutStudentsInput = {
+    where: academic_semestersWhereUniqueInput
+    create: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type academic_semestersCreateManyStudentsInputEnvelope = {
+    data: academic_semestersCreateManyStudentsInput | academic_semestersCreateManyStudentsInput[]
+    skipDuplicates?: boolean
   }
 
   export type detentionsCreateWithoutStudentsInput = {
@@ -42954,110 +44806,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type student_enrollmentsCreateWithoutStudentsInput = {
-    id: string
-    semesterNumber: number
-    status?: $Enums.EnrollmentStatus
-    enrolledAt?: Date | string
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    academic_terms: academic_termsCreateNestedOneWithoutStudent_enrollmentsInput
-  }
-
-  export type student_enrollmentsUncheckedCreateWithoutStudentsInput = {
-    id: string
-    termId: string
-    semesterNumber: number
-    status?: $Enums.EnrollmentStatus
-    enrolledAt?: Date | string
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-  }
-
-  export type student_enrollmentsCreateOrConnectWithoutStudentsInput = {
-    where: student_enrollmentsWhereUniqueInput
-    create: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type student_enrollmentsCreateManyStudentsInputEnvelope = {
-    data: student_enrollmentsCreateManyStudentsInput | student_enrollmentsCreateManyStudentsInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type departmentsCreateWithoutStudentsInput = {
-    id: string
-    name: string
-    code: string
-    createdAt?: Date | string
-    updatedAt: Date | string
-    academic_years?: academic_yearsCreateNestedManyWithoutDepartmentsInput
-    teachers_departments_hodTeacherIdToteachers?: teachersCreateNestedOneWithoutDepartments_departments_hodTeacherIdToteachersInput
-    teachers_teachers_departmentIdTodepartments?: teachersCreateNestedManyWithoutDepartments_teachers_departmentIdTodepartmentsInput
-  }
-
-  export type departmentsUncheckedCreateWithoutStudentsInput = {
-    id: string
-    name: string
-    code: string
-    hodTeacherId?: string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    academic_years?: academic_yearsUncheckedCreateNestedManyWithoutDepartmentsInput
-    teachers_teachers_departmentIdTodepartments?: teachersUncheckedCreateNestedManyWithoutDepartments_teachers_departmentIdTodepartmentsInput
-  }
-
-  export type departmentsCreateOrConnectWithoutStudentsInput = {
-    where: departmentsWhereUniqueInput
-    create: XOR<departmentsCreateWithoutStudentsInput, departmentsUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type user_accountsCreateWithoutStudentsInput = {
-    id: string
-    username: string
-    email?: string | null
-    password?: string | null
-    role: $Enums.UserRole
-    isActive?: boolean
-    mustChangePassword?: boolean
-    lastLogin?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
-    import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
-    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
-    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
-    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
-    otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
-    teachers?: teachersCreateNestedOneWithoutUser_accountsInput
-  }
-
-  export type user_accountsUncheckedCreateWithoutStudentsInput = {
-    id: string
-    username: string
-    email?: string | null
-    password?: string | null
-    role: $Enums.UserRole
-    isActive?: boolean
-    mustChangePassword?: boolean
-    lastLogin?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
-    import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
-    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
-    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
-    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
-    otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
-    teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
-  }
-
-  export type user_accountsCreateOrConnectWithoutStudentsInput = {
-    where: user_accountsWhereUniqueInput
-    create: XOR<user_accountsCreateWithoutStudentsInput, user_accountsUncheckedCreateWithoutStudentsInput>
-  }
-
   export type student_contact_detailsCreateWithoutStudentInput = {
     id: string
     permanentAddress?: string | null
@@ -43105,6 +44853,76 @@ export namespace Prisma {
   export type student_contact_detailsCreateOrConnectWithoutStudentInput = {
     where: student_contact_detailsWhereUniqueInput
     create: XOR<student_contact_detailsCreateWithoutStudentInput, student_contact_detailsUncheckedCreateWithoutStudentInput>
+  }
+
+  export type student_documentsCreateWithoutStudentInput = {
+    id: string
+    documentName: string
+    category: $Enums.DocumentCategory
+    description?: string | null
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type student_documentsUncheckedCreateWithoutStudentInput = {
+    id: string
+    documentName: string
+    category: $Enums.DocumentCategory
+    description?: string | null
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type student_documentsCreateOrConnectWithoutStudentInput = {
+    where: student_documentsWhereUniqueInput
+    create: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput>
+  }
+
+  export type student_documentsCreateManyStudentInputEnvelope = {
+    data: student_documentsCreateManyStudentInput | student_documentsCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type student_enrollmentsCreateWithoutStudentsInput = {
+    id: string
+    semesterNumber: number
+    status?: $Enums.EnrollmentStatus
+    enrolledAt?: Date | string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academic_terms: academic_termsCreateNestedOneWithoutStudent_enrollmentsInput
+  }
+
+  export type student_enrollmentsUncheckedCreateWithoutStudentsInput = {
+    id: string
+    termId: string
+    semesterNumber: number
+    status?: $Enums.EnrollmentStatus
+    enrolledAt?: Date | string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type student_enrollmentsCreateOrConnectWithoutStudentsInput = {
+    where: student_enrollmentsWhereUniqueInput
+    create: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type student_enrollmentsCreateManyStudentsInputEnvelope = {
+    data: student_enrollmentsCreateManyStudentsInput | student_enrollmentsCreateManyStudentsInput[]
+    skipDuplicates?: boolean
   }
 
   export type student_parent_detailsCreateWithoutStudentInput = {
@@ -43164,120 +44982,126 @@ export namespace Prisma {
     create: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
   }
 
-  export type student_documentsCreateWithoutStudentInput = {
+  export type departmentsCreateWithoutStudentsInput = {
     id: string
-    documentName: string
-    category: $Enums.DocumentCategory
-    description?: string | null
-    fileType: string
-    fileSize: number
-    cloudinaryPublicId: string
-    fileUrl: string
-    resourceType: string
-    uploadedAt?: Date | string
-    updatedAt: Date | string
-  }
-
-  export type student_documentsUncheckedCreateWithoutStudentInput = {
-    id: string
-    documentName: string
-    category: $Enums.DocumentCategory
-    description?: string | null
-    fileType: string
-    fileSize: number
-    cloudinaryPublicId: string
-    fileUrl: string
-    resourceType: string
-    uploadedAt?: Date | string
-    updatedAt: Date | string
-  }
-
-  export type student_documentsCreateOrConnectWithoutStudentInput = {
-    where: student_documentsWhereUniqueInput
-    create: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput>
-  }
-
-  export type student_documentsCreateManyStudentInputEnvelope = {
-    data: student_documentsCreateManyStudentInput | student_documentsCreateManyStudentInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type academic_semestersCreateWithoutStudentsInput = {
-    id: string
-    semesterNumber: number
-    status?: $Enums.AcademicSemesterStatus
-    entryStatus?: $Enums.AcademicEntryStatus
-    sgpa?: number | null
-    totalCredits?: number
-    creditsEarned?: number
-    backlogs?: number
+    name: string
+    code: string
     createdAt?: Date | string
     updatedAt: Date | string
-    academic_years?: academic_yearsCreateNestedOneWithoutAcademic_semestersInput
-    subjects?: academic_subjectsCreateNestedManyWithoutAcademicSemesterInput
+    academic_years?: academic_yearsCreateNestedManyWithoutDepartmentsInput
+    teachers_departments_hodTeacherIdToteachers?: teachersCreateNestedOneWithoutDepartments_departments_hodTeacherIdToteachersInput
+    teachers_teachers_departmentIdTodepartments?: teachersCreateNestedManyWithoutDepartments_teachers_departmentIdTodepartmentsInput
   }
 
-  export type academic_semestersUncheckedCreateWithoutStudentsInput = {
+  export type departmentsUncheckedCreateWithoutStudentsInput = {
     id: string
-    academicYearId?: string | null
-    semesterNumber: number
-    status?: $Enums.AcademicSemesterStatus
-    entryStatus?: $Enums.AcademicEntryStatus
-    sgpa?: number | null
-    totalCredits?: number
-    creditsEarned?: number
-    backlogs?: number
+    name: string
+    code: string
+    hodTeacherId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
-    subjects?: academic_subjectsUncheckedCreateNestedManyWithoutAcademicSemesterInput
+    academic_years?: academic_yearsUncheckedCreateNestedManyWithoutDepartmentsInput
+    teachers_teachers_departmentIdTodepartments?: teachersUncheckedCreateNestedManyWithoutDepartments_teachers_departmentIdTodepartmentsInput
   }
 
-  export type academic_semestersCreateOrConnectWithoutStudentsInput = {
-    where: academic_semestersWhereUniqueInput
-    create: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput>
+  export type departmentsCreateOrConnectWithoutStudentsInput = {
+    where: departmentsWhereUniqueInput
+    create: XOR<departmentsCreateWithoutStudentsInput, departmentsUncheckedCreateWithoutStudentsInput>
   }
 
-  export type academic_semestersCreateManyStudentsInputEnvelope = {
-    data: academic_semestersCreateManyStudentsInput | academic_semestersCreateManyStudentsInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type academic_backlogsCreateWithoutStudentsInput = {
+  export type user_accountsCreateWithoutStudentsInput = {
     id: string
-    subjectCode: string
-    subjectName: string
-    semesterNumber: number
-    status?: $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: number | null
-    clearedGrade?: string | null
-    clearedMarks?: number | null
-    clearedAt?: Date | string | null
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
+    detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
+    teachers?: teachersCreateNestedOneWithoutUser_accountsInput
   }
 
-  export type academic_backlogsUncheckedCreateWithoutStudentsInput = {
+  export type user_accountsUncheckedCreateWithoutStudentsInput = {
     id: string
-    subjectCode: string
-    subjectName: string
-    semesterNumber: number
-    status?: $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: number | null
-    clearedGrade?: string | null
-    clearedMarks?: number | null
-    clearedAt?: Date | string | null
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
+    detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
+    teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
   }
 
-  export type academic_backlogsCreateOrConnectWithoutStudentsInput = {
+  export type user_accountsCreateOrConnectWithoutStudentsInput = {
+    where: user_accountsWhereUniqueInput
+    create: XOR<user_accountsCreateWithoutStudentsInput, user_accountsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput = {
     where: academic_backlogsWhereUniqueInput
+    update: XOR<academic_backlogsUpdateWithoutStudentsInput, academic_backlogsUncheckedUpdateWithoutStudentsInput>
     create: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput>
   }
 
-  export type academic_backlogsCreateManyStudentsInputEnvelope = {
-    data: academic_backlogsCreateManyStudentsInput | academic_backlogsCreateManyStudentsInput[]
-    skipDuplicates?: boolean
+  export type academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: academic_backlogsWhereUniqueInput
+    data: XOR<academic_backlogsUpdateWithoutStudentsInput, academic_backlogsUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type academic_backlogsUpdateManyWithWhereWithoutStudentsInput = {
+    where: academic_backlogsScalarWhereInput
+    data: XOR<academic_backlogsUpdateManyMutationInput, academic_backlogsUncheckedUpdateManyWithoutStudentsInput>
+  }
+
+  export type academic_backlogsScalarWhereInput = {
+    AND?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
+    OR?: academic_backlogsScalarWhereInput[]
+    NOT?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
+    id?: StringFilter<"academic_backlogs"> | string
+    studentId?: StringFilter<"academic_backlogs"> | string
+    subjectCode?: StringFilter<"academic_backlogs"> | string
+    subjectName?: StringFilter<"academic_backlogs"> | string
+    semesterNumber?: IntFilter<"academic_backlogs"> | number
+    status?: EnumAcademicBacklogStatusFilter<"academic_backlogs"> | $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: IntNullableFilter<"academic_backlogs"> | number | null
+    clearedGrade?: StringNullableFilter<"academic_backlogs"> | string | null
+    clearedMarks?: FloatNullableFilter<"academic_backlogs"> | number | null
+    clearedAt?: DateTimeNullableFilter<"academic_backlogs"> | Date | string | null
+    createdAt?: DateTimeFilter<"academic_backlogs"> | Date | string
+    updatedAt?: DateTimeFilter<"academic_backlogs"> | Date | string
+  }
+
+  export type academic_semestersUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: academic_semestersWhereUniqueInput
+    update: XOR<academic_semestersUpdateWithoutStudentsInput, academic_semestersUncheckedUpdateWithoutStudentsInput>
+    create: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type academic_semestersUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: academic_semestersWhereUniqueInput
+    data: XOR<academic_semestersUpdateWithoutStudentsInput, academic_semestersUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type academic_semestersUpdateManyWithWhereWithoutStudentsInput = {
+    where: academic_semestersScalarWhereInput
+    data: XOR<academic_semestersUpdateManyMutationInput, academic_semestersUncheckedUpdateManyWithoutStudentsInput>
   }
 
   export type detentionsUpsertWithWhereUniqueWithoutStudentsInput = {
@@ -43326,106 +45150,6 @@ export namespace Prisma {
   export type mentor_transfer_requestsUpdateManyWithWhereWithoutStudentsInput = {
     where: mentor_transfer_requestsScalarWhereInput
     data: XOR<mentor_transfer_requestsUpdateManyMutationInput, mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsInput>
-  }
-
-  export type student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput = {
-    where: student_enrollmentsWhereUniqueInput
-    update: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
-    create: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput = {
-    where: student_enrollmentsWhereUniqueInput
-    data: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type student_enrollmentsUpdateManyWithWhereWithoutStudentsInput = {
-    where: student_enrollmentsScalarWhereInput
-    data: XOR<student_enrollmentsUpdateManyMutationInput, student_enrollmentsUncheckedUpdateManyWithoutStudentsInput>
-  }
-
-  export type departmentsUpsertWithoutStudentsInput = {
-    update: XOR<departmentsUpdateWithoutStudentsInput, departmentsUncheckedUpdateWithoutStudentsInput>
-    create: XOR<departmentsCreateWithoutStudentsInput, departmentsUncheckedCreateWithoutStudentsInput>
-    where?: departmentsWhereInput
-  }
-
-  export type departmentsUpdateToOneWithWhereWithoutStudentsInput = {
-    where?: departmentsWhereInput
-    data: XOR<departmentsUpdateWithoutStudentsInput, departmentsUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type departmentsUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    academic_years?: academic_yearsUpdateManyWithoutDepartmentsNestedInput
-    teachers_departments_hodTeacherIdToteachers?: teachersUpdateOneWithoutDepartments_departments_hodTeacherIdToteachersNestedInput
-    teachers_teachers_departmentIdTodepartments?: teachersUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsNestedInput
-  }
-
-  export type departmentsUncheckedUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    code?: StringFieldUpdateOperationsInput | string
-    hodTeacherId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    academic_years?: academic_yearsUncheckedUpdateManyWithoutDepartmentsNestedInput
-    teachers_teachers_departmentIdTodepartments?: teachersUncheckedUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsNestedInput
-  }
-
-  export type user_accountsUpsertWithoutStudentsInput = {
-    update: XOR<user_accountsUpdateWithoutStudentsInput, user_accountsUncheckedUpdateWithoutStudentsInput>
-    create: XOR<user_accountsCreateWithoutStudentsInput, user_accountsUncheckedCreateWithoutStudentsInput>
-    where?: user_accountsWhereInput
-  }
-
-  export type user_accountsUpdateToOneWithWhereWithoutStudentsInput = {
-    where?: user_accountsWhereInput
-    data: XOR<user_accountsUpdateWithoutStudentsInput, user_accountsUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type user_accountsUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
-    import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
-    mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
-    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
-    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
-    otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
-    teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
-  }
-
-  export type user_accountsUncheckedUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    username?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    password?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
-    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
-    import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
-    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
-    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
-    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
-    otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
-    teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
   export type student_contact_detailsUpsertWithoutStudentInput = {
@@ -43481,6 +45205,56 @@ export namespace Prisma {
     allowWhatsappCommunication?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_documentsUpsertWithWhereUniqueWithoutStudentInput = {
+    where: student_documentsWhereUniqueInput
+    update: XOR<student_documentsUpdateWithoutStudentInput, student_documentsUncheckedUpdateWithoutStudentInput>
+    create: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput>
+  }
+
+  export type student_documentsUpdateWithWhereUniqueWithoutStudentInput = {
+    where: student_documentsWhereUniqueInput
+    data: XOR<student_documentsUpdateWithoutStudentInput, student_documentsUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type student_documentsUpdateManyWithWhereWithoutStudentInput = {
+    where: student_documentsScalarWhereInput
+    data: XOR<student_documentsUpdateManyMutationInput, student_documentsUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type student_documentsScalarWhereInput = {
+    AND?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
+    OR?: student_documentsScalarWhereInput[]
+    NOT?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
+    id?: StringFilter<"student_documents"> | string
+    studentId?: StringFilter<"student_documents"> | string
+    documentName?: StringFilter<"student_documents"> | string
+    category?: EnumDocumentCategoryFilter<"student_documents"> | $Enums.DocumentCategory
+    description?: StringNullableFilter<"student_documents"> | string | null
+    fileType?: StringFilter<"student_documents"> | string
+    fileSize?: IntFilter<"student_documents"> | number
+    cloudinaryPublicId?: StringFilter<"student_documents"> | string
+    fileUrl?: StringFilter<"student_documents"> | string
+    resourceType?: StringFilter<"student_documents"> | string
+    uploadedAt?: DateTimeFilter<"student_documents"> | Date | string
+    updatedAt?: DateTimeFilter<"student_documents"> | Date | string
+  }
+
+  export type student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: student_enrollmentsWhereUniqueInput
+    update: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
+    create: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: student_enrollmentsWhereUniqueInput
+    data: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type student_enrollmentsUpdateManyWithWhereWithoutStudentsInput = {
+    where: student_enrollmentsScalarWhereInput
+    data: XOR<student_enrollmentsUpdateManyMutationInput, student_enrollmentsUncheckedUpdateManyWithoutStudentsInput>
   }
 
   export type student_parent_detailsUpsertWithoutStudentInput = {
@@ -43546,88 +45320,88 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type student_documentsUpsertWithWhereUniqueWithoutStudentInput = {
-    where: student_documentsWhereUniqueInput
-    update: XOR<student_documentsUpdateWithoutStudentInput, student_documentsUncheckedUpdateWithoutStudentInput>
-    create: XOR<student_documentsCreateWithoutStudentInput, student_documentsUncheckedCreateWithoutStudentInput>
+  export type departmentsUpsertWithoutStudentsInput = {
+    update: XOR<departmentsUpdateWithoutStudentsInput, departmentsUncheckedUpdateWithoutStudentsInput>
+    create: XOR<departmentsCreateWithoutStudentsInput, departmentsUncheckedCreateWithoutStudentsInput>
+    where?: departmentsWhereInput
   }
 
-  export type student_documentsUpdateWithWhereUniqueWithoutStudentInput = {
-    where: student_documentsWhereUniqueInput
-    data: XOR<student_documentsUpdateWithoutStudentInput, student_documentsUncheckedUpdateWithoutStudentInput>
+  export type departmentsUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: departmentsWhereInput
+    data: XOR<departmentsUpdateWithoutStudentsInput, departmentsUncheckedUpdateWithoutStudentsInput>
   }
 
-  export type student_documentsUpdateManyWithWhereWithoutStudentInput = {
-    where: student_documentsScalarWhereInput
-    data: XOR<student_documentsUpdateManyMutationInput, student_documentsUncheckedUpdateManyWithoutStudentInput>
+  export type departmentsUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_years?: academic_yearsUpdateManyWithoutDepartmentsNestedInput
+    teachers_departments_hodTeacherIdToteachers?: teachersUpdateOneWithoutDepartments_departments_hodTeacherIdToteachersNestedInput
+    teachers_teachers_departmentIdTodepartments?: teachersUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsNestedInput
   }
 
-  export type student_documentsScalarWhereInput = {
-    AND?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
-    OR?: student_documentsScalarWhereInput[]
-    NOT?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
-    id?: StringFilter<"student_documents"> | string
-    studentId?: StringFilter<"student_documents"> | string
-    documentName?: StringFilter<"student_documents"> | string
-    category?: EnumDocumentCategoryFilter<"student_documents"> | $Enums.DocumentCategory
-    description?: StringNullableFilter<"student_documents"> | string | null
-    fileType?: StringFilter<"student_documents"> | string
-    fileSize?: IntFilter<"student_documents"> | number
-    cloudinaryPublicId?: StringFilter<"student_documents"> | string
-    fileUrl?: StringFilter<"student_documents"> | string
-    resourceType?: StringFilter<"student_documents"> | string
-    uploadedAt?: DateTimeFilter<"student_documents"> | Date | string
-    updatedAt?: DateTimeFilter<"student_documents"> | Date | string
+  export type departmentsUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    hodTeacherId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_years?: academic_yearsUncheckedUpdateManyWithoutDepartmentsNestedInput
+    teachers_teachers_departmentIdTodepartments?: teachersUncheckedUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsNestedInput
   }
 
-  export type academic_semestersUpsertWithWhereUniqueWithoutStudentsInput = {
-    where: academic_semestersWhereUniqueInput
-    update: XOR<academic_semestersUpdateWithoutStudentsInput, academic_semestersUncheckedUpdateWithoutStudentsInput>
-    create: XOR<academic_semestersCreateWithoutStudentsInput, academic_semestersUncheckedCreateWithoutStudentsInput>
+  export type user_accountsUpsertWithoutStudentsInput = {
+    update: XOR<user_accountsUpdateWithoutStudentsInput, user_accountsUncheckedUpdateWithoutStudentsInput>
+    create: XOR<user_accountsCreateWithoutStudentsInput, user_accountsUncheckedCreateWithoutStudentsInput>
+    where?: user_accountsWhereInput
   }
 
-  export type academic_semestersUpdateWithWhereUniqueWithoutStudentsInput = {
-    where: academic_semestersWhereUniqueInput
-    data: XOR<academic_semestersUpdateWithoutStudentsInput, academic_semestersUncheckedUpdateWithoutStudentsInput>
+  export type user_accountsUpdateToOneWithWhereWithoutStudentsInput = {
+    where?: user_accountsWhereInput
+    data: XOR<user_accountsUpdateWithoutStudentsInput, user_accountsUncheckedUpdateWithoutStudentsInput>
   }
 
-  export type academic_semestersUpdateManyWithWhereWithoutStudentsInput = {
-    where: academic_semestersScalarWhereInput
-    data: XOR<academic_semestersUpdateManyMutationInput, academic_semestersUncheckedUpdateManyWithoutStudentsInput>
+  export type user_accountsUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
+    teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
   }
 
-  export type academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput = {
-    where: academic_backlogsWhereUniqueInput
-    update: XOR<academic_backlogsUpdateWithoutStudentsInput, academic_backlogsUncheckedUpdateWithoutStudentsInput>
-    create: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type academic_backlogsUpdateWithWhereUniqueWithoutStudentsInput = {
-    where: academic_backlogsWhereUniqueInput
-    data: XOR<academic_backlogsUpdateWithoutStudentsInput, academic_backlogsUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type academic_backlogsUpdateManyWithWhereWithoutStudentsInput = {
-    where: academic_backlogsScalarWhereInput
-    data: XOR<academic_backlogsUpdateManyMutationInput, academic_backlogsUncheckedUpdateManyWithoutStudentsInput>
-  }
-
-  export type academic_backlogsScalarWhereInput = {
-    AND?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
-    OR?: academic_backlogsScalarWhereInput[]
-    NOT?: academic_backlogsScalarWhereInput | academic_backlogsScalarWhereInput[]
-    id?: StringFilter<"academic_backlogs"> | string
-    studentId?: StringFilter<"academic_backlogs"> | string
-    subjectCode?: StringFilter<"academic_backlogs"> | string
-    subjectName?: StringFilter<"academic_backlogs"> | string
-    semesterNumber?: IntFilter<"academic_backlogs"> | number
-    status?: EnumAcademicBacklogStatusFilter<"academic_backlogs"> | $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: IntNullableFilter<"academic_backlogs"> | number | null
-    clearedGrade?: StringNullableFilter<"academic_backlogs"> | string | null
-    clearedMarks?: FloatNullableFilter<"academic_backlogs"> | number | null
-    clearedAt?: DateTimeNullableFilter<"academic_backlogs"> | Date | string | null
-    createdAt?: DateTimeFilter<"academic_backlogs"> | Date | string
-    updatedAt?: DateTimeFilter<"academic_backlogs"> | Date | string
+  export type user_accountsUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
   export type studentsCreateWithoutContactDetailsInput = {
@@ -43637,37 +45411,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutContactDetailsInput = {
@@ -43677,37 +45451,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
+    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
-    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutContactDetailsInput = {
@@ -43733,37 +45507,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutContactDetailsInput = {
@@ -43773,37 +45547,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
+    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsCreateWithoutParentDetailsInput = {
@@ -43813,37 +45587,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutParentDetailsInput = {
@@ -43853,37 +45627,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutParentDetailsInput = {
@@ -43909,37 +45683,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutParentDetailsInput = {
@@ -43949,37 +45723,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsCreateWithoutDocumentsInput = {
@@ -43989,37 +45763,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutDocumentsInput = {
@@ -44029,37 +45803,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutDocumentsInput = {
@@ -44085,37 +45859,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutDocumentsInput = {
@@ -44125,122 +45899,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
-  }
-
-  export type studentsCreateWithoutAcademicSemestersInput = {
-    id: string
-    registerNumber: string
-    admissionNumber?: string | null
-    fullName: string
-    email?: string | null
-    phone?: string | null
-    profileImage?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
-    status?: $Enums.StudentStatus
-    createdAt?: Date | string
-    updatedAt: Date | string
-    detentions?: detentionsCreateNestedManyWithoutStudentsInput
-    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
-    mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
-    departments: departmentsCreateNestedOneWithoutStudentsInput
-    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
-  }
-
-  export type studentsUncheckedCreateWithoutAcademicSemestersInput = {
-    id: string
-    registerNumber: string
-    admissionNumber?: string | null
-    fullName: string
-    email?: string | null
-    phone?: string | null
-    profileImage?: string | null
-    dateOfBirth?: Date | string | null
-    gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
-    status?: $Enums.StudentStatus
-    departmentId: string
-    userAccountId?: string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-    detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
-    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
-    mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
-    contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
-    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
-  }
-
-  export type studentsCreateOrConnectWithoutAcademicSemestersInput = {
-    where: studentsWhereUniqueInput
-    create: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
   }
 
   export type academic_yearsCreateWithoutAcademic_semestersInput = {
@@ -44274,6 +45963,91 @@ export namespace Prisma {
   export type academic_yearsCreateOrConnectWithoutAcademic_semestersInput = {
     where: academic_yearsWhereUniqueInput
     create: XOR<academic_yearsCreateWithoutAcademic_semestersInput, academic_yearsUncheckedCreateWithoutAcademic_semestersInput>
+  }
+
+  export type studentsCreateWithoutAcademicSemestersInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    departments: departmentsCreateNestedOneWithoutStudentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+  }
+
+  export type studentsUncheckedCreateWithoutAcademicSemestersInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+  }
+
+  export type studentsCreateOrConnectWithoutAcademicSemestersInput = {
+    where: studentsWhereUniqueInput
+    create: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
   }
 
   export type academic_subjectsCreateWithoutAcademicSemesterInput = {
@@ -44328,97 +46102,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type studentsUpsertWithoutAcademicSemestersInput = {
-    update: XOR<studentsUpdateWithoutAcademicSemestersInput, studentsUncheckedUpdateWithoutAcademicSemestersInput>
-    create: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
-    where?: studentsWhereInput
-  }
-
-  export type studentsUpdateToOneWithWhereWithoutAcademicSemestersInput = {
-    where?: studentsWhereInput
-    data: XOR<studentsUpdateWithoutAcademicSemestersInput, studentsUncheckedUpdateWithoutAcademicSemestersInput>
-  }
-
-  export type studentsUpdateWithoutAcademicSemestersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    registerNumber?: StringFieldUpdateOperationsInput | string
-    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    detentions?: detentionsUpdateManyWithoutStudentsNestedInput
-    mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
-    mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
-    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
-    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
-  }
-
-  export type studentsUncheckedUpdateWithoutAcademicSemestersInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    registerNumber?: StringFieldUpdateOperationsInput | string
-    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
-    fullName?: StringFieldUpdateOperationsInput | string
-    email?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
-    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
-    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
-    departmentId?: StringFieldUpdateOperationsInput | string
-    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
-    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
-    mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
-  }
-
   export type academic_yearsUpsertWithoutAcademic_semestersInput = {
     update: XOR<academic_yearsUpdateWithoutAcademic_semestersInput, academic_yearsUncheckedUpdateWithoutAcademic_semestersInput>
     create: XOR<academic_yearsCreateWithoutAcademic_semestersInput, academic_yearsUncheckedCreateWithoutAcademic_semestersInput>
@@ -44456,6 +46139,97 @@ export namespace Prisma {
     academic_term_requests?: academic_term_requestsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutAcademic_yearsNestedInput
+  }
+
+  export type studentsUpsertWithoutAcademicSemestersInput = {
+    update: XOR<studentsUpdateWithoutAcademicSemestersInput, studentsUncheckedUpdateWithoutAcademicSemestersInput>
+    create: XOR<studentsCreateWithoutAcademicSemestersInput, studentsUncheckedCreateWithoutAcademicSemestersInput>
+    where?: studentsWhereInput
+  }
+
+  export type studentsUpdateToOneWithWhereWithoutAcademicSemestersInput = {
+    where?: studentsWhereInput
+    data: XOR<studentsUpdateWithoutAcademicSemestersInput, studentsUncheckedUpdateWithoutAcademicSemestersInput>
+  }
+
+  export type studentsUpdateWithoutAcademicSemestersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+  }
+
+  export type studentsUncheckedUpdateWithoutAcademicSemestersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type academic_subjectsUpsertWithWhereUniqueWithoutAcademicSemesterInput = {
@@ -44510,8 +46284,8 @@ export namespace Prisma {
     backlogs?: number
     createdAt?: Date | string
     updatedAt: Date | string
-    students: studentsCreateNestedOneWithoutAcademicSemestersInput
     academic_years?: academic_yearsCreateNestedOneWithoutAcademic_semestersInput
+    students: studentsCreateNestedOneWithoutAcademicSemestersInput
   }
 
   export type academic_semestersUncheckedCreateWithoutSubjectsInput = {
@@ -44556,8 +46330,8 @@ export namespace Prisma {
     backlogs?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    students?: studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput
     academic_years?: academic_yearsUpdateOneWithoutAcademic_semestersNestedInput
+    students?: studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput
   }
 
   export type academic_semestersUncheckedUpdateWithoutSubjectsInput = {
@@ -44582,37 +46356,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
-    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
-    documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutAcademicBacklogsInput = {
@@ -44622,37 +46396,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutAcademicBacklogsInput = {
@@ -44678,37 +46452,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
-    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
-    documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutAcademicBacklogsInput = {
@@ -44718,37 +46492,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type departmentsCreateWithoutTeachers_departments_hodTeacherIdToteachersInput = {
@@ -44944,6 +46718,51 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type teacher_profilesCreateWithoutTeachersInput = {
+    id: string
+    profileImage?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    office?: string | null
+    officeHours?: string | null
+    about?: string | null
+    highlightOne?: string | null
+    highlightTwo?: string | null
+    highlightThree?: string | null
+    linkedIn?: string | null
+    googleScholar?: string | null
+    researchGate?: string | null
+    orcid?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type teacher_profilesUncheckedCreateWithoutTeachersInput = {
+    id: string
+    profileImage?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    office?: string | null
+    officeHours?: string | null
+    about?: string | null
+    highlightOne?: string | null
+    highlightTwo?: string | null
+    highlightThree?: string | null
+    linkedIn?: string | null
+    googleScholar?: string | null
+    researchGate?: string | null
+    orcid?: string | null
+    website?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type teacher_profilesCreateOrConnectWithoutTeachersInput = {
+    where: teacher_profilesWhereUniqueInput
+    create: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
+  }
+
   export type departmentsCreateWithoutTeachers_teachers_departmentIdTodepartmentsInput = {
     id: string
     name: string
@@ -44978,10 +46797,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -44998,10 +46817,10 @@ export namespace Prisma {
     password?: string | null
     role: $Enums.UserRole
     isActive?: boolean
-    mustChangePassword?: boolean
     lastLogin?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    mustChangePassword?: boolean
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -45113,6 +46932,57 @@ export namespace Prisma {
     data: XOR<mentor_transfer_requestsUpdateManyMutationInput, mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput>
   }
 
+  export type teacher_profilesUpsertWithoutTeachersInput = {
+    update: XOR<teacher_profilesUpdateWithoutTeachersInput, teacher_profilesUncheckedUpdateWithoutTeachersInput>
+    create: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
+    where?: teacher_profilesWhereInput
+  }
+
+  export type teacher_profilesUpdateToOneWithWhereWithoutTeachersInput = {
+    where?: teacher_profilesWhereInput
+    data: XOR<teacher_profilesUpdateWithoutTeachersInput, teacher_profilesUncheckedUpdateWithoutTeachersInput>
+  }
+
+  export type teacher_profilesUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightOne?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightTwo?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightThree?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedIn?: NullableStringFieldUpdateOperationsInput | string | null
+    googleScholar?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGate?: NullableStringFieldUpdateOperationsInput | string | null
+    orcid?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type teacher_profilesUncheckedUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightOne?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightTwo?: NullableStringFieldUpdateOperationsInput | string | null
+    highlightThree?: NullableStringFieldUpdateOperationsInput | string | null
+    linkedIn?: NullableStringFieldUpdateOperationsInput | string | null
+    googleScholar?: NullableStringFieldUpdateOperationsInput | string | null
+    researchGate?: NullableStringFieldUpdateOperationsInput | string | null
+    orcid?: NullableStringFieldUpdateOperationsInput | string | null
+    website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type departmentsUpsertWithoutTeachers_teachers_departmentIdTodepartmentsInput = {
     update: XOR<departmentsUpdateWithoutTeachers_teachers_departmentIdTodepartmentsInput, departmentsUncheckedUpdateWithoutTeachers_teachers_departmentIdTodepartmentsInput>
     create: XOR<departmentsCreateWithoutTeachers_teachers_departmentIdTodepartmentsInput, departmentsUncheckedCreateWithoutTeachers_teachers_departmentIdTodepartmentsInput>
@@ -45164,10 +47034,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -45184,10 +47054,10 @@ export namespace Prisma {
     password?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     isActive?: BoolFieldUpdateOperationsInput | boolean
-    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -45426,37 +47296,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
-    departments: departmentsCreateNestedOneWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    departments: departmentsCreateNestedOneWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutUser_accountsInput = {
@@ -45466,37 +47336,37 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     departmentId: string
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
-    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
-    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutUser_accountsInput = {
@@ -45520,6 +47390,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
   }
 
@@ -45540,6 +47411,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutUser_accountsInput = {
@@ -45675,37 +47547,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
-    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutUser_accountsInput = {
@@ -45715,37 +47587,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     departmentId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type teachersUpsertWithoutUser_accountsInput = {
@@ -45775,6 +47647,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
   }
 
@@ -45788,6 +47661,103 @@ export namespace Prisma {
     maxMentees?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
     departmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersCreateWithoutTeacher_profilesInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersUncheckedCreateWithoutTeacher_profilesInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+  }
+
+  export type teachersCreateOrConnectWithoutTeacher_profilesInput = {
+    where: teachersWhereUniqueInput
+    create: XOR<teachersCreateWithoutTeacher_profilesInput, teachersUncheckedCreateWithoutTeacher_profilesInput>
+  }
+
+  export type teachersUpsertWithoutTeacher_profilesInput = {
+    update: XOR<teachersUpdateWithoutTeacher_profilesInput, teachersUncheckedUpdateWithoutTeacher_profilesInput>
+    create: XOR<teachersCreateWithoutTeacher_profilesInput, teachersUncheckedCreateWithoutTeacher_profilesInput>
+    where?: teachersWhereInput
+  }
+
+  export type teachersUpdateToOneWithWhereWithoutTeacher_profilesInput = {
+    where?: teachersWhereInput
+    data: XOR<teachersUpdateWithoutTeacher_profilesInput, teachersUncheckedUpdateWithoutTeacher_profilesInput>
+  }
+
+  export type teachersUpdateWithoutTeacher_profilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersUncheckedUpdateWithoutTeacher_profilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
@@ -46005,6 +47975,20 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type academic_semestersCreateManyAcademic_yearsInput = {
+    id: string
+    studentId: string
+    semesterNumber: number
+    status?: $Enums.AcademicSemesterStatus
+    entryStatus?: $Enums.AcademicEntryStatus
+    sgpa?: number | null
+    totalCredits?: number
+    creditsEarned?: number
+    backlogs?: number
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
   export type academic_term_requestsCreateManyAcademic_yearsInput = {
     id: string
     semesterNumber: number
@@ -46044,18 +48028,48 @@ export namespace Prisma {
     completedAt?: Date | string | null
   }
 
-  export type academic_semestersCreateManyAcademic_yearsInput = {
-    id: string
-    studentId: string
-    semesterNumber: number
-    status?: $Enums.AcademicSemesterStatus
-    entryStatus?: $Enums.AcademicEntryStatus
-    sgpa?: number | null
-    totalCredits?: number
-    creditsEarned?: number
-    backlogs?: number
-    createdAt?: Date | string
-    updatedAt: Date | string
+  export type academic_semestersUpdateWithoutAcademic_yearsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
+    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalCredits?: IntFieldUpdateOperationsInput | number
+    creditsEarned?: IntFieldUpdateOperationsInput | number
+    backlogs?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput
+    subjects?: academic_subjectsUpdateManyWithoutAcademicSemesterNestedInput
+  }
+
+  export type academic_semestersUncheckedUpdateWithoutAcademic_yearsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
+    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalCredits?: IntFieldUpdateOperationsInput | number
+    creditsEarned?: IntFieldUpdateOperationsInput | number
+    backlogs?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjects?: academic_subjectsUncheckedUpdateManyWithoutAcademicSemesterNestedInput
+  }
+
+  export type academic_semestersUncheckedUpdateManyWithoutAcademic_yearsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
+    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalCredits?: IntFieldUpdateOperationsInput | number
+    creditsEarned?: IntFieldUpdateOperationsInput | number
+    backlogs?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type academic_term_requestsUpdateWithoutAcademic_yearsInput = {
@@ -46185,50 +48199,6 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
-  export type academic_semestersUpdateWithoutAcademic_yearsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
-    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalCredits?: IntFieldUpdateOperationsInput | number
-    creditsEarned?: IntFieldUpdateOperationsInput | number
-    backlogs?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    students?: studentsUpdateOneRequiredWithoutAcademicSemestersNestedInput
-    subjects?: academic_subjectsUpdateManyWithoutAcademicSemesterNestedInput
-  }
-
-  export type academic_semestersUncheckedUpdateWithoutAcademic_yearsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentId?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
-    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalCredits?: IntFieldUpdateOperationsInput | number
-    creditsEarned?: IntFieldUpdateOperationsInput | number
-    backlogs?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subjects?: academic_subjectsUncheckedUpdateManyWithoutAcademicSemesterNestedInput
-  }
-
-  export type academic_semestersUncheckedUpdateManyWithoutAcademic_yearsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    studentId?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
-    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalCredits?: IntFieldUpdateOperationsInput | number
-    creditsEarned?: IntFieldUpdateOperationsInput | number
-    backlogs?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type academic_yearsCreateManyDepartmentsInput = {
     id: string
     name: string
@@ -46246,28 +48216,28 @@ export namespace Prisma {
     fullName: string
     email?: string | null
     phone?: string | null
-    profileImage?: string | null
     dateOfBirth?: Date | string | null
     gender?: $Enums.Gender | null
-    bloodGroup?: $Enums.BloodGroup | null
-    nationality?: string | null
-    religion?: string | null
-    programme?: string | null
-    semester?: string | null
-    section?: string | null
-    studentType?: $Enums.StudentType | null
-    address?: string | null
-    permanentAddress?: string | null
-    yearsAtUniversity?: string | null
-    totalCredits?: number | null
-    currentCGPA?: number | null
-    overallAttendance?: number | null
-    academicStanding?: string | null
-    academicSetupCompleted?: boolean
     status?: $Enums.StudentStatus
     userAccountId?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
   }
 
   export type teachersCreateManyDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -46292,10 +48262,10 @@ export namespace Prisma {
     status?: EnumAcademicYearStatusFieldUpdateOperationsInput | $Enums.AcademicYearStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUpdateManyWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsUncheckedUpdateWithoutDepartmentsInput = {
@@ -46306,10 +48276,10 @@ export namespace Prisma {
     status?: EnumAcademicYearStatusFieldUpdateOperationsInput | $Enums.AcademicYearStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_term_requests?: academic_term_requestsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     academic_terms?: academic_termsUncheckedUpdateManyWithoutAcademic_yearsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutAcademic_yearsNestedInput
-    academic_semesters?: academic_semestersUncheckedUpdateManyWithoutAcademic_yearsNestedInput
   }
 
   export type academic_yearsUncheckedUpdateManyWithoutDepartmentsInput = {
@@ -46329,37 +48299,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
-    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutDepartmentsInput = {
@@ -46369,37 +48339,37 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
-    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
-    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
   export type studentsUncheckedUpdateManyWithoutDepartmentsInput = {
@@ -46409,28 +48379,28 @@ export namespace Prisma {
     fullName?: StringFieldUpdateOperationsInput | string
     email?: NullableStringFieldUpdateOperationsInput | string | null
     phone?: NullableStringFieldUpdateOperationsInput | string | null
-    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
     dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
-    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
-    nationality?: NullableStringFieldUpdateOperationsInput | string | null
-    religion?: NullableStringFieldUpdateOperationsInput | string | null
-    programme?: NullableStringFieldUpdateOperationsInput | string | null
-    semester?: NullableStringFieldUpdateOperationsInput | string | null
-    section?: NullableStringFieldUpdateOperationsInput | string | null
-    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
-    address?: NullableStringFieldUpdateOperationsInput | string | null
-    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
-    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
-    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
-    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
-    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
-    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
-    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
     status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type teachersUpdateWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -46449,6 +48419,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
   }
 
@@ -46469,6 +48440,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -46521,6 +48493,34 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type academic_backlogsCreateManyStudentsInput = {
+    id: string
+    subjectCode: string
+    subjectName: string
+    semesterNumber: number
+    status?: $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: number | null
+    clearedGrade?: string | null
+    clearedMarks?: number | null
+    clearedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
+  export type academic_semestersCreateManyStudentsInput = {
+    id: string
+    academicYearId?: string | null
+    semesterNumber: number
+    status?: $Enums.AcademicSemesterStatus
+    entryStatus?: $Enums.AcademicEntryStatus
+    sgpa?: number | null
+    totalCredits?: number
+    creditsEarned?: number
+    backlogs?: number
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
   export type detentionsCreateManyStudentsInput = {
     id: string
     termId: string
@@ -46562,17 +48562,6 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
-  export type student_enrollmentsCreateManyStudentsInput = {
-    id: string
-    termId: string
-    semesterNumber: number
-    status?: $Enums.EnrollmentStatus
-    enrolledAt?: Date | string
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
-  }
-
   export type student_documentsCreateManyStudentInput = {
     id: string
     documentName: string
@@ -46587,32 +48576,101 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
-  export type academic_semestersCreateManyStudentsInput = {
+  export type student_enrollmentsCreateManyStudentsInput = {
     id: string
-    academicYearId?: string | null
+    termId: string
     semesterNumber: number
-    status?: $Enums.AcademicSemesterStatus
-    entryStatus?: $Enums.AcademicEntryStatus
-    sgpa?: number | null
-    totalCredits?: number
-    creditsEarned?: number
-    backlogs?: number
+    status?: $Enums.EnrollmentStatus
+    enrolledAt?: Date | string
+    completedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt: Date | string
   }
 
-  export type academic_backlogsCreateManyStudentsInput = {
-    id: string
-    subjectCode: string
-    subjectName: string
-    semesterNumber: number
-    status?: $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: number | null
-    clearedGrade?: string | null
-    clearedMarks?: number | null
-    clearedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
+  export type academic_backlogsUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subjectCode?: StringFieldUpdateOperationsInput | string
+    subjectName?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicBacklogStatusFieldUpdateOperationsInput | $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    clearedGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    clearedMarks?: NullableFloatFieldUpdateOperationsInput | number | null
+    clearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type academic_backlogsUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subjectCode?: StringFieldUpdateOperationsInput | string
+    subjectName?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicBacklogStatusFieldUpdateOperationsInput | $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    clearedGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    clearedMarks?: NullableFloatFieldUpdateOperationsInput | number | null
+    clearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type academic_backlogsUncheckedUpdateManyWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    subjectCode?: StringFieldUpdateOperationsInput | string
+    subjectName?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicBacklogStatusFieldUpdateOperationsInput | $Enums.AcademicBacklogStatus
+    clearedSemesterNumber?: NullableIntFieldUpdateOperationsInput | number | null
+    clearedGrade?: NullableStringFieldUpdateOperationsInput | string | null
+    clearedMarks?: NullableFloatFieldUpdateOperationsInput | number | null
+    clearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type academic_semestersUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
+    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalCredits?: IntFieldUpdateOperationsInput | number
+    creditsEarned?: IntFieldUpdateOperationsInput | number
+    backlogs?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academic_years?: academic_yearsUpdateOneWithoutAcademic_semestersNestedInput
+    subjects?: academic_subjectsUpdateManyWithoutAcademicSemesterNestedInput
+  }
+
+  export type academic_semestersUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
+    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalCredits?: IntFieldUpdateOperationsInput | number
+    creditsEarned?: IntFieldUpdateOperationsInput | number
+    backlogs?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    subjects?: academic_subjectsUncheckedUpdateManyWithoutAcademicSemesterNestedInput
+  }
+
+  export type academic_semestersUncheckedUpdateManyWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
+    semesterNumber?: IntFieldUpdateOperationsInput | number
+    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
+    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
+    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
+    totalCredits?: IntFieldUpdateOperationsInput | number
+    creditsEarned?: IntFieldUpdateOperationsInput | number
+    backlogs?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type detentionsUpdateWithoutStudentsInput = {
@@ -46738,39 +48796,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type student_enrollmentsUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
-    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    academic_terms?: academic_termsUpdateOneRequiredWithoutStudent_enrollmentsNestedInput
-  }
-
-  export type student_enrollmentsUncheckedUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    termId?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
-    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type student_enrollmentsUncheckedUpdateManyWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    termId?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
-    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type student_documentsUpdateWithoutStudentInput = {
     id?: StringFieldUpdateOperationsInput | string
     documentName?: StringFieldUpdateOperationsInput | string
@@ -46813,88 +48838,35 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type academic_semestersUpdateWithoutStudentsInput = {
+  export type student_enrollmentsUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
-    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalCredits?: IntFieldUpdateOperationsInput | number
-    creditsEarned?: IntFieldUpdateOperationsInput | number
-    backlogs?: IntFieldUpdateOperationsInput | number
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    academic_years?: academic_yearsUpdateOneWithoutAcademic_semestersNestedInput
-    subjects?: academic_subjectsUpdateManyWithoutAcademicSemesterNestedInput
+    academic_terms?: academic_termsUpdateOneRequiredWithoutStudent_enrollmentsNestedInput
   }
 
-  export type academic_semestersUncheckedUpdateWithoutStudentsInput = {
+  export type student_enrollmentsUncheckedUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
+    termId?: StringFieldUpdateOperationsInput | string
     semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
-    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalCredits?: IntFieldUpdateOperationsInput | number
-    creditsEarned?: IntFieldUpdateOperationsInput | number
-    backlogs?: IntFieldUpdateOperationsInput | number
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    subjects?: academic_subjectsUncheckedUpdateManyWithoutAcademicSemesterNestedInput
-  }
-
-  export type academic_semestersUncheckedUpdateManyWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    academicYearId?: NullableStringFieldUpdateOperationsInput | string | null
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicSemesterStatusFieldUpdateOperationsInput | $Enums.AcademicSemesterStatus
-    entryStatus?: EnumAcademicEntryStatusFieldUpdateOperationsInput | $Enums.AcademicEntryStatus
-    sgpa?: NullableFloatFieldUpdateOperationsInput | number | null
-    totalCredits?: IntFieldUpdateOperationsInput | number
-    creditsEarned?: IntFieldUpdateOperationsInput | number
-    backlogs?: IntFieldUpdateOperationsInput | number
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type academic_backlogsUpdateWithoutStudentsInput = {
+  export type student_enrollmentsUncheckedUpdateManyWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
-    subjectCode?: StringFieldUpdateOperationsInput | string
-    subjectName?: StringFieldUpdateOperationsInput | string
+    termId?: StringFieldUpdateOperationsInput | string
     semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicBacklogStatusFieldUpdateOperationsInput | $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: NullableIntFieldUpdateOperationsInput | number | null
-    clearedGrade?: NullableStringFieldUpdateOperationsInput | string | null
-    clearedMarks?: NullableFloatFieldUpdateOperationsInput | number | null
-    clearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type academic_backlogsUncheckedUpdateWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    subjectCode?: StringFieldUpdateOperationsInput | string
-    subjectName?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicBacklogStatusFieldUpdateOperationsInput | $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: NullableIntFieldUpdateOperationsInput | number | null
-    clearedGrade?: NullableStringFieldUpdateOperationsInput | string | null
-    clearedMarks?: NullableFloatFieldUpdateOperationsInput | number | null
-    clearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type academic_backlogsUncheckedUpdateManyWithoutStudentsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    subjectCode?: StringFieldUpdateOperationsInput | string
-    subjectName?: StringFieldUpdateOperationsInput | string
-    semesterNumber?: IntFieldUpdateOperationsInput | number
-    status?: EnumAcademicBacklogStatusFieldUpdateOperationsInput | $Enums.AcademicBacklogStatus
-    clearedSemesterNumber?: NullableIntFieldUpdateOperationsInput | number | null
-    clearedGrade?: NullableStringFieldUpdateOperationsInput | string | null
-    clearedMarks?: NullableFloatFieldUpdateOperationsInput | number | null
-    clearedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: EnumEnrollmentStatusFieldUpdateOperationsInput | $Enums.EnrollmentStatus
+    enrolledAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -267,29 +267,29 @@ exports.Prisma.StudentsScalarFieldEnum = {
   fullName: 'fullName',
   email: 'email',
   phone: 'phone',
-  profileImage: 'profileImage',
   dateOfBirth: 'dateOfBirth',
   gender: 'gender',
-  bloodGroup: 'bloodGroup',
-  nationality: 'nationality',
-  religion: 'religion',
-  programme: 'programme',
-  semester: 'semester',
-  section: 'section',
-  studentType: 'studentType',
-  address: 'address',
-  permanentAddress: 'permanentAddress',
-  yearsAtUniversity: 'yearsAtUniversity',
-  totalCredits: 'totalCredits',
-  currentCGPA: 'currentCGPA',
-  overallAttendance: 'overallAttendance',
-  academicStanding: 'academicStanding',
-  academicSetupCompleted: 'academicSetupCompleted',
   status: 'status',
   departmentId: 'departmentId',
   userAccountId: 'userAccountId',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  academicSetupCompleted: 'academicSetupCompleted',
+  academicStanding: 'academicStanding',
+  address: 'address',
+  bloodGroup: 'bloodGroup',
+  currentCGPA: 'currentCGPA',
+  nationality: 'nationality',
+  overallAttendance: 'overallAttendance',
+  permanentAddress: 'permanentAddress',
+  profileImage: 'profileImage',
+  programme: 'programme',
+  religion: 'religion',
+  section: 'section',
+  semester: 'semester',
+  studentType: 'studentType',
+  totalCredits: 'totalCredits',
+  yearsAtUniversity: 'yearsAtUniversity'
 };
 
 exports.Prisma.Student_contact_detailsScalarFieldEnum = {
@@ -431,10 +431,10 @@ exports.Prisma.User_accountsScalarFieldEnum = {
   password: 'password',
   role: 'role',
   isActive: 'isActive',
-  mustChangePassword: 'mustChangePassword',
   lastLogin: 'lastLogin',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  mustChangePassword: 'mustChangePassword'
 };
 
 exports.Prisma.Term_change_requestsScalarFieldEnum = {
@@ -449,6 +449,27 @@ exports.Prisma.Term_change_requestsScalarFieldEnum = {
   reviewedBy: 'reviewedBy',
   reviewedAt: 'reviewedAt',
   reviewComment: 'reviewComment',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Teacher_profilesScalarFieldEnum = {
+  id: 'id',
+  teacherId: 'teacherId',
+  profileImage: 'profileImage',
+  qualification: 'qualification',
+  specialization: 'specialization',
+  office: 'office',
+  officeHours: 'officeHours',
+  about: 'about',
+  highlightOne: 'highlightOne',
+  highlightTwo: 'highlightTwo',
+  highlightThree: 'highlightThree',
+  linkedIn: 'linkedIn',
+  googleScholar: 'googleScholar',
+  researchGate: 'researchGate',
+  orcid: 'orcid',
+  website: 'website',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -540,6 +561,14 @@ exports.Gender = exports.$Enums.Gender = {
   OTHER: 'OTHER'
 };
 
+exports.StudentStatus = exports.$Enums.StudentStatus = {
+  INVITED: 'INVITED',
+  ACTIVE: 'ACTIVE',
+  DETAINED: 'DETAINED',
+  GRADUATED: 'GRADUATED',
+  INACTIVE: 'INACTIVE'
+};
+
 exports.BloodGroup = exports.$Enums.BloodGroup = {
   A_POSITIVE: 'A_POSITIVE',
   A_NEGATIVE: 'A_NEGATIVE',
@@ -554,14 +583,6 @@ exports.BloodGroup = exports.$Enums.BloodGroup = {
 exports.StudentType = exports.$Enums.StudentType = {
   DAY_SCHOLAR: 'DAY_SCHOLAR',
   HOSTELLER: 'HOSTELLER'
-};
-
-exports.StudentStatus = exports.$Enums.StudentStatus = {
-  INVITED: 'INVITED',
-  ACTIVE: 'ACTIVE',
-  DETAINED: 'DETAINED',
-  GRADUATED: 'GRADUATED',
-  INACTIVE: 'INACTIVE'
 };
 
 exports.AddressType = exports.$Enums.AddressType = {
@@ -641,7 +662,8 @@ exports.Prisma.ModelName = {
   academic_backlogs: 'academic_backlogs',
   teachers: 'teachers',
   user_accounts: 'user_accounts',
-  term_change_requests: 'term_change_requests'
+  term_change_requests: 'term_change_requests',
+  teacher_profiles: 'teacher_profiles'
 };
 
 /**

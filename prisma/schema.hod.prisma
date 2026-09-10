@@ -23,8 +23,7 @@ model academic_term_requests {
   rejectionReason   String?
   createdAt         DateTime                  @default(now())
   updatedAt         DateTime
-
-  academic_years academic_years @relation(fields: [academicYearId], references: [id])
+  academic_years    academic_years            @relation(fields: [academicYearId], references: [id])
 
   @@index([academicYearId])
   @@index([requestedBy])
@@ -41,9 +40,7 @@ model academic_terms {
   status                   AcademicTermStatus         @default(UPCOMING)
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime
-
   academic_years           academic_years             @relation(fields: [academicYearId], references: [id])
-
   detentions               detentions[]
   mentor_assignments       mentor_assignments[]
   mentor_transfer_requests mentor_transfer_requests[]
@@ -63,13 +60,11 @@ model academic_years {
   departmentId           String
   createdAt              DateTime                 @default(now())
   updatedAt              DateTime
-
+  academic_semesters     academic_semesters[]
   academic_term_requests academic_term_requests[]
   academic_terms         academic_terms[]
   departments            departments              @relation(fields: [departmentId], references: [id])
-
   import_batches         import_batches[]
-  academic_semesters     academic_semesters[]
 
   @@unique([departmentId, name])
   @@index([departmentId])
@@ -83,13 +78,9 @@ model departments {
   hodTeacherId                                String?          @unique
   createdAt                                   DateTime         @default(now())
   updatedAt                                   DateTime
-
   academic_years                              academic_years[]
-
   teachers_departments_hodTeacherIdToteachers teachers?        @relation("departments_hodTeacherIdToteachers", fields: [hodTeacherId], references: [id])
-
   students                                    students[]
-
   teachers_teachers_departmentIdTodepartments teachers[]       @relation("teachers_departmentIdTodepartments")
 }
 
@@ -104,11 +95,8 @@ model detentions {
   resumedBy      String?
   createdAt      DateTime        @default(now())
   updatedAt      DateTime
-
   user_accounts  user_accounts?  @relation(fields: [resumedBy], references: [id])
-
   students       students        @relation(fields: [studentId], references: [id])
-
   academic_terms academic_terms  @relation(fields: [termId], references: [id])
 
   @@index([status])
@@ -127,12 +115,9 @@ model import_batches {
   uploadedBy      String
   createdAt       DateTime          @default(now())
   completedAt     DateTime?
-
-  academic_years academic_years     @relation(fields: [academicYearId], references: [id])
-
-  user_accounts  user_accounts      @relation(fields: [uploadedBy], references: [id])
-
-  import_errors  import_errors[]
+  academic_years  academic_years    @relation(fields: [academicYearId], references: [id])
+  user_accounts   user_accounts     @relation(fields: [uploadedBy], references: [id])
+  import_errors   import_errors[]
 
   @@index([academicYearId])
   @@index([status])
@@ -147,7 +132,6 @@ model import_errors {
   value          String?
   message        String
   createdAt      DateTime       @default(now())
-
   import_batches import_batches @relation(fields: [importBatchId], references: [id])
 
   @@index([importBatchId])
@@ -164,13 +148,9 @@ model mentor_assignments {
   assignedBy     String
   createdAt      DateTime               @default(now())
   updatedAt      DateTime
-
   user_accounts  user_accounts          @relation(fields: [assignedBy], references: [id])
-
   students       students               @relation(fields: [studentId], references: [id])
-
   teachers       teachers               @relation(fields: [teacherId], references: [id])
-
   academic_terms academic_terms         @relation(fields: [termId], references: [id])
 
   @@index([status])
@@ -195,19 +175,12 @@ model mentor_transfer_requests {
   rejectionReason                                                         String?
   createdAt                                                               DateTime                    @default(now())
   updatedAt                                                               DateTime
-
   teachers_mentor_transfer_requests_currentMentorIdToteachers             teachers?                   @relation("mentor_transfer_requests_currentMentorIdToteachers", fields: [currentMentorId], references: [id])
-
   teachers_mentor_transfer_requests_initiatedByTeacherIdToteachers        teachers?                   @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers", fields: [initiatedByTeacherId], references: [id])
-
   user_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accounts user_accounts               @relation("mentor_transfer_requests_initiatedByUserIdTouser_accounts", fields: [initiatedByUserId], references: [id])
-
   teachers_mentor_transfer_requests_requestedMentorIdToteachers           teachers?                   @relation("mentor_transfer_requests_requestedMentorIdToteachers", fields: [requestedMentorId], references: [id])
-
   user_accounts_mentor_transfer_requests_reviewedByTouser_accounts        user_accounts?              @relation("mentor_transfer_requests_reviewedByTouser_accounts", fields: [reviewedBy], references: [id])
-
   students                                                                students                    @relation(fields: [studentId], references: [id])
-
   academic_terms                                                          academic_terms              @relation(fields: [termId], references: [id])
 
   @@index([currentMentorId])
@@ -229,7 +202,6 @@ model otp_verifications {
   verifiedAt    DateTime?
   attempts      Int           @default(0)
   createdAt     DateTime      @default(now())
-
   user_accounts user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
 
   @@index([expiresAt])
@@ -246,9 +218,7 @@ model student_enrollments {
   completedAt    DateTime?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime
-
   students       students         @relation(fields: [studentId], references: [id])
-
   academic_terms academic_terms   @relation(fields: [termId], references: [id])
 
   @@unique([studentId, termId])
@@ -259,72 +229,45 @@ model student_enrollments {
 
 model students {
   id                       String                     @id
-
-  // Primary business identifier.
-  // All student searches and student-facing business operations
-  // should be register-number based.
   registerNumber           String                     @unique
-
-  // University admission identifier.
   admissionNumber          String?                    @unique
-
-  // Basic profile information.
   fullName                 String
   email                    String?
   phone                    String?
-  profileImage             String?
   dateOfBirth              DateTime?
   gender                   Gender?
-  bloodGroup               BloodGroup?
-  nationality              String?
-  religion                 String?
-
-  // Academic/profile information.
-  programme                String?
-  semester                 String?
-  section                  String?
-  studentType              StudentType?
-  address                  String?
-  permanentAddress         String?
-  yearsAtUniversity        String?
-
-  // Current academic summary.
-  totalCredits             Int?
-  currentCGPA              Float?
-  overallAttendance        Float?
-  academicStanding         String?
-
-  // Profile/onboarding state.
-  academicSetupCompleted   Boolean                    @default(false)
-
-  // Student lifecycle.
   status                   StudentStatus              @default(INVITED)
-
-  // Organizational relationship.
   departmentId             String
-
-  // Authentication relationship.
-  // Email/password authentication is handled by user_accounts.
   userAccountId            String?                    @unique
-
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime
-
+  academicSetupCompleted   Boolean                    @default(false)
+  academicStanding         String?
+  address                  String?
+  bloodGroup               BloodGroup?
+  currentCGPA              Float?
+  nationality              String?
+  overallAttendance        Float?
+  permanentAddress         String?
+  profileImage             String?
+  programme                String?
+  religion                 String?
+  section                  String?
+  semester                 String?
+  studentType              StudentType?
+  totalCredits             Int?
+  yearsAtUniversity        String?
+  academicBacklogs         academic_backlogs[]
+  academicSemesters        academic_semesters[]
   detentions               detentions[]
   mentor_assignments       mentor_assignments[]
   mentor_transfer_requests mentor_transfer_requests[]
-  student_enrollments      student_enrollments[]
-
-  departments              departments                @relation(fields: [departmentId], references: [id])
-
-  user_accounts            user_accounts?             @relation(fields: [userAccountId], references: [id])
-
   contactDetails           student_contact_details?
-  parentDetails            student_parent_details?
   documents                student_documents[]
-
-  academicSemesters        academic_semesters[]
-  academicBacklogs         academic_backlogs[]
+  student_enrollments      student_enrollments[]
+  parentDetails            student_parent_details?
+  departments              departments                @relation(fields: [departmentId], references: [id])
+  user_accounts            user_accounts?             @relation(fields: [userAccountId], references: [id])
 
   @@index([departmentId])
   @@index([status])
@@ -332,39 +275,31 @@ model students {
 
 model student_contact_details {
   id                           String                        @id
-  studentId                   String                        @unique
-
+  studentId                    String                        @unique
   permanentAddress             String?
   currentAddress               String?
-  addressType                 AddressType?
+  addressType                  AddressType?
   durationAtCurrentAddress     String?
-
   personalMobile               String?
   alternateMobile              String?
   personalEmail                String?
   alternateEmail               String?
   whatsappNumber               String?
   telegramUsername             String?
-
   linkedInProfile              String?
   githubProfile                String?
-
   preferredContactMethod       PreferredContactMethod?
   preferredContactTime         String?
   communicationEmailPreference CommunicationEmailPreference?
-
   allowWhatsappCommunication   Boolean                       @default(false)
-
   createdAt                    DateTime                      @default(now())
   updatedAt                    DateTime
-
-  student                     students                      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  student                      students                      @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model student_parent_details {
-  id                     String    @id
-  studentId              String    @unique
-
+  id                     String   @id
+  studentId              String   @unique
   fatherName             String?
   fatherOccupation       String?
   fatherCompany          String?
@@ -373,7 +308,6 @@ model student_parent_details {
   fatherEmail            String?
   fatherPhone            String?
   fatherAddress          String?
-
   motherName             String?
   motherOccupation       String?
   motherCompany          String?
@@ -382,64 +316,49 @@ model student_parent_details {
   motherEmail            String?
   motherPhone            String?
   motherAddress          String?
-
   guardianName           String?
   guardianRelationship   String?
   guardianPhone          String?
   guardianAlternatePhone String?
-
-  createdAt              DateTime  @default(now())
+  createdAt              DateTime @default(now())
   updatedAt              DateTime
-
-  student                students  @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  student                students @relation(fields: [studentId], references: [id], onDelete: Cascade)
 }
 
 model student_documents {
   id                 String           @id
-
   studentId          String
   documentName       String
   category           DocumentCategory
   description        String?
-
-  fileType            String
-  fileSize            Int
-
+  fileType           String
+  fileSize           Int
   cloudinaryPublicId String
-  fileUrl             String
+  fileUrl            String
   resourceType       String
-
   uploadedAt         DateTime         @default(now())
   updatedAt          DateTime
-
   student            students         @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([studentId])
 }
 
 model academic_semesters {
-  id               String                 @id
-
-  studentId        String
-  academicYearId   String?
-  semesterNumber   Int
-
-  status           AcademicSemesterStatus @default(LOCKED)
-  entryStatus      AcademicEntryStatus    @default(DRAFT)
-
-  sgpa             Float?
-  totalCredits     Int                    @default(0)
-  creditsEarned    Int                    @default(0)
-  backlogs         Int                    @default(0)
-
-  createdAt        DateTime               @default(now())
-  updatedAt        DateTime
-
-  students         students               @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  academic_years   academic_years?        @relation(fields: [academicYearId], references: [id])
-
-  subjects         academic_subjects[]
+  id             String                 @id
+  studentId      String
+  academicYearId String?
+  semesterNumber Int
+  status         AcademicSemesterStatus @default(LOCKED)
+  entryStatus    AcademicEntryStatus    @default(DRAFT)
+  sgpa           Float?
+  totalCredits   Int                    @default(0)
+  creditsEarned  Int                    @default(0)
+  backlogs       Int                    @default(0)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime
+  academic_years academic_years?        @relation(fields: [academicYearId], references: [id])
+  students       students               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjects       academic_subjects[]
 
   @@unique([studentId, semesterNumber])
   @@index([studentId])
@@ -447,33 +366,25 @@ model academic_semesters {
 }
 
 model academic_subjects {
-  id                 String              @id
-
+  id                 String             @id
   academicSemesterId String
-
   courseCode         String
   courseName         String
   credits            Int
-
   cia1               Float?
   cia2               Float?
   cia3               Float?
   mse                Float?
   ese                Float?
-
   maximumMarks       Float?
   totalMarksObtained Float?
-
   grade              String?
   gradePoint         Float?
-
   attendance         Float?
-  classesAttended    Int                 @default(0)
-  classesHeld        Int                 @default(0)
-
-  createdAt          DateTime            @default(now())
+  classesAttended    Int                @default(0)
+  classesHeld        Int                @default(0)
+  createdAt          DateTime           @default(now())
   updatedAt          DateTime
-
   academicSemester   academic_semesters @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
 
   @@unique([academicSemesterId, courseCode])
@@ -483,24 +394,17 @@ model academic_subjects {
 
 model academic_backlogs {
   id                    String                @id
-
   studentId             String
-
   subjectCode           String
   subjectName           String
-
   semesterNumber        Int
-
   status                AcademicBacklogStatus @default(ACTIVE)
-
   clearedSemesterNumber Int?
   clearedGrade          String?
   clearedMarks          Float?
   clearedAt             DateTime?
-
   createdAt             DateTime              @default(now())
   updatedAt             DateTime
-
   students              students              @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([studentId])
@@ -516,25 +420,17 @@ model teachers {
   designation                                                                      String?
   maxMentees                                                                       Int                        @default(30)
   isActive                                                                         Boolean                    @default(true)
-
   departmentId                                                                     String
   userAccountId                                                                    String?                    @unique
-
   createdAt                                                                        DateTime                   @default(now())
   updatedAt                                                                        DateTime
-
   departments_departments_hodTeacherIdToteachers                                   departments?               @relation("departments_hodTeacherIdToteachers")
-
   mentor_assignments                                                               mentor_assignments[]
-
   mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers      mentor_transfer_requests[] @relation("mentor_transfer_requests_currentMentorIdToteachers")
-
   mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers")
-
   mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers    mentor_transfer_requests[] @relation("mentor_transfer_requests_requestedMentorIdToteachers")
-
+  teacher_profiles                                                                 teacher_profiles?
   departments_teachers_departmentIdTodepartments                                   departments                @relation("teachers_departmentIdTodepartments", fields: [departmentId], references: [id])
-
   user_accounts                                                                    user_accounts?             @relation(fields: [userAccountId], references: [id])
 
   @@index([departmentId])
@@ -543,72 +439,66 @@ model teachers {
 
 model user_accounts {
   id                                                                                 String                     @id
-
   username                                                                           String                     @unique
   email                                                                              String?                    @unique
   password                                                                           String?
-
   role                                                                               UserRole
-
   isActive                                                                           Boolean                    @default(true)
-
-  // Forces the user to change the temporary/default password
-  // during their first successful login.
-  mustChangePassword                                                                 Boolean                    @default(false)
-
   lastLogin                                                                          DateTime?
-
   createdAt                                                                          DateTime                   @default(now())
   updatedAt                                                                          DateTime
-
+  mustChangePassword                                                                 Boolean                    @default(false)
   detentions                                                                         detentions[]
   import_batches                                                                     import_batches[]
   mentor_assignments                                                                 mentor_assignments[]
-
   mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByUserIdTouser_accounts")
-
   mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts        mentor_transfer_requests[] @relation("mentor_transfer_requests_reviewedByTouser_accounts")
-
   otp_verifications                                                                  otp_verifications[]
-
   students                                                                           students?
   teachers                                                                           teachers?
 }
 
 model term_change_requests {
-  id String @id
-
-  currentTermId String
-
-  requestedTermName String
-
+  id                      String    @id
+  currentTermId           String
+  requestedTermName       String
   requestedSemesterNumber Int
-
-  requestedStartDate DateTime
-
-  requestedEndDate DateTime
-
-  requestedBy String
-
-  status String @default("PENDING")
-
-  reviewedBy String?
-
-  reviewedAt DateTime?
-
-  reviewComment String?
-
-  createdAt DateTime @default(now())
-
-  updatedAt DateTime @updatedAt
+  requestedStartDate      DateTime
+  requestedEndDate        DateTime
+  requestedBy             String
+  status                  String    @default("PENDING")
+  reviewedBy              String?
+  reviewedAt              DateTime?
+  reviewComment           String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @default(now()) @updatedAt
 
   @@index([status])
-
   @@index([requestedBy])
-
   @@index([currentTermId])
-
   @@index([createdAt])
+}
+
+model teacher_profiles {
+  id             String   @id
+  teacherId      String   @unique
+  profileImage   String?
+  qualification  String?
+  specialization String?
+  office         String?
+  officeHours    String?
+  about          String?
+  highlightOne   String?
+  highlightTwo   String?
+  highlightThree String?
+  linkedIn       String?
+  googleScholar  String?
+  researchGate   String?
+  orcid          String?
+  website        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+  teachers       teachers @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 }
 
 enum Gender {
