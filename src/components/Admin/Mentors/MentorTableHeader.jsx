@@ -1,39 +1,24 @@
 import React from "react";
-import { ArrowUpDown } from "lucide-react";
-
-const headers = [
-  "Mentor",
-  "Department",
-  "Designation",
-  "Students Assigned",
-  "Meetings",
-  "Attendance",
-  "Status",
-  "Actions",
-];
 
 const MentorTableHeader = () => {
   return (
-    <thead className="bg-slate-50 border-b border-slate-200">
-      <tr>
-        {headers.map((header) => (
-          <th
-            key={header}
-            className="px-5 py-3 text-left text-[12px] font-semibold text-slate-600 whitespace-nowrap"
-          >
-            <div className="flex items-center gap-1">
-              <span>{header}</span>
+    <thead className="bg-slate-50">
+      <tr className="border-b border-slate-200 text-left text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        <th className="px-5 py-4">Mentor</th>
 
-              {header !== "Actions" && (
-                <ArrowUpDown
-                  size={11}
-                  className="text-slate-400"
-                  strokeWidth={2}
-                />
-              )}
-            </div>
-          </th>
-        ))}
+        <th className="px-5 py-4">Department</th>
+
+        <th className="px-5 py-4">Designation</th>
+
+        <th className="px-5 py-4">Students Assigned</th>
+
+        <th className="px-5 py-4">Meetings</th>
+
+        <th className="px-5 py-4">Attendance</th>
+
+        <th className="px-5 py-4">Status</th>
+
+        <th className="px-5 py-4">Actions</th>
       </tr>
     </thead>
   );
