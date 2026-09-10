@@ -649,7 +649,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "D:\\Mentor-Mentee\\Project\\backend\\src\\generated\\prisma-hod",
+      "value": "C:\\Project\\Mentor-Mentee Project\\Mentor-Mentee-Backend\\src\\generated\\prisma-hod",
       "fromEnvVar": null
     },
     "config": {
@@ -663,7 +663,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "D:\\Mentor-Mentee\\Project\\backend\\prisma\\schema.hod.prisma",
+    "sourceFilePath": "C:\\Project\\Mentor-Mentee Project\\Mentor-Mentee-Backend\\prisma\\schema.hod.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
