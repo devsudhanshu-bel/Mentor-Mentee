@@ -4,10 +4,34 @@ import ApiResponse from "../../../utils/ApiResponse.js";
 import asyncHandler from "../../../utils/asyncHandler.js";
 
 class AdminController {
-  /**
-   * Create a new Mentor
-   * POST /api/admin/mentors
-   */
+  // ==========================================================
+  // GET ALL MENTORS
+  // ==========================================================
+
+  getMentors = asyncHandler(async (req, res) => {
+    const {
+      search = "",
+      departmentId = "",
+      status = "",
+      workload = "",
+    } = req.query;
+
+    const result = await AdminService.getMentors({
+      search,
+      departmentId,
+      status,
+      workload,
+    });
+
+    return res
+      .status(200)
+      .json(new ApiResponse(200, "Mentors fetched successfully", result));
+  });
+
+  // ==========================================================
+  // CREATE MENTOR
+  // ==========================================================
+
   createMentor = asyncHandler(async (req, res) => {
     const { name, password } = req.body;
 
@@ -16,13 +40,9 @@ class AdminController {
       password,
     });
 
-    return res.status(201).json(
-      new ApiResponse(
-        201,
-        "Mentor created successfully",
-        mentor
-      )
-    );
+    return res
+      .status(201)
+      .json(new ApiResponse(201, "Mentor created successfully", mentor));
   });
 }
 
