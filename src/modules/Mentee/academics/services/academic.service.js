@@ -1,5 +1,10 @@
-import prisma from "../../../../config/prisma.js";
+import crypto from "crypto";
+import hodPrisma from "../../../../config/prisma.hod.js";
 import ApiError from "../../../../utils/ApiError.js";
+
+// ==========================================================
+// CONSTANTS
+// ==========================================================
 
 const ROMAN_TO_NUMBER = {
   I: 1,
@@ -25,25 +30,39 @@ const GRADE_POINTS = {
   F: 0,
 };
 
+// ==========================================================
+// SEMESTER NUMBER
+// ==========================================================
+
 const getCurrentSemesterNumber = (semester) => {
-  if (semester === null || semester === undefined) return 1;
+  if (semester === null || semester === undefined) {
+    return 1;
+  }
 
   const value = String(semester).trim().toUpperCase();
 
-  const numeric = Number(value.replace(/[^0-9]/g, ""));
+  const numericMatch = value.match(/\d+/);
 
-  if (numeric >= 1 && numeric <= 8) {
-    return numeric;
+  if (numericMatch) {
+    const numeric = Number(numericMatch[0]);
+
+    if (numeric >= 1 && numeric <= 8) {
+      return numeric;
+    }
   }
 
   for (const [roman, number] of Object.entries(ROMAN_TO_NUMBER)) {
-    if (value.includes(roman)) {
+    if (value === roman || value.includes(`SEMESTER ${roman}`)) {
       return number;
     }
   }
 
   return 1;
 };
+
+// ==========================================================
+// VALIDATE SEMESTER
+// ==========================================================
 
 const validateSemesterNumber = (semesterNumber) => {
   const number = Number(semesterNumber);
@@ -55,60 +74,75 @@ const validateSemesterNumber = (semesterNumber) => {
   return number;
 };
 
-const normaliseSubject = (subject) => {
-  if (!subject?.courseCode || !subject?.courseName) {
-    throw new ApiError(400, "Course code and course name are required");
+// ==========================================================
+// NULLABLE NUMBER
+// ==========================================================
+
+const nullableNumber = (value) => {
+  if (value === "" || value === null || value === undefined) {
+    return null;
   }
 
-  const credits = Number(subject.credits);
+  const number = Number(value);
 
-  if (!Number.isFinite(credits) || credits <= 0) {
-    throw new ApiError(400, `Invalid credits for ${subject.courseCode}`);
-  }
+  return Number.isFinite(number) ? number : null;
+};
+
+// ==========================================================
+// NORMALISE ACADEMIC MARKS
+//
+// IMPORTANT:
+// This function ONLY normalises academic fields.
+//
+// It does NOT accept or process:
+// - credits
+// - attendance
+// - classesHeld
+// - classesAttended
+// - courseCode
+// - courseName
+//
+// Those values come from the existing DB subject.
+// ==========================================================
+
+const normaliseAcademicMarks = (subject) => {
+  const cia1 = nullableNumber(subject.cia1);
+
+  const mse = nullableNumber(subject.mse);
+
+  const cia3 = nullableNumber(subject.cia3);
+
+  const ese = nullableNumber(subject.ese);
+
+  const suppliedTotal = nullableNumber(subject.totalMarksObtained);
+
+  const calculatedTotal = [cia1, mse, cia3, ese]
+    .filter((value) => value !== null)
+    .reduce((total, value) => total + Number(value), 0);
 
   const totalMarksObtained =
-    subject.totalMarksObtained !== undefined &&
-    subject.totalMarksObtained !== null &&
-    subject.totalMarksObtained !== ""
-      ? Number(subject.totalMarksObtained)
-      : [subject.cia1, subject.mse, subject.cia3, subject.ese]
-          .filter(
-            (value) => value !== undefined && value !== null && value !== "",
-          )
-          .reduce((sum, value) => sum + Number(value), 0);
+    suppliedTotal !== null ? suppliedTotal : calculatedTotal;
 
-  const grade = subject.grade?.trim() || null;
+  const grade = subject.grade
+    ? String(subject.grade).trim().toUpperCase()
+    : null;
+
+  const suppliedGradePoint = nullableNumber(subject.gradePoint);
 
   const gradePoint =
-    subject.gradePoint !== undefined &&
-    subject.gradePoint !== null &&
-    subject.gradePoint !== ""
-      ? Number(subject.gradePoint)
+    suppliedGradePoint !== null
+      ? suppliedGradePoint
       : grade && GRADE_POINTS[grade] !== undefined
         ? GRADE_POINTS[grade]
         : null;
 
   return {
-    courseCode: String(subject.courseCode).trim().toUpperCase(),
+    cia1,
+    mse,
+    cia3,
+    ese,
 
-    courseName: String(subject.courseName).trim(),
-
-    credits,
-
-    cia1:
-      subject.cia1 === "" || subject.cia1 == null ? null : Number(subject.cia1),
-
-    mse: subject.mse === "" || subject.mse == null ? null : Number(subject.mse),
-
-    cia3:
-      subject.cia3 === "" || subject.cia3 == null ? null : Number(subject.cia3),
-
-    ese: subject.ese === "" || subject.ese == null ? null : Number(subject.ese),
-
-    maximumMarks:
-      subject.maximumMarks === "" || subject.maximumMarks == null
-        ? null
-        : Number(subject.maximumMarks),
+    maximumMarks: nullableNumber(subject.maximumMarks),
 
     totalMarksObtained: Number.isFinite(totalMarksObtained)
       ? totalMarksObtained
@@ -117,127 +151,279 @@ const normaliseSubject = (subject) => {
     grade,
 
     gradePoint: Number.isFinite(gradePoint) ? gradePoint : null,
-
-    attendance:
-      subject.attendance === "" || subject.attendance == null
-        ? null
-        : Number(subject.attendance),
   };
 };
 
+// ==========================================================
+// CALCULATE SEMESTER
+//
+// Credits are taken from EXISTING DB SUBJECTS.
+// ==========================================================
+
 const calculateSemester = (subjects) => {
   const totalCredits = subjects.reduce(
-    (sum, subject) => sum + subject.credits,
+    (total, subject) => total + Number(subject.credits || 0),
     0,
   );
 
   const creditsEarned = subjects.reduce(
-    (sum, subject) => sum + (subject.grade === "F" ? 0 : subject.credits),
+    (total, subject) =>
+      total + (subject.grade === "F" ? 0 : Number(subject.credits || 0)),
     0,
   );
 
   const backlogs = subjects.filter((subject) => subject.grade === "F").length;
 
-  const gradedSubjects = subjects.filter((subject) =>
-    Number.isFinite(subject.gradePoint),
+  const gradedSubjects = subjects.filter(
+    (subject) =>
+      subject.gradePoint !== null &&
+      subject.gradePoint !== undefined &&
+      Number.isFinite(Number(subject.gradePoint)),
   );
 
   const weightedPoints = gradedSubjects.reduce(
-    (sum, subject) => sum + subject.credits * subject.gradePoint,
+    (total, subject) =>
+      total + Number(subject.credits || 0) * Number(subject.gradePoint || 0),
     0,
   );
 
   const gradedCredits = gradedSubjects.reduce(
-    (sum, subject) => sum + subject.credits,
+    (total, subject) => total + Number(subject.credits || 0),
     0,
   );
 
   return {
     totalCredits,
+
     creditsEarned,
+
     backlogs,
 
-    sgpa: gradedCredits
-      ? Number((weightedPoints / gradedCredits).toFixed(2))
-      : null,
+    sgpa:
+      gradedCredits > 0
+        ? Number((weightedPoints / gradedCredits).toFixed(2))
+        : null,
 
     status: backlogs === 0 ? "COMPLETED" : "FAILED",
   };
 };
 
+// ==========================================================
+// CALCULATE OVERALL
+//
+// Attendance is calculated from actual attendance records.
+// ==========================================================
+
+const calculateOverallAcademicValues = (allSemesters) => {
+  const allSubjects = allSemesters.flatMap(
+    (semester) => semester.subjects || [],
+  );
+
+  // ------------------------------------------------------
+  // CGPA
+  // ------------------------------------------------------
+
+  const gradedSubjects = allSubjects.filter(
+    (subject) =>
+      subject.gradePoint !== null &&
+      subject.gradePoint !== undefined &&
+      Number.isFinite(Number(subject.gradePoint)),
+  );
+
+  const cgpaCredits = gradedSubjects.reduce(
+    (total, subject) => total + Number(subject.credits || 0),
+    0,
+  );
+
+  const cgpaPoints = gradedSubjects.reduce(
+    (total, subject) =>
+      total + Number(subject.credits || 0) * Number(subject.gradePoint || 0),
+    0,
+  );
+
+  const currentCGPA =
+    cgpaCredits > 0 ? Number((cgpaPoints / cgpaCredits).toFixed(2)) : null;
+
+  // ------------------------------------------------------
+  // TOTAL CREDITS
+  // ------------------------------------------------------
+
+  const totalCredits = allSemesters.reduce(
+    (total, semester) => total + Number(semester.creditsEarned || 0),
+    0,
+  );
+
+  // ------------------------------------------------------
+  // ATTENDANCE
+  //
+  // IMPORTANT:
+  // Attendance remains completely independent
+  // from academic marks updates.
+  // ------------------------------------------------------
+
+  let classesHeld = 0;
+
+  let classesAttended = 0;
+
+  allSubjects.forEach((subject) => {
+    classesHeld += Number(subject.classesHeld || 0);
+
+    classesAttended += Number(subject.classesAttended || 0);
+  });
+
+  const overallAttendance =
+    classesHeld > 0
+      ? Number(((classesAttended / classesHeld) * 100).toFixed(2))
+      : null;
+
+  // ------------------------------------------------------
+  // BACKLOGS
+  // ------------------------------------------------------
+
+  const overallBacklogs = allSemesters.reduce(
+    (total, semester) => total + Number(semester.backlogs || 0),
+    0,
+  );
+
+  // ------------------------------------------------------
+  // ACADEMIC STANDING
+  // ------------------------------------------------------
+
+  let academicStanding = "Excellent";
+
+  if (overallBacklogs > 0) {
+    academicStanding = "Needs Attention";
+  } else if (currentCGPA !== null && currentCGPA < 2) {
+    academicStanding = "Needs Improvement";
+  } else if (currentCGPA !== null && currentCGPA < 2.5) {
+    academicStanding = "Satisfactory";
+  } else if (currentCGPA !== null && currentCGPA < 3) {
+    academicStanding = "Good";
+  } else if (currentCGPA !== null && currentCGPA < 3.5) {
+    academicStanding = "Very Good";
+  }
+
+  return {
+    totalCredits,
+
+    currentCGPA,
+
+    overallAttendance,
+
+    academicStanding,
+  };
+};
+
+// ==========================================================
+// FIND STUDENT
+// ==========================================================
+
+const findStudentByUserId = async (userId) => {
+  const student = await hodPrisma.students.findUnique({
+    where: {
+      userAccountId: userId,
+    },
+
+    select: {
+      id: true,
+
+      registerNumber: true,
+
+      fullName: true,
+
+      email: true,
+
+      semester: true,
+
+      academicSetupCompleted: true,
+
+      currentCGPA: true,
+
+      totalCredits: true,
+
+      overallAttendance: true,
+
+      academicStanding: true,
+    },
+  });
+
+  if (!student) {
+    throw new ApiError(404, "Student profile not found");
+  }
+
+  return student;
+};
+
+// ==========================================================
+// ACADEMIC SERVICE
+// ==========================================================
+
 class AcademicService {
-  // =========================================================
-  // GET ACADEMIC PROFILE
-  // =========================================================
+  // ========================================================
+  // GET PROFILE
+  // ========================================================
 
   async getProfile(userId) {
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
+    const student = await findStudentByUserId(userId);
+
+    const records = await hodPrisma.academic_semesters.findMany({
+      where: {
+        studentId: student.id,
+      },
+
+      orderBy: {
+        semesterNumber: "asc",
+      },
 
       include: {
-        academicSemesters: {
+        subjects: {
           orderBy: {
-            semesterNumber: "asc",
-          },
-
-          include: {
-            subjects: {
-              orderBy: {
-                courseCode: "asc",
-              },
-            },
+            courseCode: "asc",
           },
         },
       },
     });
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    const currentSemester = getCurrentSemesterNumber(profile.semester);
-
-    const records = profile.academicSemesters;
+    const currentSemester = getCurrentSemesterNumber(student.semester);
 
     const recordMap = new Map(
       records.map((record) => [record.semesterNumber, record]),
     );
 
-    const semesters = Array.from({ length: 8 }, (_, index) => {
-      const semesterNumber = index + 1;
+    const semesters = Array.from(
+      {
+        length: 8,
+      },
+      (_, index) => {
+        const semesterNumber = index + 1;
 
-      const record = recordMap.get(semesterNumber);
+        const record = recordMap.get(semesterNumber);
 
-      let status = "LOCKED";
+        let status = "LOCKED";
 
-      if (record) {
-        status = record.status;
-      } else if (semesterNumber < currentSemester) {
-        status = "CURRENT";
-      } else if (semesterNumber === currentSemester) {
-        status = "CURRENT";
-      } else if (
-        semesterNumber === currentSemester + 1 &&
-        recordMap.get(currentSemester)?.status === "COMPLETED"
-      ) {
-        status = "CURRENT";
-      }
+        if (record) {
+          status = record.status;
+        } else if (semesterNumber <= currentSemester) {
+          status = "CURRENT";
+        }
 
-      return {
-        semesterNumber,
-        status,
+        return {
+          semesterNumber,
 
-        hasRecord: Boolean(record),
+          status,
 
-        sgpa: record?.sgpa ?? null,
+          hasRecord: Boolean(record),
 
-        totalCredits: record?.totalCredits ?? 0,
+          sgpa: record?.sgpa ?? null,
 
-        creditsEarned: record?.creditsEarned ?? 0,
+          totalCredits: record?.totalCredits ?? 0,
 
-        backlogs: record?.backlogs ?? 0,
-      };
-    });
+          creditsEarned: record?.creditsEarned ?? 0,
+
+          backlogs: record?.backlogs ?? 0,
+        };
+      },
+    );
 
     const completedPreviousSemesters = records.filter(
       (record) =>
@@ -246,49 +432,47 @@ class AcademicService {
     ).length;
 
     return {
-      studentProfileId: profile.id,
+      studentProfileId: student.id,
+
+      studentId: student.id,
+
+      registerNumber: student.registerNumber,
 
       currentSemester,
 
-      setupCompleted: profile.academicSetupCompleted,
+      setupCompleted: student.academicSetupCompleted,
 
       completedPreviousSemesters,
 
       semesters,
 
       overall: {
-        currentCGPA: profile.currentCGPA,
+        currentCGPA: student.currentCGPA,
 
-        totalCredits: profile.totalCredits,
+        totalCredits: student.totalCredits,
 
-        overallAttendance: profile.overallAttendance,
+        overallAttendance: student.overallAttendance,
 
-        academicStanding: profile.academicStanding,
+        academicStanding: student.academicStanding,
       },
     };
   }
 
-  // =========================================================
-  // GET SEMESTER
-  // =========================================================
+  // ========================================================
+  // GET SINGLE SEMESTER
+  // ========================================================
 
   async getSemester(userId, semesterNumber) {
     const number = validateSemesterNumber(semesterNumber);
 
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
+    const student = await findStudentByUserId(userId);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
+    const currentSemester = getCurrentSemesterNumber(student.semester);
 
-    const currentSemester = getCurrentSemesterNumber(profile.semester);
-
-    const record = await prisma.academicSemester.findUnique({
+    const record = await hodPrisma.academic_semesters.findUnique({
       where: {
-        studentProfileId_semesterNumber: {
-          studentProfileId: profile.id,
+        studentId_semesterNumber: {
+          studentId: student.id,
 
           semesterNumber: number,
         },
@@ -303,27 +487,20 @@ class AcademicService {
       },
     });
 
-    const currentRecord = await prisma.academicSemester.findUnique({
-      where: {
-        studentProfileId_semesterNumber: {
-          studentProfileId: profile.id,
+    /*
+     * Previous + current semesters can be viewed.
+     * Future semesters remain locked.
+     */
 
-          semesterNumber: currentSemester,
-        },
-      },
-    });
-
-    const unlocked =
-      number < currentSemester ||
-      (number === currentSemester + 1 && currentRecord?.status === "COMPLETED");
-
-    if (!unlocked) {
+    if (number > currentSemester) {
       throw new ApiError(403, "This semester is currently locked");
     }
 
     return (
       record || {
         id: null,
+
+        studentId: student.id,
 
         semesterNumber: number,
 
@@ -344,39 +521,25 @@ class AcademicService {
     );
   }
 
-  // =========================================================
+  // ========================================================
   // SAVE SEMESTER
-  // =========================================================
+  //
+  // Academics DOES NOT create subject structure.
+  //
+  // Attendance is responsible for creating subjects,
+  // credits and attendance.
+  //
+  // This method only updates academic marks.
+  // ========================================================
 
   async saveSemester(userId, body) {
     const semesterNumber = validateSemesterNumber(body.semesterNumber);
 
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
+    const student = await findStudentByUserId(userId);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
+    const currentSemester = getCurrentSemesterNumber(student.semester);
 
-    const currentSemester = getCurrentSemesterNumber(profile.semester);
-
-    const existingCurrent = await prisma.academicSemester.findUnique({
-      where: {
-        studentProfileId_semesterNumber: {
-          studentProfileId: profile.id,
-
-          semesterNumber: currentSemester,
-        },
-      },
-    });
-
-    const allowed =
-      semesterNumber < currentSemester ||
-      (semesterNumber === currentSemester + 1 &&
-        existingCurrent?.status === "COMPLETED");
-
-    if (!allowed) {
+    if (semesterNumber > currentSemester) {
       throw new ApiError(403, "This semester is currently locked");
     }
 
@@ -384,66 +547,181 @@ class AcademicService {
       throw new ApiError(400, "At least one subject is required");
     }
 
-    const subjects = body.subjects.map(normaliseSubject);
-
-    const calculated = calculateSemester(subjects);
-
-    const result = await prisma.$transaction(async (tx) => {
-      const semester = await tx.academicSemester.upsert({
-        where: {
-          studentProfileId_semesterNumber: {
-            studentProfileId: profile.id,
-
-            semesterNumber: semesterNumber,
-          },
-        },
-
-        create: {
-          studentProfileId: profile.id,
+    const existingSemester = await hodPrisma.academic_semesters.findUnique({
+      where: {
+        studentId_semesterNumber: {
+          studentId: student.id,
 
           semesterNumber,
+        },
+      },
 
-          academicYear: body.academicYear || null,
+      include: {
+        subjects: true,
+      },
+    });
 
-          term: body.term || null,
+    if (!existingSemester) {
+      throw new ApiError(
+        404,
+        "Academic semester not found. Please enter attendance/subject details first.",
+      );
+    }
 
+    /*
+     * Build academic marks ONLY.
+     */
+
+    const academicSubjects = body.subjects.map((subject) => {
+      if (!subject?.id) {
+        throw new ApiError(
+          400,
+          "Subject ID is required when entering academic marks.",
+        );
+      }
+
+      const existing = existingSemester.subjects.find(
+        (item) => item.id === subject.id,
+      );
+
+      if (!existing) {
+        throw new ApiError(
+          400,
+          `Subject ${subject.id} does not belong to this semester.`,
+        );
+      }
+
+      return {
+        existing,
+
+        marks: normaliseAcademicMarks(subject),
+      };
+    });
+
+    /*
+     * Merge DB subject information with
+     * academic marks.
+     *
+     * Credits ALWAYS come from DB.
+     */
+
+    const calculationSubjects = existingSemester.subjects.map((existing) => {
+      const incoming = academicSubjects.find(
+        (item) => item.existing.id === existing.id,
+      );
+
+      const marks = incoming?.marks;
+
+      return {
+        ...existing,
+
+        cia1: marks?.cia1 ?? existing.cia1,
+
+        mse: marks?.mse ?? existing.mse,
+
+        cia3: marks?.cia3 ?? existing.cia3,
+
+        ese: marks?.ese ?? existing.ese,
+
+        totalMarksObtained:
+          marks?.totalMarksObtained ?? existing.totalMarksObtained,
+
+        grade: marks?.grade ?? existing.grade,
+
+        gradePoint: marks?.gradePoint ?? existing.gradePoint,
+      };
+    });
+
+    const calculated = calculateSemester(calculationSubjects);
+
+    const result = await hodPrisma.$transaction(async (tx) => {
+      // --------------------------------------------
+      // UPDATE SEMESTER SUMMARY
+      // --------------------------------------------
+
+      const semester = await tx.academic_semesters.update({
+        where: {
+          id: existingSemester.id,
+        },
+
+        data: {
           status: calculated.status,
 
           entryStatus: "SUBMITTED",
 
-          ...calculated,
-        },
+          sgpa: calculated.sgpa,
 
-        update: {
-          academicYear: body.academicYear || null,
+          /*
+           * totalCredits is calculated from
+           * existing DB credits.
+           */
 
-          term: body.term || null,
+          totalCredits: calculated.totalCredits,
 
-          status: calculated.status,
+          creditsEarned: calculated.creditsEarned,
 
-          entryStatus: "SUBMITTED",
+          backlogs: calculated.backlogs,
 
-          ...calculated,
+          updatedAt: new Date(),
         },
       });
 
-      await tx.academicSubject.deleteMany({
+      // --------------------------------------------
+      // UPDATE ACADEMIC MARKS ONLY
+      // --------------------------------------------
+
+      for (const item of academicSubjects) {
+        await tx.academic_subjects.update({
+          where: {
+            id: item.existing.id,
+          },
+
+          data: {
+            /*
+             * ONLY academic fields.
+             */
+
+            cia1: item.marks.cia1,
+
+            cia2: null,
+
+            mse: item.marks.mse,
+
+            cia3: item.marks.cia3,
+
+            ese: item.marks.ese,
+
+            maximumMarks: item.marks.maximumMarks,
+
+            totalMarksObtained: item.marks.totalMarksObtained,
+
+            grade: item.marks.grade,
+
+            gradePoint: item.marks.gradePoint,
+
+            updatedAt: new Date(),
+          },
+        });
+      }
+
+      /*
+       * ABSOLUTELY NOTHING HERE FOR:
+       *
+       * courseCode
+       * courseName
+       * credits
+       * attendance
+       * classesHeld
+       * classesAttended
+       */
+
+      // --------------------------------------------
+      // FETCH ALL SEMESTERS
+      // --------------------------------------------
+
+      const allSemesters = await tx.academic_semesters.findMany({
         where: {
-          academicSemesterId: semester.id,
-        },
-      });
-
-      await tx.academicSubject.createMany({
-        data: subjects.map((subject) => ({
-          academicSemesterId: semester.id,
-
-          ...subject,
-        })),
-      });
-
-      const allSemesters = await tx.academicSemester.findMany({
-        where: {
-          studentProfileId: profile.id,
+          studentId: student.id,
         },
 
         include: {
@@ -451,59 +729,37 @@ class AcademicService {
         },
       });
 
-      const graded = allSemesters
-        .flatMap((item) => item.subjects)
-        .filter((subject) => subject.gradePoint != null);
+      const overall = calculateOverallAcademicValues(allSemesters);
 
-      const cgpaCredits = graded.reduce(
-        (sum, subject) => sum + subject.credits,
-        0,
-      );
+      // --------------------------------------------
+      // UPDATE STUDENT SUMMARY
+      // --------------------------------------------
 
-      const cgpaPoints = graded.reduce(
-        (sum, subject) => sum + subject.credits * subject.gradePoint,
-        0,
-      );
-
-      const totalCredits = allSemesters.reduce(
-        (sum, item) => sum + item.creditsEarned,
-        0,
-      );
-
-      const attendanceValues = allSemesters
-        .flatMap((item) => item.subjects.map((subject) => subject.attendance))
-        .filter((value) => value != null);
-
-      await tx.studentProfile.update({
+      await tx.students.update({
         where: {
-          id: profile.id,
+          id: student.id,
         },
 
         data: {
-          academicSetupCompleted:
-            profile.academicSetupCompleted || semesterNumber < currentSemester,
+          academicSetupCompleted: true,
 
-          totalCredits,
+          totalCredits: overall.totalCredits,
 
-          currentCGPA: cgpaCredits
-            ? Number((cgpaPoints / cgpaCredits).toFixed(2))
-            : null,
+          currentCGPA: overall.currentCGPA,
 
-          overallAttendance: attendanceValues.length
-            ? Number(
-                (
-                  attendanceValues.reduce((sum, value) => sum + value, 0) /
-                  attendanceValues.length
-                ).toFixed(2),
-              )
-            : null,
+          overallAttendance: overall.overallAttendance,
 
-          academicStanding:
-            calculated.backlogs === 0 ? "Excellent" : "Needs Attention",
+          academicStanding: overall.academicStanding,
+
+          updatedAt: new Date(),
         },
       });
 
-      return tx.academicSemester.findUnique({
+      // --------------------------------------------
+      // RETURN
+      // --------------------------------------------
+
+      return tx.academic_semesters.findUnique({
         where: {
           id: semester.id,
         },
@@ -521,42 +777,24 @@ class AcademicService {
     return result;
   }
 
-  // =========================================================
+  // ========================================================
   // UPDATE EXISTING SEMESTER
-  // =========================================================
+  //
+  // MARKS ONLY.
+  //
+  // Credits + attendance are NEVER written.
+  // ========================================================
 
   async updateSemester(userId, semesterNumber, body) {
-    // -------------------------------------------------------
-    // Validate semester number
-    // -------------------------------------------------------
-
     const number = validateSemesterNumber(semesterNumber);
 
-    // -------------------------------------------------------
-    // Find student profile
-    // -------------------------------------------------------
+    const student = await findStudentByUserId(userId);
 
-    const profile = await prisma.studentProfile.findUnique({
-      where: {
-        userId,
-      },
-    });
+    const currentSemester = getCurrentSemesterNumber(student.semester);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    // -------------------------------------------------------
-    // Determine current semester
-    // -------------------------------------------------------
-
-    const currentSemester = getCurrentSemesterNumber(profile.semester);
-
-    // -------------------------------------------------------
-    // Only previous semesters can be edited.
-    //
-    // Current and future semesters remain locked.
-    // -------------------------------------------------------
+    // ------------------------------------------------------
+    // CURRENT + FUTURE SEMESTERS ARE LOCKED
+    // ------------------------------------------------------
 
     if (number >= currentSemester) {
       throw new ApiError(
@@ -565,15 +803,14 @@ class AcademicService {
       );
     }
 
-    // -------------------------------------------------------
-    // Check whether the semester actually exists
-    // -------------------------------------------------------
+    // ------------------------------------------------------
+    // GET EXISTING SEMESTER
+    // ------------------------------------------------------
 
-    const existingSemester = await prisma.academicSemester.findUnique({
+    const existingSemester = await hodPrisma.academic_semesters.findUnique({
       where: {
-        studentProfileId_semesterNumber: {
-          studentProfileId: profile.id,
-
+        studentId_semesterNumber: {
+          studentId: student.id,
           semesterNumber: number,
         },
       },
@@ -590,257 +827,259 @@ class AcademicService {
       );
     }
 
-    // -------------------------------------------------------
-    // Validate subjects
-    // -------------------------------------------------------
+    // ------------------------------------------------------
+    // VALIDATE REQUEST
+    // ------------------------------------------------------
 
     if (!Array.isArray(body.subjects) || body.subjects.length === 0) {
       throw new ApiError(400, "At least one subject is required");
     }
 
-    // -------------------------------------------------------
-    // Normalise subjects
-    // -------------------------------------------------------
-
-    const subjects = body.subjects.map(normaliseSubject);
-
-    // -------------------------------------------------------
-    // Recalculate semester values
+    // ------------------------------------------------------
+    // IMPORTANT
     //
-    // This means editing a mark/grade/credit will
-    // automatically recalculate:
+    // Only academic fields are accepted.
     //
-    // - Total Credits
-    // - Credits Earned
-    // - Backlogs
-    // - SGPA
-    // - Semester Status
-    // -------------------------------------------------------
+    // NEVER use:
+    // credits
+    // attendance
+    // classesHeld
+    // classesAttended
+    // courseCode
+    // courseName
+    //
+    // from the request for updating the subject.
+    // ------------------------------------------------------
 
-    const calculated = calculateSemester(subjects);
-
-    // -------------------------------------------------------
-    // Transaction
-    // -------------------------------------------------------
-
-    const result = await prisma.$transaction(async (tx) => {
-      // -------------------------------------------------
-      // Update semester
-      // -------------------------------------------------
-
-      const semester = await tx.academicSemester.update({
-        where: {
-          id: existingSemester.id,
-        },
-
-        data: {
-          academicYear:
-            body.academicYear !== undefined
-              ? body.academicYear
-              : existingSemester.academicYear,
-
-          term: body.term !== undefined ? body.term : existingSemester.term,
-
-          status: calculated.status,
-
-          entryStatus: "SUBMITTED",
-
-          ...calculated,
-        },
-      });
-
-      // -------------------------------------------------
-      // Remove old subjects
-      //
-      // We replace ONLY subjects belonging to this
-      // semester.
-      //
-      // No other semester is touched.
-      // -------------------------------------------------
-
-      await tx.academicSubject.deleteMany({
-        where: {
-          academicSemesterId: semester.id,
-        },
-      });
-
-      // -------------------------------------------------
-      // Insert edited subjects
-      // -------------------------------------------------
-
-      await tx.academicSubject.createMany({
-        data: subjects.map((subject) => ({
-          academicSemesterId: semester.id,
-
-          ...subject,
-        })),
-      });
-
-      // -------------------------------------------------
-      // Recalculate student-wide academic values
-      // -------------------------------------------------
-
-      const allSemesters = await tx.academicSemester.findMany({
-        where: {
-          studentProfileId: profile.id,
-        },
-
-        include: {
-          subjects: true,
-        },
-      });
-
-      // -------------------------------------------------
-      // CGPA calculation
-      // -------------------------------------------------
-
-      const gradedSubjects = allSemesters
-        .flatMap((item) => item.subjects)
-        .filter(
-          (subject) =>
-            subject.gradePoint !== null && subject.gradePoint !== undefined,
-        );
-
-      const cgpaCredits = gradedSubjects.reduce(
-        (sum, subject) => sum + Number(subject.credits || 0),
-        0,
-      );
-
-      const cgpaPoints = gradedSubjects.reduce(
-        (sum, subject) =>
-          sum + Number(subject.credits || 0) * Number(subject.gradePoint || 0),
-        0,
-      );
-
-      const currentCGPA =
-        cgpaCredits > 0 ? Number((cgpaPoints / cgpaCredits).toFixed(2)) : null;
-
-      // -------------------------------------------------
-      // Total credits
-      // -------------------------------------------------
-
-      const totalCredits = allSemesters.reduce(
-        (sum, semesterRecord) =>
-          sum + Number(semesterRecord.creditsEarned || 0),
-        0,
-      );
-
-      // -------------------------------------------------
-      // Attendance
-      // -------------------------------------------------
-
-      const attendanceValues = allSemesters
-        .flatMap((semesterRecord) =>
-          semesterRecord.subjects.map((subject) => subject.attendance),
-        )
-        .filter((value) => value !== null && value !== undefined);
-
-      const overallAttendance =
-        attendanceValues.length > 0
-          ? Number(
-              (
-                attendanceValues.reduce(
-                  (sum, value) => sum + Number(value),
-                  0,
-                ) / attendanceValues.length
-              ).toFixed(2),
-            )
-          : null;
-
-      // -------------------------------------------------
-      // Overall backlog count
-      // -------------------------------------------------
-
-      const overallBacklogs = allSemesters.reduce(
-        (total, semesterRecord) => total + Number(semesterRecord.backlogs || 0),
-        0,
-      );
-
-      // -------------------------------------------------
-      // Academic standing
-      // -------------------------------------------------
-
-      let academicStanding = "Excellent";
-
-      if (overallBacklogs > 0) {
-        academicStanding = "Needs Attention";
-      } else if (currentCGPA !== null && currentCGPA < 2) {
-        academicStanding = "Needs Improvement";
-      } else if (currentCGPA !== null && currentCGPA < 2.5) {
-        academicStanding = "Satisfactory";
-      } else if (currentCGPA !== null && currentCGPA < 3) {
-        academicStanding = "Good";
-      } else if (currentCGPA !== null && currentCGPA < 3.5) {
-        academicStanding = "Very Good";
+    for (const incoming of body.subjects) {
+      if (!incoming?.id) {
+        throw new ApiError(400, "Subject ID is required.");
       }
 
-      // -------------------------------------------------
-      // Update StudentProfile
-      // -------------------------------------------------
+      const existingSubject = existingSemester.subjects.find(
+        (subject) => subject.id === incoming.id,
+      );
 
-      await tx.studentProfile.update({
+      if (!existingSubject) {
+        throw new ApiError(
+          400,
+          `Subject ${incoming.id} does not belong to Semester ${number}.`,
+        );
+      }
+
+      const academicData = {
+        cia1:
+          incoming.cia1 === "" ||
+          incoming.cia1 === null ||
+          incoming.cia1 === undefined
+            ? null
+            : Number(incoming.cia1),
+
+        mse:
+          incoming.mse === "" ||
+          incoming.mse === null ||
+          incoming.mse === undefined
+            ? null
+            : Number(incoming.mse),
+
+        cia3:
+          incoming.cia3 === "" ||
+          incoming.cia3 === null ||
+          incoming.cia3 === undefined
+            ? null
+            : Number(incoming.cia3),
+
+        ese:
+          incoming.ese === "" ||
+          incoming.ese === null ||
+          incoming.ese === undefined
+            ? null
+            : Number(incoming.ese),
+
+        maximumMarks:
+          incoming.maximumMarks === "" ||
+          incoming.maximumMarks === null ||
+          incoming.maximumMarks === undefined
+            ? null
+            : Number(incoming.maximumMarks),
+
+        totalMarksObtained:
+          incoming.totalMarksObtained === "" ||
+          incoming.totalMarksObtained === null ||
+          incoming.totalMarksObtained === undefined
+            ? null
+            : Number(incoming.totalMarksObtained),
+
+        grade:
+          incoming.grade === "" ||
+          incoming.grade === null ||
+          incoming.grade === undefined
+            ? null
+            : String(incoming.grade).trim().toUpperCase(),
+
+        gradePoint:
+          incoming.gradePoint === "" ||
+          incoming.gradePoint === null ||
+          incoming.gradePoint === undefined
+            ? null
+            : Number(incoming.gradePoint),
+
+        updatedAt: new Date(),
+      };
+
+      // ----------------------------------------------------
+      // UPDATE ACADEMIC FIELDS ONLY
+      // ----------------------------------------------------
+
+      await hodPrisma.academic_subjects.update({
         where: {
-          id: profile.id,
+          id: existingSubject.id,
         },
 
-        data: {
-          totalCredits,
-
-          currentCGPA,
-
-          overallAttendance,
-
-          academicStanding,
-        },
+        data: academicData,
       });
+    }
 
-      // -------------------------------------------------
-      // Return updated semester
-      // -------------------------------------------------
+    // ------------------------------------------------------
+    // FETCH UPDATED SUBJECTS
+    // ------------------------------------------------------
 
-      return tx.academicSemester.findUnique({
-        where: {
-          id: semester.id,
-        },
+    const updatedSubjects = await hodPrisma.academic_subjects.findMany({
+      where: {
+        academicSemesterId: existingSemester.id,
+      },
 
-        include: {
-          subjects: {
-            orderBy: {
-              courseCode: "asc",
-            },
+      orderBy: {
+        courseCode: "asc",
+      },
+    });
+
+    // ------------------------------------------------------
+    // CALCULATE SEMESTER SUMMARY
+    //
+    // IMPORTANT:
+    // calculateSemester() uses credits FROM DATABASE.
+    //
+    // It does NOT use credits from the frontend.
+    // ------------------------------------------------------
+
+    const calculated = calculateSemester(updatedSubjects);
+
+    // ------------------------------------------------------
+    // UPDATE SEMESTER SUMMARY
+    // ------------------------------------------------------
+
+    await hodPrisma.academic_semesters.update({
+      where: {
+        id: existingSemester.id,
+      },
+
+      data: {
+        status: calculated.status,
+
+        entryStatus: "SUBMITTED",
+
+        sgpa: calculated.sgpa,
+
+        /*
+         * Calculated using the existing DB credits.
+         */
+        totalCredits: calculated.totalCredits,
+
+        creditsEarned: calculated.creditsEarned,
+
+        backlogs: calculated.backlogs,
+
+        updatedAt: new Date(),
+      },
+    });
+
+    // ------------------------------------------------------
+    // FETCH ALL SEMESTERS
+    // ------------------------------------------------------
+
+    const allSemesters = await hodPrisma.academic_semesters.findMany({
+      where: {
+        studentId: student.id,
+      },
+
+      include: {
+        subjects: true,
+      },
+    });
+
+    // ------------------------------------------------------
+    // RECALCULATE STUDENT SUMMARY
+    // ------------------------------------------------------
+
+    const overall = calculateOverallAcademicValues(allSemesters);
+
+    // ------------------------------------------------------
+    // UPDATE STUDENT SUMMARY
+    // ------------------------------------------------------
+
+    await hodPrisma.students.update({
+      where: {
+        id: student.id,
+      },
+
+      data: {
+        academicSetupCompleted: true,
+
+        totalCredits: overall.totalCredits,
+
+        currentCGPA: overall.currentCGPA,
+
+        overallAttendance: overall.overallAttendance,
+
+        academicStanding: overall.academicStanding,
+
+        updatedAt: new Date(),
+      },
+    });
+
+    // ------------------------------------------------------
+    // RETURN FRESH SEMESTER
+    // ------------------------------------------------------
+
+    const result = await hodPrisma.academic_semesters.findUnique({
+      where: {
+        id: existingSemester.id,
+      },
+
+      include: {
+        subjects: {
+          orderBy: {
+            courseCode: "asc",
           },
         },
-      });
+      },
     });
 
     return result;
   }
 
-  // =========================================================
-  // BACKLOG MANAGEMENT
-  // =========================================================
+  // ========================================================
+  // GET BACKLOGS
+  // ========================================================
 
   async getBacklogs(userId) {
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
+    const student = await findStudentByUserId(userId);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    const backlogs = await prisma.academicBacklog.findMany({
+    const backlogs = await hodPrisma.academic_backlogs.findMany({
       where: {
-        studentProfileId: profile.id,
+        studentId: student.id,
       },
 
       orderBy: [
         {
           status: "asc",
         },
+
         {
           semesterNumber: "asc",
         },
+
         {
           createdAt: "asc",
         },
@@ -858,42 +1097,20 @@ class AcademicService {
     };
   }
 
-  // =========================================================
+  // ========================================================
   // CREATE BACKLOG
-  // =========================================================
+  // ========================================================
 
   async createBacklog(userId, body) {
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
-
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    // -------------------------------------------------------
-    // SUBJECT CODE
-    // -------------------------------------------------------
+    const student = await findStudentByUserId(userId);
 
     const subjectCode = String(body.subjectCode || "")
       .trim()
       .toUpperCase();
 
-    // -------------------------------------------------------
-    // SUBJECT NAME
-    // -------------------------------------------------------
-
     const subjectName = String(body.subjectName || "").trim();
 
-    // -------------------------------------------------------
-    // SEMESTER
-    // -------------------------------------------------------
-
     const semesterNumber = Number(body.semesterNumber);
-
-    // -------------------------------------------------------
-    // VALIDATION
-    // -------------------------------------------------------
 
     if (!subjectCode) {
       throw new ApiError(400, "Subject code is required");
@@ -911,13 +1128,9 @@ class AcademicService {
       throw new ApiError(400, "Semester number must be between 1 and 8");
     }
 
-    // -------------------------------------------------------
-    // DUPLICATE ACTIVE BACKLOG CHECK
-    // -------------------------------------------------------
-
-    const existingBacklog = await prisma.academicBacklog.findFirst({
+    const existingBacklog = await hodPrisma.academic_backlogs.findFirst({
       where: {
-        studentProfileId: profile.id,
+        studentId: student.id,
 
         subjectCode: {
           equals: subjectCode,
@@ -938,13 +1151,11 @@ class AcademicService {
       );
     }
 
-    // -------------------------------------------------------
-    // CREATE
-    // -------------------------------------------------------
-
-    const backlog = await prisma.academicBacklog.create({
+    return hodPrisma.academic_backlogs.create({
       data: {
-        studentProfileId: profile.id,
+        id: crypto.randomUUID(),
+
+        studentId: student.id,
 
         subjectCode,
 
@@ -953,30 +1164,26 @@ class AcademicService {
         semesterNumber,
 
         status: "ACTIVE",
+
+        createdAt: new Date(),
+
+        updatedAt: new Date(),
       },
     });
-
-    return backlog;
   }
 
-  // =========================================================
+  // ========================================================
   // UPDATE BACKLOG
-  // =========================================================
+  // ========================================================
 
   async updateBacklog(userId, backlogId, body) {
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
+    const student = await findStudentByUserId(userId);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    const backlog = await prisma.academicBacklog.findFirst({
+    const backlog = await hodPrisma.academic_backlogs.findFirst({
       where: {
         id: backlogId,
 
-        studentProfileId: profile.id,
+        studentId: student.id,
       },
     });
 
@@ -988,29 +1195,13 @@ class AcademicService {
       throw new ApiError(400, "A cleared backlog cannot be edited");
     }
 
-    // -------------------------------------------------------
-    // SUBJECT CODE
-    // -------------------------------------------------------
-
     const subjectCode = String(body.subjectCode || "")
       .trim()
       .toUpperCase();
 
-    // -------------------------------------------------------
-    // SUBJECT NAME
-    // -------------------------------------------------------
-
     const subjectName = String(body.subjectName || "").trim();
 
-    // -------------------------------------------------------
-    // SEMESTER
-    // -------------------------------------------------------
-
     const semesterNumber = Number(body.semesterNumber);
-
-    // -------------------------------------------------------
-    // VALIDATION
-    // -------------------------------------------------------
 
     if (!subjectCode) {
       throw new ApiError(400, "Subject code is required");
@@ -1028,13 +1219,9 @@ class AcademicService {
       throw new ApiError(400, "Semester number must be between 1 and 8");
     }
 
-    // -------------------------------------------------------
-    // DUPLICATE CHECK
-    // -------------------------------------------------------
-
-    const duplicate = await prisma.academicBacklog.findFirst({
+    const duplicate = await hodPrisma.academic_backlogs.findFirst({
       where: {
-        studentProfileId: profile.id,
+        studentId: student.id,
 
         subjectCode: {
           equals: subjectCode,
@@ -1059,11 +1246,7 @@ class AcademicService {
       );
     }
 
-    // -------------------------------------------------------
-    // UPDATE
-    // -------------------------------------------------------
-
-    const updatedBacklog = await prisma.academicBacklog.update({
+    return hodPrisma.academic_backlogs.update({
       where: {
         id: backlogId,
       },
@@ -1074,30 +1257,24 @@ class AcademicService {
         subjectName,
 
         semesterNumber,
+
+        updatedAt: new Date(),
       },
     });
-
-    return updatedBacklog;
   }
 
-  // =========================================================
+  // ========================================================
   // DELETE BACKLOG
-  // =========================================================
+  // ========================================================
 
   async deleteBacklog(userId, backlogId) {
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
+    const student = await findStudentByUserId(userId);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    const backlog = await prisma.academicBacklog.findFirst({
+    const backlog = await hodPrisma.academic_backlogs.findFirst({
       where: {
         id: backlogId,
 
-        studentProfileId: profile.id,
+        studentId: student.id,
       },
     });
 
@@ -1105,7 +1282,7 @@ class AcademicService {
       throw new ApiError(404, "Backlog record not found");
     }
 
-    await prisma.academicBacklog.delete({
+    await hodPrisma.academic_backlogs.delete({
       where: {
         id: backlogId,
       },
@@ -1113,28 +1290,23 @@ class AcademicService {
 
     return {
       id: backlogId,
+
       deleted: true,
     };
   }
 
-  // =========================================================
+  // ========================================================
   // CLEAR BACKLOG
-  // =========================================================
+  // ========================================================
 
   async clearBacklog(userId, backlogId, body) {
-    const profile = await prisma.studentProfile.findUnique({
-      where: { userId },
-    });
+    const student = await findStudentByUserId(userId);
 
-    if (!profile) {
-      throw new ApiError(404, "Student profile not found");
-    }
-
-    const backlog = await prisma.academicBacklog.findFirst({
+    const backlog = await hodPrisma.academic_backlogs.findFirst({
       where: {
         id: backlogId,
 
-        studentProfileId: profile.id,
+        studentId: student.id,
       },
     });
 
@@ -1156,10 +1328,6 @@ class AcademicService {
       body.clearedMarks === undefined
         ? null
         : Number(body.clearedMarks);
-
-    // -------------------------------------------------------
-    // VALIDATION
-    // -------------------------------------------------------
 
     if (
       !Number.isInteger(clearedSemesterNumber) ||
@@ -1183,11 +1351,7 @@ class AcademicService {
       );
     }
 
-    // -------------------------------------------------------
-    // MARK AS CLEARED
-    // -------------------------------------------------------
-
-    const updatedBacklog = await prisma.academicBacklog.update({
+    return hodPrisma.academic_backlogs.update({
       where: {
         id: backlogId,
       },
@@ -1202,10 +1366,10 @@ class AcademicService {
         clearedMarks,
 
         clearedAt: new Date(),
+
+        updatedAt: new Date(),
       },
     });
-
-    return updatedBacklog;
   }
 }
 

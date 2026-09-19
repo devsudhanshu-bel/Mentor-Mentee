@@ -1,15 +1,17 @@
 import asyncHandler from "../../../../utils/asyncHandler.js";
 import ApiResponse from "../../../../utils/ApiResponse.js";
+
 import academicService from "../services/academic.service.js";
 
-class AcademicController {
-  // =========================================================
-  // EXISTING ACADEMIC APIs
-  // =========================================================
+/* ==========================================================
+   ACADEMIC CONTROLLER
+========================================================== */
 
-  /**
-   * GET /mentee/academics
-   */
+class AcademicController {
+  /* ========================================================
+     GET ACADEMIC PROFILE
+  ======================================================== */
+
   getProfile = asyncHandler(async (req, res) => {
     const data = await academicService.getProfile(req.user.id);
 
@@ -20,9 +22,10 @@ class AcademicController {
       );
   });
 
-  /**
-   * GET /mentee/academics/semester/:semesterNumber
-   */
+  /* ========================================================
+     GET SINGLE SEMESTER
+  ======================================================== */
+
   getSemester = asyncHandler(async (req, res) => {
     const data = await academicService.getSemester(
       req.user.id,
@@ -34,11 +37,10 @@ class AcademicController {
       .json(new ApiResponse(200, "Semester fetched successfully", data));
   });
 
-  /**
-   * POST /mentee/academics/semester
-   *
-   * Used for initially saving semester academic details.
-   */
+  /* ========================================================
+     SAVE SEMESTER ACADEMIC DATA
+  ======================================================== */
+
   saveSemester = asyncHandler(async (req, res) => {
     const data = await academicService.saveSemester(req.user.id, req.body);
 
@@ -47,22 +49,10 @@ class AcademicController {
       .json(new ApiResponse(201, "Academic semester saved successfully", data));
   });
 
-  /**
-   * PUT /mentee/academics/semester/:semesterNumber
-   *
-   * Used when a student edits an already saved semester.
-   *
-   * The semester number comes from the URL so that:
-   *
-   * PUT /semester/1
-   * -> edits Semester I
-   *
-   * PUT /semester/2
-   * -> edits Semester II
-   *
-   * PUT /semester/6
-   * -> edits Semester VI
-   */
+  /* ========================================================
+     UPDATE SEMESTER ACADEMIC DATA
+  ======================================================== */
+
   updateSemester = asyncHandler(async (req, res) => {
     const semesterNumber = Number(req.params.semesterNumber);
 
@@ -83,13 +73,10 @@ class AcademicController {
       );
   });
 
-  // =========================================================
-  // BACKLOG APIs
-  // =========================================================
+  /* ========================================================
+     GET BACKLOGS
+  ======================================================== */
 
-  /**
-   * GET /mentee/academics/backlogs
-   */
   getBacklogs = asyncHandler(async (req, res) => {
     const data = await academicService.getBacklogs(req.user.id);
 
@@ -98,9 +85,10 @@ class AcademicController {
       .json(new ApiResponse(200, "Backlogs fetched successfully", data));
   });
 
-  /**
-   * POST /mentee/academics/backlogs
-   */
+  /* ========================================================
+     CREATE BACKLOG
+  ======================================================== */
+
   createBacklog = asyncHandler(async (req, res) => {
     const data = await academicService.createBacklog(req.user.id, req.body);
 
@@ -109,9 +97,10 @@ class AcademicController {
       .json(new ApiResponse(201, "Backlog added successfully", data));
   });
 
-  /**
-   * PUT /mentee/academics/backlogs/:id
-   */
+  /* ========================================================
+     UPDATE BACKLOG
+  ======================================================== */
+
   updateBacklog = asyncHandler(async (req, res) => {
     const data = await academicService.updateBacklog(
       req.user.id,
@@ -124,9 +113,10 @@ class AcademicController {
       .json(new ApiResponse(200, "Backlog updated successfully", data));
   });
 
-  /**
-   * DELETE /mentee/academics/backlogs/:id
-   */
+  /* ========================================================
+     DELETE BACKLOG
+  ======================================================== */
+
   deleteBacklog = asyncHandler(async (req, res) => {
     const data = await academicService.deleteBacklog(
       req.user.id,
@@ -138,9 +128,10 @@ class AcademicController {
       .json(new ApiResponse(200, "Backlog removed successfully", data));
   });
 
-  /**
-   * PATCH /mentee/academics/backlogs/:id/clear
-   */
+  /* ========================================================
+     CLEAR BACKLOG
+  ======================================================== */
+
   clearBacklog = asyncHandler(async (req, res) => {
     const data = await academicService.clearBacklog(
       req.user.id,
@@ -155,5 +146,9 @@ class AcademicController {
       );
   });
 }
+
+/* ==========================================================
+   EXPORT
+========================================================== */
 
 export default new AcademicController();

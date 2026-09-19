@@ -1,50 +1,61 @@
 import { z } from "zod";
 
+const optionalString = z.string().trim().optional().nullable();
+
+const optionalEmail = z.string().trim().email().optional().nullable();
+
 const parentSchema = z.object({
   /* ==========================================================
-     Father Details
+     Father
   ========================================================== */
 
-  fatherName: z.string().trim().optional(),
+  fatherName: optionalString,
 
-  fatherOccupation: z.string().trim().optional(),
+  fatherOccupation: optionalString,
 
-  fatherPhone: z.string().trim().optional(),
+  fatherCompany: optionalString,
 
-  fatherEmail: z
-    .string()
-    .email()
-    .optional(),
+  fatherAnnualIncome: optionalString,
+
+  fatherQualification: optionalString,
+
+  fatherEmail: optionalEmail,
+
+  fatherPhone: optionalString,
+
+  fatherAddress: optionalString,
 
   /* ==========================================================
-     Mother Details
+     Mother
   ========================================================== */
 
-  motherName: z.string().trim().optional(),
+  motherName: optionalString,
 
-  motherOccupation: z.string().trim().optional(),
+  motherOccupation: optionalString,
 
-  motherPhone: z.string().trim().optional(),
+  motherCompany: optionalString,
 
-  motherEmail: z
-    .string()
-    .email()
-    .optional(),
+  motherAnnualIncome: optionalString,
+
+  motherQualification: optionalString,
+
+  motherEmail: optionalEmail,
+
+  motherPhone: optionalString,
+
+  motherAddress: optionalString,
 
   /* ==========================================================
-     Guardian Details
+     Guardian
   ========================================================== */
 
-  guardianName: z.string().trim().optional(),
+  guardianName: optionalString,
 
-  guardianRelation: z.string().trim().optional(),
+  guardianRelationship: optionalString,
 
-  guardianPhone: z.string().trim().optional(),
+  guardianPhone: optionalString,
 
-  guardianEmail: z
-    .string()
-    .email()
-    .optional(),
+  guardianAlternatePhone: optionalString,
 });
 
 export default parentSchema;

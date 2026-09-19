@@ -1,21 +1,56 @@
-import prisma from "../../../config/prisma.js";
-
-import ApiError from "../../../utils/ApiError.js";
+import hodPrisma from "../../../../config/prisma.hod.js";
+import ApiError from "../../../../utils/ApiError.js";
 
 class MentorService {
-  /* ==========================================================
-     Get Logged-in Mentor Profile
-  ========================================================== */
+  /**
+   * ==========================================================
+   * GET CURRENT STUDENT'S MENTOR
+   *
+   * JWT user ID
+   *      ↓
+   * students.userAccountId
+   *      ↓
+   * active mentor_assignments
+   *      ↓
+   * teachers
+   *      ↓
+   * teacher_profiles
+   * ==========================================================
+   */
+  async getMyMentor(userId) {
+    // ========================================================
+    // 1. Find logged-in student
+    // ========================================================
 
-  async getProfile(userId) {
-    const profile = await prisma.mentorProfile.findUnique({
+    const student = await hodPrisma.students.findUnique({
       where: {
-        userId,
+        userAccountId: userId,
       },
-      include: {
-        user: {
+
+      select: {
+        id: true,
+        registerNumber: true,
+        admissionNumber: true,
+        fullName: true,
+        email: true,
+        phone: true,
+        profileImage: true,
+        programme: true,
+        semester: true,
+        section: true,
+
+        departments: {
           select: {
-            fullName: true,
+            id: true,
+            name: true,
+            code: true,
+          },
+        },
+
+        user_accounts: {
+          select: {
+            id: true,
+            username: true,
             email: true,
             isActive: true,
           },
@@ -23,174 +58,249 @@ class MentorService {
       },
     });
 
-    if (!profile) {
+    if (!student) {
+      throw new ApiError(404, "Student profile not found");
+    }
+
+    // ========================================================
+    // 2. Find active mentor assignment
+    // ========================================================
+
+    const assignment = await hodPrisma.mentor_assignments.findFirst({
+      where: {
+        studentId: student.id,
+        status: "ACTIVE",
+      },
+
+      orderBy: {
+        assignedAt: "desc",
+      },
+
+      select: {
+        id: true,
+        assignedAt: true,
+        endedAt: true,
+        status: true,
+
+        academic_terms: {
+          select: {
+            id: true,
+            name: true,
+            semesterNumber: true,
+            startDate: true,
+            endDate: true,
+            status: true,
+          },
+        },
+
+        teachers: {
+          select: {
+            id: true,
+            employeeCode: true,
+            fullName: true,
+            email: true,
+            phone: true,
+            designation: true,
+            maxMentees: true,
+            isActive: true,
+            departmentId: true,
+
+            departments_teachers_departmentIdTodepartments: {
+              select: {
+                id: true,
+                name: true,
+                code: true,
+              },
+            },
+
+            teacher_profiles: {
+              select: {
+                profileImage: true,
+                qualification: true,
+                specialization: true,
+                office: true,
+                officeHours: true,
+                about: true,
+                highlightOne: true,
+                highlightTwo: true,
+                highlightThree: true,
+                linkedIn: true,
+                googleScholar: true,
+                researchGate: true,
+                orcid: true,
+                website: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // ========================================================
+    // 3. No mentor assigned
+    // ========================================================
+
+    if (!assignment) {
       return {
-        profileExists: false,
-        profile: null,
+        assigned: false,
+
+        student: {
+          id: student.id,
+          registerNumber: student.registerNumber,
+          admissionNumber: student.admissionNumber,
+          fullName: student.fullName,
+
+          email: student.email ?? student.user_accounts?.email ?? null,
+
+          phone: student.phone,
+          profileImage: student.profileImage,
+          programme: student.programme,
+          semester: student.semester,
+          section: student.section,
+
+          department: student.departments
+            ? {
+                id: student.departments.id,
+                name: student.departments.name,
+                code: student.departments.code,
+              }
+            : null,
+        },
+
+        mentor: null,
+
+        assignment: null,
+
+        relationship: {
+          mentorSince: null,
+          assignmentStatus: null,
+          term: null,
+        },
       };
     }
 
+    // ========================================================
+    // 4. Prepare mentor information
+    // ========================================================
+
+    const teacher = assignment.teachers;
+
+    const teacherDepartment =
+      teacher.departments_teachers_departmentIdTodepartments;
+
+    const teacherProfile = teacher.teacher_profiles;
+
+    // ========================================================
+    // 5. Return clean frontend response
+    // ========================================================
+
     return {
-      profileExists: true,
-      profile: {
-        id: profile.id,
-        userId: profile.userId,
+      assigned: true,
 
-        // User Details
-        fullName: profile.user.fullName,
-        email: profile.user.email,
-        isActive: profile.user.isActive,
+      student: {
+        id: student.id,
+        registerNumber: student.registerNumber,
+        admissionNumber: student.admissionNumber,
+        fullName: student.fullName,
 
-        // Professional Details
-        employeeId: profile.employeeId,
-        designation: profile.designation,
-        department: profile.department,
-        school: profile.school,
-        specialization: profile.specialization,
-        qualification: profile.qualification,
+        email: student.email ?? student.user_accounts?.email ?? null,
 
-        // Contact Details
-        office: profile.office,
-        officeHours: profile.officeHours,
-        phone: profile.phone,
+        phone: student.phone,
+        profileImage: student.profileImage,
+        programme: student.programme,
+        semester: student.semester,
+        section: student.section,
 
-        // Profile
-        profileImage: profile.profileImage,
-        about: profile.about,
+        department: student.departments
+          ? {
+              id: student.departments.id,
+              name: student.departments.name,
+              code: student.departments.code,
+            }
+          : null,
+      },
 
-        // Highlights
-        highlightOne: profile.highlightOne,
-        highlightTwo: profile.highlightTwo,
-        highlightThree: profile.highlightThree,
+      mentor: {
+        id: teacher.id,
+        employeeCode: teacher.employeeCode,
+        fullName: teacher.fullName,
+        email: teacher.email,
+        phone: teacher.phone,
+        designation: teacher.designation,
+        maxMentees: teacher.maxMentees,
+        isActive: teacher.isActive,
 
-        // Social Links
-        linkedIn: profile.linkedIn,
-        googleScholar: profile.googleScholar,
-        researchGate: profile.researchGate,
-        orcid: profile.orcid,
-        website: profile.website,
+        department: teacherDepartment
+          ? {
+              id: teacherDepartment.id,
+              name: teacherDepartment.name,
+              code: teacherDepartment.code,
+            }
+          : null,
 
-        // Metadata
-        createdAt: profile.createdAt,
-        updatedAt: profile.updatedAt,
+        profile: teacherProfile
+          ? {
+              profileImage: teacherProfile.profileImage,
+
+              qualification: teacherProfile.qualification,
+
+              specialization: teacherProfile.specialization,
+
+              office: teacherProfile.office,
+
+              officeHours: teacherProfile.officeHours,
+
+              about: teacherProfile.about,
+
+              highlightOne: teacherProfile.highlightOne,
+
+              highlightTwo: teacherProfile.highlightTwo,
+
+              highlightThree: teacherProfile.highlightThree,
+
+              linkedIn: teacherProfile.linkedIn,
+
+              googleScholar: teacherProfile.googleScholar,
+
+              researchGate: teacherProfile.researchGate,
+
+              orcid: teacherProfile.orcid,
+
+              website: teacherProfile.website,
+            }
+          : null,
+      },
+
+      assignment: {
+        id: assignment.id,
+        assignedAt: assignment.assignedAt,
+        endedAt: assignment.endedAt,
+        status: assignment.status,
+      },
+
+      relationship: {
+        mentorSince: assignment.assignedAt,
+
+        assignmentStatus: assignment.status,
+
+        term: assignment.academic_terms
+          ? {
+              id: assignment.academic_terms.id,
+
+              name: assignment.academic_terms.name,
+
+              semesterNumber: assignment.academic_terms.semesterNumber,
+
+              startDate: assignment.academic_terms.startDate,
+
+              endDate: assignment.academic_terms.endDate,
+
+              status: assignment.academic_terms.status,
+            }
+          : null,
       },
     };
   }
-
-  /* ==========================================================
-     Create Mentor Profile
-  ========================================================== */
-
-  async createProfile(userId, data) {
-    const existingProfile = await prisma.mentorProfile.findUnique({
-      where: {
-        userId,
-      },
-    });
-
-    if (existingProfile) {
-      throw new ApiError(400, "Profile already exists");
-    }
-
-    const profile = await prisma.mentorProfile.create({
-      data: {
-        userId,
-
-        employeeId: data.employeeId,
-        designation: data.designation,
-        department: data.department,
-        school: data.school,
-
-        specialization: data.specialization,
-        qualification: data.qualification,
-
-        office: data.office,
-        officeHours: data.officeHours,
-        phone: data.phone,
-
-        profileImage: data.profileImage,
-
-        about: data.about,
-
-        highlightOne: data.highlightOne,
-        highlightTwo: data.highlightTwo,
-        highlightThree: data.highlightThree,
-
-        linkedIn: data.linkedIn,
-        googleScholar: data.googleScholar,
-        researchGate: data.researchGate,
-        orcid: data.orcid,
-        website: data.website,
-      },
-    });
-
-    return profile;
-  }
-
-  /* ==========================================================
-     Update Mentor Profile
-  ========================================================== */
-
-  async updateProfile(userId, data) {
-  const existingProfile = await prisma.mentorProfile.findUnique({
-    where: {
-      userId,
-    },
-  });
-
-  if (!existingProfile) {
-    throw new ApiError(
-      404,
-      "Profile not found. Please create your profile first."
-    );
-  }
-
-  // Update User table
-  await prisma.user.update({
-    where: {
-      id: userId,
-    },
-    data: {
-      fullName: data.fullName,
-    },
-  });
-
-  // Update Mentor Profile
-  const profile = await prisma.mentorProfile.update({
-    where: {
-      userId,
-    },
-    data: {
-      employeeId: data.employeeId,
-      designation: data.designation,
-      department: data.department,
-      school: data.school,
-
-      specialization: data.specialization,
-      qualification: data.qualification,
-
-      office: data.office,
-      officeHours: data.officeHours,
-      phone: data.phone,
-
-      profileImage: data.profileImage,
-
-      about: data.about,
-
-      highlightOne: data.highlightOne,
-      highlightTwo: data.highlightTwo,
-      highlightThree: data.highlightThree,
-
-      linkedIn: data.linkedIn,
-      googleScholar: data.googleScholar,
-      researchGate: data.researchGate,
-      orcid: data.orcid,
-      website: data.website,
-    },
-  });
-
-  return profile;
-}
 }
 
 export default new MentorService();

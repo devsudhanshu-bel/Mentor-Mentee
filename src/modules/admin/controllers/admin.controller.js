@@ -44,6 +44,22 @@ class AdminController {
       .status(201)
       .json(new ApiResponse(201, "Mentor created successfully", mentor));
   });
+
+  // ==========================================================
+  // GET MENTOR DETAILS
+  // ==========================================================
+
+  getMentorDetails = asyncHandler(async (req, res) => {
+    const { mentorId } = req.params;
+
+    const result = await AdminService.getMentorDetails(mentorId);
+
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(200, "Mentor details fetched successfully", result),
+      );
+  });
 }
 
 export default new AdminController();

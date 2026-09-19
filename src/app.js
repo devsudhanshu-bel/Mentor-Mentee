@@ -4,18 +4,24 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 
-import authRoutes from "./modules/auth/routes/auth.routes.js";
-import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
-import attendanceRoutes from "./modules/Mentee/attendance/routes/attendance.routes.js";
-import studentRoutes from "./modules/admin/students/student.routes.js";
+/* ==========================================================
+   ROUTES
+========================================================== */
 
-import assignmentRoutes from "./modules/admin/assignments/assignment.routes.js";
-import termChangeRoutes from "./modules/admin/term-change/termChange.routes.js";
+import authRoutes from "./modules/auth/routes/auth.routes.js";
+
+import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
+
+import adminRoutes from "./modules/admin/routes/admin.routes.js";
+
+/* ==========================================================
+   APP
+========================================================== */
 
 const app = express();
 
 /* ==========================================================
-   Security Middleware
+   SECURITY
 ========================================================== */
 
 app.use(helmet());
@@ -32,75 +38,73 @@ app.use(
 );
 
 /* ==========================================================
-   Body Parsers
+   BODY PARSERS
 ========================================================== */
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+);
+
 app.use(cookieParser());
 
 /* ==========================================================
-   Logger
+   LOGGER
 ========================================================== */
 
 app.use(morgan("dev"));
 
 /* ==========================================================
-   Health Check
+   HEALTH CHECK
 ========================================================== */
 
 app.get("/", (req, res) => {
-  res.status(200).json({
+  return res.status(200).json({
     success: true,
     message: "Mentor-Mentee Backend Running 🚀",
   });
 });
 
 /* ==========================================================
-   API Routes
+   AUTHENTICATION
 ========================================================== */
 
-// Authentication
 app.use("/api/auth", authRoutes);
 
-// Mentee
+/* ==========================================================
+   MENTEE / STUDENT
+========================================================== */
+
 app.use("/api/mentee", menteeRoutes);
 
-// Attendance
-app.use("/api/attendance", attendanceRoutes);
-
 /* ==========================================================
-   Admin - Assignments
+   ADMIN
 ========================================================== */
 
-app.use("/api/admin/assignments", assignmentRoutes);
+app.use("/api/admin", adminRoutes);
 
 /* ==========================================================
-   Admin - Term Change
-========================================================== */
-
-app.use("/api/admin/term-change", termChangeRoutes);
-app.use("/api/admin/students", studentRoutes);
-
-/* ==========================================================
-   404 Handler
+   404 HANDLER
 ========================================================== */
 
 app.use((req, res) => {
-  res.status(404).json({
+  return res.status(404).json({
     success: false,
     message: "Route Not Found",
   });
 });
 
 /* ==========================================================
-   Global Error Handler
+   GLOBAL ERROR HANDLER
 ========================================================== */
 
 app.use((err, req, res, next) => {
   console.error("❌ Error:", err);
 
-  res.status(err.statusCode || 500).json({
+  return res.status(err.statusCode || 500).json({
     success: false,
     statusCode: err.statusCode || 500,
     message: err.message || "Internal Server Error",
