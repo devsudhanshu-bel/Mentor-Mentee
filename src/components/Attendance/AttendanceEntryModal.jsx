@@ -1,6 +1,14 @@
 import React, { useMemo, useState } from "react";
 
-import { X, Plus, Trash2, BookOpen, Save, AlertCircle } from "lucide-react";
+import {
+  X,
+  Plus,
+  Trash2,
+  BookOpen,
+  Save,
+  AlertCircle,
+  ChevronDown,
+} from "lucide-react";
 
 const ROMAN = {
   1: "I",
@@ -13,58 +21,71 @@ const ROMAN = {
   8: "VIII",
 };
 
+/* ==========================================================
+   PERCENTAGE
+========================================================== */
+
+const calculatePercentage = (attended, held) => {
+  const numericHeld = Number(held) || 0;
+  const numericAttended = Number(attended) || 0;
+
+  if (numericHeld <= 0) {
+    return 0;
+  }
+
+  return (numericAttended / numericHeld) * 100;
+};
+
+/* ==========================================================
+   EMPTY SUBJECT
+========================================================== */
+
+const createSubject = () => ({
+  id: Date.now() + Math.random(),
+
+  subjectName: "",
+
+  courseCode: "",
+
+  credits: "",
+
+  category: "THEORY",
+
+  /* Theory */
+
+  theoryClassesHeld: "",
+
+  theoryClassesAttended: "",
+
+  /* Practical */
+
+  practicalClassesHeld: "",
+
+  practicalClassesAttended: "",
+});
+
+/* ==========================================================
+   COMPONENT
+========================================================== */
+
 const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
-  const [subjects, setSubjects] = useState([
-    {
-      id: Date.now(),
-
-      subjectName: "",
-
-      courseCode: "",
-
-      credits: "",
-
-      classesHeld: "",
-
-      classesAttended: "",
-    },
-  ]);
+  const [subjects, setSubjects] = useState([createSubject()]);
 
   const [saving, setSaving] = useState(false);
 
   const [error, setError] = useState("");
 
-  /*
-  |--------------------------------------------------------------------------
-  | Add Subject
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     ADD SUBJECT
+  ======================================================== */
 
   const addSubject = () => {
-    setSubjects((current) => [
-      ...current,
-
-      {
-        id: Date.now() + Math.random(),
-
-        subjectName: "",
-
-        courseCode: "",
-
-        credits: "",
-
-        classesHeld: "",
-
-        classesAttended: "",
-      },
-    ]);
+    setSubjects((current) => [...current, createSubject()]);
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | Remove Subject
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     REMOVE SUBJECT
+  ======================================================== */
 
   const removeSubject = (id) => {
     if (subjects.length === 1) {
@@ -72,13 +93,13 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
     }
 
     setSubjects((current) => current.filter((subject) => subject.id !== id));
+
+    setError("");
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | Update Subject
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     UPDATE SUBJECT
+  ======================================================== */
 
   const updateSubject = (id, field, value) => {
     setSubjects((current) =>
@@ -95,38 +116,102 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
     setError("");
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | Live Summary
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     GET SUBJECT TOTALS
+  ======================================================== */
+
+  const getSubjectTotals = (subject) => {
+    if (subject.category === "PRACTICAL") {
+      const theoryHeld = Number(subject.theoryClassesHeld) || 0;
+
+      const theoryAttended = Number(subject.theoryClassesAttended) || 0;
+
+      const practicalHeld = Number(subject.practicalClassesHeld) || 0;
+
+      const practicalAttended = Number(subject.practicalClassesAttended) || 0;
+
+      const totalHeld = theoryHeld + practicalHeld;
+
+      const totalAttended = theoryAttended + practicalAttended;
+
+      return {
+        theoryHeld,
+
+        theoryAttended,
+
+        theoryPercentage: calculatePercentage(theoryAttended, theoryHeld),
+
+        practicalHeld,
+
+        practicalAttended,
+
+        practicalPercentage: calculatePercentage(
+          practicalAttended,
+          practicalHeld,
+        ),
+
+        totalHeld,
+
+        totalAttended,
+
+        combinedPercentage: calculatePercentage(totalAttended, totalHeld),
+      };
+    }
+
+    const classesHeld = Number(subject.theoryClassesHeld) || 0;
+
+    const classesAttended = Number(subject.theoryClassesAttended) || 0;
+
+    return {
+      theoryHeld: classesHeld,
+
+      theoryAttended: classesAttended,
+
+      theoryPercentage: calculatePercentage(classesAttended, classesHeld),
+
+      practicalHeld: 0,
+
+      practicalAttended: 0,
+
+      practicalPercentage: 0,
+
+      totalHeld: classesHeld,
+
+      totalAttended: classesAttended,
+
+      combinedPercentage: calculatePercentage(classesAttended, classesHeld),
+    };
+  };
+
+  /* ========================================================
+     LIVE SUMMARY
+  ======================================================== */
 
   const summary = useMemo(() => {
-    const classesHeld = subjects.reduce(
-      (total, subject) => total + (Number(subject.classesHeld) || 0),
-      0,
-    );
+    let classesHeld = 0;
 
-    const classesAttended = subjects.reduce(
-      (total, subject) => total + (Number(subject.classesAttended) || 0),
-      0,
-    );
+    let classesAttended = 0;
 
-    const percentage =
-      classesHeld > 0 ? (classesAttended / classesHeld) * 100 : 0;
+    subjects.forEach((subject) => {
+      const totals = getSubjectTotals(subject);
+
+      classesHeld += totals.totalHeld;
+
+      classesAttended += totals.totalAttended;
+    });
 
     return {
       classesHeld,
+
       classesAttended,
-      percentage,
+
+      percentage: calculatePercentage(classesAttended, classesHeld),
     };
   }, [subjects]);
 
-  /*
-  |--------------------------------------------------------------------------
-  | Validate
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     VALIDATE
+  ======================================================== */
 
   const validate = () => {
     const names = [];
@@ -134,47 +219,83 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
     for (const subject of subjects) {
       const name = subject.subjectName.trim();
 
-      const held = Number(subject.classesHeld);
-
-      const attended = Number(subject.classesAttended);
-
       if (!name) {
         return "Please enter every subject name.";
       }
 
-      if (subject.classesHeld === "" || !Number.isInteger(held) || held < 0) {
-        return `Enter valid classes held for ${name}.`;
-      }
+      const normalizedName = name.toLowerCase();
 
-      if (
-        subject.classesAttended === "" ||
-        !Number.isInteger(attended) ||
-        attended < 0
-      ) {
-        return `Enter valid classes attended for ${name}.`;
-      }
-
-      if (attended > held) {
-        return `Classes attended cannot exceed classes held for ${name}.`;
-      }
-
-      const normalized = name.toLowerCase();
-
-      if (names.includes(normalized)) {
+      if (names.includes(normalizedName)) {
         return `Duplicate subject: ${name}.`;
       }
 
-      names.push(normalized);
+      names.push(normalizedName);
+
+      /* ======================================================
+         THEORY
+      ====================================================== */
+
+      const theoryHeld = Number(subject.theoryClassesHeld);
+
+      const theoryAttended = Number(subject.theoryClassesAttended);
+
+      if (
+        subject.theoryClassesHeld === "" ||
+        !Number.isInteger(theoryHeld) ||
+        theoryHeld < 0
+      ) {
+        return `Enter valid theory classes held for ${name}.`;
+      }
+
+      if (
+        subject.theoryClassesAttended === "" ||
+        !Number.isInteger(theoryAttended) ||
+        theoryAttended < 0
+      ) {
+        return `Enter valid theory classes attended for ${name}.`;
+      }
+
+      if (theoryAttended > theoryHeld) {
+        return `Theory classes attended cannot exceed classes held for ${name}.`;
+      }
+
+      /* ======================================================
+         PRACTICAL
+      ====================================================== */
+
+      if (subject.category === "PRACTICAL") {
+        const practicalHeld = Number(subject.practicalClassesHeld);
+
+        const practicalAttended = Number(subject.practicalClassesAttended);
+
+        if (
+          subject.practicalClassesHeld === "" ||
+          !Number.isInteger(practicalHeld) ||
+          practicalHeld < 0
+        ) {
+          return `Enter valid practical classes held for ${name}.`;
+        }
+
+        if (
+          subject.practicalClassesAttended === "" ||
+          !Number.isInteger(practicalAttended) ||
+          practicalAttended < 0
+        ) {
+          return `Enter valid practical classes attended for ${name}.`;
+        }
+
+        if (practicalAttended > practicalHeld) {
+          return `Practical classes attended cannot exceed classes held for ${name}.`;
+        }
+      }
     }
 
     return "";
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | Save
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     SAVE
+  ======================================================== */
 
   const handleSave = async () => {
     const validationError = validate();
@@ -187,41 +308,73 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
 
     try {
       setSaving(true);
+
       setError("");
 
-      const payload = subjects.map((subject) => ({
-        subjectName: subject.subjectName.trim(),
+      /*
+       * IMPORTANT:
+       *
+       * For practical subjects:
+       *
+       * Combined Held =
+       * Theory Held + Practical Held
+       *
+       * Combined Attended =
+       * Theory Attended + Practical Attended
+       *
+       * The backend therefore receives the
+       * final combined subject attendance.
+       */
 
-        courseCode: subject.courseCode.trim(),
+      const payload = subjects.map((subject) => {
+        const totals = getSubjectTotals(subject);
 
-        credits: Number(subject.credits) || 0,
+        return {
+          subjectName: subject.subjectName.trim(),
 
-        classesHeld: Number(subject.classesHeld),
+          courseCode: subject.courseCode.trim(),
 
-        classesAttended: Number(subject.classesAttended),
-      }));
+          credits: Number(subject.credits) || 0,
+
+          category: subject.category,
+
+          /*
+           * FINAL COMBINED VALUES
+           */
+
+          classesHeld: totals.totalHeld,
+
+          classesAttended: totals.totalAttended,
+        };
+      });
 
       await onSave(payload);
-    } catch (error) {
-      setError(error.message || "Failed to save attendance.");
+    } catch (err) {
+      setError(err?.message || "Failed to save attendance.");
     } finally {
       setSaving(false);
     }
   };
 
+  /* ========================================================
+     RENDER
+  ======================================================== */
+
   return (
     <div
       className="
-      fixed
-      inset-0
-      z-[100]
-      flex
-      items-center
-      justify-center
-      p-4
-    "
+        fixed
+        inset-0
+        z-[100]
+        flex
+        items-center
+        justify-center
+        p-4
+      "
     >
-      {/* Backdrop */}
+      {/* ======================================================
+          BACKDROP
+      ====================================================== */}
 
       <div
         className="
@@ -233,55 +386,57 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
         onClick={saving ? undefined : onClose}
       />
 
-      {/* Modal */}
+      {/* ======================================================
+          MODAL
+      ====================================================== */}
 
       <div
         className="
-        relative
-        z-10
-        w-full
-        max-w-[760px]
-        max-h-[90vh]
-        bg-white
-        rounded-2xl
-        shadow-2xl
-        overflow-hidden
-        flex
-        flex-col
-      "
+          relative
+          z-10
+          w-full
+          max-w-[760px]
+          max-h-[90vh]
+          bg-white
+          rounded-2xl
+          shadow-2xl
+          overflow-hidden
+          flex
+          flex-col
+        "
       >
-        {/* ============================================================
+        {/* ====================================================
             HEADER
-        ============================================================ */}
+        ==================================================== */}
 
         <div
           className="
-          px-6
-          py-5
-          border-b
-          border-slate-200
-          flex
-          items-center
-          justify-between
-        "
+            px-6
+            py-5
+            border-b
+            border-slate-200
+            flex
+            items-center
+            justify-between
+          "
         >
           <div
             className="
-            flex
-            items-center
-            gap-3
-          "
+              flex
+              items-center
+              gap-3
+            "
           >
             <div
               className="
-              w-10
-              h-10
-              rounded-xl
-              bg-blue-50
-              flex
-              items-center
-              justify-center
-            "
+                w-10
+                h-10
+                rounded-xl
+                bg-blue-50
+                flex
+                items-center
+                justify-center
+              "
             >
               <BookOpen size={19} className="text-blue-600" />
             </div>
@@ -289,22 +444,22 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
             <div>
               <h2
                 className="
-                text-[17px]
-                font-semibold
-                text-[#142970]
-              "
+                  text-[17px]
+                  font-semibold
+                  text-[#142970]
+                "
               >
                 Enter Attendance
               </h2>
 
               <p
                 className="
-                text-[12px]
-                text-slate-500
-                mt-0.5
-              "
+                  text-[12px]
+                  text-slate-500
+                  mt-0.5
+                "
               >
-                Semester {ROMAN[semester]}
+                Semester {ROMAN[semester] || semester}
               </p>
             </div>
           </div>
@@ -329,331 +484,152 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
           </button>
         </div>
 
-        {/* ============================================================
+        {/* ====================================================
             CONTENT
-        ============================================================ */}
+        ==================================================== */}
 
         <div
           className="
-          flex-1
-          overflow-y-auto
-          px-6
-          py-5
-          space-y-4
-        "
+            flex-1
+            overflow-y-auto
+            px-6
+            py-5
+            space-y-4
+          "
         >
           <div>
             <h3
               className="
-              text-[14px]
-              font-semibold
-              text-slate-700
-            "
+                text-[14px]
+                font-semibold
+                text-slate-700
+              "
             >
               Add your subjects
             </h3>
 
             <p
               className="
-              text-[12px]
-              text-slate-500
-              mt-1
-            "
+                text-[12px]
+                text-slate-500
+                mt-1
+              "
             >
-              Enter the classes held and attended for each subject.
+              Select the subject category and enter the corresponding attendance
+              details.
             </p>
           </div>
 
-          {/* Error */}
+          {/* ==================================================
+              ERROR
+          ================================================== */}
 
           {error && (
             <div
               className="
-              flex
-              items-start
-              gap-2
-              px-3
-              py-2.5
-              rounded-lg
-              bg-red-50
-              border
-              border-red-100
-              text-red-600
-              text-[12px]
-            "
+                flex
+                items-start
+                gap-2
+                px-3
+                py-2.5
+                rounded-lg
+                bg-red-50
+                border
+                border-red-100
+                text-red-600
+                text-[12px]
+              "
             >
-              <AlertCircle
-                size={15}
-                className="
-                  mt-0.5
-                  flex-shrink-0
-                "
-              />
+              <AlertCircle size={15} className="mt-0.5 flex-shrink-0" />
 
               <span>{error}</span>
             </div>
           )}
 
-          {/* Subjects */}
+          {/* ==================================================
+              SUBJECTS
+          ================================================== */}
 
-          <div
-            className="
-            space-y-3
-          "
-          >
-            {subjects.map((subject, index) => (
-              <div
-                key={subject.id}
-                className="
-                    border
-                    border-slate-200
-                    rounded-xl
-                    p-4
-                    bg-slate-50/50
-                  "
-              >
+          <div className="space-y-3">
+            {subjects.map((subject, index) => {
+              const totals = getSubjectTotals(subject);
+
+              return (
                 <div
+                  key={subject.id}
                   className="
-                    flex
-                    items-center
-                    justify-between
-                    mb-4
-                  "
-                >
-                  <p
-                    className="
-                      text-[12px]
-                      font-semibold
-                      text-slate-600
+                      border
+                      border-slate-200
+                      rounded-xl
+                      p-4
+                      bg-slate-50/50
                     "
-                  >
-                    Subject {index + 1}
-                  </p>
+                >
+                  {/* ========================================
+                        SUBJECT HEADER
+                    ======================================== */}
 
-                  {subjects.length > 1 && (
-                    <button
-                      type="button"
-                      onClick={() => removeSubject(subject.id)}
+                  <div
+                    className="
+                        flex
+                        items-center
+                        justify-between
+                        mb-4
+                      "
+                  >
+                    <p
                       className="
-                          text-slate-400
-                          hover:text-red-500
+                          text-[12px]
+                          font-semibold
+                          text-slate-600
                         "
                     >
-                      <Trash2 size={15} />
-                    </button>
-                  )}
-                </div>
+                      Subject {index + 1}
+                    </p>
 
-                {/* Subject */}
+                    {subjects.length > 1 && (
+                      <button
+                        type="button"
+                        disabled={saving}
+                        onClick={() => removeSubject(subject.id)}
+                        className="
+                            text-slate-400
+                            hover:text-red-500
+                          "
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    )}
+                  </div>
 
-                <div className="mb-3">
-                  <label
-                    className="
-                      block
-                      text-[11px]
-                      font-medium
-                      text-slate-600
-                      mb-1.5
-                    "
-                  >
-                    Subject Name
-                  </label>
+                  {/* ========================================
+                        SUBJECT NAME
+                    ======================================== */}
 
-                  <input
-                    type="text"
-                    value={subject.subjectName}
-                    onChange={(e) =>
-                      updateSubject(subject.id, "subjectName", e.target.value)
-                    }
-                    placeholder="e.g. Deep Learning"
-                    className="
-                        w-full
-                        h-10
-                        px-3
-                        rounded-lg
-                        border
-                        border-slate-300
-                        bg-white
-                        text-[13px]
-                        outline-none
-                        focus:border-blue-500
-                      "
-                  />
-                </div>
-
-                {/* Course Code + Credits */}
-
-                <div
-                  className="
-                    grid
-                    grid-cols-2
-                    gap-3
-                    mb-3
-                  "
-                >
-                  <div>
+                  <div className="mb-3">
                     <label
                       className="
-                        block
-                        text-[11px]
-                        font-medium
-                        text-slate-600
-                        mb-1.5
-                      "
-                    >
-                      Course Code
-                      <span
-                        className="
-                          text-slate-400
-                          font-normal
+                          block
+                          text-[11px]
+                          font-medium
+                          text-slate-600
+                          mb-1.5
                         "
-                      >
-                        {" "}
-                        (Optional)
-                      </span>
+                    >
+                      Subject Name
                     </label>
 
                     <input
                       type="text"
-                      value={subject.courseCode}
-                      onChange={(e) =>
-                        updateSubject(subject.id, "courseCode", e.target.value)
-                      }
-                      placeholder="e.g. CSE701"
-                      className="
-                          w-full
-                          h-10
-                          px-3
-                          rounded-lg
-                          border
-                          border-slate-300
-                          bg-white
-                          text-[13px]
-                          outline-none
-                          focus:border-blue-500
-                        "
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className="
-                        block
-                        text-[11px]
-                        font-medium
-                        text-slate-600
-                        mb-1.5
-                      "
-                    >
-                      Credits
-                      <span
-                        className="
-                          text-slate-400
-                          font-normal
-                        "
-                      >
-                        {" "}
-                        (Optional)
-                      </span>
-                    </label>
-
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={subject.credits}
-                      onChange={(e) =>
-                        updateSubject(subject.id, "credits", e.target.value)
-                      }
-                      placeholder="0"
-                      className="
-                          w-full
-                          h-10
-                          px-3
-                          rounded-lg
-                          border
-                          border-slate-300
-                          bg-white
-                          text-[13px]
-                          outline-none
-                          focus:border-blue-500
-                        "
-                    />
-                  </div>
-                </div>
-
-                {/* Attendance */}
-
-                <div
-                  className="
-                    grid
-                    grid-cols-2
-                    gap-3
-                  "
-                >
-                  <div>
-                    <label
-                      className="
-                        block
-                        text-[11px]
-                        font-medium
-                        text-slate-600
-                        mb-1.5
-                      "
-                    >
-                      Classes Held
-                    </label>
-
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={subject.classesHeld}
-                      onChange={(e) =>
-                        updateSubject(subject.id, "classesHeld", e.target.value)
-                      }
-                      placeholder="0"
-                      className="
-                          w-full
-                          h-10
-                          px-3
-                          rounded-lg
-                          border
-                          border-slate-300
-                          bg-white
-                          text-[13px]
-                          outline-none
-                          focus:border-blue-500
-                        "
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      className="
-                        block
-                        text-[11px]
-                        font-medium
-                        text-slate-600
-                        mb-1.5
-                      "
-                    >
-                      Classes Attended
-                    </label>
-
-                    <input
-                      type="number"
-                      min="0"
-                      step="1"
-                      value={subject.classesAttended}
-                      onChange={(e) =>
+                      value={subject.subjectName}
+                      onChange={(event) =>
                         updateSubject(
                           subject.id,
-                          "classesAttended",
-                          e.target.value,
+                          "subjectName",
+                          event.target.value,
                         )
                       }
-                      placeholder="0"
+                      placeholder="e.g. Deep Learning"
                       className="
                           w-full
                           h-10
@@ -668,50 +644,635 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
                         "
                     />
                   </div>
-                </div>
 
-                {/* Percentage */}
+                  {/* ========================================
+                        COURSE CODE + CREDITS
+                    ======================================== */}
 
-                <div
-                  className="
-                    mt-3
-                    text-right
-                  "
-                >
-                  <span
+                  <div
                     className="
-                      text-[11px]
-                      text-slate-400
-                    "
+                        grid
+                        grid-cols-2
+                        gap-3
+                        mb-3
+                      "
                   >
-                    Attendance:{" "}
-                  </span>
+                    <div>
+                      <label
+                        className="
+                            block
+                            text-[11px]
+                            font-medium
+                            text-slate-600
+                            mb-1.5
+                          "
+                      >
+                        Course Code
+                        <span className="text-slate-400 font-normal">
+                          {" "}
+                        </span>
+                      </label>
 
-                  <span
+                      <input
+                        type="text"
+                        value={subject.courseCode}
+                        onChange={(event) =>
+                          updateSubject(
+                            subject.id,
+                            "courseCode",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="e.g. CSE701"
+                        className="
+                            w-full
+                            h-10
+                            px-3
+                            rounded-lg
+                            border
+                            border-slate-300
+                            bg-white
+                            text-[13px]
+                            outline-none
+                            focus:border-blue-500
+                          "
+                      />
+                    </div>
+
+                    <div>
+                      <label
+                        className="
+                            block
+                            text-[11px]
+                            font-medium
+                            text-slate-600
+                            mb-1.5
+                          "
+                      >
+                        Credits
+                        <span className="text-slate-400 font-normal">
+                          {" "}
+                        </span>
+                      </label>
+
+                      <input
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={subject.credits}
+                        onChange={(event) =>
+                          updateSubject(
+                            subject.id,
+                            "credits",
+                            event.target.value,
+                          )
+                        }
+                        placeholder="0"
+                        className="
+                            w-full
+                            h-10
+                            px-3
+                            rounded-lg
+                            border
+                            border-slate-300
+                            bg-white
+                            text-[13px]
+                            outline-none
+                            focus:border-blue-500
+                          "
+                      />
+                    </div>
+                  </div>
+
+                  {/* ========================================
+                        CATEGORY
+                    ======================================== */}
+
+                  <div className="mb-4">
+                    <label
+                      className="
+                          block
+                          text-[11px]
+                          font-medium
+                          text-slate-600
+                          mb-1.5
+                        "
+                    >
+                      Subject Category
+                    </label>
+
+                    <div className="relative">
+                      <select
+                        value={subject.category}
+                        onChange={(event) =>
+                          updateSubject(
+                            subject.id,
+                            "category",
+                            event.target.value,
+                          )
+                        }
+                        className="
+                            appearance-none
+                            w-full
+                            h-10
+                            px-3
+                            pr-9
+                            rounded-lg
+                            border
+                            border-slate-300
+                            bg-white
+                            text-[13px]
+                            outline-none
+                            focus:border-blue-500
+                            cursor-pointer
+                          "
+                      >
+                        <option value="THEORY">Theory</option>
+
+                        <option value="PRACTICAL">Practical</option>
+                      </select>
+
+                      <ChevronDown
+                        size={16}
+                        className="
+                            absolute
+                            right-3
+                            top-1/2
+                            -translate-y-1/2
+                            text-slate-400
+                            pointer-events-none
+                          "
+                      />
+                    </div>
+                  </div>
+
+                  {/* ========================================
+                        THEORY
+                    ======================================== */}
+
+                  <div
                     className="
-                      text-[11px]
-                      font-semibold
-                      text-blue-600
-                    "
+                        border
+                        border-slate-200
+                        rounded-xl
+                        p-3
+                        bg-white
+                      "
                   >
-                    {Number(subject.classesHeld) > 0
-                      ? (
-                          (Number(subject.classesAttended) /
-                            Number(subject.classesHeld)) *
-                          100
-                        ).toFixed(2)
-                      : "0.00"}
-                    %
-                  </span>
+                    {subject.category === "PRACTICAL" ? (
+                      <div className="mb-3">
+                        <p
+                          className="
+                              text-[12px]
+                              font-semibold
+                              text-[#142970]
+                            "
+                        >
+                          Theory Part
+                        </p>
+
+                        <p
+                          className="
+                              text-[10px]
+                              text-slate-400
+                              mt-0.5
+                            "
+                        >
+                          Enter theory attendance
+                        </p>
+                      </div>
+                    ) : null}
+
+                    <div
+                      className="
+                          grid
+                          grid-cols-2
+                          gap-3
+                        "
+                    >
+                      <div>
+                        <label
+                          className="
+                              block
+                              text-[11px]
+                              font-medium
+                              text-slate-600
+                              mb-1.5
+                            "
+                        >
+                          Classes Held
+                        </label>
+
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={subject.theoryClassesHeld}
+                          onChange={(event) =>
+                            updateSubject(
+                              subject.id,
+                              "theoryClassesHeld",
+                              event.target.value,
+                            )
+                          }
+                          placeholder="0"
+                          className="
+                              w-full
+                              h-10
+                              px-3
+                              rounded-lg
+                              border
+                              border-slate-300
+                              bg-white
+                              text-[13px]
+                              outline-none
+                              focus:border-blue-500
+                            "
+                        />
+                      </div>
+
+                      <div>
+                        <label
+                          className="
+                              block
+                              text-[11px]
+                              font-medium
+                              text-slate-600
+                              mb-1.5
+                            "
+                        >
+                          Classes Attended
+                        </label>
+
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={subject.theoryClassesAttended}
+                          onChange={(event) =>
+                            updateSubject(
+                              subject.id,
+                              "theoryClassesAttended",
+                              event.target.value,
+                            )
+                          }
+                          placeholder="0"
+                          className="
+                              w-full
+                              h-10
+                              px-3
+                              rounded-lg
+                              border
+                              border-slate-300
+                              bg-white
+                              text-[13px]
+                              outline-none
+                              focus:border-blue-500
+                            "
+                        />
+                      </div>
+                    </div>
+
+                    {/* THEORY PERCENTAGE */}
+
+                    <div
+                      className="
+                          mt-3
+                          text-right
+                        "
+                    >
+                      <span
+                        className="
+                            text-[11px]
+                            text-slate-400
+                          "
+                      >
+                        Theory Attendance:{" "}
+                      </span>
+
+                      <span
+                        className="
+                            text-[11px]
+                            font-semibold
+                            text-blue-600
+                          "
+                      >
+                        {totals.theoryPercentage.toFixed(2)}%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* ========================================
+                        PRACTICAL
+                    ======================================== */}
+
+                  {subject.category === "PRACTICAL" && (
+                    <>
+                      <div
+                        className="
+                            border
+                            border-slate-200
+                            rounded-xl
+                            p-3
+                            bg-white
+                            mt-3
+                          "
+                      >
+                        <div className="mb-3">
+                          <p
+                            className="
+                                text-[12px]
+                                font-semibold
+                                text-[#142970]
+                              "
+                          >
+                            Practical Part
+                          </p>
+
+                          <p
+                            className="
+                                text-[10px]
+                                text-slate-400
+                                mt-0.5
+                              "
+                          >
+                            Enter practical attendance
+                          </p>
+                        </div>
+
+                        <div
+                          className="
+                              grid
+                              grid-cols-2
+                              gap-3
+                            "
+                        >
+                          <div>
+                            <label
+                              className="
+                                  block
+                                  text-[11px]
+                                  font-medium
+                                  text-slate-600
+                                  mb-1.5
+                                "
+                            >
+                              Classes Held
+                            </label>
+
+                            <input
+                              type="number"
+                              min="0"
+                              step="1"
+                              value={subject.practicalClassesHeld}
+                              onChange={(event) =>
+                                updateSubject(
+                                  subject.id,
+                                  "practicalClassesHeld",
+                                  event.target.value,
+                                )
+                              }
+                              placeholder="0"
+                              className="
+                                  w-full
+                                  h-10
+                                  px-3
+                                  rounded-lg
+                                  border
+                                  border-slate-300
+                                  bg-white
+                                  text-[13px]
+                                  outline-none
+                                  focus:border-blue-500
+                                "
+                            />
+                          </div>
+
+                          <div>
+                            <label
+                              className="
+                                  block
+                                  text-[11px]
+                                  font-medium
+                                  text-slate-600
+                                  mb-1.5
+                                "
+                            >
+                              Classes Attended
+                            </label>
+
+                            <input
+                              type="number"
+                              min="0"
+                              step="1"
+                              value={subject.practicalClassesAttended}
+                              onChange={(event) =>
+                                updateSubject(
+                                  subject.id,
+                                  "practicalClassesAttended",
+                                  event.target.value,
+                                )
+                              }
+                              placeholder="0"
+                              className="
+                                  w-full
+                                  h-10
+                                  px-3
+                                  rounded-lg
+                                  border
+                                  border-slate-300
+                                  bg-white
+                                  text-[13px]
+                                  outline-none
+                                  focus:border-blue-500
+                                "
+                            />
+                          </div>
+                        </div>
+
+                        {/* PRACTICAL PERCENTAGE */}
+
+                        <div
+                          className="
+                              mt-3
+                              text-right
+                            "
+                        >
+                          <span
+                            className="
+                                text-[11px]
+                                text-slate-400
+                              "
+                          >
+                            Practical Attendance:{" "}
+                          </span>
+
+                          <span
+                            className="
+                                text-[11px]
+                                font-semibold
+                                text-blue-600
+                              "
+                          >
+                            {totals.practicalPercentage.toFixed(2)}%
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* ======================================
+                            COMBINED RESULT
+                        ====================================== */}
+
+                      <div
+                        className="
+                            mt-3
+                            rounded-xl
+                            border
+                            border-blue-100
+                            bg-blue-50/50
+                            px-4
+                            py-3
+                          "
+                      >
+                        <div
+                          className="
+                              flex
+                              items-center
+                              justify-between
+                              mb-3
+                            "
+                        >
+                          <div>
+                            <p
+                              className="
+                                  text-[12px]
+                                  font-semibold
+                                  text-[#142970]
+                                "
+                            >
+                              Combined Attendance
+                            </p>
+
+                            <p
+                              className="
+                                  text-[10px]
+                                  text-slate-400
+                                  mt-0.5
+                                "
+                            >
+                              Theory + Practical
+                            </p>
+                          </div>
+
+                          <span
+                            className="
+                                text-[15px]
+                                font-bold
+                                text-blue-600
+                              "
+                          >
+                            {totals.combinedPercentage.toFixed(2)}%
+                          </span>
+                        </div>
+
+                        <div
+                          className="
+                              grid
+                              grid-cols-2
+                              gap-3
+                            "
+                        >
+                          <div>
+                            <p
+                              className="
+                                  text-[10px]
+                                  text-slate-400
+                                "
+                            >
+                              Total Classes Held
+                            </p>
+
+                            <p
+                              className="
+                                  text-[13px]
+                                  font-semibold
+                                  text-[#142970]
+                                  mt-1
+                                "
+                            >
+                              {totals.totalHeld}
+                            </p>
+                          </div>
+
+                          <div>
+                            <p
+                              className="
+                                  text-[10px]
+                                  text-slate-400
+                                "
+                            >
+                              Total Classes Attended
+                            </p>
+
+                            <p
+                              className="
+                                  text-[13px]
+                                  font-semibold
+                                  text-[#142970]
+                                  mt-1
+                                "
+                            >
+                              {totals.totalAttended}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {/* ========================================
+                        THEORY FINAL PERCENTAGE
+                    ======================================== */}
+
+                  {subject.category === "THEORY" && (
+                    <div
+                      className="
+                          mt-3
+                          text-right
+                        "
+                    >
+                      <span
+                        className="
+                            text-[11px]
+                            text-slate-400
+                          "
+                      >
+                        Attendance:{" "}
+                      </span>
+
+                      <span
+                        className="
+                            text-[11px]
+                            font-semibold
+                            text-blue-600
+                          "
+                      >
+                        {totals.combinedPercentage.toFixed(2)}%
+                      </span>
+                    </div>
+                  )}
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
-          {/* Add */}
+          {/* ==================================================
+              ADD SUBJECT
+          ================================================== */}
 
           <button
             type="button"
+            disabled={saving}
             onClick={addSubject}
             className="
               w-full
@@ -728,6 +1289,7 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
               justify-center
               gap-2
               hover:bg-blue-50
+              disabled:opacity-50
             "
           >
             <Plus size={15} />
@@ -735,100 +1297,81 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
           </button>
         </div>
 
-        {/* ============================================================
+        {/* ====================================================
             FOOTER
-        ============================================================ */}
+        ==================================================== */}
 
         <div
           className="
-          border-t
-          border-slate-200
-          px-6
-          py-4
-          bg-white
-        "
+            border-t
+            border-slate-200
+            px-6
+            py-4
+            bg-white
+          "
         >
           <div
             className="
-            grid
-            grid-cols-3
-            gap-4
-            mb-4
-          "
+              grid
+              grid-cols-3
+              gap-4
+              mb-4
+            "
           >
             <div>
-              <p
-                className="
-                text-[10px]
-                text-slate-400
-              "
-              >
-                Classes Held
-              </p>
+              <p className="text-[10px] text-slate-400">Classes Held</p>
 
               <p
                 className="
-                text-[14px]
-                font-semibold
-                text-[#142970]
-                mt-1
-              "
+                  text-[14px]
+                  font-semibold
+                  text-[#142970]
+                  mt-1
+                "
               >
                 {summary.classesHeld}
               </p>
             </div>
 
             <div>
-              <p
-                className="
-                text-[10px]
-                text-slate-400
-              "
-              >
-                Classes Attended
-              </p>
+              <p className="text-[10px] text-slate-400">Classes Attended</p>
 
               <p
                 className="
-                text-[14px]
-                font-semibold
-                text-[#142970]
-                mt-1
-              "
+                  text-[14px]
+                  font-semibold
+                  text-[#142970]
+                  mt-1
+                "
               >
                 {summary.classesAttended}
               </p>
             </div>
 
             <div>
-              <p
-                className="
-                text-[10px]
-                text-slate-400
-              "
-              >
-                Overall Attendance
-              </p>
+              <p className="text-[10px] text-slate-400">Overall Attendance</p>
 
               <p
                 className="
-                text-[14px]
-                font-semibold
-                text-blue-600
-                mt-1
-              "
+                  text-[14px]
+                  font-semibold
+                  text-blue-600
+                  mt-1
+                "
               >
                 {summary.percentage.toFixed(2)}%
               </p>
             </div>
           </div>
 
+          {/* BUTTONS */}
+
           <div
             className="
-            flex
-            justify-end
-            gap-2
-          "
+              flex
+              justify-end
+              gap-2
+            "
           >
             <button
               type="button"

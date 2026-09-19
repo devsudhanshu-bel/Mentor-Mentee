@@ -16,7 +16,6 @@ import SemesterSummary from "../components/Academics/SemesterSummary";
 import GradeDistribution from "../components/Academics/GradeDistribution";
 
 import SGPATrend from "../components/Academics/SGPATrend";
-import SubjectsChart from "../components/Academics/SubjectsChart";
 
 import {
   getAcademicOverview,
@@ -26,63 +25,75 @@ import {
 
 const Academics = () => {
   // =========================================================
-  // Academic overview
+  // ACADEMIC OVERVIEW
   // =========================================================
+
   const [academicData, setAcademicData] = useState(null);
 
   const [loading, setLoading] = useState(true);
+
   const [error, setError] = useState("");
 
   // =========================================================
-  // Selected semester data
+  // SELECTED SEMESTER DATA
   // =========================================================
+
   const [selectedSemesterData, setSelectedSemesterData] = useState(null);
 
   // =========================================================
-  // Setup modal
+  // SETUP MODAL
   // =========================================================
+
   const [showSetupModal, setShowSetupModal] = useState(false);
 
   // =========================================================
-  // Semester currently being entered
+  // SETUP SEMESTER
   // =========================================================
+
   const [setupSemester, setSetupSemester] = useState(null);
 
   // =========================================================
-  // Number of subjects
+  // SUBJECT COUNT
   // =========================================================
+
   const [subjectCount, setSubjectCount] = useState(null);
 
   // =========================================================
-  // Success modal
+  // SUCCESS MODAL
   // =========================================================
+
   const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   // =========================================================
-  // Currently selected semester
+  // ACTIVE SEMESTER
   // =========================================================
+
   const [activeSemester, setActiveSemester] = useState(1);
 
   // =========================================================
-  // Current semester
+  // CURRENT SEMESTER
   // =========================================================
+
   const currentSemester = Number(
     academicData?.currentSemester ?? academicData?.data?.currentSemester ?? 1,
   );
 
   // =========================================================
-  // Semester records
+  // SEMESTER RECORDS
   // =========================================================
+
   const semesterRecords =
     academicData?.semesters || academicData?.data?.semesters || [];
 
   // =========================================================
-  // INITIAL ACADEMIC OVERVIEW
+  // INITIAL LOAD
   // =========================================================
+
   useEffect(() => {
     const fetchAcademicData = async () => {
       try {
         setLoading(true);
+
         setError("");
 
         const data = await getAcademicOverview();
@@ -91,30 +102,34 @@ const Academics = () => {
 
         setAcademicData(data);
 
-        // -----------------------------------------------------
-        // Setup completion
-        // -----------------------------------------------------
+        // -------------------------------------------------
+        // SETUP COMPLETION
+        // -------------------------------------------------
+
         const setupCompleted =
           data?.setupCompleted ?? data?.data?.setupCompleted ?? false;
 
-        // -----------------------------------------------------
-        // Semester records
-        // -----------------------------------------------------
+        // -------------------------------------------------
+        // RECORDS
+        // -------------------------------------------------
+
         const records = data?.semesters || data?.data?.semesters || [];
 
-        // -----------------------------------------------------
-        // Completed semesters only
-        // Current semester remains locked.
-        // -----------------------------------------------------
+        // -------------------------------------------------
+        // COMPLETED PREVIOUS SEMESTERS
+        // -------------------------------------------------
+
         const completedSemesters = records.filter(
           (semester) =>
             semester?.hasRecord === true &&
-            Number(semester?.semesterNumber) < currentSemester,
+            Number(semester?.semesterNumber) <
+              Number(data?.currentSemester ?? data?.data?.currentSemester ?? 1),
         );
 
-        // -----------------------------------------------------
-        // Select latest completed semester
-        // -----------------------------------------------------
+        // -------------------------------------------------
+        // LATEST COMPLETED
+        // -------------------------------------------------
+
         if (completedSemesters.length > 0) {
           const latestCompletedSemester = Math.max(
             ...completedSemesters.map((semester) =>
@@ -123,15 +138,21 @@ const Academics = () => {
           );
 
           setActiveSemester(latestCompletedSemester);
-        } else if (currentSemester > 1) {
-          setActiveSemester(currentSemester - 1);
+        } else if (
+          Number(data?.currentSemester ?? data?.data?.currentSemester ?? 1) > 1
+        ) {
+          setActiveSemester(
+            Number(data?.currentSemester ?? data?.data?.currentSemester ?? 1) -
+              1,
+          );
         } else {
           setActiveSemester(1);
         }
 
-        // -----------------------------------------------------
-        // First login setup
-        // -----------------------------------------------------
+        // -------------------------------------------------
+        // FIRST LOGIN SETUP
+        // -------------------------------------------------
+
         if (!setupCompleted) {
           setShowSetupModal(true);
         }
@@ -153,6 +174,7 @@ const Academics = () => {
   // =========================================================
   // FETCH SELECTED SEMESTER
   // =========================================================
+
   useEffect(() => {
     let cancelled = false;
 
@@ -162,7 +184,6 @@ const Academics = () => {
       }
 
       try {
-        // Clear previous semester data
         setSelectedSemesterData(null);
 
         const data = await getAcademicSemester(activeSemester);
@@ -193,14 +214,16 @@ const Academics = () => {
   }, [activeSemester]);
 
   // =========================================================
-  // HANDLE SEMESTER TAB CLICK
+  // SEMESTER CHANGE
   // =========================================================
+
   const handleSemesterChange = (semesterNumber, options = {}) => {
     console.log("Semester clicked:", semesterNumber, options);
 
     // -------------------------------------------------------
-    // Current and future semesters locked
+    // CURRENT + FUTURE LOCKED
     // -------------------------------------------------------
+
     if (Number(semesterNumber) >= currentSemester) {
       console.log(`Semester ${semesterNumber} is locked.`);
 
@@ -208,38 +231,44 @@ const Academics = () => {
     }
 
     // -------------------------------------------------------
-    // Set active semester
+    // SET ACTIVE
     // -------------------------------------------------------
+
     setActiveSemester(Number(semesterNumber));
 
     // -------------------------------------------------------
-    // ENTRY MODE
+    // ENTRY
     // -------------------------------------------------------
+
     if (options.mode === "ENTRY") {
       setSetupSemester(Number(semesterNumber));
 
       setSubjectCount(null);
+
       setShowSetupModal(false);
+
       setShowSuccessModal(false);
 
       return;
     }
 
     // -------------------------------------------------------
-    // VIEW MODE
+    // VIEW
     // -------------------------------------------------------
+
     if (options.mode === "VIEW") {
       setSetupSemester(null);
-      setSubjectCount(null);
-      setShowSuccessModal(false);
 
-      return;
+      setSubjectCount(null);
+
+      setShowSuccessModal(false);
     }
   };
 
   // =========================================================
-  // LOADING STATE
+  // LOADING
   // =========================================================
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-100">
@@ -261,8 +290,9 @@ const Academics = () => {
   }
 
   // =========================================================
-  // ERROR STATE
+  // ERROR
   // =========================================================
+
   if (error) {
     return (
       <div className="min-h-screen bg-slate-100">
@@ -282,25 +312,21 @@ const Academics = () => {
   }
 
   // =========================================================
-  // MAIN PAGE
+  // MAIN
   // =========================================================
+
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* =====================================================
-          SIDEBAR
-         ===================================================== */}
       <Sidebar />
 
-      {/* =====================================================
-          MAIN CONTENT
-         ===================================================== */}
       <div className="ml-[290px] flex min-h-screen flex-col">
         <Header />
 
         <main className="flex-1 space-y-5 px-4 py-4">
           {/* =================================================
               ACADEMIC BANNER
-             ================================================= */}
+          ================================================= */}
+
           <AcademicBanner
             academicData={academicData}
             selectedSemesterData={selectedSemesterData}
@@ -308,8 +334,9 @@ const Academics = () => {
           />
 
           {/* =================================================
-              ACADEMIC INFORMATION + SEMESTER TABS
-             ================================================= */}
+              SEMESTER NAVIGATION
+          ================================================= */}
+
           <AcademicInfo
             currentSemester={currentSemester}
             semesterData={semesterRecords}
@@ -319,52 +346,38 @@ const Academics = () => {
 
           {/* =================================================
               SEMESTER TABLE
-              
-              FULL WIDTH
-              
-              This is intentionally separated from the
-              analytics section so that the height of the
-              table does not affect the positioning of the
-              analytics cards.
-             ================================================= */}
+          ================================================= */}
+
           <div className="w-full">
             <SemesterTable semesterNumber={activeSemester} />
           </div>
 
           {/* =================================================
-    ANALYTICS SECTION
-    All cards stay at the same height and level.
-    Table above remains completely dynamic.
-   ================================================= */}
-          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4 items-stretch">
-            {/* Semester Summary */}
+              ANALYTICS
+          ================================================= */}
+
+          <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 items-stretch">
+            {/* SEMESTER SUMMARY */}
+
             <div className="min-w-0 h-[215px]">
               <div className="h-full [&>*]:h-full">
                 <SemesterSummary semesterData={selectedSemesterData} />
               </div>
             </div>
 
-            {/* Grade Distribution */}
+            {/* GRADE DISTRIBUTION */}
+
             <div className="min-w-0 h-[215px]">
               <div className="h-full [&>*]:h-full">
                 <GradeDistribution semesterData={selectedSemesterData} />
               </div>
             </div>
 
-            {/* SGPA Trend */}
+            {/* SGPA TREND */}
+
             <div className="min-w-0 h-[215px]">
               <div className="h-full [&>*]:h-full">
                 <SGPATrend academicData={academicData} />
-              </div>
-            </div>
-
-            {/* Subjects */}
-            <div className="min-w-0 h-[215px]">
-              <div className="h-full [&>*]:h-full">
-                <SubjectsChart
-                  semesterData={selectedSemesterData}
-                  academicData={academicData}
-                />
               </div>
             </div>
           </div>
@@ -372,8 +385,9 @@ const Academics = () => {
       </div>
 
       {/* =====================================================
-          FIRST LOGIN / ACADEMIC SETUP
-         ===================================================== */}
+          FIRST LOGIN SETUP
+      ===================================================== */}
+
       <AcademicSetupModal
         isOpen={showSetupModal}
         currentSemester={currentSemester}
@@ -386,14 +400,17 @@ const Academics = () => {
           setSetupSemester(Number(semesterNumber));
 
           setSubjectCount(null);
+
           setShowSetupModal(false);
+
           setShowSuccessModal(false);
         }}
       />
 
       {/* =====================================================
-          SUBJECT COUNT STEP
-         ===================================================== */}
+          SUBJECT COUNT
+      ===================================================== */}
+
       {setupSemester && !subjectCount && !showSuccessModal && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/40 px-4 backdrop-blur-sm">
           <div className="w-full max-w-lg">
@@ -417,8 +434,9 @@ const Academics = () => {
       )}
 
       {/* =====================================================
-          SUBJECT ENTRY FORM
-         ===================================================== */}
+          SUBJECT ENTRY
+      ===================================================== */}
+
       {setupSemester && subjectCount && !showSuccessModal && (
         <div className="fixed inset-0 z-[110] overflow-y-auto bg-black/40 px-4 py-8 backdrop-blur-sm">
           <div className="mx-auto w-full max-w-4xl">
@@ -430,9 +448,16 @@ const Academics = () => {
               }}
               onComplete={async (subjects) => {
                 try {
-                  // =========================================
-                  // BACKEND PAYLOAD
-                  // =========================================
+                  // ======================================
+                  // ACADEMIC PAYLOAD
+                  //
+                  // IMPORTANT:
+                  // NO attendance field here.
+                  //
+                  // Attendance belongs to the
+                  // Attendance module.
+                  // ======================================
+
                   const payload = {
                     semesterNumber: setupSemester,
 
@@ -469,27 +494,23 @@ const Academics = () => {
                         subject.gradePoint === ""
                           ? null
                           : Number(subject.gradePoint),
-
-                      attendance:
-                        subject.attendance === ""
-                          ? null
-                          : Number(subject.attendance),
                     })),
                   };
 
                   console.log("Academic POST payload:", payload);
 
-                  // =========================================
-                  // SAVE TO BACKEND
-                  // =========================================
+                  // ======================================
+                  // SAVE
+                  // ======================================
+
                   await createAcademicSemester(payload);
 
-                  // =========================================
-                  // SUCCESS POPUP
-                  // =========================================
+                  // ======================================
+                  // SUCCESS
+                  // ======================================
+
                   setShowSuccessModal(true);
 
-                  // Hide entry form
                   setSubjectCount(null);
                 } catch (err) {
                   console.error("Failed to save semester:", err);
@@ -506,34 +527,39 @@ const Academics = () => {
       )}
 
       {/* =====================================================
-          SUCCESS MODAL
-         ===================================================== */}
+          SUCCESS
+      ===================================================== */}
+
       <AcademicSuccessModal
         isOpen={showSuccessModal}
         semesterNumber={setupSemester}
         onContinue={async () => {
           // -----------------------------------------------
-          // Close success modal
+          // CLOSE
           // -----------------------------------------------
+
           setShowSuccessModal(false);
 
           // -----------------------------------------------
-          // Select submitted semester
+          // SELECT SEMESTER
           // -----------------------------------------------
+
           if (setupSemester) {
             setActiveSemester(setupSemester);
           }
 
           // -----------------------------------------------
-          // Clear setup state
+          // CLEAR
           // -----------------------------------------------
+
           setSetupSemester(null);
 
           setSubjectCount(null);
 
           // -----------------------------------------------
-          // Refresh overview
+          // REFRESH
           // -----------------------------------------------
+
           try {
             const updated = await getAcademicOverview();
 

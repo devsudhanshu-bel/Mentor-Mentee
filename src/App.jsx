@@ -205,7 +205,7 @@ function App() {
 
           <Route path="/admin/mentors" element={<AdminMentors />} />
 
-          <Route path="/admin/mentor/:id" element={<MentorDetails />} />
+          <Route path="/admin/mentor/:mentorId" element={<MentorDetails />} />
 
           {/* ==================================================
               ADMIN STUDENT

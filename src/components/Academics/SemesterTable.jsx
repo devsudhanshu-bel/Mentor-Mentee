@@ -1,42 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  BookOpen,
-  Loader2,
-  AlertCircle,
-  Pencil,
-  Plus,
-  Trash2,
-  Save,
-  X,
-} from "lucide-react";
+import { BookOpen, Loader2, AlertCircle, Pencil, Save, X } from "lucide-react";
 
 import {
   getAcademicSemester,
   updateAcademicSemester,
 } from "../../api/academic.api";
-
-const createEmptySubject = () => ({
-  id: `new-${Date.now()}-${Math.random()}`,
-
-  courseCode: "",
-  courseName: "",
-
-  credits: "",
-
-  cia1: "",
-  mse: "",
-  cia3: "",
-  ese: "",
-
-  totalMarksObtained: "",
-  maximumMarks: "",
-
-  grade: "",
-  gradePoint: "",
-
-  attendance: "",
-});
 
 // =========================================================
 // NUMBER → WORDS
@@ -119,7 +88,6 @@ const numberToWords = (number) => {
 
   if (num < 1000000) {
     const thousands = Math.floor(num / 1000);
-
     const remainder = num % 1000;
 
     let result = convertBelowThousand(thousands) + " Thousand";
@@ -133,7 +101,6 @@ const numberToWords = (number) => {
 
   if (num < 100000000) {
     const lakhs = Math.floor(num / 100000);
-
     const remainder = num % 100000;
 
     let result = convertBelowThousand(lakhs) + " Lakh";
@@ -182,7 +149,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
       setLoading(true);
       setError("");
       setSuccess("");
-
       setIsEditing(false);
 
       const response = await getAcademicSemester(semesterNumber);
@@ -201,15 +167,15 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
         response?.data?.subjects ||
         [];
 
+      const safeSubjects = Array.isArray(resolvedSubjects)
+        ? resolvedSubjects
+        : [];
+
       setSemesterData(resolvedSemester);
 
-      setSubjects(Array.isArray(resolvedSubjects) ? resolvedSubjects : []);
+      setSubjects(safeSubjects);
 
-      setOriginalSubjects(
-        Array.isArray(resolvedSubjects)
-          ? JSON.parse(JSON.stringify(resolvedSubjects))
-          : [],
-      );
+      setOriginalSubjects(JSON.parse(JSON.stringify(safeSubjects)));
     } catch (err) {
       console.error(`Failed to load Semester ${semesterNumber}:`, err);
 
@@ -232,21 +198,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
   };
 
   useEffect(() => {
-    let mounted = true;
-
-    const run = async () => {
-      if (!mounted) {
-        return;
-      }
-
-      await fetchSemester();
-    };
-
-    run();
-
-    return () => {
-      mounted = false;
-    };
+    fetchSemester();
   }, [semesterNumber]);
 
   // =========================================================
@@ -306,7 +258,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
   };
 
   // =========================================================
-  // UPDATE SUBJECT
+  // UPDATE ONLY ACADEMIC FIELDS
   // =========================================================
 
   const handleSubjectChange = (index, field, value) => {
@@ -323,22 +275,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
   };
 
   // =========================================================
-  // ADD SUBJECT
-  // =========================================================
-
-  const handleAddSubject = () => {
-    setSubjects((previous) => [...previous, createEmptySubject()]);
-  };
-
-  // =========================================================
-  // REMOVE SUBJECT
-  // =========================================================
-
-  const handleRemoveSubject = (index) => {
-    setSubjects((previous) => previous.filter((_, i) => i !== index));
-  };
-
-  // =========================================================
   // SAVE
   // =========================================================
 
@@ -348,146 +284,94 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
       setError("");
       setSuccess("");
 
-      // -----------------------------------------
-      // VALIDATION
-      // -----------------------------------------
-
-      for (let index = 0; index < subjects.length; index++) {
-        const subject = subjects[index];
-
-        if (!String(subject?.courseCode || "").trim()) {
-          setError(`Subject ${index + 1}: Subject Code is required.`);
-
-          setSaving(false);
-
-          return;
-        }
-
-        if (!String(subject?.courseName || "").trim()) {
-          setError(`Subject ${index + 1}: Subject Name is required.`);
-
-          setSaving(false);
-
-          return;
-        }
-
-        if (
-          subject?.credits === "" ||
-          subject?.credits === null ||
-          subject?.credits === undefined
-        ) {
-          setError(`Subject ${index + 1}: Credits are required.`);
-
-          setSaving(false);
-
-          return;
-        }
-      }
-
-      // -----------------------------------------
-      // CLEAN PAYLOAD
-      // -----------------------------------------
-
-      const cleanSubjects = subjects.map((subject) => ({
-        ...(subject?.id && !String(subject.id).startsWith("new-")
-          ? {
-              id: subject.id,
-            }
-          : {}),
-
-        courseCode: String(subject.courseCode || "").trim(),
-
-        courseName: String(subject.courseName || "").trim(),
-
-        credits: Number(subject.credits),
-
-        cia1:
-          subject.cia1 === "" ||
-          subject.cia1 === null ||
-          subject.cia1 === undefined
-            ? null
-            : Number(subject.cia1),
-
-        mse:
-          subject.mse === "" ||
-          subject.mse === null ||
-          subject.mse === undefined
-            ? null
-            : Number(subject.mse),
-
-        cia3:
-          subject.cia3 === "" ||
-          subject.cia3 === null ||
-          subject.cia3 === undefined
-            ? null
-            : Number(subject.cia3),
-
-        ese:
-          subject.ese === "" ||
-          subject.ese === null ||
-          subject.ese === undefined
-            ? null
-            : Number(subject.ese),
-
-        totalMarksObtained:
-          subject.totalMarksObtained === "" ||
-          subject.totalMarksObtained === null ||
-          subject.totalMarksObtained === undefined
-            ? null
-            : Number(subject.totalMarksObtained),
-
-        maximumMarks:
-          subject.maximumMarks === "" ||
-          subject.maximumMarks === null ||
-          subject.maximumMarks === undefined
-            ? null
-            : Number(subject.maximumMarks),
-
-        grade: String(subject.grade || "").trim(),
-
-        gradePoint:
-          subject.gradePoint === "" ||
-          subject.gradePoint === null ||
-          subject.gradePoint === undefined
-            ? null
-            : Number(subject.gradePoint),
-
-        attendance:
-          subject.attendance === "" ||
-          subject.attendance === null ||
-          subject.attendance === undefined
-            ? null
-            : Number(subject.attendance),
-      }));
-
-      // -----------------------------------------
-      // API
-      // -----------------------------------------
-
-      const response = await updateAcademicSemester(semesterNumber, {
+      const payload = {
         semesterNumber: Number(semesterNumber),
 
-        subjects: cleanSubjects,
-      });
+        subjects: subjects.map((subject) => ({
+          /*
+           * ID ONLY identifies the existing
+           * subject in the database.
+           */
 
-      console.log("Updated semester:", response);
+          id: subject.id,
 
-      setSuccess(`Semester ${semesterNumber} updated successfully.`);
+          /*
+           * ACADEMIC FIELDS ONLY
+           */
+
+          cia1:
+            subject.cia1 === "" ||
+            subject.cia1 === null ||
+            subject.cia1 === undefined
+              ? null
+              : Number(subject.cia1),
+
+          mse:
+            subject.mse === "" ||
+            subject.mse === null ||
+            subject.mse === undefined
+              ? null
+              : Number(subject.mse),
+
+          cia3:
+            subject.cia3 === "" ||
+            subject.cia3 === null ||
+            subject.cia3 === undefined
+              ? null
+              : Number(subject.cia3),
+
+          ese:
+            subject.ese === "" ||
+            subject.ese === null ||
+            subject.ese === undefined
+              ? null
+              : Number(subject.ese),
+
+          maximumMarks:
+            subject.maximumMarks === "" ||
+            subject.maximumMarks === null ||
+            subject.maximumMarks === undefined
+              ? null
+              : Number(subject.maximumMarks),
+
+          totalMarksObtained:
+            subject.totalMarksObtained === "" ||
+            subject.totalMarksObtained === null ||
+            subject.totalMarksObtained === undefined
+              ? null
+              : Number(subject.totalMarksObtained),
+
+          grade: subject.grade
+            ? String(subject.grade).trim().toUpperCase()
+            : null,
+
+          gradePoint:
+            subject.gradePoint === "" ||
+            subject.gradePoint === null ||
+            subject.gradePoint === undefined
+              ? null
+              : Number(subject.gradePoint),
+        })),
+      };
+
+      console.log("ACADEMIC MARKS ONLY PAYLOAD:", payload);
+
+      const response = await updateAcademicSemester(semesterNumber, payload);
+
+      console.log("Academic update response:", response);
+
+      setSuccess("Academic marks updated successfully.");
 
       setIsEditing(false);
 
       await fetchSemester();
-
-      setTimeout(() => {
-        setSuccess("");
-      }, 3000);
     } catch (err) {
-      console.error("Failed to update semester:", err);
+      console.error("Failed to update academic marks:", err);
 
       setError(
         err?.response?.data?.message ||
           err?.message ||
-          "Failed to save semester changes.",
+          "Failed to save academic marks.",
       );
     } finally {
       setSaving(false);
@@ -551,19 +435,10 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
   if (!subjects.length && !isEditing) {
     return (
       <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+        <div className="border-b border-slate-100 px-6 py-4">
           <h2 className="text-lg font-semibold text-[#0B63F6]">
             Semester {semesterNumber} Details
           </h2>
-
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="flex items-center gap-2 rounded-lg bg-[#0B63F6] px-4 py-2 text-xs font-semibold text-white hover:bg-blue-700"
-          >
-            <Pencil size={14} />
-            Add Semester Details
-          </button>
         </div>
 
         <div className="flex min-h-[220px] items-center justify-center px-6">
@@ -572,10 +447,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
             <p className="text-sm font-medium text-slate-500">
               No academic details available for Semester {semesterNumber}.
-            </p>
-
-            <p className="mt-1 text-xs text-slate-400">
-              Add subjects and marks to this semester.
             </p>
           </div>
         </div>
@@ -591,7 +462,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* =====================================================
           HEADER
-         ===================================================== */}
+      ===================================================== */}
 
       <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
         <div>
@@ -601,7 +472,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
           {isEditing && (
             <p className="mt-1 text-[11px] text-blue-500">
-              Editing only Semester {semesterNumber}
+              Editing academic marks only
             </p>
           )}
         </div>
@@ -651,7 +522,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
       {/* =====================================================
           SUCCESS
-         ===================================================== */}
+      ===================================================== */}
 
       {success && (
         <div className="mx-5 mt-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-xs font-medium text-green-700">
@@ -661,7 +532,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
       {/* =====================================================
           ERROR
-         ===================================================== */}
+      ===================================================== */}
 
       {error && (
         <div className="mx-5 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
@@ -670,42 +541,28 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
       )}
 
       {/* =====================================================
-          EDIT CONTROLS
-         ===================================================== */}
+          EDIT NOTICE
+      ===================================================== */}
 
       {isEditing && (
-        <div className="flex items-center justify-between border-b border-blue-100 bg-blue-50 px-5 py-3">
-          <div>
-            <p className="text-xs font-semibold text-blue-700">
-              Edit Semester {semesterNumber}
-            </p>
+        <div className="border-b border-blue-100 bg-blue-50 px-5 py-3">
+          <p className="text-xs font-semibold text-blue-700">
+            Academic marks editing
+          </p>
 
-            <p className="mt-0.5 text-[10px] text-blue-500">
-              You can modify marks, credits, grades and subjects.
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleAddSubject}
-            className="flex items-center gap-1.5 rounded-lg bg-[#0B63F6] px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
-          >
-            <Plus size={14} />
-            Add Subject
-          </button>
+          <p className="mt-0.5 text-[10px] text-blue-500">
+            Course details, credits and attendance are managed from the
+            Attendance page and cannot be changed here.
+          </p>
         </div>
       )}
 
       {/* =====================================================
           TABLE
-         ===================================================== */}
+      ===================================================== */}
 
       <div className="w-full overflow-x-auto scrollbar-hide">
         <table className="w-full border-collapse text-[11px] text-slate-700">
-          {/* =================================================
-              TABLE HEADER
-             ================================================= */}
-
           <thead className="bg-white">
             <tr className="text-slate-700">
               <th
@@ -777,15 +634,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
               >
                 Attendance (%)
               </th>
-
-              {isEditing && (
-                <th
-                  rowSpan="2"
-                  className="w-20 border border-slate-200 px-2 py-2 font-semibold"
-                >
-                  Action
-                </th>
-              )}
             </tr>
 
             <tr>
@@ -811,10 +659,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
             </tr>
           </thead>
 
-          {/* =================================================
-              TABLE BODY
-             ================================================= */}
-
           <tbody>
             {subjects.map((subject, index) => {
               const attendance =
@@ -824,288 +668,252 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
                   ? Number(subject.attendance)
                   : null;
 
-              // =================================================
-              // VIEW MODE
-              // =================================================
-
-              if (!isEditing) {
-                return (
-                  <tr
-                    key={subject.id || subject.courseCode || index}
-                    className="transition-colors hover:bg-slate-50"
-                  >
-                    <td className="border border-slate-200 px-2 py-3 text-center font-medium">
-                      {index + 1}
-                    </td>
-
-                    <td className="whitespace-nowrap border border-slate-200 px-2 py-3 text-center font-semibold text-[#0B3B8F]">
-                      {displayValue(subject.courseCode || subject.code)}
-                    </td>
-
-                    <td className="whitespace-nowrap border border-slate-200 px-3 py-3">
-                      {displayValue(subject.courseName || subject.name)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center font-medium">
-                      {displayValue(subject.credits)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {displayValue(subject.cia1)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {displayValue(subject.mse)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {displayValue(subject.cia3)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {displayValue(subject.ese)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center font-semibold">
-                      {displayValue(
-                        subject.totalMarksObtained ?? subject.obtained,
-                      )}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {displayValue(subject.maximumMarks ?? subject.max)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center font-semibold text-[#0B3B8F]">
-                      {displayValue(subject.grade)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {displayValue(subject.gradePoint)}
-                    </td>
-
-                    <td className="border border-slate-200 px-2 py-3 text-center">
-                      {attendance !== null ? (
-                        <span
-                          className={`inline-flex items-center justify-center rounded-md px-2.5 py-0.5 text-[10px] font-semibold ${
-                            attendance >= 90
-                              ? "bg-green-100 text-green-700"
-                              : attendance >= 85
-                                ? "bg-amber-100 text-amber-700"
-                                : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {attendance}%
-                        </span>
-                      ) : (
-                        "-"
-                      )}
-                    </td>
-                  </tr>
-                );
-              }
-
-              // =================================================
-              // EDIT MODE
-              // =================================================
-
               return (
-                <tr key={subject.id || index} className="bg-blue-50/30">
-                  <td className="border border-slate-200 px-2 py-2 text-center font-medium">
+                <tr
+                  key={subject.id || subject.courseCode || index}
+                  className={
+                    isEditing
+                      ? "bg-blue-50/20"
+                      : "transition-colors hover:bg-slate-50"
+                  }
+                >
+                  {/* # */}
+                  <td className="border border-slate-200 px-2 py-3 text-center font-medium">
                     {index + 1}
                   </td>
 
-                  {/* COURSE CODE */}
-                  <td className="border border-slate-200 p-1.5">
-                    <input
-                      value={subject.courseCode || ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "courseCode",
-                          event.target.value.toUpperCase(),
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-2 py-1.5 text-[11px] outline-none focus:border-blue-500"
-                    />
+                  {/* =================================================
+                        COURSE CODE — READ ONLY
+                    ================================================= */}
+
+                  <td className="border border-slate-200 px-2 py-3 text-center font-semibold text-[#0B3B8F]">
+                    {displayValue(subject.courseCode || subject.code)}
                   </td>
 
-                  {/* COURSE NAME */}
-                  <td className="border border-slate-200 p-1.5">
-                    <input
-                      value={subject.courseName || ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "courseName",
-                          event.target.value,
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-2 py-1.5 text-[11px] outline-none focus:border-blue-500"
-                    />
+                  {/* =================================================
+                        COURSE NAME — READ ONLY
+                    ================================================= */}
+
+                  <td className="border border-slate-200 px-3 py-3">
+                    {displayValue(subject.courseName || subject.name)}
                   </td>
 
-                  {/* CREDITS */}
-                  <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      min="0"
-                      step="0.5"
-                      value={subject.credits ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "credits",
-                          event.target.value,
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-2 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                  {/* =================================================
+                        CREDITS — READ ONLY / FROM ATTENDANCE
+                    ================================================= */}
+
+                  <td className="border border-slate-200 px-2 py-3 text-center font-semibold">
+                    {displayValue(subject.credits)}
                   </td>
 
-                  {/* CIA 1 */}
+                  {/* =================================================
+                        CIA 1 — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      value={subject.cia1 ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(index, "cia1", event.target.value)
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={subject.cia1 ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(index, "cia1", event.target.value)
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center">
+                        {displayValue(subject.cia1)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* MSE */}
+                  {/* =================================================
+                        MSE — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      value={subject.mse ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(index, "mse", event.target.value)
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={subject.mse ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(index, "mse", event.target.value)
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center">
+                        {displayValue(subject.mse)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* CIA 3 */}
+                  {/* =================================================
+                        CIA 3 — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      value={subject.cia3 ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(index, "cia3", event.target.value)
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={subject.cia3 ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(index, "cia3", event.target.value)
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center">
+                        {displayValue(subject.cia3)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* ESE */}
+                  {/* =================================================
+                        ESE — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      value={subject.ese ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(index, "ese", event.target.value)
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={subject.ese ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(index, "ese", event.target.value)
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center">
+                        {displayValue(subject.ese)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* TOTAL OBTAINED */}
+                  {/* =================================================
+                        TOTAL OBTAINED — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      value={subject.totalMarksObtained ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "totalMarksObtained",
-                          event.target.value,
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={subject.totalMarksObtained ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(
+                            index,
+                            "totalMarksObtained",
+                            event.target.value,
+                          )
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center font-semibold">
+                        {displayValue(
+                          subject.totalMarksObtained ?? subject.obtained,
+                        )}
+                      </div>
+                    )}
                   </td>
 
-                  {/* MAXIMUM */}
+                  {/* =================================================
+                        MAXIMUM — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      value={subject.maximumMarks ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "maximumMarks",
-                          event.target.value,
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        value={subject.maximumMarks ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(
+                            index,
+                            "maximumMarks",
+                            event.target.value,
+                          )
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center">
+                        {displayValue(subject.maximumMarks ?? subject.max)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* GRADE */}
+                  {/* =================================================
+                        GRADE — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      value={subject.grade || ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "grade",
-                          event.target.value.toUpperCase(),
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        value={subject.grade || ""}
+                        onChange={(event) =>
+                          handleSubjectChange(
+                            index,
+                            "grade",
+                            event.target.value.toUpperCase(),
+                          )
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center font-semibold text-[#0B3B8F]">
+                        {displayValue(subject.grade)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* GRADE POINT */}
+                  {/* =================================================
+                        GRADE POINT — EDITABLE
+                    ================================================= */}
+
                   <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      min="0"
-                      max="10"
-                      step="0.01"
-                      value={subject.gradePoint ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "gradePoint",
-                          event.target.value,
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        min="0"
+                        max="10"
+                        step="0.01"
+                        value={subject.gradePoint ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(
+                            index,
+                            "gradePoint",
+                            event.target.value,
+                          )
+                        }
+                        className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                      />
+                    ) : (
+                      <div className="px-2 py-2 text-center">
+                        {displayValue(subject.gradePoint)}
+                      </div>
+                    )}
                   </td>
 
-                  {/* ATTENDANCE */}
-                  <td className="border border-slate-200 p-1.5">
-                    <input
-                      type="number"
-                      min="0"
-                      max="100"
-                      step="0.01"
-                      value={subject.attendance ?? ""}
-                      onChange={(event) =>
-                        handleSubjectChange(
-                          index,
-                          "attendance",
-                          event.target.value,
-                        )
-                      }
-                      className="w-full rounded border border-slate-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
-                    />
-                  </td>
+                  {/* =================================================
+                        ATTENDANCE — ALWAYS READ ONLY
+                    ================================================= */}
 
-                  {/* DELETE */}
-                  <td className="border border-slate-200 px-2 py-2 text-center">
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveSubject(index)}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-red-50 text-red-600 hover:bg-red-100"
-                      title="Remove subject"
-                    >
-                      <Trash2 size={14} />
-                    </button>
+                  <td className="border border-slate-200 px-2 py-3 text-center">
+                    {attendance !== null ? (
+                      <span
+                        className={`inline-flex items-center justify-center rounded-md px-2.5 py-0.5 text-[10px] font-semibold ${
+                          attendance >= 90
+                            ? "bg-green-100 text-green-700"
+                            : attendance >= 85
+                              ? "bg-amber-100 text-amber-700"
+                              : "bg-red-100 text-red-700"
+                        }`}
+                      >
+                        {attendance}%
+                      </span>
+                    ) : (
+                      "-"
+                    )}
                   </td>
                 </tr>
               );
@@ -1113,16 +921,10 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
             {/* =================================================
                 TOTAL ROW
-               ================================================= */}
+            ================================================= */}
 
             {subjects.length > 0 && (
               <tr className="bg-white font-semibold">
-                {/* TOTAL LABEL
-                    8 columns:
-                    # + Code + Name + Credits +
-                    CIA1 + MSE + CIA3 + ESE
-                */}
-
                 <td
                   colSpan="8"
                   className="border border-slate-300 px-4 py-3 text-right text-[11px] text-slate-700"
@@ -1131,24 +933,15 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
                   <span>{totalMarksInWords}</span>
                 </td>
 
-                {/* TOTAL OBTAINED */}
-
                 <td className="border border-slate-300 px-2 py-3 text-center text-[11px] font-bold text-slate-800">
                   {totalMarksObtained}
                 </td>
-
-                {/* TOTAL MAX */}
 
                 <td className="border border-slate-300 px-2 py-3 text-center text-[11px] font-bold text-slate-800">
                   {maximumMarks}
                 </td>
 
-                {/* REMAINING COLUMNS */}
-
-                <td
-                  colSpan={isEditing ? "4" : "3"}
-                  className="border border-slate-300 px-2 py-3"
-                ></td>
+                <td colSpan="3" className="border border-slate-300 px-2 py-3" />
               </tr>
             )}
           </tbody>
@@ -1157,7 +950,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
       {/* =====================================================
           FOOTER
-         ===================================================== */}
+      ===================================================== */}
 
       <div className="border-t border-slate-200 bg-white px-5 py-3">
         <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500">

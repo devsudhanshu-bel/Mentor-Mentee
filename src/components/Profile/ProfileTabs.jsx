@@ -1,40 +1,31 @@
 import React from "react";
-import {
-  User,
-  Users,
-  Phone,
-  BookOpen,
-} from "lucide-react";
-
-const tabs = [
-  {
-    id: "personal",
-    label: "Personal Information",
-    icon: User,
-  },
-  {
-    id: "parent",
-    label: "Parent / Guardian Details",
-    icon: Users,
-  },
-  {
-    id: "contact",
-    label: "Contact Details",
-    icon: Phone,
-  },
-  {
-    id: "academic",
-    label: "Academic Information",
-    icon: BookOpen,
-  },
-];
+import { UserRound, UsersRound, Phone } from "lucide-react";
 
 const ProfileTabs = ({ activeTab, setActiveTab }) => {
+  const tabs = [
+    {
+      id: "personal",
+      label: "Personal Information",
+      icon: UserRound,
+    },
+    {
+      id: "parent",
+      label: "Parent / Guardian Details",
+      icon: UsersRound,
+    },
+    {
+      id: "contact",
+      label: "Contact Details",
+      icon: Phone,
+    },
+  ];
+
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid w-full grid-cols-3 gap-3">
       {tabs.map((tab) => {
         const Icon = tab.icon;
-        const active = activeTab === tab.id;
+
+        const isActive = activeTab === tab.id;
 
         return (
           <button
@@ -42,32 +33,29 @@ const ProfileTabs = ({ activeTab, setActiveTab }) => {
             type="button"
             onClick={() => setActiveTab(tab.id)}
             className={`
-              h-10
-              rounded-xl
-              border
               flex
+              w-full
               items-center
               justify-center
               gap-2
+              rounded-xl
+              border
+              px-4
+              py-3
+              text-[13px]
+              font-medium
               transition-all
-              duration-300
-              cursor-pointer
-
+              duration-200
               ${
-                active
-                  ? "bg-gradient-to-r from-blue-600 to-blue-500 border-blue-600 text-white shadow-md"
-                  : "bg-white border-slate-200 text-slate-700 hover:border-blue-300 hover:text-blue-600"
+                isActive
+                  ? "border-blue-500 bg-blue-600 text-white shadow-md"
+                  : "border-slate-200 bg-white text-slate-700 hover:border-blue-300 hover:bg-blue-50"
               }
             `}
           >
-            <Icon
-              size={15}
-              strokeWidth={2}
-            />
+            <Icon size={17} strokeWidth={2} />
 
-            <span className="text-[13px] font-medium">
-              {tab.label}
-            </span>
+            <span>{tab.label}</span>
           </button>
         );
       })}

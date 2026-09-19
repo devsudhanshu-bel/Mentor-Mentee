@@ -4,11 +4,9 @@ import StudentHierarchy from "./StudentHierarchy";
 import StudentFilters from "./StudentFilters";
 import StudentTable from "./StudentTable";
 
-const StudentsTab = () => {
+const StudentsTab = ({ students = [] }) => {
   return (
     <div className="space-y-4">
-      {/* ================= Section Header ================= */}
-
       <div>
         <h2 className="text-lg font-semibold text-slate-900">
           Assigned Students
@@ -19,26 +17,16 @@ const StudentsTab = () => {
         </p>
       </div>
 
-      {/* ================= Main Content ================= */}
-
       <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-12">
-          {/* ================= Student Hierarchy ================= */}
-
           <div className="xl:col-span-3">
-            <StudentHierarchy />
+            <StudentHierarchy students={students} />
           </div>
 
-          {/* ================= Right Section ================= */}
-
           <div className="space-y-4 xl:col-span-9">
-            {/* Filters */}
-
             <StudentFilters />
 
-            {/* Students Table (includes pagination) */}
-
-            <StudentTable />
+            <StudentTable students={students} />
           </div>
         </div>
       </div>

@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  User,
-  CalendarDays,
-  MapPin,
-  Save,
-  Pencil,
-} from "lucide-react";
+import { User, CalendarDays, MapPin, Save, Pencil } from "lucide-react";
 
 import api from "../../api/axios";
 
@@ -72,14 +66,11 @@ const PersonalInformationCard = () => {
   // UI State
   //--------------------------------------------------
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
 
-  const [profileExists, setProfileExists] =
-    useState(false);
+  const [profileExists, setProfileExists] = useState(false);
 
-  const [isEditing, setIsEditing] =
-    useState(false);
+  const [isEditing, setIsEditing] = useState(false);
 
   //--------------------------------------------------
   // Initial Load
@@ -95,10 +86,7 @@ const PersonalInformationCard = () => {
 
   const fetchProfile = async () => {
     try {
-      const response =
-        await api.get(
-          "/mentee/profile/personal"
-        );
+      const response = await api.get("/mentee/profile/personal");
 
       if (response.data.data) {
         setProfileData(response.data.data);
@@ -138,15 +126,9 @@ const PersonalInformationCard = () => {
   const handleSave = async () => {
     try {
       if (profileExists) {
-        await api.put(
-          "/mentee/profile/personal",
-          profileData
-        );
+        await api.put("/mentee/profile/personal", profileData);
       } else {
-        await api.post(
-          "/mentee/profile/personal",
-          profileData
-        );
+        await api.post("/mentee/profile/personal", profileData);
 
         setProfileExists(true);
       }
@@ -173,40 +155,30 @@ const PersonalInformationCard = () => {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-10 text-center">
-        Loading...
-      </div>
+      <div className="bg-white rounded-2xl p-10 text-center">Loading...</div>
     );
   }
 
   return (
     <div className="grid grid-cols-12 gap-3">
-
       {/* ================= LEFT ================= */}
 
-      <div className="col-span-12 xl:col-span-8">
-
+      <div className="col-span-12">
         <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
-
           {/* Header */}
 
           <div className="flex items-center gap-2 mb-4">
-
-            <User
-              size={16}
-              className="text-blue-600"
-            />
+            <User size={16} className="text-blue-600" />
 
             <h2 className="text-base font-semibold text-blue-600">
               Personal Information
             </h2>
-
           </div>
 
           {/* Form */}
 
           <div className="grid grid-cols-2 gap-x-4 gap-y-3">
-                        {/* ================= Full Name ================= */}
+            {/* ================= Full Name ================= */}
 
             <div>
               <label className="block text-[11px] font-medium text-slate-600 mb-1">
@@ -447,16 +419,14 @@ const PersonalInformationCard = () => {
                 <option value="HOSTELLER">Hosteller</option>
               </select>
             </div>
-                        {/* ================= Current Address ================= */}
+            {/* ================= Current Address ================= */}
 
             <div className="col-span-2">
-
               <label className="block text-[11px] font-medium text-slate-600 mb-1">
                 Current Address
               </label>
 
               <div className="relative">
-
                 <MapPin
                   size={14}
                   className="absolute left-3 top-3 text-slate-400"
@@ -482,15 +452,12 @@ const PersonalInformationCard = () => {
                     disabled:bg-slate-50
                   "
                 />
-
               </div>
-
             </div>
 
             {/* ================= Permanent Address ================= */}
 
             <div className="col-span-2">
-
               <label className="block text-[11px] font-medium text-slate-600 mb-1">
                 Permanent Address
               </label>
@@ -514,23 +481,19 @@ const PersonalInformationCard = () => {
                   disabled:bg-slate-50
                 "
               />
-
             </div>
 
             {/* ================= Footer ================= */}
 
             <div className="col-span-2 flex items-center justify-between mt-2">
-
               {/* Same Address */}
 
               <label className="flex items-center gap-2 text-[13px] text-slate-700">
-
                 <input
                   type="checkbox"
                   checked={
                     profileData.address !== "" &&
-                    profileData.address ===
-                      profileData.permanentAddress
+                    profileData.address === profileData.permanentAddress
                   }
                   disabled={profileExists && !isEditing}
                   onChange={(e) => {
@@ -548,19 +511,14 @@ const PersonalInformationCard = () => {
                   }}
                   className="w-3.5 h-3.5 accent-blue-600"
                 />
-
                 Same as Current Address
-
               </label>
 
               {/* Buttons */}
 
               <div className="flex items-center gap-3">
-
                 {profileExists ? (
-
                   isEditing ? (
-
                     <button
                       type="button"
                       onClick={handleSave}
@@ -584,14 +542,9 @@ const PersonalInformationCard = () => {
                     >
                       <Save size={15} />
 
-                      <span>
-                        Save Changes
-                      </span>
-
+                      <span>Save Changes</span>
                     </button>
-
                   ) : (
-
                     <button
                       type="button"
                       onClick={handleEdit}
@@ -615,16 +568,10 @@ const PersonalInformationCard = () => {
                     >
                       <Pencil size={15} />
 
-                      <span>
-                        Edit Profile
-                      </span>
-
+                      <span>Edit Profile</span>
                     </button>
-
                   )
-
                 ) : (
-
                   <button
                     type="button"
                     onClick={handleSave}
@@ -648,337 +595,15 @@ const PersonalInformationCard = () => {
                   >
                     <Save size={15} />
 
-                    <span>
-                      Create Profile
-                    </span>
-
+                    <span>Create Profile</span>
                   </button>
-
                 )}
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-            {/* ================= RIGHT SIDE ================= */}
-
-      <div className="col-span-12 xl:col-span-4 space-y-3">
-
-        {/* ================= Profile Picture ================= */}
-
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
-
-          <h3 className="text-base font-semibold text-blue-600 mb-4">
-            Profile Picture
-          </h3>
-
-          <div className="flex flex-col items-center">
-
-            <div className="relative">
-
-              <img
-                src={
-                  profileData.profileImage
-                    ? profileData.profileImage
-                    : profile
-                }
-                alt="Profile"
-                className="
-                  w-28
-                  h-28
-                  rounded-full
-                  object-cover
-                  border-4
-                  border-white
-                  shadow-md
-                "
-              />
-
-              <button
-                type="button"
-                disabled={profileExists && !isEditing}
-                className="
-                  absolute
-                  bottom-1
-                  right-1
-                  w-8
-                  h-8
-                  rounded-full
-                  bg-blue-600
-                  text-white
-                  flex
-                  items-center
-                  justify-center
-                  shadow-md
-                  hover:bg-blue-700
-                  transition
-                  disabled:bg-slate-300
-                  disabled:cursor-not-allowed
-                "
-              >
-                📷
-              </button>
-
-            </div>
-
-            <p className="text-[10px] text-slate-500 mt-3">
-              JPG, PNG or GIF. Max size 2MB.
-            </p>
-
-            <div className="flex items-center gap-3 mt-4">
-
-              <button
-                type="button"
-                disabled={profileExists && !isEditing}
-                className="
-                  h-9
-                  px-4
-                  rounded-lg
-                  border
-                  border-blue-200
-                  bg-blue-50
-                  text-blue-600
-                  text-[13px]
-                  font-medium
-                  hover:bg-blue-100
-                  transition
-                  disabled:bg-slate-100
-                  disabled:text-slate-400
-                  disabled:border-slate-200
-                  disabled:cursor-not-allowed
-                "
-              >
-                Upload Photo
-              </button>
-
-              <button
-                type="button"
-                disabled={
-                  (profileExists && !isEditing) ||
-                  !profileData.profileImage
-                }
-                className="
-                  h-9
-                  px-4
-                  rounded-lg
-                  border
-                  border-red-200
-                  bg-red-50
-                  text-red-600
-                  text-[13px]
-                  font-medium
-                  hover:bg-red-100
-                  transition
-                  disabled:bg-slate-100
-                  disabled:text-slate-400
-                  disabled:border-slate-200
-                  disabled:cursor-not-allowed
-                "
-              >
-                Remove
-              </button>
-
-            </div>
-
-            {/* ================= Status ================= */}
-
-            <div className="mt-5 w-full">
-
-              <div className="rounded-xl bg-slate-50 border border-slate-200 p-3">
-
-                <div className="flex items-center justify-between">
-
-                  <span className="text-[13px] text-slate-600">
-                    Profile Status
-                  </span>
-
-                  <span
-                    className={`
-                      px-3
-                      py-1
-                      rounded-full
-                      text-[11px]
-                      font-semibold
-                      ${
-                        profileExists
-                          ? "bg-green-100 text-green-700"
-                          : "bg-orange-100 text-orange-700"
-                      }
-                    `}
-                  >
-                    {profileExists
-                      ? "Completed"
-                      : "Not Created"}
-                  </span>
-
-                </div>
-
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-                {/* ================= Personal Summary ================= */}
-
-        <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
-
-          <h3 className="text-base font-semibold text-blue-600 mb-4">
-            Personal Summary
-          </h3>
-
-          <div className="space-y-4">
-
-            {/* Years at University */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Years at University
-              </label>
-
-              <input
-                type="number"
-                name="yearsAtUniversity"
-                value={profileData.yearsAtUniversity || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="w-full h-9 rounded-lg border border-slate-200 px-3 text-[13px] outline-none disabled:bg-slate-50"
-              />
-
-            </div>
-
-            {/* Total Credits */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Total Credits Earned
-              </label>
-
-              <input
-                type="number"
-                name="totalCredits"
-                value={profileData.totalCredits || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="w-full h-9 rounded-lg border border-slate-200 px-3 text-[13px] outline-none disabled:bg-slate-50"
-              />
-
-            </div>
-
-            {/* CGPA */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Current CGPA
-              </label>
-
-              <input
-                type="number"
-                step="0.01"
-                name="currentCGPA"
-                value={profileData.currentCGPA || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="w-full h-9 rounded-lg border border-slate-200 px-3 text-[13px] outline-none disabled:bg-slate-50"
-              />
-
-            </div>
-
-            {/* Attendance */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Overall Attendance (%)
-              </label>
-
-              <input
-                type="number"
-                step="0.01"
-                name="overallAttendance"
-                value={profileData.overallAttendance || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="w-full h-9 rounded-lg border border-slate-200 px-3 text-[13px] outline-none disabled:bg-slate-50"
-              />
-
-            </div>
-
-            {/* Mentor */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Current Mentor
-              </label>
-
-              <input
-                type="text"
-                name="currentMentor"
-                value={profileData.currentMentor || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="w-full h-9 rounded-lg border border-slate-200 px-3 text-[13px] outline-none disabled:bg-slate-50"
-              />
-
-            </div>
-
-            {/* Academic Standing */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Academic Standing
-              </label>
-
-              <select
-                name="academicStanding"
-                value={profileData.academicStanding || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="w-full h-9 rounded-lg border border-slate-200 px-3 text-[13px] outline-none disabled:bg-slate-50"
-              >
-                <option value="">
-                  Select Standing
-                </option>
-
-                <option value="Excellent">
-                  Excellent
-                </option>
-
-                <option value="Good">
-                  Good
-                </option>
-
-                <option value="Average">
-                  Average
-                </option>
-
-                <option value="Needs Improvement">
-                  Needs Improvement
-                </option>
-
-              </select>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
     </div>
-
   );
 };
 

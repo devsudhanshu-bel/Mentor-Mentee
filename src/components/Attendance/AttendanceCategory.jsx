@@ -16,7 +16,7 @@ const AttendanceCategory = ({ attendanceData }) => {
   subjects.forEach((subject) => {
     const percentage = Number(subject.percentage) || 0;
 
-    if (percentage >= 95) {
+    if (percentage >= 90) {
       categories.excellent++;
     } else if (percentage >= 85) {
       categories.good++;

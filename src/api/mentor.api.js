@@ -34,3 +34,13 @@ export const getMentors = async ({
 
   return response?.data?.data ?? response?.data ?? {};
 };
+
+// ==========================================================
+// GET MENTOR DETAILS
+// ==========================================================
+
+export const getMentorDetails = async (mentorId) => {
+  const response = await api.get(`/admin/mentors/${mentorId}`);
+
+  return response?.data?.data ?? response?.data ?? {};
+};

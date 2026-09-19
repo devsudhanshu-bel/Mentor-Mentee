@@ -1,6 +1,10 @@
 import React from "react";
 import { TrendingUp } from "lucide-react";
 
+/* ==========================================================
+   STAT CARD
+========================================================== */
+
 const StatCard = ({
   title,
   value,
@@ -15,21 +19,23 @@ const StatCard = ({
         border
         ${borderColor}
         rounded-xl
-        px-4
-        py-2.5
-        h-[66px]
+        px-3
+        py-3
+        h-[130px]
         flex
         items-center
         justify-between
+        min-w-0
       `}
     >
-      <div>
+      <div className="min-w-0 flex-1">
         <p
           className="
-          text-[10px]
-          font-medium
-          text-slate-500
-        "
+            text-[10px]
+            font-medium
+            text-slate-500
+            leading-tight
+          "
         >
           {title}
         </p>
@@ -38,7 +44,7 @@ const StatCard = ({
           className={`
             text-[15px]
             font-bold
-            mt-1
+            mt-2
             ${valueColor}
           `}
         >
@@ -48,23 +54,36 @@ const StatCard = ({
         {subtitle && (
           <p
             className="
-            text-[10px]
-            text-slate-500
-            leading-none
-            mt-1
-            max-w-[120px]
-            truncate
-          "
+              text-[10px]
+              text-slate-500
+              leading-[13px]
+              mt-1
+              break-words
+              line-clamp-2
+            "
+            title={subtitle}
           >
             {subtitle}
           </p>
         )}
       </div>
 
-      <TrendingUp size={22} strokeWidth={2} className={iconColor} />
+      <TrendingUp
+        size={21}
+        strokeWidth={2}
+        className={`
+          ${iconColor}
+          flex-shrink-0
+          ml-1
+        `}
+      />
     </div>
   );
 };
+
+/* ==========================================================
+   ATTENDANCE STATISTICS
+========================================================== */
 
 const AttendanceStatistics = ({ attendanceData }) => {
   const subjects = attendanceData?.subjects || [];
@@ -73,60 +92,70 @@ const AttendanceStatistics = ({ attendanceData }) => {
 
   const semesterPercentage = Number(summary.percentage) || 0;
 
-  /*
-   * Find highest and lowest subject.
-   */
+  /* ========================================================
+     SORT SUBJECTS
+  ======================================================== */
 
   const sortedSubjects = [...subjects].sort(
-    (a, b) => Number(b.percentage || 0) - Number(a.percentage || 0),
+    (a, b) => Number(b?.percentage || 0) - Number(a?.percentage || 0),
   );
 
-  const highest = sortedSubjects[0];
+  const highest = sortedSubjects.length > 0 ? sortedSubjects[0] : null;
 
-  const lowest = sortedSubjects[sortedSubjects.length - 1];
+  const lowest =
+    sortedSubjects.length > 0
+      ? sortedSubjects[sortedSubjects.length - 1]
+      : null;
+
+  /* ========================================================
+     RENDER
+  ======================================================== */
 
   return (
     <div
       className="
-      bg-white
-      border
-      border-slate-200
-      rounded-2xl
-      shadow-sm
-      p-4
-      h-[200px]
-    "
+        bg-white
+        border
+        border-slate-200
+        rounded-2xl
+        shadow-sm
+        p-4
+        h-[200px]
+        flex
+        flex-col
+      "
     >
+      {/* ======================================================
+          TITLE
+      ====================================================== */}
+
       <h3
         className="
-        text-[14px]
-        font-semibold
-        text-blue-600
-        mb-3
-      "
+          text-[14px]
+          font-semibold
+          text-blue-600
+          mb-3
+        "
       >
         Attendance Statistics
       </h3>
 
+      {/* ======================================================
+          THREE STAT CARDS
+      ====================================================== */}
+
       <div
         className="
-        grid
-        grid-cols-2
-        gap-3
-      "
+          grid
+          grid-cols-3
+          gap-3
+          flex-1
+          items-center
+        "
       >
-        {/* This Month */}
-
-        <StatCard
-          title="This Month"
-          value="—"
-          subtitle="Monthly data unavailable"
-          valueColor="text-slate-400"
-          borderColor="border-slate-200"
-          iconColor="text-slate-400"
-        />
-
-        {/* This Semester */}
+        {/* ====================================================
+            THIS SEMESTER
+        ==================================================== */}
 
         <StatCard
           title="This Semester"
@@ -136,7 +165,9 @@ const AttendanceStatistics = ({ attendanceData }) => {
           iconColor="text-blue-600"
         />
 
-        {/* Highest */}
+        {/* ====================================================
+            HIGHEST SUBJECT
+        ==================================================== */}
 
         <StatCard
           title="Highest (Subject)"
@@ -149,7 +180,9 @@ const AttendanceStatistics = ({ attendanceData }) => {
           iconColor="text-emerald-500"
         />
 
-        {/* Lowest */}
+        {/* ====================================================
+            LOWEST SUBJECT
+        ==================================================== */}
 
         <StatCard
           title="Lowest (Subject)"

@@ -71,10 +71,10 @@ const Mentors = () => {
         workload,
       });
 
-      setMentors(result.mentors || []);
+      setMentors(Array.isArray(result?.mentors) ? result.mentors : []);
 
       setCounts(
-        result.counts || {
+        result?.counts ?? {
           totalMentors: 0,
           activeMentors: 0,
           mentorsWithStudents: 0,
@@ -82,11 +82,15 @@ const Mentors = () => {
         },
       );
 
-      setDepartments(result.departments || []);
+      setDepartments(
+        Array.isArray(result?.departments) ? result.departments : [],
+      );
     } catch (err) {
       console.error("Failed to fetch mentors:", err);
 
       setError(err?.response?.data?.message || "Failed to load mentors.");
+
+      setMentors([]);
     } finally {
       setLoading(false);
     }
@@ -128,21 +132,21 @@ const Mentors = () => {
     <div className="min-h-screen bg-slate-100">
       {/* ==================================================
           SIDEBAR
-          ================================================== */}
+      ================================================== */}
 
       <AdminSidebar />
 
       {/* ==================================================
           MAIN
-          ================================================== */}
+      ================================================== */}
 
       <div className="ml-[290px] min-h-screen">
         <AdminHeader />
 
         <main className="space-y-5 p-6">
           {/* ==================================================
-              PAGE HEADER
-              ================================================== */}
+              HEADER
+          ================================================== */}
 
           <div className="flex items-start justify-between">
             <div>
@@ -154,11 +158,28 @@ const Mentors = () => {
             </div>
 
             <div className="flex items-center gap-2">
+              {/* Refresh */}
               <button
                 type="button"
                 onClick={fetchMentors}
                 disabled={loading}
-                className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  rounded-xl
+                  border
+                  border-slate-200
+                  bg-white
+                  px-4
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-slate-700
+                  shadow-sm
+                  hover:bg-slate-50
+                  disabled:opacity-50
+                "
               >
                 <RefreshCw
                   size={17}
@@ -167,9 +188,23 @@ const Mentors = () => {
                 Refresh
               </button>
 
+              {/* Add Mentor */}
               <button
                 type="button"
-                className="flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+                className="
+                  flex
+                  items-center
+                  gap-2
+                  rounded-xl
+                  bg-blue-600
+                  px-5
+                  py-3
+                  text-sm
+                  font-semibold
+                  text-white
+                  shadow-sm
+                  hover:bg-blue-700
+                "
               >
                 <Plus size={18} />
                 Add Mentor
@@ -178,14 +213,14 @@ const Mentors = () => {
           </div>
 
           {/* ==================================================
-              KPI CARDS
-              ================================================== */}
+              KPI
+          ================================================== */}
 
           <MentorKPICards counts={counts} />
 
           {/* ==================================================
               FILTERS
-              ================================================== */}
+          ================================================== */}
 
           <MentorTableFilters
             search={search}
@@ -201,7 +236,7 @@ const Mentors = () => {
 
           {/* ==================================================
               ERROR
-              ================================================== */}
+          ================================================== */}
 
           {error && (
             <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -211,7 +246,7 @@ const Mentors = () => {
 
           {/* ==================================================
               TABLE
-              ================================================== */}
+          ================================================== */}
 
           <MentorTable
             mentors={paginatedMentors}
