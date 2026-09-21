@@ -292,6 +292,29 @@ exports.Prisma.StudentsScalarFieldEnum = {
   yearsAtUniversity: 'yearsAtUniversity'
 };
 
+exports.Prisma.Student_internshipsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  companyName: 'companyName',
+  internshipTitle: 'internshipTitle',
+  role: 'role',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  location: 'location',
+  mode: 'mode',
+  projectName: 'projectName',
+  description: 'description',
+  status: 'status',
+  verificationStatus: 'verificationStatus',
+  mentorRemark: 'mentorRemark',
+  verifiedAt: 'verifiedAt',
+  rating: 'rating',
+  completionRequested: 'completionRequested',
+  completionRequestedAt: 'completionRequestedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.Student_contact_detailsScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
@@ -585,6 +608,24 @@ exports.StudentType = exports.$Enums.StudentType = {
   HOSTELLER: 'HOSTELLER'
 };
 
+exports.InternshipMode = exports.$Enums.InternshipMode = {
+  ONSITE: 'ONSITE',
+  REMOTE: 'REMOTE',
+  HYBRID: 'HYBRID'
+};
+
+exports.InternshipStatus = exports.$Enums.InternshipStatus = {
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.InternshipVerificationStatus = exports.$Enums.InternshipVerificationStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
 exports.AddressType = exports.$Enums.AddressType = {
   HOME: 'HOME',
   HOSTEL: 'HOSTEL',
@@ -654,6 +695,7 @@ exports.Prisma.ModelName = {
   otp_verifications: 'otp_verifications',
   student_enrollments: 'student_enrollments',
   students: 'students',
+  student_internships: 'student_internships',
   student_contact_details: 'student_contact_details',
   student_parent_details: 'student_parent_details',
   student_documents: 'student_documents',

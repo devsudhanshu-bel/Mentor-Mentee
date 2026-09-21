@@ -74,6 +74,11 @@ export type student_enrollments = $Result.DefaultSelection<Prisma.$student_enrol
  */
 export type students = $Result.DefaultSelection<Prisma.$studentsPayload>
 /**
+ * Model student_internships
+ * 
+ */
+export type student_internships = $Result.DefaultSelection<Prisma.$student_internshipsPayload>
+/**
  * Model student_contact_details
  * 
  */
@@ -219,6 +224,33 @@ export const DocumentCategory: {
 };
 
 export type DocumentCategory = (typeof DocumentCategory)[keyof typeof DocumentCategory]
+
+
+export const InternshipStatus: {
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
+};
+
+export type InternshipStatus = (typeof InternshipStatus)[keyof typeof InternshipStatus]
+
+
+export const InternshipVerificationStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type InternshipVerificationStatus = (typeof InternshipVerificationStatus)[keyof typeof InternshipVerificationStatus]
+
+
+export const InternshipMode: {
+  ONSITE: 'ONSITE',
+  REMOTE: 'REMOTE',
+  HYBRID: 'HYBRID'
+};
+
+export type InternshipMode = (typeof InternshipMode)[keyof typeof InternshipMode]
 
 
 export const AcademicBacklogStatus: {
@@ -383,6 +415,18 @@ export const AcademicEntryStatus: typeof $Enums.AcademicEntryStatus
 export type DocumentCategory = $Enums.DocumentCategory
 
 export const DocumentCategory: typeof $Enums.DocumentCategory
+
+export type InternshipStatus = $Enums.InternshipStatus
+
+export const InternshipStatus: typeof $Enums.InternshipStatus
+
+export type InternshipVerificationStatus = $Enums.InternshipVerificationStatus
+
+export const InternshipVerificationStatus: typeof $Enums.InternshipVerificationStatus
+
+export type InternshipMode = $Enums.InternshipMode
+
+export const InternshipMode: typeof $Enums.InternshipMode
 
 export type AcademicBacklogStatus = $Enums.AcademicBacklogStatus
 
@@ -673,6 +717,16 @@ export class PrismaClient<
     * ```
     */
   get students(): Prisma.studentsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.student_internships`: Exposes CRUD operations for the **student_internships** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Student_internships
+    * const student_internships = await prisma.student_internships.findMany()
+    * ```
+    */
+  get student_internships(): Prisma.student_internshipsDelegate<ExtArgs, ClientOptions>;
 
   /**
    * `prisma.student_contact_details`: Exposes CRUD operations for the **student_contact_details** model.
@@ -1226,6 +1280,7 @@ export namespace Prisma {
     otp_verifications: 'otp_verifications',
     student_enrollments: 'student_enrollments',
     students: 'students',
+    student_internships: 'student_internships',
     student_contact_details: 'student_contact_details',
     student_parent_details: 'student_parent_details',
     student_documents: 'student_documents',
@@ -1254,7 +1309,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles"
+      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2146,6 +2201,80 @@ export namespace Prisma {
           }
         }
       }
+      student_internships: {
+        payload: Prisma.$student_internshipsPayload<ExtArgs>
+        fields: Prisma.student_internshipsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.student_internshipsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.student_internshipsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>
+          }
+          findFirst: {
+            args: Prisma.student_internshipsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.student_internshipsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>
+          }
+          findMany: {
+            args: Prisma.student_internshipsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>[]
+          }
+          create: {
+            args: Prisma.student_internshipsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>
+          }
+          createMany: {
+            args: Prisma.student_internshipsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.student_internshipsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>[]
+          }
+          delete: {
+            args: Prisma.student_internshipsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>
+          }
+          update: {
+            args: Prisma.student_internshipsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>
+          }
+          deleteMany: {
+            args: Prisma.student_internshipsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.student_internshipsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.student_internshipsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>[]
+          }
+          upsert: {
+            args: Prisma.student_internshipsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$student_internshipsPayload>
+          }
+          aggregate: {
+            args: Prisma.Student_internshipsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateStudent_internships>
+          }
+          groupBy: {
+            args: Prisma.student_internshipsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Student_internshipsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.student_internshipsCountArgs<ExtArgs>
+            result: $Utils.Optional<Student_internshipsCountAggregateOutputType> | number
+          }
+        }
+      }
       student_contact_details: {
         payload: Prisma.$student_contact_detailsPayload<ExtArgs>
         fields: Prisma.student_contact_detailsFieldRefs
@@ -2994,6 +3123,7 @@ export namespace Prisma {
     otp_verifications?: otp_verificationsOmit
     student_enrollments?: student_enrollmentsOmit
     students?: studentsOmit
+    student_internships?: student_internshipsOmit
     student_contact_details?: student_contact_detailsOmit
     student_parent_details?: student_parent_detailsOmit
     student_documents?: student_documentsOmit
@@ -3286,6 +3416,7 @@ export namespace Prisma {
     mentor_assignments: number
     mentor_transfer_requests: number
     documents: number
+    internships: number
     student_enrollments: number
   }
 
@@ -3296,6 +3427,7 @@ export namespace Prisma {
     mentor_assignments?: boolean | StudentsCountOutputTypeCountMentor_assignmentsArgs
     mentor_transfer_requests?: boolean | StudentsCountOutputTypeCountMentor_transfer_requestsArgs
     documents?: boolean | StudentsCountOutputTypeCountDocumentsArgs
+    internships?: boolean | StudentsCountOutputTypeCountInternshipsArgs
     student_enrollments?: boolean | StudentsCountOutputTypeCountStudent_enrollmentsArgs
   }
 
@@ -3350,6 +3482,13 @@ export namespace Prisma {
    */
   export type StudentsCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: student_documentsWhereInput
+  }
+
+  /**
+   * StudentsCountOutputType without action
+   */
+  export type StudentsCountOutputTypeCountInternshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: student_internshipsWhereInput
   }
 
   /**
@@ -17009,6 +17148,7 @@ export namespace Prisma {
     mentor_transfer_requests?: boolean | students$mentor_transfer_requestsArgs<ExtArgs>
     contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
     documents?: boolean | students$documentsArgs<ExtArgs>
+    internships?: boolean | students$internshipsArgs<ExtArgs>
     student_enrollments?: boolean | students$student_enrollmentsArgs<ExtArgs>
     parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
@@ -17125,6 +17265,7 @@ export namespace Prisma {
     mentor_transfer_requests?: boolean | students$mentor_transfer_requestsArgs<ExtArgs>
     contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
     documents?: boolean | students$documentsArgs<ExtArgs>
+    internships?: boolean | students$internshipsArgs<ExtArgs>
     student_enrollments?: boolean | students$student_enrollmentsArgs<ExtArgs>
     parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
@@ -17150,6 +17291,7 @@ export namespace Prisma {
       mentor_transfer_requests: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       contactDetails: Prisma.$student_contact_detailsPayload<ExtArgs> | null
       documents: Prisma.$student_documentsPayload<ExtArgs>[]
+      internships: Prisma.$student_internshipsPayload<ExtArgs>[]
       student_enrollments: Prisma.$student_enrollmentsPayload<ExtArgs>[]
       parentDetails: Prisma.$student_parent_detailsPayload<ExtArgs> | null
       departments: Prisma.$departmentsPayload<ExtArgs>
@@ -17586,6 +17728,7 @@ export namespace Prisma {
     mentor_transfer_requests<T extends students$mentor_transfer_requestsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_transfer_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contactDetails<T extends students$contactDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$contactDetailsArgs<ExtArgs>>): Prisma__student_contact_detailsClient<$Result.GetResult<Prisma.$student_contact_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     documents<T extends students$documentsArgs<ExtArgs> = {}>(args?: Subset<T, students$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    internships<T extends students$internshipsArgs<ExtArgs> = {}>(args?: Subset<T, students$internshipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     student_enrollments<T extends students$student_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, students$student_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_enrollmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     parentDetails<T extends students$parentDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$parentDetailsArgs<ExtArgs>>): Prisma__student_parent_detailsClient<$Result.GetResult<Prisma.$student_parent_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     departments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
@@ -18207,6 +18350,30 @@ export namespace Prisma {
   }
 
   /**
+   * students.internships
+   */
+  export type students$internshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    where?: student_internshipsWhereInput
+    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
+    cursor?: student_internshipsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Student_internshipsScalarFieldEnum | Student_internshipsScalarFieldEnum[]
+  }
+
+  /**
    * students.student_enrollments
    */
   export type students$student_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18284,6 +18451,1293 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: studentsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model student_internships
+   */
+
+  export type AggregateStudent_internships = {
+    _count: Student_internshipsCountAggregateOutputType | null
+    _avg: Student_internshipsAvgAggregateOutputType | null
+    _sum: Student_internshipsSumAggregateOutputType | null
+    _min: Student_internshipsMinAggregateOutputType | null
+    _max: Student_internshipsMaxAggregateOutputType | null
+  }
+
+  export type Student_internshipsAvgAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type Student_internshipsSumAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type Student_internshipsMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    companyName: string | null
+    internshipTitle: string | null
+    role: string | null
+    startDate: Date | null
+    endDate: Date | null
+    location: string | null
+    mode: $Enums.InternshipMode | null
+    projectName: string | null
+    description: string | null
+    status: $Enums.InternshipStatus | null
+    verificationStatus: $Enums.InternshipVerificationStatus | null
+    mentorRemark: string | null
+    verifiedAt: Date | null
+    rating: number | null
+    completionRequested: boolean | null
+    completionRequestedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Student_internshipsMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    companyName: string | null
+    internshipTitle: string | null
+    role: string | null
+    startDate: Date | null
+    endDate: Date | null
+    location: string | null
+    mode: $Enums.InternshipMode | null
+    projectName: string | null
+    description: string | null
+    status: $Enums.InternshipStatus | null
+    verificationStatus: $Enums.InternshipVerificationStatus | null
+    mentorRemark: string | null
+    verifiedAt: Date | null
+    rating: number | null
+    completionRequested: boolean | null
+    completionRequestedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Student_internshipsCountAggregateOutputType = {
+    id: number
+    studentId: number
+    companyName: number
+    internshipTitle: number
+    role: number
+    startDate: number
+    endDate: number
+    location: number
+    mode: number
+    projectName: number
+    description: number
+    status: number
+    verificationStatus: number
+    mentorRemark: number
+    verifiedAt: number
+    rating: number
+    completionRequested: number
+    completionRequestedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Student_internshipsAvgAggregateInputType = {
+    rating?: true
+  }
+
+  export type Student_internshipsSumAggregateInputType = {
+    rating?: true
+  }
+
+  export type Student_internshipsMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    companyName?: true
+    internshipTitle?: true
+    role?: true
+    startDate?: true
+    endDate?: true
+    location?: true
+    mode?: true
+    projectName?: true
+    description?: true
+    status?: true
+    verificationStatus?: true
+    mentorRemark?: true
+    verifiedAt?: true
+    rating?: true
+    completionRequested?: true
+    completionRequestedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Student_internshipsMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    companyName?: true
+    internshipTitle?: true
+    role?: true
+    startDate?: true
+    endDate?: true
+    location?: true
+    mode?: true
+    projectName?: true
+    description?: true
+    status?: true
+    verificationStatus?: true
+    mentorRemark?: true
+    verifiedAt?: true
+    rating?: true
+    completionRequested?: true
+    completionRequestedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Student_internshipsCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    companyName?: true
+    internshipTitle?: true
+    role?: true
+    startDate?: true
+    endDate?: true
+    location?: true
+    mode?: true
+    projectName?: true
+    description?: true
+    status?: true
+    verificationStatus?: true
+    mentorRemark?: true
+    verifiedAt?: true
+    rating?: true
+    completionRequested?: true
+    completionRequestedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Student_internshipsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which student_internships to aggregate.
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of student_internships to fetch.
+     */
+    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: student_internshipsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` student_internships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` student_internships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned student_internships
+    **/
+    _count?: true | Student_internshipsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Student_internshipsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Student_internshipsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Student_internshipsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Student_internshipsMaxAggregateInputType
+  }
+
+  export type GetStudent_internshipsAggregateType<T extends Student_internshipsAggregateArgs> = {
+        [P in keyof T & keyof AggregateStudent_internships]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateStudent_internships[P]>
+      : GetScalarType<T[P], AggregateStudent_internships[P]>
+  }
+
+
+
+
+  export type student_internshipsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: student_internshipsWhereInput
+    orderBy?: student_internshipsOrderByWithAggregationInput | student_internshipsOrderByWithAggregationInput[]
+    by: Student_internshipsScalarFieldEnum[] | Student_internshipsScalarFieldEnum
+    having?: student_internshipsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Student_internshipsCountAggregateInputType | true
+    _avg?: Student_internshipsAvgAggregateInputType
+    _sum?: Student_internshipsSumAggregateInputType
+    _min?: Student_internshipsMinAggregateInputType
+    _max?: Student_internshipsMaxAggregateInputType
+  }
+
+  export type Student_internshipsGroupByOutputType = {
+    id: string
+    studentId: string
+    companyName: string
+    internshipTitle: string
+    role: string | null
+    startDate: Date
+    endDate: Date | null
+    location: string | null
+    mode: $Enums.InternshipMode | null
+    projectName: string | null
+    description: string | null
+    status: $Enums.InternshipStatus
+    verificationStatus: $Enums.InternshipVerificationStatus
+    mentorRemark: string | null
+    verifiedAt: Date | null
+    rating: number | null
+    completionRequested: boolean
+    completionRequestedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Student_internshipsCountAggregateOutputType | null
+    _avg: Student_internshipsAvgAggregateOutputType | null
+    _sum: Student_internshipsSumAggregateOutputType | null
+    _min: Student_internshipsMinAggregateOutputType | null
+    _max: Student_internshipsMaxAggregateOutputType | null
+  }
+
+  type GetStudent_internshipsGroupByPayload<T extends student_internshipsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Student_internshipsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Student_internshipsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Student_internshipsGroupByOutputType[P]>
+            : GetScalarType<T[P], Student_internshipsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type student_internshipsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    companyName?: boolean
+    internshipTitle?: boolean
+    role?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    location?: boolean
+    mode?: boolean
+    projectName?: boolean
+    description?: boolean
+    status?: boolean
+    verificationStatus?: boolean
+    mentorRemark?: boolean
+    verifiedAt?: boolean
+    rating?: boolean
+    completionRequested?: boolean
+    completionRequestedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | studentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["student_internships"]>
+
+  export type student_internshipsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    companyName?: boolean
+    internshipTitle?: boolean
+    role?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    location?: boolean
+    mode?: boolean
+    projectName?: boolean
+    description?: boolean
+    status?: boolean
+    verificationStatus?: boolean
+    mentorRemark?: boolean
+    verifiedAt?: boolean
+    rating?: boolean
+    completionRequested?: boolean
+    completionRequestedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | studentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["student_internships"]>
+
+  export type student_internshipsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    companyName?: boolean
+    internshipTitle?: boolean
+    role?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    location?: boolean
+    mode?: boolean
+    projectName?: boolean
+    description?: boolean
+    status?: boolean
+    verificationStatus?: boolean
+    mentorRemark?: boolean
+    verifiedAt?: boolean
+    rating?: boolean
+    completionRequested?: boolean
+    completionRequestedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    student?: boolean | studentsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["student_internships"]>
+
+  export type student_internshipsSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    companyName?: boolean
+    internshipTitle?: boolean
+    role?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    location?: boolean
+    mode?: boolean
+    projectName?: boolean
+    description?: boolean
+    status?: boolean
+    verificationStatus?: boolean
+    mentorRemark?: boolean
+    verifiedAt?: boolean
+    rating?: boolean
+    completionRequested?: boolean
+    completionRequestedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type student_internshipsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "companyName" | "internshipTitle" | "role" | "startDate" | "endDate" | "location" | "mode" | "projectName" | "description" | "status" | "verificationStatus" | "mentorRemark" | "verifiedAt" | "rating" | "completionRequested" | "completionRequestedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["student_internships"]>
+  export type student_internshipsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | studentsDefaultArgs<ExtArgs>
+  }
+  export type student_internshipsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | studentsDefaultArgs<ExtArgs>
+  }
+  export type student_internshipsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    student?: boolean | studentsDefaultArgs<ExtArgs>
+  }
+
+  export type $student_internshipsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "student_internships"
+    objects: {
+      student: Prisma.$studentsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      companyName: string
+      internshipTitle: string
+      role: string | null
+      startDate: Date
+      endDate: Date | null
+      location: string | null
+      mode: $Enums.InternshipMode | null
+      projectName: string | null
+      description: string | null
+      status: $Enums.InternshipStatus
+      verificationStatus: $Enums.InternshipVerificationStatus
+      mentorRemark: string | null
+      verifiedAt: Date | null
+      rating: number | null
+      completionRequested: boolean
+      completionRequestedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["student_internships"]>
+    composites: {}
+  }
+
+  type student_internshipsGetPayload<S extends boolean | null | undefined | student_internshipsDefaultArgs> = $Result.GetResult<Prisma.$student_internshipsPayload, S>
+
+  type student_internshipsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<student_internshipsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Student_internshipsCountAggregateInputType | true
+    }
+
+  export interface student_internshipsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['student_internships'], meta: { name: 'student_internships' } }
+    /**
+     * Find zero or one Student_internships that matches the filter.
+     * @param {student_internshipsFindUniqueArgs} args - Arguments to find a Student_internships
+     * @example
+     * // Get one Student_internships
+     * const student_internships = await prisma.student_internships.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends student_internshipsFindUniqueArgs>(args: SelectSubset<T, student_internshipsFindUniqueArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Student_internships that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {student_internshipsFindUniqueOrThrowArgs} args - Arguments to find a Student_internships
+     * @example
+     * // Get one Student_internships
+     * const student_internships = await prisma.student_internships.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends student_internshipsFindUniqueOrThrowArgs>(args: SelectSubset<T, student_internshipsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Student_internships that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {student_internshipsFindFirstArgs} args - Arguments to find a Student_internships
+     * @example
+     * // Get one Student_internships
+     * const student_internships = await prisma.student_internships.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends student_internshipsFindFirstArgs>(args?: SelectSubset<T, student_internshipsFindFirstArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Student_internships that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {student_internshipsFindFirstOrThrowArgs} args - Arguments to find a Student_internships
+     * @example
+     * // Get one Student_internships
+     * const student_internships = await prisma.student_internships.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends student_internshipsFindFirstOrThrowArgs>(args?: SelectSubset<T, student_internshipsFindFirstOrThrowArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Student_internships that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {student_internshipsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Student_internships
+     * const student_internships = await prisma.student_internships.findMany()
+     * 
+     * // Get first 10 Student_internships
+     * const student_internships = await prisma.student_internships.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const student_internshipsWithIdOnly = await prisma.student_internships.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends student_internshipsFindManyArgs>(args?: SelectSubset<T, student_internshipsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Student_internships.
+     * @param {student_internshipsCreateArgs} args - Arguments to create a Student_internships.
+     * @example
+     * // Create one Student_internships
+     * const Student_internships = await prisma.student_internships.create({
+     *   data: {
+     *     // ... data to create a Student_internships
+     *   }
+     * })
+     * 
+     */
+    create<T extends student_internshipsCreateArgs>(args: SelectSubset<T, student_internshipsCreateArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Student_internships.
+     * @param {student_internshipsCreateManyArgs} args - Arguments to create many Student_internships.
+     * @example
+     * // Create many Student_internships
+     * const student_internships = await prisma.student_internships.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends student_internshipsCreateManyArgs>(args?: SelectSubset<T, student_internshipsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Student_internships and returns the data saved in the database.
+     * @param {student_internshipsCreateManyAndReturnArgs} args - Arguments to create many Student_internships.
+     * @example
+     * // Create many Student_internships
+     * const student_internships = await prisma.student_internships.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Student_internships and only return the `id`
+     * const student_internshipsWithIdOnly = await prisma.student_internships.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends student_internshipsCreateManyAndReturnArgs>(args?: SelectSubset<T, student_internshipsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Student_internships.
+     * @param {student_internshipsDeleteArgs} args - Arguments to delete one Student_internships.
+     * @example
+     * // Delete one Student_internships
+     * const Student_internships = await prisma.student_internships.delete({
+     *   where: {
+     *     // ... filter to delete one Student_internships
+     *   }
+     * })
+     * 
+     */
+    delete<T extends student_internshipsDeleteArgs>(args: SelectSubset<T, student_internshipsDeleteArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Student_internships.
+     * @param {student_internshipsUpdateArgs} args - Arguments to update one Student_internships.
+     * @example
+     * // Update one Student_internships
+     * const student_internships = await prisma.student_internships.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends student_internshipsUpdateArgs>(args: SelectSubset<T, student_internshipsUpdateArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Student_internships.
+     * @param {student_internshipsDeleteManyArgs} args - Arguments to filter Student_internships to delete.
+     * @example
+     * // Delete a few Student_internships
+     * const { count } = await prisma.student_internships.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends student_internshipsDeleteManyArgs>(args?: SelectSubset<T, student_internshipsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Student_internships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {student_internshipsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Student_internships
+     * const student_internships = await prisma.student_internships.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends student_internshipsUpdateManyArgs>(args: SelectSubset<T, student_internshipsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Student_internships and returns the data updated in the database.
+     * @param {student_internshipsUpdateManyAndReturnArgs} args - Arguments to update many Student_internships.
+     * @example
+     * // Update many Student_internships
+     * const student_internships = await prisma.student_internships.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Student_internships and only return the `id`
+     * const student_internshipsWithIdOnly = await prisma.student_internships.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends student_internshipsUpdateManyAndReturnArgs>(args: SelectSubset<T, student_internshipsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Student_internships.
+     * @param {student_internshipsUpsertArgs} args - Arguments to update or create a Student_internships.
+     * @example
+     * // Update or create a Student_internships
+     * const student_internships = await prisma.student_internships.upsert({
+     *   create: {
+     *     // ... data to create a Student_internships
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Student_internships we want to update
+     *   }
+     * })
+     */
+    upsert<T extends student_internshipsUpsertArgs>(args: SelectSubset<T, student_internshipsUpsertArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Student_internships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {student_internshipsCountArgs} args - Arguments to filter Student_internships to count.
+     * @example
+     * // Count the number of Student_internships
+     * const count = await prisma.student_internships.count({
+     *   where: {
+     *     // ... the filter for the Student_internships we want to count
+     *   }
+     * })
+    **/
+    count<T extends student_internshipsCountArgs>(
+      args?: Subset<T, student_internshipsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Student_internshipsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Student_internships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Student_internshipsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Student_internshipsAggregateArgs>(args: Subset<T, Student_internshipsAggregateArgs>): Prisma.PrismaPromise<GetStudent_internshipsAggregateType<T>>
+
+    /**
+     * Group by Student_internships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {student_internshipsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends student_internshipsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: student_internshipsGroupByArgs['orderBy'] }
+        : { orderBy?: student_internshipsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, student_internshipsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetStudent_internshipsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the student_internships model
+   */
+  readonly fields: student_internshipsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for student_internships.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__student_internshipsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    student<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the student_internships model
+   */
+  interface student_internshipsFieldRefs {
+    readonly id: FieldRef<"student_internships", 'String'>
+    readonly studentId: FieldRef<"student_internships", 'String'>
+    readonly companyName: FieldRef<"student_internships", 'String'>
+    readonly internshipTitle: FieldRef<"student_internships", 'String'>
+    readonly role: FieldRef<"student_internships", 'String'>
+    readonly startDate: FieldRef<"student_internships", 'DateTime'>
+    readonly endDate: FieldRef<"student_internships", 'DateTime'>
+    readonly location: FieldRef<"student_internships", 'String'>
+    readonly mode: FieldRef<"student_internships", 'InternshipMode'>
+    readonly projectName: FieldRef<"student_internships", 'String'>
+    readonly description: FieldRef<"student_internships", 'String'>
+    readonly status: FieldRef<"student_internships", 'InternshipStatus'>
+    readonly verificationStatus: FieldRef<"student_internships", 'InternshipVerificationStatus'>
+    readonly mentorRemark: FieldRef<"student_internships", 'String'>
+    readonly verifiedAt: FieldRef<"student_internships", 'DateTime'>
+    readonly rating: FieldRef<"student_internships", 'Float'>
+    readonly completionRequested: FieldRef<"student_internships", 'Boolean'>
+    readonly completionRequestedAt: FieldRef<"student_internships", 'DateTime'>
+    readonly createdAt: FieldRef<"student_internships", 'DateTime'>
+    readonly updatedAt: FieldRef<"student_internships", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * student_internships findUnique
+   */
+  export type student_internshipsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * Filter, which student_internships to fetch.
+     */
+    where: student_internshipsWhereUniqueInput
+  }
+
+  /**
+   * student_internships findUniqueOrThrow
+   */
+  export type student_internshipsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * Filter, which student_internships to fetch.
+     */
+    where: student_internshipsWhereUniqueInput
+  }
+
+  /**
+   * student_internships findFirst
+   */
+  export type student_internshipsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * Filter, which student_internships to fetch.
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of student_internships to fetch.
+     */
+    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for student_internships.
+     */
+    cursor?: student_internshipsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` student_internships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` student_internships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of student_internships.
+     */
+    distinct?: Student_internshipsScalarFieldEnum | Student_internshipsScalarFieldEnum[]
+  }
+
+  /**
+   * student_internships findFirstOrThrow
+   */
+  export type student_internshipsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * Filter, which student_internships to fetch.
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of student_internships to fetch.
+     */
+    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for student_internships.
+     */
+    cursor?: student_internshipsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` student_internships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` student_internships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of student_internships.
+     */
+    distinct?: Student_internshipsScalarFieldEnum | Student_internshipsScalarFieldEnum[]
+  }
+
+  /**
+   * student_internships findMany
+   */
+  export type student_internshipsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * Filter, which student_internships to fetch.
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of student_internships to fetch.
+     */
+    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing student_internships.
+     */
+    cursor?: student_internshipsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` student_internships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` student_internships.
+     */
+    skip?: number
+    distinct?: Student_internshipsScalarFieldEnum | Student_internshipsScalarFieldEnum[]
+  }
+
+  /**
+   * student_internships create
+   */
+  export type student_internshipsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a student_internships.
+     */
+    data: XOR<student_internshipsCreateInput, student_internshipsUncheckedCreateInput>
+  }
+
+  /**
+   * student_internships createMany
+   */
+  export type student_internshipsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many student_internships.
+     */
+    data: student_internshipsCreateManyInput | student_internshipsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * student_internships createManyAndReturn
+   */
+  export type student_internshipsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * The data used to create many student_internships.
+     */
+    data: student_internshipsCreateManyInput | student_internshipsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * student_internships update
+   */
+  export type student_internshipsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a student_internships.
+     */
+    data: XOR<student_internshipsUpdateInput, student_internshipsUncheckedUpdateInput>
+    /**
+     * Choose, which student_internships to update.
+     */
+    where: student_internshipsWhereUniqueInput
+  }
+
+  /**
+   * student_internships updateMany
+   */
+  export type student_internshipsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update student_internships.
+     */
+    data: XOR<student_internshipsUpdateManyMutationInput, student_internshipsUncheckedUpdateManyInput>
+    /**
+     * Filter which student_internships to update
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * Limit how many student_internships to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * student_internships updateManyAndReturn
+   */
+  export type student_internshipsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * The data used to update student_internships.
+     */
+    data: XOR<student_internshipsUpdateManyMutationInput, student_internshipsUncheckedUpdateManyInput>
+    /**
+     * Filter which student_internships to update
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * Limit how many student_internships to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * student_internships upsert
+   */
+  export type student_internshipsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the student_internships to update in case it exists.
+     */
+    where: student_internshipsWhereUniqueInput
+    /**
+     * In case the student_internships found by the `where` argument doesn't exist, create a new student_internships with this data.
+     */
+    create: XOR<student_internshipsCreateInput, student_internshipsUncheckedCreateInput>
+    /**
+     * In case the student_internships was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<student_internshipsUpdateInput, student_internshipsUncheckedUpdateInput>
+  }
+
+  /**
+   * student_internships delete
+   */
+  export type student_internshipsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    /**
+     * Filter which student_internships to delete.
+     */
+    where: student_internshipsWhereUniqueInput
+  }
+
+  /**
+   * student_internships deleteMany
+   */
+  export type student_internshipsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which student_internships to delete
+     */
+    where?: student_internshipsWhereInput
+    /**
+     * Limit how many student_internships to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * student_internships without action
+   */
+  export type student_internshipsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
   }
 
 
@@ -31065,6 +32519,32 @@ export namespace Prisma {
   export type StudentsScalarFieldEnum = (typeof StudentsScalarFieldEnum)[keyof typeof StudentsScalarFieldEnum]
 
 
+  export const Student_internshipsScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    companyName: 'companyName',
+    internshipTitle: 'internshipTitle',
+    role: 'role',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    location: 'location',
+    mode: 'mode',
+    projectName: 'projectName',
+    description: 'description',
+    status: 'status',
+    verificationStatus: 'verificationStatus',
+    mentorRemark: 'mentorRemark',
+    verifiedAt: 'verifiedAt',
+    rating: 'rating',
+    completionRequested: 'completionRequested',
+    completionRequestedAt: 'completionRequestedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Student_internshipsScalarFieldEnum = (typeof Student_internshipsScalarFieldEnum)[keyof typeof Student_internshipsScalarFieldEnum]
+
+
   export const Student_contact_detailsScalarFieldEnum: {
     id: 'id',
     studentId: 'studentId',
@@ -31562,6 +33042,48 @@ export namespace Prisma {
    * Reference to a field of type 'StudentType[]'
    */
   export type ListEnumStudentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StudentType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipMode'
+   */
+  export type EnumInternshipModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipMode[]'
+   */
+  export type ListEnumInternshipModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipMode[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipStatus'
+   */
+  export type EnumInternshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipStatus[]'
+   */
+  export type ListEnumInternshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipVerificationStatus'
+   */
+  export type EnumInternshipVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipVerificationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipVerificationStatus[]'
+   */
+  export type ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipVerificationStatus[]'>
     
 
 
@@ -32670,6 +34192,7 @@ export namespace Prisma {
     mentor_transfer_requests?: Mentor_transfer_requestsListRelationFilter
     contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
     documents?: Student_documentsListRelationFilter
+    internships?: Student_internshipsListRelationFilter
     student_enrollments?: Student_enrollmentsListRelationFilter
     parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
@@ -32713,6 +34236,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsOrderByRelationAggregateInput
     contactDetails?: student_contact_detailsOrderByWithRelationInput
     documents?: student_documentsOrderByRelationAggregateInput
+    internships?: student_internshipsOrderByRelationAggregateInput
     student_enrollments?: student_enrollmentsOrderByRelationAggregateInput
     parentDetails?: student_parent_detailsOrderByWithRelationInput
     departments?: departmentsOrderByWithRelationInput
@@ -32759,6 +34283,7 @@ export namespace Prisma {
     mentor_transfer_requests?: Mentor_transfer_requestsListRelationFilter
     contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
     documents?: Student_documentsListRelationFilter
+    internships?: Student_internshipsListRelationFilter
     student_enrollments?: Student_enrollmentsListRelationFilter
     parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
@@ -32835,6 +34360,138 @@ export namespace Prisma {
     studentType?: EnumStudentTypeNullableWithAggregatesFilter<"students"> | $Enums.StudentType | null
     totalCredits?: IntNullableWithAggregatesFilter<"students"> | number | null
     yearsAtUniversity?: StringNullableWithAggregatesFilter<"students"> | string | null
+  }
+
+  export type student_internshipsWhereInput = {
+    AND?: student_internshipsWhereInput | student_internshipsWhereInput[]
+    OR?: student_internshipsWhereInput[]
+    NOT?: student_internshipsWhereInput | student_internshipsWhereInput[]
+    id?: StringFilter<"student_internships"> | string
+    studentId?: StringFilter<"student_internships"> | string
+    companyName?: StringFilter<"student_internships"> | string
+    internshipTitle?: StringFilter<"student_internships"> | string
+    role?: StringNullableFilter<"student_internships"> | string | null
+    startDate?: DateTimeFilter<"student_internships"> | Date | string
+    endDate?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    location?: StringNullableFilter<"student_internships"> | string | null
+    mode?: EnumInternshipModeNullableFilter<"student_internships"> | $Enums.InternshipMode | null
+    projectName?: StringNullableFilter<"student_internships"> | string | null
+    description?: StringNullableFilter<"student_internships"> | string | null
+    status?: EnumInternshipStatusFilter<"student_internships"> | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFilter<"student_internships"> | $Enums.InternshipVerificationStatus
+    mentorRemark?: StringNullableFilter<"student_internships"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    rating?: FloatNullableFilter<"student_internships"> | number | null
+    completionRequested?: BoolFilter<"student_internships"> | boolean
+    completionRequestedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    createdAt?: DateTimeFilter<"student_internships"> | Date | string
+    updatedAt?: DateTimeFilter<"student_internships"> | Date | string
+    student?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+  }
+
+  export type student_internshipsOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    companyName?: SortOrder
+    internshipTitle?: SortOrder
+    role?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    mode?: SortOrderInput | SortOrder
+    projectName?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    verificationStatus?: SortOrder
+    mentorRemark?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    rating?: SortOrderInput | SortOrder
+    completionRequested?: SortOrder
+    completionRequestedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    student?: studentsOrderByWithRelationInput
+  }
+
+  export type student_internshipsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: student_internshipsWhereInput | student_internshipsWhereInput[]
+    OR?: student_internshipsWhereInput[]
+    NOT?: student_internshipsWhereInput | student_internshipsWhereInput[]
+    studentId?: StringFilter<"student_internships"> | string
+    companyName?: StringFilter<"student_internships"> | string
+    internshipTitle?: StringFilter<"student_internships"> | string
+    role?: StringNullableFilter<"student_internships"> | string | null
+    startDate?: DateTimeFilter<"student_internships"> | Date | string
+    endDate?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    location?: StringNullableFilter<"student_internships"> | string | null
+    mode?: EnumInternshipModeNullableFilter<"student_internships"> | $Enums.InternshipMode | null
+    projectName?: StringNullableFilter<"student_internships"> | string | null
+    description?: StringNullableFilter<"student_internships"> | string | null
+    status?: EnumInternshipStatusFilter<"student_internships"> | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFilter<"student_internships"> | $Enums.InternshipVerificationStatus
+    mentorRemark?: StringNullableFilter<"student_internships"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    rating?: FloatNullableFilter<"student_internships"> | number | null
+    completionRequested?: BoolFilter<"student_internships"> | boolean
+    completionRequestedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    createdAt?: DateTimeFilter<"student_internships"> | Date | string
+    updatedAt?: DateTimeFilter<"student_internships"> | Date | string
+    student?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+  }, "id">
+
+  export type student_internshipsOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    companyName?: SortOrder
+    internshipTitle?: SortOrder
+    role?: SortOrderInput | SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    mode?: SortOrderInput | SortOrder
+    projectName?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    status?: SortOrder
+    verificationStatus?: SortOrder
+    mentorRemark?: SortOrderInput | SortOrder
+    verifiedAt?: SortOrderInput | SortOrder
+    rating?: SortOrderInput | SortOrder
+    completionRequested?: SortOrder
+    completionRequestedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: student_internshipsCountOrderByAggregateInput
+    _avg?: student_internshipsAvgOrderByAggregateInput
+    _max?: student_internshipsMaxOrderByAggregateInput
+    _min?: student_internshipsMinOrderByAggregateInput
+    _sum?: student_internshipsSumOrderByAggregateInput
+  }
+
+  export type student_internshipsScalarWhereWithAggregatesInput = {
+    AND?: student_internshipsScalarWhereWithAggregatesInput | student_internshipsScalarWhereWithAggregatesInput[]
+    OR?: student_internshipsScalarWhereWithAggregatesInput[]
+    NOT?: student_internshipsScalarWhereWithAggregatesInput | student_internshipsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"student_internships"> | string
+    studentId?: StringWithAggregatesFilter<"student_internships"> | string
+    companyName?: StringWithAggregatesFilter<"student_internships"> | string
+    internshipTitle?: StringWithAggregatesFilter<"student_internships"> | string
+    role?: StringNullableWithAggregatesFilter<"student_internships"> | string | null
+    startDate?: DateTimeWithAggregatesFilter<"student_internships"> | Date | string
+    endDate?: DateTimeNullableWithAggregatesFilter<"student_internships"> | Date | string | null
+    location?: StringNullableWithAggregatesFilter<"student_internships"> | string | null
+    mode?: EnumInternshipModeNullableWithAggregatesFilter<"student_internships"> | $Enums.InternshipMode | null
+    projectName?: StringNullableWithAggregatesFilter<"student_internships"> | string | null
+    description?: StringNullableWithAggregatesFilter<"student_internships"> | string | null
+    status?: EnumInternshipStatusWithAggregatesFilter<"student_internships"> | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusWithAggregatesFilter<"student_internships"> | $Enums.InternshipVerificationStatus
+    mentorRemark?: StringNullableWithAggregatesFilter<"student_internships"> | string | null
+    verifiedAt?: DateTimeNullableWithAggregatesFilter<"student_internships"> | Date | string | null
+    rating?: FloatNullableWithAggregatesFilter<"student_internships"> | number | null
+    completionRequested?: BoolWithAggregatesFilter<"student_internships"> | boolean
+    completionRequestedAt?: DateTimeNullableWithAggregatesFilter<"student_internships"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"student_internships"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"student_internships"> | Date | string
   }
 
   export type student_contact_detailsWhereInput = {
@@ -34988,6 +36645,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -35031,6 +36689,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -35070,6 +36729,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -35113,6 +36773,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -35209,6 +36870,166 @@ export namespace Prisma {
     studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
     totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
     yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type student_internshipsCreateInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    student: studentsCreateNestedOneWithoutInternshipsInput
+  }
+
+  export type student_internshipsUncheckedCreateInput = {
+    id: string
+    studentId: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type student_internshipsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    student?: studentsUpdateOneRequiredWithoutInternshipsNestedInput
+  }
+
+  export type student_internshipsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_internshipsCreateManyInput = {
+    id: string
+    studentId: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type student_internshipsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_internshipsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type student_contact_detailsCreateInput = {
@@ -37574,6 +39395,12 @@ export namespace Prisma {
     none?: student_documentsWhereInput
   }
 
+  export type Student_internshipsListRelationFilter = {
+    every?: student_internshipsWhereInput
+    some?: student_internshipsWhereInput
+    none?: student_internshipsWhereInput
+  }
+
   export type Student_parent_detailsNullableScalarRelationFilter = {
     is?: student_parent_detailsWhereInput | null
     isNot?: student_parent_detailsWhereInput | null
@@ -37584,6 +39411,10 @@ export namespace Prisma {
   }
 
   export type student_documentsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type student_internshipsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -37773,6 +39604,134 @@ export namespace Prisma {
     _sum?: NestedIntNullableFilter<$PrismaModel>
     _min?: NestedIntNullableFilter<$PrismaModel>
     _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipModeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipMode | EnumInternshipModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInternshipModeNullableFilter<$PrismaModel> | $Enums.InternshipMode | null
+  }
+
+  export type EnumInternshipStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipStatus | EnumInternshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipStatusFilter<$PrismaModel> | $Enums.InternshipStatus
+  }
+
+  export type EnumInternshipVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipVerificationStatus | EnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel> | $Enums.InternshipVerificationStatus
+  }
+
+  export type student_internshipsCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    companyName?: SortOrder
+    internshipTitle?: SortOrder
+    role?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    location?: SortOrder
+    mode?: SortOrder
+    projectName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    verificationStatus?: SortOrder
+    mentorRemark?: SortOrder
+    verifiedAt?: SortOrder
+    rating?: SortOrder
+    completionRequested?: SortOrder
+    completionRequestedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type student_internshipsAvgOrderByAggregateInput = {
+    rating?: SortOrder
+  }
+
+  export type student_internshipsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    companyName?: SortOrder
+    internshipTitle?: SortOrder
+    role?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    location?: SortOrder
+    mode?: SortOrder
+    projectName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    verificationStatus?: SortOrder
+    mentorRemark?: SortOrder
+    verifiedAt?: SortOrder
+    rating?: SortOrder
+    completionRequested?: SortOrder
+    completionRequestedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type student_internshipsMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    companyName?: SortOrder
+    internshipTitle?: SortOrder
+    role?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    location?: SortOrder
+    mode?: SortOrder
+    projectName?: SortOrder
+    description?: SortOrder
+    status?: SortOrder
+    verificationStatus?: SortOrder
+    mentorRemark?: SortOrder
+    verifiedAt?: SortOrder
+    rating?: SortOrder
+    completionRequested?: SortOrder
+    completionRequestedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type student_internshipsSumOrderByAggregateInput = {
+    rating?: SortOrder
+  }
+
+  export type EnumInternshipModeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipMode | EnumInternshipModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInternshipModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.InternshipMode | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInternshipModeNullableFilter<$PrismaModel>
+    _max?: NestedEnumInternshipModeNullableFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipStatus | EnumInternshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipStatusWithAggregatesFilter<$PrismaModel> | $Enums.InternshipStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipStatusFilter<$PrismaModel>
+    _max?: NestedEnumInternshipStatusFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipVerificationStatus | EnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InternshipVerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
   }
 
   export type EnumAddressTypeNullableFilter<$PrismaModel = never> = {
@@ -39558,6 +41517,13 @@ export namespace Prisma {
     connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
   }
 
+  export type student_internshipsCreateNestedManyWithoutStudentInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+  }
+
   export type student_enrollmentsCreateNestedManyWithoutStudentsInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
@@ -39629,6 +41595,13 @@ export namespace Prisma {
     connectOrCreate?: student_documentsCreateOrConnectWithoutStudentInput | student_documentsCreateOrConnectWithoutStudentInput[]
     createMany?: student_documentsCreateManyStudentInputEnvelope
     connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
+  }
+
+  export type student_internshipsUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
   }
 
   export type student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput = {
@@ -39774,6 +41747,20 @@ export namespace Prisma {
     deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
   }
 
+  export type student_internshipsUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    upsert?: student_internshipsUpsertWithWhereUniqueWithoutStudentInput | student_internshipsUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    set?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    disconnect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    delete?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    update?: student_internshipsUpdateWithWhereUniqueWithoutStudentInput | student_internshipsUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: student_internshipsUpdateManyWithWhereWithoutStudentInput | student_internshipsUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
+  }
+
   export type student_enrollmentsUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
@@ -39910,6 +41897,20 @@ export namespace Prisma {
     deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
   }
 
+  export type student_internshipsUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    upsert?: student_internshipsUpsertWithWhereUniqueWithoutStudentInput | student_internshipsUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    set?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    disconnect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    delete?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    update?: student_internshipsUpdateWithWhereUniqueWithoutStudentInput | student_internshipsUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: student_internshipsUpdateManyWithWhereWithoutStudentInput | student_internshipsUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
+  }
+
   export type student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
@@ -39932,6 +41933,32 @@ export namespace Prisma {
     delete?: student_parent_detailsWhereInput | boolean
     connect?: student_parent_detailsWhereUniqueInput
     update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type studentsCreateNestedOneWithoutInternshipsInput = {
+    create?: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutInternshipsInput
+    connect?: studentsWhereUniqueInput
+  }
+
+  export type NullableEnumInternshipModeFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipMode | null
+  }
+
+  export type EnumInternshipStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipStatus
+  }
+
+  export type EnumInternshipVerificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipVerificationStatus
+  }
+
+  export type studentsUpdateOneRequiredWithoutInternshipsNestedInput = {
+    create?: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutInternshipsInput
+    upsert?: studentsUpsertWithoutInternshipsInput
+    connect?: studentsWhereUniqueInput
+    update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutInternshipsInput, studentsUpdateWithoutInternshipsInput>, studentsUncheckedUpdateWithoutInternshipsInput>
   }
 
   export type studentsCreateNestedOneWithoutContactDetailsInput = {
@@ -41155,6 +43182,57 @@ export namespace Prisma {
     _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
+  export type NestedEnumInternshipModeNullableFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipMode | EnumInternshipModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInternshipModeNullableFilter<$PrismaModel> | $Enums.InternshipMode | null
+  }
+
+  export type NestedEnumInternshipStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipStatus | EnumInternshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipStatusFilter<$PrismaModel> | $Enums.InternshipStatus
+  }
+
+  export type NestedEnumInternshipVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipVerificationStatus | EnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel> | $Enums.InternshipVerificationStatus
+  }
+
+  export type NestedEnumInternshipModeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipMode | EnumInternshipModeFieldRefInput<$PrismaModel> | null
+    in?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    notIn?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
+    not?: NestedEnumInternshipModeNullableWithAggregatesFilter<$PrismaModel> | $Enums.InternshipMode | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedEnumInternshipModeNullableFilter<$PrismaModel>
+    _max?: NestedEnumInternshipModeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipStatus | EnumInternshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipStatus[] | ListEnumInternshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipStatusWithAggregatesFilter<$PrismaModel> | $Enums.InternshipStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipStatusFilter<$PrismaModel>
+    _max?: NestedEnumInternshipStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipVerificationStatus | EnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipVerificationStatus[] | ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.InternshipVerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
+  }
+
   export type NestedEnumAddressTypeNullableFilter<$PrismaModel = never> = {
     equals?: $Enums.AddressType | EnumAddressTypeFieldRefInput<$PrismaModel> | null
     in?: $Enums.AddressType[] | ListEnumAddressTypeFieldRefInput<$PrismaModel> | null
@@ -42180,6 +44258,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -42221,6 +44300,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -42530,6 +44610,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -42572,6 +44653,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -42712,6 +44794,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -42754,6 +44837,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -43171,6 +45255,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -43213,6 +45298,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -43398,6 +45484,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -43440,6 +45527,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -43795,6 +45883,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -43837,6 +45926,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -44181,6 +46271,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -44223,6 +46314,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -44399,6 +46491,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -44441,6 +46534,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -44530,6 +46624,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -44572,6 +46667,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -44890,6 +46986,60 @@ export namespace Prisma {
 
   export type student_documentsCreateManyStudentInputEnvelope = {
     data: student_documentsCreateManyStudentInput | student_documentsCreateManyStudentInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type student_internshipsCreateWithoutStudentInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type student_internshipsUncheckedCreateWithoutStudentInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type student_internshipsCreateOrConnectWithoutStudentInput = {
+    where: student_internshipsWhereUniqueInput
+    create: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput>
+  }
+
+  export type student_internshipsCreateManyStudentInputEnvelope = {
+    data: student_internshipsCreateManyStudentInput | student_internshipsCreateManyStudentInput[]
     skipDuplicates?: boolean
   }
 
@@ -45241,6 +47391,48 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"student_documents"> | Date | string
   }
 
+  export type student_internshipsUpsertWithWhereUniqueWithoutStudentInput = {
+    where: student_internshipsWhereUniqueInput
+    update: XOR<student_internshipsUpdateWithoutStudentInput, student_internshipsUncheckedUpdateWithoutStudentInput>
+    create: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput>
+  }
+
+  export type student_internshipsUpdateWithWhereUniqueWithoutStudentInput = {
+    where: student_internshipsWhereUniqueInput
+    data: XOR<student_internshipsUpdateWithoutStudentInput, student_internshipsUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type student_internshipsUpdateManyWithWhereWithoutStudentInput = {
+    where: student_internshipsScalarWhereInput
+    data: XOR<student_internshipsUpdateManyMutationInput, student_internshipsUncheckedUpdateManyWithoutStudentInput>
+  }
+
+  export type student_internshipsScalarWhereInput = {
+    AND?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
+    OR?: student_internshipsScalarWhereInput[]
+    NOT?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
+    id?: StringFilter<"student_internships"> | string
+    studentId?: StringFilter<"student_internships"> | string
+    companyName?: StringFilter<"student_internships"> | string
+    internshipTitle?: StringFilter<"student_internships"> | string
+    role?: StringNullableFilter<"student_internships"> | string | null
+    startDate?: DateTimeFilter<"student_internships"> | Date | string
+    endDate?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    location?: StringNullableFilter<"student_internships"> | string | null
+    mode?: EnumInternshipModeNullableFilter<"student_internships"> | $Enums.InternshipMode | null
+    projectName?: StringNullableFilter<"student_internships"> | string | null
+    description?: StringNullableFilter<"student_internships"> | string | null
+    status?: EnumInternshipStatusFilter<"student_internships"> | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFilter<"student_internships"> | $Enums.InternshipVerificationStatus
+    mentorRemark?: StringNullableFilter<"student_internships"> | string | null
+    verifiedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    rating?: FloatNullableFilter<"student_internships"> | number | null
+    completionRequested?: BoolFilter<"student_internships"> | boolean
+    completionRequestedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    createdAt?: DateTimeFilter<"student_internships"> | Date | string
+    updatedAt?: DateTimeFilter<"student_internships"> | Date | string
+  }
+
   export type student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput = {
     where: student_enrollmentsWhereUniqueInput
     update: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
@@ -45404,6 +47596,186 @@ export namespace Prisma {
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
+  export type studentsCreateWithoutInternshipsInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    departments: departmentsCreateNestedOneWithoutStudentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+  }
+
+  export type studentsUncheckedCreateWithoutInternshipsInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+  }
+
+  export type studentsCreateOrConnectWithoutInternshipsInput = {
+    where: studentsWhereUniqueInput
+    create: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
+  }
+
+  export type studentsUpsertWithoutInternshipsInput = {
+    update: XOR<studentsUpdateWithoutInternshipsInput, studentsUncheckedUpdateWithoutInternshipsInput>
+    create: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
+    where?: studentsWhereInput
+  }
+
+  export type studentsUpdateToOneWithWhereWithoutInternshipsInput = {
+    where?: studentsWhereInput
+    data: XOR<studentsUpdateWithoutInternshipsInput, studentsUncheckedUpdateWithoutInternshipsInput>
+  }
+
+  export type studentsUpdateWithoutInternshipsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+  }
+
+  export type studentsUncheckedUpdateWithoutInternshipsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+  }
+
   export type studentsCreateWithoutContactDetailsInput = {
     id: string
     registerNumber: string
@@ -45438,6 +47810,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -45480,6 +47853,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -45534,6 +47908,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -45576,6 +47951,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -45615,6 +47991,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -45657,6 +48034,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
@@ -45711,6 +48089,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -45753,6 +48132,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
@@ -45790,6 +48170,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -45832,6 +48213,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -45886,6 +48268,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -45928,6 +48311,7 @@ export namespace Prisma {
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -45999,6 +48383,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -46041,6 +48426,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -46186,6 +48572,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -46228,6 +48615,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -46383,6 +48771,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -46425,6 +48814,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -46479,6 +48869,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -46521,6 +48912,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -47324,6 +49716,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
@@ -47365,6 +49758,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
@@ -47575,6 +49969,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
@@ -47616,6 +50011,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -48327,6 +50723,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -48368,6 +50765,7 @@ export namespace Prisma {
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
@@ -48574,6 +50972,28 @@ export namespace Prisma {
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
+  }
+
+  export type student_internshipsCreateManyStudentInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type student_enrollmentsCreateManyStudentsInput = {
@@ -48835,6 +51255,72 @@ export namespace Prisma {
     fileUrl?: StringFieldUpdateOperationsInput | string
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_internshipsUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_internshipsUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_internshipsUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
