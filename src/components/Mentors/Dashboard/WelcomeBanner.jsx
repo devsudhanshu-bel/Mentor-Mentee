@@ -1,9 +1,14 @@
 import React, { useEffect, useMemo, useState } from "react";
+
 import banner from "../../../assets/banner.png";
 
 import { getDashboardBanner } from "../../../api/dashboard.api";
 
 const WelcomeBanner = () => {
+  /* ==========================================================
+     MENTOR DATA
+  ========================================================== */
+
   const [mentor, setMentor] = useState({
     fullName: "",
     designation: "",
@@ -13,13 +18,32 @@ const WelcomeBanner = () => {
 
   const [loading, setLoading] = useState(true);
 
+  /* ==========================================================
+     FETCH DASHBOARD BANNER DATA
+  ========================================================== */
+
   useEffect(() => {
     const fetchBanner = async () => {
       try {
         const data = await getDashboardBanner();
-        setMentor(data);
+
+        console.log(
+          "Dashboard banner response:",
+          data
+        );
+
+        setMentor({
+          fullName: data?.fullName || "",
+          designation: data?.designation || "",
+          department: data?.department || "",
+          profileImage:
+            data?.profileImage || null,
+        });
       } catch (error) {
-        console.error("Failed to fetch dashboard banner:", error);
+        console.error(
+          "Failed to fetch dashboard banner:",
+          error
+        );
       } finally {
         setLoading(false);
       }
@@ -28,7 +52,18 @@ const WelcomeBanner = () => {
     fetchBanner();
   }, []);
 
-  const now = useMemo(() => new Date(), []);
+  /* ==========================================================
+     CURRENT DATE / TIME
+  ========================================================== */
+
+  const now = useMemo(
+    () => new Date(),
+    []
+  );
+
+  /* ==========================================================
+     GREETING
+  ========================================================== */
 
   const greeting = useMemo(() => {
     const hour = now.getHours();
@@ -48,14 +83,25 @@ const WelcomeBanner = () => {
     return "Good Night";
   }, [now]);
 
+  /* ==========================================================
+     TODAY
+  ========================================================== */
+
   const today = useMemo(() => {
-    return now.toLocaleDateString("en-IN", {
-      weekday: "long",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
+    return now.toLocaleDateString(
+      "en-IN",
+      {
+        weekday: "long",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }
+    );
   }, [now]);
+
+  /* ==========================================================
+     LOADING STATE
+  ========================================================== */
 
   if (loading) {
     return (
@@ -73,6 +119,10 @@ const WelcomeBanner = () => {
     );
   }
 
+  /* ==========================================================
+     BANNER
+  ========================================================== */
+
   return (
     <div
       className="
@@ -87,35 +137,129 @@ const WelcomeBanner = () => {
         shadow-sm
       "
     >
-      {/* Banner */}
+      {/* ======================================================
+          BACKGROUND BANNER
+      ====================================================== */}
+
       <img
         src={banner}
         alt="Mentor Dashboard Banner"
-        className="absolute inset-0 h-full w-full object-cover"
+        className="
+          absolute
+          inset-0
+          h-full
+          w-full
+          object-cover
+        "
         draggable={false}
       />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-transparent" />
+      {/* ======================================================
+          OVERLAY
+      ====================================================== */}
 
-      {/* Content */}
-      <div className="relative z-10 flex h-full items-center px-10">
+      <div
+        className="
+          absolute
+          inset-0
+          bg-gradient-to-r
+          from-white/95
+          via-white/70
+          to-transparent
+        "
+      />
+
+      {/* ======================================================
+          CONTENT
+      ====================================================== */}
+
+      <div
+        className="
+          relative
+          z-10
+          flex
+          h-full
+          items-center
+          px-10
+        "
+      >
         <div className="max-w-xl">
+
+          {/* ==================================================
+              GREETING
+          ================================================== */}
+
           <p className="text-[16px] font-medium text-slate-700">
             {greeting},
           </p>
 
-          <h1 className="mt-1 text-[24px] font-bold leading-none text-slate-900">
-            {mentor.fullName} 👋
+          {/* ==================================================
+              MENTOR NAME
+          ================================================== */}
+
+          <h1
+            className="
+              mt-1
+              text-[24px]
+              font-bold
+              leading-none
+              text-slate-900
+            "
+          >
+            {mentor.fullName || "Mentor"} 👋
           </h1>
 
-          <div className="mt-3 flex items-center gap-3 text-[12px] text-slate-600">
-            <span>{mentor.department}</span>
+          {/* ==================================================
+              DEPARTMENT + DESIGNATION
+          ================================================== */}
 
-            <span className="h-1 w-1 rounded-full bg-slate-400" />
+          {(mentor.department ||
+            mentor.designation) && (
+            <div
+              className="
+                mt-3
+                flex
+                items-center
+                gap-3
+                text-[12px]
+                text-slate-600
+              "
+            >
+              {/* Department */}
 
-            <span>{mentor.designation}</span>
-          </div>
+              {mentor.department && (
+                <span>
+                  {mentor.department}
+                </span>
+              )}
+
+              {/* Separator */}
+
+              {mentor.department &&
+                mentor.designation && (
+                  <span
+                    className="
+                      h-1
+                      w-1
+                      rounded-full
+                      bg-slate-400
+                    "
+                  />
+                )}
+
+              {/* Designation */}
+
+              {mentor.designation && (
+                <span>
+                  {mentor.designation}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* ==================================================
+              TODAY
+          ================================================== */}
 
           <p className="mt-5 text-[12px] text-slate-600">
             Today is{" "}
@@ -123,6 +267,7 @@ const WelcomeBanner = () => {
               {today}
             </span>
           </p>
+
         </div>
       </div>
     </div>

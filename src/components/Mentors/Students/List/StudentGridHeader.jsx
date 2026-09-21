@@ -1,47 +1,67 @@
 import React from "react";
-import { LayoutGrid, List } from "lucide-react";
 
-const StudentGridHeader = () => {
+const StudentGridHeader = ({
+  totalStudents = 0,
+  sortBy = "name-asc",
+  onSortChange,
+}) => {
   return (
     <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-      {/* Left */}
+
+      {/* ======================================================
+          TOTAL STUDENTS
+      ====================================================== */}
+
       <div className="flex items-center gap-1">
         <span className="text-[13px] text-slate-600">
           Total Students:
         </span>
 
         <span className="text-[13px] font-semibold text-blue-600">
-          24
+          {totalStudents}
         </span>
       </div>
 
-      {/* Right */}
-      <div className="flex items-center gap-3">
-        {/* Sort */}
-        <div className="flex items-center gap-2">
-          <span className="text-[12px] text-slate-500">
-            Sort By
-          </span>
+      {/* ======================================================
+          SORT
+      ====================================================== */}
 
-          <select className="h-9 rounded-lg border border-slate-300 bg-white px-3 text-[12px] outline-none focus:border-blue-600">
-            <option>Name (A - Z)</option>
-            <option>Name (Z - A)</option>
-            <option>Attendance</option>
-            <option>CGPA</option>
-            <option>Last Meeting</option>
-          </select>
-        </div>
+      <div className="flex items-center gap-2">
+        <span className="text-[12px] text-slate-500">
+          Sort By
+        </span>
 
-        {/* View Toggle */}
-        <div className="flex overflow-hidden rounded-lg border border-slate-300 bg-white">
-          <button className="flex h-9 w-9 items-center justify-center bg-blue-600 text-white">
-            <LayoutGrid size={16} />
-          </button>
+        <select
+          value={sortBy}
+          onChange={(event) =>
+            onSortChange?.(event.target.value)
+          }
+          className="h-9 rounded-lg border border-slate-300 bg-white px-3 text-[12px] text-slate-700 outline-none transition focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+        >
+          <option value="name-asc">
+            Name (A - Z)
+          </option>
 
-          <button className="flex h-9 w-9 items-center justify-center text-slate-500 transition hover:bg-slate-100">
-            <List size={16} />
-          </button>
-        </div>
+          <option value="name-desc">
+            Name (Z - A)
+          </option>
+
+          <option value="cgpa-high">
+            CGPA (High - Low)
+          </option>
+
+          <option value="cgpa-low">
+            CGPA (Low - High)
+          </option>
+
+          <option value="assigned-newest">
+            Recently Assigned
+          </option>
+
+          <option value="assigned-oldest">
+            Oldest Assignment
+          </option>
+        </select>
       </div>
     </div>
   );
