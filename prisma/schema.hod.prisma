@@ -264,6 +264,7 @@ model students {
   mentor_transfer_requests mentor_transfer_requests[]
   contactDetails           student_contact_details?
   documents                student_documents[]
+  internships              student_internships[]
   student_enrollments      student_enrollments[]
   parentDetails            student_parent_details?
   departments              departments                @relation(fields: [departmentId], references: [id])
@@ -271,6 +272,44 @@ model students {
 
   @@index([departmentId])
   @@index([status])
+}
+
+model student_internships {
+  id        String @id
+  studentId String
+
+  companyName     String
+  internshipTitle String
+  role            String?
+
+  startDate DateTime
+  endDate   DateTime?
+
+  location String?
+  mode     InternshipMode?
+
+  projectName String?
+  description String?
+
+  status             InternshipStatus             @default(ONGOING)
+  verificationStatus InternshipVerificationStatus @default(PENDING)
+
+  mentorRemark String?
+  verifiedAt   DateTime?
+
+  rating Float?
+
+  completionRequested   Boolean   @default(false)
+  completionRequestedAt DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  student students @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([status])
+  @@index([verificationStatus])
 }
 
 model student_contact_details {
@@ -565,6 +604,24 @@ enum DocumentCategory {
   AWARDS
   PERSONAL
   OTHER
+}
+
+enum InternshipStatus {
+  ONGOING
+  COMPLETED
+  CANCELLED
+}
+
+enum InternshipVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum InternshipMode {
+  ONSITE
+  REMOTE
+  HYBRID
 }
 
 enum AcademicBacklogStatus {

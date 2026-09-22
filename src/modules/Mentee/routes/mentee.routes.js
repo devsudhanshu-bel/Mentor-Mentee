@@ -6,32 +6,46 @@ import { authorize } from "../../../middleware/role.middleware.js";
 import profileRoutes from "./profile/profile.routes.js";
 import documentRoutes from "../documents/routes/document.routes.js";
 import academicRoutes from "../academics/routes/academic.routes.js";
+import attendanceRoutes from "../attendance/routes/attendance.routes.js";
+import mentorRoutes from "../mentor/routes/mentor.routes.js";
 
 const router = express.Router();
 
 /* ==========================================================
-   All Mentee Routes Require Authentication
+   ALL MENTEE ROUTES
 ========================================================== */
 
 router.use(authenticate);
 router.use(authorize("STUDENT"));
 
 /* ==========================================================
-   Profile Routes
+   PROFILE
 ========================================================== */
 
 router.use("/profile", profileRoutes);
 
 /* ==========================================================
-   Documents Routes
+   DOCUMENTS
 ========================================================== */
 
 router.use("/documents", documentRoutes);
 
 /* ==========================================================
-   Academic Routes
+   ACADEMICS
 ========================================================== */
 
 router.use("/academics", academicRoutes);
+
+/* ==========================================================
+   ATTENDANCE
+========================================================== */
+
+router.use("/attendance", attendanceRoutes);
+
+/* ==========================================================
+   MENTOR
+========================================================== */
+
+router.use("/mentor", mentorRoutes);
 
 export default router;

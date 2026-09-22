@@ -11,7 +11,17 @@ export const getAttendance = async (req, res, next) => {
   try {
     const semester = Number(req.params.semester);
 
-    const data = await getSemesterAttendance(semester);
+    const userId = req.user?.id;
+
+    if (!userId) {
+      const error = new Error("Authenticated user not found.");
+
+      error.statusCode = 401;
+
+      throw error;
+    }
+
+    const data = await getSemesterAttendance(userId, semester);
 
     return res.status(200).json({
       success: true,
@@ -30,13 +40,25 @@ export const saveAttendance = async (req, res, next) => {
   try {
     const semester = Number(req.params.semester);
 
+    const userId = req.user?.id;
+
+    if (!userId) {
+      const error = new Error("Authenticated user not found.");
+
+      error.statusCode = 401;
+
+      throw error;
+    }
+
     const { subjects } = req.body;
 
-    const data = await saveSemesterAttendance(semester, subjects);
+    const data = await saveSemesterAttendance(userId, semester, subjects);
 
     return res.status(200).json({
       success: true,
+
       message: "Attendance saved successfully.",
+
       data,
     });
   } catch (error) {

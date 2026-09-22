@@ -4,15 +4,16 @@ import DashboardController from "./dashboard.controller.js";
 
 const router = express.Router();
 
-/*
-|--------------------------------------------------------------------------
-| Dashboard Banner
-|--------------------------------------------------------------------------
-*/
+/* ==========================================================
+   ADMIN DASHBOARD OVERVIEW
+========================================================== */
 
-router.get(
-  "/banner",
-  DashboardController.getBanner
-);
+router.get("/overview", DashboardController.getOverview);
+
+/* ==========================================================
+   ADMIN DASHBOARD BANNER
+========================================================== */
+
+router.get("/banner", DashboardController.getBanner);
 
 export default router;

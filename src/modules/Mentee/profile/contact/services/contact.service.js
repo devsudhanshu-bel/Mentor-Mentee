@@ -1,176 +1,221 @@
-import prisma from "../../../../../config/prisma.js";
+import crypto from "crypto";
 
+import hodPrisma from "../../../../../config/prisma.hod.js";
 import ApiError from "../../../../../utils/ApiError.js";
 
 class ContactService {
-  /**
-   * Create Contact Details
-   */
-  async create(userId, data) {
-    //--------------------------------------------------
-    // Check Student Profile
-    //--------------------------------------------------
+  /* ==========================================================
+     FIND STUDENT FROM AUTHENTICATED USER
+     
+     user_accounts.id
+            ↓
+     students.userAccountId
+  ========================================================== */
 
-    const studentProfile = await prisma.studentProfile.findUnique({
+  async findStudent(userId) {
+    if (!userId) {
+      throw new ApiError(401, "Authenticated user not found");
+    }
+
+    const student = await hodPrisma.students.findUnique({
       where: {
-        userId,
+        userAccountId: userId,
+      },
+
+      select: {
+        id: true,
+        registerNumber: true,
+        fullName: true,
       },
     });
 
-    if (!studentProfile) {
+    return student;
+  }
+
+  /* ==========================================================
+     CREATE CONTACT DETAILS
+  ========================================================== */
+
+  async create(userId, data) {
+    const student = await this.findStudent(userId);
+
+    if (!student) {
       throw new ApiError(
         404,
-        "Create personal profile before adding contact details"
+        "Create personal profile before adding contact details",
       );
     }
 
-    //--------------------------------------------------
-    // Check Existing Contact Details
-    //--------------------------------------------------
+    /* --------------------------------------------------------
+       Check whether details already exist
+    -------------------------------------------------------- */
 
-    const existingContact = await prisma.studentContactDetails.findUnique({
+    const existingContact = await hodPrisma.student_contact_details.findUnique({
       where: {
-        studentProfileId: studentProfile.id,
+        studentId: student.id,
       },
     });
 
     if (existingContact) {
-      throw new ApiError(
-        409,
-        "Contact details already exist"
-      );
+      throw new ApiError(409, "Contact details already exist");
     }
 
-    //--------------------------------------------------
-    // Create Contact Details
-    //--------------------------------------------------
+    /* --------------------------------------------------------
+       CREATE
+    -------------------------------------------------------- */
 
-    const contact = await prisma.studentContactDetails.create({
+    const contact = await hodPrisma.student_contact_details.create({
       data: {
-        studentProfileId: studentProfile.id,
+        id: crypto.randomUUID(),
 
-        permanentAddress: data.permanentAddress,
-        currentAddress: data.currentAddress,
-        addressType: data.addressType,
-        durationAtCurrentAddress: data.durationAtCurrentAddress,
+        studentId: student.id,
 
-        personalMobile: data.personalMobile,
-        alternateMobile: data.alternateMobile,
+        /* Address */
 
-        personalEmail: data.personalEmail,
-        alternateEmail: data.alternateEmail,
+        permanentAddress: data.permanentAddress || null,
 
-        whatsappNumber: data.whatsappNumber,
-        telegramUsername: data.telegramUsername,
+        currentAddress: data.currentAddress || null,
 
-        linkedInProfile: data.linkedInProfile,
-        githubProfile: data.githubProfile,
+        addressType: data.addressType || null,
 
-        preferredContactMethod: data.preferredContactMethod,
-        preferredContactTime: data.preferredContactTime,
-        communicationEmailPreference: data.communicationEmailPreference,
+        durationAtCurrentAddress: data.durationAtCurrentAddress || null,
 
-        allowWhatsappCommunication: data.allowWhatsappCommunication,
+        /* Contact */
+
+        personalMobile: data.personalMobile || null,
+
+        alternateMobile: data.alternateMobile || null,
+
+        personalEmail: data.personalEmail || null,
+
+        alternateEmail: data.alternateEmail || null,
+
+        /* Social */
+
+        whatsappNumber: data.whatsappNumber || null,
+
+        telegramUsername: data.telegramUsername || null,
+
+        linkedInProfile: data.linkedInProfile || null,
+
+        githubProfile: data.githubProfile || null,
+
+        /* Preferences */
+
+        preferredContactMethod: data.preferredContactMethod || null,
+
+        preferredContactTime: data.preferredContactTime || null,
+
+        communicationEmailPreference: data.communicationEmailPreference || null,
+
+        allowWhatsappCommunication: Boolean(data.allowWhatsappCommunication),
+
+        createdAt: new Date(),
+
+        updatedAt: new Date(),
       },
     });
 
     return contact;
   }
 
-  /**
-   * Get Contact Details
-   */
-  async get(userId) {
-    const studentProfile = await prisma.studentProfile.findUnique({
-      where: {
-        userId,
-      },
-    });
+  /* ==========================================================
+     GET CONTACT DETAILS
+  ========================================================== */
 
-    if (!studentProfile) {
+  async get(userId) {
+    const student = await this.findStudent(userId);
+
+    if (!student) {
       return null;
     }
 
-    return await prisma.studentContactDetails.findUnique({
+    const contact = await hodPrisma.student_contact_details.findUnique({
       where: {
-        studentProfileId: studentProfile.id,
+        studentId: student.id,
       },
     });
+
+    return contact;
   }
 
-  /**
-   * Update Contact Details
-   */
+  /* ==========================================================
+     UPDATE CONTACT DETAILS
+  ========================================================== */
+
   async update(userId, data) {
-    //--------------------------------------------------
-    // Check Student Profile
-    //--------------------------------------------------
+    const student = await this.findStudent(userId);
 
-    const studentProfile = await prisma.studentProfile.findUnique({
-      where: {
-        userId,
-      },
-    });
-
-    if (!studentProfile) {
-      throw new ApiError(
-        404,
-        "Personal profile not found"
-      );
+    if (!student) {
+      throw new ApiError(404, "Personal profile not found");
     }
 
-    //--------------------------------------------------
-    // Check Contact Details
-    //--------------------------------------------------
-
-    const existingContact = await prisma.studentContactDetails.findUnique({
+    const existingContact = await hodPrisma.student_contact_details.findUnique({
       where: {
-        studentProfileId: studentProfile.id,
+        studentId: student.id,
       },
     });
 
     if (!existingContact) {
-      throw new ApiError(
-        404,
-        "Contact details not found"
+      throw new ApiError(404, "Contact details not found");
+    }
+
+    /*
+     * ----------------------------------------------------------
+     * Only update explicitly supplied fields.
+     * ----------------------------------------------------------
+     */
+
+    const updateData = {
+      updatedAt: new Date(),
+    };
+
+    const fields = [
+      "permanentAddress",
+      "currentAddress",
+      "addressType",
+      "durationAtCurrentAddress",
+
+      "personalMobile",
+      "alternateMobile",
+      "personalEmail",
+      "alternateEmail",
+
+      "whatsappNumber",
+      "telegramUsername",
+      "linkedInProfile",
+      "githubProfile",
+
+      "preferredContactMethod",
+      "preferredContactTime",
+      "communicationEmailPreference",
+    ];
+
+    for (const field of fields) {
+      if (data[field] !== undefined) {
+        updateData[field] = data[field] === "" ? null : data[field];
+      }
+    }
+
+    /*
+     * Checkbox needs explicit boolean handling.
+     */
+
+    if (data.allowWhatsappCommunication !== undefined) {
+      updateData.allowWhatsappCommunication = Boolean(
+        data.allowWhatsappCommunication,
       );
     }
 
-    //--------------------------------------------------
-    // Update Contact Details
-    //--------------------------------------------------
-
-    const contact = await prisma.studentContactDetails.update({
+    const updatedContact = await hodPrisma.student_contact_details.update({
       where: {
-        studentProfileId: studentProfile.id,
+        studentId: student.id,
       },
-      data: {
-        permanentAddress: data.permanentAddress,
-        currentAddress: data.currentAddress,
-        addressType: data.addressType,
-        durationAtCurrentAddress: data.durationAtCurrentAddress,
 
-        personalMobile: data.personalMobile,
-        alternateMobile: data.alternateMobile,
-
-        personalEmail: data.personalEmail,
-        alternateEmail: data.alternateEmail,
-
-        whatsappNumber: data.whatsappNumber,
-        telegramUsername: data.telegramUsername,
-
-        linkedInProfile: data.linkedInProfile,
-        githubProfile: data.githubProfile,
-
-        preferredContactMethod: data.preferredContactMethod,
-        preferredContactTime: data.preferredContactTime,
-        communicationEmailPreference: data.communicationEmailPreference,
-
-        allowWhatsappCommunication: data.allowWhatsappCommunication,
-      },
+      data: updateData,
     });
 
-    return contact;
+    return updatedContact;
   }
 }
 
