@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import {
   ShieldCheck,
@@ -12,112 +12,59 @@ import {
 
 import profile from "../../assets/profile.jpg";
 
-/*
-|--------------------------------------------------------------------------
-| Semester Configuration
-|--------------------------------------------------------------------------
-|
-| Semester VII = Current Semester
-| Semester VIII = Next Semester
-|
-| Semester I - VI remain selectable.
-|
-*/
+/* ==========================================================
+   ROMAN NUMERALS
+========================================================== */
 
-const CURRENT_SEMESTER = 7;
-const NEXT_SEMESTER = 8;
+const ROMAN = {
+  1: "I",
+  2: "II",
+  3: "III",
+  4: "IV",
+  5: "V",
+  6: "VI",
+  7: "VII",
+  8: "VIII",
+};
 
-const SEMESTERS = [
-  {
-    number: 1,
-    roman: "I",
-    academicYear: "2022 - 2023",
-    term: "Odd",
-  },
-  {
-    number: 2,
-    roman: "II",
-    academicYear: "2022 - 2023",
-    term: "Even",
-  },
-  {
-    number: 3,
-    roman: "III",
-    academicYear: "2023 - 2024",
-    term: "Odd",
-  },
-  {
-    number: 4,
-    roman: "IV",
-    academicYear: "2023 - 2024",
-    term: "Even",
-  },
-  {
-    number: 5,
-    roman: "V",
-    academicYear: "2024 - 2025",
-    term: "Odd",
-  },
-  {
-    number: 6,
-    roman: "VI",
-    academicYear: "2024 - 2025",
-    term: "Even",
-  },
-  {
-    number: 7,
-    roman: "VII",
-    academicYear: "2025 - 2026",
-    term: "Odd",
-  },
-  {
-    number: 8,
-    roman: "VIII",
-    academicYear: "2025 - 2026",
-    term: "Even",
-  },
-];
+/* ==========================================================
+   ALL SEMESTERS
+   Always show I - VIII regardless of DB records.
+========================================================== */
 
-/*
-|--------------------------------------------------------------------------
-| Attendance Banner
-|--------------------------------------------------------------------------
-*/
+const semesterNumbers = Array.from({ length: 8 }, (_, index) => index + 1);
+
+/* ==========================================================
+   ATTENDANCE BANNER
+========================================================== */
 
 const AttendanceBanner = ({
   selectedSemester,
   onSemesterChange,
   attendanceData,
 }) => {
-  /*
-  |--------------------------------------------------------------------------
-  | Internal Semester
-  |--------------------------------------------------------------------------
-  |
-  | Attendance.jsx normally controls the semester.
-  | Internal state is only a fallback.
-  |
-  */
+  /* ==========================================================
+     BACKEND STUDENT
+  ========================================================== */
 
-  const [internalSemester, setInternalSemester] = useState(CURRENT_SEMESTER);
+  const student = attendanceData?.student || {};
 
-  const activeSemester = selectedSemester ?? internalSemester;
+  /* ==========================================================
+     CURRENT SEMESTER
+  ========================================================== */
 
-  /*
-  |--------------------------------------------------------------------------
-  | Semester Information
-  |--------------------------------------------------------------------------
-  */
+  const currentSemester = Number(attendanceData?.currentSemester) || 1;
 
-  const semesterInfo =
-    SEMESTERS.find((semester) => semester.number === activeSemester) ||
-    SEMESTERS.find((semester) => semester.number === CURRENT_SEMESTER);
+  /* ==========================================================
+     SELECTED SEMESTER
+  ========================================================== */
 
-  /*
-  |--------------------------------------------------------------------------
-  | Backend Attendance Data
-  |--------------------------------------------------------------------------
-  */
+  const activeSemester = Number(selectedSemester) || currentSemester;
+
+  /* ==========================================================
+     SUMMARY
+     This always belongs to the selected semester.
+  ========================================================== */
 
   const summary = attendanceData?.summary || {};
 
@@ -125,30 +72,18 @@ const AttendanceBanner = ({
 
   const classesHeld = Number(summary.classesHeld) || 0;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Attendance Percentage
-  |--------------------------------------------------------------------------
-  |
-  | The backend already calculates this.
-  | We use the backend value when available.
-  |
-  */
-
   const backendPercentage = Number(summary.percentage);
-
-  const calculatedPercentage =
-    classesHeld > 0 ? (classesAttended / classesHeld) * 100 : 0;
 
   const attendancePercentage = Number.isFinite(backendPercentage)
     ? backendPercentage
-    : calculatedPercentage;
+    : classesHeld > 0
+      ? (classesAttended / classesHeld) * 100
+      : 0;
 
-  /*
-  |--------------------------------------------------------------------------
-  | Academic Standing
-  |--------------------------------------------------------------------------
-  */
+  /* ==========================================================
+     ACADEMIC STANDING
+     Based on selected semester.
+  ========================================================== */
 
   let standing = "No Data";
 
@@ -170,47 +105,51 @@ const AttendanceBanner = ({
     }
   }
 
-  /*
-  |--------------------------------------------------------------------------
-  | Semester Selection
-  |--------------------------------------------------------------------------
-  */
+  /* ==========================================================
+     SEMESTER CHANGE
+  ========================================================== */
 
   const handleSemesterChange = (event) => {
-    const semesterNumber = Number(event.target.value);
+    const semester = Number(event.target.value);
 
-    /*
-     * VII and VIII are locked.
-     */
-
-    if (
-      semesterNumber === CURRENT_SEMESTER ||
-      semesterNumber === NEXT_SEMESTER
-    ) {
+    if (!Number.isInteger(semester)) {
       return;
     }
 
     /*
-     * If Attendance.jsx controls the
-     * semester, notify the parent.
+     * Current semester and every
+     * semester after it are locked.
      */
 
-    if (onSemesterChange) {
-      onSemesterChange(semesterNumber);
-    } else {
-      /*
-       * Fallback for standalone usage.
-       */
+    if (semester >= currentSemester) {
+      return;
+    }
 
-      setInternalSemester(semesterNumber);
+    if (onSemesterChange) {
+      onSemesterChange(semester);
     }
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | Render
-  |--------------------------------------------------------------------------
-  */
+  /* ==========================================================
+     STUDENT DISPLAY DATA
+  ========================================================== */
+
+  const studentName = student?.fullName || "Student";
+
+  const registerNumber = student?.registerNumber || "—";
+
+  const programme = student?.programme || "Programme not available";
+
+  const mentorName =
+    student?.mentor?.fullName ||
+    attendanceData?.mentor?.fullName ||
+    "Not Assigned";
+
+  const profileImage = student?.profileImage || profile;
+
+  /* ==========================================================
+     RENDER
+  ========================================================== */
 
   return (
     <div
@@ -232,9 +171,9 @@ const AttendanceBanner = ({
           gap-6
         "
       >
-        {/* ==============================================================
-            LEFT SECTION
-        ============================================================== */}
+        {/* ====================================================
+            STUDENT INFORMATION
+        ==================================================== */}
 
         <div
           className="
@@ -244,13 +183,16 @@ const AttendanceBanner = ({
             min-w-0
           "
         >
-          {/* ------------------------------------------------------------
-              Profile
-          ------------------------------------------------------------ */}
+          {/* ==================================================
+              PROFILE IMAGE
+          ================================================== */}
 
           <img
-            src={profile}
-            alt="Profile"
+            src={profileImage}
+            alt={studentName}
+            onError={(event) => {
+              event.currentTarget.src = profile;
+            }}
             className="
               w-[88px]
               h-[88px]
@@ -262,12 +204,10 @@ const AttendanceBanner = ({
             "
           />
 
-          {/* ------------------------------------------------------------
-              Student Details
-          ------------------------------------------------------------ */}
-
           <div className="min-w-0">
-            {/* Student Name */}
+            {/* ==================================================
+                STUDENT NAME
+            ================================================== */}
 
             <h2
               className="
@@ -276,10 +216,12 @@ const AttendanceBanner = ({
                 text-[#142970]
               "
             >
-              Sudhanshu Sreedhara Belavarthy
+              {studentName}
             </h2>
 
-            {/* Student Information */}
+            {/* ==================================================
+                STUDENT DETAILS
+            ================================================== */}
 
             <div
               className="
@@ -292,20 +234,20 @@ const AttendanceBanner = ({
                 whitespace-nowrap
               "
             >
-              <span>2362177</span>
+              <span>{registerNumber}</span>
 
               <span>•</span>
 
-              <span>B.Tech - AI & Data Science Engineering</span>
+              <span>{programme}</span>
 
               <span>•</span>
 
-              <span>{semesterInfo.semester}</span>
+              <span>Semester {ROMAN[activeSemester] || activeSemester}</span>
             </div>
 
-            {/* ==========================================================
-                ATTENDANCE STATISTICS
-            ========================================================== */}
+            {/* ==================================================
+                ATTENDANCE INFORMATION
+            ================================================== */}
 
             <div
               className="
@@ -315,9 +257,9 @@ const AttendanceBanner = ({
                 mt-5
               "
             >
-              {/* --------------------------------------------------------
-                  Overall Attendance
-              -------------------------------------------------------- */}
+              {/* =================================================
+                  OVERALL ATTENDANCE
+              ================================================= */}
 
               <Info
                 icon={<ShieldCheck size={16} />}
@@ -325,9 +267,9 @@ const AttendanceBanner = ({
                 value={`${attendancePercentage.toFixed(2)}%`}
               />
 
-              {/* --------------------------------------------------------
-                  Classes Attended
-              -------------------------------------------------------- */}
+              {/* =================================================
+                  CLASSES ATTENDED
+              ================================================= */}
 
               <Info
                 icon={<CalendarCheck2 size={16} />}
@@ -335,9 +277,9 @@ const AttendanceBanner = ({
                 value={classesAttended}
               />
 
-              {/* --------------------------------------------------------
-                  Classes Held
-              -------------------------------------------------------- */}
+              {/* =================================================
+                  CLASSES HELD
+              ================================================= */}
 
               <Info
                 icon={<CalendarDays size={16} />}
@@ -345,20 +287,20 @@ const AttendanceBanner = ({
                 value={classesHeld}
               />
 
-              {/* --------------------------------------------------------
-                  Mentor
-              -------------------------------------------------------- */}
+              {/* =================================================
+                  MENTOR
+              ================================================= */}
 
               <Info
                 icon={<UserRound size={16} />}
                 title="Mentor"
-                value="Dr. Arjun Sharma"
+                value={mentorName}
                 blue
               />
 
-              {/* --------------------------------------------------------
-                  Academic Standing
-              -------------------------------------------------------- */}
+              {/* =================================================
+                  ACADEMIC STANDING
+              ================================================= */}
 
               <div>
                 <div
@@ -394,9 +336,9 @@ const AttendanceBanner = ({
           </div>
         </div>
 
-        {/* ==============================================================
-            RIGHT SECTION
-        ============================================================== */}
+        {/* ====================================================
+            SEMESTER SELECTOR
+        ==================================================== */}
 
         <div
           className="
@@ -409,7 +351,9 @@ const AttendanceBanner = ({
             flex-shrink-0
           "
         >
-          {/* Label */}
+          {/* ==================================================
+              LABEL
+          ================================================== */}
 
           <p
             className="
@@ -421,9 +365,9 @@ const AttendanceBanner = ({
             Attendance for
           </p>
 
-          {/* ------------------------------------------------------------
-              Semester Dropdown
-          ------------------------------------------------------------ */}
+          {/* ==================================================
+              SELECT
+          ================================================== */}
 
           <div className="relative">
             <select
@@ -449,29 +393,25 @@ const AttendanceBanner = ({
                 focus:ring-blue-100
               "
             >
-              {SEMESTERS.map((semester) => {
-                const isCurrent = semester.number === CURRENT_SEMESTER;
+              {semesterNumbers.map((semester) => {
+                const isCurrent = semester === currentSemester;
 
-                const isNext = semester.number === NEXT_SEMESTER;
+                const isFuture = semester > currentSemester;
+
+                const isLocked = semester >= currentSemester;
 
                 return (
-                  <option
-                    key={semester.number}
-                    value={semester.number}
-                    disabled={isCurrent || isNext}
-                  >
-                    Semester {semester.roman}
+                  <option key={semester} value={semester} disabled={isLocked}>
+                    Semester {ROMAN[semester] || semester}
                     {isCurrent
-                      ? " • Current Semester"
-                      : isNext
+                      ? " • Current • Locked"
+                      : isFuture
                         ? " • Locked"
                         : ""}
                   </option>
                 );
               })}
             </select>
-
-            {/* Dropdown Arrow */}
 
             <ChevronDown
               size={16}
@@ -486,9 +426,9 @@ const AttendanceBanner = ({
             />
           </div>
 
-          {/* ------------------------------------------------------------
-              Lock Information
-          ------------------------------------------------------------ */}
+          {/* ==================================================
+              LOCK MESSAGE
+          ================================================== */}
 
           <div
             className="
@@ -506,7 +446,7 @@ const AttendanceBanner = ({
                 text-slate-400
               "
             >
-              Semesters VII & VIII are locked
+              Current and future semesters are locked
             </span>
           </div>
         </div>
@@ -515,11 +455,9 @@ const AttendanceBanner = ({
   );
 };
 
-/*
-|--------------------------------------------------------------------------
-| Reusable Information Component
-|--------------------------------------------------------------------------
-*/
+/* ==========================================================
+   INFO COMPONENT
+========================================================== */
 
 const Info = ({ icon, title, value, blue = false }) => {
   return (

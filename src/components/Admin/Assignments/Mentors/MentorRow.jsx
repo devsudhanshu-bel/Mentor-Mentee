@@ -1,87 +1,60 @@
 import React from "react";
-import { Check } from "lucide-react";
+
+import { Eye, MoreHorizontal } from "lucide-react";
+
+import { useNavigate } from "react-router-dom";
 
 import MentorCapacityBar from "./MentorCapacityBar";
 
 const MentorRow = ({ mentor, selectedMentor, setSelectedMentor }) => {
-  // ============================================================
-  // MENTOR DATA
-  // ============================================================
+  const navigate = useNavigate();
 
-  const name = mentor?.fullName || mentor?.name || "Unknown Mentor";
+  const isSelected = selectedMentor === mentor.id;
 
-  // Backend returns:
-  //
-  // department: {
-  //   id,
-  //   name,
-  //   code
-  // }
-  //
-  // Therefore ALWAYS extract the display string.
+  const assigned = Number(mentor.currentMentees) || 0;
 
-  const department =
-    typeof mentor?.department === "string"
-      ? mentor.department
-      : mentor?.department?.name ||
-        mentor?.departments?.name ||
-        mentor?.departmentName ||
-        "Department not available";
+  const capacity = Number(mentor.maxMentees) || 0;
 
-  const assigned = Number(
-    mentor?.assigned ?? mentor?.assignedCount ?? mentor?.currentMentees ?? 0,
-  );
+  const available =
+    mentor.availableSlots !== undefined
+      ? Number(mentor.availableSlots)
+      : Math.max(capacity - assigned, 0);
 
-  const capacity = Number(mentor?.capacity ?? mentor?.maxMentees ?? 0);
-
-  // ============================================================
-  // INITIALS
-  // ============================================================
-
-  const initials = name
-    .replace(/^Dr\.\s*/i, "")
-    .trim()
+  const initials = (mentor.fullName || "Mentor")
+    .replace(/^(Dr\.|Prof\.)\s*/i, "")
     .split(/\s+/)
     .filter(Boolean)
-    .map((word) => word.charAt(0))
+    .map((word) => word[0])
     .join("")
     .slice(0, 2)
     .toUpperCase();
 
-  // ============================================================
-  // SELECT
-  // ============================================================
-
-  const handleSelect = (event) => {
-    event.stopPropagation();
-
+  const handleSelect = () => {
     setSelectedMentor(mentor.id);
   };
 
-  // ============================================================
-  // RENDER
-  // ============================================================
-
   return (
     <tr
-      onClick={() => setSelectedMentor(mentor.id)}
+      onClick={handleSelect}
       className={`
         cursor-pointer
         border-b
         border-slate-100
         transition
         hover:bg-slate-50
-        ${selectedMentor === mentor.id ? "bg-blue-50" : ""}
+        ${isSelected ? "bg-blue-50" : "bg-white"}
       `}
     >
-      {/* ======================================================
+      {/* ==================================================
           MENTOR
-          ====================================================== */}
+      ================================================== */}
 
-      <td className="w-[55%] px-6 py-4">
-        <div className="flex items-center gap-3">
+      <td className="px-5 py-4">
+        <div className="flex min-w-0 items-center gap-3">
+          {/* Avatar */}
+
           <div
-            className="
+            className={`
               flex
               h-10
               w-10
@@ -89,64 +62,149 @@ const MentorRow = ({ mentor, selectedMentor, setSelectedMentor }) => {
               items-center
               justify-center
               rounded-full
-              bg-blue-100
-              text-sm
+              text-xs
               font-bold
-              text-blue-700
-            "
+              ${
+                isSelected
+                  ? "bg-blue-600 text-white"
+                  : "bg-blue-50 text-blue-700"
+              }
+            `}
           >
-            {initials || "M"}
+            {initials}
           </div>
+
+          {/* Information */}
 
           <div className="min-w-0">
             <p className="truncate text-[13px] font-semibold text-slate-800">
-              {name}
+              {mentor.fullName || "Unnamed Mentor"}
             </p>
 
-            <p className="truncate text-[11px] text-slate-500">{department}</p>
+            <p className="truncate text-[10px] text-slate-500">
+              {mentor.email || "No email"}
+            </p>
+
+            <p className="mt-0.5 text-[9px] text-slate-400">
+              {mentor.employeeCode || "No employee code"}
+            </p>
           </div>
         </div>
       </td>
 
-      {/* ======================================================
-          CAPACITY
-          ====================================================== */}
+      {/* ==================================================
+          DEPARTMENT
+      ================================================== */}
 
-      <td className="w-[25%] px-6 py-4">
+      <td className="px-5 py-4">
+        <span className="block max-w-[180px] text-[12px] leading-5 text-slate-700">
+          {mentor.department?.name || "—"}
+        </span>
+
+        {mentor.department?.code && (
+          <span className="text-[10px] text-slate-400">
+            {mentor.department.code}
+          </span>
+        )}
+      </td>
+
+      {/* ==================================================
+          DESIGNATION
+      ================================================== */}
+
+      <td className="px-5 py-4">
+        <span className="text-[12px] leading-5 text-slate-700">
+          {mentor.designation || "Faculty Mentor"}
+        </span>
+      </td>
+
+      {/* ==================================================
+          CAPACITY
+      ================================================== */}
+
+      <td className="min-w-[150px] px-5 py-4">
         <MentorCapacityBar assigned={assigned} capacity={capacity} />
       </td>
 
-      {/* ======================================================
-          ACTION
-          ====================================================== */}
+      {/* ==================================================
+          AVAILABLE SLOTS
+      ================================================== */}
 
-      <td className="w-[20%] px-6 py-4 text-center">
-        <button
-          type="button"
-          onClick={handleSelect}
+      <td className="px-5 py-4">
+        <span
           className={`
             inline-flex
-            min-w-[95px]
+            min-w-[34px]
             items-center
             justify-center
-            gap-2
-            rounded-lg
-            px-4
-            py-2
-            text-[12px]
+            rounded-md
+            px-2
+            py-1
+            text-[11px]
             font-semibold
-            transition
             ${
-              selectedMentor === mentor.id
-                ? "bg-blue-600 text-white"
-                : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-100"
+              available > 0
+                ? "bg-emerald-50 text-emerald-700"
+                : "bg-red-50 text-red-700"
             }
           `}
         >
-          {selectedMentor === mentor.id && <Check size={14} />}
+          {available}
+        </span>
+      </td>
 
-          {selectedMentor === mentor.id ? "Selected" : "Select"}
-        </button>
+      {/* ==================================================
+          ACTION
+      ================================================== */}
+
+      <td className="px-5 py-4" onClick={(event) => event.stopPropagation()}>
+        <div className="flex items-center justify-center gap-2">
+          {/* Select */}
+
+          <button
+            type="button"
+            onClick={handleSelect}
+            disabled={available <= 0}
+            className={`
+              rounded-lg
+              px-3
+              py-1.5
+              text-[11px]
+              font-semibold
+              transition
+              ${
+                available <= 0
+                  ? "cursor-not-allowed bg-slate-100 text-slate-400"
+                  : isSelected
+                    ? "bg-blue-600 text-white"
+                    : "border border-blue-200 bg-blue-50 text-blue-700 hover:bg-blue-100"
+              }
+            `}
+          >
+            {isSelected ? "Selected" : available > 0 ? "Select" : "Full"}
+          </button>
+
+          {/* View */}
+
+          <button
+            type="button"
+            onClick={() => navigate(`/admin/mentor/${mentor.id}`)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-100"
+            title="View Mentor"
+          >
+            <Eye size={14} />
+          </button>
+
+          {/* More */}
+
+          <button
+            type="button"
+            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-100"
+            title="More Actions"
+          >
+            <MoreHorizontal size={15} />
+          </button>
+        </div>
       </td>
     </tr>
   );

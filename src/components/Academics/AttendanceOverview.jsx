@@ -1,142 +1,384 @@
-import React, { useMemo } from "react";
-import { RadialBarChart, RadialBar, ResponsiveContainer } from "recharts";
-import { CalendarCheck2 } from "lucide-react";
+import React from "react";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
-const AttendanceOverview = ({ semesterData = null }) => {
-  const semester =
-    semesterData?.semester ||
-    semesterData?.data?.semester ||
-    semesterData?.data ||
-    semesterData;
+/* ==========================================================
+   COLORS
+========================================================== */
 
-  const subjects = semester?.subjects || semesterData?.subjects || [];
+const COLORS = ["#2563EB", "#DBEAFE"];
 
-  const attendanceData = useMemo(() => {
-    const validSubjects = subjects.filter(
-      (subject) =>
-        subject?.attendance !== null &&
-        subject?.attendance !== undefined &&
-        subject?.attendance !== "",
-    );
+/* ==========================================================
+   ATTENDANCE OVERVIEW
+========================================================== */
 
-    if (!validSubjects.length) {
-      return {
-        percentage: null,
-        attended: null,
-        held: null,
-        subjects: subjects.length,
-      };
-    }
+const AttendanceOverview = ({ attendanceData }) => {
+  /* ========================================================
+     SUMMARY
+  ======================================================== */
 
-    const totalAttendance = validSubjects.reduce(
-      (sum, subject) => sum + Number(subject.attendance),
-      0,
-    );
+  const summary = attendanceData?.summary || {};
 
-    const percentage = totalAttendance / validSubjects.length;
+  const attended = Number(summary.classesAttended) || 0;
 
-    return {
-      percentage: Number(percentage.toFixed(1)),
-      attended: null,
-      held: null,
-      subjects: subjects.length,
-    };
-  }, [subjects]);
+  const held = Number(summary.classesHeld) || 0;
+
+  const missed = Math.max(held - attended, 0);
+
+  /* ========================================================
+     ATTENDANCE PERCENTAGE
+
+     Priority:
+     1. Calculate from actual class counts
+     2. If counts are unavailable, use backend
+        stored/calculated percentage
+
+     This preserves existing attendance such as
+     94.44% when the old record still has 0/0
+     class counts.
+  ======================================================== */
+
+  const calculatedPercentage = held > 0 ? (attended / held) * 100 : null;
+
+  const backendPercentage = Number(summary.percentage);
+
+  let safePercentage = 0;
+
+  if (calculatedPercentage !== null && Number.isFinite(calculatedPercentage)) {
+    safePercentage = calculatedPercentage;
+  } else if (Number.isFinite(backendPercentage)) {
+    safePercentage = backendPercentage;
+  }
+
+  /* ========================================================
+     CHART DATA
+  ======================================================== */
 
   const chartData =
-    attendanceData.percentage !== null
+    held > 0
       ? [
           {
-            name: "Attendance",
-            value: attendanceData.percentage,
-            fill: "#0B63F6",
+            name: "Attended",
+            value: attended,
+          },
+          {
+            name: "Missed",
+            value: missed,
           },
         ]
-      : [];
+      : safePercentage > 0
+        ? [
+            {
+              name: "Attendance",
+              value: safePercentage,
+            },
+            {
+              name: "Remaining",
+              value: Math.max(100 - safePercentage, 0),
+            },
+          ]
+        : [
+            {
+              name: "No Attendance",
+              value: 1,
+            },
+          ];
+
+  /* ========================================================
+     STANDING
+  ======================================================== */
+
+  let standing = "No Data";
+
+  let standingColor = "text-slate-400";
+
+  if (safePercentage > 0) {
+    if (safePercentage < 75) {
+      standing = "Needs Attention";
+
+      standingColor = "text-red-600";
+    } else if (safePercentage < 85) {
+      standing = "Good";
+
+      standingColor = "text-orange-600";
+    } else {
+      standing = "Excellent";
+
+      standingColor = "text-green-600";
+    }
+  }
+
+  /* ========================================================
+     RENDER
+  ======================================================== */
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      {/* Header */}
-      <div className="mb-3 flex items-center gap-2">
-        <CalendarCheck2 size={16} className="text-[#0B63F6]" />
+    <div
+      className="
+        bg-white
+        rounded-2xl
+        border
+        border-slate-200
+        shadow-sm
+        p-5
+        h-[200px]
+      "
+    >
+      {/* ====================================================
+          TITLE
+      ==================================================== */}
 
-        <h3 className="text-[15px] font-semibold text-[#0B3B8F]">
-          Attendance Overview
-        </h3>
-      </div>
+      <h3
+        className="
+          text-[14px]
+          font-semibold
+          text-blue-600
+          mb-4
+        "
+      >
+        Overall Attendance
+      </h3>
 
-      {attendanceData.percentage === null ? (
-        <div className="flex min-h-[120px] items-center justify-center">
-          <p className="text-[11px] text-slate-400">
-            No attendance data available
-          </p>
-        </div>
-      ) : (
-        <div className="flex items-center justify-between">
-          {/* Circular Progress */}
-          <div className="relative h-[95px] w-[95px]">
-            <ResponsiveContainer width="100%" height="100%">
-              <RadialBarChart
-                cx="50%"
-                cy="50%"
-                innerRadius="75%"
-                outerRadius="100%"
-                barSize={8}
+      <div
+        className="
+          flex
+          items-center
+          justify-between
+          h-[145px]
+        "
+      >
+        {/* ==================================================
+            DONUT CHART
+        ================================================== */}
+
+        <div
+          className="
+            relative
+            w-[120px]
+            h-[120px]
+          "
+        >
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
                 data={chartData}
+                dataKey="value"
+                innerRadius={42}
+                outerRadius={58}
                 startAngle={90}
-                endAngle={-270}
+                endAngle={450}
+                stroke="none"
               >
-                <RadialBar
-                  background
-                  clockWise
-                  dataKey="value"
-                  cornerRadius={20}
-                />
-              </RadialBarChart>
-            </ResponsiveContainer>
+                {chartData.map((entry, index) => {
+                  /*
+                   * When actual class data exists:
+                   * blue = attended
+                   * light blue = missed
+                   *
+                   * When only stored percentage exists:
+                   * blue = stored attendance
+                   * light blue = remaining
+                   *
+                   * When nothing exists:
+                   * grey donut
+                   */
 
-            {/* Center */}
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <span className="text-[18px] font-bold text-[#0B3B8F]">
-                {attendanceData.percentage}%
-              </span>
+                  const fill =
+                    safePercentage > 0 ? COLORS[index] || COLORS[1] : "#E2E8F0";
 
-              <span className="text-center text-[9px] leading-tight text-slate-500">
-                Overall
-                <br />
-                Attendance
-              </span>
-            </div>
-          </div>
+                  return <Cell key={entry.name} fill={fill} />;
+                })}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
 
-          {/* Stats */}
-          <div className="w-[120px] space-y-2 text-[11px]">
-            <div className="flex justify-between">
-              <span className="text-slate-500">Classes Attended</span>
+          {/* =================================================
+              CENTER TEXT
+          ================================================= */}
 
-              <span className="font-semibold text-[#0B3B8F]">
-                {attendanceData.attended ?? "-"}
-              </span>
-            </div>
+          <div
+            className="
+              absolute
+              inset-0
+              flex
+              flex-col
+              items-center
+              justify-center
+            "
+          >
+            <h2
+              className="
+                text-[18px]
+                font-bold
+                text-[#142970]
+              "
+            >
+              {safePercentage.toFixed(2)}%
+            </h2>
 
-            <div className="flex justify-between">
-              <span className="text-slate-500">Classes Held</span>
-
-              <span className="font-semibold text-[#0B3B8F]">
-                {attendanceData.held ?? "-"}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-slate-500">Total Subjects</span>
-
-              <span className="font-semibold text-[#0B3B8F]">
-                {attendanceData.subjects}
-              </span>
-            </div>
+            <p
+              className={`
+                text-[11px]
+                font-medium
+                ${standingColor}
+              `}
+            >
+              {standing}
+            </p>
           </div>
         </div>
-      )}
+
+        {/* ==================================================
+            STATS
+        ================================================== */}
+
+        <div
+          className="
+            space-y-4
+            text-[12px]
+          "
+        >
+          {/* =================================================
+              CLASSES ATTENDED
+          ================================================= */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-8
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                gap-2
+              "
+            >
+              <span
+                className="
+                  w-3
+                  h-3
+                  rounded
+                  bg-blue-600
+                "
+              />
+
+              <span
+                className="
+                  text-slate-600
+                "
+              >
+                Classes Attended
+              </span>
+            </div>
+
+            <span
+              className="
+                font-semibold
+                text-[#142970]
+              "
+            >
+              {attended}
+            </span>
+          </div>
+
+          {/* =================================================
+              CLASSES HELD
+          ================================================= */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-8
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                gap-2
+              "
+            >
+              <span
+                className="
+                  w-3
+                  h-3
+                  rounded
+                  bg-blue-200
+                "
+              />
+
+              <span
+                className="
+                  text-slate-600
+                "
+              >
+                Classes Held
+              </span>
+            </div>
+
+            <span
+              className="
+                font-semibold
+                text-[#142970]
+              "
+            >
+              {held}
+            </span>
+          </div>
+
+          {/* =================================================
+              CLASSES MISSED
+          ================================================= */}
+
+          <div
+            className="
+              flex
+              items-center
+              justify-between
+              gap-8
+            "
+          >
+            <div
+              className="
+                flex
+                items-center
+                gap-2
+              "
+            >
+              <span
+                className="
+                  w-3
+                  h-3
+                  rounded
+                  bg-red-500
+                "
+              />
+
+              <span
+                className="
+                  text-slate-600
+                "
+              >
+                Classes Missed
+              </span>
+            </div>
+
+            <span
+              className="
+                font-semibold
+                text-[#142970]
+              "
+            >
+              {missed}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

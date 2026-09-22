@@ -4,18 +4,15 @@ import StudentTableHeader from "./StudentTableHeader";
 import StudentRow from "./StudentRow";
 
 const StudentTable = ({
-  students,
-  selectedStudents,
+  students = [],
+  selectedStudents = [],
   toggleStudent,
-  allSelected,
+  allSelected = false,
   toggleAll,
 }) => {
   return (
-    <table className="w-full">
-      <StudentTableHeader
-        allSelected={allSelected}
-        onSelectAll={toggleAll}
-      />
+    <table className="w-full min-w-[650px]">
+      <StudentTableHeader allSelected={allSelected} onSelectAll={toggleAll} />
 
       <tbody>
         {students.map((student) => (
@@ -29,10 +26,7 @@ const StudentTable = ({
 
         {students.length === 0 && (
           <tr>
-            <td
-              colSpan={5}
-              className="py-8 text-center text-sm text-slate-500"
-            >
+            <td colSpan={5} className="py-8 text-center text-sm text-slate-500">
               No students found.
             </td>
           </tr>

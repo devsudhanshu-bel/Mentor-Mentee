@@ -1,18 +1,27 @@
 import React from "react";
-import {
-  Search,
-  SlidersHorizontal,
-  Download,
-} from "lucide-react";
 
-const MentorTableFilters = () => {
+import { Search, SlidersHorizontal, Download } from "lucide-react";
+
+const MentorTableFilters = ({
+  search,
+  setSearch,
+  departmentId,
+  setDepartmentId,
+  status,
+  setStatus,
+  workload,
+  setWorkload,
+  departments = [],
+}) => {
   return (
-    <div className="bg-white border border-slate-200 rounded-2xl p-4">
-      <div className="grid grid-cols-12 gap-3 items-end">
-        {/* ================= Search ================= */}
+    <div className="rounded-2xl border border-slate-200 bg-white p-4">
+      <div className="grid grid-cols-12 items-end gap-3">
+        {/* ==================================================
+            SEARCH
+            ================================================== */}
 
         <div className="col-span-12 xl:col-span-4">
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Search
           </label>
 
@@ -24,69 +33,108 @@ const MentorTableFilters = () => {
 
             <input
               type="text"
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
               placeholder="Search mentor..."
-              className="w-full h-10 rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-[13px] outline-none focus:border-blue-500"
+              className="h-10 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-[13px] outline-none focus:border-blue-500"
             />
           </div>
         </div>
 
-        {/* ================= Department ================= */}
+        {/* ==================================================
+            DEPARTMENT
+            ================================================== */}
 
         <div className="col-span-12 sm:col-span-4 xl:col-span-2">
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Department
           </label>
 
-          <select className="w-full h-10 rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500">
-            <option>All Departments</option>
-            <option>CSE</option>
-            <option>ISE</option>
-            <option>ECE</option>
-            <option>AIML</option>
+          <select
+            value={departmentId}
+            onChange={(event) => setDepartmentId(event.target.value)}
+            className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500"
+          >
+            <option value="">All Departments</option>
+
+            {departments.map((department) => (
+              <option key={department.id} value={department.id}>
+                {department.name}
+              </option>
+            ))}
           </select>
         </div>
 
-        {/* ================= Status ================= */}
+        {/* ==================================================
+            STATUS
+            ================================================== */}
 
         <div className="col-span-12 sm:col-span-4 xl:col-span-2">
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Status
           </label>
 
-          <select className="w-full h-10 rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500">
-            <option>All Status</option>
-            <option>Active</option>
-            <option>Busy</option>
-            <option>Inactive</option>
-            <option>On Leave</option>
+          <select
+            value={status}
+            onChange={(event) => setStatus(event.target.value)}
+            className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500"
+          >
+            <option value="">All Status</option>
+
+            <option value="Active">Active</option>
+
+            <option value="Inactive">Inactive</option>
           </select>
         </div>
 
-        {/* ================= Workload ================= */}
+        {/* ==================================================
+            WORKLOAD
+            ================================================== */}
 
         <div className="col-span-12 sm:col-span-4 xl:col-span-2">
-          <label className="block text-[11px] font-medium text-slate-500 mb-1">
+          <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Workload
           </label>
 
-          <select className="w-full h-10 rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500">
-            <option>All</option>
-            <option>High</option>
-            <option>Medium</option>
-            <option>Low</option>
+          <select
+            value={workload}
+            onChange={(event) => setWorkload(event.target.value)}
+            className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500"
+          >
+            <option value="">All</option>
+
+            <option value="High">High</option>
+
+            <option value="Medium">Medium</option>
+
+            <option value="Low">Low</option>
           </select>
         </div>
 
-        {/* ================= Buttons ================= */}
+        {/* ==================================================
+            FILTERS BUTTON
+            ================================================== */}
 
-        <div className="col-span-12 xl:col-span-2 flex gap-2">
-          <button className="flex-1 h-10 rounded-xl border border-blue-600 text-blue-600 hover:bg-blue-50 transition flex items-center justify-center gap-2 text-[13px] font-medium">
-            <SlidersHorizontal size={15} />
+        <div className="col-span-12 sm:col-span-6 xl:col-span-1">
+          <button
+            type="button"
+            className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-blue-200 text-[12px] font-semibold text-blue-600 hover:bg-blue-50"
+          >
+            <SlidersHorizontal size={14} />
             Filters
           </button>
+        </div>
 
-          <button className="h-10 px-4 rounded-xl border border-slate-200 hover:bg-slate-50 transition flex items-center justify-center gap-2 text-[13px] font-medium text-slate-700">
-            <Download size={15} />
+        {/* ==================================================
+            EXPORT
+            ================================================== */}
+
+        <div className="col-span-12 sm:col-span-6 xl:col-span-1">
+          <button
+            type="button"
+            className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 text-[12px] font-semibold text-slate-600 hover:bg-slate-50"
+          >
+            <Download size={14} />
             Export
           </button>
         </div>

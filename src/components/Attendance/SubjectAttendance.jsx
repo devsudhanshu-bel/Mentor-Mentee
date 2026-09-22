@@ -1,5 +1,12 @@
 import React from "react";
-import { FileText } from "lucide-react";
+
+import { FileText, Pencil } from "lucide-react";
+
+import generateAttendanceReport from "../../utils/generateAttendanceReport";
+
+/* ==========================================================
+   ATTENDANCE BADGE COLOR
+========================================================== */
 
 const badgeColor = (value) => {
   if (value >= 95) {
@@ -17,136 +24,172 @@ const badgeColor = (value) => {
   return "bg-red-100 text-red-700";
 };
 
-const SubjectAttendance = ({ attendanceData }) => {
+/* ==========================================================
+   SUBJECT ATTENDANCE
+========================================================== */
+
+const SubjectAttendance = ({ attendanceData, onEdit }) => {
   const subjects = attendanceData?.subjects || [];
+
+  /* ========================================================
+     EDIT
+  ======================================================== */
+
+  const handleEdit = () => {
+    if (onEdit) {
+      onEdit();
+    }
+  };
+
+  /* ========================================================
+     PDF REPORT
+  ======================================================== */
+
+  const handleDetailedReport = () => {
+    if (!attendanceData) {
+      return;
+    }
+
+    generateAttendanceReport(attendanceData);
+  };
+
+  /* ========================================================
+     RENDER
+  ======================================================== */
 
   return (
     <div
       className="
-      bg-white
-      border
-      border-slate-200
-      rounded-2xl
-      shadow-sm
-      p-3.5
-    "
+        bg-white
+        border
+        border-slate-200
+        rounded-2xl
+        shadow-sm
+        p-3.5
+      "
     >
-      {/* Heading */}
+      {/* ====================================================
+          HEADING
+      ==================================================== */}
 
       <h3
         className="
-        text-[14px]
-        font-semibold
-        text-blue-600
-        mb-3
-      "
+          text-[14px]
+          font-semibold
+          text-blue-600
+          mb-3
+        "
       >
         Subject-wise Attendance
       </h3>
 
-      {/* Empty */}
+      {/* ====================================================
+          EMPTY STATE
+      ==================================================== */}
 
       {subjects.length === 0 ? (
         <div
           className="
-          h-[180px]
-          flex
-          items-center
-          justify-center
-          border
-          border-slate-200
-          rounded-lg
-          text-[12px]
-          text-slate-400
-        "
+            h-[180px]
+            flex
+            items-center
+            justify-center
+            border
+            border-slate-200
+            rounded-lg
+            text-[12px]
+            text-slate-400
+          "
         >
           No attendance entered for this semester yet.
         </div>
       ) : (
         <>
-          {/* Table */}
+          {/* ==================================================
+              TABLE
+          ================================================== */}
 
           <div
             className="
-            overflow-hidden
-            rounded-lg
-            border
-            border-slate-200
-          "
+              overflow-hidden
+              rounded-lg
+              border
+              border-slate-200
+            "
           >
             <table
               className="
-              w-full
-            "
+                w-full
+              "
             >
               <thead
                 className="
-                bg-slate-50
-              "
+                  bg-slate-50
+                "
               >
                 <tr
                   className="
-                  text-[11px]
-                  text-slate-600
-                "
+                    text-[11px]
+                    text-slate-600
+                  "
                 >
                   <th
                     className="
-                    py-2
-                    px-2
-                    text-center
-                    w-8
-                  "
+                      py-2
+                      px-2
+                      text-center
+                      w-8
+                    "
                   >
                     #
                   </th>
 
                   <th
                     className="
-                    py-2
-                    px-3
-                    text-left
-                  "
+                      py-2
+                      px-3
+                      text-left
+                    "
                   >
                     Subject Code
                   </th>
 
                   <th
                     className="
-                    py-2
-                    px-3
-                    text-left
-                  "
+                      py-2
+                      px-3
+                      text-left
+                    "
                   >
                     Subject Name
                   </th>
 
                   <th
                     className="
-                    py-2
-                    px-3
-                    text-center
-                  "
+                      py-2
+                      px-3
+                      text-center
+                    "
                   >
                     Classes Held
                   </th>
 
                   <th
                     className="
-                    py-2
-                    px-3
-                    text-center
-                  "
+                      py-2
+                      px-3
+                      text-center
+                    "
                   >
                     Classes Attended
                   </th>
 
                   <th
                     className="
-                    py-2
-                    px-3
-                    text-center
-                  "
+                      py-2
+                      px-3
+                      text-center
+                    "
                   >
                     Attendance
                   </th>
@@ -155,7 +198,17 @@ const SubjectAttendance = ({ attendanceData }) => {
 
               <tbody>
                 {subjects.map((subject, index) => {
-                  const percentage = Number(subject.percentage) || 0;
+                  const held = Number(subject.classesHeld || 0);
+
+                  const storedAttendance = Number(subject.storedAttendance);
+
+                  const hasClassData = held > 0;
+
+                  const percentage = hasClassData
+                    ? Number(subject.percentage || 0)
+                    : Number.isFinite(storedAttendance)
+                      ? storedAttendance
+                      : Number(subject.percentage || 0);
 
                   return (
                     <tr
@@ -169,60 +222,60 @@ const SubjectAttendance = ({ attendanceData }) => {
                     >
                       <td
                         className="
-                          py-2
-                          text-center
-                          text-[11px]
-                          text-slate-500
-                        "
+                            py-2
+                            text-center
+                            text-[11px]
+                            text-slate-500
+                          "
                       >
                         {index + 1}
                       </td>
 
                       <td
                         className="
-                          px-3
-                          text-[11px]
-                          font-medium
-                          text-[#142970]
-                        "
+                            px-3
+                            text-[11px]
+                            font-medium
+                            text-[#142970]
+                          "
                       >
                         {subject.courseCode || "—"}
                       </td>
 
                       <td
                         className="
-                          px-3
-                          text-[11px]
-                          text-slate-700
-                        "
+                            px-3
+                            text-[11px]
+                            text-slate-700
+                          "
                       >
-                        {subject.subjectName}
+                        {subject.subjectName || "—"}
                       </td>
 
                       <td
                         className="
-                          text-center
-                          text-[11px]
-                          text-slate-700
-                        "
+                            text-center
+                            text-[11px]
+                            text-slate-700
+                          "
                       >
-                        {subject.classesHeld}
+                        {held}
                       </td>
 
                       <td
                         className="
-                          text-center
-                          text-[11px]
-                          text-slate-700
-                        "
+                            text-center
+                            text-[11px]
+                            text-slate-700
+                          "
                       >
-                        {subject.classesAttended}
+                        {Number(subject.classesAttended || 0)}
                       </td>
 
                       <td
                         className="
-                          text-center
-                        "
+                            text-center
+                          "
                       >
                         <span
                           className={`
@@ -243,20 +296,101 @@ const SubjectAttendance = ({ attendanceData }) => {
                   );
                 })}
               </tbody>
+              <tfoot>
+                <tr className="border-t border-slate-200 bg-slate-50">
+                  <td
+                    colSpan={5}
+                    className="
+        px-4
+        py-3
+        text-right
+        text-[12px]
+        font-semibold
+        text-[#142970]
+      "
+                  >
+                    Overall Attendance
+                  </td>
+
+                  <td
+                    className="
+        px-4
+        py-3
+        text-center
+      "
+                  >
+                    <span
+                      className="
+          inline-flex
+          items-center
+          justify-center
+          rounded-full
+          bg-green-100
+          px-3
+          py-1
+          text-[11px]
+          font-semibold
+          text-green-700
+        "
+                    >
+                      {Number(attendanceData?.summary?.percentage || 0).toFixed(
+                        2,
+                      )}
+                      %
+                    </span>
+                  </td>
+                </tr>
+              </tfoot>
             </table>
           </div>
 
-          {/* Button */}
+          {/* ==================================================
+              ACTION BUTTONS
+          ================================================== */}
 
           <div
             className="
-            flex
-            justify-center
-            mt-2
-          "
+              flex
+              justify-center
+              items-center
+              gap-3
+              mt-2
+            "
           >
+            {/* =================================================
+                EDIT
+            ================================================= */}
+
             <button
               type="button"
+              onClick={handleEdit}
+              className="
+                flex
+                items-center
+                gap-2
+                rounded-lg
+                border
+                border-blue-300
+                px-5
+                py-1.5
+                text-[12px]
+                font-medium
+                text-blue-600
+                transition
+                hover:bg-blue-50
+              "
+            >
+              <Pencil size={14} />
+              Edit Attendance
+            </button>
+
+            {/* =================================================
+                PDF REPORT
+            ================================================= */}
+
+            <button
+              type="button"
+              onClick={handleDetailedReport}
               className="
                 flex
                 items-center

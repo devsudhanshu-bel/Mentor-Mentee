@@ -8,133 +8,248 @@ import AttendanceOverview from "../components/Attendance/AttendanceOverview";
 import AttendanceStatistics from "../components/Attendance/AttendanceStatistics";
 import AttendanceCategory from "../components/Attendance/AttendanceCategory";
 import SubjectAttendance from "../components/Attendance/SubjectAttendance";
-import AttendanceCalendar from "../components/Attendance/AttendanceCalendar";
-import AttendanceTrend from "../components/Attendance/AttendanceTrend";
-import AttendanceNote from "../components/Attendance/AttendanceNote";
-import NeedHelp from "../components/Attendance/NeedHelp";
-
 import AttendanceEntryModal from "../components/Attendance/AttendanceEntryModal";
 
 import {
   getSemesterAttendance,
   saveSemesterAttendance,
-} from "../services/attendanceApi";
+} from "../api/attendance.api";
+
+/* ==========================================================
+   ATTENDANCE PAGE
+========================================================== */
 
 const Attendance = () => {
-  /*
-  |--------------------------------------------------------------------------
-  | SELECTED SEMESTER
-  |--------------------------------------------------------------------------
-  |
-  | Semester VII is the current semester.
-  | Therefore it is selected by default.
-  |
-  */
+  /* ========================================================
+     STATE
+  ======================================================== */
 
-  const [selectedSemester, setSelectedSemester] = useState(7);
-
-  /*
-  |--------------------------------------------------------------------------
-  | ATTENDANCE DATA
-  |--------------------------------------------------------------------------
-  */
+  const [selectedSemester, setSelectedSemester] = useState(null);
 
   const [attendanceData, setAttendanceData] = useState(null);
 
-  /*
-  |--------------------------------------------------------------------------
-  | LOADING
-  |--------------------------------------------------------------------------
-  */
-
   const [loading, setLoading] = useState(true);
 
-  /*
-  |--------------------------------------------------------------------------
-  | ERROR
-  |--------------------------------------------------------------------------
-  */
+  const [initializing, setInitializing] = useState(true);
 
   const [error, setError] = useState("");
 
-  /*
-  |--------------------------------------------------------------------------
-  | ENTRY MODAL
-  |--------------------------------------------------------------------------
-  */
-
   const [showEntryModal, setShowEntryModal] = useState(false);
 
-  /*
-  |--------------------------------------------------------------------------
-  | LOAD ATTENDANCE
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     SEMESTER PARSER
+  ======================================================== */
+
+  const getCurrentSemester = () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+
+      if (!storedUser) {
+        return 1;
+      }
+
+      const user = JSON.parse(storedUser);
+
+      const values = [
+        user?.semester,
+        user?.currentSemester,
+        user?.semesterNumber,
+      ];
+
+      const romanMap = {
+        I: 1,
+        II: 2,
+        III: 3,
+        IV: 4,
+        V: 5,
+        VI: 6,
+        VII: 7,
+        VIII: 8,
+      };
+
+      for (const value of values) {
+        if (value === null || value === undefined) {
+          continue;
+        }
+
+        const stringValue = String(value).trim();
+
+        /* ----------------------------------------------
+           Numeric semester
+        ---------------------------------------------- */
+
+        const numericMatch = stringValue.match(/\d+/);
+
+        if (numericMatch) {
+          const number = Number(numericMatch[0]);
+
+          if (number >= 1 && number <= 8) {
+            return number;
+          }
+        }
+
+        /* ----------------------------------------------
+           Roman semester
+        ---------------------------------------------- */
+
+        const normalized = stringValue
+          .toUpperCase()
+          .replace("SEMESTER", "")
+          .trim();
+
+        if (romanMap[normalized]) {
+          return romanMap[normalized];
+        }
+      }
+
+      return 1;
+    } catch (err) {
+      console.error("Failed to determine current semester:", err);
+
+      return 1;
+    }
+  };
+
+  /* ========================================================
+     LOAD ATTENDANCE
+  ======================================================== */
 
   const loadAttendance = async (semester, shouldOpenModal = true) => {
     try {
       setLoading(true);
+
       setError("");
 
       const response = await getSemesterAttendance(semester);
 
       const data = response?.data || null;
 
+      /*
+       * Only replace existing UI data
+       * after a successful request.
+       */
+
       setAttendanceData(data);
 
       /*
-      |--------------------------------------------------------------------------
-      | FIRST TIME ENTRY
-      |--------------------------------------------------------------------------
-      |
-      | If the selected semester has no attendance,
-      | show the subject-entry popup.
-      |
-      */
+       * Automatically open the entry
+       * modal when the semester has
+       * no attendance yet.
+       */
 
       if (shouldOpenModal && data && data.hasAttendance === false) {
         setShowEntryModal(true);
       } else {
         setShowEntryModal(false);
       }
+
+      return data;
     } catch (err) {
       console.error("Failed to load attendance:", err);
 
-      setError(err?.message || "Unable to load attendance.");
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to load attendance.",
+      );
 
       setAttendanceData(null);
+
+      setShowEntryModal(false);
+
+      throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | INITIAL LOAD
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     INITIAL LOAD
+  ======================================================== */
 
   useEffect(() => {
-    loadAttendance(7, true);
+    let mounted = true;
+
+    const initialiseAttendance = async () => {
+      const currentSemester = getCurrentSemester();
+
+      try {
+        /*
+         * Load the actual backend
+         * semester first.
+         */
+
+        const data = await loadAttendance(currentSemester, false);
+
+        /*
+         * Prefer backend current semester
+         * when it is available.
+         */
+
+        const backendSemester = Number(data?.currentSemester);
+
+        const resolvedSemester =
+          Number.isInteger(backendSemester) &&
+          backendSemester >= 1 &&
+          backendSemester <= 8
+            ? backendSemester
+            : currentSemester;
+
+        if (mounted) {
+          setSelectedSemester(resolvedSemester);
+        }
+      } catch (err) {
+        /*
+         * Even when the API fails,
+         * preserve the locally resolved
+         * semester for the error UI.
+         */
+
+        if (mounted) {
+          setSelectedSemester(currentSemester);
+        }
+      } finally {
+        if (mounted) {
+          setInitializing(false);
+        }
+      }
+    };
+
+    initialiseAttendance();
+
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  /*
-  |--------------------------------------------------------------------------
-  | SEMESTER CHANGE
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     SEMESTER CHANGE
+  ======================================================== */
 
-  const handleSemesterChange = (semester) => {
-    setSelectedSemester(semester);
+  const handleSemesterChange = async (semester) => {
+    const number = Number(semester);
 
-    loadAttendance(semester, true);
+    if (!Number.isInteger(number) || number < 1 || number > 8) {
+      return;
+    }
+
+    /*
+     * Remove old semester data
+     * immediately so that stale
+     * data isn't displayed while
+     * the new semester loads.
+     */
+
+    setAttendanceData(null);
+
+    setSelectedSemester(number);
+
+    await loadAttendance(number, true);
   };
 
-  /*
-  |--------------------------------------------------------------------------
-  | SAVE ATTENDANCE
-  |--------------------------------------------------------------------------
-  */
+  /* ========================================================
+     SAVE ATTENDANCE
+  ======================================================== */
 
   const handleSaveAttendance = async (subjects) => {
     try {
@@ -143,89 +258,96 @@ const Attendance = () => {
       const response = await saveSemesterAttendance(selectedSemester, subjects);
 
       /*
-      |--------------------------------------------------------------------------
-      | Use backend-calculated data
-      |--------------------------------------------------------------------------
-      */
+       * Show returned data immediately.
+       */
 
       setAttendanceData(response?.data || null);
 
-      /*
-      |--------------------------------------------------------------------------
-      | Close modal
-      |--------------------------------------------------------------------------
-      */
-
       setShowEntryModal(false);
+
+      /*
+       * Re-fetch from database.
+       *
+       * This makes the displayed data
+       * the actual persisted data.
+       */
+
+      await loadAttendance(selectedSemester, false);
     } catch (err) {
       console.error("Failed to save attendance:", err);
+
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to save attendance.",
+      );
 
       throw err;
     }
   };
 
+  /* ========================================================
+     INITIAL PAGE LOADING
+  ======================================================== */
+
+  if (initializing || selectedSemester === null) {
+    return (
+      <div className="min-h-screen bg-slate-100">
+        <Sidebar />
+
+        <div className="ml-[290px] min-h-screen">
+          <Header />
+
+          <div className="flex min-h-[70vh] items-center justify-center">
+            <div className="text-center">
+              <div className="mb-2 text-sm font-medium text-slate-600">
+                Loading attendance...
+              </div>
+
+              <div className="text-xs text-slate-400">Please wait</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  /* ========================================================
+     MAIN PAGE
+  ======================================================== */
+
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* ================================================================
-          SIDEBAR
-      ================================================================= */}
-
       <Sidebar />
 
-      {/* ================================================================
-          MAIN CONTENT
-      ================================================================= */}
-
-      <div
-        className="
-          ml-[290px]
-          min-h-screen
-          flex
-          flex-col
-        "
-      >
-        {/* ==============================================================
-            HEADER
-        ============================================================== */}
-
+      <div className="ml-[290px] flex min-h-screen flex-col">
         <Header />
 
-        {/* ==============================================================
-            CONTENT
-        ============================================================== */}
-
-        <main
-          className="
-            flex-1
-            px-4
-            py-4
-            space-y-4
-          "
-        >
-          {/* ============================================================
+        <main className="flex-1 space-y-4 px-4 py-4">
+          {/* ==================================================
               ERROR
-          ============================================================ */}
+          ================================================== */}
 
           {error && (
             <div
               className="
-                bg-red-50
+                rounded-xl
                 border
                 border-red-200
-                text-red-600
+                bg-red-50
                 px-4
                 py-3
-                rounded-xl
                 text-[12px]
+                text-red-600
               "
             >
               {error}
             </div>
           )}
 
-          {/* ============================================================
-              ATTENDANCE BANNER
-          ============================================================ */}
+          {/* ==================================================
+              BANNER
+          ================================================== */}
 
           <AttendanceBanner
             selectedSemester={selectedSemester}
@@ -233,9 +355,9 @@ const Attendance = () => {
             attendanceData={attendanceData}
           />
 
-          {/* ============================================================
-              SECTION HEADING
-          ============================================================ */}
+          {/* ==================================================
+              PAGE TITLE
+          ================================================== */}
 
           <div>
             <h1
@@ -258,53 +380,32 @@ const Attendance = () => {
             </p>
           </div>
 
-          {/* ============================================================
-              FIRST ROW
-          ============================================================ */}
+          {/* ==================================================
+              OVERVIEW CARDS
+          ================================================== */}
 
-          <div
-            className="
-              grid
-              grid-cols-12
-              gap-2
-            "
-          >
-            {/* Overall Attendance */}
+          <div className="grid grid-cols-12 gap-2">
+            {/* Overall */}
 
-            <div
-              className="
-                col-span-12
-                lg:col-span-4
-              "
-            >
+            <div className="col-span-12 lg:col-span-4">
               <AttendanceOverview
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
               />
             </div>
 
-            {/* Attendance Statistics */}
+            {/* Statistics */}
 
-            <div
-              className="
-                col-span-12
-                lg:col-span-4
-              "
-            >
+            <div className="col-span-12 lg:col-span-4">
               <AttendanceStatistics
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
               />
             </div>
 
-            {/* Attendance Category */}
+            {/* Category */}
 
-            <div
-              className="
-                col-span-12
-                lg:col-span-4
-              "
-            >
+            <div className="col-span-12 lg:col-span-4">
               <AttendanceCategory
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
@@ -312,106 +413,27 @@ const Attendance = () => {
             </div>
           </div>
 
-          {/* ============================================================
-              SECOND ROW
-          ============================================================ */}
+          {/* ==================================================
+              SUBJECT ATTENDANCE
+          ================================================== */}
 
-          <div
-            className="
-              grid
-              grid-cols-12
-              gap-2
-            "
-          >
-            {/* Subject Attendance */}
-
-            <div
-              className="
-                col-span-12
-                lg:col-span-7
-              "
-            >
+          <div className="grid grid-cols-12 gap-2">
+            <div className="col-span-12 w-full">
               <SubjectAttendance
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
-              />
-            </div>
-
-            {/* Calendar */}
-
-            <div
-              className="
-                col-span-12
-                lg:col-span-5
-                flex
-              "
-            >
-              <AttendanceCalendar
-                selectedSemester={selectedSemester}
-                attendanceData={attendanceData}
-              />
-            </div>
-          </div>
-
-          {/* ============================================================
-              THIRD ROW
-          ============================================================ */}
-
-          <div
-            className="
-              grid
-              grid-cols-12
-              gap-2
-            "
-          >
-            {/* Attendance Trend */}
-
-            <div
-              className="
-                col-span-12
-                lg:col-span-8
-              "
-            >
-              <AttendanceTrend
-                selectedSemester={selectedSemester}
-                attendanceData={attendanceData}
-              />
-            </div>
-
-            {/* Note */}
-
-            <div
-              className="
-                col-span-12
-                lg:col-span-2
-              "
-            >
-              <AttendanceNote
-                selectedSemester={selectedSemester}
-                attendanceData={attendanceData}
-              />
-            </div>
-
-            {/* Need Help */}
-
-            <div
-              className="
-                col-span-12
-                lg:col-span-2
-              "
-            >
-              <NeedHelp
-                selectedSemester={selectedSemester}
-                attendanceData={attendanceData}
+                onEdit={() => {
+                  setShowEntryModal(true);
+                }}
               />
             </div>
           </div>
         </main>
       </div>
 
-      {/* ================================================================
-          ATTENDANCE ENTRY MODAL
-      ================================================================= */}
+      {/* ======================================================
+          ENTRY MODAL
+      ====================================================== */}
 
       {showEntryModal && (
         <AttendanceEntryModal
@@ -421,29 +443,29 @@ const Attendance = () => {
         />
       )}
 
-      {/* ================================================================
-          LOADING INDICATOR
-      ================================================================= */}
+      {/* ======================================================
+          SEMESTER LOADING INDICATOR
+      ====================================================== */}
 
-      {loading && (
+      {loading && !initializing && (
         <div
           className="
-            fixed
-            bottom-5
-            right-5
-            z-[90]
-            bg-white
-            border
-            border-slate-200
-            shadow-lg
-            rounded-xl
-            px-4
-            py-3
-            text-[12px]
-            text-slate-500
-          "
+              fixed
+              bottom-5
+              right-5
+              z-[90]
+              rounded-xl
+              border
+              border-slate-200
+              bg-white
+              px-4
+              py-3
+              text-[12px]
+              text-slate-500
+              shadow-lg
+            "
         >
-          Loading attendance...
+          Loading Semester {selectedSemester}...
         </div>
       )}
     </div>
