@@ -1,37 +1,53 @@
 import express from "express";
 
 import MentorController from "../controllers/mentor.controller.js";
-import dashboardRoutes from "./dashboard.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
+
 import { authorize } from "../../../middleware/role.middleware.js";
 
 const router = express.Router();
 
 /* ==========================================================
-   All Mentor Routes Require Authentication
+   AUTHENTICATION
 ========================================================== */
 
 router.use(authenticate);
-router.use(authorize("MENTOR"));
 
 /* ==========================================================
-   Dashboard Routes
+   MENTOR ROLE
 ========================================================== */
 
-router.use("/dashboard", dashboardRoutes);
+router.use(
+  authorize("MENTOR")
+);
 
 /* ==========================================================
-   Mentor Profile
+   PROFILE
 ========================================================== */
 
-// Get Logged-in Mentor Profile
-router.get("/profile", MentorController.getProfile);
+router.get(
+  "/profile",
+  MentorController.getProfile
+);
 
-// Create Mentor Profile (Only Once)
-router.post("/profile", MentorController.createProfile);
+router.post(
+  "/profile",
+  MentorController.createProfile
+);
 
-// Update Mentor Profile
-router.put("/profile", MentorController.updateProfile);
+router.put(
+  "/profile",
+  MentorController.updateProfile
+);
+
+/* ==========================================================
+   MENTORING OVERVIEW
+========================================================== */
+
+router.get(
+  "/overview",
+  MentorController.getOverview
+);
 
 export default router;

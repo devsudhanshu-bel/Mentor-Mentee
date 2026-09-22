@@ -1,38 +1,92 @@
-import prisma from "../../../config/prisma.js";
+import prisma from "../../../config/prisma.hod.js";
 
 import ApiError from "../../../utils/ApiError.js";
 
 class DashboardService {
-  /**
-   * Dashboard Banner
-   */
+  /* ==========================================================
+     DASHBOARD BANNER
+  ========================================================== */
+
   async getBanner(userId) {
-    const mentor =
-      await prisma.mentorProfile.findUnique({
-        where: {
-          userId,
-        },
-        include: {
-          user: {
-            select: {
-              fullName: true,
-            },
+    /*
+     * Find the teacher associated with the
+     * currently authenticated mentor account.
+     *
+     * userId comes from:
+     *
+     * req.user.id
+     *
+     * Relationship:
+     *
+     * user_accounts.id
+     *        ↓
+     * teachers.userAccountId
+     */
+
+    const teacher = await prisma.teachers.findUnique({
+      where: {
+        userAccountId: userId,
+      },
+
+      select: {
+        id: true,
+
+        fullName: true,
+
+        designation: true,
+
+        /* ----------------------------------------------------
+           Department
+        ---------------------------------------------------- */
+
+        departments_teachers_departmentIdTodepartments: {
+          select: {
+            name: true,
           },
         },
-      });
 
-    if (!mentor) {
+        /* ----------------------------------------------------
+           Teacher Profile
+        ---------------------------------------------------- */
+
+        teacher_profiles: {
+          select: {
+            profileImage: true,
+          },
+        },
+      },
+    });
+
+    /* ========================================================
+       MENTOR NOT FOUND
+    ======================================================== */
+
+    if (!teacher) {
       throw new ApiError(
         404,
-        "Mentor profile not found"
+        "Mentor teacher record not found."
       );
     }
 
+    /* ========================================================
+       RETURN BANNER DATA
+    ======================================================== */
+
     return {
-      fullName: mentor.user.fullName,
-      designation: mentor.designation,
-      department: mentor.department,
-      profileImage: mentor.profileImage,
+      fullName:
+        teacher.fullName || "Mentor",
+
+      designation:
+        teacher.designation || "",
+
+      department:
+        teacher
+          .departments_teachers_departmentIdTodepartments
+          ?.name || "",
+
+      profileImage:
+        teacher.teacher_profiles
+          ?.profileImage || null,
     };
   }
 }

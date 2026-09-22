@@ -1,18 +1,18 @@
-import asyncHandler from "../../../utils/asyncHandler.js";
+import StudentsService from "../services/students.service.js";
 
 import ApiResponse from "../../../utils/ApiResponse.js";
 
-import dashboardService from "../services/dashboard.service.js";
+import asyncHandler from "../../../utils/asyncHandler.js";
 
-class DashboardController {
+class StudentsController {
   /* ==========================================================
-     DASHBOARD BANNER
+     GET MY STUDENTS
   ========================================================== */
 
-  getBanner = asyncHandler(
+  getMyStudents = asyncHandler(
     async (req, res) => {
-      const banner =
-        await dashboardService.getBanner(
+      const students =
+        await StudentsService.getMyStudents(
           req.user.id
         );
 
@@ -21,12 +21,12 @@ class DashboardController {
         .json(
           new ApiResponse(
             200,
-            "Dashboard banner fetched successfully",
-            banner
+            "Students fetched successfully",
+            students
           )
         );
     }
   );
 }
 
-export default new DashboardController();
+export default new StudentsController();
