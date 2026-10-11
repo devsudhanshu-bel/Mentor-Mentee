@@ -1,0 +1,120 @@
+AUTH
+1. POST /api/auth/login
+{
+    "email":"rahul@christuniversity.in",
+    "password":"Rahul@123"
+}
+
+2. POST http://localhost:5000/api/auth/register
+Content-Type : application/json
+{
+  "fullName": "Rahul Sharma",
+  "email": "rahul@christuniversity.in",
+  "password": "Rahul@123",
+  "employeeId": "EMP001",
+  "department": "Computer Science",
+  "designation": "Assistant Professor",
+  "officeRoom": "B204",
+  "phone": "9876543210"
+}   
+
+3. GET http://localhost:5000/api/auth/me
+Authorization: Bearer <Token>
+
+
+4. POST http://localhost:5000/api/auth/logout
+Authorization: Bearer <Token>
+
+
+
+Student login
+1. POST http://localhost:5000/api/students
+Authorization: Bearer <Token> (Mentor's)
+{
+  "fullName": "Sudhanshu Sreedhara",
+  "email": "sudhanshu@christuniversity.in",
+  "registerNumber": "2362177",
+  "admissionNumber": "23MCA001",
+  "department": "ADSE",
+  "programme": "B.Tech",
+  "section": "A",
+  "currentSemester": 7,
+  "mentorId": 1
+}
+
+2. 
+
+Dashboard
+1. GET http://localhost:5000/api/dashboard/banner
+Authorization: Bearer <Token>
+
+2. http://localhost:5000/api/dashboard/summary
+3. http://localhost:5000/api/dashboard/cgpa-trend
+4. http://localhost:5000/api/dashboard/attendance
+5. http://localhost:5000/api/dashboard/meetings
+6. http://localhost:5000/api/dashboard/notifications
+7. http://localhost:5000/api/dashboard/tasks
+8. http://localhost:5000/api/dashboard
+
+Profile
+1. GET http://localhost:5000/api/profile
+2. PUT http://localhost:5000/api/profile
+{
+  "phone": "9876543210",
+  "alternatePhone": "9123456789",
+  "alternateEmail": "student.personal@gmail.com",
+
+  "whatsappNumber": "9876543210",
+  "telegramUsername": "student_23",
+
+  "linkedinUrl": "https://linkedin.com/in/student",
+  "githubUrl": "https://github.com/student",
+
+  "currentAddress": "Bangalore",
+  "permanentAddress": "Mysore",
+
+  "addressType": "Hostel",
+  "addressDuration": "2 Years",
+
+  "preferredContactMethod": "WhatsApp",
+  "preferredContactTime": "Evening",
+
+  "communicationEmailPreference": "University",
+
+  "allowWhatsapp": true
+}
+3. PUT http://localhost:5000/api/profile/password
+{
+  "currentPassword": "Student@123",
+  "newPassword": "Sudhanshu@123"
+}
+
+
+Academics
+1. GET http://localhost:5000/api/academics
+2. GET http://localhost:5000/api/academics/semester-results
+3. GET http://localhost:5000/api/academics/cgpa-history
+4. GET http://localhost:5000/api/academics/backlogs
+5. POST http://localhost:5000/api/academics/semester/1/subject
+{
+  "subjectCode": "MCA101",
+  "subjectName": "Data Structures",
+  "credits": 4,
+  "category": "Core",
+  "cia1": 18,
+  "cia2": 19,
+  "cia3": 20,
+  "mse": 25,
+  "ese": 55,
+  "obtainedMarks": 92,
+  "maxMarks": 100,
+  "attendance": 95,
+  "grade": "O"
+}
+6. POST http://localhost:5000/api/academics/semester/1
+7. GET http://localhost:5000/api/academics/analytics
+8. PUT http://localhost:5000/academics/semester/1/subject/{subjectId} (update)
+9. DELETE http://localhost:5000/academics/semester/1/subject/{subjectId} (delete)
+10. PUT http://localhost:5000/academics/semester/1
+11. GET http://localhost:5000/academics/cgpa-history
+12. POST http://localhost:5000/academics/semester/1/lock

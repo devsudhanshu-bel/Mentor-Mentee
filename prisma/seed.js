@@ -1,0 +1,1 @@
+import "../seed-assignment-test-data.js";
