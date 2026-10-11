@@ -1,83 +1,95 @@
 import React from "react";
-import {
-  Mail,
-  Phone,
-  MapPin,
-} from "lucide-react";
+import { Mail, Phone, MapPin } from "lucide-react";
 
-import profile from "../../../assets/profile.jpg";
+import profilePlaceholder from "../../../assets/profile.jpg";
 
-const MentorProfileCard = () => {
+const MentorProfileCard = ({ mentor = {} }) => {
+  const mentorName = mentor.fullName || "Unnamed Mentor";
+
+  const designation = mentor.designation || "Designation unavailable";
+
+  const department = mentor.department?.name || "Department unavailable";
+
+  const email = mentor.email || "Email unavailable";
+
+  const phone = mentor.phone || "Phone unavailable";
+
+  const office = mentor.profile?.office || "Office not provided";
+
+  const profileImage = mentor.profile?.profileImage || profilePlaceholder;
+
+  const isActive = mentor.isActive ?? mentor.status === "Active";
+
   return (
     <div className="h-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
       <div className="flex items-start gap-4">
-        {/* Avatar */}
+        {/* Mentor profile image */}
 
         <img
-          src={profile}
-          alt="Mentor"
-          className="h-[72px] w-[72px] rounded-full border border-slate-200 object-cover shrink-0"
+          src={profileImage}
+          alt={mentorName}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = profilePlaceholder;
+          }}
+          className="h-[72px] w-[72px] shrink-0 rounded-full border border-slate-200 object-cover"
         />
 
-        {/* Right */}
+        {/* Mentor information */}
 
-        <div className="flex-1 min-w-0 space-y-3">
-          {/* Name */}
+        <div className="min-w-0 flex-1 space-y-3">
+          {/* Name and status */}
 
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-[18px] font-bold text-slate-900 leading-none">
-              Dr. Arjun Mehta
+            <h2 className="text-[18px] font-bold leading-tight text-slate-900">
+              {mentorName}
             </h2>
 
-            <span className="rounded-md bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-700">
-              Active
+            <span
+              className={`rounded-md px-2 py-1 text-[10px] font-semibold ${
+                isActive
+                  ? "bg-emerald-100 text-emerald-700"
+                  : "bg-red-100 text-red-700"
+              }`}
+            >
+              {isActive ? "Active" : "Inactive"}
             </span>
           </div>
 
-          {/* Role */}
+          {/* Designation and department */}
 
           <div className="space-y-0.5">
             <p className="text-[13px] font-semibold text-slate-700">
-              Associate Professor
+              {designation}
             </p>
 
-            <p className="text-[12px] text-slate-500 leading-5">
-              Department of Computer Science &
-              Engineering
-            </p>
+            <p className="text-[12px] leading-5 text-slate-500">{department}</p>
           </div>
 
-          {/* Contact */}
+          {/* Contact details */}
 
           <div className="space-y-2 pt-1">
             <div className="flex items-center gap-2 text-[12px] text-slate-600">
-              <Mail
-                size={14}
-                className="text-slate-400"
-              />
+              <Mail size={14} className="shrink-0 text-slate-400" />
 
-              <span className="truncate">
-                arjun.mehta@christuniversity.in
+              <span className="truncate" title={email}>
+                {email}
               </span>
             </div>
 
             <div className="flex items-center gap-2 text-[12px] text-slate-600">
-              <Phone
-                size={14}
-                className="text-slate-400"
-              />
+              <Phone size={14} className="shrink-0 text-slate-400" />
 
-              <span>+91 98765 43210</span>
+              <span className="truncate" title={phone}>
+                {phone}
+              </span>
             </div>
 
             <div className="flex items-center gap-2 text-[12px] text-slate-600">
-              <MapPin
-                size={14}
-                className="text-slate-400"
-              />
+              <MapPin size={14} className="shrink-0 text-slate-400" />
 
-              <span className="truncate">
-                Faculty Block 2, Room 304
+              <span className="truncate" title={office}>
+                {office}
               </span>
             </div>
           </div>
