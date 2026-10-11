@@ -278,38 +278,148 @@ model student_internships {
   id        String @id
   studentId String
 
+  // Submission type
+  internshipType InternshipType
+
+  // Company and internship details
   companyName     String
   internshipTitle String
   role            String?
+  startDate       DateTime
+  endDate         DateTime?
+  location        String?
+  mode            InternshipMode?
+  projectName     String?
+  description     String?
 
-  startDate DateTime
-  endDate   DateTime?
+  // Overall lifecycle
+  status InternshipStatus @default(PENDING_INITIAL_VERIFICATION)
 
-  location String?
-  mode     InternshipMode?
-
-  projectName String?
-  description String?
-
-  status             InternshipStatus             @default(ONGOING)
+  // Initial verification
   verificationStatus InternshipVerificationStatus @default(PENDING)
+  mentorRemark       String?
+  verifiedAt         DateTime?
 
-  mentorRemark String?
-  verifiedAt   DateTime?
+  // Completion verification
+  completionVerificationStatus CompletionVerificationStatus @default(NOT_SUBMITTED)
+  completionRequestedAt        DateTime?
+  completionMentorRemark       String?
+  completionVerifiedAt         DateTime?
 
+  // Optional mentor rating
   rating Float?
-
-  completionRequested   Boolean   @default(false)
-  completionRequestedAt DateTime?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  student students @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  // Relationships
+  student              students               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  internship_documents internship_documents[]
+  internship_reviews   internship_reviews[]
 
-  @@index([studentId])
+  @@index([studentId, status])
+  @@index([studentId, verificationStatus])
+  @@index([studentId, completionVerificationStatus])
   @@index([status])
-  @@index([verificationStatus])
+  @@index([createdAt])
+}
+
+model internship_reviews {
+  id                String @id
+  internshipId      String
+  reviewerTeacherId String
+
+  // Review classification
+  reviewStage InternshipReviewStage
+  decision    InternshipReviewDecision
+  remarks     String?
+
+  reviewedAt DateTime @default(now())
+  createdAt  DateTime @default(now())
+
+  // Relationships
+  internship student_internships @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+  reviewer   teachers            @relation(fields: [reviewerTeacherId], references: [id])
+
+  @@index([internshipId, reviewStage, reviewedAt])
+  @@index([reviewerTeacherId, reviewedAt])
+}
+
+model internship_documents {
+  id           String @id
+  internshipId String
+
+  // Document classification
+  documentType    InternshipDocumentType
+  submissionStage InternshipDocumentStage
+
+  // File metadata
+  documentName String
+  fileType     String
+  fileSize     Int
+
+  // Cloudinary storage
+  cloudinaryPublicId String
+  fileUrl            String
+  resourceType       String
+
+  uploadedAt DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  // Relationship — keep this on one line
+  internship student_internships @relation(fields: [internshipId], references: [id], onDelete: Cascade)
+
+  @@index([internshipId, submissionStage])
+  @@index([internshipId, documentType])
+}
+
+enum InternshipType {
+  ONGOING
+  ALREADY_COMPLETED
+}
+
+enum InternshipStatus {
+  PENDING_INITIAL_VERIFICATION
+  ONGOING
+  PENDING_COMPLETION_VERIFICATION
+  COMPLETED
+  CANCELLED
+}
+
+enum InternshipVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CompletionVerificationStatus {
+  NOT_SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum InternshipDocumentType {
+  OFFER_LETTER
+  COMPLETION_CERTIFICATE
+  COMPLETION_LETTER
+  FINAL_REPORT
+  OTHER
+}
+
+enum InternshipDocumentStage {
+  INITIAL
+  COMPLETION
+}
+
+enum InternshipReviewStage {
+  INITIAL
+  COMPLETION
+}
+
+enum InternshipReviewDecision {
+  APPROVED
+  REJECTED
 }
 
 model student_contact_details {
@@ -462,26 +572,37 @@ model academic_backlogs {
 }
 
 model teachers {
-  id                                                                               String                     @id
-  employeeCode                                                                     String                     @unique
-  fullName                                                                         String
-  email                                                                            String?
-  phone                                                                            String?
-  designation                                                                      String?
-  maxMentees                                                                       Int                        @default(30)
-  isActive                                                                         Boolean                    @default(true)
-  departmentId                                                                     String
-  userAccountId                                                                    String?                    @unique
-  createdAt                                                                        DateTime                   @default(now())
-  updatedAt                                                                        DateTime
-  departments_departments_hodTeacherIdToteachers                                   departments?               @relation("departments_hodTeacherIdToteachers")
+  id            String   @id
+  employeeCode  String   @unique
+  fullName      String
+  email         String?
+  phone         String?
+  designation   String?
+  maxMentees    Int      @default(30)
+  isActive      Boolean  @default(true)
+  departmentId  String
+  userAccountId String?  @unique
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Department relationships
+  departments_departments_hodTeacherIdToteachers departments? @relation("departments_hodTeacherIdToteachers")
+  departments_teachers_departmentIdTodepartments departments  @relation("teachers_departmentIdTodepartments", fields: [departmentId], references: [id])
+
+  // User account relationship
+  user_accounts user_accounts? @relation(fields: [userAccountId], references: [id])
+
+  // Mentor relationships
   mentor_assignments                                                               mentor_assignments[]
   mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers      mentor_transfer_requests[] @relation("mentor_transfer_requests_currentMentorIdToteachers")
   mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers")
   mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers    mentor_transfer_requests[] @relation("mentor_transfer_requests_requestedMentorIdToteachers")
-  teacher_profiles                                                                 teacher_profiles?
-  departments_teachers_departmentIdTodepartments                                   departments                @relation("teachers_departmentIdTodepartments", fields: [departmentId], references: [id])
-  user_accounts                                                                    user_accounts?             @relation(fields: [userAccountId], references: [id])
+
+  // Teacher profile
+  teacher_profiles teacher_profiles?
+
+  // Internship review relationship
+  internship_reviews internship_reviews[]
 
   @@index([departmentId])
   @@index([isActive])
@@ -615,18 +736,6 @@ enum DocumentCategory {
   AWARDS
   PERSONAL
   OTHER
-}
-
-enum InternshipStatus {
-  ONGOING
-  COMPLETED
-  CANCELLED
-}
-
-enum InternshipVerificationStatus {
-  PENDING
-  APPROVED
-  REJECTED
 }
 
 enum InternshipMode {

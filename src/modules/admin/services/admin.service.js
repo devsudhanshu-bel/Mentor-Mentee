@@ -365,6 +365,12 @@ class AdminService {
   // GET MENTOR DETAILS
   // ==========================================================
 
+  // ==========================================================
+  // GET MENTOR DETAILS
+  // Uses real student attendance from:
+  // students -> academic_semesters -> subjects
+  // ==========================================================
+
   async getMentorDetails(mentorId) {
     if (!mentorId) {
       throw new ApiError(400, "Mentor ID is required");
@@ -434,7 +440,6 @@ class AdminService {
                 section: true,
                 semester: true,
                 currentCGPA: true,
-                overallAttendance: true,
                 status: true,
                 profileImage: true,
                 programme: true,
@@ -470,75 +475,144 @@ class AdminService {
 
     const assignments = mentor.mentor_assignments || [];
 
-    const students = assignments
-      .filter((assignment) => assignment.students)
-      .map((assignment) => {
-        const student = assignment.students;
+    // ----------------------------------------------------------
+    // FETCH ASSIGNED STUDENTS AND THEIR REAL ATTENDANCE
+    // ----------------------------------------------------------
 
-        return {
-          id: student.id,
+    const students = await Promise.all(
+      assignments
+        .filter((assignment) => assignment.students)
+        .map(async (assignment) => {
+          const student = assignment.students;
 
-          registerNumber: student.registerNumber,
+          // Prefer the semester attached to this assignment's term.
+          // Fall back to the student's semester if necessary.
+          const semesterNumber =
+            Number(assignment.academic_terms?.semesterNumber) ||
+            Number(String(student.semester || "").replace(/[^0-9]/g, ""));
 
-          name: student.fullName,
+          let classesHeld = 0;
+          let classesAttended = 0;
+          let attendance = null;
+          let hasAttendance = false;
 
-          email: student.email || "No email",
+          if (
+            Number.isInteger(semesterNumber) &&
+            semesterNumber >= 1 &&
+            semesterNumber <= 8
+          ) {
+            const academicSemester =
+              await hodPrisma.academic_semesters.findUnique({
+                where: {
+                  studentId_semesterNumber: {
+                    studentId: student.id,
+                    semesterNumber,
+                  },
+                },
 
-          phone: student.phone || null,
+                include: {
+                  subjects: {
+                    orderBy: {
+                      createdAt: "asc",
+                    },
+                  },
+                },
+              });
 
-          programme: student.programme || "—",
+            if (academicSemester) {
+              const subjects = academicSemester.subjects || [];
 
-          semester: student.semester || "—",
+              classesHeld = subjects.reduce(
+                (total, subject) => total + Number(subject.classesHeld || 0),
+                0,
+              );
 
-          section: student.section || "—",
+              classesAttended = subjects.reduce(
+                (total, subject) =>
+                  total + Number(subject.classesAttended || 0),
+                0,
+              );
 
-          currentCGPA: student.currentCGPA,
+              hasAttendance = classesHeld > 0;
 
-          attendance: student.overallAttendance,
+              attendance = hasAttendance
+                ? Number(((classesAttended / classesHeld) * 100).toFixed(2))
+                : null;
+            }
+          }
 
-          status: student.status === "ACTIVE" ? "Active" : student.status,
+          return {
+            id: student.id,
+            registerNumber: student.registerNumber,
+            name: student.fullName,
+            email: student.email || "No email",
+            phone: student.phone || null,
+            programme: student.programme || "—",
+            semester: student.semester || "—",
+            section: student.section || "—",
+            currentCGPA: student.currentCGPA,
 
-          profileImage: student.profileImage || null,
+            // Calculated from academic_semesters.subjects.
+            // null means no recorded classes, not 0% attendance.
+            attendance,
+            classesHeld,
+            classesAttended,
+            hasAttendance,
 
-          department: student.departments
-            ? {
-                id: student.departments.id,
+            status: student.status === "ACTIVE" ? "Active" : student.status,
 
-                name: student.departments.name,
+            profileImage: student.profileImage || null,
 
-                code: student.departments.code,
-              }
-            : null,
+            department: student.departments
+              ? {
+                  id: student.departments.id,
+                  name: student.departments.name,
+                  code: student.departments.code,
+                }
+              : null,
 
-          assignedAt: assignment.assignedAt,
+            assignedAt: assignment.assignedAt,
 
-          term: assignment.academic_terms
-            ? {
-                id: assignment.academic_terms.id,
+            term: assignment.academic_terms
+              ? {
+                  id: assignment.academic_terms.id,
+                  name: assignment.academic_terms.name,
+                  semesterNumber: assignment.academic_terms.semesterNumber,
+                  status: assignment.academic_terms.status,
+                }
+              : null,
+          };
+        }),
+    );
 
-                name: assignment.academic_terms.name,
+    // ----------------------------------------------------------
+    // MENTOR ATTENDANCE SUMMARY
+    // Weighted by classes held, rather than averaging
+    // student percentages equally.
+    // ----------------------------------------------------------
 
-                semesterNumber: assignment.academic_terms.semesterNumber,
+    const studentsWithAttendance = students.filter(
+      (student) => student.hasAttendance,
+    );
 
-                status: assignment.academic_terms.status,
-              }
-            : null,
-        };
-      });
+    const totalClassesHeld = studentsWithAttendance.reduce(
+      (total, student) => total + student.classesHeld,
+      0,
+    );
 
-    const attendanceValues = students
-      .map((student) => student.attendance)
-      .filter((value) => typeof value === "number" && Number.isFinite(value));
+    const totalClassesAttended = studentsWithAttendance.reduce(
+      (total, student) => total + student.classesAttended,
+      0,
+    );
 
     const averageAttendance =
-      attendanceValues.length > 0
-        ? Number(
-            (
-              attendanceValues.reduce((sum, value) => sum + value, 0) /
-              attendanceValues.length
-            ).toFixed(1),
-          )
+      totalClassesHeld > 0
+        ? Number(((totalClassesAttended / totalClassesHeld) * 100).toFixed(1))
         : null;
+
+    // ----------------------------------------------------------
+    // CGPA SUMMARY
+    // ----------------------------------------------------------
 
     const cgpaValues = students
       .map((student) => student.currentCGPA)
@@ -554,8 +628,11 @@ class AdminService {
           )
         : null;
 
-    const assignedCount = students.length;
+    // ----------------------------------------------------------
+    // CAPACITY SUMMARY
+    // ----------------------------------------------------------
 
+    const assignedCount = students.length;
     const capacity = mentor.maxMentees || 0;
 
     const utilization =
@@ -564,48 +641,31 @@ class AdminService {
     return {
       mentor: {
         id: mentor.id,
-
         employeeCode: mentor.employeeCode,
-
         fullName: mentor.fullName,
-
         email: mentor.email,
-
         phone: mentor.phone,
-
         designation: mentor.designation,
-
         maxMentees: mentor.maxMentees,
-
         isActive: mentor.isActive,
-
         status: mentor.isActive ? "Active" : "Inactive",
-
         department: mentor.departments_teachers_departmentIdTodepartments,
-
         profile: mentor.teacher_profiles || null,
       },
 
       stats: {
         studentsAssigned: assignedCount,
-
         capacity,
-
         utilization,
-
         averageAttendance,
-
         averageCGPA,
 
-        // No meeting/goal models currently
-        // exist in the HOD schema.
+        // No meeting/goal models currently exist.
         meetingsConducted: null,
-
         goalCompletion: null,
       },
 
       students,
-
       assignmentCount: assignments.length,
     };
   }

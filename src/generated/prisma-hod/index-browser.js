@@ -295,6 +295,7 @@ exports.Prisma.StudentsScalarFieldEnum = {
 exports.Prisma.Student_internshipsScalarFieldEnum = {
   id: 'id',
   studentId: 'studentId',
+  internshipType: 'internshipType',
   companyName: 'companyName',
   internshipTitle: 'internshipTitle',
   role: 'role',
@@ -308,10 +309,38 @@ exports.Prisma.Student_internshipsScalarFieldEnum = {
   verificationStatus: 'verificationStatus',
   mentorRemark: 'mentorRemark',
   verifiedAt: 'verifiedAt',
-  rating: 'rating',
-  completionRequested: 'completionRequested',
+  completionVerificationStatus: 'completionVerificationStatus',
   completionRequestedAt: 'completionRequestedAt',
+  completionMentorRemark: 'completionMentorRemark',
+  completionVerifiedAt: 'completionVerifiedAt',
+  rating: 'rating',
   createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.Internship_reviewsScalarFieldEnum = {
+  id: 'id',
+  internshipId: 'internshipId',
+  reviewerTeacherId: 'reviewerTeacherId',
+  reviewStage: 'reviewStage',
+  decision: 'decision',
+  remarks: 'remarks',
+  reviewedAt: 'reviewedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.Internship_documentsScalarFieldEnum = {
+  id: 'id',
+  internshipId: 'internshipId',
+  documentType: 'documentType',
+  submissionStage: 'submissionStage',
+  documentName: 'documentName',
+  fileType: 'fileType',
+  fileSize: 'fileSize',
+  cloudinaryPublicId: 'cloudinaryPublicId',
+  fileUrl: 'fileUrl',
+  resourceType: 'resourceType',
+  uploadedAt: 'uploadedAt',
   updatedAt: 'updatedAt'
 };
 
@@ -612,6 +641,11 @@ exports.StudentType = exports.$Enums.StudentType = {
   HOSTELLER: 'HOSTELLER'
 };
 
+exports.InternshipType = exports.$Enums.InternshipType = {
+  ONGOING: 'ONGOING',
+  ALREADY_COMPLETED: 'ALREADY_COMPLETED'
+};
+
 exports.InternshipMode = exports.$Enums.InternshipMode = {
   ONSITE: 'ONSITE',
   REMOTE: 'REMOTE',
@@ -619,7 +653,9 @@ exports.InternshipMode = exports.$Enums.InternshipMode = {
 };
 
 exports.InternshipStatus = exports.$Enums.InternshipStatus = {
+  PENDING_INITIAL_VERIFICATION: 'PENDING_INITIAL_VERIFICATION',
   ONGOING: 'ONGOING',
+  PENDING_COMPLETION_VERIFICATION: 'PENDING_COMPLETION_VERIFICATION',
   COMPLETED: 'COMPLETED',
   CANCELLED: 'CANCELLED'
 };
@@ -628,6 +664,36 @@ exports.InternshipVerificationStatus = exports.$Enums.InternshipVerificationStat
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
+};
+
+exports.CompletionVerificationStatus = exports.$Enums.CompletionVerificationStatus = {
+  NOT_SUBMITTED: 'NOT_SUBMITTED',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.InternshipReviewStage = exports.$Enums.InternshipReviewStage = {
+  INITIAL: 'INITIAL',
+  COMPLETION: 'COMPLETION'
+};
+
+exports.InternshipReviewDecision = exports.$Enums.InternshipReviewDecision = {
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.InternshipDocumentType = exports.$Enums.InternshipDocumentType = {
+  OFFER_LETTER: 'OFFER_LETTER',
+  COMPLETION_CERTIFICATE: 'COMPLETION_CERTIFICATE',
+  COMPLETION_LETTER: 'COMPLETION_LETTER',
+  FINAL_REPORT: 'FINAL_REPORT',
+  OTHER: 'OTHER'
+};
+
+exports.InternshipDocumentStage = exports.$Enums.InternshipDocumentStage = {
+  INITIAL: 'INITIAL',
+  COMPLETION: 'COMPLETION'
 };
 
 exports.AddressType = exports.$Enums.AddressType = {
@@ -700,6 +766,8 @@ exports.Prisma.ModelName = {
   student_enrollments: 'student_enrollments',
   students: 'students',
   student_internships: 'student_internships',
+  internship_reviews: 'internship_reviews',
+  internship_documents: 'internship_documents',
   student_contact_details: 'student_contact_details',
   student_parent_details: 'student_parent_details',
   student_documents: 'student_documents',
