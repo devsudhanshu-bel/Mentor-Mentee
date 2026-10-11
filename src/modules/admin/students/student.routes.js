@@ -3,6 +3,8 @@ import multer from "multer";
 
 import StudentController from "./student.controller.js";
 
+import StudentOverviewController from "./student-overview.controller.js";
+
 import { authenticate } from "../../../middleware/auth.middleware.js";
 
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -57,6 +59,13 @@ const upload = multer({
 //
 // Only ADMIN users are allowed.
 // ==========================================================
+
+router.get(
+  "/:studentId/overview",
+  authenticate,
+  authorize("ADMIN", "SYSTEM_ADMIN"),
+  StudentOverviewController.getOverview,
+);
 
 router.post(
   "/import",
