@@ -2,15 +2,10 @@ import React from "react";
 import { Eye, MoreHorizontal } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const StudentTableRow = ({ student }) => {
+const StudentTableRow = ({ student, mentorId }) => {
   const navigate = useNavigate();
 
-  const name = student.fullName ?? student.name ?? "Unknown Student";
-
-  const registerNumber =
-    student.registerNumber ?? student.admissionNumber ?? "—";
-
-  const email = student.email || "No email";
+  const name = student?.name || "Unknown Student";
 
   const initials = name
     .split(" ")
@@ -20,75 +15,63 @@ const StudentTableRow = ({ student }) => {
     .substring(0, 2)
     .toUpperCase();
 
-  const semester =
-    student.semesterNumber ??
-    student.student_enrollments?.[0]?.semesterNumber ??
-    student.semester ??
-    "—";
-
-  const section =
-    student.section ??
-    student.sectionName ??
-    student.sectionCode ??
-    student.student_enrollments?.[0]?.section ??
-    "—";
-
   const attendance =
-    typeof student.attendance === "number"
-      ? `${student.attendance}%`
-      : typeof student.attendancePercentage === "number"
-        ? `${student.attendancePercentage}%`
-        : "—";
-
-  const rawCgpa = student.currentCGPA ?? student.cgpa;
+    typeof student?.attendance === "number" ? `${student.attendance}%` : "—";
 
   const cgpa =
-    rawCgpa !== null &&
-    rawCgpa !== undefined &&
-    rawCgpa !== "" &&
-    Number.isFinite(Number(rawCgpa))
-      ? Number(rawCgpa).toFixed(2)
+    typeof student?.currentCGPA === "number"
+      ? student.currentCGPA.toFixed(2)
       : "—";
 
-  const rawStatus = String(student.status ?? "").toUpperCase();
+  const handleViewStudent = () => {
+    if (!mentorId || !student?.id) {
+      console.error("Cannot open student details:", {
+        mentorId,
+        studentId: student?.id,
+      });
+      return;
+    }
 
-  const isActive = ["ACTIVE", "ENROLLED"].includes(rawStatus);
-
-  const statusLabel = rawStatus
-    ? rawStatus.charAt(0) + rawStatus.slice(1).toLowerCase()
-    : "Unknown";
-
-  const studentId = student.id ?? student.studentId;
+    navigate(
+      `/admin/mentor/${encodeURIComponent(mentorId)}/student/${encodeURIComponent(
+        String(student.id),
+      )}/overview`,
+    );
+  };
 
   return (
     <tr className="border-b border-slate-100 transition hover:bg-slate-50">
       <td className="px-4 py-3">
         <span className="text-xs font-medium text-slate-700">
-          {registerNumber}
+          {student?.registerNumber || "—"}
         </span>
       </td>
 
       <td className="px-4 py-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700">
-            {initials || "ST"}
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-[11px] font-semibold text-blue-700">
+            {initials}
           </div>
 
-          <div className="min-w-0">
+          <div>
             <p className="text-xs font-semibold text-slate-800">{name}</p>
 
-            <p className="text-[11px] text-slate-500">{email}</p>
+            <p className="text-[11px] text-slate-500">
+              {student?.email || "No email"}
+            </p>
           </div>
         </div>
       </td>
 
       <td className="px-4 py-3">
-        <span className="text-xs text-slate-700">{semester}</span>
+        <span className="text-xs text-slate-700">
+          {student?.semester || "—"}
+        </span>
       </td>
 
       <td className="px-4 py-3">
         <span className="inline-flex rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-700">
-          {section}
+          {student?.section || "—"}
         </span>
       </td>
 
@@ -105,12 +88,12 @@ const StudentTableRow = ({ student }) => {
       <td className="px-4 py-3 text-center">
         <span
           className={`inline-flex rounded-full px-2.5 py-1 text-[11px] font-medium ${
-            isActive
+            student?.status === "Active"
               ? "bg-green-100 text-green-700"
               : "bg-amber-100 text-amber-700"
           }`}
         >
-          {statusLabel}
+          {student?.status || "—"}
         </span>
       </td>
 
@@ -118,14 +101,10 @@ const StudentTableRow = ({ student }) => {
         <div className="flex items-center justify-center gap-2">
           <button
             type="button"
-            onClick={() => {
-              if (studentId) {
-                navigate(`/admin/student/${studentId}`);
-              }
-            }}
-            disabled={!studentId}
-            className="rounded-lg border border-slate-200 p-2 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40"
+            onClick={handleViewStudent}
+            className="rounded-lg border border-slate-200 p-2 transition hover:bg-slate-100"
             title="View Student"
+            aria-label={`View ${name}`}
           >
             <Eye size={15} />
           </button>
@@ -134,6 +113,7 @@ const StudentTableRow = ({ student }) => {
             type="button"
             className="rounded-lg border border-slate-200 p-2 transition hover:bg-slate-100"
             title="More Actions"
+            aria-label={`More actions for ${name}`}
           >
             <MoreHorizontal size={15} />
           </button>
