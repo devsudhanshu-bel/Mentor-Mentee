@@ -261,11 +261,13 @@ model students {
   academicSemesters        academic_semesters[]
   detentions               detentions[]
   mentor_assignments       mentor_assignments[]
+  mentor_meeting_series    mentor_meeting_series[]
+  mentor_meetings          mentor_meetings[]
   mentor_transfer_requests mentor_transfer_requests[]
   contactDetails           student_contact_details?
   documents                student_documents[]
-  internships              student_internships[]
   student_enrollments      student_enrollments[]
+  internships              student_internships[]
   parentDetails            student_parent_details?
   departments              departments                @relation(fields: [departmentId], references: [id])
   user_accounts            user_accounts?             @relation(fields: [userAccountId], references: [id])
@@ -275,41 +277,75 @@ model students {
 }
 
 model student_internships {
-  id        String @id
-  studentId String
+  id                           String                       @id
+  studentId                    String
+  companyName                  String
+  internshipTitle              String
+  role                         String?
+  startDate                    DateTime
+  endDate                      DateTime?
+  location                     String?
+  mode                         InternshipMode?
+  projectName                  String?
+  description                  String?
+  status                       InternshipStatus             @default(ONGOING)
+  verificationStatus           InternshipVerificationStatus @default(PENDING)
+  mentorRemark                 String?
+  verifiedAt                   DateTime?
+  rating                       Float?
+  completionRequested          Boolean                      @default(false)
+  completionRequestedAt        DateTime?
+  createdAt                    DateTime                     @default(now())
+  updatedAt                    DateTime                     @updatedAt
+  internshipType               InternshipType               @default(ONGOING)
+  completionVerificationStatus CompletionVerificationStatus @default(NOT_SUBMITTED)
+  completionMentorRemark       String?
+  completionVerifiedAt         DateTime?
+  internship_documents         internship_documents[]
+  internship_reviews           internship_reviews[]
+  student                      students                     @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  companyName     String
-  internshipTitle String
-  role            String?
-
-  startDate DateTime
-  endDate   DateTime?
-
-  location String?
-  mode     InternshipMode?
-
-  projectName String?
-  description String?
-
-  status             InternshipStatus             @default(ONGOING)
-  verificationStatus InternshipVerificationStatus @default(PENDING)
-
-  mentorRemark String?
-  verifiedAt   DateTime?
-
-  rating Float?
-
-  completionRequested   Boolean   @default(false)
-  completionRequestedAt DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  student students @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  @@index([studentId])
   @@index([status])
+  @@index([studentId])
+  @@index([studentId, completionVerificationStatus], map: "student_internships_studentid_completionverificationstatus_idx")
+  @@index([studentId, status], map: "student_internships_studentid_status_idx")
+  @@index([studentId, verificationStatus], map: "student_internships_studentid_verificationstatus_idx")
   @@index([verificationStatus])
+}
+
+model internship_reviews {
+  id                String                   @id
+  internshipId      String
+  reviewerTeacherId String
+  reviewStage       InternshipReviewStage
+  decision          InternshipReviewDecision
+  remarks           String?
+  reviewedAt        DateTime                 @default(now())
+  createdAt         DateTime                 @default(now())
+  internship        student_internships      @relation(fields: [internshipId], references: [id], onDelete: Cascade, map: "internship_reviews_internshipid_fkey")
+  reviewer          teachers                 @relation(fields: [reviewerTeacherId], references: [id], map: "internship_reviews_reviewerteacherid_fkey")
+
+  @@index([internshipId, reviewStage, reviewedAt], map: "internship_reviews_internshipid_reviewstage_reviewedat_idx")
+  @@index([reviewerTeacherId, reviewedAt], map: "internship_reviews_reviewerteacherid_reviewedat_idx")
+}
+
+model internship_documents {
+  id                 String                  @id
+  internshipId       String
+  documentType       InternshipDocumentType
+  submissionStage    InternshipDocumentStage
+  documentName       String
+  fileType           String
+  fileSize           Int
+  cloudinaryPublicId String
+  fileUrl            String
+  resourceType       String
+  uploadedAt         DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  internship         student_internships     @relation(fields: [internshipId], references: [id], onDelete: Cascade, map: "internship_documents_internshipid_fkey")
+
+  @@index([internshipId, documentType], map: "internship_documents_internshipid_documenttype_idx")
+  @@index([internshipId, submissionStage], map: "internship_documents_internshipid_submissionstage_idx")
 }
 
 model student_contact_details {
@@ -365,32 +401,25 @@ model student_parent_details {
 }
 
 model student_documents {
-  id                 String           @id
-  studentId          String
-  documentName       String
-  category           DocumentCategory
-  description        String?
-  fileType           String
-  fileSize           Int
-  cloudinaryPublicId String
-  fileUrl            String
-  resourceType       String
-  uploadedAt         DateTime         @default(now())
-  updatedAt          DateTime
-
-  // Research review fields
-  researchReviewStatus String    @default("NOT_REVIEWED")
+  id                   String           @id
+  studentId            String
+  documentName         String
+  category             DocumentCategory
+  description          String?
+  fileType             String
+  fileSize             Int
+  cloudinaryPublicId   String
+  fileUrl              String
+  resourceType         String
+  uploadedAt           DateTime         @default(now())
+  updatedAt            DateTime
+  researchReviewStatus String           @default("NOT_REVIEWED")
   reviewedByTeacherId  String?
   reviewedAt           DateTime?
   mentorRemark         String?
+  student              students         @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
-  // Student relation
-  student students @relation(fields: [studentId], references: [id], onDelete: Cascade)
-
-  // Indexes
   @@index([studentId])
-  @@index([category, researchReviewStatus])
-  @@index([reviewedByTeacherId])
 }
 
 model academic_semesters {
@@ -473,9 +502,13 @@ model teachers {
   departmentId                                                                     String
   userAccountId                                                                    String?                    @unique
   createdAt                                                                        DateTime                   @default(now())
-  updatedAt                                                                        DateTime
+  updatedAt                                                                        DateTime                   @updatedAt
   departments_departments_hodTeacherIdToteachers                                   departments?               @relation("departments_hodTeacherIdToteachers")
+  internship_reviews                                                               internship_reviews[]
   mentor_assignments                                                               mentor_assignments[]
+  mentor_meeting_feedback                                                          mentor_meeting_feedback[]
+  mentor_meeting_series                                                            mentor_meeting_series[]
+  mentor_meetings                                                                  mentor_meetings[]
   mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers      mentor_transfer_requests[] @relation("mentor_transfer_requests_currentMentorIdToteachers")
   mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers")
   mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers    mentor_transfer_requests[] @relation("mentor_transfer_requests_requestedMentorIdToteachers")
@@ -551,6 +584,148 @@ model teacher_profiles {
   teachers       teachers @relation(fields: [teacherId], references: [id], onDelete: Cascade)
 }
 
+model mentor_meeting_discussion_points {
+  id              String          @id
+  meetingId       String
+  content         String
+  position        Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  mentor_meetings mentor_meetings @relation(fields: [meetingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mentor_meeting_discussion_points_meeting_fk")
+
+  @@index([meetingId, position], map: "mentor_meeting_discussion_points_order_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentor_meeting_feedback {
+  id              String          @id
+  meetingId       String          @unique
+  mentorTeacherId String
+  rating          Int
+  feedback        String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  mentor_meetings mentor_meetings @relation(fields: [meetingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mentor_meeting_feedback_meeting_fk")
+  teachers        teachers        @relation(fields: [mentorTeacherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meeting_feedback_teacher_fk")
+}
+
+model mentor_meeting_notes {
+  id              String          @id
+  meetingId       String          @unique
+  content         String          @default("")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  mentor_meetings mentor_meetings @relation(fields: [meetingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mentor_meeting_notes_meeting_fk")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentor_meeting_series {
+  id              String            @id
+  mentorTeacherId String
+  studentId       String
+  frequency       String
+  startDate       DateTime
+  endDate         DateTime?
+  dayOfWeek       Int?
+  startTime       String
+  endTime         String
+  timezone        String            @default("Asia/Kolkata")
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  students        students          @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meeting_series_student_fk")
+  teachers        teachers          @relation(fields: [mentorTeacherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meeting_series_teacher_fk")
+  mentor_meetings mentor_meetings[]
+
+  @@index([mentorTeacherId, studentId], map: "mentor_meeting_series_mentor_student_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentor_meetings {
+  id                               String                             @id
+  mentorTeacherId                  String
+  studentId                        String
+  seriesId                         String?
+  followUpToMeetingId              String?
+  title                            String
+  meetingType                      String                             @default("REGULAR")
+  mode                             String                             @default("IN_PERSON")
+  status                           String                             @default("SCHEDULED")
+  priority                         String                             @default("NORMAL")
+  startAt                          DateTime
+  endAt                            DateTime
+  venue                            String?
+  meetingLink                      String?
+  agenda                           String?
+  description                      String?
+  startedAt                        DateTime?
+  endedAt                          DateTime?
+  createdAt                        DateTime                           @default(now())
+  updatedAt                        DateTime                           @default(now())
+  mentor_meeting_discussion_points mentor_meeting_discussion_points[]
+  mentor_meeting_feedback          mentor_meeting_feedback?
+  mentor_meeting_notes             mentor_meeting_notes?
+  mentor_meetings                  mentor_meetings?                   @relation("mentor_meetingsTomentor_meetings", fields: [followUpToMeetingId], references: [id], onUpdate: NoAction, map: "mentor_meetings_followup_fk")
+  other_mentor_meetings            mentor_meetings[]                  @relation("mentor_meetingsTomentor_meetings")
+  mentor_meeting_series            mentor_meeting_series?             @relation(fields: [seriesId], references: [id], onUpdate: NoAction, map: "mentor_meetings_series_fk")
+  students                         students                           @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meetings_student_fk")
+  teachers                         teachers                           @relation(fields: [mentorTeacherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meetings_teacher_fk")
+
+  @@index([mentorTeacherId, startAt], map: "mentor_meetings_mentor_start_idx")
+  @@index([seriesId], map: "mentor_meetings_series_idx")
+  @@index([status, startAt], map: "mentor_meetings_status_start_idx")
+  @@index([studentId, startAt], map: "mentor_meetings_student_start_idx")
+}
+
+enum InternshipType {
+  ONGOING
+  ALREADY_COMPLETED
+}
+
+enum InternshipStatus {
+  ONGOING
+  COMPLETED
+  CANCELLED
+  PENDING_INITIAL_VERIFICATION
+  PENDING_COMPLETION_VERIFICATION
+}
+
+enum InternshipVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CompletionVerificationStatus {
+  NOT_SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum InternshipDocumentType {
+  OFFER_LETTER
+  COMPLETION_CERTIFICATE
+  COMPLETION_LETTER
+  FINAL_REPORT
+  OTHER
+}
+
+enum InternshipDocumentStage {
+  INITIAL
+  COMPLETION
+}
+
+enum InternshipReviewStage {
+  INITIAL
+  COMPLETION
+}
+
+enum InternshipReviewDecision {
+  APPROVED
+  REJECTED
+}
+
 enum Gender {
   MALE
   FEMALE
@@ -615,18 +790,6 @@ enum DocumentCategory {
   AWARDS
   PERSONAL
   OTHER
-}
-
-enum InternshipStatus {
-  ONGOING
-  COMPLETED
-  CANCELLED
-}
-
-enum InternshipVerificationStatus {
-  PENDING
-  APPROVED
-  REJECTED
 }
 
 enum InternshipMode {

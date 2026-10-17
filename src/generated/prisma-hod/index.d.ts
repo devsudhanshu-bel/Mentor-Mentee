@@ -79,6 +79,16 @@ export type students = $Result.DefaultSelection<Prisma.$studentsPayload>
  */
 export type student_internships = $Result.DefaultSelection<Prisma.$student_internshipsPayload>
 /**
+ * Model internship_reviews
+ * 
+ */
+export type internship_reviews = $Result.DefaultSelection<Prisma.$internship_reviewsPayload>
+/**
+ * Model internship_documents
+ * 
+ */
+export type internship_documents = $Result.DefaultSelection<Prisma.$internship_documentsPayload>
+/**
  * Model student_contact_details
  * 
  */
@@ -128,12 +138,110 @@ export type term_change_requests = $Result.DefaultSelection<Prisma.$term_change_
  * 
  */
 export type teacher_profiles = $Result.DefaultSelection<Prisma.$teacher_profilesPayload>
+/**
+ * Model mentor_meeting_discussion_points
+ * 
+ */
+export type mentor_meeting_discussion_points = $Result.DefaultSelection<Prisma.$mentor_meeting_discussion_pointsPayload>
+/**
+ * Model mentor_meeting_feedback
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ */
+export type mentor_meeting_feedback = $Result.DefaultSelection<Prisma.$mentor_meeting_feedbackPayload>
+/**
+ * Model mentor_meeting_notes
+ * 
+ */
+export type mentor_meeting_notes = $Result.DefaultSelection<Prisma.$mentor_meeting_notesPayload>
+/**
+ * Model mentor_meeting_series
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ */
+export type mentor_meeting_series = $Result.DefaultSelection<Prisma.$mentor_meeting_seriesPayload>
+/**
+ * Model mentor_meetings
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ */
+export type mentor_meetings = $Result.DefaultSelection<Prisma.$mentor_meetingsPayload>
 
 /**
  * Enums
  */
 export namespace $Enums {
-  export const Gender: {
+  export const InternshipType: {
+  ONGOING: 'ONGOING',
+  ALREADY_COMPLETED: 'ALREADY_COMPLETED'
+};
+
+export type InternshipType = (typeof InternshipType)[keyof typeof InternshipType]
+
+
+export const InternshipStatus: {
+  ONGOING: 'ONGOING',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED',
+  PENDING_INITIAL_VERIFICATION: 'PENDING_INITIAL_VERIFICATION',
+  PENDING_COMPLETION_VERIFICATION: 'PENDING_COMPLETION_VERIFICATION'
+};
+
+export type InternshipStatus = (typeof InternshipStatus)[keyof typeof InternshipStatus]
+
+
+export const InternshipVerificationStatus: {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type InternshipVerificationStatus = (typeof InternshipVerificationStatus)[keyof typeof InternshipVerificationStatus]
+
+
+export const CompletionVerificationStatus: {
+  NOT_SUBMITTED: 'NOT_SUBMITTED',
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type CompletionVerificationStatus = (typeof CompletionVerificationStatus)[keyof typeof CompletionVerificationStatus]
+
+
+export const InternshipDocumentType: {
+  OFFER_LETTER: 'OFFER_LETTER',
+  COMPLETION_CERTIFICATE: 'COMPLETION_CERTIFICATE',
+  COMPLETION_LETTER: 'COMPLETION_LETTER',
+  FINAL_REPORT: 'FINAL_REPORT',
+  OTHER: 'OTHER'
+};
+
+export type InternshipDocumentType = (typeof InternshipDocumentType)[keyof typeof InternshipDocumentType]
+
+
+export const InternshipDocumentStage: {
+  INITIAL: 'INITIAL',
+  COMPLETION: 'COMPLETION'
+};
+
+export type InternshipDocumentStage = (typeof InternshipDocumentStage)[keyof typeof InternshipDocumentStage]
+
+
+export const InternshipReviewStage: {
+  INITIAL: 'INITIAL',
+  COMPLETION: 'COMPLETION'
+};
+
+export type InternshipReviewStage = (typeof InternshipReviewStage)[keyof typeof InternshipReviewStage]
+
+
+export const InternshipReviewDecision: {
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+export type InternshipReviewDecision = (typeof InternshipReviewDecision)[keyof typeof InternshipReviewDecision]
+
+
+export const Gender: {
   MALE: 'MALE',
   FEMALE: 'FEMALE',
   OTHER: 'OTHER'
@@ -224,24 +332,6 @@ export const DocumentCategory: {
 };
 
 export type DocumentCategory = (typeof DocumentCategory)[keyof typeof DocumentCategory]
-
-
-export const InternshipStatus: {
-  ONGOING: 'ONGOING',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
-};
-
-export type InternshipStatus = (typeof InternshipStatus)[keyof typeof InternshipStatus]
-
-
-export const InternshipVerificationStatus: {
-  PENDING: 'PENDING',
-  APPROVED: 'APPROVED',
-  REJECTED: 'REJECTED'
-};
-
-export type InternshipVerificationStatus = (typeof InternshipVerificationStatus)[keyof typeof InternshipVerificationStatus]
 
 
 export const InternshipMode: {
@@ -380,6 +470,38 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 }
 
+export type InternshipType = $Enums.InternshipType
+
+export const InternshipType: typeof $Enums.InternshipType
+
+export type InternshipStatus = $Enums.InternshipStatus
+
+export const InternshipStatus: typeof $Enums.InternshipStatus
+
+export type InternshipVerificationStatus = $Enums.InternshipVerificationStatus
+
+export const InternshipVerificationStatus: typeof $Enums.InternshipVerificationStatus
+
+export type CompletionVerificationStatus = $Enums.CompletionVerificationStatus
+
+export const CompletionVerificationStatus: typeof $Enums.CompletionVerificationStatus
+
+export type InternshipDocumentType = $Enums.InternshipDocumentType
+
+export const InternshipDocumentType: typeof $Enums.InternshipDocumentType
+
+export type InternshipDocumentStage = $Enums.InternshipDocumentStage
+
+export const InternshipDocumentStage: typeof $Enums.InternshipDocumentStage
+
+export type InternshipReviewStage = $Enums.InternshipReviewStage
+
+export const InternshipReviewStage: typeof $Enums.InternshipReviewStage
+
+export type InternshipReviewDecision = $Enums.InternshipReviewDecision
+
+export const InternshipReviewDecision: typeof $Enums.InternshipReviewDecision
+
 export type Gender = $Enums.Gender
 
 export const Gender: typeof $Enums.Gender
@@ -415,14 +537,6 @@ export const AcademicEntryStatus: typeof $Enums.AcademicEntryStatus
 export type DocumentCategory = $Enums.DocumentCategory
 
 export const DocumentCategory: typeof $Enums.DocumentCategory
-
-export type InternshipStatus = $Enums.InternshipStatus
-
-export const InternshipStatus: typeof $Enums.InternshipStatus
-
-export type InternshipVerificationStatus = $Enums.InternshipVerificationStatus
-
-export const InternshipVerificationStatus: typeof $Enums.InternshipVerificationStatus
 
 export type InternshipMode = $Enums.InternshipMode
 
@@ -729,6 +843,26 @@ export class PrismaClient<
   get student_internships(): Prisma.student_internshipsDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.internship_reviews`: Exposes CRUD operations for the **internship_reviews** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Internship_reviews
+    * const internship_reviews = await prisma.internship_reviews.findMany()
+    * ```
+    */
+  get internship_reviews(): Prisma.internship_reviewsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.internship_documents`: Exposes CRUD operations for the **internship_documents** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Internship_documents
+    * const internship_documents = await prisma.internship_documents.findMany()
+    * ```
+    */
+  get internship_documents(): Prisma.internship_documentsDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.student_contact_details`: Exposes CRUD operations for the **student_contact_details** model.
     * Example usage:
     * ```ts
@@ -827,6 +961,56 @@ export class PrismaClient<
     * ```
     */
   get teacher_profiles(): Prisma.teacher_profilesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_meeting_discussion_points`: Exposes CRUD operations for the **mentor_meeting_discussion_points** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_meeting_discussion_points
+    * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findMany()
+    * ```
+    */
+  get mentor_meeting_discussion_points(): Prisma.mentor_meeting_discussion_pointsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_meeting_feedback`: Exposes CRUD operations for the **mentor_meeting_feedback** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_meeting_feedbacks
+    * const mentor_meeting_feedbacks = await prisma.mentor_meeting_feedback.findMany()
+    * ```
+    */
+  get mentor_meeting_feedback(): Prisma.mentor_meeting_feedbackDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_meeting_notes`: Exposes CRUD operations for the **mentor_meeting_notes** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_meeting_notes
+    * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findMany()
+    * ```
+    */
+  get mentor_meeting_notes(): Prisma.mentor_meeting_notesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_meeting_series`: Exposes CRUD operations for the **mentor_meeting_series** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_meeting_series
+    * const mentor_meeting_series = await prisma.mentor_meeting_series.findMany()
+    * ```
+    */
+  get mentor_meeting_series(): Prisma.mentor_meeting_seriesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_meetings`: Exposes CRUD operations for the **mentor_meetings** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_meetings
+    * const mentor_meetings = await prisma.mentor_meetings.findMany()
+    * ```
+    */
+  get mentor_meetings(): Prisma.mentor_meetingsDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1281,6 +1465,8 @@ export namespace Prisma {
     student_enrollments: 'student_enrollments',
     students: 'students',
     student_internships: 'student_internships',
+    internship_reviews: 'internship_reviews',
+    internship_documents: 'internship_documents',
     student_contact_details: 'student_contact_details',
     student_parent_details: 'student_parent_details',
     student_documents: 'student_documents',
@@ -1290,7 +1476,12 @@ export namespace Prisma {
     teachers: 'teachers',
     user_accounts: 'user_accounts',
     term_change_requests: 'term_change_requests',
-    teacher_profiles: 'teacher_profiles'
+    teacher_profiles: 'teacher_profiles',
+    mentor_meeting_discussion_points: 'mentor_meeting_discussion_points',
+    mentor_meeting_feedback: 'mentor_meeting_feedback',
+    mentor_meeting_notes: 'mentor_meeting_notes',
+    mentor_meeting_series: 'mentor_meeting_series',
+    mentor_meetings: 'mentor_meetings'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1309,7 +1500,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles"
+      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -2275,6 +2466,154 @@ export namespace Prisma {
           }
         }
       }
+      internship_reviews: {
+        payload: Prisma.$internship_reviewsPayload<ExtArgs>
+        fields: Prisma.internship_reviewsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.internship_reviewsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.internship_reviewsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>
+          }
+          findFirst: {
+            args: Prisma.internship_reviewsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.internship_reviewsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>
+          }
+          findMany: {
+            args: Prisma.internship_reviewsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>[]
+          }
+          create: {
+            args: Prisma.internship_reviewsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>
+          }
+          createMany: {
+            args: Prisma.internship_reviewsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.internship_reviewsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>[]
+          }
+          delete: {
+            args: Prisma.internship_reviewsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>
+          }
+          update: {
+            args: Prisma.internship_reviewsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>
+          }
+          deleteMany: {
+            args: Prisma.internship_reviewsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.internship_reviewsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.internship_reviewsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>[]
+          }
+          upsert: {
+            args: Prisma.internship_reviewsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_reviewsPayload>
+          }
+          aggregate: {
+            args: Prisma.Internship_reviewsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInternship_reviews>
+          }
+          groupBy: {
+            args: Prisma.internship_reviewsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Internship_reviewsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.internship_reviewsCountArgs<ExtArgs>
+            result: $Utils.Optional<Internship_reviewsCountAggregateOutputType> | number
+          }
+        }
+      }
+      internship_documents: {
+        payload: Prisma.$internship_documentsPayload<ExtArgs>
+        fields: Prisma.internship_documentsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.internship_documentsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.internship_documentsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>
+          }
+          findFirst: {
+            args: Prisma.internship_documentsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.internship_documentsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>
+          }
+          findMany: {
+            args: Prisma.internship_documentsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>[]
+          }
+          create: {
+            args: Prisma.internship_documentsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>
+          }
+          createMany: {
+            args: Prisma.internship_documentsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.internship_documentsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>[]
+          }
+          delete: {
+            args: Prisma.internship_documentsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>
+          }
+          update: {
+            args: Prisma.internship_documentsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>
+          }
+          deleteMany: {
+            args: Prisma.internship_documentsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.internship_documentsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.internship_documentsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>[]
+          }
+          upsert: {
+            args: Prisma.internship_documentsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$internship_documentsPayload>
+          }
+          aggregate: {
+            args: Prisma.Internship_documentsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateInternship_documents>
+          }
+          groupBy: {
+            args: Prisma.internship_documentsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Internship_documentsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.internship_documentsCountArgs<ExtArgs>
+            result: $Utils.Optional<Internship_documentsCountAggregateOutputType> | number
+          }
+        }
+      }
       student_contact_details: {
         payload: Prisma.$student_contact_detailsPayload<ExtArgs>
         fields: Prisma.student_contact_detailsFieldRefs
@@ -3015,6 +3354,376 @@ export namespace Prisma {
           }
         }
       }
+      mentor_meeting_discussion_points: {
+        payload: Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>
+        fields: Prisma.mentor_meeting_discussion_pointsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_meeting_discussion_pointsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_meeting_discussion_pointsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_meeting_discussion_pointsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_meeting_discussion_pointsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_meeting_discussion_pointsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_meeting_discussion_pointsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_meeting_discussion_pointsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_meeting_discussion_pointsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_meeting_discussion_pointsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>
+          }
+          update: {
+            args: Prisma.mentor_meeting_discussion_pointsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_meeting_discussion_pointsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_meeting_discussion_pointsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_meeting_discussion_pointsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_meeting_discussion_pointsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_discussion_pointsPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_meeting_discussion_pointsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_meeting_discussion_points>
+          }
+          groupBy: {
+            args: Prisma.mentor_meeting_discussion_pointsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_discussion_pointsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_meeting_discussion_pointsCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_discussion_pointsCountAggregateOutputType> | number
+          }
+        }
+      }
+      mentor_meeting_feedback: {
+        payload: Prisma.$mentor_meeting_feedbackPayload<ExtArgs>
+        fields: Prisma.mentor_meeting_feedbackFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_meeting_feedbackFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_meeting_feedbackFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_meeting_feedbackFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_meeting_feedbackFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_meeting_feedbackFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_meeting_feedbackCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_meeting_feedbackCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_meeting_feedbackCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_meeting_feedbackDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>
+          }
+          update: {
+            args: Prisma.mentor_meeting_feedbackUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_meeting_feedbackDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_meeting_feedbackUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_meeting_feedbackUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_meeting_feedbackUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_feedbackPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_meeting_feedbackAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_meeting_feedback>
+          }
+          groupBy: {
+            args: Prisma.mentor_meeting_feedbackGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_feedbackGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_meeting_feedbackCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_feedbackCountAggregateOutputType> | number
+          }
+        }
+      }
+      mentor_meeting_notes: {
+        payload: Prisma.$mentor_meeting_notesPayload<ExtArgs>
+        fields: Prisma.mentor_meeting_notesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_meeting_notesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_meeting_notesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_meeting_notesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_meeting_notesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_meeting_notesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_meeting_notesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_meeting_notesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_meeting_notesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_meeting_notesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>
+          }
+          update: {
+            args: Prisma.mentor_meeting_notesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_meeting_notesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_meeting_notesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_meeting_notesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_meeting_notesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_notesPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_meeting_notesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_meeting_notes>
+          }
+          groupBy: {
+            args: Prisma.mentor_meeting_notesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_notesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_meeting_notesCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_notesCountAggregateOutputType> | number
+          }
+        }
+      }
+      mentor_meeting_series: {
+        payload: Prisma.$mentor_meeting_seriesPayload<ExtArgs>
+        fields: Prisma.mentor_meeting_seriesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_meeting_seriesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_meeting_seriesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_meeting_seriesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_meeting_seriesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_meeting_seriesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_meeting_seriesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_meeting_seriesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_meeting_seriesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_meeting_seriesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>
+          }
+          update: {
+            args: Prisma.mentor_meeting_seriesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_meeting_seriesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_meeting_seriesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_meeting_seriesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_meeting_seriesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meeting_seriesPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_meeting_seriesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_meeting_series>
+          }
+          groupBy: {
+            args: Prisma.mentor_meeting_seriesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_seriesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_meeting_seriesCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meeting_seriesCountAggregateOutputType> | number
+          }
+        }
+      }
+      mentor_meetings: {
+        payload: Prisma.$mentor_meetingsPayload<ExtArgs>
+        fields: Prisma.mentor_meetingsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_meetingsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_meetingsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_meetingsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_meetingsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_meetingsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_meetingsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_meetingsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_meetingsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_meetingsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>
+          }
+          update: {
+            args: Prisma.mentor_meetingsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_meetingsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_meetingsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_meetingsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_meetingsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_meetingsPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_meetingsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_meetings>
+          }
+          groupBy: {
+            args: Prisma.mentor_meetingsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meetingsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_meetingsCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_meetingsCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3124,6 +3833,8 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsOmit
     students?: studentsOmit
     student_internships?: student_internshipsOmit
+    internship_reviews?: internship_reviewsOmit
+    internship_documents?: internship_documentsOmit
     student_contact_details?: student_contact_detailsOmit
     student_parent_details?: student_parent_detailsOmit
     student_documents?: student_documentsOmit
@@ -3134,6 +3845,11 @@ export namespace Prisma {
     user_accounts?: user_accountsOmit
     term_change_requests?: term_change_requestsOmit
     teacher_profiles?: teacher_profilesOmit
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsOmit
+    mentor_meeting_feedback?: mentor_meeting_feedbackOmit
+    mentor_meeting_notes?: mentor_meeting_notesOmit
+    mentor_meeting_series?: mentor_meeting_seriesOmit
+    mentor_meetings?: mentor_meetingsOmit
   }
 
   /* Types for Logging */
@@ -3414,10 +4130,12 @@ export namespace Prisma {
     academicSemesters: number
     detentions: number
     mentor_assignments: number
+    mentor_meeting_series: number
+    mentor_meetings: number
     mentor_transfer_requests: number
     documents: number
-    internships: number
     student_enrollments: number
+    internships: number
   }
 
   export type StudentsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -3425,10 +4143,12 @@ export namespace Prisma {
     academicSemesters?: boolean | StudentsCountOutputTypeCountAcademicSemestersArgs
     detentions?: boolean | StudentsCountOutputTypeCountDetentionsArgs
     mentor_assignments?: boolean | StudentsCountOutputTypeCountMentor_assignmentsArgs
+    mentor_meeting_series?: boolean | StudentsCountOutputTypeCountMentor_meeting_seriesArgs
+    mentor_meetings?: boolean | StudentsCountOutputTypeCountMentor_meetingsArgs
     mentor_transfer_requests?: boolean | StudentsCountOutputTypeCountMentor_transfer_requestsArgs
     documents?: boolean | StudentsCountOutputTypeCountDocumentsArgs
-    internships?: boolean | StudentsCountOutputTypeCountInternshipsArgs
     student_enrollments?: boolean | StudentsCountOutputTypeCountStudent_enrollmentsArgs
+    internships?: boolean | StudentsCountOutputTypeCountInternshipsArgs
   }
 
   // Custom InputTypes
@@ -3473,6 +4193,20 @@ export namespace Prisma {
   /**
    * StudentsCountOutputType without action
    */
+  export type StudentsCountOutputTypeCountMentor_meeting_seriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_seriesWhereInput
+  }
+
+  /**
+   * StudentsCountOutputType without action
+   */
+  export type StudentsCountOutputTypeCountMentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meetingsWhereInput
+  }
+
+  /**
+   * StudentsCountOutputType without action
+   */
   export type StudentsCountOutputTypeCountMentor_transfer_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: mentor_transfer_requestsWhereInput
   }
@@ -3487,15 +4221,55 @@ export namespace Prisma {
   /**
    * StudentsCountOutputType without action
    */
-  export type StudentsCountOutputTypeCountInternshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: student_internshipsWhereInput
+  export type StudentsCountOutputTypeCountStudent_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: student_enrollmentsWhereInput
   }
 
   /**
    * StudentsCountOutputType without action
    */
-  export type StudentsCountOutputTypeCountStudent_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    where?: student_enrollmentsWhereInput
+  export type StudentsCountOutputTypeCountInternshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: student_internshipsWhereInput
+  }
+
+
+  /**
+   * Count Type Student_internshipsCountOutputType
+   */
+
+  export type Student_internshipsCountOutputType = {
+    internship_documents: number
+    internship_reviews: number
+  }
+
+  export type Student_internshipsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship_documents?: boolean | Student_internshipsCountOutputTypeCountInternship_documentsArgs
+    internship_reviews?: boolean | Student_internshipsCountOutputTypeCountInternship_reviewsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Student_internshipsCountOutputType without action
+   */
+  export type Student_internshipsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Student_internshipsCountOutputType
+     */
+    select?: Student_internshipsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Student_internshipsCountOutputType without action
+   */
+  export type Student_internshipsCountOutputTypeCountInternship_documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: internship_documentsWhereInput
+  }
+
+  /**
+   * Student_internshipsCountOutputType without action
+   */
+  export type Student_internshipsCountOutputTypeCountInternship_reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: internship_reviewsWhereInput
   }
 
 
@@ -3535,14 +4309,22 @@ export namespace Prisma {
    */
 
   export type TeachersCountOutputType = {
+    internship_reviews: number
     mentor_assignments: number
+    mentor_meeting_feedback: number
+    mentor_meeting_series: number
+    mentor_meetings: number
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers: number
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers: number
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers: number
   }
 
   export type TeachersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship_reviews?: boolean | TeachersCountOutputTypeCountInternship_reviewsArgs
     mentor_assignments?: boolean | TeachersCountOutputTypeCountMentor_assignmentsArgs
+    mentor_meeting_feedback?: boolean | TeachersCountOutputTypeCountMentor_meeting_feedbackArgs
+    mentor_meeting_series?: boolean | TeachersCountOutputTypeCountMentor_meeting_seriesArgs
+    mentor_meetings?: boolean | TeachersCountOutputTypeCountMentor_meetingsArgs
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: boolean | TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: boolean | TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: boolean | TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs
@@ -3562,8 +4344,36 @@ export namespace Prisma {
   /**
    * TeachersCountOutputType without action
    */
+  export type TeachersCountOutputTypeCountInternship_reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: internship_reviewsWhereInput
+  }
+
+  /**
+   * TeachersCountOutputType without action
+   */
   export type TeachersCountOutputTypeCountMentor_assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: mentor_assignmentsWhereInput
+  }
+
+  /**
+   * TeachersCountOutputType without action
+   */
+  export type TeachersCountOutputTypeCountMentor_meeting_feedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_feedbackWhereInput
+  }
+
+  /**
+   * TeachersCountOutputType without action
+   */
+  export type TeachersCountOutputTypeCountMentor_meeting_seriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_seriesWhereInput
+  }
+
+  /**
+   * TeachersCountOutputType without action
+   */
+  export type TeachersCountOutputTypeCountMentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meetingsWhereInput
   }
 
   /**
@@ -3661,6 +4471,77 @@ export namespace Prisma {
    */
   export type User_accountsCountOutputTypeCountOtp_verificationsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: otp_verificationsWhereInput
+  }
+
+
+  /**
+   * Count Type Mentor_meeting_seriesCountOutputType
+   */
+
+  export type Mentor_meeting_seriesCountOutputType = {
+    mentor_meetings: number
+  }
+
+  export type Mentor_meeting_seriesCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | Mentor_meeting_seriesCountOutputTypeCountMentor_meetingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Mentor_meeting_seriesCountOutputType without action
+   */
+  export type Mentor_meeting_seriesCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor_meeting_seriesCountOutputType
+     */
+    select?: Mentor_meeting_seriesCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Mentor_meeting_seriesCountOutputType without action
+   */
+  export type Mentor_meeting_seriesCountOutputTypeCountMentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meetingsWhereInput
+  }
+
+
+  /**
+   * Count Type Mentor_meetingsCountOutputType
+   */
+
+  export type Mentor_meetingsCountOutputType = {
+    mentor_meeting_discussion_points: number
+    other_mentor_meetings: number
+  }
+
+  export type Mentor_meetingsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meeting_discussion_points?: boolean | Mentor_meetingsCountOutputTypeCountMentor_meeting_discussion_pointsArgs
+    other_mentor_meetings?: boolean | Mentor_meetingsCountOutputTypeCountOther_mentor_meetingsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Mentor_meetingsCountOutputType without action
+   */
+  export type Mentor_meetingsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor_meetingsCountOutputType
+     */
+    select?: Mentor_meetingsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Mentor_meetingsCountOutputType without action
+   */
+  export type Mentor_meetingsCountOutputTypeCountMentor_meeting_discussion_pointsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_discussion_pointsWhereInput
+  }
+
+  /**
+   * Mentor_meetingsCountOutputType without action
+   */
+  export type Mentor_meetingsCountOutputTypeCountOther_mentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meetingsWhereInput
   }
 
 
@@ -17145,11 +18026,13 @@ export namespace Prisma {
     academicSemesters?: boolean | students$academicSemestersArgs<ExtArgs>
     detentions?: boolean | students$detentionsArgs<ExtArgs>
     mentor_assignments?: boolean | students$mentor_assignmentsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | students$mentor_meeting_seriesArgs<ExtArgs>
+    mentor_meetings?: boolean | students$mentor_meetingsArgs<ExtArgs>
     mentor_transfer_requests?: boolean | students$mentor_transfer_requestsArgs<ExtArgs>
     contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
     documents?: boolean | students$documentsArgs<ExtArgs>
-    internships?: boolean | students$internshipsArgs<ExtArgs>
     student_enrollments?: boolean | students$student_enrollmentsArgs<ExtArgs>
+    internships?: boolean | students$internshipsArgs<ExtArgs>
     parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
@@ -17262,11 +18145,13 @@ export namespace Prisma {
     academicSemesters?: boolean | students$academicSemestersArgs<ExtArgs>
     detentions?: boolean | students$detentionsArgs<ExtArgs>
     mentor_assignments?: boolean | students$mentor_assignmentsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | students$mentor_meeting_seriesArgs<ExtArgs>
+    mentor_meetings?: boolean | students$mentor_meetingsArgs<ExtArgs>
     mentor_transfer_requests?: boolean | students$mentor_transfer_requestsArgs<ExtArgs>
     contactDetails?: boolean | students$contactDetailsArgs<ExtArgs>
     documents?: boolean | students$documentsArgs<ExtArgs>
-    internships?: boolean | students$internshipsArgs<ExtArgs>
     student_enrollments?: boolean | students$student_enrollmentsArgs<ExtArgs>
+    internships?: boolean | students$internshipsArgs<ExtArgs>
     parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
@@ -17288,11 +18173,13 @@ export namespace Prisma {
       academicSemesters: Prisma.$academic_semestersPayload<ExtArgs>[]
       detentions: Prisma.$detentionsPayload<ExtArgs>[]
       mentor_assignments: Prisma.$mentor_assignmentsPayload<ExtArgs>[]
+      mentor_meeting_series: Prisma.$mentor_meeting_seriesPayload<ExtArgs>[]
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>[]
       mentor_transfer_requests: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       contactDetails: Prisma.$student_contact_detailsPayload<ExtArgs> | null
       documents: Prisma.$student_documentsPayload<ExtArgs>[]
-      internships: Prisma.$student_internshipsPayload<ExtArgs>[]
       student_enrollments: Prisma.$student_enrollmentsPayload<ExtArgs>[]
+      internships: Prisma.$student_internshipsPayload<ExtArgs>[]
       parentDetails: Prisma.$student_parent_detailsPayload<ExtArgs> | null
       departments: Prisma.$departmentsPayload<ExtArgs>
       user_accounts: Prisma.$user_accountsPayload<ExtArgs> | null
@@ -17725,11 +18612,13 @@ export namespace Prisma {
     academicSemesters<T extends students$academicSemestersArgs<ExtArgs> = {}>(args?: Subset<T, students$academicSemestersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$academic_semestersPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     detentions<T extends students$detentionsArgs<ExtArgs> = {}>(args?: Subset<T, students$detentionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$detentionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_assignments<T extends students$mentor_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meeting_series<T extends students$mentor_meeting_seriesArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_meeting_seriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meetings<T extends students$mentor_meetingsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests<T extends students$mentor_transfer_requestsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_transfer_requestsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     contactDetails<T extends students$contactDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$contactDetailsArgs<ExtArgs>>): Prisma__student_contact_detailsClient<$Result.GetResult<Prisma.$student_contact_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     documents<T extends students$documentsArgs<ExtArgs> = {}>(args?: Subset<T, students$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
-    internships<T extends students$internshipsArgs<ExtArgs> = {}>(args?: Subset<T, students$internshipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     student_enrollments<T extends students$student_enrollmentsArgs<ExtArgs> = {}>(args?: Subset<T, students$student_enrollmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_enrollmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    internships<T extends students$internshipsArgs<ExtArgs> = {}>(args?: Subset<T, students$internshipsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     parentDetails<T extends students$parentDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$parentDetailsArgs<ExtArgs>>): Prisma__student_parent_detailsClient<$Result.GetResult<Prisma.$student_parent_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     departments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user_accounts<T extends students$user_accountsArgs<ExtArgs> = {}>(args?: Subset<T, students$user_accountsArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -18283,6 +19172,54 @@ export namespace Prisma {
   }
 
   /**
+   * students.mentor_meeting_series
+   */
+  export type students$mentor_meeting_seriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    where?: mentor_meeting_seriesWhereInput
+    orderBy?: mentor_meeting_seriesOrderByWithRelationInput | mentor_meeting_seriesOrderByWithRelationInput[]
+    cursor?: mentor_meeting_seriesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meeting_seriesScalarFieldEnum | Mentor_meeting_seriesScalarFieldEnum[]
+  }
+
+  /**
+   * students.mentor_meetings
+   */
+  export type students$mentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    where?: mentor_meetingsWhereInput
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    cursor?: mentor_meetingsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
+  }
+
+  /**
    * students.mentor_transfer_requests
    */
   export type students$mentor_transfer_requestsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18350,30 +19287,6 @@ export namespace Prisma {
   }
 
   /**
-   * students.internships
-   */
-  export type students$internshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
-    /**
-     * Select specific fields to fetch from the student_internships
-     */
-    select?: student_internshipsSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the student_internships
-     */
-    omit?: student_internshipsOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: student_internshipsInclude<ExtArgs> | null
-    where?: student_internshipsWhereInput
-    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
-    cursor?: student_internshipsWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: Student_internshipsScalarFieldEnum | Student_internshipsScalarFieldEnum[]
-  }
-
-  /**
    * students.student_enrollments
    */
   export type students$student_enrollmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18395,6 +19308,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Student_enrollmentsScalarFieldEnum | Student_enrollmentsScalarFieldEnum[]
+  }
+
+  /**
+   * students.internships
+   */
+  export type students$internshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the student_internships
+     */
+    select?: student_internshipsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the student_internships
+     */
+    omit?: student_internshipsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: student_internshipsInclude<ExtArgs> | null
+    where?: student_internshipsWhereInput
+    orderBy?: student_internshipsOrderByWithRelationInput | student_internshipsOrderByWithRelationInput[]
+    cursor?: student_internshipsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Student_internshipsScalarFieldEnum | Student_internshipsScalarFieldEnum[]
   }
 
   /**
@@ -18495,6 +19432,10 @@ export namespace Prisma {
     completionRequestedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    internshipType: $Enums.InternshipType | null
+    completionVerificationStatus: $Enums.CompletionVerificationStatus | null
+    completionMentorRemark: string | null
+    completionVerifiedAt: Date | null
   }
 
   export type Student_internshipsMaxAggregateOutputType = {
@@ -18518,6 +19459,10 @@ export namespace Prisma {
     completionRequestedAt: Date | null
     createdAt: Date | null
     updatedAt: Date | null
+    internshipType: $Enums.InternshipType | null
+    completionVerificationStatus: $Enums.CompletionVerificationStatus | null
+    completionMentorRemark: string | null
+    completionVerifiedAt: Date | null
   }
 
   export type Student_internshipsCountAggregateOutputType = {
@@ -18541,6 +19486,10 @@ export namespace Prisma {
     completionRequestedAt: number
     createdAt: number
     updatedAt: number
+    internshipType: number
+    completionVerificationStatus: number
+    completionMentorRemark: number
+    completionVerifiedAt: number
     _all: number
   }
 
@@ -18574,6 +19523,10 @@ export namespace Prisma {
     completionRequestedAt?: true
     createdAt?: true
     updatedAt?: true
+    internshipType?: true
+    completionVerificationStatus?: true
+    completionMentorRemark?: true
+    completionVerifiedAt?: true
   }
 
   export type Student_internshipsMaxAggregateInputType = {
@@ -18597,6 +19550,10 @@ export namespace Prisma {
     completionRequestedAt?: true
     createdAt?: true
     updatedAt?: true
+    internshipType?: true
+    completionVerificationStatus?: true
+    completionMentorRemark?: true
+    completionVerifiedAt?: true
   }
 
   export type Student_internshipsCountAggregateInputType = {
@@ -18620,6 +19577,10 @@ export namespace Prisma {
     completionRequestedAt?: true
     createdAt?: true
     updatedAt?: true
+    internshipType?: true
+    completionVerificationStatus?: true
+    completionMentorRemark?: true
+    completionVerifiedAt?: true
     _all?: true
   }
 
@@ -18730,6 +19691,10 @@ export namespace Prisma {
     completionRequestedAt: Date | null
     createdAt: Date
     updatedAt: Date
+    internshipType: $Enums.InternshipType
+    completionVerificationStatus: $Enums.CompletionVerificationStatus
+    completionMentorRemark: string | null
+    completionVerifiedAt: Date | null
     _count: Student_internshipsCountAggregateOutputType | null
     _avg: Student_internshipsAvgAggregateOutputType | null
     _sum: Student_internshipsSumAggregateOutputType | null
@@ -18772,7 +19737,14 @@ export namespace Prisma {
     completionRequestedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    internshipType?: boolean
+    completionVerificationStatus?: boolean
+    completionMentorRemark?: boolean
+    completionVerifiedAt?: boolean
+    internship_documents?: boolean | student_internships$internship_documentsArgs<ExtArgs>
+    internship_reviews?: boolean | student_internships$internship_reviewsArgs<ExtArgs>
     student?: boolean | studentsDefaultArgs<ExtArgs>
+    _count?: boolean | Student_internshipsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student_internships"]>
 
   export type student_internshipsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -18796,6 +19768,10 @@ export namespace Prisma {
     completionRequestedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    internshipType?: boolean
+    completionVerificationStatus?: boolean
+    completionMentorRemark?: boolean
+    completionVerifiedAt?: boolean
     student?: boolean | studentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student_internships"]>
 
@@ -18820,6 +19796,10 @@ export namespace Prisma {
     completionRequestedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    internshipType?: boolean
+    completionVerificationStatus?: boolean
+    completionMentorRemark?: boolean
+    completionVerifiedAt?: boolean
     student?: boolean | studentsDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["student_internships"]>
 
@@ -18844,11 +19824,18 @@ export namespace Prisma {
     completionRequestedAt?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    internshipType?: boolean
+    completionVerificationStatus?: boolean
+    completionMentorRemark?: boolean
+    completionVerifiedAt?: boolean
   }
 
-  export type student_internshipsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "companyName" | "internshipTitle" | "role" | "startDate" | "endDate" | "location" | "mode" | "projectName" | "description" | "status" | "verificationStatus" | "mentorRemark" | "verifiedAt" | "rating" | "completionRequested" | "completionRequestedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["student_internships"]>
+  export type student_internshipsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "companyName" | "internshipTitle" | "role" | "startDate" | "endDate" | "location" | "mode" | "projectName" | "description" | "status" | "verificationStatus" | "mentorRemark" | "verifiedAt" | "rating" | "completionRequested" | "completionRequestedAt" | "createdAt" | "updatedAt" | "internshipType" | "completionVerificationStatus" | "completionMentorRemark" | "completionVerifiedAt", ExtArgs["result"]["student_internships"]>
   export type student_internshipsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship_documents?: boolean | student_internships$internship_documentsArgs<ExtArgs>
+    internship_reviews?: boolean | student_internships$internship_reviewsArgs<ExtArgs>
     student?: boolean | studentsDefaultArgs<ExtArgs>
+    _count?: boolean | Student_internshipsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type student_internshipsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     student?: boolean | studentsDefaultArgs<ExtArgs>
@@ -18860,6 +19847,8 @@ export namespace Prisma {
   export type $student_internshipsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "student_internships"
     objects: {
+      internship_documents: Prisma.$internship_documentsPayload<ExtArgs>[]
+      internship_reviews: Prisma.$internship_reviewsPayload<ExtArgs>[]
       student: Prisma.$studentsPayload<ExtArgs>
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -18883,6 +19872,10 @@ export namespace Prisma {
       completionRequestedAt: Date | null
       createdAt: Date
       updatedAt: Date
+      internshipType: $Enums.InternshipType
+      completionVerificationStatus: $Enums.CompletionVerificationStatus
+      completionMentorRemark: string | null
+      completionVerifiedAt: Date | null
     }, ExtArgs["result"]["student_internships"]>
     composites: {}
   }
@@ -19277,6 +20270,8 @@ export namespace Prisma {
    */
   export interface Prisma__student_internshipsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    internship_documents<T extends student_internships$internship_documentsArgs<ExtArgs> = {}>(args?: Subset<T, student_internships$internship_documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    internship_reviews<T extends student_internships$internship_reviewsArgs<ExtArgs> = {}>(args?: Subset<T, student_internships$internship_reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     student<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -19327,6 +20322,10 @@ export namespace Prisma {
     readonly completionRequestedAt: FieldRef<"student_internships", 'DateTime'>
     readonly createdAt: FieldRef<"student_internships", 'DateTime'>
     readonly updatedAt: FieldRef<"student_internships", 'DateTime'>
+    readonly internshipType: FieldRef<"student_internships", 'InternshipType'>
+    readonly completionVerificationStatus: FieldRef<"student_internships", 'CompletionVerificationStatus'>
+    readonly completionMentorRemark: FieldRef<"student_internships", 'String'>
+    readonly completionVerifiedAt: FieldRef<"student_internships", 'DateTime'>
   }
     
 
@@ -19723,6 +20722,54 @@ export namespace Prisma {
   }
 
   /**
+   * student_internships.internship_documents
+   */
+  export type student_internships$internship_documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    where?: internship_documentsWhereInput
+    orderBy?: internship_documentsOrderByWithRelationInput | internship_documentsOrderByWithRelationInput[]
+    cursor?: internship_documentsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Internship_documentsScalarFieldEnum | Internship_documentsScalarFieldEnum[]
+  }
+
+  /**
+   * student_internships.internship_reviews
+   */
+  export type student_internships$internship_reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    where?: internship_reviewsWhereInput
+    orderBy?: internship_reviewsOrderByWithRelationInput | internship_reviewsOrderByWithRelationInput[]
+    cursor?: internship_reviewsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Internship_reviewsScalarFieldEnum | Internship_reviewsScalarFieldEnum[]
+  }
+
+  /**
    * student_internships without action
    */
   export type student_internshipsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -19738,6 +20785,2294 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: student_internshipsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model internship_reviews
+   */
+
+  export type AggregateInternship_reviews = {
+    _count: Internship_reviewsCountAggregateOutputType | null
+    _min: Internship_reviewsMinAggregateOutputType | null
+    _max: Internship_reviewsMaxAggregateOutputType | null
+  }
+
+  export type Internship_reviewsMinAggregateOutputType = {
+    id: string | null
+    internshipId: string | null
+    reviewerTeacherId: string | null
+    reviewStage: $Enums.InternshipReviewStage | null
+    decision: $Enums.InternshipReviewDecision | null
+    remarks: string | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type Internship_reviewsMaxAggregateOutputType = {
+    id: string | null
+    internshipId: string | null
+    reviewerTeacherId: string | null
+    reviewStage: $Enums.InternshipReviewStage | null
+    decision: $Enums.InternshipReviewDecision | null
+    remarks: string | null
+    reviewedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type Internship_reviewsCountAggregateOutputType = {
+    id: number
+    internshipId: number
+    reviewerTeacherId: number
+    reviewStage: number
+    decision: number
+    remarks: number
+    reviewedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type Internship_reviewsMinAggregateInputType = {
+    id?: true
+    internshipId?: true
+    reviewerTeacherId?: true
+    reviewStage?: true
+    decision?: true
+    remarks?: true
+    reviewedAt?: true
+    createdAt?: true
+  }
+
+  export type Internship_reviewsMaxAggregateInputType = {
+    id?: true
+    internshipId?: true
+    reviewerTeacherId?: true
+    reviewStage?: true
+    decision?: true
+    remarks?: true
+    reviewedAt?: true
+    createdAt?: true
+  }
+
+  export type Internship_reviewsCountAggregateInputType = {
+    id?: true
+    internshipId?: true
+    reviewerTeacherId?: true
+    reviewStage?: true
+    decision?: true
+    remarks?: true
+    reviewedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type Internship_reviewsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which internship_reviews to aggregate.
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_reviews to fetch.
+     */
+    orderBy?: internship_reviewsOrderByWithRelationInput | internship_reviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: internship_reviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_reviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned internship_reviews
+    **/
+    _count?: true | Internship_reviewsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Internship_reviewsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Internship_reviewsMaxAggregateInputType
+  }
+
+  export type GetInternship_reviewsAggregateType<T extends Internship_reviewsAggregateArgs> = {
+        [P in keyof T & keyof AggregateInternship_reviews]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInternship_reviews[P]>
+      : GetScalarType<T[P], AggregateInternship_reviews[P]>
+  }
+
+
+
+
+  export type internship_reviewsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: internship_reviewsWhereInput
+    orderBy?: internship_reviewsOrderByWithAggregationInput | internship_reviewsOrderByWithAggregationInput[]
+    by: Internship_reviewsScalarFieldEnum[] | Internship_reviewsScalarFieldEnum
+    having?: internship_reviewsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Internship_reviewsCountAggregateInputType | true
+    _min?: Internship_reviewsMinAggregateInputType
+    _max?: Internship_reviewsMaxAggregateInputType
+  }
+
+  export type Internship_reviewsGroupByOutputType = {
+    id: string
+    internshipId: string
+    reviewerTeacherId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks: string | null
+    reviewedAt: Date
+    createdAt: Date
+    _count: Internship_reviewsCountAggregateOutputType | null
+    _min: Internship_reviewsMinAggregateOutputType | null
+    _max: Internship_reviewsMaxAggregateOutputType | null
+  }
+
+  type GetInternship_reviewsGroupByPayload<T extends internship_reviewsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Internship_reviewsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Internship_reviewsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Internship_reviewsGroupByOutputType[P]>
+            : GetScalarType<T[P], Internship_reviewsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type internship_reviewsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    internshipId?: boolean
+    reviewerTeacherId?: boolean
+    reviewStage?: boolean
+    decision?: boolean
+    remarks?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+    reviewer?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["internship_reviews"]>
+
+  export type internship_reviewsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    internshipId?: boolean
+    reviewerTeacherId?: boolean
+    reviewStage?: boolean
+    decision?: boolean
+    remarks?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+    reviewer?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["internship_reviews"]>
+
+  export type internship_reviewsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    internshipId?: boolean
+    reviewerTeacherId?: boolean
+    reviewStage?: boolean
+    decision?: boolean
+    remarks?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+    reviewer?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["internship_reviews"]>
+
+  export type internship_reviewsSelectScalar = {
+    id?: boolean
+    internshipId?: boolean
+    reviewerTeacherId?: boolean
+    reviewStage?: boolean
+    decision?: boolean
+    remarks?: boolean
+    reviewedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type internship_reviewsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "internshipId" | "reviewerTeacherId" | "reviewStage" | "decision" | "remarks" | "reviewedAt" | "createdAt", ExtArgs["result"]["internship_reviews"]>
+  export type internship_reviewsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+    reviewer?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type internship_reviewsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+    reviewer?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type internship_reviewsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+    reviewer?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+
+  export type $internship_reviewsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "internship_reviews"
+    objects: {
+      internship: Prisma.$student_internshipsPayload<ExtArgs>
+      reviewer: Prisma.$teachersPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      internshipId: string
+      reviewerTeacherId: string
+      reviewStage: $Enums.InternshipReviewStage
+      decision: $Enums.InternshipReviewDecision
+      remarks: string | null
+      reviewedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["internship_reviews"]>
+    composites: {}
+  }
+
+  type internship_reviewsGetPayload<S extends boolean | null | undefined | internship_reviewsDefaultArgs> = $Result.GetResult<Prisma.$internship_reviewsPayload, S>
+
+  type internship_reviewsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<internship_reviewsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Internship_reviewsCountAggregateInputType | true
+    }
+
+  export interface internship_reviewsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['internship_reviews'], meta: { name: 'internship_reviews' } }
+    /**
+     * Find zero or one Internship_reviews that matches the filter.
+     * @param {internship_reviewsFindUniqueArgs} args - Arguments to find a Internship_reviews
+     * @example
+     * // Get one Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends internship_reviewsFindUniqueArgs>(args: SelectSubset<T, internship_reviewsFindUniqueArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Internship_reviews that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {internship_reviewsFindUniqueOrThrowArgs} args - Arguments to find a Internship_reviews
+     * @example
+     * // Get one Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends internship_reviewsFindUniqueOrThrowArgs>(args: SelectSubset<T, internship_reviewsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Internship_reviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_reviewsFindFirstArgs} args - Arguments to find a Internship_reviews
+     * @example
+     * // Get one Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends internship_reviewsFindFirstArgs>(args?: SelectSubset<T, internship_reviewsFindFirstArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Internship_reviews that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_reviewsFindFirstOrThrowArgs} args - Arguments to find a Internship_reviews
+     * @example
+     * // Get one Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends internship_reviewsFindFirstOrThrowArgs>(args?: SelectSubset<T, internship_reviewsFindFirstOrThrowArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Internship_reviews that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_reviewsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.findMany()
+     * 
+     * // Get first 10 Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const internship_reviewsWithIdOnly = await prisma.internship_reviews.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends internship_reviewsFindManyArgs>(args?: SelectSubset<T, internship_reviewsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Internship_reviews.
+     * @param {internship_reviewsCreateArgs} args - Arguments to create a Internship_reviews.
+     * @example
+     * // Create one Internship_reviews
+     * const Internship_reviews = await prisma.internship_reviews.create({
+     *   data: {
+     *     // ... data to create a Internship_reviews
+     *   }
+     * })
+     * 
+     */
+    create<T extends internship_reviewsCreateArgs>(args: SelectSubset<T, internship_reviewsCreateArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Internship_reviews.
+     * @param {internship_reviewsCreateManyArgs} args - Arguments to create many Internship_reviews.
+     * @example
+     * // Create many Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends internship_reviewsCreateManyArgs>(args?: SelectSubset<T, internship_reviewsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Internship_reviews and returns the data saved in the database.
+     * @param {internship_reviewsCreateManyAndReturnArgs} args - Arguments to create many Internship_reviews.
+     * @example
+     * // Create many Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Internship_reviews and only return the `id`
+     * const internship_reviewsWithIdOnly = await prisma.internship_reviews.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends internship_reviewsCreateManyAndReturnArgs>(args?: SelectSubset<T, internship_reviewsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Internship_reviews.
+     * @param {internship_reviewsDeleteArgs} args - Arguments to delete one Internship_reviews.
+     * @example
+     * // Delete one Internship_reviews
+     * const Internship_reviews = await prisma.internship_reviews.delete({
+     *   where: {
+     *     // ... filter to delete one Internship_reviews
+     *   }
+     * })
+     * 
+     */
+    delete<T extends internship_reviewsDeleteArgs>(args: SelectSubset<T, internship_reviewsDeleteArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Internship_reviews.
+     * @param {internship_reviewsUpdateArgs} args - Arguments to update one Internship_reviews.
+     * @example
+     * // Update one Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends internship_reviewsUpdateArgs>(args: SelectSubset<T, internship_reviewsUpdateArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Internship_reviews.
+     * @param {internship_reviewsDeleteManyArgs} args - Arguments to filter Internship_reviews to delete.
+     * @example
+     * // Delete a few Internship_reviews
+     * const { count } = await prisma.internship_reviews.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends internship_reviewsDeleteManyArgs>(args?: SelectSubset<T, internship_reviewsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Internship_reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_reviewsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends internship_reviewsUpdateManyArgs>(args: SelectSubset<T, internship_reviewsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Internship_reviews and returns the data updated in the database.
+     * @param {internship_reviewsUpdateManyAndReturnArgs} args - Arguments to update many Internship_reviews.
+     * @example
+     * // Update many Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Internship_reviews and only return the `id`
+     * const internship_reviewsWithIdOnly = await prisma.internship_reviews.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends internship_reviewsUpdateManyAndReturnArgs>(args: SelectSubset<T, internship_reviewsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Internship_reviews.
+     * @param {internship_reviewsUpsertArgs} args - Arguments to update or create a Internship_reviews.
+     * @example
+     * // Update or create a Internship_reviews
+     * const internship_reviews = await prisma.internship_reviews.upsert({
+     *   create: {
+     *     // ... data to create a Internship_reviews
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Internship_reviews we want to update
+     *   }
+     * })
+     */
+    upsert<T extends internship_reviewsUpsertArgs>(args: SelectSubset<T, internship_reviewsUpsertArgs<ExtArgs>>): Prisma__internship_reviewsClient<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Internship_reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_reviewsCountArgs} args - Arguments to filter Internship_reviews to count.
+     * @example
+     * // Count the number of Internship_reviews
+     * const count = await prisma.internship_reviews.count({
+     *   where: {
+     *     // ... the filter for the Internship_reviews we want to count
+     *   }
+     * })
+    **/
+    count<T extends internship_reviewsCountArgs>(
+      args?: Subset<T, internship_reviewsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Internship_reviewsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Internship_reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Internship_reviewsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Internship_reviewsAggregateArgs>(args: Subset<T, Internship_reviewsAggregateArgs>): Prisma.PrismaPromise<GetInternship_reviewsAggregateType<T>>
+
+    /**
+     * Group by Internship_reviews.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_reviewsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends internship_reviewsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: internship_reviewsGroupByArgs['orderBy'] }
+        : { orderBy?: internship_reviewsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, internship_reviewsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInternship_reviewsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the internship_reviews model
+   */
+  readonly fields: internship_reviewsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for internship_reviews.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__internship_reviewsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    internship<T extends student_internshipsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, student_internshipsDefaultArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    reviewer<T extends teachersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, teachersDefaultArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the internship_reviews model
+   */
+  interface internship_reviewsFieldRefs {
+    readonly id: FieldRef<"internship_reviews", 'String'>
+    readonly internshipId: FieldRef<"internship_reviews", 'String'>
+    readonly reviewerTeacherId: FieldRef<"internship_reviews", 'String'>
+    readonly reviewStage: FieldRef<"internship_reviews", 'InternshipReviewStage'>
+    readonly decision: FieldRef<"internship_reviews", 'InternshipReviewDecision'>
+    readonly remarks: FieldRef<"internship_reviews", 'String'>
+    readonly reviewedAt: FieldRef<"internship_reviews", 'DateTime'>
+    readonly createdAt: FieldRef<"internship_reviews", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * internship_reviews findUnique
+   */
+  export type internship_reviewsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_reviews to fetch.
+     */
+    where: internship_reviewsWhereUniqueInput
+  }
+
+  /**
+   * internship_reviews findUniqueOrThrow
+   */
+  export type internship_reviewsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_reviews to fetch.
+     */
+    where: internship_reviewsWhereUniqueInput
+  }
+
+  /**
+   * internship_reviews findFirst
+   */
+  export type internship_reviewsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_reviews to fetch.
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_reviews to fetch.
+     */
+    orderBy?: internship_reviewsOrderByWithRelationInput | internship_reviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for internship_reviews.
+     */
+    cursor?: internship_reviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_reviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of internship_reviews.
+     */
+    distinct?: Internship_reviewsScalarFieldEnum | Internship_reviewsScalarFieldEnum[]
+  }
+
+  /**
+   * internship_reviews findFirstOrThrow
+   */
+  export type internship_reviewsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_reviews to fetch.
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_reviews to fetch.
+     */
+    orderBy?: internship_reviewsOrderByWithRelationInput | internship_reviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for internship_reviews.
+     */
+    cursor?: internship_reviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_reviews.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of internship_reviews.
+     */
+    distinct?: Internship_reviewsScalarFieldEnum | Internship_reviewsScalarFieldEnum[]
+  }
+
+  /**
+   * internship_reviews findMany
+   */
+  export type internship_reviewsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_reviews to fetch.
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_reviews to fetch.
+     */
+    orderBy?: internship_reviewsOrderByWithRelationInput | internship_reviewsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing internship_reviews.
+     */
+    cursor?: internship_reviewsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_reviews from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_reviews.
+     */
+    skip?: number
+    distinct?: Internship_reviewsScalarFieldEnum | Internship_reviewsScalarFieldEnum[]
+  }
+
+  /**
+   * internship_reviews create
+   */
+  export type internship_reviewsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a internship_reviews.
+     */
+    data: XOR<internship_reviewsCreateInput, internship_reviewsUncheckedCreateInput>
+  }
+
+  /**
+   * internship_reviews createMany
+   */
+  export type internship_reviewsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many internship_reviews.
+     */
+    data: internship_reviewsCreateManyInput | internship_reviewsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * internship_reviews createManyAndReturn
+   */
+  export type internship_reviewsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * The data used to create many internship_reviews.
+     */
+    data: internship_reviewsCreateManyInput | internship_reviewsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * internship_reviews update
+   */
+  export type internship_reviewsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a internship_reviews.
+     */
+    data: XOR<internship_reviewsUpdateInput, internship_reviewsUncheckedUpdateInput>
+    /**
+     * Choose, which internship_reviews to update.
+     */
+    where: internship_reviewsWhereUniqueInput
+  }
+
+  /**
+   * internship_reviews updateMany
+   */
+  export type internship_reviewsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update internship_reviews.
+     */
+    data: XOR<internship_reviewsUpdateManyMutationInput, internship_reviewsUncheckedUpdateManyInput>
+    /**
+     * Filter which internship_reviews to update
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * Limit how many internship_reviews to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * internship_reviews updateManyAndReturn
+   */
+  export type internship_reviewsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * The data used to update internship_reviews.
+     */
+    data: XOR<internship_reviewsUpdateManyMutationInput, internship_reviewsUncheckedUpdateManyInput>
+    /**
+     * Filter which internship_reviews to update
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * Limit how many internship_reviews to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * internship_reviews upsert
+   */
+  export type internship_reviewsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the internship_reviews to update in case it exists.
+     */
+    where: internship_reviewsWhereUniqueInput
+    /**
+     * In case the internship_reviews found by the `where` argument doesn't exist, create a new internship_reviews with this data.
+     */
+    create: XOR<internship_reviewsCreateInput, internship_reviewsUncheckedCreateInput>
+    /**
+     * In case the internship_reviews was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<internship_reviewsUpdateInput, internship_reviewsUncheckedUpdateInput>
+  }
+
+  /**
+   * internship_reviews delete
+   */
+  export type internship_reviewsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    /**
+     * Filter which internship_reviews to delete.
+     */
+    where: internship_reviewsWhereUniqueInput
+  }
+
+  /**
+   * internship_reviews deleteMany
+   */
+  export type internship_reviewsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which internship_reviews to delete
+     */
+    where?: internship_reviewsWhereInput
+    /**
+     * Limit how many internship_reviews to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * internship_reviews without action
+   */
+  export type internship_reviewsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model internship_documents
+   */
+
+  export type AggregateInternship_documents = {
+    _count: Internship_documentsCountAggregateOutputType | null
+    _avg: Internship_documentsAvgAggregateOutputType | null
+    _sum: Internship_documentsSumAggregateOutputType | null
+    _min: Internship_documentsMinAggregateOutputType | null
+    _max: Internship_documentsMaxAggregateOutputType | null
+  }
+
+  export type Internship_documentsAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type Internship_documentsSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type Internship_documentsMinAggregateOutputType = {
+    id: string | null
+    internshipId: string | null
+    documentType: $Enums.InternshipDocumentType | null
+    submissionStage: $Enums.InternshipDocumentStage | null
+    documentName: string | null
+    fileType: string | null
+    fileSize: number | null
+    cloudinaryPublicId: string | null
+    fileUrl: string | null
+    resourceType: string | null
+    uploadedAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Internship_documentsMaxAggregateOutputType = {
+    id: string | null
+    internshipId: string | null
+    documentType: $Enums.InternshipDocumentType | null
+    submissionStage: $Enums.InternshipDocumentStage | null
+    documentName: string | null
+    fileType: string | null
+    fileSize: number | null
+    cloudinaryPublicId: string | null
+    fileUrl: string | null
+    resourceType: string | null
+    uploadedAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Internship_documentsCountAggregateOutputType = {
+    id: number
+    internshipId: number
+    documentType: number
+    submissionStage: number
+    documentName: number
+    fileType: number
+    fileSize: number
+    cloudinaryPublicId: number
+    fileUrl: number
+    resourceType: number
+    uploadedAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Internship_documentsAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type Internship_documentsSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type Internship_documentsMinAggregateInputType = {
+    id?: true
+    internshipId?: true
+    documentType?: true
+    submissionStage?: true
+    documentName?: true
+    fileType?: true
+    fileSize?: true
+    cloudinaryPublicId?: true
+    fileUrl?: true
+    resourceType?: true
+    uploadedAt?: true
+    updatedAt?: true
+  }
+
+  export type Internship_documentsMaxAggregateInputType = {
+    id?: true
+    internshipId?: true
+    documentType?: true
+    submissionStage?: true
+    documentName?: true
+    fileType?: true
+    fileSize?: true
+    cloudinaryPublicId?: true
+    fileUrl?: true
+    resourceType?: true
+    uploadedAt?: true
+    updatedAt?: true
+  }
+
+  export type Internship_documentsCountAggregateInputType = {
+    id?: true
+    internshipId?: true
+    documentType?: true
+    submissionStage?: true
+    documentName?: true
+    fileType?: true
+    fileSize?: true
+    cloudinaryPublicId?: true
+    fileUrl?: true
+    resourceType?: true
+    uploadedAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Internship_documentsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which internship_documents to aggregate.
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_documents to fetch.
+     */
+    orderBy?: internship_documentsOrderByWithRelationInput | internship_documentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: internship_documentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_documents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned internship_documents
+    **/
+    _count?: true | Internship_documentsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Internship_documentsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Internship_documentsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Internship_documentsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Internship_documentsMaxAggregateInputType
+  }
+
+  export type GetInternship_documentsAggregateType<T extends Internship_documentsAggregateArgs> = {
+        [P in keyof T & keyof AggregateInternship_documents]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateInternship_documents[P]>
+      : GetScalarType<T[P], AggregateInternship_documents[P]>
+  }
+
+
+
+
+  export type internship_documentsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: internship_documentsWhereInput
+    orderBy?: internship_documentsOrderByWithAggregationInput | internship_documentsOrderByWithAggregationInput[]
+    by: Internship_documentsScalarFieldEnum[] | Internship_documentsScalarFieldEnum
+    having?: internship_documentsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Internship_documentsCountAggregateInputType | true
+    _avg?: Internship_documentsAvgAggregateInputType
+    _sum?: Internship_documentsSumAggregateInputType
+    _min?: Internship_documentsMinAggregateInputType
+    _max?: Internship_documentsMaxAggregateInputType
+  }
+
+  export type Internship_documentsGroupByOutputType = {
+    id: string
+    internshipId: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt: Date
+    updatedAt: Date
+    _count: Internship_documentsCountAggregateOutputType | null
+    _avg: Internship_documentsAvgAggregateOutputType | null
+    _sum: Internship_documentsSumAggregateOutputType | null
+    _min: Internship_documentsMinAggregateOutputType | null
+    _max: Internship_documentsMaxAggregateOutputType | null
+  }
+
+  type GetInternship_documentsGroupByPayload<T extends internship_documentsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Internship_documentsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Internship_documentsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Internship_documentsGroupByOutputType[P]>
+            : GetScalarType<T[P], Internship_documentsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type internship_documentsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    internshipId?: boolean
+    documentType?: boolean
+    submissionStage?: boolean
+    documentName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    cloudinaryPublicId?: boolean
+    fileUrl?: boolean
+    resourceType?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["internship_documents"]>
+
+  export type internship_documentsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    internshipId?: boolean
+    documentType?: boolean
+    submissionStage?: boolean
+    documentName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    cloudinaryPublicId?: boolean
+    fileUrl?: boolean
+    resourceType?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["internship_documents"]>
+
+  export type internship_documentsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    internshipId?: boolean
+    documentType?: boolean
+    submissionStage?: boolean
+    documentName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    cloudinaryPublicId?: boolean
+    fileUrl?: boolean
+    resourceType?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["internship_documents"]>
+
+  export type internship_documentsSelectScalar = {
+    id?: boolean
+    internshipId?: boolean
+    documentType?: boolean
+    submissionStage?: boolean
+    documentName?: boolean
+    fileType?: boolean
+    fileSize?: boolean
+    cloudinaryPublicId?: boolean
+    fileUrl?: boolean
+    resourceType?: boolean
+    uploadedAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type internship_documentsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "internshipId" | "documentType" | "submissionStage" | "documentName" | "fileType" | "fileSize" | "cloudinaryPublicId" | "fileUrl" | "resourceType" | "uploadedAt" | "updatedAt", ExtArgs["result"]["internship_documents"]>
+  export type internship_documentsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+  }
+  export type internship_documentsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+  }
+  export type internship_documentsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    internship?: boolean | student_internshipsDefaultArgs<ExtArgs>
+  }
+
+  export type $internship_documentsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "internship_documents"
+    objects: {
+      internship: Prisma.$student_internshipsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      internshipId: string
+      documentType: $Enums.InternshipDocumentType
+      submissionStage: $Enums.InternshipDocumentStage
+      documentName: string
+      fileType: string
+      fileSize: number
+      cloudinaryPublicId: string
+      fileUrl: string
+      resourceType: string
+      uploadedAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["internship_documents"]>
+    composites: {}
+  }
+
+  type internship_documentsGetPayload<S extends boolean | null | undefined | internship_documentsDefaultArgs> = $Result.GetResult<Prisma.$internship_documentsPayload, S>
+
+  type internship_documentsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<internship_documentsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Internship_documentsCountAggregateInputType | true
+    }
+
+  export interface internship_documentsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['internship_documents'], meta: { name: 'internship_documents' } }
+    /**
+     * Find zero or one Internship_documents that matches the filter.
+     * @param {internship_documentsFindUniqueArgs} args - Arguments to find a Internship_documents
+     * @example
+     * // Get one Internship_documents
+     * const internship_documents = await prisma.internship_documents.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends internship_documentsFindUniqueArgs>(args: SelectSubset<T, internship_documentsFindUniqueArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Internship_documents that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {internship_documentsFindUniqueOrThrowArgs} args - Arguments to find a Internship_documents
+     * @example
+     * // Get one Internship_documents
+     * const internship_documents = await prisma.internship_documents.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends internship_documentsFindUniqueOrThrowArgs>(args: SelectSubset<T, internship_documentsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Internship_documents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_documentsFindFirstArgs} args - Arguments to find a Internship_documents
+     * @example
+     * // Get one Internship_documents
+     * const internship_documents = await prisma.internship_documents.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends internship_documentsFindFirstArgs>(args?: SelectSubset<T, internship_documentsFindFirstArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Internship_documents that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_documentsFindFirstOrThrowArgs} args - Arguments to find a Internship_documents
+     * @example
+     * // Get one Internship_documents
+     * const internship_documents = await prisma.internship_documents.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends internship_documentsFindFirstOrThrowArgs>(args?: SelectSubset<T, internship_documentsFindFirstOrThrowArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Internship_documents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_documentsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Internship_documents
+     * const internship_documents = await prisma.internship_documents.findMany()
+     * 
+     * // Get first 10 Internship_documents
+     * const internship_documents = await prisma.internship_documents.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const internship_documentsWithIdOnly = await prisma.internship_documents.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends internship_documentsFindManyArgs>(args?: SelectSubset<T, internship_documentsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Internship_documents.
+     * @param {internship_documentsCreateArgs} args - Arguments to create a Internship_documents.
+     * @example
+     * // Create one Internship_documents
+     * const Internship_documents = await prisma.internship_documents.create({
+     *   data: {
+     *     // ... data to create a Internship_documents
+     *   }
+     * })
+     * 
+     */
+    create<T extends internship_documentsCreateArgs>(args: SelectSubset<T, internship_documentsCreateArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Internship_documents.
+     * @param {internship_documentsCreateManyArgs} args - Arguments to create many Internship_documents.
+     * @example
+     * // Create many Internship_documents
+     * const internship_documents = await prisma.internship_documents.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends internship_documentsCreateManyArgs>(args?: SelectSubset<T, internship_documentsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Internship_documents and returns the data saved in the database.
+     * @param {internship_documentsCreateManyAndReturnArgs} args - Arguments to create many Internship_documents.
+     * @example
+     * // Create many Internship_documents
+     * const internship_documents = await prisma.internship_documents.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Internship_documents and only return the `id`
+     * const internship_documentsWithIdOnly = await prisma.internship_documents.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends internship_documentsCreateManyAndReturnArgs>(args?: SelectSubset<T, internship_documentsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Internship_documents.
+     * @param {internship_documentsDeleteArgs} args - Arguments to delete one Internship_documents.
+     * @example
+     * // Delete one Internship_documents
+     * const Internship_documents = await prisma.internship_documents.delete({
+     *   where: {
+     *     // ... filter to delete one Internship_documents
+     *   }
+     * })
+     * 
+     */
+    delete<T extends internship_documentsDeleteArgs>(args: SelectSubset<T, internship_documentsDeleteArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Internship_documents.
+     * @param {internship_documentsUpdateArgs} args - Arguments to update one Internship_documents.
+     * @example
+     * // Update one Internship_documents
+     * const internship_documents = await prisma.internship_documents.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends internship_documentsUpdateArgs>(args: SelectSubset<T, internship_documentsUpdateArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Internship_documents.
+     * @param {internship_documentsDeleteManyArgs} args - Arguments to filter Internship_documents to delete.
+     * @example
+     * // Delete a few Internship_documents
+     * const { count } = await prisma.internship_documents.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends internship_documentsDeleteManyArgs>(args?: SelectSubset<T, internship_documentsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Internship_documents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_documentsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Internship_documents
+     * const internship_documents = await prisma.internship_documents.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends internship_documentsUpdateManyArgs>(args: SelectSubset<T, internship_documentsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Internship_documents and returns the data updated in the database.
+     * @param {internship_documentsUpdateManyAndReturnArgs} args - Arguments to update many Internship_documents.
+     * @example
+     * // Update many Internship_documents
+     * const internship_documents = await prisma.internship_documents.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Internship_documents and only return the `id`
+     * const internship_documentsWithIdOnly = await prisma.internship_documents.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends internship_documentsUpdateManyAndReturnArgs>(args: SelectSubset<T, internship_documentsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Internship_documents.
+     * @param {internship_documentsUpsertArgs} args - Arguments to update or create a Internship_documents.
+     * @example
+     * // Update or create a Internship_documents
+     * const internship_documents = await prisma.internship_documents.upsert({
+     *   create: {
+     *     // ... data to create a Internship_documents
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Internship_documents we want to update
+     *   }
+     * })
+     */
+    upsert<T extends internship_documentsUpsertArgs>(args: SelectSubset<T, internship_documentsUpsertArgs<ExtArgs>>): Prisma__internship_documentsClient<$Result.GetResult<Prisma.$internship_documentsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Internship_documents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_documentsCountArgs} args - Arguments to filter Internship_documents to count.
+     * @example
+     * // Count the number of Internship_documents
+     * const count = await prisma.internship_documents.count({
+     *   where: {
+     *     // ... the filter for the Internship_documents we want to count
+     *   }
+     * })
+    **/
+    count<T extends internship_documentsCountArgs>(
+      args?: Subset<T, internship_documentsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Internship_documentsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Internship_documents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Internship_documentsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Internship_documentsAggregateArgs>(args: Subset<T, Internship_documentsAggregateArgs>): Prisma.PrismaPromise<GetInternship_documentsAggregateType<T>>
+
+    /**
+     * Group by Internship_documents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {internship_documentsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends internship_documentsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: internship_documentsGroupByArgs['orderBy'] }
+        : { orderBy?: internship_documentsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, internship_documentsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetInternship_documentsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the internship_documents model
+   */
+  readonly fields: internship_documentsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for internship_documents.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__internship_documentsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    internship<T extends student_internshipsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, student_internshipsDefaultArgs<ExtArgs>>): Prisma__student_internshipsClient<$Result.GetResult<Prisma.$student_internshipsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the internship_documents model
+   */
+  interface internship_documentsFieldRefs {
+    readonly id: FieldRef<"internship_documents", 'String'>
+    readonly internshipId: FieldRef<"internship_documents", 'String'>
+    readonly documentType: FieldRef<"internship_documents", 'InternshipDocumentType'>
+    readonly submissionStage: FieldRef<"internship_documents", 'InternshipDocumentStage'>
+    readonly documentName: FieldRef<"internship_documents", 'String'>
+    readonly fileType: FieldRef<"internship_documents", 'String'>
+    readonly fileSize: FieldRef<"internship_documents", 'Int'>
+    readonly cloudinaryPublicId: FieldRef<"internship_documents", 'String'>
+    readonly fileUrl: FieldRef<"internship_documents", 'String'>
+    readonly resourceType: FieldRef<"internship_documents", 'String'>
+    readonly uploadedAt: FieldRef<"internship_documents", 'DateTime'>
+    readonly updatedAt: FieldRef<"internship_documents", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * internship_documents findUnique
+   */
+  export type internship_documentsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_documents to fetch.
+     */
+    where: internship_documentsWhereUniqueInput
+  }
+
+  /**
+   * internship_documents findUniqueOrThrow
+   */
+  export type internship_documentsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_documents to fetch.
+     */
+    where: internship_documentsWhereUniqueInput
+  }
+
+  /**
+   * internship_documents findFirst
+   */
+  export type internship_documentsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_documents to fetch.
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_documents to fetch.
+     */
+    orderBy?: internship_documentsOrderByWithRelationInput | internship_documentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for internship_documents.
+     */
+    cursor?: internship_documentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_documents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of internship_documents.
+     */
+    distinct?: Internship_documentsScalarFieldEnum | Internship_documentsScalarFieldEnum[]
+  }
+
+  /**
+   * internship_documents findFirstOrThrow
+   */
+  export type internship_documentsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_documents to fetch.
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_documents to fetch.
+     */
+    orderBy?: internship_documentsOrderByWithRelationInput | internship_documentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for internship_documents.
+     */
+    cursor?: internship_documentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_documents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of internship_documents.
+     */
+    distinct?: Internship_documentsScalarFieldEnum | Internship_documentsScalarFieldEnum[]
+  }
+
+  /**
+   * internship_documents findMany
+   */
+  export type internship_documentsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * Filter, which internship_documents to fetch.
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of internship_documents to fetch.
+     */
+    orderBy?: internship_documentsOrderByWithRelationInput | internship_documentsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing internship_documents.
+     */
+    cursor?: internship_documentsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` internship_documents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` internship_documents.
+     */
+    skip?: number
+    distinct?: Internship_documentsScalarFieldEnum | Internship_documentsScalarFieldEnum[]
+  }
+
+  /**
+   * internship_documents create
+   */
+  export type internship_documentsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a internship_documents.
+     */
+    data: XOR<internship_documentsCreateInput, internship_documentsUncheckedCreateInput>
+  }
+
+  /**
+   * internship_documents createMany
+   */
+  export type internship_documentsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many internship_documents.
+     */
+    data: internship_documentsCreateManyInput | internship_documentsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * internship_documents createManyAndReturn
+   */
+  export type internship_documentsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * The data used to create many internship_documents.
+     */
+    data: internship_documentsCreateManyInput | internship_documentsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * internship_documents update
+   */
+  export type internship_documentsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a internship_documents.
+     */
+    data: XOR<internship_documentsUpdateInput, internship_documentsUncheckedUpdateInput>
+    /**
+     * Choose, which internship_documents to update.
+     */
+    where: internship_documentsWhereUniqueInput
+  }
+
+  /**
+   * internship_documents updateMany
+   */
+  export type internship_documentsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update internship_documents.
+     */
+    data: XOR<internship_documentsUpdateManyMutationInput, internship_documentsUncheckedUpdateManyInput>
+    /**
+     * Filter which internship_documents to update
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * Limit how many internship_documents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * internship_documents updateManyAndReturn
+   */
+  export type internship_documentsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * The data used to update internship_documents.
+     */
+    data: XOR<internship_documentsUpdateManyMutationInput, internship_documentsUncheckedUpdateManyInput>
+    /**
+     * Filter which internship_documents to update
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * Limit how many internship_documents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * internship_documents upsert
+   */
+  export type internship_documentsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the internship_documents to update in case it exists.
+     */
+    where: internship_documentsWhereUniqueInput
+    /**
+     * In case the internship_documents found by the `where` argument doesn't exist, create a new internship_documents with this data.
+     */
+    create: XOR<internship_documentsCreateInput, internship_documentsUncheckedCreateInput>
+    /**
+     * In case the internship_documents was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<internship_documentsUpdateInput, internship_documentsUncheckedUpdateInput>
+  }
+
+  /**
+   * internship_documents delete
+   */
+  export type internship_documentsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
+    /**
+     * Filter which internship_documents to delete.
+     */
+    where: internship_documentsWhereUniqueInput
+  }
+
+  /**
+   * internship_documents deleteMany
+   */
+  export type internship_documentsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which internship_documents to delete
+     */
+    where?: internship_documentsWhereInput
+    /**
+     * Limit how many internship_documents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * internship_documents without action
+   */
+  export type internship_documentsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_documents
+     */
+    select?: internship_documentsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_documents
+     */
+    omit?: internship_documentsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_documentsInclude<ExtArgs> | null
   }
 
 
@@ -27554,7 +30889,11 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     departments_departments_hodTeacherIdToteachers?: boolean | teachers$departments_departments_hodTeacherIdToteachersArgs<ExtArgs>
+    internship_reviews?: boolean | teachers$internship_reviewsArgs<ExtArgs>
     mentor_assignments?: boolean | teachers$mentor_assignmentsArgs<ExtArgs>
+    mentor_meeting_feedback?: boolean | teachers$mentor_meeting_feedbackArgs<ExtArgs>
+    mentor_meeting_series?: boolean | teachers$mentor_meeting_seriesArgs<ExtArgs>
+    mentor_meetings?: boolean | teachers$mentor_meetingsArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs>
@@ -27616,7 +30955,11 @@ export namespace Prisma {
   export type teachersOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "employeeCode" | "fullName" | "email" | "phone" | "designation" | "maxMentees" | "isActive" | "departmentId" | "userAccountId" | "createdAt" | "updatedAt", ExtArgs["result"]["teachers"]>
   export type teachersInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     departments_departments_hodTeacherIdToteachers?: boolean | teachers$departments_departments_hodTeacherIdToteachersArgs<ExtArgs>
+    internship_reviews?: boolean | teachers$internship_reviewsArgs<ExtArgs>
     mentor_assignments?: boolean | teachers$mentor_assignmentsArgs<ExtArgs>
+    mentor_meeting_feedback?: boolean | teachers$mentor_meeting_feedbackArgs<ExtArgs>
+    mentor_meeting_series?: boolean | teachers$mentor_meeting_seriesArgs<ExtArgs>
+    mentor_meetings?: boolean | teachers$mentor_meetingsArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: boolean | teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs>
@@ -27638,7 +30981,11 @@ export namespace Prisma {
     name: "teachers"
     objects: {
       departments_departments_hodTeacherIdToteachers: Prisma.$departmentsPayload<ExtArgs> | null
+      internship_reviews: Prisma.$internship_reviewsPayload<ExtArgs>[]
       mentor_assignments: Prisma.$mentor_assignmentsPayload<ExtArgs>[]
+      mentor_meeting_feedback: Prisma.$mentor_meeting_feedbackPayload<ExtArgs>[]
+      mentor_meeting_series: Prisma.$mentor_meeting_seriesPayload<ExtArgs>[]
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
@@ -28054,7 +31401,11 @@ export namespace Prisma {
   export interface Prisma__teachersClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
     departments_departments_hodTeacherIdToteachers<T extends teachers$departments_departments_hodTeacherIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$departments_departments_hodTeacherIdToteachersArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    internship_reviews<T extends teachers$internship_reviewsArgs<ExtArgs> = {}>(args?: Subset<T, teachers$internship_reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$internship_reviewsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_assignments<T extends teachers$mentor_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meeting_feedback<T extends teachers$mentor_meeting_feedbackArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_meeting_feedbackArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meeting_series<T extends teachers$mentor_meeting_seriesArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_meeting_seriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meetings<T extends teachers$mentor_meetingsArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers<T extends teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers<T extends teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers<T extends teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -28517,6 +31868,30 @@ export namespace Prisma {
   }
 
   /**
+   * teachers.internship_reviews
+   */
+  export type teachers$internship_reviewsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the internship_reviews
+     */
+    select?: internship_reviewsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the internship_reviews
+     */
+    omit?: internship_reviewsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: internship_reviewsInclude<ExtArgs> | null
+    where?: internship_reviewsWhereInput
+    orderBy?: internship_reviewsOrderByWithRelationInput | internship_reviewsOrderByWithRelationInput[]
+    cursor?: internship_reviewsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Internship_reviewsScalarFieldEnum | Internship_reviewsScalarFieldEnum[]
+  }
+
+  /**
    * teachers.mentor_assignments
    */
   export type teachers$mentor_assignmentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -28538,6 +31913,78 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Mentor_assignmentsScalarFieldEnum | Mentor_assignmentsScalarFieldEnum[]
+  }
+
+  /**
+   * teachers.mentor_meeting_feedback
+   */
+  export type teachers$mentor_meeting_feedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    where?: mentor_meeting_feedbackWhereInput
+    orderBy?: mentor_meeting_feedbackOrderByWithRelationInput | mentor_meeting_feedbackOrderByWithRelationInput[]
+    cursor?: mentor_meeting_feedbackWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meeting_feedbackScalarFieldEnum | Mentor_meeting_feedbackScalarFieldEnum[]
+  }
+
+  /**
+   * teachers.mentor_meeting_series
+   */
+  export type teachers$mentor_meeting_seriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    where?: mentor_meeting_seriesWhereInput
+    orderBy?: mentor_meeting_seriesOrderByWithRelationInput | mentor_meeting_seriesOrderByWithRelationInput[]
+    cursor?: mentor_meeting_seriesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meeting_seriesScalarFieldEnum | Mentor_meeting_seriesScalarFieldEnum[]
+  }
+
+  /**
+   * teachers.mentor_meetings
+   */
+  export type teachers$mentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    where?: mentor_meetingsWhereInput
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    cursor?: mentor_meetingsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
   }
 
   /**
@@ -32351,6 +35798,5948 @@ export namespace Prisma {
 
 
   /**
+   * Model mentor_meeting_discussion_points
+   */
+
+  export type AggregateMentor_meeting_discussion_points = {
+    _count: Mentor_meeting_discussion_pointsCountAggregateOutputType | null
+    _avg: Mentor_meeting_discussion_pointsAvgAggregateOutputType | null
+    _sum: Mentor_meeting_discussion_pointsSumAggregateOutputType | null
+    _min: Mentor_meeting_discussion_pointsMinAggregateOutputType | null
+    _max: Mentor_meeting_discussion_pointsMaxAggregateOutputType | null
+  }
+
+  export type Mentor_meeting_discussion_pointsAvgAggregateOutputType = {
+    position: number | null
+  }
+
+  export type Mentor_meeting_discussion_pointsSumAggregateOutputType = {
+    position: number | null
+  }
+
+  export type Mentor_meeting_discussion_pointsMinAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    content: string | null
+    position: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_discussion_pointsMaxAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    content: string | null
+    position: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_discussion_pointsCountAggregateOutputType = {
+    id: number
+    meetingId: number
+    content: number
+    position: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Mentor_meeting_discussion_pointsAvgAggregateInputType = {
+    position?: true
+  }
+
+  export type Mentor_meeting_discussion_pointsSumAggregateInputType = {
+    position?: true
+  }
+
+  export type Mentor_meeting_discussion_pointsMinAggregateInputType = {
+    id?: true
+    meetingId?: true
+    content?: true
+    position?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_discussion_pointsMaxAggregateInputType = {
+    id?: true
+    meetingId?: true
+    content?: true
+    position?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_discussion_pointsCountAggregateInputType = {
+    id?: true
+    meetingId?: true
+    content?: true
+    position?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Mentor_meeting_discussion_pointsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_discussion_points to aggregate.
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_discussion_points to fetch.
+     */
+    orderBy?: mentor_meeting_discussion_pointsOrderByWithRelationInput | mentor_meeting_discussion_pointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_meeting_discussion_pointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_discussion_points from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_discussion_points.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_meeting_discussion_points
+    **/
+    _count?: true | Mentor_meeting_discussion_pointsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Mentor_meeting_discussion_pointsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Mentor_meeting_discussion_pointsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_meeting_discussion_pointsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_meeting_discussion_pointsMaxAggregateInputType
+  }
+
+  export type GetMentor_meeting_discussion_pointsAggregateType<T extends Mentor_meeting_discussion_pointsAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_meeting_discussion_points]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_meeting_discussion_points[P]>
+      : GetScalarType<T[P], AggregateMentor_meeting_discussion_points[P]>
+  }
+
+
+
+
+  export type mentor_meeting_discussion_pointsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_discussion_pointsWhereInput
+    orderBy?: mentor_meeting_discussion_pointsOrderByWithAggregationInput | mentor_meeting_discussion_pointsOrderByWithAggregationInput[]
+    by: Mentor_meeting_discussion_pointsScalarFieldEnum[] | Mentor_meeting_discussion_pointsScalarFieldEnum
+    having?: mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_meeting_discussion_pointsCountAggregateInputType | true
+    _avg?: Mentor_meeting_discussion_pointsAvgAggregateInputType
+    _sum?: Mentor_meeting_discussion_pointsSumAggregateInputType
+    _min?: Mentor_meeting_discussion_pointsMinAggregateInputType
+    _max?: Mentor_meeting_discussion_pointsMaxAggregateInputType
+  }
+
+  export type Mentor_meeting_discussion_pointsGroupByOutputType = {
+    id: string
+    meetingId: string
+    content: string
+    position: number
+    createdAt: Date
+    updatedAt: Date
+    _count: Mentor_meeting_discussion_pointsCountAggregateOutputType | null
+    _avg: Mentor_meeting_discussion_pointsAvgAggregateOutputType | null
+    _sum: Mentor_meeting_discussion_pointsSumAggregateOutputType | null
+    _min: Mentor_meeting_discussion_pointsMinAggregateOutputType | null
+    _max: Mentor_meeting_discussion_pointsMaxAggregateOutputType | null
+  }
+
+  type GetMentor_meeting_discussion_pointsGroupByPayload<T extends mentor_meeting_discussion_pointsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_meeting_discussion_pointsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_meeting_discussion_pointsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_meeting_discussion_pointsGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_meeting_discussion_pointsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_meeting_discussion_pointsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_discussion_points"]>
+
+  export type mentor_meeting_discussion_pointsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_discussion_points"]>
+
+  export type mentor_meeting_discussion_pointsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_discussion_points"]>
+
+  export type mentor_meeting_discussion_pointsSelectScalar = {
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    position?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type mentor_meeting_discussion_pointsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "meetingId" | "content" | "position" | "createdAt" | "updatedAt", ExtArgs["result"]["mentor_meeting_discussion_points"]>
+  export type mentor_meeting_discussion_pointsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_discussion_pointsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_discussion_pointsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_meeting_discussion_pointsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_meeting_discussion_points"
+    objects: {
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      meetingId: string
+      content: string
+      position: number
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mentor_meeting_discussion_points"]>
+    composites: {}
+  }
+
+  type mentor_meeting_discussion_pointsGetPayload<S extends boolean | null | undefined | mentor_meeting_discussion_pointsDefaultArgs> = $Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload, S>
+
+  type mentor_meeting_discussion_pointsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_meeting_discussion_pointsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_meeting_discussion_pointsCountAggregateInputType | true
+    }
+
+  export interface mentor_meeting_discussion_pointsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_meeting_discussion_points'], meta: { name: 'mentor_meeting_discussion_points' } }
+    /**
+     * Find zero or one Mentor_meeting_discussion_points that matches the filter.
+     * @param {mentor_meeting_discussion_pointsFindUniqueArgs} args - Arguments to find a Mentor_meeting_discussion_points
+     * @example
+     * // Get one Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_meeting_discussion_pointsFindUniqueArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsFindUniqueArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_meeting_discussion_points that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_meeting_discussion_pointsFindUniqueOrThrowArgs} args - Arguments to find a Mentor_meeting_discussion_points
+     * @example
+     * // Get one Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_meeting_discussion_pointsFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_discussion_points that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_discussion_pointsFindFirstArgs} args - Arguments to find a Mentor_meeting_discussion_points
+     * @example
+     * // Get one Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_meeting_discussion_pointsFindFirstArgs>(args?: SelectSubset<T, mentor_meeting_discussion_pointsFindFirstArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_discussion_points that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_discussion_pointsFindFirstOrThrowArgs} args - Arguments to find a Mentor_meeting_discussion_points
+     * @example
+     * // Get one Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_meeting_discussion_pointsFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_meeting_discussion_pointsFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_meeting_discussion_points that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_discussion_pointsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findMany()
+     * 
+     * // Get first 10 Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_meeting_discussion_pointsWithIdOnly = await prisma.mentor_meeting_discussion_points.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_meeting_discussion_pointsFindManyArgs>(args?: SelectSubset<T, mentor_meeting_discussion_pointsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_meeting_discussion_points.
+     * @param {mentor_meeting_discussion_pointsCreateArgs} args - Arguments to create a Mentor_meeting_discussion_points.
+     * @example
+     * // Create one Mentor_meeting_discussion_points
+     * const Mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.create({
+     *   data: {
+     *     // ... data to create a Mentor_meeting_discussion_points
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_meeting_discussion_pointsCreateArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsCreateArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_meeting_discussion_points.
+     * @param {mentor_meeting_discussion_pointsCreateManyArgs} args - Arguments to create many Mentor_meeting_discussion_points.
+     * @example
+     * // Create many Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_meeting_discussion_pointsCreateManyArgs>(args?: SelectSubset<T, mentor_meeting_discussion_pointsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_meeting_discussion_points and returns the data saved in the database.
+     * @param {mentor_meeting_discussion_pointsCreateManyAndReturnArgs} args - Arguments to create many Mentor_meeting_discussion_points.
+     * @example
+     * // Create many Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_meeting_discussion_points and only return the `id`
+     * const mentor_meeting_discussion_pointsWithIdOnly = await prisma.mentor_meeting_discussion_points.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_meeting_discussion_pointsCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_meeting_discussion_pointsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_meeting_discussion_points.
+     * @param {mentor_meeting_discussion_pointsDeleteArgs} args - Arguments to delete one Mentor_meeting_discussion_points.
+     * @example
+     * // Delete one Mentor_meeting_discussion_points
+     * const Mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_meeting_discussion_points
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_meeting_discussion_pointsDeleteArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsDeleteArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_meeting_discussion_points.
+     * @param {mentor_meeting_discussion_pointsUpdateArgs} args - Arguments to update one Mentor_meeting_discussion_points.
+     * @example
+     * // Update one Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_meeting_discussion_pointsUpdateArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsUpdateArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_meeting_discussion_points.
+     * @param {mentor_meeting_discussion_pointsDeleteManyArgs} args - Arguments to filter Mentor_meeting_discussion_points to delete.
+     * @example
+     * // Delete a few Mentor_meeting_discussion_points
+     * const { count } = await prisma.mentor_meeting_discussion_points.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_meeting_discussion_pointsDeleteManyArgs>(args?: SelectSubset<T, mentor_meeting_discussion_pointsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_discussion_points.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_discussion_pointsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_meeting_discussion_pointsUpdateManyArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_discussion_points and returns the data updated in the database.
+     * @param {mentor_meeting_discussion_pointsUpdateManyAndReturnArgs} args - Arguments to update many Mentor_meeting_discussion_points.
+     * @example
+     * // Update many Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_meeting_discussion_points and only return the `id`
+     * const mentor_meeting_discussion_pointsWithIdOnly = await prisma.mentor_meeting_discussion_points.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_meeting_discussion_pointsUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_meeting_discussion_points.
+     * @param {mentor_meeting_discussion_pointsUpsertArgs} args - Arguments to update or create a Mentor_meeting_discussion_points.
+     * @example
+     * // Update or create a Mentor_meeting_discussion_points
+     * const mentor_meeting_discussion_points = await prisma.mentor_meeting_discussion_points.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_meeting_discussion_points
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_discussion_points we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_meeting_discussion_pointsUpsertArgs>(args: SelectSubset<T, mentor_meeting_discussion_pointsUpsertArgs<ExtArgs>>): Prisma__mentor_meeting_discussion_pointsClient<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_meeting_discussion_points.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_discussion_pointsCountArgs} args - Arguments to filter Mentor_meeting_discussion_points to count.
+     * @example
+     * // Count the number of Mentor_meeting_discussion_points
+     * const count = await prisma.mentor_meeting_discussion_points.count({
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_discussion_points we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_meeting_discussion_pointsCountArgs>(
+      args?: Subset<T, mentor_meeting_discussion_pointsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_meeting_discussion_pointsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_meeting_discussion_points.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_meeting_discussion_pointsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_meeting_discussion_pointsAggregateArgs>(args: Subset<T, Mentor_meeting_discussion_pointsAggregateArgs>): Prisma.PrismaPromise<GetMentor_meeting_discussion_pointsAggregateType<T>>
+
+    /**
+     * Group by Mentor_meeting_discussion_points.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_discussion_pointsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_meeting_discussion_pointsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_meeting_discussion_pointsGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_meeting_discussion_pointsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_meeting_discussion_pointsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_meeting_discussion_pointsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_meeting_discussion_points model
+   */
+  readonly fields: mentor_meeting_discussion_pointsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_meeting_discussion_points.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_meeting_discussion_pointsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    mentor_meetings<T extends mentor_meetingsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetingsDefaultArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_meeting_discussion_points model
+   */
+  interface mentor_meeting_discussion_pointsFieldRefs {
+    readonly id: FieldRef<"mentor_meeting_discussion_points", 'String'>
+    readonly meetingId: FieldRef<"mentor_meeting_discussion_points", 'String'>
+    readonly content: FieldRef<"mentor_meeting_discussion_points", 'String'>
+    readonly position: FieldRef<"mentor_meeting_discussion_points", 'Int'>
+    readonly createdAt: FieldRef<"mentor_meeting_discussion_points", 'DateTime'>
+    readonly updatedAt: FieldRef<"mentor_meeting_discussion_points", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_meeting_discussion_points findUnique
+   */
+  export type mentor_meeting_discussion_pointsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_discussion_points to fetch.
+     */
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_discussion_points findUniqueOrThrow
+   */
+  export type mentor_meeting_discussion_pointsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_discussion_points to fetch.
+     */
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_discussion_points findFirst
+   */
+  export type mentor_meeting_discussion_pointsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_discussion_points to fetch.
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_discussion_points to fetch.
+     */
+    orderBy?: mentor_meeting_discussion_pointsOrderByWithRelationInput | mentor_meeting_discussion_pointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_discussion_points.
+     */
+    cursor?: mentor_meeting_discussion_pointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_discussion_points from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_discussion_points.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_discussion_points.
+     */
+    distinct?: Mentor_meeting_discussion_pointsScalarFieldEnum | Mentor_meeting_discussion_pointsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_discussion_points findFirstOrThrow
+   */
+  export type mentor_meeting_discussion_pointsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_discussion_points to fetch.
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_discussion_points to fetch.
+     */
+    orderBy?: mentor_meeting_discussion_pointsOrderByWithRelationInput | mentor_meeting_discussion_pointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_discussion_points.
+     */
+    cursor?: mentor_meeting_discussion_pointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_discussion_points from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_discussion_points.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_discussion_points.
+     */
+    distinct?: Mentor_meeting_discussion_pointsScalarFieldEnum | Mentor_meeting_discussion_pointsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_discussion_points findMany
+   */
+  export type mentor_meeting_discussion_pointsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_discussion_points to fetch.
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_discussion_points to fetch.
+     */
+    orderBy?: mentor_meeting_discussion_pointsOrderByWithRelationInput | mentor_meeting_discussion_pointsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_meeting_discussion_points.
+     */
+    cursor?: mentor_meeting_discussion_pointsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_discussion_points from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_discussion_points.
+     */
+    skip?: number
+    distinct?: Mentor_meeting_discussion_pointsScalarFieldEnum | Mentor_meeting_discussion_pointsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_discussion_points create
+   */
+  export type mentor_meeting_discussion_pointsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_meeting_discussion_points.
+     */
+    data: XOR<mentor_meeting_discussion_pointsCreateInput, mentor_meeting_discussion_pointsUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_meeting_discussion_points createMany
+   */
+  export type mentor_meeting_discussion_pointsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_meeting_discussion_points.
+     */
+    data: mentor_meeting_discussion_pointsCreateManyInput | mentor_meeting_discussion_pointsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_meeting_discussion_points createManyAndReturn
+   */
+  export type mentor_meeting_discussion_pointsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_meeting_discussion_points.
+     */
+    data: mentor_meeting_discussion_pointsCreateManyInput | mentor_meeting_discussion_pointsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_discussion_points update
+   */
+  export type mentor_meeting_discussion_pointsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_meeting_discussion_points.
+     */
+    data: XOR<mentor_meeting_discussion_pointsUpdateInput, mentor_meeting_discussion_pointsUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_meeting_discussion_points to update.
+     */
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_discussion_points updateMany
+   */
+  export type mentor_meeting_discussion_pointsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_meeting_discussion_points.
+     */
+    data: XOR<mentor_meeting_discussion_pointsUpdateManyMutationInput, mentor_meeting_discussion_pointsUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_discussion_points to update
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * Limit how many mentor_meeting_discussion_points to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_discussion_points updateManyAndReturn
+   */
+  export type mentor_meeting_discussion_pointsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_meeting_discussion_points.
+     */
+    data: XOR<mentor_meeting_discussion_pointsUpdateManyMutationInput, mentor_meeting_discussion_pointsUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_discussion_points to update
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * Limit how many mentor_meeting_discussion_points to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_discussion_points upsert
+   */
+  export type mentor_meeting_discussion_pointsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_meeting_discussion_points to update in case it exists.
+     */
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+    /**
+     * In case the mentor_meeting_discussion_points found by the `where` argument doesn't exist, create a new mentor_meeting_discussion_points with this data.
+     */
+    create: XOR<mentor_meeting_discussion_pointsCreateInput, mentor_meeting_discussion_pointsUncheckedCreateInput>
+    /**
+     * In case the mentor_meeting_discussion_points was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_meeting_discussion_pointsUpdateInput, mentor_meeting_discussion_pointsUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_meeting_discussion_points delete
+   */
+  export type mentor_meeting_discussion_pointsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_meeting_discussion_points to delete.
+     */
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_discussion_points deleteMany
+   */
+  export type mentor_meeting_discussion_pointsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_discussion_points to delete
+     */
+    where?: mentor_meeting_discussion_pointsWhereInput
+    /**
+     * Limit how many mentor_meeting_discussion_points to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_discussion_points without action
+   */
+  export type mentor_meeting_discussion_pointsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model mentor_meeting_feedback
+   */
+
+  export type AggregateMentor_meeting_feedback = {
+    _count: Mentor_meeting_feedbackCountAggregateOutputType | null
+    _avg: Mentor_meeting_feedbackAvgAggregateOutputType | null
+    _sum: Mentor_meeting_feedbackSumAggregateOutputType | null
+    _min: Mentor_meeting_feedbackMinAggregateOutputType | null
+    _max: Mentor_meeting_feedbackMaxAggregateOutputType | null
+  }
+
+  export type Mentor_meeting_feedbackAvgAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type Mentor_meeting_feedbackSumAggregateOutputType = {
+    rating: number | null
+  }
+
+  export type Mentor_meeting_feedbackMinAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    mentorTeacherId: string | null
+    rating: number | null
+    feedback: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_feedbackMaxAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    mentorTeacherId: string | null
+    rating: number | null
+    feedback: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_feedbackCountAggregateOutputType = {
+    id: number
+    meetingId: number
+    mentorTeacherId: number
+    rating: number
+    feedback: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Mentor_meeting_feedbackAvgAggregateInputType = {
+    rating?: true
+  }
+
+  export type Mentor_meeting_feedbackSumAggregateInputType = {
+    rating?: true
+  }
+
+  export type Mentor_meeting_feedbackMinAggregateInputType = {
+    id?: true
+    meetingId?: true
+    mentorTeacherId?: true
+    rating?: true
+    feedback?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_feedbackMaxAggregateInputType = {
+    id?: true
+    meetingId?: true
+    mentorTeacherId?: true
+    rating?: true
+    feedback?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_feedbackCountAggregateInputType = {
+    id?: true
+    meetingId?: true
+    mentorTeacherId?: true
+    rating?: true
+    feedback?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Mentor_meeting_feedbackAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_feedback to aggregate.
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_feedbacks to fetch.
+     */
+    orderBy?: mentor_meeting_feedbackOrderByWithRelationInput | mentor_meeting_feedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_meeting_feedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_feedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_feedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_meeting_feedbacks
+    **/
+    _count?: true | Mentor_meeting_feedbackCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Mentor_meeting_feedbackAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Mentor_meeting_feedbackSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_meeting_feedbackMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_meeting_feedbackMaxAggregateInputType
+  }
+
+  export type GetMentor_meeting_feedbackAggregateType<T extends Mentor_meeting_feedbackAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_meeting_feedback]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_meeting_feedback[P]>
+      : GetScalarType<T[P], AggregateMentor_meeting_feedback[P]>
+  }
+
+
+
+
+  export type mentor_meeting_feedbackGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_feedbackWhereInput
+    orderBy?: mentor_meeting_feedbackOrderByWithAggregationInput | mentor_meeting_feedbackOrderByWithAggregationInput[]
+    by: Mentor_meeting_feedbackScalarFieldEnum[] | Mentor_meeting_feedbackScalarFieldEnum
+    having?: mentor_meeting_feedbackScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_meeting_feedbackCountAggregateInputType | true
+    _avg?: Mentor_meeting_feedbackAvgAggregateInputType
+    _sum?: Mentor_meeting_feedbackSumAggregateInputType
+    _min?: Mentor_meeting_feedbackMinAggregateInputType
+    _max?: Mentor_meeting_feedbackMaxAggregateInputType
+  }
+
+  export type Mentor_meeting_feedbackGroupByOutputType = {
+    id: string
+    meetingId: string
+    mentorTeacherId: string
+    rating: number
+    feedback: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Mentor_meeting_feedbackCountAggregateOutputType | null
+    _avg: Mentor_meeting_feedbackAvgAggregateOutputType | null
+    _sum: Mentor_meeting_feedbackSumAggregateOutputType | null
+    _min: Mentor_meeting_feedbackMinAggregateOutputType | null
+    _max: Mentor_meeting_feedbackMaxAggregateOutputType | null
+  }
+
+  type GetMentor_meeting_feedbackGroupByPayload<T extends mentor_meeting_feedbackGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_meeting_feedbackGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_meeting_feedbackGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_meeting_feedbackGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_meeting_feedbackGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_meeting_feedbackSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    mentorTeacherId?: boolean
+    rating?: boolean
+    feedback?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_feedback"]>
+
+  export type mentor_meeting_feedbackSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    mentorTeacherId?: boolean
+    rating?: boolean
+    feedback?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_feedback"]>
+
+  export type mentor_meeting_feedbackSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    mentorTeacherId?: boolean
+    rating?: boolean
+    feedback?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_feedback"]>
+
+  export type mentor_meeting_feedbackSelectScalar = {
+    id?: boolean
+    meetingId?: boolean
+    mentorTeacherId?: boolean
+    rating?: boolean
+    feedback?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type mentor_meeting_feedbackOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "meetingId" | "mentorTeacherId" | "rating" | "feedback" | "createdAt" | "updatedAt", ExtArgs["result"]["mentor_meeting_feedback"]>
+  export type mentor_meeting_feedbackInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_feedbackIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_feedbackIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_meeting_feedbackPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_meeting_feedback"
+    objects: {
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>
+      teachers: Prisma.$teachersPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      meetingId: string
+      mentorTeacherId: string
+      rating: number
+      feedback: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mentor_meeting_feedback"]>
+    composites: {}
+  }
+
+  type mentor_meeting_feedbackGetPayload<S extends boolean | null | undefined | mentor_meeting_feedbackDefaultArgs> = $Result.GetResult<Prisma.$mentor_meeting_feedbackPayload, S>
+
+  type mentor_meeting_feedbackCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_meeting_feedbackFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_meeting_feedbackCountAggregateInputType | true
+    }
+
+  export interface mentor_meeting_feedbackDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_meeting_feedback'], meta: { name: 'mentor_meeting_feedback' } }
+    /**
+     * Find zero or one Mentor_meeting_feedback that matches the filter.
+     * @param {mentor_meeting_feedbackFindUniqueArgs} args - Arguments to find a Mentor_meeting_feedback
+     * @example
+     * // Get one Mentor_meeting_feedback
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_meeting_feedbackFindUniqueArgs>(args: SelectSubset<T, mentor_meeting_feedbackFindUniqueArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_meeting_feedback that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_meeting_feedbackFindUniqueOrThrowArgs} args - Arguments to find a Mentor_meeting_feedback
+     * @example
+     * // Get one Mentor_meeting_feedback
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_meeting_feedbackFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_meeting_feedbackFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_feedback that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_feedbackFindFirstArgs} args - Arguments to find a Mentor_meeting_feedback
+     * @example
+     * // Get one Mentor_meeting_feedback
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_meeting_feedbackFindFirstArgs>(args?: SelectSubset<T, mentor_meeting_feedbackFindFirstArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_feedback that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_feedbackFindFirstOrThrowArgs} args - Arguments to find a Mentor_meeting_feedback
+     * @example
+     * // Get one Mentor_meeting_feedback
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_meeting_feedbackFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_meeting_feedbackFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_meeting_feedbacks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_feedbackFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_meeting_feedbacks
+     * const mentor_meeting_feedbacks = await prisma.mentor_meeting_feedback.findMany()
+     * 
+     * // Get first 10 Mentor_meeting_feedbacks
+     * const mentor_meeting_feedbacks = await prisma.mentor_meeting_feedback.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_meeting_feedbackWithIdOnly = await prisma.mentor_meeting_feedback.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_meeting_feedbackFindManyArgs>(args?: SelectSubset<T, mentor_meeting_feedbackFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_meeting_feedback.
+     * @param {mentor_meeting_feedbackCreateArgs} args - Arguments to create a Mentor_meeting_feedback.
+     * @example
+     * // Create one Mentor_meeting_feedback
+     * const Mentor_meeting_feedback = await prisma.mentor_meeting_feedback.create({
+     *   data: {
+     *     // ... data to create a Mentor_meeting_feedback
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_meeting_feedbackCreateArgs>(args: SelectSubset<T, mentor_meeting_feedbackCreateArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_meeting_feedbacks.
+     * @param {mentor_meeting_feedbackCreateManyArgs} args - Arguments to create many Mentor_meeting_feedbacks.
+     * @example
+     * // Create many Mentor_meeting_feedbacks
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_meeting_feedbackCreateManyArgs>(args?: SelectSubset<T, mentor_meeting_feedbackCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_meeting_feedbacks and returns the data saved in the database.
+     * @param {mentor_meeting_feedbackCreateManyAndReturnArgs} args - Arguments to create many Mentor_meeting_feedbacks.
+     * @example
+     * // Create many Mentor_meeting_feedbacks
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_meeting_feedbacks and only return the `id`
+     * const mentor_meeting_feedbackWithIdOnly = await prisma.mentor_meeting_feedback.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_meeting_feedbackCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_meeting_feedbackCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_meeting_feedback.
+     * @param {mentor_meeting_feedbackDeleteArgs} args - Arguments to delete one Mentor_meeting_feedback.
+     * @example
+     * // Delete one Mentor_meeting_feedback
+     * const Mentor_meeting_feedback = await prisma.mentor_meeting_feedback.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_meeting_feedback
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_meeting_feedbackDeleteArgs>(args: SelectSubset<T, mentor_meeting_feedbackDeleteArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_meeting_feedback.
+     * @param {mentor_meeting_feedbackUpdateArgs} args - Arguments to update one Mentor_meeting_feedback.
+     * @example
+     * // Update one Mentor_meeting_feedback
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_meeting_feedbackUpdateArgs>(args: SelectSubset<T, mentor_meeting_feedbackUpdateArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_meeting_feedbacks.
+     * @param {mentor_meeting_feedbackDeleteManyArgs} args - Arguments to filter Mentor_meeting_feedbacks to delete.
+     * @example
+     * // Delete a few Mentor_meeting_feedbacks
+     * const { count } = await prisma.mentor_meeting_feedback.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_meeting_feedbackDeleteManyArgs>(args?: SelectSubset<T, mentor_meeting_feedbackDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_feedbacks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_feedbackUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_meeting_feedbacks
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_meeting_feedbackUpdateManyArgs>(args: SelectSubset<T, mentor_meeting_feedbackUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_feedbacks and returns the data updated in the database.
+     * @param {mentor_meeting_feedbackUpdateManyAndReturnArgs} args - Arguments to update many Mentor_meeting_feedbacks.
+     * @example
+     * // Update many Mentor_meeting_feedbacks
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_meeting_feedbacks and only return the `id`
+     * const mentor_meeting_feedbackWithIdOnly = await prisma.mentor_meeting_feedback.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_meeting_feedbackUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_meeting_feedbackUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_meeting_feedback.
+     * @param {mentor_meeting_feedbackUpsertArgs} args - Arguments to update or create a Mentor_meeting_feedback.
+     * @example
+     * // Update or create a Mentor_meeting_feedback
+     * const mentor_meeting_feedback = await prisma.mentor_meeting_feedback.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_meeting_feedback
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_feedback we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_meeting_feedbackUpsertArgs>(args: SelectSubset<T, mentor_meeting_feedbackUpsertArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_meeting_feedbacks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_feedbackCountArgs} args - Arguments to filter Mentor_meeting_feedbacks to count.
+     * @example
+     * // Count the number of Mentor_meeting_feedbacks
+     * const count = await prisma.mentor_meeting_feedback.count({
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_feedbacks we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_meeting_feedbackCountArgs>(
+      args?: Subset<T, mentor_meeting_feedbackCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_meeting_feedbackCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_meeting_feedback.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_meeting_feedbackAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_meeting_feedbackAggregateArgs>(args: Subset<T, Mentor_meeting_feedbackAggregateArgs>): Prisma.PrismaPromise<GetMentor_meeting_feedbackAggregateType<T>>
+
+    /**
+     * Group by Mentor_meeting_feedback.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_feedbackGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_meeting_feedbackGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_meeting_feedbackGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_meeting_feedbackGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_meeting_feedbackGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_meeting_feedbackGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_meeting_feedback model
+   */
+  readonly fields: mentor_meeting_feedbackFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_meeting_feedback.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_meeting_feedbackClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    mentor_meetings<T extends mentor_meetingsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetingsDefaultArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    teachers<T extends teachersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, teachersDefaultArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_meeting_feedback model
+   */
+  interface mentor_meeting_feedbackFieldRefs {
+    readonly id: FieldRef<"mentor_meeting_feedback", 'String'>
+    readonly meetingId: FieldRef<"mentor_meeting_feedback", 'String'>
+    readonly mentorTeacherId: FieldRef<"mentor_meeting_feedback", 'String'>
+    readonly rating: FieldRef<"mentor_meeting_feedback", 'Int'>
+    readonly feedback: FieldRef<"mentor_meeting_feedback", 'String'>
+    readonly createdAt: FieldRef<"mentor_meeting_feedback", 'DateTime'>
+    readonly updatedAt: FieldRef<"mentor_meeting_feedback", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_meeting_feedback findUnique
+   */
+  export type mentor_meeting_feedbackFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_feedback to fetch.
+     */
+    where: mentor_meeting_feedbackWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_feedback findUniqueOrThrow
+   */
+  export type mentor_meeting_feedbackFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_feedback to fetch.
+     */
+    where: mentor_meeting_feedbackWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_feedback findFirst
+   */
+  export type mentor_meeting_feedbackFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_feedback to fetch.
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_feedbacks to fetch.
+     */
+    orderBy?: mentor_meeting_feedbackOrderByWithRelationInput | mentor_meeting_feedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_feedbacks.
+     */
+    cursor?: mentor_meeting_feedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_feedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_feedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_feedbacks.
+     */
+    distinct?: Mentor_meeting_feedbackScalarFieldEnum | Mentor_meeting_feedbackScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_feedback findFirstOrThrow
+   */
+  export type mentor_meeting_feedbackFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_feedback to fetch.
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_feedbacks to fetch.
+     */
+    orderBy?: mentor_meeting_feedbackOrderByWithRelationInput | mentor_meeting_feedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_feedbacks.
+     */
+    cursor?: mentor_meeting_feedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_feedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_feedbacks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_feedbacks.
+     */
+    distinct?: Mentor_meeting_feedbackScalarFieldEnum | Mentor_meeting_feedbackScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_feedback findMany
+   */
+  export type mentor_meeting_feedbackFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_feedbacks to fetch.
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_feedbacks to fetch.
+     */
+    orderBy?: mentor_meeting_feedbackOrderByWithRelationInput | mentor_meeting_feedbackOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_meeting_feedbacks.
+     */
+    cursor?: mentor_meeting_feedbackWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_feedbacks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_feedbacks.
+     */
+    skip?: number
+    distinct?: Mentor_meeting_feedbackScalarFieldEnum | Mentor_meeting_feedbackScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_feedback create
+   */
+  export type mentor_meeting_feedbackCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_meeting_feedback.
+     */
+    data: XOR<mentor_meeting_feedbackCreateInput, mentor_meeting_feedbackUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_meeting_feedback createMany
+   */
+  export type mentor_meeting_feedbackCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_meeting_feedbacks.
+     */
+    data: mentor_meeting_feedbackCreateManyInput | mentor_meeting_feedbackCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_meeting_feedback createManyAndReturn
+   */
+  export type mentor_meeting_feedbackCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_meeting_feedbacks.
+     */
+    data: mentor_meeting_feedbackCreateManyInput | mentor_meeting_feedbackCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_feedback update
+   */
+  export type mentor_meeting_feedbackUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_meeting_feedback.
+     */
+    data: XOR<mentor_meeting_feedbackUpdateInput, mentor_meeting_feedbackUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_meeting_feedback to update.
+     */
+    where: mentor_meeting_feedbackWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_feedback updateMany
+   */
+  export type mentor_meeting_feedbackUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_meeting_feedbacks.
+     */
+    data: XOR<mentor_meeting_feedbackUpdateManyMutationInput, mentor_meeting_feedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_feedbacks to update
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * Limit how many mentor_meeting_feedbacks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_feedback updateManyAndReturn
+   */
+  export type mentor_meeting_feedbackUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_meeting_feedbacks.
+     */
+    data: XOR<mentor_meeting_feedbackUpdateManyMutationInput, mentor_meeting_feedbackUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_feedbacks to update
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * Limit how many mentor_meeting_feedbacks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_feedback upsert
+   */
+  export type mentor_meeting_feedbackUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_meeting_feedback to update in case it exists.
+     */
+    where: mentor_meeting_feedbackWhereUniqueInput
+    /**
+     * In case the mentor_meeting_feedback found by the `where` argument doesn't exist, create a new mentor_meeting_feedback with this data.
+     */
+    create: XOR<mentor_meeting_feedbackCreateInput, mentor_meeting_feedbackUncheckedCreateInput>
+    /**
+     * In case the mentor_meeting_feedback was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_meeting_feedbackUpdateInput, mentor_meeting_feedbackUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_meeting_feedback delete
+   */
+  export type mentor_meeting_feedbackDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_meeting_feedback to delete.
+     */
+    where: mentor_meeting_feedbackWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_feedback deleteMany
+   */
+  export type mentor_meeting_feedbackDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_feedbacks to delete
+     */
+    where?: mentor_meeting_feedbackWhereInput
+    /**
+     * Limit how many mentor_meeting_feedbacks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_feedback without action
+   */
+  export type mentor_meeting_feedbackDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model mentor_meeting_notes
+   */
+
+  export type AggregateMentor_meeting_notes = {
+    _count: Mentor_meeting_notesCountAggregateOutputType | null
+    _min: Mentor_meeting_notesMinAggregateOutputType | null
+    _max: Mentor_meeting_notesMaxAggregateOutputType | null
+  }
+
+  export type Mentor_meeting_notesMinAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_notesMaxAggregateOutputType = {
+    id: string | null
+    meetingId: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_notesCountAggregateOutputType = {
+    id: number
+    meetingId: number
+    content: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Mentor_meeting_notesMinAggregateInputType = {
+    id?: true
+    meetingId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_notesMaxAggregateInputType = {
+    id?: true
+    meetingId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_notesCountAggregateInputType = {
+    id?: true
+    meetingId?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Mentor_meeting_notesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_notes to aggregate.
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_notes to fetch.
+     */
+    orderBy?: mentor_meeting_notesOrderByWithRelationInput | mentor_meeting_notesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_meeting_notesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_notes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_notes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_meeting_notes
+    **/
+    _count?: true | Mentor_meeting_notesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_meeting_notesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_meeting_notesMaxAggregateInputType
+  }
+
+  export type GetMentor_meeting_notesAggregateType<T extends Mentor_meeting_notesAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_meeting_notes]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_meeting_notes[P]>
+      : GetScalarType<T[P], AggregateMentor_meeting_notes[P]>
+  }
+
+
+
+
+  export type mentor_meeting_notesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_notesWhereInput
+    orderBy?: mentor_meeting_notesOrderByWithAggregationInput | mentor_meeting_notesOrderByWithAggregationInput[]
+    by: Mentor_meeting_notesScalarFieldEnum[] | Mentor_meeting_notesScalarFieldEnum
+    having?: mentor_meeting_notesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_meeting_notesCountAggregateInputType | true
+    _min?: Mentor_meeting_notesMinAggregateInputType
+    _max?: Mentor_meeting_notesMaxAggregateInputType
+  }
+
+  export type Mentor_meeting_notesGroupByOutputType = {
+    id: string
+    meetingId: string
+    content: string
+    createdAt: Date
+    updatedAt: Date
+    _count: Mentor_meeting_notesCountAggregateOutputType | null
+    _min: Mentor_meeting_notesMinAggregateOutputType | null
+    _max: Mentor_meeting_notesMaxAggregateOutputType | null
+  }
+
+  type GetMentor_meeting_notesGroupByPayload<T extends mentor_meeting_notesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_meeting_notesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_meeting_notesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_meeting_notesGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_meeting_notesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_meeting_notesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_notes"]>
+
+  export type mentor_meeting_notesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_notes"]>
+
+  export type mentor_meeting_notesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_notes"]>
+
+  export type mentor_meeting_notesSelectScalar = {
+    id?: boolean
+    meetingId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type mentor_meeting_notesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "meetingId" | "content" | "createdAt" | "updatedAt", ExtArgs["result"]["mentor_meeting_notes"]>
+  export type mentor_meeting_notesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_notesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_notesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetingsDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_meeting_notesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_meeting_notes"
+    objects: {
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      meetingId: string
+      content: string
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mentor_meeting_notes"]>
+    composites: {}
+  }
+
+  type mentor_meeting_notesGetPayload<S extends boolean | null | undefined | mentor_meeting_notesDefaultArgs> = $Result.GetResult<Prisma.$mentor_meeting_notesPayload, S>
+
+  type mentor_meeting_notesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_meeting_notesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_meeting_notesCountAggregateInputType | true
+    }
+
+  export interface mentor_meeting_notesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_meeting_notes'], meta: { name: 'mentor_meeting_notes' } }
+    /**
+     * Find zero or one Mentor_meeting_notes that matches the filter.
+     * @param {mentor_meeting_notesFindUniqueArgs} args - Arguments to find a Mentor_meeting_notes
+     * @example
+     * // Get one Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_meeting_notesFindUniqueArgs>(args: SelectSubset<T, mentor_meeting_notesFindUniqueArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_meeting_notes that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_meeting_notesFindUniqueOrThrowArgs} args - Arguments to find a Mentor_meeting_notes
+     * @example
+     * // Get one Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_meeting_notesFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_meeting_notesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_notes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_notesFindFirstArgs} args - Arguments to find a Mentor_meeting_notes
+     * @example
+     * // Get one Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_meeting_notesFindFirstArgs>(args?: SelectSubset<T, mentor_meeting_notesFindFirstArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_notes that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_notesFindFirstOrThrowArgs} args - Arguments to find a Mentor_meeting_notes
+     * @example
+     * // Get one Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_meeting_notesFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_meeting_notesFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_meeting_notes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_notesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findMany()
+     * 
+     * // Get first 10 Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_meeting_notesWithIdOnly = await prisma.mentor_meeting_notes.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_meeting_notesFindManyArgs>(args?: SelectSubset<T, mentor_meeting_notesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_meeting_notes.
+     * @param {mentor_meeting_notesCreateArgs} args - Arguments to create a Mentor_meeting_notes.
+     * @example
+     * // Create one Mentor_meeting_notes
+     * const Mentor_meeting_notes = await prisma.mentor_meeting_notes.create({
+     *   data: {
+     *     // ... data to create a Mentor_meeting_notes
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_meeting_notesCreateArgs>(args: SelectSubset<T, mentor_meeting_notesCreateArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_meeting_notes.
+     * @param {mentor_meeting_notesCreateManyArgs} args - Arguments to create many Mentor_meeting_notes.
+     * @example
+     * // Create many Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_meeting_notesCreateManyArgs>(args?: SelectSubset<T, mentor_meeting_notesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_meeting_notes and returns the data saved in the database.
+     * @param {mentor_meeting_notesCreateManyAndReturnArgs} args - Arguments to create many Mentor_meeting_notes.
+     * @example
+     * // Create many Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_meeting_notes and only return the `id`
+     * const mentor_meeting_notesWithIdOnly = await prisma.mentor_meeting_notes.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_meeting_notesCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_meeting_notesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_meeting_notes.
+     * @param {mentor_meeting_notesDeleteArgs} args - Arguments to delete one Mentor_meeting_notes.
+     * @example
+     * // Delete one Mentor_meeting_notes
+     * const Mentor_meeting_notes = await prisma.mentor_meeting_notes.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_meeting_notes
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_meeting_notesDeleteArgs>(args: SelectSubset<T, mentor_meeting_notesDeleteArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_meeting_notes.
+     * @param {mentor_meeting_notesUpdateArgs} args - Arguments to update one Mentor_meeting_notes.
+     * @example
+     * // Update one Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_meeting_notesUpdateArgs>(args: SelectSubset<T, mentor_meeting_notesUpdateArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_meeting_notes.
+     * @param {mentor_meeting_notesDeleteManyArgs} args - Arguments to filter Mentor_meeting_notes to delete.
+     * @example
+     * // Delete a few Mentor_meeting_notes
+     * const { count } = await prisma.mentor_meeting_notes.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_meeting_notesDeleteManyArgs>(args?: SelectSubset<T, mentor_meeting_notesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_notes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_notesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_meeting_notesUpdateManyArgs>(args: SelectSubset<T, mentor_meeting_notesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_notes and returns the data updated in the database.
+     * @param {mentor_meeting_notesUpdateManyAndReturnArgs} args - Arguments to update many Mentor_meeting_notes.
+     * @example
+     * // Update many Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_meeting_notes and only return the `id`
+     * const mentor_meeting_notesWithIdOnly = await prisma.mentor_meeting_notes.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_meeting_notesUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_meeting_notesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_meeting_notes.
+     * @param {mentor_meeting_notesUpsertArgs} args - Arguments to update or create a Mentor_meeting_notes.
+     * @example
+     * // Update or create a Mentor_meeting_notes
+     * const mentor_meeting_notes = await prisma.mentor_meeting_notes.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_meeting_notes
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_notes we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_meeting_notesUpsertArgs>(args: SelectSubset<T, mentor_meeting_notesUpsertArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_meeting_notes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_notesCountArgs} args - Arguments to filter Mentor_meeting_notes to count.
+     * @example
+     * // Count the number of Mentor_meeting_notes
+     * const count = await prisma.mentor_meeting_notes.count({
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_notes we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_meeting_notesCountArgs>(
+      args?: Subset<T, mentor_meeting_notesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_meeting_notesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_meeting_notes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_meeting_notesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_meeting_notesAggregateArgs>(args: Subset<T, Mentor_meeting_notesAggregateArgs>): Prisma.PrismaPromise<GetMentor_meeting_notesAggregateType<T>>
+
+    /**
+     * Group by Mentor_meeting_notes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_notesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_meeting_notesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_meeting_notesGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_meeting_notesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_meeting_notesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_meeting_notesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_meeting_notes model
+   */
+  readonly fields: mentor_meeting_notesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_meeting_notes.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_meeting_notesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    mentor_meetings<T extends mentor_meetingsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetingsDefaultArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_meeting_notes model
+   */
+  interface mentor_meeting_notesFieldRefs {
+    readonly id: FieldRef<"mentor_meeting_notes", 'String'>
+    readonly meetingId: FieldRef<"mentor_meeting_notes", 'String'>
+    readonly content: FieldRef<"mentor_meeting_notes", 'String'>
+    readonly createdAt: FieldRef<"mentor_meeting_notes", 'DateTime'>
+    readonly updatedAt: FieldRef<"mentor_meeting_notes", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_meeting_notes findUnique
+   */
+  export type mentor_meeting_notesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_notes to fetch.
+     */
+    where: mentor_meeting_notesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_notes findUniqueOrThrow
+   */
+  export type mentor_meeting_notesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_notes to fetch.
+     */
+    where: mentor_meeting_notesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_notes findFirst
+   */
+  export type mentor_meeting_notesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_notes to fetch.
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_notes to fetch.
+     */
+    orderBy?: mentor_meeting_notesOrderByWithRelationInput | mentor_meeting_notesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_notes.
+     */
+    cursor?: mentor_meeting_notesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_notes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_notes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_notes.
+     */
+    distinct?: Mentor_meeting_notesScalarFieldEnum | Mentor_meeting_notesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_notes findFirstOrThrow
+   */
+  export type mentor_meeting_notesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_notes to fetch.
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_notes to fetch.
+     */
+    orderBy?: mentor_meeting_notesOrderByWithRelationInput | mentor_meeting_notesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_notes.
+     */
+    cursor?: mentor_meeting_notesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_notes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_notes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_notes.
+     */
+    distinct?: Mentor_meeting_notesScalarFieldEnum | Mentor_meeting_notesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_notes findMany
+   */
+  export type mentor_meeting_notesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_notes to fetch.
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_notes to fetch.
+     */
+    orderBy?: mentor_meeting_notesOrderByWithRelationInput | mentor_meeting_notesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_meeting_notes.
+     */
+    cursor?: mentor_meeting_notesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_notes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_notes.
+     */
+    skip?: number
+    distinct?: Mentor_meeting_notesScalarFieldEnum | Mentor_meeting_notesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_notes create
+   */
+  export type mentor_meeting_notesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_meeting_notes.
+     */
+    data: XOR<mentor_meeting_notesCreateInput, mentor_meeting_notesUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_meeting_notes createMany
+   */
+  export type mentor_meeting_notesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_meeting_notes.
+     */
+    data: mentor_meeting_notesCreateManyInput | mentor_meeting_notesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_meeting_notes createManyAndReturn
+   */
+  export type mentor_meeting_notesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_meeting_notes.
+     */
+    data: mentor_meeting_notesCreateManyInput | mentor_meeting_notesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_notes update
+   */
+  export type mentor_meeting_notesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_meeting_notes.
+     */
+    data: XOR<mentor_meeting_notesUpdateInput, mentor_meeting_notesUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_meeting_notes to update.
+     */
+    where: mentor_meeting_notesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_notes updateMany
+   */
+  export type mentor_meeting_notesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_meeting_notes.
+     */
+    data: XOR<mentor_meeting_notesUpdateManyMutationInput, mentor_meeting_notesUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_notes to update
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * Limit how many mentor_meeting_notes to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_notes updateManyAndReturn
+   */
+  export type mentor_meeting_notesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_meeting_notes.
+     */
+    data: XOR<mentor_meeting_notesUpdateManyMutationInput, mentor_meeting_notesUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_notes to update
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * Limit how many mentor_meeting_notes to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_notes upsert
+   */
+  export type mentor_meeting_notesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_meeting_notes to update in case it exists.
+     */
+    where: mentor_meeting_notesWhereUniqueInput
+    /**
+     * In case the mentor_meeting_notes found by the `where` argument doesn't exist, create a new mentor_meeting_notes with this data.
+     */
+    create: XOR<mentor_meeting_notesCreateInput, mentor_meeting_notesUncheckedCreateInput>
+    /**
+     * In case the mentor_meeting_notes was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_meeting_notesUpdateInput, mentor_meeting_notesUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_meeting_notes delete
+   */
+  export type mentor_meeting_notesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_meeting_notes to delete.
+     */
+    where: mentor_meeting_notesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_notes deleteMany
+   */
+  export type mentor_meeting_notesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_notes to delete
+     */
+    where?: mentor_meeting_notesWhereInput
+    /**
+     * Limit how many mentor_meeting_notes to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_notes without action
+   */
+  export type mentor_meeting_notesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model mentor_meeting_series
+   */
+
+  export type AggregateMentor_meeting_series = {
+    _count: Mentor_meeting_seriesCountAggregateOutputType | null
+    _avg: Mentor_meeting_seriesAvgAggregateOutputType | null
+    _sum: Mentor_meeting_seriesSumAggregateOutputType | null
+    _min: Mentor_meeting_seriesMinAggregateOutputType | null
+    _max: Mentor_meeting_seriesMaxAggregateOutputType | null
+  }
+
+  export type Mentor_meeting_seriesAvgAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type Mentor_meeting_seriesSumAggregateOutputType = {
+    dayOfWeek: number | null
+  }
+
+  export type Mentor_meeting_seriesMinAggregateOutputType = {
+    id: string | null
+    mentorTeacherId: string | null
+    studentId: string | null
+    frequency: string | null
+    startDate: Date | null
+    endDate: Date | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    timezone: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_seriesMaxAggregateOutputType = {
+    id: string | null
+    mentorTeacherId: string | null
+    studentId: string | null
+    frequency: string | null
+    startDate: Date | null
+    endDate: Date | null
+    dayOfWeek: number | null
+    startTime: string | null
+    endTime: string | null
+    timezone: string | null
+    isActive: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meeting_seriesCountAggregateOutputType = {
+    id: number
+    mentorTeacherId: number
+    studentId: number
+    frequency: number
+    startDate: number
+    endDate: number
+    dayOfWeek: number
+    startTime: number
+    endTime: number
+    timezone: number
+    isActive: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Mentor_meeting_seriesAvgAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type Mentor_meeting_seriesSumAggregateInputType = {
+    dayOfWeek?: true
+  }
+
+  export type Mentor_meeting_seriesMinAggregateInputType = {
+    id?: true
+    mentorTeacherId?: true
+    studentId?: true
+    frequency?: true
+    startDate?: true
+    endDate?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    timezone?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_seriesMaxAggregateInputType = {
+    id?: true
+    mentorTeacherId?: true
+    studentId?: true
+    frequency?: true
+    startDate?: true
+    endDate?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    timezone?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meeting_seriesCountAggregateInputType = {
+    id?: true
+    mentorTeacherId?: true
+    studentId?: true
+    frequency?: true
+    startDate?: true
+    endDate?: true
+    dayOfWeek?: true
+    startTime?: true
+    endTime?: true
+    timezone?: true
+    isActive?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Mentor_meeting_seriesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_series to aggregate.
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_series to fetch.
+     */
+    orderBy?: mentor_meeting_seriesOrderByWithRelationInput | mentor_meeting_seriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_meeting_seriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_series from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_series.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_meeting_series
+    **/
+    _count?: true | Mentor_meeting_seriesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Mentor_meeting_seriesAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Mentor_meeting_seriesSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_meeting_seriesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_meeting_seriesMaxAggregateInputType
+  }
+
+  export type GetMentor_meeting_seriesAggregateType<T extends Mentor_meeting_seriesAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_meeting_series]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_meeting_series[P]>
+      : GetScalarType<T[P], AggregateMentor_meeting_series[P]>
+  }
+
+
+
+
+  export type mentor_meeting_seriesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meeting_seriesWhereInput
+    orderBy?: mentor_meeting_seriesOrderByWithAggregationInput | mentor_meeting_seriesOrderByWithAggregationInput[]
+    by: Mentor_meeting_seriesScalarFieldEnum[] | Mentor_meeting_seriesScalarFieldEnum
+    having?: mentor_meeting_seriesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_meeting_seriesCountAggregateInputType | true
+    _avg?: Mentor_meeting_seriesAvgAggregateInputType
+    _sum?: Mentor_meeting_seriesSumAggregateInputType
+    _min?: Mentor_meeting_seriesMinAggregateInputType
+    _max?: Mentor_meeting_seriesMaxAggregateInputType
+  }
+
+  export type Mentor_meeting_seriesGroupByOutputType = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    frequency: string
+    startDate: Date
+    endDate: Date | null
+    dayOfWeek: number | null
+    startTime: string
+    endTime: string
+    timezone: string
+    isActive: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: Mentor_meeting_seriesCountAggregateOutputType | null
+    _avg: Mentor_meeting_seriesAvgAggregateOutputType | null
+    _sum: Mentor_meeting_seriesSumAggregateOutputType | null
+    _min: Mentor_meeting_seriesMinAggregateOutputType | null
+    _max: Mentor_meeting_seriesMaxAggregateOutputType | null
+  }
+
+  type GetMentor_meeting_seriesGroupByPayload<T extends mentor_meeting_seriesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_meeting_seriesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_meeting_seriesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_meeting_seriesGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_meeting_seriesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_meeting_seriesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    frequency?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    timezone?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+    mentor_meetings?: boolean | mentor_meeting_series$mentor_meetingsArgs<ExtArgs>
+    _count?: boolean | Mentor_meeting_seriesCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_series"]>
+
+  export type mentor_meeting_seriesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    frequency?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    timezone?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_series"]>
+
+  export type mentor_meeting_seriesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    frequency?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    timezone?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meeting_series"]>
+
+  export type mentor_meeting_seriesSelectScalar = {
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    frequency?: boolean
+    startDate?: boolean
+    endDate?: boolean
+    dayOfWeek?: boolean
+    startTime?: boolean
+    endTime?: boolean
+    timezone?: boolean
+    isActive?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type mentor_meeting_seriesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mentorTeacherId" | "studentId" | "frequency" | "startDate" | "endDate" | "dayOfWeek" | "startTime" | "endTime" | "timezone" | "isActive" | "createdAt" | "updatedAt", ExtArgs["result"]["mentor_meeting_series"]>
+  export type mentor_meeting_seriesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+    mentor_meetings?: boolean | mentor_meeting_series$mentor_meetingsArgs<ExtArgs>
+    _count?: boolean | Mentor_meeting_seriesCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_seriesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type mentor_meeting_seriesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_meeting_seriesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_meeting_series"
+    objects: {
+      students: Prisma.$studentsPayload<ExtArgs>
+      teachers: Prisma.$teachersPayload<ExtArgs>
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      mentorTeacherId: string
+      studentId: string
+      frequency: string
+      startDate: Date
+      endDate: Date | null
+      dayOfWeek: number | null
+      startTime: string
+      endTime: string
+      timezone: string
+      isActive: boolean
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mentor_meeting_series"]>
+    composites: {}
+  }
+
+  type mentor_meeting_seriesGetPayload<S extends boolean | null | undefined | mentor_meeting_seriesDefaultArgs> = $Result.GetResult<Prisma.$mentor_meeting_seriesPayload, S>
+
+  type mentor_meeting_seriesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_meeting_seriesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_meeting_seriesCountAggregateInputType | true
+    }
+
+  export interface mentor_meeting_seriesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_meeting_series'], meta: { name: 'mentor_meeting_series' } }
+    /**
+     * Find zero or one Mentor_meeting_series that matches the filter.
+     * @param {mentor_meeting_seriesFindUniqueArgs} args - Arguments to find a Mentor_meeting_series
+     * @example
+     * // Get one Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_meeting_seriesFindUniqueArgs>(args: SelectSubset<T, mentor_meeting_seriesFindUniqueArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_meeting_series that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_meeting_seriesFindUniqueOrThrowArgs} args - Arguments to find a Mentor_meeting_series
+     * @example
+     * // Get one Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_meeting_seriesFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_meeting_seriesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_series that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_seriesFindFirstArgs} args - Arguments to find a Mentor_meeting_series
+     * @example
+     * // Get one Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_meeting_seriesFindFirstArgs>(args?: SelectSubset<T, mentor_meeting_seriesFindFirstArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meeting_series that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_seriesFindFirstOrThrowArgs} args - Arguments to find a Mentor_meeting_series
+     * @example
+     * // Get one Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_meeting_seriesFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_meeting_seriesFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_meeting_series that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_seriesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.findMany()
+     * 
+     * // Get first 10 Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_meeting_seriesWithIdOnly = await prisma.mentor_meeting_series.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_meeting_seriesFindManyArgs>(args?: SelectSubset<T, mentor_meeting_seriesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_meeting_series.
+     * @param {mentor_meeting_seriesCreateArgs} args - Arguments to create a Mentor_meeting_series.
+     * @example
+     * // Create one Mentor_meeting_series
+     * const Mentor_meeting_series = await prisma.mentor_meeting_series.create({
+     *   data: {
+     *     // ... data to create a Mentor_meeting_series
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_meeting_seriesCreateArgs>(args: SelectSubset<T, mentor_meeting_seriesCreateArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_meeting_series.
+     * @param {mentor_meeting_seriesCreateManyArgs} args - Arguments to create many Mentor_meeting_series.
+     * @example
+     * // Create many Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_meeting_seriesCreateManyArgs>(args?: SelectSubset<T, mentor_meeting_seriesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_meeting_series and returns the data saved in the database.
+     * @param {mentor_meeting_seriesCreateManyAndReturnArgs} args - Arguments to create many Mentor_meeting_series.
+     * @example
+     * // Create many Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_meeting_series and only return the `id`
+     * const mentor_meeting_seriesWithIdOnly = await prisma.mentor_meeting_series.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_meeting_seriesCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_meeting_seriesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_meeting_series.
+     * @param {mentor_meeting_seriesDeleteArgs} args - Arguments to delete one Mentor_meeting_series.
+     * @example
+     * // Delete one Mentor_meeting_series
+     * const Mentor_meeting_series = await prisma.mentor_meeting_series.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_meeting_series
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_meeting_seriesDeleteArgs>(args: SelectSubset<T, mentor_meeting_seriesDeleteArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_meeting_series.
+     * @param {mentor_meeting_seriesUpdateArgs} args - Arguments to update one Mentor_meeting_series.
+     * @example
+     * // Update one Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_meeting_seriesUpdateArgs>(args: SelectSubset<T, mentor_meeting_seriesUpdateArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_meeting_series.
+     * @param {mentor_meeting_seriesDeleteManyArgs} args - Arguments to filter Mentor_meeting_series to delete.
+     * @example
+     * // Delete a few Mentor_meeting_series
+     * const { count } = await prisma.mentor_meeting_series.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_meeting_seriesDeleteManyArgs>(args?: SelectSubset<T, mentor_meeting_seriesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_series.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_seriesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_meeting_seriesUpdateManyArgs>(args: SelectSubset<T, mentor_meeting_seriesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meeting_series and returns the data updated in the database.
+     * @param {mentor_meeting_seriesUpdateManyAndReturnArgs} args - Arguments to update many Mentor_meeting_series.
+     * @example
+     * // Update many Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_meeting_series and only return the `id`
+     * const mentor_meeting_seriesWithIdOnly = await prisma.mentor_meeting_series.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_meeting_seriesUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_meeting_seriesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_meeting_series.
+     * @param {mentor_meeting_seriesUpsertArgs} args - Arguments to update or create a Mentor_meeting_series.
+     * @example
+     * // Update or create a Mentor_meeting_series
+     * const mentor_meeting_series = await prisma.mentor_meeting_series.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_meeting_series
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_series we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_meeting_seriesUpsertArgs>(args: SelectSubset<T, mentor_meeting_seriesUpsertArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_meeting_series.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_seriesCountArgs} args - Arguments to filter Mentor_meeting_series to count.
+     * @example
+     * // Count the number of Mentor_meeting_series
+     * const count = await prisma.mentor_meeting_series.count({
+     *   where: {
+     *     // ... the filter for the Mentor_meeting_series we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_meeting_seriesCountArgs>(
+      args?: Subset<T, mentor_meeting_seriesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_meeting_seriesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_meeting_series.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_meeting_seriesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_meeting_seriesAggregateArgs>(args: Subset<T, Mentor_meeting_seriesAggregateArgs>): Prisma.PrismaPromise<GetMentor_meeting_seriesAggregateType<T>>
+
+    /**
+     * Group by Mentor_meeting_series.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meeting_seriesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_meeting_seriesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_meeting_seriesGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_meeting_seriesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_meeting_seriesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_meeting_seriesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_meeting_series model
+   */
+  readonly fields: mentor_meeting_seriesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_meeting_series.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_meeting_seriesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    students<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    teachers<T extends teachersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, teachersDefaultArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    mentor_meetings<T extends mentor_meeting_series$mentor_meetingsArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meeting_series$mentor_meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_meeting_series model
+   */
+  interface mentor_meeting_seriesFieldRefs {
+    readonly id: FieldRef<"mentor_meeting_series", 'String'>
+    readonly mentorTeacherId: FieldRef<"mentor_meeting_series", 'String'>
+    readonly studentId: FieldRef<"mentor_meeting_series", 'String'>
+    readonly frequency: FieldRef<"mentor_meeting_series", 'String'>
+    readonly startDate: FieldRef<"mentor_meeting_series", 'DateTime'>
+    readonly endDate: FieldRef<"mentor_meeting_series", 'DateTime'>
+    readonly dayOfWeek: FieldRef<"mentor_meeting_series", 'Int'>
+    readonly startTime: FieldRef<"mentor_meeting_series", 'String'>
+    readonly endTime: FieldRef<"mentor_meeting_series", 'String'>
+    readonly timezone: FieldRef<"mentor_meeting_series", 'String'>
+    readonly isActive: FieldRef<"mentor_meeting_series", 'Boolean'>
+    readonly createdAt: FieldRef<"mentor_meeting_series", 'DateTime'>
+    readonly updatedAt: FieldRef<"mentor_meeting_series", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_meeting_series findUnique
+   */
+  export type mentor_meeting_seriesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_series to fetch.
+     */
+    where: mentor_meeting_seriesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_series findUniqueOrThrow
+   */
+  export type mentor_meeting_seriesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_series to fetch.
+     */
+    where: mentor_meeting_seriesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_series findFirst
+   */
+  export type mentor_meeting_seriesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_series to fetch.
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_series to fetch.
+     */
+    orderBy?: mentor_meeting_seriesOrderByWithRelationInput | mentor_meeting_seriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_series.
+     */
+    cursor?: mentor_meeting_seriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_series from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_series.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_series.
+     */
+    distinct?: Mentor_meeting_seriesScalarFieldEnum | Mentor_meeting_seriesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_series findFirstOrThrow
+   */
+  export type mentor_meeting_seriesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_series to fetch.
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_series to fetch.
+     */
+    orderBy?: mentor_meeting_seriesOrderByWithRelationInput | mentor_meeting_seriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meeting_series.
+     */
+    cursor?: mentor_meeting_seriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_series from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_series.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meeting_series.
+     */
+    distinct?: Mentor_meeting_seriesScalarFieldEnum | Mentor_meeting_seriesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_series findMany
+   */
+  export type mentor_meeting_seriesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meeting_series to fetch.
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meeting_series to fetch.
+     */
+    orderBy?: mentor_meeting_seriesOrderByWithRelationInput | mentor_meeting_seriesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_meeting_series.
+     */
+    cursor?: mentor_meeting_seriesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meeting_series from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meeting_series.
+     */
+    skip?: number
+    distinct?: Mentor_meeting_seriesScalarFieldEnum | Mentor_meeting_seriesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_series create
+   */
+  export type mentor_meeting_seriesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_meeting_series.
+     */
+    data: XOR<mentor_meeting_seriesCreateInput, mentor_meeting_seriesUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_meeting_series createMany
+   */
+  export type mentor_meeting_seriesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_meeting_series.
+     */
+    data: mentor_meeting_seriesCreateManyInput | mentor_meeting_seriesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_meeting_series createManyAndReturn
+   */
+  export type mentor_meeting_seriesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_meeting_series.
+     */
+    data: mentor_meeting_seriesCreateManyInput | mentor_meeting_seriesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_series update
+   */
+  export type mentor_meeting_seriesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_meeting_series.
+     */
+    data: XOR<mentor_meeting_seriesUpdateInput, mentor_meeting_seriesUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_meeting_series to update.
+     */
+    where: mentor_meeting_seriesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_series updateMany
+   */
+  export type mentor_meeting_seriesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_meeting_series.
+     */
+    data: XOR<mentor_meeting_seriesUpdateManyMutationInput, mentor_meeting_seriesUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_series to update
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * Limit how many mentor_meeting_series to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_series updateManyAndReturn
+   */
+  export type mentor_meeting_seriesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_meeting_series.
+     */
+    data: XOR<mentor_meeting_seriesUpdateManyMutationInput, mentor_meeting_seriesUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meeting_series to update
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * Limit how many mentor_meeting_series to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meeting_series upsert
+   */
+  export type mentor_meeting_seriesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_meeting_series to update in case it exists.
+     */
+    where: mentor_meeting_seriesWhereUniqueInput
+    /**
+     * In case the mentor_meeting_series found by the `where` argument doesn't exist, create a new mentor_meeting_series with this data.
+     */
+    create: XOR<mentor_meeting_seriesCreateInput, mentor_meeting_seriesUncheckedCreateInput>
+    /**
+     * In case the mentor_meeting_series was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_meeting_seriesUpdateInput, mentor_meeting_seriesUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_meeting_series delete
+   */
+  export type mentor_meeting_seriesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_meeting_series to delete.
+     */
+    where: mentor_meeting_seriesWhereUniqueInput
+  }
+
+  /**
+   * mentor_meeting_series deleteMany
+   */
+  export type mentor_meeting_seriesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meeting_series to delete
+     */
+    where?: mentor_meeting_seriesWhereInput
+    /**
+     * Limit how many mentor_meeting_series to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meeting_series.mentor_meetings
+   */
+  export type mentor_meeting_series$mentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    where?: mentor_meetingsWhereInput
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    cursor?: mentor_meetingsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meeting_series without action
+   */
+  export type mentor_meeting_seriesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model mentor_meetings
+   */
+
+  export type AggregateMentor_meetings = {
+    _count: Mentor_meetingsCountAggregateOutputType | null
+    _min: Mentor_meetingsMinAggregateOutputType | null
+    _max: Mentor_meetingsMaxAggregateOutputType | null
+  }
+
+  export type Mentor_meetingsMinAggregateOutputType = {
+    id: string | null
+    mentorTeacherId: string | null
+    studentId: string | null
+    seriesId: string | null
+    followUpToMeetingId: string | null
+    title: string | null
+    meetingType: string | null
+    mode: string | null
+    status: string | null
+    priority: string | null
+    startAt: Date | null
+    endAt: Date | null
+    venue: string | null
+    meetingLink: string | null
+    agenda: string | null
+    description: string | null
+    startedAt: Date | null
+    endedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meetingsMaxAggregateOutputType = {
+    id: string | null
+    mentorTeacherId: string | null
+    studentId: string | null
+    seriesId: string | null
+    followUpToMeetingId: string | null
+    title: string | null
+    meetingType: string | null
+    mode: string | null
+    status: string | null
+    priority: string | null
+    startAt: Date | null
+    endAt: Date | null
+    venue: string | null
+    meetingLink: string | null
+    agenda: string | null
+    description: string | null
+    startedAt: Date | null
+    endedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Mentor_meetingsCountAggregateOutputType = {
+    id: number
+    mentorTeacherId: number
+    studentId: number
+    seriesId: number
+    followUpToMeetingId: number
+    title: number
+    meetingType: number
+    mode: number
+    status: number
+    priority: number
+    startAt: number
+    endAt: number
+    venue: number
+    meetingLink: number
+    agenda: number
+    description: number
+    startedAt: number
+    endedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Mentor_meetingsMinAggregateInputType = {
+    id?: true
+    mentorTeacherId?: true
+    studentId?: true
+    seriesId?: true
+    followUpToMeetingId?: true
+    title?: true
+    meetingType?: true
+    mode?: true
+    status?: true
+    priority?: true
+    startAt?: true
+    endAt?: true
+    venue?: true
+    meetingLink?: true
+    agenda?: true
+    description?: true
+    startedAt?: true
+    endedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meetingsMaxAggregateInputType = {
+    id?: true
+    mentorTeacherId?: true
+    studentId?: true
+    seriesId?: true
+    followUpToMeetingId?: true
+    title?: true
+    meetingType?: true
+    mode?: true
+    status?: true
+    priority?: true
+    startAt?: true
+    endAt?: true
+    venue?: true
+    meetingLink?: true
+    agenda?: true
+    description?: true
+    startedAt?: true
+    endedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Mentor_meetingsCountAggregateInputType = {
+    id?: true
+    mentorTeacherId?: true
+    studentId?: true
+    seriesId?: true
+    followUpToMeetingId?: true
+    title?: true
+    meetingType?: true
+    mode?: true
+    status?: true
+    priority?: true
+    startAt?: true
+    endAt?: true
+    venue?: true
+    meetingLink?: true
+    agenda?: true
+    description?: true
+    startedAt?: true
+    endedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Mentor_meetingsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meetings to aggregate.
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meetings to fetch.
+     */
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_meetingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_meetings
+    **/
+    _count?: true | Mentor_meetingsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_meetingsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_meetingsMaxAggregateInputType
+  }
+
+  export type GetMentor_meetingsAggregateType<T extends Mentor_meetingsAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_meetings]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_meetings[P]>
+      : GetScalarType<T[P], AggregateMentor_meetings[P]>
+  }
+
+
+
+
+  export type mentor_meetingsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_meetingsWhereInput
+    orderBy?: mentor_meetingsOrderByWithAggregationInput | mentor_meetingsOrderByWithAggregationInput[]
+    by: Mentor_meetingsScalarFieldEnum[] | Mentor_meetingsScalarFieldEnum
+    having?: mentor_meetingsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_meetingsCountAggregateInputType | true
+    _min?: Mentor_meetingsMinAggregateInputType
+    _max?: Mentor_meetingsMaxAggregateInputType
+  }
+
+  export type Mentor_meetingsGroupByOutputType = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId: string | null
+    followUpToMeetingId: string | null
+    title: string
+    meetingType: string
+    mode: string
+    status: string
+    priority: string
+    startAt: Date
+    endAt: Date
+    venue: string | null
+    meetingLink: string | null
+    agenda: string | null
+    description: string | null
+    startedAt: Date | null
+    endedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Mentor_meetingsCountAggregateOutputType | null
+    _min: Mentor_meetingsMinAggregateOutputType | null
+    _max: Mentor_meetingsMaxAggregateOutputType | null
+  }
+
+  type GetMentor_meetingsGroupByPayload<T extends mentor_meetingsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_meetingsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_meetingsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_meetingsGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_meetingsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_meetingsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    seriesId?: boolean
+    followUpToMeetingId?: boolean
+    title?: boolean
+    meetingType?: boolean
+    mode?: boolean
+    status?: boolean
+    priority?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    venue?: boolean
+    meetingLink?: boolean
+    agenda?: boolean
+    description?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meeting_discussion_points?: boolean | mentor_meetings$mentor_meeting_discussion_pointsArgs<ExtArgs>
+    mentor_meeting_feedback?: boolean | mentor_meetings$mentor_meeting_feedbackArgs<ExtArgs>
+    mentor_meeting_notes?: boolean | mentor_meetings$mentor_meeting_notesArgs<ExtArgs>
+    mentor_meetings?: boolean | mentor_meetings$mentor_meetingsArgs<ExtArgs>
+    other_mentor_meetings?: boolean | mentor_meetings$other_mentor_meetingsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+    _count?: boolean | Mentor_meetingsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meetings"]>
+
+  export type mentor_meetingsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    seriesId?: boolean
+    followUpToMeetingId?: boolean
+    title?: boolean
+    meetingType?: boolean
+    mode?: boolean
+    status?: boolean
+    priority?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    venue?: boolean
+    meetingLink?: boolean
+    agenda?: boolean
+    description?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetings$mentor_meetingsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meetings"]>
+
+  export type mentor_meetingsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    seriesId?: boolean
+    followUpToMeetingId?: boolean
+    title?: boolean
+    meetingType?: boolean
+    mode?: boolean
+    status?: boolean
+    priority?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    venue?: boolean
+    meetingLink?: boolean
+    agenda?: boolean
+    description?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    mentor_meetings?: boolean | mentor_meetings$mentor_meetingsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_meetings"]>
+
+  export type mentor_meetingsSelectScalar = {
+    id?: boolean
+    mentorTeacherId?: boolean
+    studentId?: boolean
+    seriesId?: boolean
+    followUpToMeetingId?: boolean
+    title?: boolean
+    meetingType?: boolean
+    mode?: boolean
+    status?: boolean
+    priority?: boolean
+    startAt?: boolean
+    endAt?: boolean
+    venue?: boolean
+    meetingLink?: boolean
+    agenda?: boolean
+    description?: boolean
+    startedAt?: boolean
+    endedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type mentor_meetingsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mentorTeacherId" | "studentId" | "seriesId" | "followUpToMeetingId" | "title" | "meetingType" | "mode" | "status" | "priority" | "startAt" | "endAt" | "venue" | "meetingLink" | "agenda" | "description" | "startedAt" | "endedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["mentor_meetings"]>
+  export type mentor_meetingsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meeting_discussion_points?: boolean | mentor_meetings$mentor_meeting_discussion_pointsArgs<ExtArgs>
+    mentor_meeting_feedback?: boolean | mentor_meetings$mentor_meeting_feedbackArgs<ExtArgs>
+    mentor_meeting_notes?: boolean | mentor_meetings$mentor_meeting_notesArgs<ExtArgs>
+    mentor_meetings?: boolean | mentor_meetings$mentor_meetingsArgs<ExtArgs>
+    other_mentor_meetings?: boolean | mentor_meetings$other_mentor_meetingsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+    _count?: boolean | Mentor_meetingsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type mentor_meetingsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetings$mentor_meetingsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type mentor_meetingsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_meetings?: boolean | mentor_meetings$mentor_meetingsArgs<ExtArgs>
+    mentor_meeting_series?: boolean | mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_meetingsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_meetings"
+    objects: {
+      mentor_meeting_discussion_points: Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>[]
+      mentor_meeting_feedback: Prisma.$mentor_meeting_feedbackPayload<ExtArgs> | null
+      mentor_meeting_notes: Prisma.$mentor_meeting_notesPayload<ExtArgs> | null
+      mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs> | null
+      other_mentor_meetings: Prisma.$mentor_meetingsPayload<ExtArgs>[]
+      mentor_meeting_series: Prisma.$mentor_meeting_seriesPayload<ExtArgs> | null
+      students: Prisma.$studentsPayload<ExtArgs>
+      teachers: Prisma.$teachersPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      mentorTeacherId: string
+      studentId: string
+      seriesId: string | null
+      followUpToMeetingId: string | null
+      title: string
+      meetingType: string
+      mode: string
+      status: string
+      priority: string
+      startAt: Date
+      endAt: Date
+      venue: string | null
+      meetingLink: string | null
+      agenda: string | null
+      description: string | null
+      startedAt: Date | null
+      endedAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["mentor_meetings"]>
+    composites: {}
+  }
+
+  type mentor_meetingsGetPayload<S extends boolean | null | undefined | mentor_meetingsDefaultArgs> = $Result.GetResult<Prisma.$mentor_meetingsPayload, S>
+
+  type mentor_meetingsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_meetingsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_meetingsCountAggregateInputType | true
+    }
+
+  export interface mentor_meetingsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_meetings'], meta: { name: 'mentor_meetings' } }
+    /**
+     * Find zero or one Mentor_meetings that matches the filter.
+     * @param {mentor_meetingsFindUniqueArgs} args - Arguments to find a Mentor_meetings
+     * @example
+     * // Get one Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_meetingsFindUniqueArgs>(args: SelectSubset<T, mentor_meetingsFindUniqueArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_meetings that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_meetingsFindUniqueOrThrowArgs} args - Arguments to find a Mentor_meetings
+     * @example
+     * // Get one Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_meetingsFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_meetingsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meetings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meetingsFindFirstArgs} args - Arguments to find a Mentor_meetings
+     * @example
+     * // Get one Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_meetingsFindFirstArgs>(args?: SelectSubset<T, mentor_meetingsFindFirstArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_meetings that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meetingsFindFirstOrThrowArgs} args - Arguments to find a Mentor_meetings
+     * @example
+     * // Get one Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_meetingsFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_meetingsFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_meetings that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meetingsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.findMany()
+     * 
+     * // Get first 10 Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_meetingsWithIdOnly = await prisma.mentor_meetings.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_meetingsFindManyArgs>(args?: SelectSubset<T, mentor_meetingsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_meetings.
+     * @param {mentor_meetingsCreateArgs} args - Arguments to create a Mentor_meetings.
+     * @example
+     * // Create one Mentor_meetings
+     * const Mentor_meetings = await prisma.mentor_meetings.create({
+     *   data: {
+     *     // ... data to create a Mentor_meetings
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_meetingsCreateArgs>(args: SelectSubset<T, mentor_meetingsCreateArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_meetings.
+     * @param {mentor_meetingsCreateManyArgs} args - Arguments to create many Mentor_meetings.
+     * @example
+     * // Create many Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_meetingsCreateManyArgs>(args?: SelectSubset<T, mentor_meetingsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_meetings and returns the data saved in the database.
+     * @param {mentor_meetingsCreateManyAndReturnArgs} args - Arguments to create many Mentor_meetings.
+     * @example
+     * // Create many Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_meetings and only return the `id`
+     * const mentor_meetingsWithIdOnly = await prisma.mentor_meetings.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_meetingsCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_meetingsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_meetings.
+     * @param {mentor_meetingsDeleteArgs} args - Arguments to delete one Mentor_meetings.
+     * @example
+     * // Delete one Mentor_meetings
+     * const Mentor_meetings = await prisma.mentor_meetings.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_meetings
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_meetingsDeleteArgs>(args: SelectSubset<T, mentor_meetingsDeleteArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_meetings.
+     * @param {mentor_meetingsUpdateArgs} args - Arguments to update one Mentor_meetings.
+     * @example
+     * // Update one Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_meetingsUpdateArgs>(args: SelectSubset<T, mentor_meetingsUpdateArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_meetings.
+     * @param {mentor_meetingsDeleteManyArgs} args - Arguments to filter Mentor_meetings to delete.
+     * @example
+     * // Delete a few Mentor_meetings
+     * const { count } = await prisma.mentor_meetings.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_meetingsDeleteManyArgs>(args?: SelectSubset<T, mentor_meetingsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meetingsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_meetingsUpdateManyArgs>(args: SelectSubset<T, mentor_meetingsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_meetings and returns the data updated in the database.
+     * @param {mentor_meetingsUpdateManyAndReturnArgs} args - Arguments to update many Mentor_meetings.
+     * @example
+     * // Update many Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_meetings and only return the `id`
+     * const mentor_meetingsWithIdOnly = await prisma.mentor_meetings.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_meetingsUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_meetingsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_meetings.
+     * @param {mentor_meetingsUpsertArgs} args - Arguments to update or create a Mentor_meetings.
+     * @example
+     * // Update or create a Mentor_meetings
+     * const mentor_meetings = await prisma.mentor_meetings.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_meetings
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_meetings we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_meetingsUpsertArgs>(args: SelectSubset<T, mentor_meetingsUpsertArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meetingsCountArgs} args - Arguments to filter Mentor_meetings to count.
+     * @example
+     * // Count the number of Mentor_meetings
+     * const count = await prisma.mentor_meetings.count({
+     *   where: {
+     *     // ... the filter for the Mentor_meetings we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_meetingsCountArgs>(
+      args?: Subset<T, mentor_meetingsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_meetingsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_meetingsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_meetingsAggregateArgs>(args: Subset<T, Mentor_meetingsAggregateArgs>): Prisma.PrismaPromise<GetMentor_meetingsAggregateType<T>>
+
+    /**
+     * Group by Mentor_meetings.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_meetingsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_meetingsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_meetingsGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_meetingsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_meetingsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_meetingsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_meetings model
+   */
+  readonly fields: mentor_meetingsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_meetings.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_meetingsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    mentor_meeting_discussion_points<T extends mentor_meetings$mentor_meeting_discussion_pointsArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetings$mentor_meeting_discussion_pointsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meeting_discussion_pointsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meeting_feedback<T extends mentor_meetings$mentor_meeting_feedbackArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetings$mentor_meeting_feedbackArgs<ExtArgs>>): Prisma__mentor_meeting_feedbackClient<$Result.GetResult<Prisma.$mentor_meeting_feedbackPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    mentor_meeting_notes<T extends mentor_meetings$mentor_meeting_notesArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetings$mentor_meeting_notesArgs<ExtArgs>>): Prisma__mentor_meeting_notesClient<$Result.GetResult<Prisma.$mentor_meeting_notesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    mentor_meetings<T extends mentor_meetings$mentor_meetingsArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetings$mentor_meetingsArgs<ExtArgs>>): Prisma__mentor_meetingsClient<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    other_mentor_meetings<T extends mentor_meetings$other_mentor_meetingsArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetings$other_mentor_meetingsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_meetingsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    mentor_meeting_series<T extends mentor_meetings$mentor_meeting_seriesArgs<ExtArgs> = {}>(args?: Subset<T, mentor_meetings$mentor_meeting_seriesArgs<ExtArgs>>): Prisma__mentor_meeting_seriesClient<$Result.GetResult<Prisma.$mentor_meeting_seriesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    students<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    teachers<T extends teachersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, teachersDefaultArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_meetings model
+   */
+  interface mentor_meetingsFieldRefs {
+    readonly id: FieldRef<"mentor_meetings", 'String'>
+    readonly mentorTeacherId: FieldRef<"mentor_meetings", 'String'>
+    readonly studentId: FieldRef<"mentor_meetings", 'String'>
+    readonly seriesId: FieldRef<"mentor_meetings", 'String'>
+    readonly followUpToMeetingId: FieldRef<"mentor_meetings", 'String'>
+    readonly title: FieldRef<"mentor_meetings", 'String'>
+    readonly meetingType: FieldRef<"mentor_meetings", 'String'>
+    readonly mode: FieldRef<"mentor_meetings", 'String'>
+    readonly status: FieldRef<"mentor_meetings", 'String'>
+    readonly priority: FieldRef<"mentor_meetings", 'String'>
+    readonly startAt: FieldRef<"mentor_meetings", 'DateTime'>
+    readonly endAt: FieldRef<"mentor_meetings", 'DateTime'>
+    readonly venue: FieldRef<"mentor_meetings", 'String'>
+    readonly meetingLink: FieldRef<"mentor_meetings", 'String'>
+    readonly agenda: FieldRef<"mentor_meetings", 'String'>
+    readonly description: FieldRef<"mentor_meetings", 'String'>
+    readonly startedAt: FieldRef<"mentor_meetings", 'DateTime'>
+    readonly endedAt: FieldRef<"mentor_meetings", 'DateTime'>
+    readonly createdAt: FieldRef<"mentor_meetings", 'DateTime'>
+    readonly updatedAt: FieldRef<"mentor_meetings", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_meetings findUnique
+   */
+  export type mentor_meetingsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meetings to fetch.
+     */
+    where: mentor_meetingsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meetings findUniqueOrThrow
+   */
+  export type mentor_meetingsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meetings to fetch.
+     */
+    where: mentor_meetingsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meetings findFirst
+   */
+  export type mentor_meetingsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meetings to fetch.
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meetings to fetch.
+     */
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meetings.
+     */
+    cursor?: mentor_meetingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meetings.
+     */
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meetings findFirstOrThrow
+   */
+  export type mentor_meetingsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meetings to fetch.
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meetings to fetch.
+     */
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_meetings.
+     */
+    cursor?: mentor_meetingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meetings.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_meetings.
+     */
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meetings findMany
+   */
+  export type mentor_meetingsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_meetings to fetch.
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_meetings to fetch.
+     */
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_meetings.
+     */
+    cursor?: mentor_meetingsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_meetings from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_meetings.
+     */
+    skip?: number
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meetings create
+   */
+  export type mentor_meetingsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_meetings.
+     */
+    data: XOR<mentor_meetingsCreateInput, mentor_meetingsUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_meetings createMany
+   */
+  export type mentor_meetingsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_meetings.
+     */
+    data: mentor_meetingsCreateManyInput | mentor_meetingsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_meetings createManyAndReturn
+   */
+  export type mentor_meetingsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_meetings.
+     */
+    data: mentor_meetingsCreateManyInput | mentor_meetingsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meetings update
+   */
+  export type mentor_meetingsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_meetings.
+     */
+    data: XOR<mentor_meetingsUpdateInput, mentor_meetingsUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_meetings to update.
+     */
+    where: mentor_meetingsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meetings updateMany
+   */
+  export type mentor_meetingsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_meetings.
+     */
+    data: XOR<mentor_meetingsUpdateManyMutationInput, mentor_meetingsUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meetings to update
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * Limit how many mentor_meetings to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meetings updateManyAndReturn
+   */
+  export type mentor_meetingsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_meetings.
+     */
+    data: XOR<mentor_meetingsUpdateManyMutationInput, mentor_meetingsUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_meetings to update
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * Limit how many mentor_meetings to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_meetings upsert
+   */
+  export type mentor_meetingsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_meetings to update in case it exists.
+     */
+    where: mentor_meetingsWhereUniqueInput
+    /**
+     * In case the mentor_meetings found by the `where` argument doesn't exist, create a new mentor_meetings with this data.
+     */
+    create: XOR<mentor_meetingsCreateInput, mentor_meetingsUncheckedCreateInput>
+    /**
+     * In case the mentor_meetings was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_meetingsUpdateInput, mentor_meetingsUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_meetings delete
+   */
+  export type mentor_meetingsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_meetings to delete.
+     */
+    where: mentor_meetingsWhereUniqueInput
+  }
+
+  /**
+   * mentor_meetings deleteMany
+   */
+  export type mentor_meetingsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_meetings to delete
+     */
+    where?: mentor_meetingsWhereInput
+    /**
+     * Limit how many mentor_meetings to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_meetings.mentor_meeting_discussion_points
+   */
+  export type mentor_meetings$mentor_meeting_discussion_pointsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_discussion_points
+     */
+    select?: mentor_meeting_discussion_pointsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_discussion_points
+     */
+    omit?: mentor_meeting_discussion_pointsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_discussion_pointsInclude<ExtArgs> | null
+    where?: mentor_meeting_discussion_pointsWhereInput
+    orderBy?: mentor_meeting_discussion_pointsOrderByWithRelationInput | mentor_meeting_discussion_pointsOrderByWithRelationInput[]
+    cursor?: mentor_meeting_discussion_pointsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meeting_discussion_pointsScalarFieldEnum | Mentor_meeting_discussion_pointsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meetings.mentor_meeting_feedback
+   */
+  export type mentor_meetings$mentor_meeting_feedbackArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_feedback
+     */
+    select?: mentor_meeting_feedbackSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_feedback
+     */
+    omit?: mentor_meeting_feedbackOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_feedbackInclude<ExtArgs> | null
+    where?: mentor_meeting_feedbackWhereInput
+  }
+
+  /**
+   * mentor_meetings.mentor_meeting_notes
+   */
+  export type mentor_meetings$mentor_meeting_notesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_notes
+     */
+    select?: mentor_meeting_notesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_notes
+     */
+    omit?: mentor_meeting_notesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_notesInclude<ExtArgs> | null
+    where?: mentor_meeting_notesWhereInput
+  }
+
+  /**
+   * mentor_meetings.mentor_meetings
+   */
+  export type mentor_meetings$mentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    where?: mentor_meetingsWhereInput
+  }
+
+  /**
+   * mentor_meetings.other_mentor_meetings
+   */
+  export type mentor_meetings$other_mentor_meetingsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+    where?: mentor_meetingsWhereInput
+    orderBy?: mentor_meetingsOrderByWithRelationInput | mentor_meetingsOrderByWithRelationInput[]
+    cursor?: mentor_meetingsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_meetingsScalarFieldEnum | Mentor_meetingsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_meetings.mentor_meeting_series
+   */
+  export type mentor_meetings$mentor_meeting_seriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meeting_series
+     */
+    select?: mentor_meeting_seriesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meeting_series
+     */
+    omit?: mentor_meeting_seriesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meeting_seriesInclude<ExtArgs> | null
+    where?: mentor_meeting_seriesWhereInput
+  }
+
+  /**
+   * mentor_meetings without action
+   */
+  export type mentor_meetingsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_meetings
+     */
+    select?: mentor_meetingsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_meetings
+     */
+    omit?: mentor_meetingsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_meetingsInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -32591,10 +41980,46 @@ export namespace Prisma {
     completionRequested: 'completionRequested',
     completionRequestedAt: 'completionRequestedAt',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    internshipType: 'internshipType',
+    completionVerificationStatus: 'completionVerificationStatus',
+    completionMentorRemark: 'completionMentorRemark',
+    completionVerifiedAt: 'completionVerifiedAt'
   };
 
   export type Student_internshipsScalarFieldEnum = (typeof Student_internshipsScalarFieldEnum)[keyof typeof Student_internshipsScalarFieldEnum]
+
+
+  export const Internship_reviewsScalarFieldEnum: {
+    id: 'id',
+    internshipId: 'internshipId',
+    reviewerTeacherId: 'reviewerTeacherId',
+    reviewStage: 'reviewStage',
+    decision: 'decision',
+    remarks: 'remarks',
+    reviewedAt: 'reviewedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type Internship_reviewsScalarFieldEnum = (typeof Internship_reviewsScalarFieldEnum)[keyof typeof Internship_reviewsScalarFieldEnum]
+
+
+  export const Internship_documentsScalarFieldEnum: {
+    id: 'id',
+    internshipId: 'internshipId',
+    documentType: 'documentType',
+    submissionStage: 'submissionStage',
+    documentName: 'documentName',
+    fileType: 'fileType',
+    fileSize: 'fileSize',
+    cloudinaryPublicId: 'cloudinaryPublicId',
+    fileUrl: 'fileUrl',
+    resourceType: 'resourceType',
+    uploadedAt: 'uploadedAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Internship_documentsScalarFieldEnum = (typeof Internship_documentsScalarFieldEnum)[keyof typeof Internship_documentsScalarFieldEnum]
 
 
   export const Student_contact_detailsScalarFieldEnum: {
@@ -32811,6 +42236,87 @@ export namespace Prisma {
   };
 
   export type Teacher_profilesScalarFieldEnum = (typeof Teacher_profilesScalarFieldEnum)[keyof typeof Teacher_profilesScalarFieldEnum]
+
+
+  export const Mentor_meeting_discussion_pointsScalarFieldEnum: {
+    id: 'id',
+    meetingId: 'meetingId',
+    content: 'content',
+    position: 'position',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Mentor_meeting_discussion_pointsScalarFieldEnum = (typeof Mentor_meeting_discussion_pointsScalarFieldEnum)[keyof typeof Mentor_meeting_discussion_pointsScalarFieldEnum]
+
+
+  export const Mentor_meeting_feedbackScalarFieldEnum: {
+    id: 'id',
+    meetingId: 'meetingId',
+    mentorTeacherId: 'mentorTeacherId',
+    rating: 'rating',
+    feedback: 'feedback',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Mentor_meeting_feedbackScalarFieldEnum = (typeof Mentor_meeting_feedbackScalarFieldEnum)[keyof typeof Mentor_meeting_feedbackScalarFieldEnum]
+
+
+  export const Mentor_meeting_notesScalarFieldEnum: {
+    id: 'id',
+    meetingId: 'meetingId',
+    content: 'content',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Mentor_meeting_notesScalarFieldEnum = (typeof Mentor_meeting_notesScalarFieldEnum)[keyof typeof Mentor_meeting_notesScalarFieldEnum]
+
+
+  export const Mentor_meeting_seriesScalarFieldEnum: {
+    id: 'id',
+    mentorTeacherId: 'mentorTeacherId',
+    studentId: 'studentId',
+    frequency: 'frequency',
+    startDate: 'startDate',
+    endDate: 'endDate',
+    dayOfWeek: 'dayOfWeek',
+    startTime: 'startTime',
+    endTime: 'endTime',
+    timezone: 'timezone',
+    isActive: 'isActive',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Mentor_meeting_seriesScalarFieldEnum = (typeof Mentor_meeting_seriesScalarFieldEnum)[keyof typeof Mentor_meeting_seriesScalarFieldEnum]
+
+
+  export const Mentor_meetingsScalarFieldEnum: {
+    id: 'id',
+    mentorTeacherId: 'mentorTeacherId',
+    studentId: 'studentId',
+    seriesId: 'seriesId',
+    followUpToMeetingId: 'followUpToMeetingId',
+    title: 'title',
+    meetingType: 'meetingType',
+    mode: 'mode',
+    status: 'status',
+    priority: 'priority',
+    startAt: 'startAt',
+    endAt: 'endAt',
+    venue: 'venue',
+    meetingLink: 'meetingLink',
+    agenda: 'agenda',
+    description: 'description',
+    startedAt: 'startedAt',
+    endedAt: 'endedAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Mentor_meetingsScalarFieldEnum = (typeof Mentor_meetingsScalarFieldEnum)[keyof typeof Mentor_meetingsScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -33140,6 +42646,90 @@ export namespace Prisma {
    * Reference to a field of type 'InternshipVerificationStatus[]'
    */
   export type ListEnumInternshipVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipVerificationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipType'
+   */
+  export type EnumInternshipTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipType'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipType[]'
+   */
+  export type ListEnumInternshipTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CompletionVerificationStatus'
+   */
+  export type EnumCompletionVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompletionVerificationStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'CompletionVerificationStatus[]'
+   */
+  export type ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CompletionVerificationStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipReviewStage'
+   */
+  export type EnumInternshipReviewStageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipReviewStage'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipReviewStage[]'
+   */
+  export type ListEnumInternshipReviewStageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipReviewStage[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipReviewDecision'
+   */
+  export type EnumInternshipReviewDecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipReviewDecision'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipReviewDecision[]'
+   */
+  export type ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipReviewDecision[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipDocumentType'
+   */
+  export type EnumInternshipDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipDocumentType'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipDocumentType[]'
+   */
+  export type ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipDocumentType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipDocumentStage'
+   */
+  export type EnumInternshipDocumentStageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipDocumentStage'>
+    
+
+
+  /**
+   * Reference to a field of type 'InternshipDocumentStage[]'
+   */
+  export type ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'InternshipDocumentStage[]'>
     
 
 
@@ -34245,11 +43835,13 @@ export namespace Prisma {
     academicSemesters?: Academic_semestersListRelationFilter
     detentions?: DetentionsListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
+    mentor_meeting_series?: Mentor_meeting_seriesListRelationFilter
+    mentor_meetings?: Mentor_meetingsListRelationFilter
     mentor_transfer_requests?: Mentor_transfer_requestsListRelationFilter
     contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
     documents?: Student_documentsListRelationFilter
-    internships?: Student_internshipsListRelationFilter
     student_enrollments?: Student_enrollmentsListRelationFilter
+    internships?: Student_internshipsListRelationFilter
     parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
@@ -34289,11 +43881,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersOrderByRelationAggregateInput
     detentions?: detentionsOrderByRelationAggregateInput
     mentor_assignments?: mentor_assignmentsOrderByRelationAggregateInput
+    mentor_meeting_series?: mentor_meeting_seriesOrderByRelationAggregateInput
+    mentor_meetings?: mentor_meetingsOrderByRelationAggregateInput
     mentor_transfer_requests?: mentor_transfer_requestsOrderByRelationAggregateInput
     contactDetails?: student_contact_detailsOrderByWithRelationInput
     documents?: student_documentsOrderByRelationAggregateInput
-    internships?: student_internshipsOrderByRelationAggregateInput
     student_enrollments?: student_enrollmentsOrderByRelationAggregateInput
+    internships?: student_internshipsOrderByRelationAggregateInput
     parentDetails?: student_parent_detailsOrderByWithRelationInput
     departments?: departmentsOrderByWithRelationInput
     user_accounts?: user_accountsOrderByWithRelationInput
@@ -34336,11 +43930,13 @@ export namespace Prisma {
     academicSemesters?: Academic_semestersListRelationFilter
     detentions?: DetentionsListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
+    mentor_meeting_series?: Mentor_meeting_seriesListRelationFilter
+    mentor_meetings?: Mentor_meetingsListRelationFilter
     mentor_transfer_requests?: Mentor_transfer_requestsListRelationFilter
     contactDetails?: XOR<Student_contact_detailsNullableScalarRelationFilter, student_contact_detailsWhereInput> | null
     documents?: Student_documentsListRelationFilter
-    internships?: Student_internshipsListRelationFilter
     student_enrollments?: Student_enrollmentsListRelationFilter
+    internships?: Student_internshipsListRelationFilter
     parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
@@ -34442,6 +44038,12 @@ export namespace Prisma {
     completionRequestedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
     createdAt?: DateTimeFilter<"student_internships"> | Date | string
     updatedAt?: DateTimeFilter<"student_internships"> | Date | string
+    internshipType?: EnumInternshipTypeFilter<"student_internships"> | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFilter<"student_internships"> | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: StringNullableFilter<"student_internships"> | string | null
+    completionVerifiedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    internship_documents?: Internship_documentsListRelationFilter
+    internship_reviews?: Internship_reviewsListRelationFilter
     student?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
   }
 
@@ -34466,6 +44068,12 @@ export namespace Prisma {
     completionRequestedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    internshipType?: SortOrder
+    completionVerificationStatus?: SortOrder
+    completionMentorRemark?: SortOrderInput | SortOrder
+    completionVerifiedAt?: SortOrderInput | SortOrder
+    internship_documents?: internship_documentsOrderByRelationAggregateInput
+    internship_reviews?: internship_reviewsOrderByRelationAggregateInput
     student?: studentsOrderByWithRelationInput
   }
 
@@ -34493,6 +44101,12 @@ export namespace Prisma {
     completionRequestedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
     createdAt?: DateTimeFilter<"student_internships"> | Date | string
     updatedAt?: DateTimeFilter<"student_internships"> | Date | string
+    internshipType?: EnumInternshipTypeFilter<"student_internships"> | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFilter<"student_internships"> | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: StringNullableFilter<"student_internships"> | string | null
+    completionVerifiedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
+    internship_documents?: Internship_documentsListRelationFilter
+    internship_reviews?: Internship_reviewsListRelationFilter
     student?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
   }, "id">
 
@@ -34517,6 +44131,10 @@ export namespace Prisma {
     completionRequestedAt?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    internshipType?: SortOrder
+    completionVerificationStatus?: SortOrder
+    completionMentorRemark?: SortOrderInput | SortOrder
+    completionVerifiedAt?: SortOrderInput | SortOrder
     _count?: student_internshipsCountOrderByAggregateInput
     _avg?: student_internshipsAvgOrderByAggregateInput
     _max?: student_internshipsMaxOrderByAggregateInput
@@ -34548,6 +44166,175 @@ export namespace Prisma {
     completionRequestedAt?: DateTimeNullableWithAggregatesFilter<"student_internships"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"student_internships"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"student_internships"> | Date | string
+    internshipType?: EnumInternshipTypeWithAggregatesFilter<"student_internships"> | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusWithAggregatesFilter<"student_internships"> | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: StringNullableWithAggregatesFilter<"student_internships"> | string | null
+    completionVerifiedAt?: DateTimeNullableWithAggregatesFilter<"student_internships"> | Date | string | null
+  }
+
+  export type internship_reviewsWhereInput = {
+    AND?: internship_reviewsWhereInput | internship_reviewsWhereInput[]
+    OR?: internship_reviewsWhereInput[]
+    NOT?: internship_reviewsWhereInput | internship_reviewsWhereInput[]
+    id?: StringFilter<"internship_reviews"> | string
+    internshipId?: StringFilter<"internship_reviews"> | string
+    reviewerTeacherId?: StringFilter<"internship_reviews"> | string
+    reviewStage?: EnumInternshipReviewStageFilter<"internship_reviews"> | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFilter<"internship_reviews"> | $Enums.InternshipReviewDecision
+    remarks?: StringNullableFilter<"internship_reviews"> | string | null
+    reviewedAt?: DateTimeFilter<"internship_reviews"> | Date | string
+    createdAt?: DateTimeFilter<"internship_reviews"> | Date | string
+    internship?: XOR<Student_internshipsScalarRelationFilter, student_internshipsWhereInput>
+    reviewer?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }
+
+  export type internship_reviewsOrderByWithRelationInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    reviewerTeacherId?: SortOrder
+    reviewStage?: SortOrder
+    decision?: SortOrder
+    remarks?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    internship?: student_internshipsOrderByWithRelationInput
+    reviewer?: teachersOrderByWithRelationInput
+  }
+
+  export type internship_reviewsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: internship_reviewsWhereInput | internship_reviewsWhereInput[]
+    OR?: internship_reviewsWhereInput[]
+    NOT?: internship_reviewsWhereInput | internship_reviewsWhereInput[]
+    internshipId?: StringFilter<"internship_reviews"> | string
+    reviewerTeacherId?: StringFilter<"internship_reviews"> | string
+    reviewStage?: EnumInternshipReviewStageFilter<"internship_reviews"> | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFilter<"internship_reviews"> | $Enums.InternshipReviewDecision
+    remarks?: StringNullableFilter<"internship_reviews"> | string | null
+    reviewedAt?: DateTimeFilter<"internship_reviews"> | Date | string
+    createdAt?: DateTimeFilter<"internship_reviews"> | Date | string
+    internship?: XOR<Student_internshipsScalarRelationFilter, student_internshipsWhereInput>
+    reviewer?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }, "id">
+
+  export type internship_reviewsOrderByWithAggregationInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    reviewerTeacherId?: SortOrder
+    reviewStage?: SortOrder
+    decision?: SortOrder
+    remarks?: SortOrderInput | SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: internship_reviewsCountOrderByAggregateInput
+    _max?: internship_reviewsMaxOrderByAggregateInput
+    _min?: internship_reviewsMinOrderByAggregateInput
+  }
+
+  export type internship_reviewsScalarWhereWithAggregatesInput = {
+    AND?: internship_reviewsScalarWhereWithAggregatesInput | internship_reviewsScalarWhereWithAggregatesInput[]
+    OR?: internship_reviewsScalarWhereWithAggregatesInput[]
+    NOT?: internship_reviewsScalarWhereWithAggregatesInput | internship_reviewsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"internship_reviews"> | string
+    internshipId?: StringWithAggregatesFilter<"internship_reviews"> | string
+    reviewerTeacherId?: StringWithAggregatesFilter<"internship_reviews"> | string
+    reviewStage?: EnumInternshipReviewStageWithAggregatesFilter<"internship_reviews"> | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionWithAggregatesFilter<"internship_reviews"> | $Enums.InternshipReviewDecision
+    remarks?: StringNullableWithAggregatesFilter<"internship_reviews"> | string | null
+    reviewedAt?: DateTimeWithAggregatesFilter<"internship_reviews"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"internship_reviews"> | Date | string
+  }
+
+  export type internship_documentsWhereInput = {
+    AND?: internship_documentsWhereInput | internship_documentsWhereInput[]
+    OR?: internship_documentsWhereInput[]
+    NOT?: internship_documentsWhereInput | internship_documentsWhereInput[]
+    id?: StringFilter<"internship_documents"> | string
+    internshipId?: StringFilter<"internship_documents"> | string
+    documentType?: EnumInternshipDocumentTypeFilter<"internship_documents"> | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFilter<"internship_documents"> | $Enums.InternshipDocumentStage
+    documentName?: StringFilter<"internship_documents"> | string
+    fileType?: StringFilter<"internship_documents"> | string
+    fileSize?: IntFilter<"internship_documents"> | number
+    cloudinaryPublicId?: StringFilter<"internship_documents"> | string
+    fileUrl?: StringFilter<"internship_documents"> | string
+    resourceType?: StringFilter<"internship_documents"> | string
+    uploadedAt?: DateTimeFilter<"internship_documents"> | Date | string
+    updatedAt?: DateTimeFilter<"internship_documents"> | Date | string
+    internship?: XOR<Student_internshipsScalarRelationFilter, student_internshipsWhereInput>
+  }
+
+  export type internship_documentsOrderByWithRelationInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    documentType?: SortOrder
+    submissionStage?: SortOrder
+    documentName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    cloudinaryPublicId?: SortOrder
+    fileUrl?: SortOrder
+    resourceType?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    internship?: student_internshipsOrderByWithRelationInput
+  }
+
+  export type internship_documentsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: internship_documentsWhereInput | internship_documentsWhereInput[]
+    OR?: internship_documentsWhereInput[]
+    NOT?: internship_documentsWhereInput | internship_documentsWhereInput[]
+    internshipId?: StringFilter<"internship_documents"> | string
+    documentType?: EnumInternshipDocumentTypeFilter<"internship_documents"> | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFilter<"internship_documents"> | $Enums.InternshipDocumentStage
+    documentName?: StringFilter<"internship_documents"> | string
+    fileType?: StringFilter<"internship_documents"> | string
+    fileSize?: IntFilter<"internship_documents"> | number
+    cloudinaryPublicId?: StringFilter<"internship_documents"> | string
+    fileUrl?: StringFilter<"internship_documents"> | string
+    resourceType?: StringFilter<"internship_documents"> | string
+    uploadedAt?: DateTimeFilter<"internship_documents"> | Date | string
+    updatedAt?: DateTimeFilter<"internship_documents"> | Date | string
+    internship?: XOR<Student_internshipsScalarRelationFilter, student_internshipsWhereInput>
+  }, "id">
+
+  export type internship_documentsOrderByWithAggregationInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    documentType?: SortOrder
+    submissionStage?: SortOrder
+    documentName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    cloudinaryPublicId?: SortOrder
+    fileUrl?: SortOrder
+    resourceType?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: internship_documentsCountOrderByAggregateInput
+    _avg?: internship_documentsAvgOrderByAggregateInput
+    _max?: internship_documentsMaxOrderByAggregateInput
+    _min?: internship_documentsMinOrderByAggregateInput
+    _sum?: internship_documentsSumOrderByAggregateInput
+  }
+
+  export type internship_documentsScalarWhereWithAggregatesInput = {
+    AND?: internship_documentsScalarWhereWithAggregatesInput | internship_documentsScalarWhereWithAggregatesInput[]
+    OR?: internship_documentsScalarWhereWithAggregatesInput[]
+    NOT?: internship_documentsScalarWhereWithAggregatesInput | internship_documentsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"internship_documents"> | string
+    internshipId?: StringWithAggregatesFilter<"internship_documents"> | string
+    documentType?: EnumInternshipDocumentTypeWithAggregatesFilter<"internship_documents"> | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageWithAggregatesFilter<"internship_documents"> | $Enums.InternshipDocumentStage
+    documentName?: StringWithAggregatesFilter<"internship_documents"> | string
+    fileType?: StringWithAggregatesFilter<"internship_documents"> | string
+    fileSize?: IntWithAggregatesFilter<"internship_documents"> | number
+    cloudinaryPublicId?: StringWithAggregatesFilter<"internship_documents"> | string
+    fileUrl?: StringWithAggregatesFilter<"internship_documents"> | string
+    resourceType?: StringWithAggregatesFilter<"internship_documents"> | string
+    uploadedAt?: DateTimeWithAggregatesFilter<"internship_documents"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"internship_documents"> | Date | string
   }
 
   export type student_contact_detailsWhereInput = {
@@ -35278,7 +45065,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"teachers"> | Date | string
     updatedAt?: DateTimeFilter<"teachers"> | Date | string
     departments_departments_hodTeacherIdToteachers?: XOR<DepartmentsNullableScalarRelationFilter, departmentsWhereInput> | null
+    internship_reviews?: Internship_reviewsListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
+    mentor_meeting_feedback?: Mentor_meeting_feedbackListRelationFilter
+    mentor_meeting_series?: Mentor_meeting_seriesListRelationFilter
+    mentor_meetings?: Mentor_meetingsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
@@ -35301,7 +45092,11 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     departments_departments_hodTeacherIdToteachers?: departmentsOrderByWithRelationInput
+    internship_reviews?: internship_reviewsOrderByRelationAggregateInput
     mentor_assignments?: mentor_assignmentsOrderByRelationAggregateInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackOrderByRelationAggregateInput
+    mentor_meeting_series?: mentor_meeting_seriesOrderByRelationAggregateInput
+    mentor_meetings?: mentor_meetingsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsOrderByRelationAggregateInput
@@ -35327,7 +45122,11 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"teachers"> | Date | string
     updatedAt?: DateTimeFilter<"teachers"> | Date | string
     departments_departments_hodTeacherIdToteachers?: XOR<DepartmentsNullableScalarRelationFilter, departmentsWhereInput> | null
+    internship_reviews?: Internship_reviewsListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
+    mentor_meeting_feedback?: Mentor_meeting_feedbackListRelationFilter
+    mentor_meeting_series?: Mentor_meeting_seriesListRelationFilter
+    mentor_meetings?: Mentor_meetingsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: Mentor_transfer_requestsListRelationFilter
@@ -35687,6 +45486,447 @@ export namespace Prisma {
     website?: StringNullableWithAggregatesFilter<"teacher_profiles"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"teacher_profiles"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"teacher_profiles"> | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsWhereInput = {
+    AND?: mentor_meeting_discussion_pointsWhereInput | mentor_meeting_discussion_pointsWhereInput[]
+    OR?: mentor_meeting_discussion_pointsWhereInput[]
+    NOT?: mentor_meeting_discussion_pointsWhereInput | mentor_meeting_discussion_pointsWhereInput[]
+    id?: StringFilter<"mentor_meeting_discussion_points"> | string
+    meetingId?: StringFilter<"mentor_meeting_discussion_points"> | string
+    content?: StringFilter<"mentor_meeting_discussion_points"> | string
+    position?: IntFilter<"mentor_meeting_discussion_points"> | number
+    createdAt?: DateTimeFilter<"mentor_meeting_discussion_points"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_discussion_points"> | Date | string
+    mentor_meetings?: XOR<Mentor_meetingsScalarRelationFilter, mentor_meetingsWhereInput>
+  }
+
+  export type mentor_meeting_discussion_pointsOrderByWithRelationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    position?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    mentor_meetings?: mentor_meetingsOrderByWithRelationInput
+  }
+
+  export type mentor_meeting_discussion_pointsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: mentor_meeting_discussion_pointsWhereInput | mentor_meeting_discussion_pointsWhereInput[]
+    OR?: mentor_meeting_discussion_pointsWhereInput[]
+    NOT?: mentor_meeting_discussion_pointsWhereInput | mentor_meeting_discussion_pointsWhereInput[]
+    meetingId?: StringFilter<"mentor_meeting_discussion_points"> | string
+    content?: StringFilter<"mentor_meeting_discussion_points"> | string
+    position?: IntFilter<"mentor_meeting_discussion_points"> | number
+    createdAt?: DateTimeFilter<"mentor_meeting_discussion_points"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_discussion_points"> | Date | string
+    mentor_meetings?: XOR<Mentor_meetingsScalarRelationFilter, mentor_meetingsWhereInput>
+  }, "id">
+
+  export type mentor_meeting_discussion_pointsOrderByWithAggregationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    position?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: mentor_meeting_discussion_pointsCountOrderByAggregateInput
+    _avg?: mentor_meeting_discussion_pointsAvgOrderByAggregateInput
+    _max?: mentor_meeting_discussion_pointsMaxOrderByAggregateInput
+    _min?: mentor_meeting_discussion_pointsMinOrderByAggregateInput
+    _sum?: mentor_meeting_discussion_pointsSumOrderByAggregateInput
+  }
+
+  export type mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput = {
+    AND?: mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput | mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput[]
+    OR?: mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput[]
+    NOT?: mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput | mentor_meeting_discussion_pointsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_meeting_discussion_points"> | string
+    meetingId?: StringWithAggregatesFilter<"mentor_meeting_discussion_points"> | string
+    content?: StringWithAggregatesFilter<"mentor_meeting_discussion_points"> | string
+    position?: IntWithAggregatesFilter<"mentor_meeting_discussion_points"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_meeting_discussion_points"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"mentor_meeting_discussion_points"> | Date | string
+  }
+
+  export type mentor_meeting_feedbackWhereInput = {
+    AND?: mentor_meeting_feedbackWhereInput | mentor_meeting_feedbackWhereInput[]
+    OR?: mentor_meeting_feedbackWhereInput[]
+    NOT?: mentor_meeting_feedbackWhereInput | mentor_meeting_feedbackWhereInput[]
+    id?: StringFilter<"mentor_meeting_feedback"> | string
+    meetingId?: StringFilter<"mentor_meeting_feedback"> | string
+    mentorTeacherId?: StringFilter<"mentor_meeting_feedback"> | string
+    rating?: IntFilter<"mentor_meeting_feedback"> | number
+    feedback?: StringNullableFilter<"mentor_meeting_feedback"> | string | null
+    createdAt?: DateTimeFilter<"mentor_meeting_feedback"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_feedback"> | Date | string
+    mentor_meetings?: XOR<Mentor_meetingsScalarRelationFilter, mentor_meetingsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }
+
+  export type mentor_meeting_feedbackOrderByWithRelationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    mentorTeacherId?: SortOrder
+    rating?: SortOrder
+    feedback?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    mentor_meetings?: mentor_meetingsOrderByWithRelationInput
+    teachers?: teachersOrderByWithRelationInput
+  }
+
+  export type mentor_meeting_feedbackWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    meetingId?: string
+    AND?: mentor_meeting_feedbackWhereInput | mentor_meeting_feedbackWhereInput[]
+    OR?: mentor_meeting_feedbackWhereInput[]
+    NOT?: mentor_meeting_feedbackWhereInput | mentor_meeting_feedbackWhereInput[]
+    mentorTeacherId?: StringFilter<"mentor_meeting_feedback"> | string
+    rating?: IntFilter<"mentor_meeting_feedback"> | number
+    feedback?: StringNullableFilter<"mentor_meeting_feedback"> | string | null
+    createdAt?: DateTimeFilter<"mentor_meeting_feedback"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_feedback"> | Date | string
+    mentor_meetings?: XOR<Mentor_meetingsScalarRelationFilter, mentor_meetingsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }, "id" | "meetingId">
+
+  export type mentor_meeting_feedbackOrderByWithAggregationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    mentorTeacherId?: SortOrder
+    rating?: SortOrder
+    feedback?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: mentor_meeting_feedbackCountOrderByAggregateInput
+    _avg?: mentor_meeting_feedbackAvgOrderByAggregateInput
+    _max?: mentor_meeting_feedbackMaxOrderByAggregateInput
+    _min?: mentor_meeting_feedbackMinOrderByAggregateInput
+    _sum?: mentor_meeting_feedbackSumOrderByAggregateInput
+  }
+
+  export type mentor_meeting_feedbackScalarWhereWithAggregatesInput = {
+    AND?: mentor_meeting_feedbackScalarWhereWithAggregatesInput | mentor_meeting_feedbackScalarWhereWithAggregatesInput[]
+    OR?: mentor_meeting_feedbackScalarWhereWithAggregatesInput[]
+    NOT?: mentor_meeting_feedbackScalarWhereWithAggregatesInput | mentor_meeting_feedbackScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_meeting_feedback"> | string
+    meetingId?: StringWithAggregatesFilter<"mentor_meeting_feedback"> | string
+    mentorTeacherId?: StringWithAggregatesFilter<"mentor_meeting_feedback"> | string
+    rating?: IntWithAggregatesFilter<"mentor_meeting_feedback"> | number
+    feedback?: StringNullableWithAggregatesFilter<"mentor_meeting_feedback"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_meeting_feedback"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"mentor_meeting_feedback"> | Date | string
+  }
+
+  export type mentor_meeting_notesWhereInput = {
+    AND?: mentor_meeting_notesWhereInput | mentor_meeting_notesWhereInput[]
+    OR?: mentor_meeting_notesWhereInput[]
+    NOT?: mentor_meeting_notesWhereInput | mentor_meeting_notesWhereInput[]
+    id?: StringFilter<"mentor_meeting_notes"> | string
+    meetingId?: StringFilter<"mentor_meeting_notes"> | string
+    content?: StringFilter<"mentor_meeting_notes"> | string
+    createdAt?: DateTimeFilter<"mentor_meeting_notes"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_notes"> | Date | string
+    mentor_meetings?: XOR<Mentor_meetingsScalarRelationFilter, mentor_meetingsWhereInput>
+  }
+
+  export type mentor_meeting_notesOrderByWithRelationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    mentor_meetings?: mentor_meetingsOrderByWithRelationInput
+  }
+
+  export type mentor_meeting_notesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    meetingId?: string
+    AND?: mentor_meeting_notesWhereInput | mentor_meeting_notesWhereInput[]
+    OR?: mentor_meeting_notesWhereInput[]
+    NOT?: mentor_meeting_notesWhereInput | mentor_meeting_notesWhereInput[]
+    content?: StringFilter<"mentor_meeting_notes"> | string
+    createdAt?: DateTimeFilter<"mentor_meeting_notes"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_notes"> | Date | string
+    mentor_meetings?: XOR<Mentor_meetingsScalarRelationFilter, mentor_meetingsWhereInput>
+  }, "id" | "meetingId">
+
+  export type mentor_meeting_notesOrderByWithAggregationInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: mentor_meeting_notesCountOrderByAggregateInput
+    _max?: mentor_meeting_notesMaxOrderByAggregateInput
+    _min?: mentor_meeting_notesMinOrderByAggregateInput
+  }
+
+  export type mentor_meeting_notesScalarWhereWithAggregatesInput = {
+    AND?: mentor_meeting_notesScalarWhereWithAggregatesInput | mentor_meeting_notesScalarWhereWithAggregatesInput[]
+    OR?: mentor_meeting_notesScalarWhereWithAggregatesInput[]
+    NOT?: mentor_meeting_notesScalarWhereWithAggregatesInput | mentor_meeting_notesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_meeting_notes"> | string
+    meetingId?: StringWithAggregatesFilter<"mentor_meeting_notes"> | string
+    content?: StringWithAggregatesFilter<"mentor_meeting_notes"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_meeting_notes"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"mentor_meeting_notes"> | Date | string
+  }
+
+  export type mentor_meeting_seriesWhereInput = {
+    AND?: mentor_meeting_seriesWhereInput | mentor_meeting_seriesWhereInput[]
+    OR?: mentor_meeting_seriesWhereInput[]
+    NOT?: mentor_meeting_seriesWhereInput | mentor_meeting_seriesWhereInput[]
+    id?: StringFilter<"mentor_meeting_series"> | string
+    mentorTeacherId?: StringFilter<"mentor_meeting_series"> | string
+    studentId?: StringFilter<"mentor_meeting_series"> | string
+    frequency?: StringFilter<"mentor_meeting_series"> | string
+    startDate?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    endDate?: DateTimeNullableFilter<"mentor_meeting_series"> | Date | string | null
+    dayOfWeek?: IntNullableFilter<"mentor_meeting_series"> | number | null
+    startTime?: StringFilter<"mentor_meeting_series"> | string
+    endTime?: StringFilter<"mentor_meeting_series"> | string
+    timezone?: StringFilter<"mentor_meeting_series"> | string
+    isActive?: BoolFilter<"mentor_meeting_series"> | boolean
+    createdAt?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+    mentor_meetings?: Mentor_meetingsListRelationFilter
+  }
+
+  export type mentor_meeting_seriesOrderByWithRelationInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    frequency?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrderInput | SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    students?: studentsOrderByWithRelationInput
+    teachers?: teachersOrderByWithRelationInput
+    mentor_meetings?: mentor_meetingsOrderByRelationAggregateInput
+  }
+
+  export type mentor_meeting_seriesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: mentor_meeting_seriesWhereInput | mentor_meeting_seriesWhereInput[]
+    OR?: mentor_meeting_seriesWhereInput[]
+    NOT?: mentor_meeting_seriesWhereInput | mentor_meeting_seriesWhereInput[]
+    mentorTeacherId?: StringFilter<"mentor_meeting_series"> | string
+    studentId?: StringFilter<"mentor_meeting_series"> | string
+    frequency?: StringFilter<"mentor_meeting_series"> | string
+    startDate?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    endDate?: DateTimeNullableFilter<"mentor_meeting_series"> | Date | string | null
+    dayOfWeek?: IntNullableFilter<"mentor_meeting_series"> | number | null
+    startTime?: StringFilter<"mentor_meeting_series"> | string
+    endTime?: StringFilter<"mentor_meeting_series"> | string
+    timezone?: StringFilter<"mentor_meeting_series"> | string
+    isActive?: BoolFilter<"mentor_meeting_series"> | boolean
+    createdAt?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+    mentor_meetings?: Mentor_meetingsListRelationFilter
+  }, "id">
+
+  export type mentor_meeting_seriesOrderByWithAggregationInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    frequency?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrderInput | SortOrder
+    dayOfWeek?: SortOrderInput | SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: mentor_meeting_seriesCountOrderByAggregateInput
+    _avg?: mentor_meeting_seriesAvgOrderByAggregateInput
+    _max?: mentor_meeting_seriesMaxOrderByAggregateInput
+    _min?: mentor_meeting_seriesMinOrderByAggregateInput
+    _sum?: mentor_meeting_seriesSumOrderByAggregateInput
+  }
+
+  export type mentor_meeting_seriesScalarWhereWithAggregatesInput = {
+    AND?: mentor_meeting_seriesScalarWhereWithAggregatesInput | mentor_meeting_seriesScalarWhereWithAggregatesInput[]
+    OR?: mentor_meeting_seriesScalarWhereWithAggregatesInput[]
+    NOT?: mentor_meeting_seriesScalarWhereWithAggregatesInput | mentor_meeting_seriesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    mentorTeacherId?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    studentId?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    frequency?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    startDate?: DateTimeWithAggregatesFilter<"mentor_meeting_series"> | Date | string
+    endDate?: DateTimeNullableWithAggregatesFilter<"mentor_meeting_series"> | Date | string | null
+    dayOfWeek?: IntNullableWithAggregatesFilter<"mentor_meeting_series"> | number | null
+    startTime?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    endTime?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    timezone?: StringWithAggregatesFilter<"mentor_meeting_series"> | string
+    isActive?: BoolWithAggregatesFilter<"mentor_meeting_series"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_meeting_series"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"mentor_meeting_series"> | Date | string
+  }
+
+  export type mentor_meetingsWhereInput = {
+    AND?: mentor_meetingsWhereInput | mentor_meetingsWhereInput[]
+    OR?: mentor_meetingsWhereInput[]
+    NOT?: mentor_meetingsWhereInput | mentor_meetingsWhereInput[]
+    id?: StringFilter<"mentor_meetings"> | string
+    mentorTeacherId?: StringFilter<"mentor_meetings"> | string
+    studentId?: StringFilter<"mentor_meetings"> | string
+    seriesId?: StringNullableFilter<"mentor_meetings"> | string | null
+    followUpToMeetingId?: StringNullableFilter<"mentor_meetings"> | string | null
+    title?: StringFilter<"mentor_meetings"> | string
+    meetingType?: StringFilter<"mentor_meetings"> | string
+    mode?: StringFilter<"mentor_meetings"> | string
+    status?: StringFilter<"mentor_meetings"> | string
+    priority?: StringFilter<"mentor_meetings"> | string
+    startAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    endAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    venue?: StringNullableFilter<"mentor_meetings"> | string | null
+    meetingLink?: StringNullableFilter<"mentor_meetings"> | string | null
+    agenda?: StringNullableFilter<"mentor_meetings"> | string | null
+    description?: StringNullableFilter<"mentor_meetings"> | string | null
+    startedAt?: DateTimeNullableFilter<"mentor_meetings"> | Date | string | null
+    endedAt?: DateTimeNullableFilter<"mentor_meetings"> | Date | string | null
+    createdAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    mentor_meeting_discussion_points?: Mentor_meeting_discussion_pointsListRelationFilter
+    mentor_meeting_feedback?: XOR<Mentor_meeting_feedbackNullableScalarRelationFilter, mentor_meeting_feedbackWhereInput> | null
+    mentor_meeting_notes?: XOR<Mentor_meeting_notesNullableScalarRelationFilter, mentor_meeting_notesWhereInput> | null
+    mentor_meetings?: XOR<Mentor_meetingsNullableScalarRelationFilter, mentor_meetingsWhereInput> | null
+    other_mentor_meetings?: Mentor_meetingsListRelationFilter
+    mentor_meeting_series?: XOR<Mentor_meeting_seriesNullableScalarRelationFilter, mentor_meeting_seriesWhereInput> | null
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }
+
+  export type mentor_meetingsOrderByWithRelationInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    seriesId?: SortOrderInput | SortOrder
+    followUpToMeetingId?: SortOrderInput | SortOrder
+    title?: SortOrder
+    meetingType?: SortOrder
+    mode?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    venue?: SortOrderInput | SortOrder
+    meetingLink?: SortOrderInput | SortOrder
+    agenda?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    endedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsOrderByRelationAggregateInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackOrderByWithRelationInput
+    mentor_meeting_notes?: mentor_meeting_notesOrderByWithRelationInput
+    mentor_meetings?: mentor_meetingsOrderByWithRelationInput
+    other_mentor_meetings?: mentor_meetingsOrderByRelationAggregateInput
+    mentor_meeting_series?: mentor_meeting_seriesOrderByWithRelationInput
+    students?: studentsOrderByWithRelationInput
+    teachers?: teachersOrderByWithRelationInput
+  }
+
+  export type mentor_meetingsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: mentor_meetingsWhereInput | mentor_meetingsWhereInput[]
+    OR?: mentor_meetingsWhereInput[]
+    NOT?: mentor_meetingsWhereInput | mentor_meetingsWhereInput[]
+    mentorTeacherId?: StringFilter<"mentor_meetings"> | string
+    studentId?: StringFilter<"mentor_meetings"> | string
+    seriesId?: StringNullableFilter<"mentor_meetings"> | string | null
+    followUpToMeetingId?: StringNullableFilter<"mentor_meetings"> | string | null
+    title?: StringFilter<"mentor_meetings"> | string
+    meetingType?: StringFilter<"mentor_meetings"> | string
+    mode?: StringFilter<"mentor_meetings"> | string
+    status?: StringFilter<"mentor_meetings"> | string
+    priority?: StringFilter<"mentor_meetings"> | string
+    startAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    endAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    venue?: StringNullableFilter<"mentor_meetings"> | string | null
+    meetingLink?: StringNullableFilter<"mentor_meetings"> | string | null
+    agenda?: StringNullableFilter<"mentor_meetings"> | string | null
+    description?: StringNullableFilter<"mentor_meetings"> | string | null
+    startedAt?: DateTimeNullableFilter<"mentor_meetings"> | Date | string | null
+    endedAt?: DateTimeNullableFilter<"mentor_meetings"> | Date | string | null
+    createdAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    mentor_meeting_discussion_points?: Mentor_meeting_discussion_pointsListRelationFilter
+    mentor_meeting_feedback?: XOR<Mentor_meeting_feedbackNullableScalarRelationFilter, mentor_meeting_feedbackWhereInput> | null
+    mentor_meeting_notes?: XOR<Mentor_meeting_notesNullableScalarRelationFilter, mentor_meeting_notesWhereInput> | null
+    mentor_meetings?: XOR<Mentor_meetingsNullableScalarRelationFilter, mentor_meetingsWhereInput> | null
+    other_mentor_meetings?: Mentor_meetingsListRelationFilter
+    mentor_meeting_series?: XOR<Mentor_meeting_seriesNullableScalarRelationFilter, mentor_meeting_seriesWhereInput> | null
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+  }, "id">
+
+  export type mentor_meetingsOrderByWithAggregationInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    seriesId?: SortOrderInput | SortOrder
+    followUpToMeetingId?: SortOrderInput | SortOrder
+    title?: SortOrder
+    meetingType?: SortOrder
+    mode?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    venue?: SortOrderInput | SortOrder
+    meetingLink?: SortOrderInput | SortOrder
+    agenda?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    startedAt?: SortOrderInput | SortOrder
+    endedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: mentor_meetingsCountOrderByAggregateInput
+    _max?: mentor_meetingsMaxOrderByAggregateInput
+    _min?: mentor_meetingsMinOrderByAggregateInput
+  }
+
+  export type mentor_meetingsScalarWhereWithAggregatesInput = {
+    AND?: mentor_meetingsScalarWhereWithAggregatesInput | mentor_meetingsScalarWhereWithAggregatesInput[]
+    OR?: mentor_meetingsScalarWhereWithAggregatesInput[]
+    NOT?: mentor_meetingsScalarWhereWithAggregatesInput | mentor_meetingsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    mentorTeacherId?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    studentId?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    seriesId?: StringNullableWithAggregatesFilter<"mentor_meetings"> | string | null
+    followUpToMeetingId?: StringNullableWithAggregatesFilter<"mentor_meetings"> | string | null
+    title?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    meetingType?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    mode?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    status?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    priority?: StringWithAggregatesFilter<"mentor_meetings"> | string
+    startAt?: DateTimeWithAggregatesFilter<"mentor_meetings"> | Date | string
+    endAt?: DateTimeWithAggregatesFilter<"mentor_meetings"> | Date | string
+    venue?: StringNullableWithAggregatesFilter<"mentor_meetings"> | string | null
+    meetingLink?: StringNullableWithAggregatesFilter<"mentor_meetings"> | string | null
+    agenda?: StringNullableWithAggregatesFilter<"mentor_meetings"> | string | null
+    description?: StringNullableWithAggregatesFilter<"mentor_meetings"> | string | null
+    startedAt?: DateTimeNullableWithAggregatesFilter<"mentor_meetings"> | Date | string | null
+    endedAt?: DateTimeNullableWithAggregatesFilter<"mentor_meetings"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_meetings"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"mentor_meetings"> | Date | string
   }
 
   export type academic_term_requestsCreateInput = {
@@ -36718,11 +46958,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -36762,11 +47004,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -36802,11 +47046,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -36846,11 +47092,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -36968,6 +47216,12 @@ export namespace Prisma {
     completionRequestedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_documents?: internship_documentsCreateNestedManyWithoutInternshipInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutInternshipInput
     student: studentsCreateNestedOneWithoutInternshipsInput
   }
 
@@ -36992,6 +47246,12 @@ export namespace Prisma {
     completionRequestedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_documents?: internship_documentsUncheckedCreateNestedManyWithoutInternshipInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutInternshipInput
   }
 
   export type student_internshipsUpdateInput = {
@@ -37014,6 +47274,12 @@ export namespace Prisma {
     completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_documents?: internship_documentsUpdateManyWithoutInternshipNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutInternshipNestedInput
     student?: studentsUpdateOneRequiredWithoutInternshipsNestedInput
   }
 
@@ -37038,6 +47304,12 @@ export namespace Prisma {
     completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_documents?: internship_documentsUncheckedUpdateManyWithoutInternshipNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutInternshipNestedInput
   }
 
   export type student_internshipsCreateManyInput = {
@@ -37061,6 +47333,10 @@ export namespace Prisma {
     completionRequestedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
   }
 
   export type student_internshipsUpdateManyMutationInput = {
@@ -37083,6 +47359,10 @@ export namespace Prisma {
     completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type student_internshipsUncheckedUpdateManyInput = {
@@ -37105,6 +47385,189 @@ export namespace Prisma {
     completionRequested?: BoolFieldUpdateOperationsInput | boolean
     completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type internship_reviewsCreateInput = {
+    id: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+    internship: student_internshipsCreateNestedOneWithoutInternship_reviewsInput
+    reviewer: teachersCreateNestedOneWithoutInternship_reviewsInput
+  }
+
+  export type internship_reviewsUncheckedCreateInput = {
+    id: string
+    internshipId: string
+    reviewerTeacherId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type internship_reviewsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internship?: student_internshipsUpdateOneRequiredWithoutInternship_reviewsNestedInput
+    reviewer?: teachersUpdateOneRequiredWithoutInternship_reviewsNestedInput
+  }
+
+  export type internship_reviewsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    internshipId?: StringFieldUpdateOperationsInput | string
+    reviewerTeacherId?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_reviewsCreateManyInput = {
+    id: string
+    internshipId: string
+    reviewerTeacherId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type internship_reviewsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_reviewsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    internshipId?: StringFieldUpdateOperationsInput | string
+    reviewerTeacherId?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_documentsCreateInput = {
+    id: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+    internship: student_internshipsCreateNestedOneWithoutInternship_documentsInput
+  }
+
+  export type internship_documentsUncheckedCreateInput = {
+    id: string
+    internshipId: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type internship_documentsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internship?: student_internshipsUpdateOneRequiredWithoutInternship_documentsNestedInput
+  }
+
+  export type internship_documentsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    internshipId?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_documentsCreateManyInput = {
+    id: string
+    internshipId: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type internship_documentsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_documentsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    internshipId?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -37962,9 +48425,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -37985,9 +48452,13 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -38006,7 +48477,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -38029,7 +48504,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -38048,7 +48527,7 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
   }
 
   export type teachersUpdateManyMutationInput = {
@@ -38456,6 +48935,478 @@ export namespace Prisma {
     researchGate?: NullableStringFieldUpdateOperationsInput | string | null
     orcid?: NullableStringFieldUpdateOperationsInput | string | null
     website?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsCreateInput = {
+    id: string
+    content: string
+    position?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings: mentor_meetingsCreateNestedOneWithoutMentor_meeting_discussion_pointsInput
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedCreateInput = {
+    id: string
+    meetingId: string
+    content: string
+    position?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_discussion_pointsNestedInput
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsCreateManyInput = {
+    id: string
+    meetingId: string
+    content: string
+    position?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_feedbackCreateInput = {
+    id: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings: mentor_meetingsCreateNestedOneWithoutMentor_meeting_feedbackInput
+    teachers: teachersCreateNestedOneWithoutMentor_meeting_feedbackInput
+  }
+
+  export type mentor_meeting_feedbackUncheckedCreateInput = {
+    id: string
+    meetingId: string
+    mentorTeacherId: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_feedbackUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_feedbackNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meeting_feedbackNestedInput
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_feedbackCreateManyInput = {
+    id: string
+    meetingId: string
+    mentorTeacherId: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_feedbackUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_notesCreateInput = {
+    id: string
+    content?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings: mentor_meetingsCreateNestedOneWithoutMentor_meeting_notesInput
+  }
+
+  export type mentor_meeting_notesUncheckedCreateInput = {
+    id: string
+    meetingId: string
+    content?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_notesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_notesNestedInput
+  }
+
+  export type mentor_meeting_notesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_notesCreateManyInput = {
+    id: string
+    meetingId: string
+    content?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_notesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_notesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_seriesCreateInput = {
+    id: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    students: studentsCreateNestedOneWithoutMentor_meeting_seriesInput
+    teachers: teachersCreateNestedOneWithoutMentor_meeting_seriesInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesUncheckedCreateInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: studentsUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesCreateManyInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_seriesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsCreateInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsCreateManyInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meetingsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -39488,6 +50439,18 @@ export namespace Prisma {
     none?: academic_backlogsWhereInput
   }
 
+  export type Mentor_meeting_seriesListRelationFilter = {
+    every?: mentor_meeting_seriesWhereInput
+    some?: mentor_meeting_seriesWhereInput
+    none?: mentor_meeting_seriesWhereInput
+  }
+
+  export type Mentor_meetingsListRelationFilter = {
+    every?: mentor_meetingsWhereInput
+    some?: mentor_meetingsWhereInput
+    none?: mentor_meetingsWhereInput
+  }
+
   export type Student_contact_detailsNullableScalarRelationFilter = {
     is?: student_contact_detailsWhereInput | null
     isNot?: student_contact_detailsWhereInput | null
@@ -39511,6 +50474,14 @@ export namespace Prisma {
   }
 
   export type academic_backlogsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type mentor_meeting_seriesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type mentor_meetingsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -39731,6 +50702,40 @@ export namespace Prisma {
     not?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel> | $Enums.InternshipVerificationStatus
   }
 
+  export type EnumInternshipTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipType | EnumInternshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipTypeFilter<$PrismaModel> | $Enums.InternshipType
+  }
+
+  export type EnumCompletionVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompletionVerificationStatus | EnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCompletionVerificationStatusFilter<$PrismaModel> | $Enums.CompletionVerificationStatus
+  }
+
+  export type Internship_documentsListRelationFilter = {
+    every?: internship_documentsWhereInput
+    some?: internship_documentsWhereInput
+    none?: internship_documentsWhereInput
+  }
+
+  export type Internship_reviewsListRelationFilter = {
+    every?: internship_reviewsWhereInput
+    some?: internship_reviewsWhereInput
+    none?: internship_reviewsWhereInput
+  }
+
+  export type internship_documentsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type internship_reviewsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type student_internshipsCountOrderByAggregateInput = {
     id?: SortOrder
     studentId?: SortOrder
@@ -39752,6 +50757,10 @@ export namespace Prisma {
     completionRequestedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    internshipType?: SortOrder
+    completionVerificationStatus?: SortOrder
+    completionMentorRemark?: SortOrder
+    completionVerifiedAt?: SortOrder
   }
 
   export type student_internshipsAvgOrderByAggregateInput = {
@@ -39779,6 +50788,10 @@ export namespace Prisma {
     completionRequestedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    internshipType?: SortOrder
+    completionVerificationStatus?: SortOrder
+    completionMentorRemark?: SortOrder
+    completionVerifiedAt?: SortOrder
   }
 
   export type student_internshipsMinOrderByAggregateInput = {
@@ -39802,6 +50815,10 @@ export namespace Prisma {
     completionRequestedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    internshipType?: SortOrder
+    completionVerificationStatus?: SortOrder
+    completionMentorRemark?: SortOrder
+    completionVerifiedAt?: SortOrder
   }
 
   export type student_internshipsSumOrderByAggregateInput = {
@@ -39836,6 +50853,185 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
     _max?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipType | EnumInternshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternshipType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipTypeFilter<$PrismaModel>
+    _max?: NestedEnumInternshipTypeFilter<$PrismaModel>
+  }
+
+  export type EnumCompletionVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompletionVerificationStatus | EnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCompletionVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.CompletionVerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCompletionVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumCompletionVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipReviewStageFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewStage | EnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewStageFilter<$PrismaModel> | $Enums.InternshipReviewStage
+  }
+
+  export type EnumInternshipReviewDecisionFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewDecision | EnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewDecisionFilter<$PrismaModel> | $Enums.InternshipReviewDecision
+  }
+
+  export type Student_internshipsScalarRelationFilter = {
+    is?: student_internshipsWhereInput
+    isNot?: student_internshipsWhereInput
+  }
+
+  export type internship_reviewsCountOrderByAggregateInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    reviewerTeacherId?: SortOrder
+    reviewStage?: SortOrder
+    decision?: SortOrder
+    remarks?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type internship_reviewsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    reviewerTeacherId?: SortOrder
+    reviewStage?: SortOrder
+    decision?: SortOrder
+    remarks?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type internship_reviewsMinOrderByAggregateInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    reviewerTeacherId?: SortOrder
+    reviewStage?: SortOrder
+    decision?: SortOrder
+    remarks?: SortOrder
+    reviewedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type EnumInternshipReviewStageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewStage | EnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewStageWithAggregatesFilter<$PrismaModel> | $Enums.InternshipReviewStage
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipReviewStageFilter<$PrismaModel>
+    _max?: NestedEnumInternshipReviewStageFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipReviewDecisionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewDecision | EnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewDecisionWithAggregatesFilter<$PrismaModel> | $Enums.InternshipReviewDecision
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipReviewDecisionFilter<$PrismaModel>
+    _max?: NestedEnumInternshipReviewDecisionFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipDocumentTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentType | EnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentTypeFilter<$PrismaModel> | $Enums.InternshipDocumentType
+  }
+
+  export type EnumInternshipDocumentStageFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentStage | EnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentStageFilter<$PrismaModel> | $Enums.InternshipDocumentStage
+  }
+
+  export type internship_documentsCountOrderByAggregateInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    documentType?: SortOrder
+    submissionStage?: SortOrder
+    documentName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    cloudinaryPublicId?: SortOrder
+    fileUrl?: SortOrder
+    resourceType?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type internship_documentsAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type internship_documentsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    documentType?: SortOrder
+    submissionStage?: SortOrder
+    documentName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    cloudinaryPublicId?: SortOrder
+    fileUrl?: SortOrder
+    resourceType?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type internship_documentsMinOrderByAggregateInput = {
+    id?: SortOrder
+    internshipId?: SortOrder
+    documentType?: SortOrder
+    submissionStage?: SortOrder
+    documentName?: SortOrder
+    fileType?: SortOrder
+    fileSize?: SortOrder
+    cloudinaryPublicId?: SortOrder
+    fileUrl?: SortOrder
+    resourceType?: SortOrder
+    uploadedAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type internship_documentsSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type EnumInternshipDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentType | EnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternshipDocumentType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipDocumentTypeFilter<$PrismaModel>
+    _max?: NestedEnumInternshipDocumentTypeFilter<$PrismaModel>
+  }
+
+  export type EnumInternshipDocumentStageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentStage | EnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentStageWithAggregatesFilter<$PrismaModel> | $Enums.InternshipDocumentStage
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipDocumentStageFilter<$PrismaModel>
+    _max?: NestedEnumInternshipDocumentStageFilter<$PrismaModel>
   }
 
   export type EnumAddressTypeNullableFilter<$PrismaModel = never> = {
@@ -40421,9 +51617,19 @@ export namespace Prisma {
     isNot?: departmentsWhereInput | null
   }
 
+  export type Mentor_meeting_feedbackListRelationFilter = {
+    every?: mentor_meeting_feedbackWhereInput
+    some?: mentor_meeting_feedbackWhereInput
+    none?: mentor_meeting_feedbackWhereInput
+  }
+
   export type Teacher_profilesNullableScalarRelationFilter = {
     is?: teacher_profilesWhereInput | null
     isNot?: teacher_profilesWhereInput | null
+  }
+
+  export type mentor_meeting_feedbackOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type teachersCountOrderByAggregateInput = {
@@ -40665,6 +51871,263 @@ export namespace Prisma {
     researchGate?: SortOrder
     orcid?: SortOrder
     website?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type Mentor_meetingsScalarRelationFilter = {
+    is?: mentor_meetingsWhereInput
+    isNot?: mentor_meetingsWhereInput
+  }
+
+  export type mentor_meeting_discussion_pointsCountOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    position?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_discussion_pointsAvgOrderByAggregateInput = {
+    position?: SortOrder
+  }
+
+  export type mentor_meeting_discussion_pointsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    position?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_discussion_pointsMinOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    position?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_discussion_pointsSumOrderByAggregateInput = {
+    position?: SortOrder
+  }
+
+  export type mentor_meeting_feedbackCountOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    mentorTeacherId?: SortOrder
+    rating?: SortOrder
+    feedback?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_feedbackAvgOrderByAggregateInput = {
+    rating?: SortOrder
+  }
+
+  export type mentor_meeting_feedbackMaxOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    mentorTeacherId?: SortOrder
+    rating?: SortOrder
+    feedback?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_feedbackMinOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    mentorTeacherId?: SortOrder
+    rating?: SortOrder
+    feedback?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_feedbackSumOrderByAggregateInput = {
+    rating?: SortOrder
+  }
+
+  export type mentor_meeting_notesCountOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_notesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_notesMinOrderByAggregateInput = {
+    id?: SortOrder
+    meetingId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_seriesCountOrderByAggregateInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    frequency?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_seriesAvgOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type mentor_meeting_seriesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    frequency?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_seriesMinOrderByAggregateInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    frequency?: SortOrder
+    startDate?: SortOrder
+    endDate?: SortOrder
+    dayOfWeek?: SortOrder
+    startTime?: SortOrder
+    endTime?: SortOrder
+    timezone?: SortOrder
+    isActive?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meeting_seriesSumOrderByAggregateInput = {
+    dayOfWeek?: SortOrder
+  }
+
+  export type Mentor_meeting_discussion_pointsListRelationFilter = {
+    every?: mentor_meeting_discussion_pointsWhereInput
+    some?: mentor_meeting_discussion_pointsWhereInput
+    none?: mentor_meeting_discussion_pointsWhereInput
+  }
+
+  export type Mentor_meeting_feedbackNullableScalarRelationFilter = {
+    is?: mentor_meeting_feedbackWhereInput | null
+    isNot?: mentor_meeting_feedbackWhereInput | null
+  }
+
+  export type Mentor_meeting_notesNullableScalarRelationFilter = {
+    is?: mentor_meeting_notesWhereInput | null
+    isNot?: mentor_meeting_notesWhereInput | null
+  }
+
+  export type Mentor_meetingsNullableScalarRelationFilter = {
+    is?: mentor_meetingsWhereInput | null
+    isNot?: mentor_meetingsWhereInput | null
+  }
+
+  export type Mentor_meeting_seriesNullableScalarRelationFilter = {
+    is?: mentor_meeting_seriesWhereInput | null
+    isNot?: mentor_meeting_seriesWhereInput | null
+  }
+
+  export type mentor_meeting_discussion_pointsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type mentor_meetingsCountOrderByAggregateInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    seriesId?: SortOrder
+    followUpToMeetingId?: SortOrder
+    title?: SortOrder
+    meetingType?: SortOrder
+    mode?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    venue?: SortOrder
+    meetingLink?: SortOrder
+    agenda?: SortOrder
+    description?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meetingsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    seriesId?: SortOrder
+    followUpToMeetingId?: SortOrder
+    title?: SortOrder
+    meetingType?: SortOrder
+    mode?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    venue?: SortOrder
+    meetingLink?: SortOrder
+    agenda?: SortOrder
+    description?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type mentor_meetingsMinOrderByAggregateInput = {
+    id?: SortOrder
+    mentorTeacherId?: SortOrder
+    studentId?: SortOrder
+    seriesId?: SortOrder
+    followUpToMeetingId?: SortOrder
+    title?: SortOrder
+    meetingType?: SortOrder
+    mode?: SortOrder
+    status?: SortOrder
+    priority?: SortOrder
+    startAt?: SortOrder
+    endAt?: SortOrder
+    venue?: SortOrder
+    meetingLink?: SortOrder
+    agenda?: SortOrder
+    description?: SortOrder
+    startedAt?: SortOrder
+    endedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -41613,6 +53076,20 @@ export namespace Prisma {
     connect?: mentor_assignmentsWhereUniqueInput | mentor_assignmentsWhereUniqueInput[]
   }
 
+  export type mentor_meeting_seriesCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutStudentsInput, mentor_meeting_seriesUncheckedCreateWithoutStudentsInput> | mentor_meeting_seriesCreateWithoutStudentsInput[] | mentor_meeting_seriesUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutStudentsInput | mentor_meeting_seriesCreateOrConnectWithoutStudentsInput[]
+    createMany?: mentor_meeting_seriesCreateManyStudentsInputEnvelope
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+  }
+
+  export type mentor_meetingsCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<mentor_meetingsCreateWithoutStudentsInput, mentor_meetingsUncheckedCreateWithoutStudentsInput> | mentor_meetingsCreateWithoutStudentsInput[] | mentor_meetingsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutStudentsInput | mentor_meetingsCreateOrConnectWithoutStudentsInput[]
+    createMany?: mentor_meetingsCreateManyStudentsInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+  }
+
   export type mentor_transfer_requestsCreateNestedManyWithoutStudentsInput = {
     create?: XOR<mentor_transfer_requestsCreateWithoutStudentsInput, mentor_transfer_requestsUncheckedCreateWithoutStudentsInput> | mentor_transfer_requestsCreateWithoutStudentsInput[] | mentor_transfer_requestsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutStudentsInput | mentor_transfer_requestsCreateOrConnectWithoutStudentsInput[]
@@ -41633,18 +53110,18 @@ export namespace Prisma {
     connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
   }
 
-  export type student_internshipsCreateNestedManyWithoutStudentInput = {
-    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
-    createMany?: student_internshipsCreateManyStudentInputEnvelope
-    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-  }
-
   export type student_enrollmentsCreateNestedManyWithoutStudentsInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
     createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
     connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+  }
+
+  export type student_internshipsCreateNestedManyWithoutStudentInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
   }
 
   export type student_parent_detailsCreateNestedOneWithoutStudentInput = {
@@ -41693,6 +53170,20 @@ export namespace Prisma {
     connect?: mentor_assignmentsWhereUniqueInput | mentor_assignmentsWhereUniqueInput[]
   }
 
+  export type mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutStudentsInput, mentor_meeting_seriesUncheckedCreateWithoutStudentsInput> | mentor_meeting_seriesCreateWithoutStudentsInput[] | mentor_meeting_seriesUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutStudentsInput | mentor_meeting_seriesCreateOrConnectWithoutStudentsInput[]
+    createMany?: mentor_meeting_seriesCreateManyStudentsInputEnvelope
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+  }
+
+  export type mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<mentor_meetingsCreateWithoutStudentsInput, mentor_meetingsUncheckedCreateWithoutStudentsInput> | mentor_meetingsCreateWithoutStudentsInput[] | mentor_meetingsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutStudentsInput | mentor_meetingsCreateOrConnectWithoutStudentsInput[]
+    createMany?: mentor_meetingsCreateManyStudentsInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+  }
+
   export type mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput = {
     create?: XOR<mentor_transfer_requestsCreateWithoutStudentsInput, mentor_transfer_requestsUncheckedCreateWithoutStudentsInput> | mentor_transfer_requestsCreateWithoutStudentsInput[] | mentor_transfer_requestsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutStudentsInput | mentor_transfer_requestsCreateOrConnectWithoutStudentsInput[]
@@ -41713,18 +53204,18 @@ export namespace Prisma {
     connect?: student_documentsWhereUniqueInput | student_documentsWhereUniqueInput[]
   }
 
-  export type student_internshipsUncheckedCreateNestedManyWithoutStudentInput = {
-    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
-    createMany?: student_internshipsCreateManyStudentInputEnvelope
-    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-  }
-
   export type student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
     createMany?: student_enrollmentsCreateManyStudentsInputEnvelope
     connect?: student_enrollmentsWhereUniqueInput | student_enrollmentsWhereUniqueInput[]
+  }
+
+  export type student_internshipsUncheckedCreateNestedManyWithoutStudentInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
   }
 
   export type student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput = {
@@ -41825,6 +53316,34 @@ export namespace Prisma {
     deleteMany?: mentor_assignmentsScalarWhereInput | mentor_assignmentsScalarWhereInput[]
   }
 
+  export type mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutStudentsInput, mentor_meeting_seriesUncheckedCreateWithoutStudentsInput> | mentor_meeting_seriesCreateWithoutStudentsInput[] | mentor_meeting_seriesUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutStudentsInput | mentor_meeting_seriesCreateOrConnectWithoutStudentsInput[]
+    upsert?: mentor_meeting_seriesUpsertWithWhereUniqueWithoutStudentsInput | mentor_meeting_seriesUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: mentor_meeting_seriesCreateManyStudentsInputEnvelope
+    set?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    disconnect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    delete?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    update?: mentor_meeting_seriesUpdateWithWhereUniqueWithoutStudentsInput | mentor_meeting_seriesUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: mentor_meeting_seriesUpdateManyWithWhereWithoutStudentsInput | mentor_meeting_seriesUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: mentor_meeting_seriesScalarWhereInput | mentor_meeting_seriesScalarWhereInput[]
+  }
+
+  export type mentor_meetingsUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutStudentsInput, mentor_meetingsUncheckedCreateWithoutStudentsInput> | mentor_meetingsCreateWithoutStudentsInput[] | mentor_meetingsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutStudentsInput | mentor_meetingsCreateOrConnectWithoutStudentsInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutStudentsInput | mentor_meetingsUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: mentor_meetingsCreateManyStudentsInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutStudentsInput | mentor_meetingsUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutStudentsInput | mentor_meetingsUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+  }
+
   export type mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<mentor_transfer_requestsCreateWithoutStudentsInput, mentor_transfer_requestsUncheckedCreateWithoutStudentsInput> | mentor_transfer_requestsCreateWithoutStudentsInput[] | mentor_transfer_requestsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutStudentsInput | mentor_transfer_requestsCreateOrConnectWithoutStudentsInput[]
@@ -41863,20 +53382,6 @@ export namespace Prisma {
     deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
   }
 
-  export type student_internshipsUpdateManyWithoutStudentNestedInput = {
-    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
-    upsert?: student_internshipsUpsertWithWhereUniqueWithoutStudentInput | student_internshipsUpsertWithWhereUniqueWithoutStudentInput[]
-    createMany?: student_internshipsCreateManyStudentInputEnvelope
-    set?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    disconnect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    delete?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    update?: student_internshipsUpdateWithWhereUniqueWithoutStudentInput | student_internshipsUpdateWithWhereUniqueWithoutStudentInput[]
-    updateMany?: student_internshipsUpdateManyWithWhereWithoutStudentInput | student_internshipsUpdateManyWithWhereWithoutStudentInput[]
-    deleteMany?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
-  }
-
   export type student_enrollmentsUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
@@ -41889,6 +53394,20 @@ export namespace Prisma {
     update?: student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput | student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput[]
     updateMany?: student_enrollmentsUpdateManyWithWhereWithoutStudentsInput | student_enrollmentsUpdateManyWithWhereWithoutStudentsInput[]
     deleteMany?: student_enrollmentsScalarWhereInput | student_enrollmentsScalarWhereInput[]
+  }
+
+  export type student_internshipsUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    upsert?: student_internshipsUpsertWithWhereUniqueWithoutStudentInput | student_internshipsUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    set?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    disconnect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    delete?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    update?: student_internshipsUpdateWithWhereUniqueWithoutStudentInput | student_internshipsUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: student_internshipsUpdateManyWithWhereWithoutStudentInput | student_internshipsUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
   }
 
   export type student_parent_detailsUpdateOneWithoutStudentNestedInput = {
@@ -41975,6 +53494,34 @@ export namespace Prisma {
     deleteMany?: mentor_assignmentsScalarWhereInput | mentor_assignmentsScalarWhereInput[]
   }
 
+  export type mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutStudentsInput, mentor_meeting_seriesUncheckedCreateWithoutStudentsInput> | mentor_meeting_seriesCreateWithoutStudentsInput[] | mentor_meeting_seriesUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutStudentsInput | mentor_meeting_seriesCreateOrConnectWithoutStudentsInput[]
+    upsert?: mentor_meeting_seriesUpsertWithWhereUniqueWithoutStudentsInput | mentor_meeting_seriesUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: mentor_meeting_seriesCreateManyStudentsInputEnvelope
+    set?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    disconnect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    delete?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    update?: mentor_meeting_seriesUpdateWithWhereUniqueWithoutStudentsInput | mentor_meeting_seriesUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: mentor_meeting_seriesUpdateManyWithWhereWithoutStudentsInput | mentor_meeting_seriesUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: mentor_meeting_seriesScalarWhereInput | mentor_meeting_seriesScalarWhereInput[]
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutStudentsInput, mentor_meetingsUncheckedCreateWithoutStudentsInput> | mentor_meetingsCreateWithoutStudentsInput[] | mentor_meetingsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutStudentsInput | mentor_meetingsCreateOrConnectWithoutStudentsInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutStudentsInput | mentor_meetingsUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: mentor_meetingsCreateManyStudentsInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutStudentsInput | mentor_meetingsUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutStudentsInput | mentor_meetingsUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+  }
+
   export type mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<mentor_transfer_requestsCreateWithoutStudentsInput, mentor_transfer_requestsUncheckedCreateWithoutStudentsInput> | mentor_transfer_requestsCreateWithoutStudentsInput[] | mentor_transfer_requestsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutStudentsInput | mentor_transfer_requestsCreateOrConnectWithoutStudentsInput[]
@@ -42013,20 +53560,6 @@ export namespace Prisma {
     deleteMany?: student_documentsScalarWhereInput | student_documentsScalarWhereInput[]
   }
 
-  export type student_internshipsUncheckedUpdateManyWithoutStudentNestedInput = {
-    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
-    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
-    upsert?: student_internshipsUpsertWithWhereUniqueWithoutStudentInput | student_internshipsUpsertWithWhereUniqueWithoutStudentInput[]
-    createMany?: student_internshipsCreateManyStudentInputEnvelope
-    set?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    disconnect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    delete?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
-    update?: student_internshipsUpdateWithWhereUniqueWithoutStudentInput | student_internshipsUpdateWithWhereUniqueWithoutStudentInput[]
-    updateMany?: student_internshipsUpdateManyWithWhereWithoutStudentInput | student_internshipsUpdateManyWithWhereWithoutStudentInput[]
-    deleteMany?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
-  }
-
   export type student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput> | student_enrollmentsCreateWithoutStudentsInput[] | student_enrollmentsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: student_enrollmentsCreateOrConnectWithoutStudentsInput | student_enrollmentsCreateOrConnectWithoutStudentsInput[]
@@ -42041,6 +53574,20 @@ export namespace Prisma {
     deleteMany?: student_enrollmentsScalarWhereInput | student_enrollmentsScalarWhereInput[]
   }
 
+  export type student_internshipsUncheckedUpdateManyWithoutStudentNestedInput = {
+    create?: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput> | student_internshipsCreateWithoutStudentInput[] | student_internshipsUncheckedCreateWithoutStudentInput[]
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutStudentInput | student_internshipsCreateOrConnectWithoutStudentInput[]
+    upsert?: student_internshipsUpsertWithWhereUniqueWithoutStudentInput | student_internshipsUpsertWithWhereUniqueWithoutStudentInput[]
+    createMany?: student_internshipsCreateManyStudentInputEnvelope
+    set?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    disconnect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    delete?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    connect?: student_internshipsWhereUniqueInput | student_internshipsWhereUniqueInput[]
+    update?: student_internshipsUpdateWithWhereUniqueWithoutStudentInput | student_internshipsUpdateWithWhereUniqueWithoutStudentInput[]
+    updateMany?: student_internshipsUpdateManyWithWhereWithoutStudentInput | student_internshipsUpdateManyWithWhereWithoutStudentInput[]
+    deleteMany?: student_internshipsScalarWhereInput | student_internshipsScalarWhereInput[]
+  }
+
   export type student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput = {
     create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
     connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
@@ -42051,10 +53598,38 @@ export namespace Prisma {
     update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
   }
 
+  export type internship_documentsCreateNestedManyWithoutInternshipInput = {
+    create?: XOR<internship_documentsCreateWithoutInternshipInput, internship_documentsUncheckedCreateWithoutInternshipInput> | internship_documentsCreateWithoutInternshipInput[] | internship_documentsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_documentsCreateOrConnectWithoutInternshipInput | internship_documentsCreateOrConnectWithoutInternshipInput[]
+    createMany?: internship_documentsCreateManyInternshipInputEnvelope
+    connect?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+  }
+
+  export type internship_reviewsCreateNestedManyWithoutInternshipInput = {
+    create?: XOR<internship_reviewsCreateWithoutInternshipInput, internship_reviewsUncheckedCreateWithoutInternshipInput> | internship_reviewsCreateWithoutInternshipInput[] | internship_reviewsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutInternshipInput | internship_reviewsCreateOrConnectWithoutInternshipInput[]
+    createMany?: internship_reviewsCreateManyInternshipInputEnvelope
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+  }
+
   export type studentsCreateNestedOneWithoutInternshipsInput = {
     create?: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
     connectOrCreate?: studentsCreateOrConnectWithoutInternshipsInput
     connect?: studentsWhereUniqueInput
+  }
+
+  export type internship_documentsUncheckedCreateNestedManyWithoutInternshipInput = {
+    create?: XOR<internship_documentsCreateWithoutInternshipInput, internship_documentsUncheckedCreateWithoutInternshipInput> | internship_documentsCreateWithoutInternshipInput[] | internship_documentsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_documentsCreateOrConnectWithoutInternshipInput | internship_documentsCreateOrConnectWithoutInternshipInput[]
+    createMany?: internship_documentsCreateManyInternshipInputEnvelope
+    connect?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+  }
+
+  export type internship_reviewsUncheckedCreateNestedManyWithoutInternshipInput = {
+    create?: XOR<internship_reviewsCreateWithoutInternshipInput, internship_reviewsUncheckedCreateWithoutInternshipInput> | internship_reviewsCreateWithoutInternshipInput[] | internship_reviewsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutInternshipInput | internship_reviewsCreateOrConnectWithoutInternshipInput[]
+    createMany?: internship_reviewsCreateManyInternshipInputEnvelope
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
   }
 
   export type NullableEnumInternshipModeFieldUpdateOperationsInput = {
@@ -42069,12 +53644,134 @@ export namespace Prisma {
     set?: $Enums.InternshipVerificationStatus
   }
 
+  export type EnumInternshipTypeFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipType
+  }
+
+  export type EnumCompletionVerificationStatusFieldUpdateOperationsInput = {
+    set?: $Enums.CompletionVerificationStatus
+  }
+
+  export type internship_documentsUpdateManyWithoutInternshipNestedInput = {
+    create?: XOR<internship_documentsCreateWithoutInternshipInput, internship_documentsUncheckedCreateWithoutInternshipInput> | internship_documentsCreateWithoutInternshipInput[] | internship_documentsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_documentsCreateOrConnectWithoutInternshipInput | internship_documentsCreateOrConnectWithoutInternshipInput[]
+    upsert?: internship_documentsUpsertWithWhereUniqueWithoutInternshipInput | internship_documentsUpsertWithWhereUniqueWithoutInternshipInput[]
+    createMany?: internship_documentsCreateManyInternshipInputEnvelope
+    set?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    disconnect?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    delete?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    connect?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    update?: internship_documentsUpdateWithWhereUniqueWithoutInternshipInput | internship_documentsUpdateWithWhereUniqueWithoutInternshipInput[]
+    updateMany?: internship_documentsUpdateManyWithWhereWithoutInternshipInput | internship_documentsUpdateManyWithWhereWithoutInternshipInput[]
+    deleteMany?: internship_documentsScalarWhereInput | internship_documentsScalarWhereInput[]
+  }
+
+  export type internship_reviewsUpdateManyWithoutInternshipNestedInput = {
+    create?: XOR<internship_reviewsCreateWithoutInternshipInput, internship_reviewsUncheckedCreateWithoutInternshipInput> | internship_reviewsCreateWithoutInternshipInput[] | internship_reviewsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutInternshipInput | internship_reviewsCreateOrConnectWithoutInternshipInput[]
+    upsert?: internship_reviewsUpsertWithWhereUniqueWithoutInternshipInput | internship_reviewsUpsertWithWhereUniqueWithoutInternshipInput[]
+    createMany?: internship_reviewsCreateManyInternshipInputEnvelope
+    set?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    disconnect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    delete?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    update?: internship_reviewsUpdateWithWhereUniqueWithoutInternshipInput | internship_reviewsUpdateWithWhereUniqueWithoutInternshipInput[]
+    updateMany?: internship_reviewsUpdateManyWithWhereWithoutInternshipInput | internship_reviewsUpdateManyWithWhereWithoutInternshipInput[]
+    deleteMany?: internship_reviewsScalarWhereInput | internship_reviewsScalarWhereInput[]
+  }
+
   export type studentsUpdateOneRequiredWithoutInternshipsNestedInput = {
     create?: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
     connectOrCreate?: studentsCreateOrConnectWithoutInternshipsInput
     upsert?: studentsUpsertWithoutInternshipsInput
     connect?: studentsWhereUniqueInput
     update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutInternshipsInput, studentsUpdateWithoutInternshipsInput>, studentsUncheckedUpdateWithoutInternshipsInput>
+  }
+
+  export type internship_documentsUncheckedUpdateManyWithoutInternshipNestedInput = {
+    create?: XOR<internship_documentsCreateWithoutInternshipInput, internship_documentsUncheckedCreateWithoutInternshipInput> | internship_documentsCreateWithoutInternshipInput[] | internship_documentsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_documentsCreateOrConnectWithoutInternshipInput | internship_documentsCreateOrConnectWithoutInternshipInput[]
+    upsert?: internship_documentsUpsertWithWhereUniqueWithoutInternshipInput | internship_documentsUpsertWithWhereUniqueWithoutInternshipInput[]
+    createMany?: internship_documentsCreateManyInternshipInputEnvelope
+    set?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    disconnect?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    delete?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    connect?: internship_documentsWhereUniqueInput | internship_documentsWhereUniqueInput[]
+    update?: internship_documentsUpdateWithWhereUniqueWithoutInternshipInput | internship_documentsUpdateWithWhereUniqueWithoutInternshipInput[]
+    updateMany?: internship_documentsUpdateManyWithWhereWithoutInternshipInput | internship_documentsUpdateManyWithWhereWithoutInternshipInput[]
+    deleteMany?: internship_documentsScalarWhereInput | internship_documentsScalarWhereInput[]
+  }
+
+  export type internship_reviewsUncheckedUpdateManyWithoutInternshipNestedInput = {
+    create?: XOR<internship_reviewsCreateWithoutInternshipInput, internship_reviewsUncheckedCreateWithoutInternshipInput> | internship_reviewsCreateWithoutInternshipInput[] | internship_reviewsUncheckedCreateWithoutInternshipInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutInternshipInput | internship_reviewsCreateOrConnectWithoutInternshipInput[]
+    upsert?: internship_reviewsUpsertWithWhereUniqueWithoutInternshipInput | internship_reviewsUpsertWithWhereUniqueWithoutInternshipInput[]
+    createMany?: internship_reviewsCreateManyInternshipInputEnvelope
+    set?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    disconnect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    delete?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    update?: internship_reviewsUpdateWithWhereUniqueWithoutInternshipInput | internship_reviewsUpdateWithWhereUniqueWithoutInternshipInput[]
+    updateMany?: internship_reviewsUpdateManyWithWhereWithoutInternshipInput | internship_reviewsUpdateManyWithWhereWithoutInternshipInput[]
+    deleteMany?: internship_reviewsScalarWhereInput | internship_reviewsScalarWhereInput[]
+  }
+
+  export type student_internshipsCreateNestedOneWithoutInternship_reviewsInput = {
+    create?: XOR<student_internshipsCreateWithoutInternship_reviewsInput, student_internshipsUncheckedCreateWithoutInternship_reviewsInput>
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutInternship_reviewsInput
+    connect?: student_internshipsWhereUniqueInput
+  }
+
+  export type teachersCreateNestedOneWithoutInternship_reviewsInput = {
+    create?: XOR<teachersCreateWithoutInternship_reviewsInput, teachersUncheckedCreateWithoutInternship_reviewsInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutInternship_reviewsInput
+    connect?: teachersWhereUniqueInput
+  }
+
+  export type EnumInternshipReviewStageFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipReviewStage
+  }
+
+  export type EnumInternshipReviewDecisionFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipReviewDecision
+  }
+
+  export type student_internshipsUpdateOneRequiredWithoutInternship_reviewsNestedInput = {
+    create?: XOR<student_internshipsCreateWithoutInternship_reviewsInput, student_internshipsUncheckedCreateWithoutInternship_reviewsInput>
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutInternship_reviewsInput
+    upsert?: student_internshipsUpsertWithoutInternship_reviewsInput
+    connect?: student_internshipsWhereUniqueInput
+    update?: XOR<XOR<student_internshipsUpdateToOneWithWhereWithoutInternship_reviewsInput, student_internshipsUpdateWithoutInternship_reviewsInput>, student_internshipsUncheckedUpdateWithoutInternship_reviewsInput>
+  }
+
+  export type teachersUpdateOneRequiredWithoutInternship_reviewsNestedInput = {
+    create?: XOR<teachersCreateWithoutInternship_reviewsInput, teachersUncheckedCreateWithoutInternship_reviewsInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutInternship_reviewsInput
+    upsert?: teachersUpsertWithoutInternship_reviewsInput
+    connect?: teachersWhereUniqueInput
+    update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutInternship_reviewsInput, teachersUpdateWithoutInternship_reviewsInput>, teachersUncheckedUpdateWithoutInternship_reviewsInput>
+  }
+
+  export type student_internshipsCreateNestedOneWithoutInternship_documentsInput = {
+    create?: XOR<student_internshipsCreateWithoutInternship_documentsInput, student_internshipsUncheckedCreateWithoutInternship_documentsInput>
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutInternship_documentsInput
+    connect?: student_internshipsWhereUniqueInput
+  }
+
+  export type EnumInternshipDocumentTypeFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipDocumentType
+  }
+
+  export type EnumInternshipDocumentStageFieldUpdateOperationsInput = {
+    set?: $Enums.InternshipDocumentStage
+  }
+
+  export type student_internshipsUpdateOneRequiredWithoutInternship_documentsNestedInput = {
+    create?: XOR<student_internshipsCreateWithoutInternship_documentsInput, student_internshipsUncheckedCreateWithoutInternship_documentsInput>
+    connectOrCreate?: student_internshipsCreateOrConnectWithoutInternship_documentsInput
+    upsert?: student_internshipsUpsertWithoutInternship_documentsInput
+    connect?: student_internshipsWhereUniqueInput
+    update?: XOR<XOR<student_internshipsUpdateToOneWithWhereWithoutInternship_documentsInput, student_internshipsUpdateWithoutInternship_documentsInput>, student_internshipsUncheckedUpdateWithoutInternship_documentsInput>
   }
 
   export type studentsCreateNestedOneWithoutContactDetailsInput = {
@@ -42253,11 +53950,39 @@ export namespace Prisma {
     connect?: departmentsWhereUniqueInput
   }
 
+  export type internship_reviewsCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<internship_reviewsCreateWithoutReviewerInput, internship_reviewsUncheckedCreateWithoutReviewerInput> | internship_reviewsCreateWithoutReviewerInput[] | internship_reviewsUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutReviewerInput | internship_reviewsCreateOrConnectWithoutReviewerInput[]
+    createMany?: internship_reviewsCreateManyReviewerInputEnvelope
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+  }
+
   export type mentor_assignmentsCreateNestedManyWithoutTeachersInput = {
     create?: XOR<mentor_assignmentsCreateWithoutTeachersInput, mentor_assignmentsUncheckedCreateWithoutTeachersInput> | mentor_assignmentsCreateWithoutTeachersInput[] | mentor_assignmentsUncheckedCreateWithoutTeachersInput[]
     connectOrCreate?: mentor_assignmentsCreateOrConnectWithoutTeachersInput | mentor_assignmentsCreateOrConnectWithoutTeachersInput[]
     createMany?: mentor_assignmentsCreateManyTeachersInputEnvelope
     connect?: mentor_assignmentsWhereUniqueInput | mentor_assignmentsWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutTeachersInput, mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput> | mentor_meeting_feedbackCreateWithoutTeachersInput[] | mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput | mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_meeting_feedbackCreateManyTeachersInputEnvelope
+    connect?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_seriesCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutTeachersInput, mentor_meeting_seriesUncheckedCreateWithoutTeachersInput> | mentor_meeting_seriesCreateWithoutTeachersInput[] | mentor_meeting_seriesUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutTeachersInput | mentor_meeting_seriesCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_meeting_seriesCreateManyTeachersInputEnvelope
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+  }
+
+  export type mentor_meetingsCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_meetingsCreateWithoutTeachersInput, mentor_meetingsUncheckedCreateWithoutTeachersInput> | mentor_meetingsCreateWithoutTeachersInput[] | mentor_meetingsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutTeachersInput | mentor_meetingsCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_meetingsCreateManyTeachersInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
   }
 
   export type mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -42305,11 +54030,39 @@ export namespace Prisma {
     connect?: departmentsWhereUniqueInput
   }
 
+  export type internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput = {
+    create?: XOR<internship_reviewsCreateWithoutReviewerInput, internship_reviewsUncheckedCreateWithoutReviewerInput> | internship_reviewsCreateWithoutReviewerInput[] | internship_reviewsUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutReviewerInput | internship_reviewsCreateOrConnectWithoutReviewerInput[]
+    createMany?: internship_reviewsCreateManyReviewerInputEnvelope
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+  }
+
   export type mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput = {
     create?: XOR<mentor_assignmentsCreateWithoutTeachersInput, mentor_assignmentsUncheckedCreateWithoutTeachersInput> | mentor_assignmentsCreateWithoutTeachersInput[] | mentor_assignmentsUncheckedCreateWithoutTeachersInput[]
     connectOrCreate?: mentor_assignmentsCreateOrConnectWithoutTeachersInput | mentor_assignmentsCreateOrConnectWithoutTeachersInput[]
     createMany?: mentor_assignmentsCreateManyTeachersInputEnvelope
     connect?: mentor_assignmentsWhereUniqueInput | mentor_assignmentsWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutTeachersInput, mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput> | mentor_meeting_feedbackCreateWithoutTeachersInput[] | mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput | mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_meeting_feedbackCreateManyTeachersInputEnvelope
+    connect?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutTeachersInput, mentor_meeting_seriesUncheckedCreateWithoutTeachersInput> | mentor_meeting_seriesCreateWithoutTeachersInput[] | mentor_meeting_seriesUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutTeachersInput | mentor_meeting_seriesCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_meeting_seriesCreateManyTeachersInputEnvelope
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+  }
+
+  export type mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_meetingsCreateWithoutTeachersInput, mentor_meetingsUncheckedCreateWithoutTeachersInput> | mentor_meetingsCreateWithoutTeachersInput[] | mentor_meetingsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutTeachersInput | mentor_meetingsCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_meetingsCreateManyTeachersInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
   }
 
   export type mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -42349,6 +54102,20 @@ export namespace Prisma {
     update?: XOR<XOR<departmentsUpdateToOneWithWhereWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUpdateWithoutTeachers_departments_hodTeacherIdToteachersInput>, departmentsUncheckedUpdateWithoutTeachers_departments_hodTeacherIdToteachersInput>
   }
 
+  export type internship_reviewsUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<internship_reviewsCreateWithoutReviewerInput, internship_reviewsUncheckedCreateWithoutReviewerInput> | internship_reviewsCreateWithoutReviewerInput[] | internship_reviewsUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutReviewerInput | internship_reviewsCreateOrConnectWithoutReviewerInput[]
+    upsert?: internship_reviewsUpsertWithWhereUniqueWithoutReviewerInput | internship_reviewsUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: internship_reviewsCreateManyReviewerInputEnvelope
+    set?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    disconnect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    delete?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    update?: internship_reviewsUpdateWithWhereUniqueWithoutReviewerInput | internship_reviewsUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: internship_reviewsUpdateManyWithWhereWithoutReviewerInput | internship_reviewsUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: internship_reviewsScalarWhereInput | internship_reviewsScalarWhereInput[]
+  }
+
   export type mentor_assignmentsUpdateManyWithoutTeachersNestedInput = {
     create?: XOR<mentor_assignmentsCreateWithoutTeachersInput, mentor_assignmentsUncheckedCreateWithoutTeachersInput> | mentor_assignmentsCreateWithoutTeachersInput[] | mentor_assignmentsUncheckedCreateWithoutTeachersInput[]
     connectOrCreate?: mentor_assignmentsCreateOrConnectWithoutTeachersInput | mentor_assignmentsCreateOrConnectWithoutTeachersInput[]
@@ -42361,6 +54128,48 @@ export namespace Prisma {
     update?: mentor_assignmentsUpdateWithWhereUniqueWithoutTeachersInput | mentor_assignmentsUpdateWithWhereUniqueWithoutTeachersInput[]
     updateMany?: mentor_assignmentsUpdateManyWithWhereWithoutTeachersInput | mentor_assignmentsUpdateManyWithWhereWithoutTeachersInput[]
     deleteMany?: mentor_assignmentsScalarWhereInput | mentor_assignmentsScalarWhereInput[]
+  }
+
+  export type mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutTeachersInput, mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput> | mentor_meeting_feedbackCreateWithoutTeachersInput[] | mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput | mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_meeting_feedbackUpsertWithWhereUniqueWithoutTeachersInput | mentor_meeting_feedbackUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_meeting_feedbackCreateManyTeachersInputEnvelope
+    set?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    disconnect?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    delete?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    connect?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    update?: mentor_meeting_feedbackUpdateWithWhereUniqueWithoutTeachersInput | mentor_meeting_feedbackUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_meeting_feedbackUpdateManyWithWhereWithoutTeachersInput | mentor_meeting_feedbackUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_meeting_feedbackScalarWhereInput | mentor_meeting_feedbackScalarWhereInput[]
+  }
+
+  export type mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutTeachersInput, mentor_meeting_seriesUncheckedCreateWithoutTeachersInput> | mentor_meeting_seriesCreateWithoutTeachersInput[] | mentor_meeting_seriesUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutTeachersInput | mentor_meeting_seriesCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_meeting_seriesUpsertWithWhereUniqueWithoutTeachersInput | mentor_meeting_seriesUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_meeting_seriesCreateManyTeachersInputEnvelope
+    set?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    disconnect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    delete?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    update?: mentor_meeting_seriesUpdateWithWhereUniqueWithoutTeachersInput | mentor_meeting_seriesUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_meeting_seriesUpdateManyWithWhereWithoutTeachersInput | mentor_meeting_seriesUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_meeting_seriesScalarWhereInput | mentor_meeting_seriesScalarWhereInput[]
+  }
+
+  export type mentor_meetingsUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutTeachersInput, mentor_meetingsUncheckedCreateWithoutTeachersInput> | mentor_meetingsCreateWithoutTeachersInput[] | mentor_meetingsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutTeachersInput | mentor_meetingsCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutTeachersInput | mentor_meetingsUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_meetingsCreateManyTeachersInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutTeachersInput | mentor_meetingsUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutTeachersInput | mentor_meetingsUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
   }
 
   export type mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput = {
@@ -42443,6 +54252,20 @@ export namespace Prisma {
     update?: XOR<XOR<departmentsUpdateToOneWithWhereWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUpdateWithoutTeachers_departments_hodTeacherIdToteachersInput>, departmentsUncheckedUpdateWithoutTeachers_departments_hodTeacherIdToteachersInput>
   }
 
+  export type internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput = {
+    create?: XOR<internship_reviewsCreateWithoutReviewerInput, internship_reviewsUncheckedCreateWithoutReviewerInput> | internship_reviewsCreateWithoutReviewerInput[] | internship_reviewsUncheckedCreateWithoutReviewerInput[]
+    connectOrCreate?: internship_reviewsCreateOrConnectWithoutReviewerInput | internship_reviewsCreateOrConnectWithoutReviewerInput[]
+    upsert?: internship_reviewsUpsertWithWhereUniqueWithoutReviewerInput | internship_reviewsUpsertWithWhereUniqueWithoutReviewerInput[]
+    createMany?: internship_reviewsCreateManyReviewerInputEnvelope
+    set?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    disconnect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    delete?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    connect?: internship_reviewsWhereUniqueInput | internship_reviewsWhereUniqueInput[]
+    update?: internship_reviewsUpdateWithWhereUniqueWithoutReviewerInput | internship_reviewsUpdateWithWhereUniqueWithoutReviewerInput[]
+    updateMany?: internship_reviewsUpdateManyWithWhereWithoutReviewerInput | internship_reviewsUpdateManyWithWhereWithoutReviewerInput[]
+    deleteMany?: internship_reviewsScalarWhereInput | internship_reviewsScalarWhereInput[]
+  }
+
   export type mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput = {
     create?: XOR<mentor_assignmentsCreateWithoutTeachersInput, mentor_assignmentsUncheckedCreateWithoutTeachersInput> | mentor_assignmentsCreateWithoutTeachersInput[] | mentor_assignmentsUncheckedCreateWithoutTeachersInput[]
     connectOrCreate?: mentor_assignmentsCreateOrConnectWithoutTeachersInput | mentor_assignmentsCreateOrConnectWithoutTeachersInput[]
@@ -42455,6 +54278,48 @@ export namespace Prisma {
     update?: mentor_assignmentsUpdateWithWhereUniqueWithoutTeachersInput | mentor_assignmentsUpdateWithWhereUniqueWithoutTeachersInput[]
     updateMany?: mentor_assignmentsUpdateManyWithWhereWithoutTeachersInput | mentor_assignmentsUpdateManyWithWhereWithoutTeachersInput[]
     deleteMany?: mentor_assignmentsScalarWhereInput | mentor_assignmentsScalarWhereInput[]
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutTeachersInput, mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput> | mentor_meeting_feedbackCreateWithoutTeachersInput[] | mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput | mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_meeting_feedbackUpsertWithWhereUniqueWithoutTeachersInput | mentor_meeting_feedbackUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_meeting_feedbackCreateManyTeachersInputEnvelope
+    set?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    disconnect?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    delete?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    connect?: mentor_meeting_feedbackWhereUniqueInput | mentor_meeting_feedbackWhereUniqueInput[]
+    update?: mentor_meeting_feedbackUpdateWithWhereUniqueWithoutTeachersInput | mentor_meeting_feedbackUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_meeting_feedbackUpdateManyWithWhereWithoutTeachersInput | mentor_meeting_feedbackUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_meeting_feedbackScalarWhereInput | mentor_meeting_feedbackScalarWhereInput[]
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutTeachersInput, mentor_meeting_seriesUncheckedCreateWithoutTeachersInput> | mentor_meeting_seriesCreateWithoutTeachersInput[] | mentor_meeting_seriesUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutTeachersInput | mentor_meeting_seriesCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_meeting_seriesUpsertWithWhereUniqueWithoutTeachersInput | mentor_meeting_seriesUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_meeting_seriesCreateManyTeachersInputEnvelope
+    set?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    disconnect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    delete?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    connect?: mentor_meeting_seriesWhereUniqueInput | mentor_meeting_seriesWhereUniqueInput[]
+    update?: mentor_meeting_seriesUpdateWithWhereUniqueWithoutTeachersInput | mentor_meeting_seriesUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_meeting_seriesUpdateManyWithWhereWithoutTeachersInput | mentor_meeting_seriesUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_meeting_seriesScalarWhereInput | mentor_meeting_seriesScalarWhereInput[]
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutTeachersInput, mentor_meetingsUncheckedCreateWithoutTeachersInput> | mentor_meetingsCreateWithoutTeachersInput[] | mentor_meetingsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutTeachersInput | mentor_meetingsCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutTeachersInput | mentor_meetingsUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_meetingsCreateManyTeachersInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutTeachersInput | mentor_meetingsUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutTeachersInput | mentor_meetingsUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
   }
 
   export type mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput = {
@@ -42841,6 +54706,340 @@ export namespace Prisma {
     upsert?: teachersUpsertWithoutTeacher_profilesInput
     connect?: teachersWhereUniqueInput
     update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutTeacher_profilesInput, teachersUpdateWithoutTeacher_profilesInput>, teachersUncheckedUpdateWithoutTeacher_profilesInput>
+  }
+
+  export type mentor_meetingsCreateNestedOneWithoutMentor_meeting_discussion_pointsInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_discussion_pointsInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_discussion_pointsInput
+    connect?: mentor_meetingsWhereUniqueInput
+  }
+
+  export type mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_discussion_pointsNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_discussion_pointsInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_discussion_pointsInput
+    upsert?: mentor_meetingsUpsertWithoutMentor_meeting_discussion_pointsInput
+    connect?: mentor_meetingsWhereUniqueInput
+    update?: XOR<XOR<mentor_meetingsUpdateToOneWithWhereWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUpdateWithoutMentor_meeting_discussion_pointsInput>, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_discussion_pointsInput>
+  }
+
+  export type mentor_meetingsCreateNestedOneWithoutMentor_meeting_feedbackInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_feedbackInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_feedbackInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_feedbackInput
+    connect?: mentor_meetingsWhereUniqueInput
+  }
+
+  export type teachersCreateNestedOneWithoutMentor_meeting_feedbackInput = {
+    create?: XOR<teachersCreateWithoutMentor_meeting_feedbackInput, teachersUncheckedCreateWithoutMentor_meeting_feedbackInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_meeting_feedbackInput
+    connect?: teachersWhereUniqueInput
+  }
+
+  export type mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_feedbackNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_feedbackInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_feedbackInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_feedbackInput
+    upsert?: mentor_meetingsUpsertWithoutMentor_meeting_feedbackInput
+    connect?: mentor_meetingsWhereUniqueInput
+    update?: XOR<XOR<mentor_meetingsUpdateToOneWithWhereWithoutMentor_meeting_feedbackInput, mentor_meetingsUpdateWithoutMentor_meeting_feedbackInput>, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_feedbackInput>
+  }
+
+  export type teachersUpdateOneRequiredWithoutMentor_meeting_feedbackNestedInput = {
+    create?: XOR<teachersCreateWithoutMentor_meeting_feedbackInput, teachersUncheckedCreateWithoutMentor_meeting_feedbackInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_meeting_feedbackInput
+    upsert?: teachersUpsertWithoutMentor_meeting_feedbackInput
+    connect?: teachersWhereUniqueInput
+    update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutMentor_meeting_feedbackInput, teachersUpdateWithoutMentor_meeting_feedbackInput>, teachersUncheckedUpdateWithoutMentor_meeting_feedbackInput>
+  }
+
+  export type mentor_meetingsCreateNestedOneWithoutMentor_meeting_notesInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_notesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_notesInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_notesInput
+    connect?: mentor_meetingsWhereUniqueInput
+  }
+
+  export type mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_notesNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_notesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_notesInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_notesInput
+    upsert?: mentor_meetingsUpsertWithoutMentor_meeting_notesInput
+    connect?: mentor_meetingsWhereUniqueInput
+    update?: XOR<XOR<mentor_meetingsUpdateToOneWithWhereWithoutMentor_meeting_notesInput, mentor_meetingsUpdateWithoutMentor_meeting_notesInput>, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_notesInput>
+  }
+
+  export type studentsCreateNestedOneWithoutMentor_meeting_seriesInput = {
+    create?: XOR<studentsCreateWithoutMentor_meeting_seriesInput, studentsUncheckedCreateWithoutMentor_meeting_seriesInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutMentor_meeting_seriesInput
+    connect?: studentsWhereUniqueInput
+  }
+
+  export type teachersCreateNestedOneWithoutMentor_meeting_seriesInput = {
+    create?: XOR<teachersCreateWithoutMentor_meeting_seriesInput, teachersUncheckedCreateWithoutMentor_meeting_seriesInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_meeting_seriesInput
+    connect?: teachersWhereUniqueInput
+  }
+
+  export type mentor_meetingsCreateNestedManyWithoutMentor_meeting_seriesInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput> | mentor_meetingsCreateWithoutMentor_meeting_seriesInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput | mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meeting_seriesInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+  }
+
+  export type mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meeting_seriesInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput> | mentor_meetingsCreateWithoutMentor_meeting_seriesInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput | mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meeting_seriesInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+  }
+
+  export type studentsUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput = {
+    create?: XOR<studentsCreateWithoutMentor_meeting_seriesInput, studentsUncheckedCreateWithoutMentor_meeting_seriesInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutMentor_meeting_seriesInput
+    upsert?: studentsUpsertWithoutMentor_meeting_seriesInput
+    connect?: studentsWhereUniqueInput
+    update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutMentor_meeting_seriesInput, studentsUpdateWithoutMentor_meeting_seriesInput>, studentsUncheckedUpdateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type teachersUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput = {
+    create?: XOR<teachersCreateWithoutMentor_meeting_seriesInput, teachersUncheckedCreateWithoutMentor_meeting_seriesInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_meeting_seriesInput
+    upsert?: teachersUpsertWithoutMentor_meeting_seriesInput
+    connect?: teachersWhereUniqueInput
+    update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutMentor_meeting_seriesInput, teachersUpdateWithoutMentor_meeting_seriesInput>, teachersUncheckedUpdateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type mentor_meetingsUpdateManyWithoutMentor_meeting_seriesNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput> | mentor_meetingsCreateWithoutMentor_meeting_seriesInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput | mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meeting_seriesInput | mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meeting_seriesInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meeting_seriesInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meeting_seriesInput | mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meeting_seriesInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutMentor_meeting_seriesInput | mentor_meetingsUpdateManyWithWhereWithoutMentor_meeting_seriesInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutMentor_meeting_seriesNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput> | mentor_meetingsCreateWithoutMentor_meeting_seriesInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput | mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meeting_seriesInput | mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meeting_seriesInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meeting_seriesInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meeting_seriesInput | mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meeting_seriesInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutMentor_meeting_seriesInput | mentor_meetingsUpdateManyWithWhereWithoutMentor_meeting_seriesInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+  }
+
+  export type mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput[] | mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput[]
+    createMany?: mentor_meeting_discussion_pointsCreateManyMentor_meetingsInputEnvelope
+    connect?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutMentor_meetingsInput
+    connect?: mentor_meeting_feedbackWhereUniqueInput
+  }
+
+  export type mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_notesCreateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_notesCreateOrConnectWithoutMentor_meetingsInput
+    connect?: mentor_meeting_notesWhereUniqueInput
+  }
+
+  export type mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput = {
+    create?: XOR<mentor_meetingsCreateWithoutOther_mentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutOther_mentor_meetingsInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutOther_mentor_meetingsInput
+    connect?: mentor_meetingsWhereUniqueInput
+  }
+
+  export type mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meetingsCreateWithoutMentor_meetingsInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput | mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meetingsInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutMentor_meetingsInput, mentor_meeting_seriesUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutMentor_meetingsInput
+    connect?: mentor_meeting_seriesWhereUniqueInput
+  }
+
+  export type studentsCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<studentsCreateWithoutMentor_meetingsInput, studentsUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutMentor_meetingsInput
+    connect?: studentsWhereUniqueInput
+  }
+
+  export type teachersCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<teachersCreateWithoutMentor_meetingsInput, teachersUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_meetingsInput
+    connect?: teachersWhereUniqueInput
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput[] | mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput[]
+    createMany?: mentor_meeting_discussion_pointsCreateManyMentor_meetingsInputEnvelope
+    connect?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutMentor_meetingsInput
+    connect?: mentor_meeting_feedbackWhereUniqueInput
+  }
+
+  export type mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meeting_notesCreateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_notesCreateOrConnectWithoutMentor_meetingsInput
+    connect?: mentor_meeting_notesWhereUniqueInput
+  }
+
+  export type mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meetingsCreateWithoutMentor_meetingsInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput | mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meetingsInputEnvelope
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+  }
+
+  export type mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput[] | mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput[]
+    upsert?: mentor_meeting_discussion_pointsUpsertWithWhereUniqueWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsUpsertWithWhereUniqueWithoutMentor_meetingsInput[]
+    createMany?: mentor_meeting_discussion_pointsCreateManyMentor_meetingsInputEnvelope
+    set?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    disconnect?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    delete?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    connect?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    update?: mentor_meeting_discussion_pointsUpdateWithWhereUniqueWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsUpdateWithWhereUniqueWithoutMentor_meetingsInput[]
+    updateMany?: mentor_meeting_discussion_pointsUpdateManyWithWhereWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsUpdateManyWithWhereWithoutMentor_meetingsInput[]
+    deleteMany?: mentor_meeting_discussion_pointsScalarWhereInput | mentor_meeting_discussion_pointsScalarWhereInput[]
+  }
+
+  export type mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: mentor_meeting_feedbackUpsertWithoutMentor_meetingsInput
+    disconnect?: mentor_meeting_feedbackWhereInput | boolean
+    delete?: mentor_meeting_feedbackWhereInput | boolean
+    connect?: mentor_meeting_feedbackWhereUniqueInput
+    update?: XOR<XOR<mentor_meeting_feedbackUpdateToOneWithWhereWithoutMentor_meetingsInput, mentor_meeting_feedbackUpdateWithoutMentor_meetingsInput>, mentor_meeting_feedbackUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_notesCreateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_notesCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: mentor_meeting_notesUpsertWithoutMentor_meetingsInput
+    disconnect?: mentor_meeting_notesWhereInput | boolean
+    delete?: mentor_meeting_notesWhereInput | boolean
+    connect?: mentor_meeting_notesWhereUniqueInput
+    update?: XOR<XOR<mentor_meeting_notesUpdateToOneWithWhereWithoutMentor_meetingsInput, mentor_meeting_notesUpdateWithoutMentor_meetingsInput>, mentor_meeting_notesUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutOther_mentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutOther_mentor_meetingsInput>
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutOther_mentor_meetingsInput
+    upsert?: mentor_meetingsUpsertWithoutOther_mentor_meetingsInput
+    disconnect?: mentor_meetingsWhereInput | boolean
+    delete?: mentor_meetingsWhereInput | boolean
+    connect?: mentor_meetingsWhereUniqueInput
+    update?: XOR<XOR<mentor_meetingsUpdateToOneWithWhereWithoutOther_mentor_meetingsInput, mentor_meetingsUpdateWithoutOther_mentor_meetingsInput>, mentor_meetingsUncheckedUpdateWithoutOther_mentor_meetingsInput>
+  }
+
+  export type mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meetingsCreateWithoutMentor_meetingsInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput | mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meetingsInput | mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meetingsInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meetingsInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput | mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput | mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+  }
+
+  export type mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_seriesCreateWithoutMentor_meetingsInput, mentor_meeting_seriesUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_seriesCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: mentor_meeting_seriesUpsertWithoutMentor_meetingsInput
+    disconnect?: mentor_meeting_seriesWhereInput | boolean
+    delete?: mentor_meeting_seriesWhereInput | boolean
+    connect?: mentor_meeting_seriesWhereUniqueInput
+    update?: XOR<XOR<mentor_meeting_seriesUpdateToOneWithWhereWithoutMentor_meetingsInput, mentor_meeting_seriesUpdateWithoutMentor_meetingsInput>, mentor_meeting_seriesUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput = {
+    create?: XOR<studentsCreateWithoutMentor_meetingsInput, studentsUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: studentsUpsertWithoutMentor_meetingsInput
+    connect?: studentsWhereUniqueInput
+    update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutMentor_meetingsInput, studentsUpdateWithoutMentor_meetingsInput>, studentsUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput = {
+    create?: XOR<teachersCreateWithoutMentor_meetingsInput, teachersUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: teachersUpsertWithoutMentor_meetingsInput
+    connect?: teachersWhereUniqueInput
+    update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutMentor_meetingsInput, teachersUpdateWithoutMentor_meetingsInput>, teachersUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput[] | mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput[]
+    upsert?: mentor_meeting_discussion_pointsUpsertWithWhereUniqueWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsUpsertWithWhereUniqueWithoutMentor_meetingsInput[]
+    createMany?: mentor_meeting_discussion_pointsCreateManyMentor_meetingsInputEnvelope
+    set?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    disconnect?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    delete?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    connect?: mentor_meeting_discussion_pointsWhereUniqueInput | mentor_meeting_discussion_pointsWhereUniqueInput[]
+    update?: mentor_meeting_discussion_pointsUpdateWithWhereUniqueWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsUpdateWithWhereUniqueWithoutMentor_meetingsInput[]
+    updateMany?: mentor_meeting_discussion_pointsUpdateManyWithWhereWithoutMentor_meetingsInput | mentor_meeting_discussion_pointsUpdateManyWithWhereWithoutMentor_meetingsInput[]
+    deleteMany?: mentor_meeting_discussion_pointsScalarWhereInput | mentor_meeting_discussion_pointsScalarWhereInput[]
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_feedbackCreateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_feedbackCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: mentor_meeting_feedbackUpsertWithoutMentor_meetingsInput
+    disconnect?: mentor_meeting_feedbackWhereInput | boolean
+    delete?: mentor_meeting_feedbackWhereInput | boolean
+    connect?: mentor_meeting_feedbackWhereUniqueInput
+    update?: XOR<XOR<mentor_meeting_feedbackUpdateToOneWithWhereWithoutMentor_meetingsInput, mentor_meeting_feedbackUpdateWithoutMentor_meetingsInput>, mentor_meeting_feedbackUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meeting_notesCreateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput>
+    connectOrCreate?: mentor_meeting_notesCreateOrConnectWithoutMentor_meetingsInput
+    upsert?: mentor_meeting_notesUpsertWithoutMentor_meetingsInput
+    disconnect?: mentor_meeting_notesWhereInput | boolean
+    delete?: mentor_meeting_notesWhereInput | boolean
+    connect?: mentor_meeting_notesWhereUniqueInput
+    update?: XOR<XOR<mentor_meeting_notesUpdateToOneWithWhereWithoutMentor_meetingsInput, mentor_meeting_notesUpdateWithoutMentor_meetingsInput>, mentor_meeting_notesUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput = {
+    create?: XOR<mentor_meetingsCreateWithoutMentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput> | mentor_meetingsCreateWithoutMentor_meetingsInput[] | mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput[]
+    connectOrCreate?: mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput | mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput[]
+    upsert?: mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meetingsInput | mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meetingsInput[]
+    createMany?: mentor_meetingsCreateManyMentor_meetingsInputEnvelope
+    set?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    disconnect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    delete?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    connect?: mentor_meetingsWhereUniqueInput | mentor_meetingsWhereUniqueInput[]
+    update?: mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput | mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput[]
+    updateMany?: mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput | mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput[]
+    deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -43319,6 +55518,20 @@ export namespace Prisma {
     not?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel> | $Enums.InternshipVerificationStatus
   }
 
+  export type NestedEnumInternshipTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipType | EnumInternshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipTypeFilter<$PrismaModel> | $Enums.InternshipType
+  }
+
+  export type NestedEnumCompletionVerificationStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompletionVerificationStatus | EnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCompletionVerificationStatusFilter<$PrismaModel> | $Enums.CompletionVerificationStatus
+  }
+
   export type NestedEnumInternshipModeNullableWithAggregatesFilter<$PrismaModel = never> = {
     equals?: $Enums.InternshipMode | EnumInternshipModeFieldRefInput<$PrismaModel> | null
     in?: $Enums.InternshipMode[] | ListEnumInternshipModeFieldRefInput<$PrismaModel> | null
@@ -43347,6 +55560,94 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
     _max?: NestedEnumInternshipVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipType | EnumInternshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipType[] | ListEnumInternshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternshipType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipTypeFilter<$PrismaModel>
+    _max?: NestedEnumInternshipTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumCompletionVerificationStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CompletionVerificationStatus | EnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CompletionVerificationStatus[] | ListEnumCompletionVerificationStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumCompletionVerificationStatusWithAggregatesFilter<$PrismaModel> | $Enums.CompletionVerificationStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCompletionVerificationStatusFilter<$PrismaModel>
+    _max?: NestedEnumCompletionVerificationStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipReviewStageFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewStage | EnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewStageFilter<$PrismaModel> | $Enums.InternshipReviewStage
+  }
+
+  export type NestedEnumInternshipReviewDecisionFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewDecision | EnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewDecisionFilter<$PrismaModel> | $Enums.InternshipReviewDecision
+  }
+
+  export type NestedEnumInternshipReviewStageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewStage | EnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewStage[] | ListEnumInternshipReviewStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewStageWithAggregatesFilter<$PrismaModel> | $Enums.InternshipReviewStage
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipReviewStageFilter<$PrismaModel>
+    _max?: NestedEnumInternshipReviewStageFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipReviewDecisionWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipReviewDecision | EnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipReviewDecision[] | ListEnumInternshipReviewDecisionFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipReviewDecisionWithAggregatesFilter<$PrismaModel> | $Enums.InternshipReviewDecision
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipReviewDecisionFilter<$PrismaModel>
+    _max?: NestedEnumInternshipReviewDecisionFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipDocumentTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentType | EnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentTypeFilter<$PrismaModel> | $Enums.InternshipDocumentType
+  }
+
+  export type NestedEnumInternshipDocumentStageFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentStage | EnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentStageFilter<$PrismaModel> | $Enums.InternshipDocumentStage
+  }
+
+  export type NestedEnumInternshipDocumentTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentType | EnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentType[] | ListEnumInternshipDocumentTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentTypeWithAggregatesFilter<$PrismaModel> | $Enums.InternshipDocumentType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipDocumentTypeFilter<$PrismaModel>
+    _max?: NestedEnumInternshipDocumentTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumInternshipDocumentStageWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.InternshipDocumentStage | EnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    in?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    notIn?: $Enums.InternshipDocumentStage[] | ListEnumInternshipDocumentStageFieldRefInput<$PrismaModel>
+    not?: NestedEnumInternshipDocumentStageWithAggregatesFilter<$PrismaModel> | $Enums.InternshipDocumentStage
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumInternshipDocumentStageFilter<$PrismaModel>
+    _max?: NestedEnumInternshipDocumentStageFilter<$PrismaModel>
   }
 
   export type NestedEnumAddressTypeNullableFilter<$PrismaModel = never> = {
@@ -44304,8 +56605,12 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -44326,8 +56631,12 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -44371,11 +56680,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
   }
@@ -44413,11 +56724,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -44441,9 +56754,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -44462,9 +56779,13 @@ export namespace Prisma {
     isActive?: boolean
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -44533,7 +56854,11 @@ export namespace Prisma {
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -44555,7 +56880,11 @@ export namespace Prisma {
     userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -44723,11 +57052,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -44766,11 +57097,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -44907,11 +57240,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -44950,11 +57285,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -45368,11 +57705,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -45411,11 +57750,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -45434,8 +57775,12 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -45456,8 +57801,12 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -45597,11 +57946,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -45640,11 +57991,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -45671,6 +58024,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -45693,6 +58050,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -45750,9 +58111,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
@@ -45772,9 +58137,13 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
@@ -45795,9 +58164,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
@@ -45817,9 +58190,13 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
@@ -45885,9 +58262,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
@@ -45907,9 +58288,13 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
@@ -45997,10 +58382,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -46040,10 +58427,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -46110,7 +58499,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
@@ -46132,7 +58525,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
@@ -46161,7 +58558,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
@@ -46183,7 +58584,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
@@ -46263,7 +58668,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
@@ -46285,7 +58694,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
@@ -46385,10 +58798,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -46428,10 +58843,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -46604,6 +59021,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
@@ -46647,6 +59066,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
@@ -46737,6 +59158,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
@@ -46780,6 +59203,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
@@ -46974,6 +59399,110 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type mentor_meeting_seriesCreateWithoutStudentsInput = {
+    id: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teachers: teachersCreateNestedOneWithoutMentor_meeting_seriesInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesUncheckedCreateWithoutStudentsInput = {
+    id: string
+    mentorTeacherId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesCreateOrConnectWithoutStudentsInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    create: XOR<mentor_meeting_seriesCreateWithoutStudentsInput, mentor_meeting_seriesUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type mentor_meeting_seriesCreateManyStudentsInputEnvelope = {
+    data: mentor_meeting_seriesCreateManyStudentsInput | mentor_meeting_seriesCreateManyStudentsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type mentor_meetingsCreateWithoutStudentsInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutStudentsInput = {
+    id: string
+    mentorTeacherId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutStudentsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutStudentsInput, mentor_meetingsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type mentor_meetingsCreateManyStudentsInputEnvelope = {
+    data: mentor_meetingsCreateManyStudentsInput | mentor_meetingsCreateManyStudentsInput[]
+    skipDuplicates?: boolean
+  }
+
   export type mentor_transfer_requestsCreateWithoutStudentsInput = {
     id: string
     requestSource: $Enums.MentorTransferRequestSource
@@ -47113,60 +59642,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type student_internshipsCreateWithoutStudentInput = {
-    id: string
-    companyName: string
-    internshipTitle: string
-    role?: string | null
-    startDate: Date | string
-    endDate?: Date | string | null
-    location?: string | null
-    mode?: $Enums.InternshipMode | null
-    projectName?: string | null
-    description?: string | null
-    status?: $Enums.InternshipStatus
-    verificationStatus?: $Enums.InternshipVerificationStatus
-    mentorRemark?: string | null
-    verifiedAt?: Date | string | null
-    rating?: number | null
-    completionRequested?: boolean
-    completionRequestedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type student_internshipsUncheckedCreateWithoutStudentInput = {
-    id: string
-    companyName: string
-    internshipTitle: string
-    role?: string | null
-    startDate: Date | string
-    endDate?: Date | string | null
-    location?: string | null
-    mode?: $Enums.InternshipMode | null
-    projectName?: string | null
-    description?: string | null
-    status?: $Enums.InternshipStatus
-    verificationStatus?: $Enums.InternshipVerificationStatus
-    mentorRemark?: string | null
-    verifiedAt?: Date | string | null
-    rating?: number | null
-    completionRequested?: boolean
-    completionRequestedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type student_internshipsCreateOrConnectWithoutStudentInput = {
-    where: student_internshipsWhereUniqueInput
-    create: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput>
-  }
-
-  export type student_internshipsCreateManyStudentInputEnvelope = {
-    data: student_internshipsCreateManyStudentInput | student_internshipsCreateManyStudentInput[]
-    skipDuplicates?: boolean
-  }
-
   export type student_enrollmentsCreateWithoutStudentsInput = {
     id: string
     semesterNumber: number
@@ -47196,6 +59671,72 @@ export namespace Prisma {
 
   export type student_enrollmentsCreateManyStudentsInputEnvelope = {
     data: student_enrollmentsCreateManyStudentsInput | student_enrollmentsCreateManyStudentsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type student_internshipsCreateWithoutStudentInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_documents?: internship_documentsCreateNestedManyWithoutInternshipInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutInternshipInput
+  }
+
+  export type student_internshipsUncheckedCreateWithoutStudentInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_documents?: internship_documentsUncheckedCreateNestedManyWithoutInternshipInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutInternshipInput
+  }
+
+  export type student_internshipsCreateOrConnectWithoutStudentInput = {
+    where: student_internshipsWhereUniqueInput
+    create: XOR<student_internshipsCreateWithoutStudentInput, student_internshipsUncheckedCreateWithoutStudentInput>
+  }
+
+  export type student_internshipsCreateManyStudentInputEnvelope = {
+    data: student_internshipsCreateManyStudentInput | student_internshipsCreateManyStudentInput[]
     skipDuplicates?: boolean
   }
 
@@ -47410,6 +59951,83 @@ export namespace Prisma {
     data: XOR<mentor_assignmentsUpdateManyMutationInput, mentor_assignmentsUncheckedUpdateManyWithoutStudentsInput>
   }
 
+  export type mentor_meeting_seriesUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    update: XOR<mentor_meeting_seriesUpdateWithoutStudentsInput, mentor_meeting_seriesUncheckedUpdateWithoutStudentsInput>
+    create: XOR<mentor_meeting_seriesCreateWithoutStudentsInput, mentor_meeting_seriesUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type mentor_meeting_seriesUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    data: XOR<mentor_meeting_seriesUpdateWithoutStudentsInput, mentor_meeting_seriesUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type mentor_meeting_seriesUpdateManyWithWhereWithoutStudentsInput = {
+    where: mentor_meeting_seriesScalarWhereInput
+    data: XOR<mentor_meeting_seriesUpdateManyMutationInput, mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsInput>
+  }
+
+  export type mentor_meeting_seriesScalarWhereInput = {
+    AND?: mentor_meeting_seriesScalarWhereInput | mentor_meeting_seriesScalarWhereInput[]
+    OR?: mentor_meeting_seriesScalarWhereInput[]
+    NOT?: mentor_meeting_seriesScalarWhereInput | mentor_meeting_seriesScalarWhereInput[]
+    id?: StringFilter<"mentor_meeting_series"> | string
+    mentorTeacherId?: StringFilter<"mentor_meeting_series"> | string
+    studentId?: StringFilter<"mentor_meeting_series"> | string
+    frequency?: StringFilter<"mentor_meeting_series"> | string
+    startDate?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    endDate?: DateTimeNullableFilter<"mentor_meeting_series"> | Date | string | null
+    dayOfWeek?: IntNullableFilter<"mentor_meeting_series"> | number | null
+    startTime?: StringFilter<"mentor_meeting_series"> | string
+    endTime?: StringFilter<"mentor_meeting_series"> | string
+    timezone?: StringFilter<"mentor_meeting_series"> | string
+    isActive?: BoolFilter<"mentor_meeting_series"> | boolean
+    createdAt?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_series"> | Date | string
+  }
+
+  export type mentor_meetingsUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    update: XOR<mentor_meetingsUpdateWithoutStudentsInput, mentor_meetingsUncheckedUpdateWithoutStudentsInput>
+    create: XOR<mentor_meetingsCreateWithoutStudentsInput, mentor_meetingsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type mentor_meetingsUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    data: XOR<mentor_meetingsUpdateWithoutStudentsInput, mentor_meetingsUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type mentor_meetingsUpdateManyWithWhereWithoutStudentsInput = {
+    where: mentor_meetingsScalarWhereInput
+    data: XOR<mentor_meetingsUpdateManyMutationInput, mentor_meetingsUncheckedUpdateManyWithoutStudentsInput>
+  }
+
+  export type mentor_meetingsScalarWhereInput = {
+    AND?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+    OR?: mentor_meetingsScalarWhereInput[]
+    NOT?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+    id?: StringFilter<"mentor_meetings"> | string
+    mentorTeacherId?: StringFilter<"mentor_meetings"> | string
+    studentId?: StringFilter<"mentor_meetings"> | string
+    seriesId?: StringNullableFilter<"mentor_meetings"> | string | null
+    followUpToMeetingId?: StringNullableFilter<"mentor_meetings"> | string | null
+    title?: StringFilter<"mentor_meetings"> | string
+    meetingType?: StringFilter<"mentor_meetings"> | string
+    mode?: StringFilter<"mentor_meetings"> | string
+    status?: StringFilter<"mentor_meetings"> | string
+    priority?: StringFilter<"mentor_meetings"> | string
+    startAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    endAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    venue?: StringNullableFilter<"mentor_meetings"> | string | null
+    meetingLink?: StringNullableFilter<"mentor_meetings"> | string | null
+    agenda?: StringNullableFilter<"mentor_meetings"> | string | null
+    description?: StringNullableFilter<"mentor_meetings"> | string | null
+    startedAt?: DateTimeNullableFilter<"mentor_meetings"> | Date | string | null
+    endedAt?: DateTimeNullableFilter<"mentor_meetings"> | Date | string | null
+    createdAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meetings"> | Date | string
+  }
+
   export type mentor_transfer_requestsUpsertWithWhereUniqueWithoutStudentsInput = {
     where: mentor_transfer_requestsWhereUniqueInput
     update: XOR<mentor_transfer_requestsUpdateWithoutStudentsInput, mentor_transfer_requestsUncheckedUpdateWithoutStudentsInput>
@@ -47519,6 +60137,22 @@ export namespace Prisma {
     mentorRemark?: StringNullableFilter<"student_documents"> | string | null
   }
 
+  export type student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: student_enrollmentsWhereUniqueInput
+    update: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
+    create: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: student_enrollmentsWhereUniqueInput
+    data: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type student_enrollmentsUpdateManyWithWhereWithoutStudentsInput = {
+    where: student_enrollmentsScalarWhereInput
+    data: XOR<student_enrollmentsUpdateManyMutationInput, student_enrollmentsUncheckedUpdateManyWithoutStudentsInput>
+  }
+
   export type student_internshipsUpsertWithWhereUniqueWithoutStudentInput = {
     where: student_internshipsWhereUniqueInput
     update: XOR<student_internshipsUpdateWithoutStudentInput, student_internshipsUncheckedUpdateWithoutStudentInput>
@@ -47559,22 +60193,10 @@ export namespace Prisma {
     completionRequestedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
     createdAt?: DateTimeFilter<"student_internships"> | Date | string
     updatedAt?: DateTimeFilter<"student_internships"> | Date | string
-  }
-
-  export type student_enrollmentsUpsertWithWhereUniqueWithoutStudentsInput = {
-    where: student_enrollmentsWhereUniqueInput
-    update: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
-    create: XOR<student_enrollmentsCreateWithoutStudentsInput, student_enrollmentsUncheckedCreateWithoutStudentsInput>
-  }
-
-  export type student_enrollmentsUpdateWithWhereUniqueWithoutStudentsInput = {
-    where: student_enrollmentsWhereUniqueInput
-    data: XOR<student_enrollmentsUpdateWithoutStudentsInput, student_enrollmentsUncheckedUpdateWithoutStudentsInput>
-  }
-
-  export type student_enrollmentsUpdateManyWithWhereWithoutStudentsInput = {
-    where: student_enrollmentsScalarWhereInput
-    data: XOR<student_enrollmentsUpdateManyMutationInput, student_enrollmentsUncheckedUpdateManyWithoutStudentsInput>
+    internshipType?: EnumInternshipTypeFilter<"student_internships"> | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFilter<"student_internships"> | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: StringNullableFilter<"student_internships"> | string | null
+    completionVerifiedAt?: DateTimeNullableFilter<"student_internships"> | Date | string | null
   }
 
   export type student_parent_detailsUpsertWithoutStudentInput = {
@@ -47724,6 +60346,74 @@ export namespace Prisma {
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
+  export type internship_documentsCreateWithoutInternshipInput = {
+    id: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type internship_documentsUncheckedCreateWithoutInternshipInput = {
+    id: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type internship_documentsCreateOrConnectWithoutInternshipInput = {
+    where: internship_documentsWhereUniqueInput
+    create: XOR<internship_documentsCreateWithoutInternshipInput, internship_documentsUncheckedCreateWithoutInternshipInput>
+  }
+
+  export type internship_documentsCreateManyInternshipInputEnvelope = {
+    data: internship_documentsCreateManyInternshipInput | internship_documentsCreateManyInternshipInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type internship_reviewsCreateWithoutInternshipInput = {
+    id: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+    reviewer: teachersCreateNestedOneWithoutInternship_reviewsInput
+  }
+
+  export type internship_reviewsUncheckedCreateWithoutInternshipInput = {
+    id: string
+    reviewerTeacherId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type internship_reviewsCreateOrConnectWithoutInternshipInput = {
+    where: internship_reviewsWhereUniqueInput
+    create: XOR<internship_reviewsCreateWithoutInternshipInput, internship_reviewsUncheckedCreateWithoutInternshipInput>
+  }
+
+  export type internship_reviewsCreateManyInternshipInputEnvelope = {
+    data: internship_reviewsCreateManyInternshipInput | internship_reviewsCreateManyInternshipInput[]
+    skipDuplicates?: boolean
+  }
+
   export type studentsCreateWithoutInternshipsInput = {
     id: string
     registerNumber: string
@@ -47756,6 +60446,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
@@ -47799,6 +60491,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
@@ -47809,6 +60503,70 @@ export namespace Prisma {
   export type studentsCreateOrConnectWithoutInternshipsInput = {
     where: studentsWhereUniqueInput
     create: XOR<studentsCreateWithoutInternshipsInput, studentsUncheckedCreateWithoutInternshipsInput>
+  }
+
+  export type internship_documentsUpsertWithWhereUniqueWithoutInternshipInput = {
+    where: internship_documentsWhereUniqueInput
+    update: XOR<internship_documentsUpdateWithoutInternshipInput, internship_documentsUncheckedUpdateWithoutInternshipInput>
+    create: XOR<internship_documentsCreateWithoutInternshipInput, internship_documentsUncheckedCreateWithoutInternshipInput>
+  }
+
+  export type internship_documentsUpdateWithWhereUniqueWithoutInternshipInput = {
+    where: internship_documentsWhereUniqueInput
+    data: XOR<internship_documentsUpdateWithoutInternshipInput, internship_documentsUncheckedUpdateWithoutInternshipInput>
+  }
+
+  export type internship_documentsUpdateManyWithWhereWithoutInternshipInput = {
+    where: internship_documentsScalarWhereInput
+    data: XOR<internship_documentsUpdateManyMutationInput, internship_documentsUncheckedUpdateManyWithoutInternshipInput>
+  }
+
+  export type internship_documentsScalarWhereInput = {
+    AND?: internship_documentsScalarWhereInput | internship_documentsScalarWhereInput[]
+    OR?: internship_documentsScalarWhereInput[]
+    NOT?: internship_documentsScalarWhereInput | internship_documentsScalarWhereInput[]
+    id?: StringFilter<"internship_documents"> | string
+    internshipId?: StringFilter<"internship_documents"> | string
+    documentType?: EnumInternshipDocumentTypeFilter<"internship_documents"> | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFilter<"internship_documents"> | $Enums.InternshipDocumentStage
+    documentName?: StringFilter<"internship_documents"> | string
+    fileType?: StringFilter<"internship_documents"> | string
+    fileSize?: IntFilter<"internship_documents"> | number
+    cloudinaryPublicId?: StringFilter<"internship_documents"> | string
+    fileUrl?: StringFilter<"internship_documents"> | string
+    resourceType?: StringFilter<"internship_documents"> | string
+    uploadedAt?: DateTimeFilter<"internship_documents"> | Date | string
+    updatedAt?: DateTimeFilter<"internship_documents"> | Date | string
+  }
+
+  export type internship_reviewsUpsertWithWhereUniqueWithoutInternshipInput = {
+    where: internship_reviewsWhereUniqueInput
+    update: XOR<internship_reviewsUpdateWithoutInternshipInput, internship_reviewsUncheckedUpdateWithoutInternshipInput>
+    create: XOR<internship_reviewsCreateWithoutInternshipInput, internship_reviewsUncheckedCreateWithoutInternshipInput>
+  }
+
+  export type internship_reviewsUpdateWithWhereUniqueWithoutInternshipInput = {
+    where: internship_reviewsWhereUniqueInput
+    data: XOR<internship_reviewsUpdateWithoutInternshipInput, internship_reviewsUncheckedUpdateWithoutInternshipInput>
+  }
+
+  export type internship_reviewsUpdateManyWithWhereWithoutInternshipInput = {
+    where: internship_reviewsScalarWhereInput
+    data: XOR<internship_reviewsUpdateManyMutationInput, internship_reviewsUncheckedUpdateManyWithoutInternshipInput>
+  }
+
+  export type internship_reviewsScalarWhereInput = {
+    AND?: internship_reviewsScalarWhereInput | internship_reviewsScalarWhereInput[]
+    OR?: internship_reviewsScalarWhereInput[]
+    NOT?: internship_reviewsScalarWhereInput | internship_reviewsScalarWhereInput[]
+    id?: StringFilter<"internship_reviews"> | string
+    internshipId?: StringFilter<"internship_reviews"> | string
+    reviewerTeacherId?: StringFilter<"internship_reviews"> | string
+    reviewStage?: EnumInternshipReviewStageFilter<"internship_reviews"> | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFilter<"internship_reviews"> | $Enums.InternshipReviewDecision
+    remarks?: StringNullableFilter<"internship_reviews"> | string | null
+    reviewedAt?: DateTimeFilter<"internship_reviews"> | Date | string
+    createdAt?: DateTimeFilter<"internship_reviews"> | Date | string
   }
 
   export type studentsUpsertWithoutInternshipsInput = {
@@ -47854,6 +60612,8 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
@@ -47897,11 +60657,381 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+  }
+
+  export type student_internshipsCreateWithoutInternship_reviewsInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_documents?: internship_documentsCreateNestedManyWithoutInternshipInput
+    student: studentsCreateNestedOneWithoutInternshipsInput
+  }
+
+  export type student_internshipsUncheckedCreateWithoutInternship_reviewsInput = {
+    id: string
+    studentId: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_documents?: internship_documentsUncheckedCreateNestedManyWithoutInternshipInput
+  }
+
+  export type student_internshipsCreateOrConnectWithoutInternship_reviewsInput = {
+    where: student_internshipsWhereUniqueInput
+    create: XOR<student_internshipsCreateWithoutInternship_reviewsInput, student_internshipsUncheckedCreateWithoutInternship_reviewsInput>
+  }
+
+  export type teachersCreateWithoutInternship_reviewsInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
+    departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersUncheckedCreateWithoutInternship_reviewsInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersCreateOrConnectWithoutInternship_reviewsInput = {
+    where: teachersWhereUniqueInput
+    create: XOR<teachersCreateWithoutInternship_reviewsInput, teachersUncheckedCreateWithoutInternship_reviewsInput>
+  }
+
+  export type student_internshipsUpsertWithoutInternship_reviewsInput = {
+    update: XOR<student_internshipsUpdateWithoutInternship_reviewsInput, student_internshipsUncheckedUpdateWithoutInternship_reviewsInput>
+    create: XOR<student_internshipsCreateWithoutInternship_reviewsInput, student_internshipsUncheckedCreateWithoutInternship_reviewsInput>
+    where?: student_internshipsWhereInput
+  }
+
+  export type student_internshipsUpdateToOneWithWhereWithoutInternship_reviewsInput = {
+    where?: student_internshipsWhereInput
+    data: XOR<student_internshipsUpdateWithoutInternship_reviewsInput, student_internshipsUncheckedUpdateWithoutInternship_reviewsInput>
+  }
+
+  export type student_internshipsUpdateWithoutInternship_reviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_documents?: internship_documentsUpdateManyWithoutInternshipNestedInput
+    student?: studentsUpdateOneRequiredWithoutInternshipsNestedInput
+  }
+
+  export type student_internshipsUncheckedUpdateWithoutInternship_reviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_documents?: internship_documentsUncheckedUpdateManyWithoutInternshipNestedInput
+  }
+
+  export type teachersUpsertWithoutInternship_reviewsInput = {
+    update: XOR<teachersUpdateWithoutInternship_reviewsInput, teachersUncheckedUpdateWithoutInternship_reviewsInput>
+    create: XOR<teachersCreateWithoutInternship_reviewsInput, teachersUncheckedCreateWithoutInternship_reviewsInput>
+    where?: teachersWhereInput
+  }
+
+  export type teachersUpdateToOneWithWhereWithoutInternship_reviewsInput = {
+    where?: teachersWhereInput
+    data: XOR<teachersUpdateWithoutInternship_reviewsInput, teachersUncheckedUpdateWithoutInternship_reviewsInput>
+  }
+
+  export type teachersUpdateWithoutInternship_reviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
+    departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersUncheckedUpdateWithoutInternship_reviewsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type student_internshipsCreateWithoutInternship_documentsInput = {
+    id: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutInternshipInput
+    student: studentsCreateNestedOneWithoutInternshipsInput
+  }
+
+  export type student_internshipsUncheckedCreateWithoutInternship_documentsInput = {
+    id: string
+    studentId: string
+    companyName: string
+    internshipTitle: string
+    role?: string | null
+    startDate: Date | string
+    endDate?: Date | string | null
+    location?: string | null
+    mode?: $Enums.InternshipMode | null
+    projectName?: string | null
+    description?: string | null
+    status?: $Enums.InternshipStatus
+    verificationStatus?: $Enums.InternshipVerificationStatus
+    mentorRemark?: string | null
+    verifiedAt?: Date | string | null
+    rating?: number | null
+    completionRequested?: boolean
+    completionRequestedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutInternshipInput
+  }
+
+  export type student_internshipsCreateOrConnectWithoutInternship_documentsInput = {
+    where: student_internshipsWhereUniqueInput
+    create: XOR<student_internshipsCreateWithoutInternship_documentsInput, student_internshipsUncheckedCreateWithoutInternship_documentsInput>
+  }
+
+  export type student_internshipsUpsertWithoutInternship_documentsInput = {
+    update: XOR<student_internshipsUpdateWithoutInternship_documentsInput, student_internshipsUncheckedUpdateWithoutInternship_documentsInput>
+    create: XOR<student_internshipsCreateWithoutInternship_documentsInput, student_internshipsUncheckedCreateWithoutInternship_documentsInput>
+    where?: student_internshipsWhereInput
+  }
+
+  export type student_internshipsUpdateToOneWithWhereWithoutInternship_documentsInput = {
+    where?: student_internshipsWhereInput
+    data: XOR<student_internshipsUpdateWithoutInternship_documentsInput, student_internshipsUncheckedUpdateWithoutInternship_documentsInput>
+  }
+
+  export type student_internshipsUpdateWithoutInternship_documentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_reviews?: internship_reviewsUpdateManyWithoutInternshipNestedInput
+    student?: studentsUpdateOneRequiredWithoutInternshipsNestedInput
+  }
+
+  export type student_internshipsUncheckedUpdateWithoutInternship_documentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutInternshipNestedInput
   }
 
   export type studentsCreateWithoutContactDetailsInput = {
@@ -47936,10 +61066,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -47979,10 +61111,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -48034,10 +61168,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -48077,10 +61213,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -48116,11 +61254,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
   }
@@ -48159,11 +61299,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
   }
 
   export type studentsCreateOrConnectWithoutParentDetailsInput = {
@@ -48214,11 +61356,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
   }
@@ -48257,11 +61401,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
   }
 
   export type studentsCreateWithoutDocumentsInput = {
@@ -48296,10 +61442,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -48339,10 +61487,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -48394,10 +61544,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -48437,10 +61589,12 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -48508,11 +61662,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -48551,11 +61707,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -48697,11 +61855,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -48740,11 +61900,13 @@ export namespace Prisma {
     academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -48896,11 +62058,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
@@ -48939,11 +62103,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -48994,11 +62160,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
@@ -49037,11 +62205,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -49070,6 +62240,36 @@ export namespace Prisma {
   export type departmentsCreateOrConnectWithoutTeachers_departments_hodTeacherIdToteachersInput = {
     where: departmentsWhereUniqueInput
     create: XOR<departmentsCreateWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUncheckedCreateWithoutTeachers_departments_hodTeacherIdToteachersInput>
+  }
+
+  export type internship_reviewsCreateWithoutReviewerInput = {
+    id: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+    internship: student_internshipsCreateNestedOneWithoutInternship_reviewsInput
+  }
+
+  export type internship_reviewsUncheckedCreateWithoutReviewerInput = {
+    id: string
+    internshipId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type internship_reviewsCreateOrConnectWithoutReviewerInput = {
+    where: internship_reviewsWhereUniqueInput
+    create: XOR<internship_reviewsCreateWithoutReviewerInput, internship_reviewsUncheckedCreateWithoutReviewerInput>
+  }
+
+  export type internship_reviewsCreateManyReviewerInputEnvelope = {
+    data: internship_reviewsCreateManyReviewerInput | internship_reviewsCreateManyReviewerInput[]
+    skipDuplicates?: boolean
   }
 
   export type mentor_assignmentsCreateWithoutTeachersInput = {
@@ -49103,6 +62303,138 @@ export namespace Prisma {
 
   export type mentor_assignmentsCreateManyTeachersInputEnvelope = {
     data: mentor_assignmentsCreateManyTeachersInput | mentor_assignmentsCreateManyTeachersInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type mentor_meeting_feedbackCreateWithoutTeachersInput = {
+    id: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings: mentor_meetingsCreateNestedOneWithoutMentor_meeting_feedbackInput
+  }
+
+  export type mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput = {
+    id: string
+    meetingId: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_feedbackCreateOrConnectWithoutTeachersInput = {
+    where: mentor_meeting_feedbackWhereUniqueInput
+    create: XOR<mentor_meeting_feedbackCreateWithoutTeachersInput, mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_feedbackCreateManyTeachersInputEnvelope = {
+    data: mentor_meeting_feedbackCreateManyTeachersInput | mentor_meeting_feedbackCreateManyTeachersInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type mentor_meeting_seriesCreateWithoutTeachersInput = {
+    id: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    students: studentsCreateNestedOneWithoutMentor_meeting_seriesInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesUncheckedCreateWithoutTeachersInput = {
+    id: string
+    studentId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesCreateOrConnectWithoutTeachersInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    create: XOR<mentor_meeting_seriesCreateWithoutTeachersInput, mentor_meeting_seriesUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_seriesCreateManyTeachersInputEnvelope = {
+    data: mentor_meeting_seriesCreateManyTeachersInput | mentor_meeting_seriesCreateManyTeachersInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type mentor_meetingsCreateWithoutTeachersInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutTeachersInput = {
+    id: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutTeachersInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutTeachersInput, mentor_meetingsUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_meetingsCreateManyTeachersInputEnvelope = {
+    data: mentor_meetingsCreateManyTeachersInput | mentor_meetingsCreateManyTeachersInput[]
     skipDuplicates?: boolean
   }
 
@@ -49388,6 +62720,22 @@ export namespace Prisma {
     teachers_teachers_departmentIdTodepartments?: teachersUncheckedUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsNestedInput
   }
 
+  export type internship_reviewsUpsertWithWhereUniqueWithoutReviewerInput = {
+    where: internship_reviewsWhereUniqueInput
+    update: XOR<internship_reviewsUpdateWithoutReviewerInput, internship_reviewsUncheckedUpdateWithoutReviewerInput>
+    create: XOR<internship_reviewsCreateWithoutReviewerInput, internship_reviewsUncheckedCreateWithoutReviewerInput>
+  }
+
+  export type internship_reviewsUpdateWithWhereUniqueWithoutReviewerInput = {
+    where: internship_reviewsWhereUniqueInput
+    data: XOR<internship_reviewsUpdateWithoutReviewerInput, internship_reviewsUncheckedUpdateWithoutReviewerInput>
+  }
+
+  export type internship_reviewsUpdateManyWithWhereWithoutReviewerInput = {
+    where: internship_reviewsScalarWhereInput
+    data: XOR<internship_reviewsUpdateManyMutationInput, internship_reviewsUncheckedUpdateManyWithoutReviewerInput>
+  }
+
   export type mentor_assignmentsUpsertWithWhereUniqueWithoutTeachersInput = {
     where: mentor_assignmentsWhereUniqueInput
     update: XOR<mentor_assignmentsUpdateWithoutTeachersInput, mentor_assignmentsUncheckedUpdateWithoutTeachersInput>
@@ -49402,6 +62750,67 @@ export namespace Prisma {
   export type mentor_assignmentsUpdateManyWithWhereWithoutTeachersInput = {
     where: mentor_assignmentsScalarWhereInput
     data: XOR<mentor_assignmentsUpdateManyMutationInput, mentor_assignmentsUncheckedUpdateManyWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_feedbackUpsertWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_meeting_feedbackWhereUniqueInput
+    update: XOR<mentor_meeting_feedbackUpdateWithoutTeachersInput, mentor_meeting_feedbackUncheckedUpdateWithoutTeachersInput>
+    create: XOR<mentor_meeting_feedbackCreateWithoutTeachersInput, mentor_meeting_feedbackUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_feedbackUpdateWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_meeting_feedbackWhereUniqueInput
+    data: XOR<mentor_meeting_feedbackUpdateWithoutTeachersInput, mentor_meeting_feedbackUncheckedUpdateWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_feedbackUpdateManyWithWhereWithoutTeachersInput = {
+    where: mentor_meeting_feedbackScalarWhereInput
+    data: XOR<mentor_meeting_feedbackUpdateManyMutationInput, mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_feedbackScalarWhereInput = {
+    AND?: mentor_meeting_feedbackScalarWhereInput | mentor_meeting_feedbackScalarWhereInput[]
+    OR?: mentor_meeting_feedbackScalarWhereInput[]
+    NOT?: mentor_meeting_feedbackScalarWhereInput | mentor_meeting_feedbackScalarWhereInput[]
+    id?: StringFilter<"mentor_meeting_feedback"> | string
+    meetingId?: StringFilter<"mentor_meeting_feedback"> | string
+    mentorTeacherId?: StringFilter<"mentor_meeting_feedback"> | string
+    rating?: IntFilter<"mentor_meeting_feedback"> | number
+    feedback?: StringNullableFilter<"mentor_meeting_feedback"> | string | null
+    createdAt?: DateTimeFilter<"mentor_meeting_feedback"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_feedback"> | Date | string
+  }
+
+  export type mentor_meeting_seriesUpsertWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    update: XOR<mentor_meeting_seriesUpdateWithoutTeachersInput, mentor_meeting_seriesUncheckedUpdateWithoutTeachersInput>
+    create: XOR<mentor_meeting_seriesCreateWithoutTeachersInput, mentor_meeting_seriesUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_seriesUpdateWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    data: XOR<mentor_meeting_seriesUpdateWithoutTeachersInput, mentor_meeting_seriesUncheckedUpdateWithoutTeachersInput>
+  }
+
+  export type mentor_meeting_seriesUpdateManyWithWhereWithoutTeachersInput = {
+    where: mentor_meeting_seriesScalarWhereInput
+    data: XOR<mentor_meeting_seriesUpdateManyMutationInput, mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersInput>
+  }
+
+  export type mentor_meetingsUpsertWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_meetingsWhereUniqueInput
+    update: XOR<mentor_meetingsUpdateWithoutTeachersInput, mentor_meetingsUncheckedUpdateWithoutTeachersInput>
+    create: XOR<mentor_meetingsCreateWithoutTeachersInput, mentor_meetingsUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_meetingsUpdateWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_meetingsWhereUniqueInput
+    data: XOR<mentor_meetingsUpdateWithoutTeachersInput, mentor_meetingsUncheckedUpdateWithoutTeachersInput>
+  }
+
+  export type mentor_meetingsUpdateManyWithWhereWithoutTeachersInput = {
+    where: mentor_meetingsScalarWhereInput
+    data: XOR<mentor_meetingsUpdateManyMutationInput, mentor_meetingsUncheckedUpdateManyWithoutTeachersInput>
   }
 
   export type mentor_transfer_requestsUpsertWithWhereUniqueWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -49841,11 +63250,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
     detentions?: detentionsCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
     documents?: student_documentsCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
   }
@@ -49883,11 +63294,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
     contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
-    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
   }
 
@@ -49906,9 +63319,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -49927,9 +63344,13 @@ export namespace Prisma {
     isActive?: boolean
     departmentId: string
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -50094,11 +63515,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
   }
@@ -50136,11 +63559,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -50167,7 +63592,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -50188,7 +63617,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -50205,9 +63638,13 @@ export namespace Prisma {
     maxMentees?: number
     isActive?: boolean
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -50227,9 +63664,13 @@ export namespace Prisma {
     departmentId: string
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
@@ -50263,7 +63704,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -50285,10 +63730,1592 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+  }
+
+  export type mentor_meetingsCreateWithoutMentor_meeting_discussion_pointsInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutMentor_meeting_discussion_pointsInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutMentor_meeting_discussion_pointsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_discussion_pointsInput>
+  }
+
+  export type mentor_meetingsUpsertWithoutMentor_meeting_discussion_pointsInput = {
+    update: XOR<mentor_meetingsUpdateWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_discussion_pointsInput>
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_discussion_pointsInput>
+    where?: mentor_meetingsWhereInput
+  }
+
+  export type mentor_meetingsUpdateToOneWithWhereWithoutMentor_meeting_discussion_pointsInput = {
+    where?: mentor_meetingsWhereInput
+    data: XOR<mentor_meetingsUpdateWithoutMentor_meeting_discussion_pointsInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_discussion_pointsInput>
+  }
+
+  export type mentor_meetingsUpdateWithoutMentor_meeting_discussion_pointsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutMentor_meeting_discussion_pointsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsCreateWithoutMentor_meeting_feedbackInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutMentor_meeting_feedbackInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutMentor_meeting_feedbackInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_feedbackInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_feedbackInput>
+  }
+
+  export type teachersCreateWithoutMentor_meeting_feedbackInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
+    departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersUncheckedCreateWithoutMentor_meeting_feedbackInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersCreateOrConnectWithoutMentor_meeting_feedbackInput = {
+    where: teachersWhereUniqueInput
+    create: XOR<teachersCreateWithoutMentor_meeting_feedbackInput, teachersUncheckedCreateWithoutMentor_meeting_feedbackInput>
+  }
+
+  export type mentor_meetingsUpsertWithoutMentor_meeting_feedbackInput = {
+    update: XOR<mentor_meetingsUpdateWithoutMentor_meeting_feedbackInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_feedbackInput>
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_feedbackInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_feedbackInput>
+    where?: mentor_meetingsWhereInput
+  }
+
+  export type mentor_meetingsUpdateToOneWithWhereWithoutMentor_meeting_feedbackInput = {
+    where?: mentor_meetingsWhereInput
+    data: XOR<mentor_meetingsUpdateWithoutMentor_meeting_feedbackInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_feedbackInput>
+  }
+
+  export type mentor_meetingsUpdateWithoutMentor_meeting_feedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutMentor_meeting_feedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type teachersUpsertWithoutMentor_meeting_feedbackInput = {
+    update: XOR<teachersUpdateWithoutMentor_meeting_feedbackInput, teachersUncheckedUpdateWithoutMentor_meeting_feedbackInput>
+    create: XOR<teachersCreateWithoutMentor_meeting_feedbackInput, teachersUncheckedCreateWithoutMentor_meeting_feedbackInput>
+    where?: teachersWhereInput
+  }
+
+  export type teachersUpdateToOneWithWhereWithoutMentor_meeting_feedbackInput = {
+    where?: teachersWhereInput
+    data: XOR<teachersUpdateWithoutMentor_meeting_feedbackInput, teachersUncheckedUpdateWithoutMentor_meeting_feedbackInput>
+  }
+
+  export type teachersUpdateWithoutMentor_meeting_feedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
+    departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersUncheckedUpdateWithoutMentor_meeting_feedbackInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type mentor_meetingsCreateWithoutMentor_meeting_notesInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutMentor_meeting_notesInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutMentor_meeting_notesInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_notesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_notesInput>
+  }
+
+  export type mentor_meetingsUpsertWithoutMentor_meeting_notesInput = {
+    update: XOR<mentor_meetingsUpdateWithoutMentor_meeting_notesInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_notesInput>
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_notesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_notesInput>
+    where?: mentor_meetingsWhereInput
+  }
+
+  export type mentor_meetingsUpdateToOneWithWhereWithoutMentor_meeting_notesInput = {
+    where?: mentor_meetingsWhereInput
+    data: XOR<mentor_meetingsUpdateWithoutMentor_meeting_notesInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_notesInput>
+  }
+
+  export type mentor_meetingsUpdateWithoutMentor_meeting_notesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutMentor_meeting_notesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type studentsCreateWithoutMentor_meeting_seriesInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    departments: departmentsCreateNestedOneWithoutStudentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+  }
+
+  export type studentsUncheckedCreateWithoutMentor_meeting_seriesInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+  }
+
+  export type studentsCreateOrConnectWithoutMentor_meeting_seriesInput = {
+    where: studentsWhereUniqueInput
+    create: XOR<studentsCreateWithoutMentor_meeting_seriesInput, studentsUncheckedCreateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type teachersCreateWithoutMentor_meeting_seriesInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
+    departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersUncheckedCreateWithoutMentor_meeting_seriesInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersCreateOrConnectWithoutMentor_meeting_seriesInput = {
+    where: teachersWhereUniqueInput
+    create: XOR<teachersCreateWithoutMentor_meeting_seriesInput, teachersUncheckedCreateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type mentor_meetingsCreateWithoutMentor_meeting_seriesInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutMentor_meeting_seriesInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type mentor_meetingsCreateManyMentor_meeting_seriesInputEnvelope = {
+    data: mentor_meetingsCreateManyMentor_meeting_seriesInput | mentor_meetingsCreateManyMentor_meeting_seriesInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type studentsUpsertWithoutMentor_meeting_seriesInput = {
+    update: XOR<studentsUpdateWithoutMentor_meeting_seriesInput, studentsUncheckedUpdateWithoutMentor_meeting_seriesInput>
+    create: XOR<studentsCreateWithoutMentor_meeting_seriesInput, studentsUncheckedCreateWithoutMentor_meeting_seriesInput>
+    where?: studentsWhereInput
+  }
+
+  export type studentsUpdateToOneWithWhereWithoutMentor_meeting_seriesInput = {
+    where?: studentsWhereInput
+    data: XOR<studentsUpdateWithoutMentor_meeting_seriesInput, studentsUncheckedUpdateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type studentsUpdateWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+  }
+
+  export type studentsUncheckedUpdateWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+  }
+
+  export type teachersUpsertWithoutMentor_meeting_seriesInput = {
+    update: XOR<teachersUpdateWithoutMentor_meeting_seriesInput, teachersUncheckedUpdateWithoutMentor_meeting_seriesInput>
+    create: XOR<teachersCreateWithoutMentor_meeting_seriesInput, teachersUncheckedCreateWithoutMentor_meeting_seriesInput>
+    where?: teachersWhereInput
+  }
+
+  export type teachersUpdateToOneWithWhereWithoutMentor_meeting_seriesInput = {
+    where?: teachersWhereInput
+    data: XOR<teachersUpdateWithoutMentor_meeting_seriesInput, teachersUncheckedUpdateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type teachersUpdateWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
+    departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersUncheckedUpdateWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meeting_seriesInput = {
+    where: mentor_meetingsWhereUniqueInput
+    update: XOR<mentor_meetingsUpdateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_seriesInput>
+    create: XOR<mentor_meetingsCreateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedCreateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meeting_seriesInput = {
+    where: mentor_meetingsWhereUniqueInput
+    data: XOR<mentor_meetingsUpdateWithoutMentor_meeting_seriesInput, mentor_meetingsUncheckedUpdateWithoutMentor_meeting_seriesInput>
+  }
+
+  export type mentor_meetingsUpdateManyWithWhereWithoutMentor_meeting_seriesInput = {
+    where: mentor_meetingsScalarWhereInput
+    data: XOR<mentor_meetingsUpdateManyMutationInput, mentor_meetingsUncheckedUpdateManyWithoutMentor_meeting_seriesInput>
+  }
+
+  export type mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput = {
+    id: string
+    content: string
+    position?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    content: string
+    position?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsCreateOrConnectWithoutMentor_meetingsInput = {
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+    create: XOR<mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_discussion_pointsCreateManyMentor_meetingsInputEnvelope = {
+    data: mentor_meeting_discussion_pointsCreateManyMentor_meetingsInput | mentor_meeting_discussion_pointsCreateManyMentor_meetingsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type mentor_meeting_feedbackCreateWithoutMentor_meetingsInput = {
+    id: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    teachers: teachersCreateNestedOneWithoutMentor_meeting_feedbackInput
+  }
+
+  export type mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    mentorTeacherId: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_feedbackCreateOrConnectWithoutMentor_meetingsInput = {
+    where: mentor_meeting_feedbackWhereUniqueInput
+    create: XOR<mentor_meeting_feedbackCreateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_notesCreateWithoutMentor_meetingsInput = {
+    id: string
+    content?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    content?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_notesCreateOrConnectWithoutMentor_meetingsInput = {
+    where: mentor_meeting_notesWhereUniqueInput
+    create: XOR<mentor_meeting_notesCreateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meetingsCreateWithoutOther_mentor_meetingsInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meetings?: mentor_meetingsCreateNestedOneWithoutOther_mentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutOther_mentor_meetingsInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutOther_mentor_meetingsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutOther_mentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutOther_mentor_meetingsInput>
+  }
+
+  export type mentor_meetingsCreateWithoutMentor_meetingsInput = {
+    id: string
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedOneWithoutMentor_meetingsInput
+    students: studentsCreateNestedOneWithoutMentor_meetingsInput
+    teachers: teachersCreateNestedOneWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedCreateNestedOneWithoutMentor_meetingsInput
+    other_mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutMentor_meetingsInput
+  }
+
+  export type mentor_meetingsCreateOrConnectWithoutMentor_meetingsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    create: XOR<mentor_meetingsCreateWithoutMentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meetingsCreateManyMentor_meetingsInputEnvelope = {
+    data: mentor_meetingsCreateManyMentor_meetingsInput | mentor_meetingsCreateManyMentor_meetingsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type mentor_meeting_seriesCreateWithoutMentor_meetingsInput = {
+    id: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    students: studentsCreateNestedOneWithoutMentor_meeting_seriesInput
+    teachers: teachersCreateNestedOneWithoutMentor_meeting_seriesInput
+  }
+
+  export type mentor_meeting_seriesUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_seriesCreateOrConnectWithoutMentor_meetingsInput = {
+    where: mentor_meeting_seriesWhereUniqueInput
+    create: XOR<mentor_meeting_seriesCreateWithoutMentor_meetingsInput, mentor_meeting_seriesUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type studentsCreateWithoutMentor_meetingsInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    departments: departmentsCreateNestedOneWithoutStudentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+  }
+
+  export type studentsUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+  }
+
+  export type studentsCreateOrConnectWithoutMentor_meetingsInput = {
+    where: studentsWhereUniqueInput
+    create: XOR<studentsCreateWithoutMentor_meetingsInput, studentsUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type teachersCreateWithoutMentor_meetingsInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
+    departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersUncheckedCreateWithoutMentor_meetingsInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersCreateOrConnectWithoutMentor_meetingsInput = {
+    where: teachersWhereUniqueInput
+    create: XOR<teachersCreateWithoutMentor_meetingsInput, teachersUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_discussion_pointsUpsertWithWhereUniqueWithoutMentor_meetingsInput = {
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+    update: XOR<mentor_meeting_discussion_pointsUpdateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<mentor_meeting_discussion_pointsCreateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_discussion_pointsUpdateWithWhereUniqueWithoutMentor_meetingsInput = {
+    where: mentor_meeting_discussion_pointsWhereUniqueInput
+    data: XOR<mentor_meeting_discussion_pointsUpdateWithoutMentor_meetingsInput, mentor_meeting_discussion_pointsUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_discussion_pointsUpdateManyWithWhereWithoutMentor_meetingsInput = {
+    where: mentor_meeting_discussion_pointsScalarWhereInput
+    data: XOR<mentor_meeting_discussion_pointsUpdateManyMutationInput, mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_discussion_pointsScalarWhereInput = {
+    AND?: mentor_meeting_discussion_pointsScalarWhereInput | mentor_meeting_discussion_pointsScalarWhereInput[]
+    OR?: mentor_meeting_discussion_pointsScalarWhereInput[]
+    NOT?: mentor_meeting_discussion_pointsScalarWhereInput | mentor_meeting_discussion_pointsScalarWhereInput[]
+    id?: StringFilter<"mentor_meeting_discussion_points"> | string
+    meetingId?: StringFilter<"mentor_meeting_discussion_points"> | string
+    content?: StringFilter<"mentor_meeting_discussion_points"> | string
+    position?: IntFilter<"mentor_meeting_discussion_points"> | number
+    createdAt?: DateTimeFilter<"mentor_meeting_discussion_points"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_meeting_discussion_points"> | Date | string
+  }
+
+  export type mentor_meeting_feedbackUpsertWithoutMentor_meetingsInput = {
+    update: XOR<mentor_meeting_feedbackUpdateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<mentor_meeting_feedbackCreateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedCreateWithoutMentor_meetingsInput>
+    where?: mentor_meeting_feedbackWhereInput
+  }
+
+  export type mentor_meeting_feedbackUpdateToOneWithWhereWithoutMentor_meetingsInput = {
+    where?: mentor_meeting_feedbackWhereInput
+    data: XOR<mentor_meeting_feedbackUpdateWithoutMentor_meetingsInput, mentor_meeting_feedbackUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_feedbackUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meeting_feedbackNestedInput
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_notesUpsertWithoutMentor_meetingsInput = {
+    update: XOR<mentor_meeting_notesUpdateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<mentor_meeting_notesCreateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedCreateWithoutMentor_meetingsInput>
+    where?: mentor_meeting_notesWhereInput
+  }
+
+  export type mentor_meeting_notesUpdateToOneWithWhereWithoutMentor_meetingsInput = {
+    where?: mentor_meeting_notesWhereInput
+    data: XOR<mentor_meeting_notesUpdateWithoutMentor_meetingsInput, mentor_meeting_notesUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_notesUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_notesUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsUpsertWithoutOther_mentor_meetingsInput = {
+    update: XOR<mentor_meetingsUpdateWithoutOther_mentor_meetingsInput, mentor_meetingsUncheckedUpdateWithoutOther_mentor_meetingsInput>
+    create: XOR<mentor_meetingsCreateWithoutOther_mentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutOther_mentor_meetingsInput>
+    where?: mentor_meetingsWhereInput
+  }
+
+  export type mentor_meetingsUpdateToOneWithWhereWithoutOther_mentor_meetingsInput = {
+    where?: mentor_meetingsWhereInput
+    data: XOR<mentor_meetingsUpdateWithoutOther_mentor_meetingsInput, mentor_meetingsUncheckedUpdateWithoutOther_mentor_meetingsInput>
+  }
+
+  export type mentor_meetingsUpdateWithoutOther_mentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutOther_mentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meetingsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    update: XOR<mentor_meetingsUpdateWithoutMentor_meetingsInput, mentor_meetingsUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<mentor_meetingsCreateWithoutMentor_meetingsInput, mentor_meetingsUncheckedCreateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput = {
+    where: mentor_meetingsWhereUniqueInput
+    data: XOR<mentor_meetingsUpdateWithoutMentor_meetingsInput, mentor_meetingsUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput = {
+    where: mentor_meetingsScalarWhereInput
+    data: XOR<mentor_meetingsUpdateManyMutationInput, mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_seriesUpsertWithoutMentor_meetingsInput = {
+    update: XOR<mentor_meeting_seriesUpdateWithoutMentor_meetingsInput, mentor_meeting_seriesUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<mentor_meeting_seriesCreateWithoutMentor_meetingsInput, mentor_meeting_seriesUncheckedCreateWithoutMentor_meetingsInput>
+    where?: mentor_meeting_seriesWhereInput
+  }
+
+  export type mentor_meeting_seriesUpdateToOneWithWhereWithoutMentor_meetingsInput = {
+    where?: mentor_meeting_seriesWhereInput
+    data: XOR<mentor_meeting_seriesUpdateWithoutMentor_meetingsInput, mentor_meeting_seriesUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type mentor_meeting_seriesUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: studentsUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type studentsUpsertWithoutMentor_meetingsInput = {
+    update: XOR<studentsUpdateWithoutMentor_meetingsInput, studentsUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<studentsCreateWithoutMentor_meetingsInput, studentsUncheckedCreateWithoutMentor_meetingsInput>
+    where?: studentsWhereInput
+  }
+
+  export type studentsUpdateToOneWithWhereWithoutMentor_meetingsInput = {
+    where?: studentsWhereInput
+    data: XOR<studentsUpdateWithoutMentor_meetingsInput, studentsUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type studentsUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+  }
+
+  export type studentsUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+  }
+
+  export type teachersUpsertWithoutMentor_meetingsInput = {
+    update: XOR<teachersUpdateWithoutMentor_meetingsInput, teachersUncheckedUpdateWithoutMentor_meetingsInput>
+    create: XOR<teachersCreateWithoutMentor_meetingsInput, teachersUncheckedCreateWithoutMentor_meetingsInput>
+    where?: teachersWhereInput
+  }
+
+  export type teachersUpdateToOneWithWhereWithoutMentor_meetingsInput = {
+    where?: teachersWhereInput
+    data: XOR<teachersUpdateWithoutMentor_meetingsInput, teachersUncheckedUpdateWithoutMentor_meetingsInput>
+  }
+
+  export type teachersUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
+    departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
   }
 
   export type detentionsCreateManyAcademic_termsInput = {
@@ -50775,7 +65802,7 @@ export namespace Prisma {
     isActive?: boolean
     userAccountId?: string | null
     createdAt?: Date | string
-    updatedAt: Date | string
+    updatedAt?: Date | string
   }
 
   export type academic_yearsUpdateWithoutDepartmentsInput = {
@@ -50848,11 +65875,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
   }
@@ -50890,11 +65919,13 @@ export namespace Prisma {
     academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
     mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
     contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
-    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
   }
 
@@ -50941,7 +65972,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -50962,7 +65997,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
@@ -51071,6 +66110,43 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
+  export type mentor_meeting_seriesCreateManyStudentsInput = {
+    id: string
+    mentorTeacherId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meetingsCreateManyStudentsInput = {
+    id: string
+    mentorTeacherId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type mentor_transfer_requestsCreateManyStudentsInput = {
     id: string
     currentMentorId?: string | null
@@ -51106,6 +66182,17 @@ export namespace Prisma {
     mentorRemark?: string | null
   }
 
+  export type student_enrollmentsCreateManyStudentsInput = {
+    id: string
+    termId: string
+    semesterNumber: number
+    status?: $Enums.EnrollmentStatus
+    enrolledAt?: Date | string
+    completedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+  }
+
   export type student_internshipsCreateManyStudentInput = {
     id: string
     companyName: string
@@ -51126,17 +66213,10 @@ export namespace Prisma {
     completionRequestedAt?: Date | string | null
     createdAt?: Date | string
     updatedAt?: Date | string
-  }
-
-  export type student_enrollmentsCreateManyStudentsInput = {
-    id: string
-    termId: string
-    semesterNumber: number
-    status?: $Enums.EnrollmentStatus
-    enrolledAt?: Date | string
-    completedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt: Date | string
+    internshipType?: $Enums.InternshipType
+    completionVerificationStatus?: $Enums.CompletionVerificationStatus
+    completionMentorRemark?: string | null
+    completionVerifiedAt?: Date | string | null
   }
 
   export type academic_backlogsUpdateWithoutStudentsInput = {
@@ -51297,6 +66377,127 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type mentor_meeting_seriesUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type mentor_transfer_requestsUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     requestSource?: EnumMentorTransferRequestSourceFieldUpdateOperationsInput | $Enums.MentorTransferRequestSource
@@ -51402,72 +66603,6 @@ export namespace Prisma {
     mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
-  export type student_internshipsUpdateWithoutStudentInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    companyName?: StringFieldUpdateOperationsInput | string
-    internshipTitle?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
-    projectName?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
-    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
-    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
-    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    rating?: NullableFloatFieldUpdateOperationsInput | number | null
-    completionRequested?: BoolFieldUpdateOperationsInput | boolean
-    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type student_internshipsUncheckedUpdateWithoutStudentInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    companyName?: StringFieldUpdateOperationsInput | string
-    internshipTitle?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
-    projectName?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
-    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
-    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
-    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    rating?: NullableFloatFieldUpdateOperationsInput | number | null
-    completionRequested?: BoolFieldUpdateOperationsInput | boolean
-    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type student_internshipsUncheckedUpdateManyWithoutStudentInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    companyName?: StringFieldUpdateOperationsInput | string
-    internshipTitle?: StringFieldUpdateOperationsInput | string
-    role?: NullableStringFieldUpdateOperationsInput | string | null
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    location?: NullableStringFieldUpdateOperationsInput | string | null
-    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
-    projectName?: NullableStringFieldUpdateOperationsInput | string | null
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
-    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
-    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
-    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    rating?: NullableFloatFieldUpdateOperationsInput | number | null
-    completionRequested?: BoolFieldUpdateOperationsInput | boolean
-    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type student_enrollmentsUpdateWithoutStudentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     semesterNumber?: IntFieldUpdateOperationsInput | number
@@ -51499,6 +66634,184 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type student_internshipsUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_documents?: internship_documentsUpdateManyWithoutInternshipNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutInternshipNestedInput
+  }
+
+  export type student_internshipsUncheckedUpdateWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    internship_documents?: internship_documentsUncheckedUpdateManyWithoutInternshipNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutInternshipNestedInput
+  }
+
+  export type student_internshipsUncheckedUpdateManyWithoutStudentInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    companyName?: StringFieldUpdateOperationsInput | string
+    internshipTitle?: StringFieldUpdateOperationsInput | string
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    mode?: NullableEnumInternshipModeFieldUpdateOperationsInput | $Enums.InternshipMode | null
+    projectName?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumInternshipStatusFieldUpdateOperationsInput | $Enums.InternshipStatus
+    verificationStatus?: EnumInternshipVerificationStatusFieldUpdateOperationsInput | $Enums.InternshipVerificationStatus
+    mentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    rating?: NullableFloatFieldUpdateOperationsInput | number | null
+    completionRequested?: BoolFieldUpdateOperationsInput | boolean
+    completionRequestedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internshipType?: EnumInternshipTypeFieldUpdateOperationsInput | $Enums.InternshipType
+    completionVerificationStatus?: EnumCompletionVerificationStatusFieldUpdateOperationsInput | $Enums.CompletionVerificationStatus
+    completionMentorRemark?: NullableStringFieldUpdateOperationsInput | string | null
+    completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type internship_documentsCreateManyInternshipInput = {
+    id: string
+    documentType: $Enums.InternshipDocumentType
+    submissionStage: $Enums.InternshipDocumentStage
+    documentName: string
+    fileType: string
+    fileSize: number
+    cloudinaryPublicId: string
+    fileUrl: string
+    resourceType: string
+    uploadedAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type internship_reviewsCreateManyInternshipInput = {
+    id: string
+    reviewerTeacherId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type internship_documentsUpdateWithoutInternshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_documentsUncheckedUpdateWithoutInternshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_documentsUncheckedUpdateManyWithoutInternshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    documentType?: EnumInternshipDocumentTypeFieldUpdateOperationsInput | $Enums.InternshipDocumentType
+    submissionStage?: EnumInternshipDocumentStageFieldUpdateOperationsInput | $Enums.InternshipDocumentStage
+    documentName?: StringFieldUpdateOperationsInput | string
+    fileType?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    resourceType?: StringFieldUpdateOperationsInput | string
+    uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_reviewsUpdateWithoutInternshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    reviewer?: teachersUpdateOneRequiredWithoutInternship_reviewsNestedInput
+  }
+
+  export type internship_reviewsUncheckedUpdateWithoutInternshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reviewerTeacherId?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_reviewsUncheckedUpdateManyWithoutInternshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reviewerTeacherId?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type academic_subjectsCreateManyAcademicSemesterInput = {
@@ -51585,6 +66898,16 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type internship_reviewsCreateManyReviewerInput = {
+    id: string
+    internshipId: string
+    reviewStage: $Enums.InternshipReviewStage
+    decision: $Enums.InternshipReviewDecision
+    remarks?: string | null
+    reviewedAt?: Date | string
+    createdAt?: Date | string
+  }
+
   export type mentor_assignmentsCreateManyTeachersInput = {
     id: string
     studentId: string
@@ -51595,6 +66918,52 @@ export namespace Prisma {
     assignedBy: string
     createdAt?: Date | string
     updatedAt: Date | string
+  }
+
+  export type mentor_meeting_feedbackCreateManyTeachersInput = {
+    id: string
+    meetingId: string
+    rating: number
+    feedback?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_seriesCreateManyTeachersInput = {
+    id: string
+    studentId: string
+    frequency: string
+    startDate: Date | string
+    endDate?: Date | string | null
+    dayOfWeek?: number | null
+    startTime: string
+    endTime: string
+    timezone?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meetingsCreateManyTeachersInput = {
+    id: string
+    studentId: string
+    seriesId?: string | null
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
   }
 
   export type mentor_transfer_requestsCreateManyTeachers_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -51648,6 +67017,36 @@ export namespace Prisma {
     updatedAt: Date | string
   }
 
+  export type internship_reviewsUpdateWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    internship?: student_internshipsUpdateOneRequiredWithoutInternship_reviewsNestedInput
+  }
+
+  export type internship_reviewsUncheckedUpdateWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    internshipId?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type internship_reviewsUncheckedUpdateManyWithoutReviewerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    internshipId?: StringFieldUpdateOperationsInput | string
+    reviewStage?: EnumInternshipReviewStageFieldUpdateOperationsInput | $Enums.InternshipReviewStage
+    decision?: EnumInternshipReviewDecisionFieldUpdateOperationsInput | $Enums.InternshipReviewDecision
+    remarks?: NullableStringFieldUpdateOperationsInput | string | null
+    reviewedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type mentor_assignmentsUpdateWithoutTeachersInput = {
     id?: StringFieldUpdateOperationsInput | string
     status?: EnumMentorAssignmentStatusFieldUpdateOperationsInput | $Enums.MentorAssignmentStatus
@@ -51680,6 +67079,154 @@ export namespace Prisma {
     assignedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     assignedBy?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_feedbackUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUpdateOneRequiredWithoutMentor_meeting_feedbackNestedInput
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    meetingId?: StringFieldUpdateOperationsInput | string
+    rating?: IntFieldUpdateOperationsInput | number
+    feedback?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_seriesUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    students?: studentsUpdateOneRequiredWithoutMentor_meeting_seriesNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meeting_seriesNestedInput
+  }
+
+  export type mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    frequency?: StringFieldUpdateOperationsInput | string
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    endDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    dayOfWeek?: NullableIntFieldUpdateOperationsInput | number | null
+    startTime?: StringFieldUpdateOperationsInput | string
+    endTime?: StringFieldUpdateOperationsInput | string
+    timezone?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -52157,6 +67704,230 @@ export namespace Prisma {
     verifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     attempts?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsCreateManyMentor_meeting_seriesInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    followUpToMeetingId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meetingsUpdateWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateOneWithoutOther_mentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutMentor_meeting_seriesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    followUpToMeetingId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsCreateManyMentor_meetingsInput = {
+    id: string
+    content: string
+    position?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meetingsCreateManyMentor_meetingsInput = {
+    id: string
+    mentorTeacherId: string
+    studentId: string
+    seriesId?: string | null
+    title: string
+    meetingType?: string
+    mode?: string
+    status?: string
+    priority?: string
+    startAt: Date | string
+    endAt: Date | string
+    venue?: string | null
+    meetingLink?: string | null
+    agenda?: string | null
+    description?: string | null
+    startedAt?: Date | string | null
+    endedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    position?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_meetingsUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateOneWithoutMentor_meetingsNestedInput
+    students?: studentsUpdateOneRequiredWithoutMentor_meetingsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_meeting_discussion_points?: mentor_meeting_discussion_pointsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    mentor_meeting_notes?: mentor_meeting_notesUncheckedUpdateOneWithoutMentor_meetingsNestedInput
+    other_mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsNestedInput
+  }
+
+  export type mentor_meetingsUncheckedUpdateManyWithoutMentor_meetingsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorTeacherId?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    seriesId?: NullableStringFieldUpdateOperationsInput | string | null
+    title?: StringFieldUpdateOperationsInput | string
+    meetingType?: StringFieldUpdateOperationsInput | string
+    mode?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    priority?: StringFieldUpdateOperationsInput | string
+    startAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    endAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    venue?: NullableStringFieldUpdateOperationsInput | string | null
+    meetingLink?: NullableStringFieldUpdateOperationsInput | string | null
+    agenda?: NullableStringFieldUpdateOperationsInput | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

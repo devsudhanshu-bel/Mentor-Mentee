@@ -1,7 +1,10 @@
 import express from "express";
 
 import MentorController from "../controllers/mentor.controller.js";
+
 import dashboardRoutes from "./dashboard.routes.js";
+import internshipsRoutes from "./internships.routes.js";
+import meetingsRoutes from "./meetings.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -25,6 +28,18 @@ router.use(authorize("MENTOR"));
 ========================================================== */
 
 router.use("/dashboard", dashboardRoutes);
+
+/* ==========================================================
+   MENTOR INTERNSHIPS
+========================================================== */
+
+router.use("/internships", internshipsRoutes);
+
+/* ==========================================================
+   MENTOR MEETINGS
+========================================================== */
+
+router.use("/meetings", meetingsRoutes);
 
 /* ==========================================================
    MENTOR PROFILE

@@ -8,6 +8,9 @@ import documentRoutes from "../documents/routes/document.routes.js";
 import academicRoutes from "../academics/routes/academic.routes.js";
 import attendanceRoutes from "../attendance/routes/attendance.routes.js";
 import mentorRoutes from "../mentor/routes/mentor.routes.js";
+import internshipRoutes from "../internships/routes/internship.routes.js";
+import meetingsRoutes from "../mentor/routes/meetings.routes.js";
+import dashboardRoutes from "../dashboard/routes/dashboard.routes.js";
 
 const router = express.Router();
 
@@ -47,5 +50,21 @@ router.use("/attendance", attendanceRoutes);
 ========================================================== */
 
 router.use("/mentor", mentorRoutes);
+
+/* ==========================================================
+   INTERNSHIPS
+========================================================== */
+
+router.use("/internships", internshipRoutes);
+
+router.use("/dashboard", dashboardRoutes);
+
+/* ==========================================================
+   STUDENT MEETINGS
+   GET /api/mentee/meetings
+   GET /api/mentee/meetings/:meetingId
+========================================================== */
+
+router.use("/meetings", meetingsRoutes);
 
 export default router;

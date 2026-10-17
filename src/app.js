@@ -1,3 +1,4 @@
+
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -10,7 +11,10 @@ import cookieParser from "cookie-parser";
 
 import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
+
 import adminRoutes from "./modules/admin/routes/admin.routes.js";
+import mentorDetailsRoutes from "./modules/admin/routes/mentorDetails.routes.js";
+
 import mentorRoutes from "./modules/mentor/routes/mentor.routes.js";
 import mentorStudentsRoutes from "./modules/mentor/routes/students.routes.js";
 import mentorAcademicsRoutes from "./modules/mentor/routes/academics.routes.js";
@@ -21,6 +25,9 @@ import mentorExtraCurricularRoutes from "./modules/mentor/routes/extraCurricular
 import mentorAwardsAchievementsRoutes from "./modules/mentor/routes/awardsAchievements.routes.js";
 import mentorDocumentsRoutes from "./modules/mentor/routes/documents.routes.js";
 import mentorCertificatesRoutes from "./modules/mentor/routes/certificates.routes.js";
+import mentorOverviewRoutes from "./modules/mentor/routes/overview.routes.js";
+import mentorMeetingsRoutes from "./modules/mentor/routes/meetings.routes.js";
+import studentReportRoutes from "./modules/mentor/routes/studentReport.routes.js";
 
 /* ==========================================================
    APP
@@ -36,9 +43,9 @@ const allowedOrigins = [
   "http://localhost:5173",
   "http://127.0.0.1:5173",
 
-  // Include your configured frontend origin, if provided.
   ...(process.env.CLIENT_URL
-    ? process.env.CLIENT_URL.split(",")
+    ? process.env.CLIENT_URL
+        .split(",")
         .map((origin) => origin.trim().replace(/\/+$/, ""))
         .filter(Boolean)
     : []),
@@ -47,8 +54,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin(origin, callback) {
-      // Permit requests without an Origin header, such as server-to-server
-      // requests and local command-line tools.
+      // Allow requests without an Origin header, such as CLI tools.
       if (!origin || allowedOrigins.includes(origin)) {
         return callback(null, true);
       }
@@ -59,10 +65,7 @@ app.use(
     },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: [
-      "Content-Type",
-      "Authorization",
-    ],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
@@ -116,6 +119,13 @@ app.use("/api/auth", authRoutes);
 app.use("/api/mentee", menteeRoutes);
 
 /* ==========================================================
+   ADMIN MENTOR DETAILS
+   GET /api/admin/mentors/:mentorId
+========================================================== */
+
+app.use("/api/admin", mentorDetailsRoutes);
+
+/* ==========================================================
    ADMIN
 ========================================================== */
 
@@ -123,6 +133,7 @@ app.use("/api/admin", adminRoutes);
 
 /* ==========================================================
    MENTOR
+   Includes routes defined in mentor.routes.js
 ========================================================== */
 
 app.use("/api/mentor", mentorRoutes);
@@ -151,24 +162,42 @@ app.use("/api/mentor/students", attendanceRoutes);
 
 app.use("/api/mentor/students", mentorResearchRoutes);
 
-app.use(
-  "/api/mentor/students",
-  mentorCoCurricularRoutes
-);
+/* ==========================================================
+   MENTOR CO-CURRICULAR
+========================================================== */
 
-app.use(
-  "/api/mentor/students",
-  mentorExtraCurricularRoutes
-);
+app.use("/api/mentor/students", mentorCoCurricularRoutes);
 
-app.use(
-  "/api/mentor/students",
-  mentorAwardsAchievementsRoutes
-);
+/* ==========================================================
+   MENTOR EXTRA-CURRICULAR
+========================================================== */
+
+app.use("/api/mentor/students", mentorExtraCurricularRoutes);
+
+/* ==========================================================
+   MENTOR AWARDS & ACHIEVEMENTS
+========================================================== */
+
+app.use("/api/mentor/students", mentorAwardsAchievementsRoutes);
+
+/* ==========================================================
+   MENTOR DOCUMENTS
+========================================================== */
 
 app.use("/api/mentor/students", mentorDocumentsRoutes);
 
+/* ==========================================================
+   MENTOR CERTIFICATES
+========================================================== */
+
 app.use("/api/mentor/students", mentorCertificatesRoutes);
+
+/* ==========================================================
+   MENTOR OVERVIEW & REPORTS
+========================================================== */
+
+app.use("/api/mentor/students", mentorOverviewRoutes);
+app.use("/api/mentor/students", studentReportRoutes);
 
 /* ==========================================================
    404 HANDLER
@@ -187,6 +216,10 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error("❌ Error:", err);
+
+  if (res.headersSent) {
+    return next(err);
+  }
 
   return res.status(err.statusCode || 500).json({
     success: false,

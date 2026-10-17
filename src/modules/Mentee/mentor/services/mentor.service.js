@@ -52,7 +52,7 @@ class MentorService {
         teachers: {
           include: {
             teacher_profiles: true,
-            departments: true,
+            departments_teachers_departmentIdTodepartments: true,
           },
         },
         academic_terms: true,
@@ -105,9 +105,9 @@ class MentorService {
                 }
               : null,
 
-            department: teacher.departments
+            department: teacher.departments_teachers_departmentIdTodepartments
               ? {
-                  ...teacher.departments,
+                  ...teacher.departments_teachers_departmentIdTodepartments,
                 }
               : null,
           }
