@@ -1,9 +1,10 @@
-
 import React, { useMemo } from "react";
 import {
   CalendarDays,
   CircleCheck,
   Clock3,
+  Star,
+  MessageSquare,
 } from "lucide-react";
 
 import SummaryCard from "./SummaryCard";
@@ -34,6 +35,43 @@ const getStartDate = (meeting) => {
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
+// Supports the Prisma relation and common API aliases.
+const getMeetingFeedback = (meeting) => {
+  const value =
+    meeting?.mentor_meeting_feedback ??
+    meeting?.mentorMeetingFeedback ??
+    meeting?.mentor_feedback ??
+    meeting?.mentorFeedback ??
+    meeting?.feedback ??
+    null;
+
+  if (Array.isArray(value)) {
+    return value[0] ?? null;
+  }
+
+  return value && typeof value === "object" ? value : null;
+};
+
+// Only valid integer ratings from 1 to 5 are counted.
+const getValidRating = (meeting) => {
+  const feedback = getMeetingFeedback(meeting);
+
+  if (
+    !feedback ||
+    feedback.rating === null ||
+    feedback.rating === undefined ||
+    feedback.rating === ""
+  ) {
+    return null;
+  }
+
+  const rating = Number(feedback.rating);
+
+  return Number.isInteger(rating) && rating >= 1 && rating <= 5
+    ? rating
+    : null;
+};
+
 // =========================================================
 // MEETING SUMMARY
 // =========================================================
@@ -51,18 +89,20 @@ const MeetingSummary = ({
       total: records.length,
       completed: 0,
       upcoming: 0,
+      feedbackCount: 0,
+      averageRating: null,
     };
+
+    let ratingTotal = 0;
 
     records.forEach((meeting) => {
       const status = normalizeStatus(meeting?.status);
       const startDate = getStartDate(meeting);
 
-      // Count completed meetings.
       if (status === "COMPLETED") {
         result.completed += 1;
       }
 
-      // Count only future meetings that are still scheduled.
       if (
         status === "SCHEDULED" &&
         startDate &&
@@ -70,13 +110,27 @@ const MeetingSummary = ({
       ) {
         result.upcoming += 1;
       }
+
+      const rating = getValidRating(meeting);
+
+      if (rating !== null) {
+        ratingTotal += rating;
+        result.feedbackCount += 1;
+      }
     });
+
+    result.averageRating =
+      result.feedbackCount > 0
+        ? Number(
+            (ratingTotal / result.feedbackCount).toFixed(1)
+          )
+        : null;
 
     return result;
   }, [meetings]);
 
-  // Prefer counts calculated from actual meeting records.
-  // Use the supplied summary when no meeting records exist.
+  // Use live meeting records when available.
+  // Fall back to the supplied summary when the list is empty.
   const hasMeetingRecords =
     Array.isArray(meetings) && meetings.length > 0;
 
@@ -87,6 +141,8 @@ const MeetingSummary = ({
           total: suppliedSummary.total ?? 0,
           completed: suppliedSummary.completed ?? 0,
           upcoming: suppliedSummary.upcoming ?? 0,
+          feedbackCount: suppliedSummary.feedbackCount ?? 0,
+          averageRating: suppliedSummary.averageRating ?? null,
         }
       : stats;
 
@@ -122,6 +178,32 @@ const MeetingSummary = ({
       value: displayedStats.upcoming,
       subtitle: "Scheduled meetings",
     },
+    {
+      key: "average-rating",
+      icon: Star,
+      iconBg: "bg-amber-50",
+      iconColor: "text-amber-500",
+      title: "Average Rating",
+      value:
+        displayedStats.averageRating === null ||
+        displayedStats.averageRating === undefined ||
+        !Number.isFinite(Number(displayedStats.averageRating))
+          ? "—"
+          : `${Number(displayedStats.averageRating).toFixed(1)}/5`,
+      subtitle:
+        displayedStats.feedbackCount === 0
+          ? "No ratings submitted yet"
+          : "Across rated meetings",
+    },
+    {
+      key: "feedback-count",
+      icon: MessageSquare,
+      iconBg: "bg-violet-50",
+      iconColor: "text-violet-600",
+      title: "Feedback Submitted",
+      value: displayedStats.feedbackCount,
+      subtitle: "Meetings with a valid rating",
+    },
   ];
 
   // =========================================================
@@ -132,6 +214,7 @@ const MeetingSummary = ({
     <section
       className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
       aria-labelledby="meeting-summary-heading"
+      aria-busy={isLoading}
     >
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2
@@ -151,7 +234,7 @@ const MeetingSummary = ({
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
         {cards.map((card) => (
           <SummaryCard
             key={card.key}

@@ -14,57 +14,103 @@ import Discussion from "../components/Mentor/Discussion";
 import { getMyMentor } from "../api/mentor.api";
 import menteeMeetingsService from "../api/menteeMeetings.api";
 
-// ==========================================================
-// NORMALIZE MEETINGS API RESPONSE
-// Supports common API response wrappers.
-// ==========================================================
+/* ==========================================================
+   NORMALIZE MEETINGS API RESPONSE
+   Supports common API response wrappers and preserves
+   saved mentor feedback from the backend.
+========================================================== */
 
 const normalizeMeetingsResponse = (response) => {
-  const payload = response?.data ?? response;
+  let payload = response?.data ?? response;
+
+  // Unwrap common API envelopes, such as:
+  // { success, message, data: [...] }
+  // { data: { meetings: [...] } }
+  for (let i = 0; i < 5; i += 1) {
+    if (
+      payload &&
+      !Array.isArray(payload) &&
+      typeof payload === "object" &&
+      payload.data !== undefined &&
+      (
+        payload.success !== undefined ||
+        payload.message !== undefined ||
+        Object.keys(payload).length === 1
+      )
+    ) {
+      payload = payload.data;
+    } else {
+      break;
+    }
+  }
+
+  let meetingList = [];
 
   if (Array.isArray(payload)) {
-    return payload;
+    meetingList = payload;
+  } else if (Array.isArray(payload?.meetings)) {
+    meetingList = payload.meetings;
+  } else if (Array.isArray(payload?.items)) {
+    meetingList = payload.items;
+  } else if (Array.isArray(payload?.data)) {
+    meetingList = payload.data;
+  } else if (Array.isArray(payload?.data?.meetings)) {
+    meetingList = payload.data.meetings;
   }
 
-  if (Array.isArray(payload?.meetings)) {
-    return payload.meetings;
-  }
+  return meetingList.map((meeting) => {
+    const rawMeeting = meeting?.rawMeeting ?? meeting;
 
-  if (Array.isArray(payload?.data)) {
-    return payload.data;
-  }
+    // Preserve the feedback relation regardless of whether the
+    // backend uses snake_case or camelCase naming.
+    const mentorFeedback =
+      meeting?.mentor_meeting_feedback ??
+      meeting?.mentorMeetingFeedback ??
+      meeting?.mentor_feedback ??
+      meeting?.mentorFeedback ??
+      rawMeeting?.mentor_meeting_feedback ??
+      rawMeeting?.mentorMeetingFeedback ??
+      rawMeeting?.mentor_feedback ??
+      rawMeeting?.mentorFeedback ??
+      null;
 
-  if (Array.isArray(payload?.data?.meetings)) {
-    return payload.data.meetings;
-  }
+    return {
+      ...meeting,
 
-  if (Array.isArray(payload?.items)) {
-    return payload.items;
-  }
+      // Explicit aliases for frontend components.
+      mentor_meeting_feedback: mentorFeedback,
+      mentorMeetingFeedback: mentorFeedback,
 
-  return [];
+      // Retain the original backend response.
+      rawMeeting,
+    };
+  });
 };
 
+/* ==========================================================
+   MENTOR & MENTEE PAGE
+========================================================== */
+
 const Mentor = () => {
-  // ========================================================
-  // STUDENT AND ASSIGNED MENTOR
-  // ========================================================
+  /* ========================================================
+     ASSIGNED MENTOR AND STUDENT
+  ======================================================== */
 
   const [mentorData, setMentorData] = useState(null);
   const [loadingMentor, setLoadingMentor] = useState(true);
   const [mentorError, setMentorError] = useState("");
 
-  // ========================================================
-  // STUDENT MEETINGS
-  // ========================================================
+  /* ========================================================
+     STUDENT MEETINGS
+  ======================================================== */
 
   const [meetings, setMeetings] = useState([]);
   const [loadingMeetings, setLoadingMeetings] = useState(true);
   const [meetingsError, setMeetingsError] = useState("");
 
-  // ========================================================
-  // FETCH STUDENT AND ASSIGNED MENTOR
-  // ========================================================
+  /* ========================================================
+     FETCH ASSIGNED MENTOR
+  ======================================================== */
 
   const fetchMyMentor = useCallback(async () => {
     try {
@@ -90,22 +136,39 @@ const Mentor = () => {
     }
   }, []);
 
-  // ========================================================
-  // FETCH MEETINGS FOR THE AUTHENTICATED STUDENT
-  // ========================================================
+  /* ========================================================
+     FETCH MEETINGS FOR AUTHENTICATED STUDENT
+  ======================================================== */
 
   const fetchMeetings = useCallback(async () => {
     try {
       setLoadingMeetings(true);
       setMeetingsError("");
 
-      const response = await menteeMeetingsService.getMeetings();
+      const response =
+        await menteeMeetingsService.getMeetings();
 
-      const meetingList = normalizeMeetingsResponse(response);
+      const meetingList =
+        normalizeMeetingsResponse(response);
 
+      // Diagnostic logging: verify the actual feedback returned
+      // by the student meetings endpoint.
       console.log(
         "[Student Mentor Page] Meetings received:",
         meetingList
+      );
+
+      console.log(
+        "[Student Mentor Page] Saved mentor feedback:",
+        meetingList.map((meeting) => ({
+          id: meeting.id ?? meeting.meetingId,
+          title: meeting.title,
+          feedback:
+            meeting.mentor_meeting_feedback ??
+            meeting.mentorMeetingFeedback ??
+            meeting.rawMeeting?.mentor_meeting_feedback ??
+            null,
+        }))
       );
 
       setMeetings(meetingList);
@@ -131,18 +194,21 @@ const Mentor = () => {
     }
   }, []);
 
-  // ========================================================
-  // INITIAL DATA FETCH
-  // ========================================================
+  /* ========================================================
+     INITIAL DATA FETCH
+  ======================================================== */
 
   useEffect(() => {
     fetchMyMentor();
-    fetchMeetings();
+
+    fetchMeetings().catch(() => {
+      // The error is displayed through meetingsError.
+    });
   }, [fetchMyMentor, fetchMeetings]);
 
-  // ========================================================
-  // PAGE
-  // ========================================================
+  /* ========================================================
+     PAGE
+  ======================================================== */
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -150,12 +216,12 @@ const Mentor = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="ml-[290px] flex min-h-screen flex-col">
         {/* Header */}
         <Header />
 
         {/* Mentor Page Content */}
-        <main className="flex-1 px-4 py-4 space-y-4">
+        <main className="flex-1 space-y-4 px-4 py-4">
           {/* Page Heading */}
           <div>
             <h1 className="text-[22px] font-bold text-[#142970]">
@@ -186,9 +252,8 @@ const Mentor = () => {
             </div>
           )}
 
-          {/* First Row */}
+          {/* Mentor, Mentee and Relationship Summary */}
           <div className="grid grid-cols-12 gap-3">
-            {/* Assigned Mentor */}
             <div className="col-span-12 lg:col-span-4">
               <MentorCard
                 mentorData={mentorData}
@@ -196,7 +261,6 @@ const Mentor = () => {
               />
             </div>
 
-            {/* Logged-in Student */}
             <div className="col-span-12 lg:col-span-4">
               <MenteeCard
                 mentorData={mentorData}
@@ -204,7 +268,6 @@ const Mentor = () => {
               />
             </div>
 
-            {/* Relationship Summary */}
             <div className="col-span-12 lg:col-span-4">
               <RelationshipSummary
                 mentorData={mentorData}
@@ -214,27 +277,21 @@ const Mentor = () => {
           </div>
 
           {/* Meetings and Discussion */}
-          <div className="grid grid-cols-12 gap-3 items-stretch">
+          <div className="grid grid-cols-12 items-stretch gap-3">
             {/* Left Column */}
-            <div className="col-span-12 lg:col-span-4 flex flex-col gap-4">
-              {/* Upcoming Meetings */}
-              <div>
-                <UpcomingMeeting
-                  meetings={meetings}
-                  loading={loadingMeetings}
-                  error={meetingsError}
-                  onRefresh={fetchMeetings}
-                />
-              </div>
+            <div className="col-span-12 flex flex-col gap-4 lg:col-span-4">
+              <UpcomingMeeting
+                meetings={meetings}
+                loading={loadingMeetings}
+                error={meetingsError}
+                onRefresh={fetchMeetings}
+              />
 
-              {/* Discussion */}
-              <div>
-                <Discussion />
-              </div>
+              <Discussion />
             </div>
 
             {/* Right Column: Recent Meetings */}
-            <div className="col-span-12 lg:col-span-8 flex">
+            <div className="col-span-12 flex lg:col-span-8">
               <div className="w-full [&>*]:h-full">
                 <RecentMeetings
                   meetings={meetings}

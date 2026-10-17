@@ -1,5 +1,6 @@
 const API_BASE_URL = (
-  import.meta.env.VITE_API_URL || "http://localhost:5000/api"
+  import.meta.env.VITE_API_URL ||
+  "http://localhost:5000/api"
 ).replace(/\/+$/, "");
 
 const BASE_PATH = `${API_BASE_URL}/mentee/meetings`;
@@ -20,7 +21,9 @@ async function request(path) {
       credentials: "include",
       headers: {
         Accept: "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(token
+          ? { Authorization: `Bearer ${token}` }
+          : {}),
       },
     });
   } catch {
@@ -29,7 +32,9 @@ async function request(path) {
     );
   }
 
-  const contentType = response.headers.get("content-type") || "";
+  const contentType =
+    response.headers.get("content-type") || "";
+
   let result = null;
 
   try {
@@ -51,7 +56,10 @@ async function request(path) {
     localStorage.removeItem("isAuthenticated");
 
     window.location.href = "/";
-    throw new Error("Your session has expired. Please log in again.");
+
+    throw new Error(
+      "Your session has expired. Please log in again."
+    );
   }
 
   if (!response.ok) {
@@ -67,7 +75,11 @@ async function request(path) {
 }
 
 const encodeId = (id) => {
-  if (id === undefined || id === null || String(id).trim() === "") {
+  if (
+    id === undefined ||
+    id === null ||
+    String(id).trim() === ""
+  ) {
     throw new Error("A valid meeting ID is required.");
   }
 
@@ -79,7 +91,13 @@ const menteeMeetingsService = {
     const query = new URLSearchParams();
 
     Object.entries(params).forEach(([key, value]) => {
-      if (value === undefined || value === null || value === "") return;
+      if (
+        value === undefined ||
+        value === null ||
+        value === ""
+      ) {
+        return;
+      }
 
       if (Array.isArray(value)) {
         value.forEach((item) => {
@@ -97,7 +115,8 @@ const menteeMeetingsService = {
     return request(search ? `/?${search}` : "/");
   },
 
-  getMeeting: (meetingId) => request(`/${encodeId(meetingId)}`),
+  getMeeting: (meetingId) =>
+    request(`/${encodeId(meetingId)}`),
 };
 
 export default menteeMeetingsService;

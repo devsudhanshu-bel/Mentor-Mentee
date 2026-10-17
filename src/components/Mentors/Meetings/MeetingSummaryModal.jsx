@@ -45,6 +45,7 @@ const getStatusLabel = (status) => {
   };
 
   const normalized = normalizeStatus(status);
+
   return labels[normalized] || normalized.replace(/_/g, " ");
 };
 
@@ -98,6 +99,7 @@ const toValidDate = (value) => {
   if (!value) return null;
 
   const date = new Date(value);
+
   return Number.isNaN(date.getTime()) ? null : date;
 };
 
@@ -158,16 +160,17 @@ const getMeetingId = (meeting) =>
 
 const getText = (value) => {
   if (typeof value === "string") return value.trim();
+
   if (typeof value === "number") return String(value);
 
   if (value && typeof value === "object") {
     return String(
       value.content ??
-      value.text ??
-      value.notes ??
-      value.remarks ??
-      value.description ??
-      ""
+        value.text ??
+        value.notes ??
+        value.remarks ??
+        value.description ??
+        ""
     ).trim();
   }
 
@@ -283,7 +286,7 @@ const getMentorName = (meeting, student) => {
 };
 
 // =========================================================
-// NOTES, DISCUSSION POINTS AND FEEDBACK
+// NOTES AND DISCUSSION POINTS
 // =========================================================
 
 const getNotesContent = (meeting) => {
@@ -294,6 +297,8 @@ const getNotesContent = (meeting) => {
     meeting?.workspace?.notes,
     meeting?.mentorMeetingNotes,
     meeting?.mentor_meeting_notes,
+    meeting?.rawMeeting?.notes,
+    meeting?.rawMeeting?.mentor_meeting_notes,
   ];
 
   for (const candidate of candidates) {
@@ -310,6 +315,7 @@ const getNotesContent = (meeting) => {
     }
 
     const text = getText(candidate);
+
     if (text) return text;
   }
 
@@ -323,6 +329,8 @@ const getDiscussionPoints = (meeting) => {
     meeting?.discussion,
     meeting?.workspace?.discussionPoints,
     meeting?.mentor_meeting_discussion_points,
+    meeting?.rawMeeting?.discussionPoints,
+    meeting?.rawMeeting?.mentor_meeting_discussion_points,
   ];
 
   for (const candidate of candidates) {
@@ -332,6 +340,7 @@ const getDiscussionPoints = (meeting) => {
         .filter(Boolean);
 
       if (points.length > 0) return points;
+
       continue;
     }
 
@@ -343,20 +352,36 @@ const getDiscussionPoints = (meeting) => {
   return [];
 };
 
+// =========================================================
+// MENTOR FEEDBACK AND RATING
+// =========================================================
+
 const getFeedbackRecord = (meeting) => {
+  if (!meeting || typeof meeting !== "object") {
+    return null;
+  }
+
   const candidates = [
-    meeting?.feedback,
-    meeting?.mentorFeedback,
-    meeting?.mentor_feedback,
-    meeting?.evaluation,
-    meeting?.mentor_meeting_feedback,
+    meeting.mentor_meeting_feedback,
+    meeting.mentorMeetingFeedback,
+    meeting.mentor_feedback,
+    meeting.mentorFeedback,
+    meeting.feedback,
+    meeting.rawMeeting?.mentor_meeting_feedback,
+    meeting.rawMeeting?.mentorMeetingFeedback,
+    meeting.rawMeeting?.mentor_feedback,
+    meeting.rawMeeting?.mentorFeedback,
+    meeting.rawMeeting?.feedback,
+    meeting.evaluation,
   ];
 
   for (const value of candidates) {
     if (Array.isArray(value)) {
-      if (value.length > 0 && value[0]) {
-        return value[0];
-      }
+      const record = value.find(
+        (item) => item && typeof item === "object"
+      );
+
+      if (record) return record;
 
       continue;
     }
@@ -369,17 +394,54 @@ const getFeedbackRecord = (meeting) => {
   return null;
 };
 
+const getValidRating = (feedback) => {
+  if (!feedback) return null;
+
+  const value = feedback.rating;
+
+  if (
+    value === null ||
+    value === undefined ||
+    value === ""
+  ) {
+    return null;
+  }
+
+  const rating = Number(value);
+
+  return Number.isInteger(rating) &&
+    rating >= 1 &&
+    rating <= 5
+    ? rating
+    : null;
+};
+
+const getFeedbackText = (meeting) => {
+  const feedback = getFeedbackRecord(meeting);
+
+  return getText(
+    feedback?.feedback ??
+      feedback?.comments ??
+      feedback?.comment ??
+      feedback?.remarks ??
+      feedback?.content ??
+      ""
+  );
+};
+
 const getRemarks = (meeting) => {
   const feedback = getFeedbackRecord(meeting);
 
   return getText(
     meeting?.remarks ??
-    meeting?.mentorRemarks ??
-    meeting?.mentor_remarks ??
-    feedback?.remarks ??
-    feedback?.comments ??
-    feedback?.feedback ??
-    ""
+      meeting?.mentorRemarks ??
+      meeting?.mentor_remarks ??
+      meeting?.rawMeeting?.remarks ??
+      feedback?.remarks ??
+      feedback?.comments ??
+      feedback?.comment ??
+      feedback?.feedback ??
+      ""
   );
 };
 
@@ -396,7 +458,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
   const [reportLoading, setReportLoading] = useState(false);
   const [reportError, setReportError] = useState("");
 
-  // Fetch the latest persisted meeting data when the modal opens.
+  // Fetch the latest saved meeting details.
   useEffect(() => {
     if (!open || !meetingId) return undefined;
 
@@ -426,7 +488,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
         if (!cancelled) {
           setReportError(
             error?.message ||
-            "Unable to fetch the latest meeting details."
+              "Unable to fetch the latest meeting details."
           );
         }
       } finally {
@@ -443,6 +505,10 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
     };
   }, [open, meetingId]);
 
+  /*
+   * Prefer the latest API result, but preserve the original
+   * meeting as a fallback when the request fails.
+   */
   const viewMeeting =
     reportMeeting ??
     meeting?.rawMeeting ??
@@ -471,7 +537,8 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
     const currentAcademicSemester =
       academicSemesters.find(
         (item) =>
-          String(item?.status ?? "").toUpperCase() === "CURRENT"
+          String(item?.status ?? "").toUpperCase() ===
+          "CURRENT"
       ) ?? academicSemesters[0];
 
     return {
@@ -544,6 +611,15 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
   const discussionPoints = getDiscussionPoints(viewMeeting);
   const remarks = getRemarks(viewMeeting);
 
+  // Always derive the rating from the persisted feedback record.
+  const feedbackRecord = getFeedbackRecord(viewMeeting);
+  const rating = getValidRating(feedbackRecord);
+  const feedbackText = getFeedbackText(viewMeeting);
+
+  /*
+   * Pass rating and comments directly into MeetingSummaryCard.
+   * Keep existing summary properties so its current layout remains.
+   */
   const summary = useMemo(() => {
     const actualSummary = firstValue(
       viewMeeting?.summary,
@@ -552,20 +628,23 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
       null
     );
 
-    const feedbackRecord = getFeedbackRecord(viewMeeting);
+    const feedback = getFeedbackRecord(viewMeeting);
+    const validRating = getValidRating(feedback);
 
-    const feedbackText = getText(
-      feedbackRecord?.feedback ??
-      feedbackRecord?.comments ??
-      feedbackRecord?.content ??
-      ""
-    );
-
-    if (!actualSummary && !feedbackRecord) return null;
+    const comments = getFeedbackText(viewMeeting);
 
     return {
-      ...(actualSummary || {}),
-      feedback: feedbackText || null,
+      ...(actualSummary &&
+      typeof actualSummary === "object"
+        ? actualSummary
+        : {}),
+
+      rating: validRating,
+      feedback: comments || null,
+      comments: comments || null,
+
+      mentor_meeting_feedback: feedback,
+      mentorMeetingFeedback: feedback,
     };
   }, [viewMeeting]);
 
@@ -573,7 +652,6 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
 
   const status = normalizeStatus(viewMeeting?.status);
 
-  // Scheduled times are fallbacks when actual times are absent.
   const startAt = firstValue(
     viewMeeting?.startedAt,
     viewMeeting?.startAt,
@@ -654,7 +732,6 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
     const meetingTitle =
       viewMeeting?.title || "Mentorship Meeting";
 
-    // SECTION 1: all meeting-related details.
     const meetingRows = [
       ["Meeting", meetingTitle],
       ["Meeting ID", meetingId ?? "Unavailable"],
@@ -683,6 +760,11 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
       ["Location / Meeting Link", venue || "Not provided"],
       ["Agenda", agenda || "Not provided"],
       ["Description", description || "Not provided"],
+      [
+        "Mentor Rating",
+        rating !== null ? `${rating}/5` : "Not rated",
+      ],
+      ["Feedback Comments", feedbackText || "Not provided"],
     ];
 
     const makeRows = (rows) =>
@@ -697,7 +779,6 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
         )
         .join("");
 
-    // SECTION 2: notes, discussion points, and feedback.
     const makeContentSection = (
       title,
       content,
@@ -781,17 +862,15 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               --surface: #f8fafc;
             }
 
-            * {
-              box-sizing: border-box;
-            }
+            * { box-sizing: border-box; }
 
             body {
               margin: 0;
               padding: 36px;
               background: var(--surface);
               color: var(--text);
-              font-family: Inter, ui-sans-serif, system-ui, -apple-system,
-                BlinkMacSystemFont, "Segoe UI", sans-serif;
+              font-family: Inter, ui-sans-serif, system-ui,
+                -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
               font-size: 13px;
               line-height: 1.65;
             }
@@ -858,9 +937,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               color: #1d4ed8;
             }
 
-            .main-section {
-              margin-top: 28px;
-            }
+            .main-section { margin-top: 28px; }
 
             .section-heading {
               display: flex;
@@ -896,8 +973,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               overflow: hidden;
             }
 
-            th,
-            td {
+            th, td {
               padding: 11px 14px;
               border-bottom: 1px solid var(--border);
               text-align: left;
@@ -913,14 +989,10 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               font-weight: 700;
             }
 
-            td {
-              color: var(--text);
-            }
+            td { color: var(--text); }
 
             tr:last-child th,
-            tr:last-child td {
-              border-bottom: none;
-            }
+            tr:last-child td { border-bottom: none; }
 
             .content-section {
               margin-top: 15px;
@@ -940,9 +1012,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               font-weight: 800;
             }
 
-            .section-content {
-              padding: 15px 16px;
-            }
+            .section-content { padding: 15px 16px; }
 
             .content-text {
               margin: 0;
@@ -969,9 +1039,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               white-space: pre-wrap;
             }
 
-            li:last-child {
-              margin-bottom: 0;
-            }
+            li:last-child { margin-bottom: 0; }
 
             .report-footer {
               margin-top: 28px;
@@ -1009,9 +1077,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
                 page-break-inside: avoid;
               }
 
-              .report-header {
-                page-break-after: avoid;
-              }
+              .report-header { page-break-after: avoid; }
             }
           </style>
         </head>
@@ -1020,7 +1086,6 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
           <main class="report">
             <header class="report-header">
               <p class="eyebrow">Mentor–Mentee Programme</p>
-
               <h1>${escapeHtml(meetingTitle)}</h1>
 
               <p class="subtitle">
@@ -1050,9 +1115,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               </h2>
 
               <table>
-                <tbody>
-                  ${makeRows(meetingRows)}
-                </tbody>
+                <tbody>${makeRows(meetingRows)}</tbody>
               </table>
             </section>
 
@@ -1196,12 +1259,15 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
             />
 
             <div className="min-w-0 space-y-4">
-              {/* Notes, discussion points and remarks */}
+              {/* Notes, discussion points, remarks and rating */}
               <MeetingSummaryCard
                 summary={summary}
                 notes={notes}
                 discussionPoints={discussionPoints}
                 remarks={remarks}
+                rating={rating}
+                feedback={feedbackText}
+                mentorFeedback={feedbackRecord}
               />
 
               {/* Agenda and meeting information */}
@@ -1276,7 +1342,8 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
                       Feedback &amp; Remarks
                     </p>
                     <p className="whitespace-pre-wrap break-words">
-                      {remarks || "No feedback or remarks have been recorded."}
+                      {remarks ||
+                        "No feedback or remarks have been recorded."}
                     </p>
                   </div>
 

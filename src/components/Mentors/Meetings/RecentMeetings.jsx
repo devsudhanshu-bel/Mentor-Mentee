@@ -113,13 +113,23 @@ const formatRecentMeeting = (meeting) => {
         ? "In Person"
         : meeting?.meetingType ?? "Meeting";
 
-  const student = meeting?.student ?? {};
+  const studentValue =
+    meeting?.student ??
+    meeting?.students ??
+    meeting?.rawMeeting?.student ??
+    meeting?.rawMeeting?.students ??
+    {};
+
+  // Support both object and array relation shapes.
+  const student = Array.isArray(studentValue)
+    ? studentValue[0] ?? {}
+    : studentValue;
 
   const studentName =
     student.fullName ??
     student.name ??
+    student.full_name ??
     meeting?.studentName ??
-    meeting?.student?.full_name ??
     "Student";
 
   const registrationNumber =
@@ -132,7 +142,9 @@ const formatRecentMeeting = (meeting) => {
   const department =
     student.department?.name ??
     student.departmentName ??
-    student.department ??
+    (typeof student.department === "string"
+      ? student.department
+      : "") ??
     meeting?.departmentName ??
     "";
 
@@ -149,6 +161,18 @@ const formatRecentMeeting = (meeting) => {
 
   const startTime = formatTime(startAt);
   const endTime = endAt ? formatTime(endAt) : null;
+
+  /*
+   * Preserve the feedback relation from the backend.
+   * The RecentMeetingItem component uses this to render
+   * the mentor's five-star rating and written feedback.
+   */
+  const mentorFeedback =
+    meeting?.mentor_meeting_feedback ??
+    meeting?.mentorMeetingFeedback ??
+    meeting?.rawMeeting?.mentor_meeting_feedback ??
+    meeting?.rawMeeting?.mentorMeetingFeedback ??
+    null;
 
   return {
     id: getMeetingId(meeting),
@@ -171,14 +195,16 @@ const formatRecentMeeting = (meeting) => {
       : startTime,
 
     notes:
-      meeting?.agenda ||
-      meeting?.description ||
-      "No meeting notes available.",
+      meeting?.mentor_meeting_notes?.notes ??
+      meeting?.mentor_meeting_notes?.content ??
+      meeting?.agenda ??
+      meeting?.description ??
+      "",
 
     agenda:
-      meeting?.agenda ||
-      meeting?.description ||
-      "No agenda provided.",
+      meeting?.agenda ??
+      meeting?.description ??
+      "",
 
     status: meeting?.status ?? "SCHEDULED",
 
@@ -204,6 +230,7 @@ const formatRecentMeeting = (meeting) => {
     student: {
       id: student.id ?? meeting?.studentId ?? null,
       name: studentName,
+      fullName: student.fullName ?? studentName,
       registrationNumber,
       department,
       year:
@@ -219,10 +246,20 @@ const formatRecentMeeting = (meeting) => {
         "",
     },
 
-    // Use a real summary only if the backend supplied one.
-    // Do not manufacture evaluation scores or outcomes.
-    summary: meeting?.summary ?? meeting?.meetingSummary ?? null,
+    /*
+     * Mentor rating and feedback.
+     * Keep the original backend field name so that
+     * RecentMeetingItem can read it directly.
+     */
+    mentor_meeting_feedback: mentorFeedback,
+    mentorMeetingFeedback: mentorFeedback,
 
+    summary:
+      meeting?.summary ??
+      meeting?.meetingSummary ??
+      null,
+
+    // Keep the original API response for modal and actions.
     rawMeeting: meeting,
   };
 };

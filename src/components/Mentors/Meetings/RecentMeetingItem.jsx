@@ -5,6 +5,8 @@ import {
   Video,
   Users,
   FileText,
+  Star,
+  MessageSquare,
 } from "lucide-react";
 
 import MeetingDateBadge from "./MeetingDateBadge";
@@ -57,8 +59,8 @@ const getStatusClasses = (status) => {
 };
 
 /**
- * Safely extracts text from fields that may contain either
- * a string or an object returned by the backend.
+ * Safely extracts text from strings, numbers,
+ * or objects returned by the backend.
  */
 const getText = (value) => {
   if (typeof value === "string") {
@@ -75,6 +77,7 @@ const getText = (value) => {
         value.text ??
         value.notes ??
         value.description ??
+        value.remarks ??
         ""
     ).trim();
   }
@@ -123,7 +126,9 @@ const normalizeMode = (meeting) => {
  */
 const getStudentName = (meeting) => {
   const student = meeting?.student;
-  const rawStudent = meeting?.rawMeeting?.student;
+  const rawStudent =
+    meeting?.rawMeeting?.student ??
+    meeting?.rawMeeting?.students;
 
   const candidates = [
     typeof student === "string" ? student : null,
@@ -148,15 +153,17 @@ const getStudentName = (meeting) => {
 };
 
 /**
- * Reads notes and discussion information from common
+ * Reads meeting notes and discussion points from common
  * backend response shapes.
  */
 const getMeetingNotes = (meeting) => {
   const candidates = [
     meeting?.notes,
     meeting?.meetingNotes,
+    meeting?.mentor_meeting_notes,
     meeting?.rawMeeting?.notes,
     meeting?.rawMeeting?.meetingNotes,
+    meeting?.rawMeeting?.mentor_meeting_notes,
   ];
 
   for (const candidate of candidates) {
@@ -169,7 +176,10 @@ const getMeetingNotes = (meeting) => {
 
   const discussionPoints =
     meeting?.discussionPoints ??
+    meeting?.discussion_points ??
+    meeting?.mentor_meeting_discussion_points ??
     meeting?.rawMeeting?.discussionPoints ??
+    meeting?.rawMeeting?.mentor_meeting_discussion_points ??
     [];
 
   if (Array.isArray(discussionPoints)) {
@@ -198,8 +208,7 @@ const getMeetingNotes = (meeting) => {
 };
 
 /**
- * Finds a meaningful meeting location without displaying
- * an empty value or an object as text.
+ * Finds a meaningful meeting location.
  */
 const getMeetingLocation = (meeting, mode) => {
   const candidates =
@@ -230,6 +239,126 @@ const getMeetingLocation = (meeting, mode) => {
   }
 
   return "";
+};
+
+/**
+ * Reads the saved feedback relation from the meeting.
+ */
+const getMeetingFeedback = (meeting) => {
+  const value =
+    meeting?.mentor_meeting_feedback ??
+    meeting?.mentorMeetingFeedback ??
+    meeting?.mentor_feedback ??
+    meeting?.mentorFeedback ??
+    meeting?.feedback ??
+    meeting?.rawMeeting?.mentor_meeting_feedback ??
+    meeting?.rawMeeting?.mentorMeetingFeedback ??
+    meeting?.rawMeeting?.mentor_feedback ??
+    meeting?.rawMeeting?.mentorFeedback ??
+    meeting?.rawMeeting?.feedback ??
+    null;
+
+  if (Array.isArray(value)) {
+    return value[0] ?? null;
+  }
+
+  return value && typeof value === "object" ? value : null;
+};
+
+/**
+ * Accepts only valid integer ratings between 1 and 5.
+ */
+const getValidRating = (feedback) => {
+  if (
+    !feedback ||
+    feedback.rating === null ||
+    feedback.rating === undefined ||
+    feedback.rating === ""
+  ) {
+    return null;
+  }
+
+  const rating = Number(feedback.rating);
+
+  return Number.isInteger(rating) && rating >= 1 && rating <= 5
+    ? rating
+    : null;
+};
+
+/* =========================================================
+   MEETING RATING
+========================================================= */
+
+const MeetingRating = ({ meeting }) => {
+  const feedback = getMeetingFeedback(meeting);
+  const rating = getValidRating(feedback);
+
+  const feedbackText = getText(
+    feedback?.feedback ??
+      feedback?.comments ??
+      feedback?.remarks ??
+      feedback?.comment ??
+      ""
+  );
+
+  // Keep the meeting row compact when no feedback exists.
+  if (!feedback) {
+    return null;
+  }
+
+  return (
+    <div className="mt-2 space-y-1.5">
+      {/* Stars */}
+      <div
+        className="flex flex-wrap items-center gap-1"
+        role="img"
+        aria-label={
+          rating !== null
+            ? `Mentor rating: ${rating} out of 5 stars`
+            : "No valid mentor rating"
+        }
+      >
+        <Star
+          size={12}
+          className="mr-0.5 text-amber-500"
+          aria-hidden="true"
+        />
+
+        {[1, 2, 3, 4, 5].map((star) => (
+          <Star
+            key={star}
+            size={14}
+            strokeWidth={1.8}
+            className={
+              rating !== null && star <= rating
+                ? "fill-amber-400 text-amber-400"
+                : "text-slate-300"
+            }
+            aria-hidden="true"
+          />
+        ))}
+
+        <span className="ml-1 text-[11px] font-semibold text-slate-600">
+          {rating !== null ? `${rating}/5` : "Not rated"}
+        </span>
+      </div>
+
+      {/* Written feedback */}
+      {feedbackText && (
+        <p className="flex items-start gap-1.5 text-[11px] leading-4 text-slate-500">
+          <MessageSquare
+            size={12}
+            className="mt-0.5 shrink-0 text-slate-400"
+            aria-hidden="true"
+          />
+
+          <span className="line-clamp-2 break-words">
+            {feedbackText}
+          </span>
+        </p>
+      )}
+    </div>
+  );
 };
 
 /* =========================================================
@@ -274,10 +403,7 @@ const RecentMeetingItem = ({
 
   return (
     <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
-      {/* =====================================================
-          LEFT: DATE AND MEETING DETAILS
-      ===================================================== */}
-
+      {/* LEFT: DATE AND MEETING DETAILS */}
       <div className="flex min-w-0 flex-1 items-start gap-3">
         <MeetingDateBadge
           month={meeting.month}
@@ -320,15 +446,9 @@ const RecentMeetingItem = ({
           {location && (
             <p className="mt-1 flex min-w-0 items-center gap-1 text-[11px] text-slate-500">
               {mode === "ONLINE" ? (
-                <Video
-                  size={11}
-                  className="shrink-0"
-                />
+                <Video size={11} className="shrink-0" />
               ) : (
-                <MapPin
-                  size={11}
-                  className="shrink-0"
-                />
+                <MapPin size={11} className="shrink-0" />
               )}
 
               <span
@@ -348,17 +468,18 @@ const RecentMeetingItem = ({
               {getStatusLabel(status)}
             </span>
           </div>
+
+          {/* Saved Rating and Feedback */}
+          <MeetingRating meeting={meeting} />
         </div>
 
-        {/* ===================================================
-            RIGHT SIDE OF DETAILS: MEETING NOTES
-        =================================================== */}
-
+        {/* MEETING NOTES */}
         <div className="hidden w-[180px] shrink-0 xl:block">
           <p className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-700">
             <FileText
               size={13}
               className="text-slate-500"
+              aria-hidden="true"
             />
             Meeting Notes
           </p>
@@ -374,10 +495,7 @@ const RecentMeetingItem = ({
         </div>
       </div>
 
-      {/* =====================================================
-          VIEW NOTES BUTTON
-      ===================================================== */}
-
+      {/* VIEW NOTES BUTTON */}
       <div className="ml-1 shrink-0">
         <button
           type="button"
@@ -385,7 +503,7 @@ const RecentMeetingItem = ({
           className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-blue-300 px-3 py-1.5 text-[12px] font-medium text-blue-600 transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
           aria-label={`View notes for ${title}`}
         >
-          <FileText size={13} />
+          <FileText size={13} aria-hidden="true" />
           <span>View Notes</span>
         </button>
       </div>
