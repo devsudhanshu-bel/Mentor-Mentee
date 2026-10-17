@@ -1,274 +1,41 @@
-import React, { useEffect, useMemo, useState } from "react";
-
+import React from "react";
 import banner from "../../../assets/banner.png";
 
-import { getDashboardBanner } from "../../../api/dashboard.api";
+const WelcomeBanner = ({ mentorName = "" }) => {
+  const hour = new Date().getHours();
 
-const WelcomeBanner = () => {
-  /* ==========================================================
-     MENTOR DATA
-  ========================================================== */
+  const greeting =
+    hour < 12
+      ? "Good Morning"
+      : hour < 17
+        ? "Good Afternoon"
+        : "Good Evening";
 
-  const [mentor, setMentor] = useState({
-    fullName: "",
-    designation: "",
-    department: "",
-    profileImage: null,
-  });
-
-  const [loading, setLoading] = useState(true);
-
-  /* ==========================================================
-     FETCH DASHBOARD BANNER DATA
-  ========================================================== */
-
-  useEffect(() => {
-    const fetchBanner = async () => {
-      try {
-        const data = await getDashboardBanner();
-
-        console.log(
-          "Dashboard banner response:",
-          data
-        );
-
-        setMentor({
-          fullName: data?.fullName || "",
-          designation: data?.designation || "",
-          department: data?.department || "",
-          profileImage:
-            data?.profileImage || null,
-        });
-      } catch (error) {
-        console.error(
-          "Failed to fetch dashboard banner:",
-          error
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBanner();
-  }, []);
-
-  /* ==========================================================
-     CURRENT DATE / TIME
-  ========================================================== */
-
-  const now = useMemo(
-    () => new Date(),
-    []
-  );
-
-  /* ==========================================================
-     GREETING
-  ========================================================== */
-
-  const greeting = useMemo(() => {
-    const hour = now.getHours();
-
-    if (hour >= 5 && hour < 12) {
-      return "Good Morning";
-    }
-
-    if (hour >= 12 && hour < 17) {
-      return "Good Afternoon";
-    }
-
-    if (hour >= 17 && hour < 21) {
-      return "Good Evening";
-    }
-
-    return "Good Night";
-  }, [now]);
-
-  /* ==========================================================
-     TODAY
-  ========================================================== */
-
-  const today = useMemo(() => {
-    return now.toLocaleDateString(
-      "en-IN",
-      {
-        weekday: "long",
-        day: "numeric",
-        month: "long",
-        year: "numeric",
-      }
-    );
-  }, [now]);
-
-  /* ==========================================================
-     LOADING STATE
-  ========================================================== */
-
-  if (loading) {
-    return (
-      <div
-        className="
-          h-[180px]
-          w-full
-          animate-pulse
-          rounded-3xl
-          border
-          border-slate-200
-          bg-slate-100
-        "
-      />
-    );
-  }
-
-  /* ==========================================================
-     BANNER
-  ========================================================== */
+  const displayName = mentorName?.trim() || "Mentor";
 
   return (
-    <div
-      className="
-        relative
-        h-[180px]
-        w-full
-        overflow-hidden
-        rounded-3xl
-        border
-        border-slate-200
-        bg-white
-        shadow-sm
-      "
-    >
-      {/* ======================================================
-          BACKGROUND BANNER
-      ====================================================== */}
-
+    <div className="relative w-full h-[165px] rounded-3xl overflow-hidden shadow-sm border border-slate-200">
       <img
         src={banner}
-        alt="Mentor Dashboard Banner"
-        className="
-          absolute
-          inset-0
-          h-full
-          w-full
-          object-cover
-        "
-        draggable={false}
+        alt=""
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* ======================================================
-          OVERLAY
-      ====================================================== */}
+      <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/30 to-transparent" />
 
-      <div
-        className="
-          absolute
-          inset-0
-          bg-gradient-to-r
-          from-white/95
-          via-white/70
-          to-transparent
-        "
-      />
+      <div className="relative z-10 h-full flex flex-col justify-center px-5 sm:px-9">
+        <p className="text-[16px] text-slate-700 mb-1">
+          {greeting},
+        </p>
 
-      {/* ======================================================
-          CONTENT
-      ====================================================== */}
+        <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 leading-tight">
+          {displayName}! 👋
+        </h1>
 
-      <div
-        className="
-          relative
-          z-10
-          flex
-          h-full
-          items-center
-          px-10
-        "
-      >
-        <div className="max-w-xl">
-
-          {/* ==================================================
-              GREETING
-          ================================================== */}
-
-          <p className="text-[16px] font-medium text-slate-700">
-            {greeting},
-          </p>
-
-          {/* ==================================================
-              MENTOR NAME
-          ================================================== */}
-
-          <h1
-            className="
-              mt-1
-              text-[24px]
-              font-bold
-              leading-none
-              text-slate-900
-            "
-          >
-            {mentor.fullName || "Mentor"} 👋
-          </h1>
-
-          {/* ==================================================
-              DEPARTMENT + DESIGNATION
-          ================================================== */}
-
-          {(mentor.department ||
-            mentor.designation) && (
-            <div
-              className="
-                mt-3
-                flex
-                items-center
-                gap-3
-                text-[12px]
-                text-slate-600
-              "
-            >
-              {/* Department */}
-
-              {mentor.department && (
-                <span>
-                  {mentor.department}
-                </span>
-              )}
-
-              {/* Separator */}
-
-              {mentor.department &&
-                mentor.designation && (
-                  <span
-                    className="
-                      h-1
-                      w-1
-                      rounded-full
-                      bg-slate-400
-                    "
-                  />
-                )}
-
-              {/* Designation */}
-
-              {mentor.designation && (
-                <span>
-                  {mentor.designation}
-                </span>
-              )}
-            </div>
-          )}
-
-          {/* ==================================================
-              TODAY
-          ================================================== */}
-
-          <p className="mt-5 text-[12px] text-slate-600">
-            Today is{" "}
-            <span className="font-semibold text-slate-800">
-              {today}
-            </span>
-          </p>
-
-        </div>
+        <p className="mt-3 text-xs sm:text-[14px] text-slate-600">
+          Welcome back! Keep inspiring, guiding, and helping students grow.
+        </p>
       </div>
     </div>
   );

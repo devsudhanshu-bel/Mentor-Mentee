@@ -6,9 +6,7 @@ import MentorHeader from "../../components/layouts/MentorHeader";
 import WelcomeBanner from "../../components/Mentors/Dashboard/WelcomeBanner";
 import KPICards from "../../components/Mentors/Dashboard/KPICards";
 import TodaysSchedule from "../../components/Mentors/Dashboard/TodaysSchedule";
-import StudentsRequiringAttention from "../../components/Mentors/Dashboard/StudentsRequiringAttention";
-import RecentActivities from "../../components/Mentors/Dashboard/RecentActivities";
-import PendingActions from "../../components/Mentors/Dashboard/PendingActions";
+import UpcomingDeadlines from "../../components/Mentors/Dashboard/UpcomingDeadlines";
 import QuickActions from "../../components/Mentors/Dashboard/QuickActions";
 
 const Dashboard = () => {
@@ -30,16 +28,10 @@ const Dashboard = () => {
           {/* KPI Cards */}
           <KPICards />
 
-          {/* Today's Schedule & Students Requiring Attention */}
+          {/* Today's Schedule & Upcoming Deadlines */}
           <div className="grid grid-cols-1 gap-2 xl:grid-cols-2">
             <TodaysSchedule />
-            <StudentsRequiringAttention />
-          </div>
-
-          {/* Recent Activities & Pending Actions */}
-          <div className="grid grid-cols-1 gap-2 xl:grid-cols-2">
-            <RecentActivities />
-            <PendingActions />
+            <UpcomingDeadlines />
           </div>
 
           {/* Quick Actions */}

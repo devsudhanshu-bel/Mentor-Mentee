@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import {
   UserRound,
   Mail,
@@ -10,8 +11,13 @@ import {
 import profile from "../../assets/profile.jpg";
 
 const MentorCard = ({ mentorData, loading = false }) => {
+  const navigate = useNavigate();
+
   const mentor = mentorData?.mentor;
 
+  // ==========================================================
+  // LOADING STATE
+  // ==========================================================
   if (loading) {
     return (
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
@@ -33,7 +39,10 @@ const MentorCard = ({ mentorData, loading = false }) => {
     );
   }
 
-  if (!mentor) {
+  // ==========================================================
+  // NO MENTOR ASSIGNED
+  // ==========================================================
+  if (!mentorData?.assigned || !mentor) {
     return (
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
         <div className="flex items-center gap-2 mb-3">
@@ -59,34 +68,53 @@ const MentorCard = ({ mentorData, loading = false }) => {
     );
   }
 
+  // ==========================================================
+  // MENTOR DETAILS
+  // ==========================================================
   const mentorImage = mentor.profile?.profileImage || profile;
 
-  const department = mentor.department?.name || "Department not available";
+  const department =
+    mentor.department?.name || "Department not available";
 
+  const handleViewProfile = () => {
+    if (!mentor.id) return;
+
+    navigate(`/mentors/profile/${mentor.id}`);
+  };
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 hover:shadow-md transition-all duration-300 h-full">
       {/* Header */}
       <div className="flex items-center gap-2 mb-3">
         <UserRound size={15} className="text-blue-600" />
 
-        <h3 className="text-[14px] font-semibold text-blue-600">Your Mentor</h3>
+        <h3 className="text-[14px] font-semibold text-blue-600">
+          Your Mentor
+        </h3>
       </div>
 
       {/* Body */}
       <div className="flex gap-4 items-start min-h-[180px]">
-        {/* Profile */}
+        {/* Profile Image */}
         <img
           src={mentorImage}
-          alt={mentor.fullName}
+          alt={mentor.fullName || "Mentor"}
+          onError={(event) => {
+            event.currentTarget.onerror = null;
+            event.currentTarget.src = profile;
+          }}
           className="w-16 h-16 rounded-full object-cover border border-slate-200 flex-shrink-0"
         />
 
         {/* Details */}
-        <div className="flex-1 flex flex-col h-full">
+        <div className="flex-1 min-w-0 flex flex-col">
           {/* Name */}
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-[16px] font-bold text-[#142970] leading-tight">
-              {mentor.fullName}
+            <h2 className="text-[16px] font-bold text-[#142970] leading-tight break-words">
+              {mentor.fullName || "Name unavailable"}
             </h2>
 
             <span className="px-2 py-[2px] rounded-full bg-green-100 text-green-700 text-[9px] font-medium">
@@ -97,7 +125,10 @@ const MentorCard = ({ mentorData, loading = false }) => {
           {/* Designation */}
           {mentor.designation && (
             <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1">
-              <BriefcaseBusiness size={12} />
+              <BriefcaseBusiness
+                size={12}
+                className="flex-shrink-0"
+              />
 
               <span>{mentor.designation}</span>
             </div>
@@ -105,49 +136,32 @@ const MentorCard = ({ mentorData, loading = false }) => {
 
           {/* Department */}
           <div className="flex items-center gap-1.5 text-[11px] text-slate-500 leading-5">
-            <Building2 size={12} />
+            <Building2 size={12} className="flex-shrink-0" />
 
             <span>{department}</span>
           </div>
 
-          {/* Contact */}
+          {/* Contact Details */}
           <div className="mt-3 space-y-2">
             {mentor.email && (
-              <div className="flex items-center gap-2 text-[11px] text-slate-600">
-                <Mail size={13} />
+              <div className="flex items-center gap-2 text-[11px] text-slate-600 min-w-0">
+                <Mail size={13} className="flex-shrink-0" />
 
-                <span className="truncate">{mentor.email}</span>
+                <span className="truncate" title={mentor.email}>
+                  {mentor.email}
+                </span>
               </div>
             )}
 
             {mentor.phone && (
-              <div className="flex items-center gap-2 text-[11px] text-slate-600">
-                <Phone size={13} />
+              <div className="flex items-center gap-2 text-[11px] text-slate-600 min-w-0">
+                <Phone size={13} className="flex-shrink-0" />
 
-                <span>{mentor.phone}</span>
+                <span className="truncate" title={mentor.phone}>
+                  {mentor.phone}
+                </span>
               </div>
             )}
-          </div>
-
-          {/* Button */}
-          <div className="mt-auto pt-5 flex justify-end">
-            <button
-              type="button"
-              className="
-                px-4
-                py-2
-                text-[12px]
-                font-medium
-                text-blue-600
-                border
-                border-blue-500
-                rounded-lg
-                hover:bg-blue-50
-                transition-all
-              "
-            >
-              View Profile
-            </button>
           </div>
         </div>
       </div>

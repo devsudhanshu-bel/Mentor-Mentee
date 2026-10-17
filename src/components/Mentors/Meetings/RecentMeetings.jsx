@@ -1,129 +1,293 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
+import {
+  CalendarClock,
+  ChevronRight,
+  RefreshCw,
+} from "lucide-react";
 
 import RecentMeetingItem from "./RecentMeetingItem";
 import MeetingSummaryModal from "./MeetingSummaryModal";
 
-const meetings = [
-  {
-    month: "MAY",
-    date: "10",
-    day: "SAT",
-    title: "Progress Review Meeting",
-    time: "1:00 PM - 2:00 PM",
-    notes: "Mid semester performance, Assignment updates",
+/* =========================================================
+   HELPERS
+========================================================= */
 
-    student: {
-      name: "Sudhanshu Sharma",
-      registrationNumber: "22BCS001",
-      department: "Computer Science & Engineering",
-      year: "3rd Year • Semester 6",
-      email: "sudhanshu@example.com",
-      phone: "+91 9876543210",
-      mentor: "Dr. Arjun Mehta",
-    },
-
-    summary: {
-      outcome: "Good",
-      participation: 5,
-      preparedness: 4,
-      communication: 5,
-      overallRating: 5,
-      followUpRequired: true,
-      nextMeeting: "07 Jun 2026 • 11:00 AM",
-    },
-  },
-
-  {
-    month: "APR",
-    date: "26",
-    day: "SAT",
-    title: "Project Discussion",
-    time: "11:30 AM - 12:30 PM",
-    notes: "Project idea, Problem statement finalization",
-
-    student: {
-      name: "Sudhanshu Sharma",
-      registrationNumber: "22BCS001",
-      department: "Computer Science & Engineering",
-      year: "3rd Year • Semester 6",
-      email: "sudhanshu@example.com",
-      phone: "+91 9876543210",
-      mentor: "Dr. Arjun Mehta",
-    },
-
-    summary: {
-      outcome: "Excellent",
-      participation: 5,
-      preparedness: 5,
-      communication: 5,
-      overallRating: 5,
-      followUpRequired: false,
-      nextMeeting: "Not Scheduled",
-    },
-  },
-
-  {
-    month: "APR",
-    date: "12",
-    day: "SAT",
-    title: "Career Guidance Session",
-    time: "2:00 PM - 3:00 PM",
-    notes: "Higher studies, Career roadmap",
-
-    student: {
-      name: "Sudhanshu Sharma",
-      registrationNumber: "22BCS001",
-      department: "Computer Science & Engineering",
-      year: "3rd Year • Semester 6",
-      email: "sudhanshu@example.com",
-      phone: "+91 9876543210",
-      mentor: "Dr. Arjun Mehta",
-    },
-
-    summary: {
-      outcome: "Very Good",
-      participation: 4,
-      preparedness: 4,
-      communication: 5,
-      overallRating: 4,
-      followUpRequired: true,
-      nextMeeting: "20 Jul 2026 • 2:00 PM",
-    },
-  },
-
-  {
-    month: "MAR",
-    date: "28",
-    day: "SAT",
-    title: "Initial Meeting",
-    time: "10:30 AM - 11:30 AM",
-    notes: "Introduction, Goals and expectations",
-
-    student: {
-      name: "Sudhanshu Sharma",
-      registrationNumber: "22BCS001",
-      department: "Computer Science & Engineering",
-      year: "3rd Year • Semester 6",
-      email: "sudhanshu@example.com",
-      phone: "+91 9876543210",
-      mentor: "Dr. Arjun Mehta",
-    },
-
-    summary: {
-      outcome: "Good",
-      participation: 4,
-      preparedness: 4,
-      communication: 4,
-      overallRating: 4,
-      followUpRequired: true,
-      nextMeeting: "10 Apr 2026 • 10:30 AM",
-    },
-  },
+const TERMINAL_STATUSES = [
+  "COMPLETED",
+  "CANCELLED",
+  "CANCELED",
+  "NO_SHOW",
 ];
 
-const RecentMeetings = () => {
+const normalizeStatus = (status) =>
+  String(status ?? "SCHEDULED")
+    .trim()
+    .toUpperCase()
+    .replace(/[\s-]+/g, "_");
+
+const getMeetingId = (meeting) =>
+  meeting?.id ??
+  meeting?.meetingId ??
+  meeting?.meeting_id ??
+  meeting?.rawMeeting?.id ??
+  null;
+
+const getMeetingStart = (meeting) =>
+  meeting?.startAt ??
+  meeting?.startTime ??
+  meeting?.scheduledAt ??
+  meeting?.scheduledStart ??
+  meeting?.start_time ??
+  null;
+
+const getMeetingEnd = (meeting) =>
+  meeting?.endAt ??
+  meeting?.endTime ??
+  meeting?.scheduledEnd ??
+  meeting?.end_time ??
+  null;
+
+const toValidDate = (value) => {
+  if (!value) return null;
+
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime()) ? null : date;
+};
+
+const isTerminalMeeting = (meeting) =>
+  TERMINAL_STATUSES.includes(normalizeStatus(meeting?.status));
+
+const isMeetingRecent = (meeting, now) => {
+  const status = normalizeStatus(meeting?.status);
+
+  if (isTerminalMeeting(meeting)) {
+    return true;
+  }
+
+  if (status === "IN_PROGRESS") {
+    return false;
+  }
+
+  const startAt = toValidDate(getMeetingStart(meeting));
+
+  return startAt !== null && startAt < now;
+};
+
+const formatTime = (date) =>
+  date.toLocaleTimeString("en-IN", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+const formatNextMeeting = (value) => {
+  const date = toValidDate(value);
+
+  if (!date) {
+    return value || "Not Scheduled";
+  }
+
+  return `${date.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  })} • ${formatTime(date)}`;
+};
+
+/* =========================================================
+   NORMALIZE API MEETING FOR THE RECENT-MEETING CARD
+========================================================= */
+
+const formatRecentMeeting = (meeting) => {
+  const startAt = toValidDate(getMeetingStart(meeting));
+  const endAt = toValidDate(getMeetingEnd(meeting));
+
+  if (!startAt) return null;
+
+  const mode = String(meeting?.mode ?? "").toUpperCase();
+
+  const meetingType =
+    mode === "ONLINE"
+      ? "Online"
+      : mode === "IN_PERSON"
+        ? "In Person"
+        : meeting?.meetingType ?? "Meeting";
+
+  const student = meeting?.student ?? {};
+
+  const studentName =
+    student.fullName ??
+    student.name ??
+    meeting?.studentName ??
+    meeting?.student?.full_name ??
+    "Student";
+
+  const registrationNumber =
+    student.registerNumber ??
+    student.registrationNumber ??
+    student.register_number ??
+    meeting?.registrationNumber ??
+    "";
+
+  const department =
+    student.department?.name ??
+    student.departmentName ??
+    student.department ??
+    meeting?.departmentName ??
+    "";
+
+  const studentEmail =
+    student.email ??
+    meeting?.studentEmail ??
+    "";
+
+  const studentPhone =
+    student.phone ??
+    student.phoneNumber ??
+    meeting?.studentPhone ??
+    "";
+
+  const startTime = formatTime(startAt);
+  const endTime = endAt ? formatTime(endAt) : null;
+
+  return {
+    id: getMeetingId(meeting),
+    meetingId: getMeetingId(meeting),
+
+    month: startAt
+      .toLocaleString("en-US", { month: "short" })
+      .toUpperCase(),
+
+    date: String(startAt.getDate()).padStart(2, "0"),
+
+    day: startAt
+      .toLocaleString("en-US", { weekday: "short" })
+      .toUpperCase(),
+
+    title: meeting?.title || "Mentorship Meeting",
+
+    time: endTime
+      ? `${startTime} - ${endTime}`
+      : startTime,
+
+    notes:
+      meeting?.agenda ||
+      meeting?.description ||
+      "No meeting notes available.",
+
+    agenda:
+      meeting?.agenda ||
+      meeting?.description ||
+      "No agenda provided.",
+
+    status: meeting?.status ?? "SCHEDULED",
+
+    type: meetingType,
+    mode: meeting?.mode,
+
+    location:
+      mode === "ONLINE"
+        ? meeting?.meetingLink || "Online meeting"
+        : meeting?.venue || "Location not specified",
+
+    venue: meeting?.venue ?? null,
+    meetingLink: meeting?.meetingLink ?? null,
+
+    startAt: getMeetingStart(meeting),
+    endAt: getMeetingEnd(meeting),
+
+    studentId:
+      meeting?.studentId ??
+      student.id ??
+      null,
+
+    student: {
+      id: student.id ?? meeting?.studentId ?? null,
+      name: studentName,
+      registrationNumber,
+      department,
+      year:
+        student.year ??
+        student.yearOfStudy ??
+        meeting?.studentYear ??
+        "",
+      email: studentEmail,
+      phone: studentPhone,
+      mentor:
+        meeting?.mentor?.fullName ??
+        meeting?.mentorName ??
+        "",
+    },
+
+    // Use a real summary only if the backend supplied one.
+    // Do not manufacture evaluation scores or outcomes.
+    summary: meeting?.summary ?? meeting?.meetingSummary ?? null,
+
+    rawMeeting: meeting,
+  };
+};
+
+/* =========================================================
+   RECENT MEETINGS
+========================================================= */
+
+const RecentMeetings = ({
+  meetings: suppliedMeetings = [],
+
+  onStartMeeting = () => {},
+  onViewDetails = () => {},
+  onEditMeeting = () => {},
+  onRescheduleMeeting = () => {},
+  onDuplicateMeeting = () => {},
+  onCancelMeeting = () => {},
+
+  onEditSeries = () => {},
+  onSkipOccurrence = () => {},
+  onPauseSeries = () => {},
+  onDeleteSeries = () => {},
+
+  onRefresh,
+}) => {
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [openSummary, setOpenSummary] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
+  const [error, setError] = useState("");
+
+  const sourceMeetings = Array.isArray(suppliedMeetings)
+    ? suppliedMeetings
+    : [];
+
+  /* =======================================================
+     PREPARE RECENT MEETINGS
+  ======================================================= */
+
+  const recentMeetings = useMemo(() => {
+    const now = new Date();
+
+    return sourceMeetings
+      .filter((meeting) => isMeetingRecent(meeting, now))
+      .sort((a, b) => {
+        const dateA = toValidDate(getMeetingStart(a));
+        const dateB = toValidDate(getMeetingStart(b));
+
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+
+        return dateB.getTime() - dateA.getTime();
+      })
+      .map(formatRecentMeeting)
+      .filter(Boolean);
+  }, [sourceMeetings]);
+
+  const displayedMeetings = showAll
+    ? recentMeetings
+    : recentMeetings.slice(0, 4);
+
+  /* =======================================================
+     SUMMARY MODAL
+  ======================================================= */
 
   const handleOpenSummary = (meeting) => {
     setSelectedMeeting(meeting);
@@ -135,32 +299,215 @@ const RecentMeetings = () => {
     setSelectedMeeting(null);
   };
 
+  /* =======================================================
+     REFRESH
+  ======================================================= */
+
+  const handleRefresh = async () => {
+    if (!onRefresh || refreshing) return;
+
+    setRefreshing(true);
+    setError("");
+
+    try {
+      const result = await onRefresh();
+
+      if (result === null) {
+        setError("Unable to refresh meetings. Please try again.");
+      }
+    } catch (err) {
+      console.error("Failed to refresh recent meetings:", err);
+
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Unable to refresh meetings."
+      );
+    } finally {
+      setRefreshing(false);
+    }
+  };
+
+  /* =======================================================
+     ACTION FORWARDING
+  ======================================================= */
+
+  const forwardAction = (callback, meeting) => {
+    if (typeof callback !== "function") return;
+
+    callback(meeting?.rawMeeting ?? meeting);
+  };
+
+  /* =======================================================
+     RENDER
+  ======================================================= */
+
   return (
     <>
       <div className="h-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-[16px] font-semibold text-slate-800">
-            Recent Meetings
-          </h2>
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <CalendarClock
+              size={18}
+              className="text-blue-600"
+            />
 
-          <button className="cursor-pointer text-[12px] font-semibold text-blue-600 transition hover:text-blue-700">
-            View All
+            <h2 className="text-[16px] font-semibold text-slate-800">
+              Recent Meetings
+            </h2>
+
+            <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
+              {recentMeetings.length}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleRefresh}
+            disabled={!onRefresh || refreshing}
+            aria-label="Refresh recent meetings"
+            title="Refresh recent meetings"
+            className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            <RefreshCw
+              size={15}
+              className={refreshing ? "animate-spin" : ""}
+            />
           </button>
         </div>
 
+        {/* Refresh Error */}
+        {error && (
+          <div
+            role="alert"
+            className="mb-3 rounded-xl border border-red-100 bg-red-50 p-3"
+          >
+            <p className="text-sm text-red-700">{error}</p>
+
+            <button
+              type="button"
+              onClick={handleRefresh}
+              disabled={!onRefresh || refreshing}
+              className="mt-2 text-sm font-semibold text-red-700 underline disabled:opacity-50"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
         {/* List */}
-        <div className="space-y-2.5">
-          {meetings.map((meeting, index) => (
-            <RecentMeetingItem
-              key={index}
-              meeting={meeting}
-              onView={handleOpenSummary}
+        {!error && recentMeetings.length > 0 && (
+          <div className="space-y-2.5">
+            {displayedMeetings.map((meeting, index) => (
+              <RecentMeetingItem
+                key={
+                  meeting.id ??
+                  `${meeting.startAt}-${index}`
+                }
+                meeting={meeting}
+                onView={handleOpenSummary}
+                onStartMeeting={(item) =>
+                  forwardAction(
+                    onStartMeeting,
+                    item ?? meeting
+                  )
+                }
+                onViewDetails={(item) =>
+                  forwardAction(
+                    onViewDetails,
+                    item ?? meeting
+                  )
+                }
+                onEditMeeting={(item) =>
+                  forwardAction(
+                    onEditMeeting,
+                    item ?? meeting
+                  )
+                }
+                onRescheduleMeeting={(item) =>
+                  forwardAction(
+                    onRescheduleMeeting,
+                    item ?? meeting
+                  )
+                }
+                onDuplicateMeeting={(item) =>
+                  forwardAction(
+                    onDuplicateMeeting,
+                    item ?? meeting
+                  )
+                }
+                onCancelMeeting={(item) =>
+                  forwardAction(
+                    onCancelMeeting,
+                    item ?? meeting
+                  )
+                }
+                onEditSeries={(item) =>
+                  forwardAction(
+                    onEditSeries,
+                    item ?? meeting
+                  )
+                }
+                onSkipOccurrence={(item) =>
+                  forwardAction(
+                    onSkipOccurrence,
+                    item ?? meeting
+                  )
+                }
+                onPauseSeries={(item) =>
+                  forwardAction(
+                    onPauseSeries,
+                    item ?? meeting
+                  )
+                }
+                onDeleteSeries={(item) =>
+                  forwardAction(
+                    onDeleteSeries,
+                    item ?? meeting
+                  )
+                }
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Empty State */}
+        {!error && recentMeetings.length === 0 && (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center">
+            <CalendarClock
+              size={30}
+              className="mb-3 text-slate-300"
             />
-          ))}
-        </div>
+
+            <p className="text-sm font-semibold text-slate-700">
+              No recent meetings
+            </p>
+
+            <p className="mt-1 text-xs text-slate-500">
+              Past meetings will appear here after they are scheduled.
+            </p>
+          </div>
+        )}
+
+        {/* Footer */}
+        {!error && recentMeetings.length > 4 && (
+          <button
+            type="button"
+            onClick={() => setShowAll((current) => !current)}
+            className="mt-4 flex w-full items-center justify-center gap-1 text-[12px] font-semibold text-blue-600 transition hover:text-blue-700"
+          >
+            {showAll ? "Show Less" : "View All Recent Meetings"}
+
+            <ChevronRight
+              size={14}
+              className={showAll ? "rotate-90" : ""}
+            />
+          </button>
+        )}
       </div>
 
+      {/* Meeting Summary */}
       <MeetingSummaryModal
         open={openSummary}
         onClose={handleCloseSummary}

@@ -1,88 +1,114 @@
+
 import React from "react";
-import { sidebarItems } from "./WorkspaceConstants";
+import {
+  FileText,
+  MessageCircle,
+  Star,
+  CalendarClock,
+} from "lucide-react";
+
+const workspaceTabs = [
+  {
+    id: "notes",
+    title: "Meeting Notes",
+    icon: FileText,
+    description: "Record meeting notes",
+  },
+  {
+    id: "discussion",
+    title: "Discussion Points",
+    icon: MessageCircle,
+    description: "Manage discussion topics",
+  },
+  {
+    id: "feedback",
+    title: "Mentor Feedback",
+    icon: Star,
+    description: "Save mentor feedback",
+  },
+  {
+    id: "followup",
+    title: "Follow-up",
+    icon: CalendarClock,
+    description: "Schedule the next meeting",
+  },
+];
 
 const WorkspaceSidebar = ({
   activeTab,
   setActiveTab,
 }) => {
   return (
-    <div className="border-r border-slate-200 bg-slate-50 p-4">
-
+    <aside className="min-h-0 overflow-y-auto border-r border-slate-200 bg-slate-50 p-3 sm:p-4">
       {/* Heading */}
+      <div className="mb-5">
+        <h3 className="text-base font-semibold text-slate-800">
+          Workspace
+        </h3>
 
-      <h3 className="mb-4 text-base font-semibold text-slate-700">
-        Workspace
-      </h3>
+        <p className="mt-1 text-xs leading-5 text-slate-500">
+          Manage your mentorship meeting.
+        </p>
+      </div>
 
       {/* Navigation */}
-
-      <div className="space-y-1.5">
-
-        {sidebarItems.map((item) => {
-
+      <nav
+        aria-label="Meeting workspace navigation"
+        className="space-y-1.5"
+      >
+        {workspaceTabs.map((item) => {
           const Icon = item.icon;
+          const isActive = activeTab === item.id;
 
           return (
-
             <button
               key={item.id}
+              type="button"
               onClick={() => setActiveTab(item.id)}
-              className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-2.5 text-left text-[13px] font-medium transition-all duration-200 ${
-                activeTab === item.id
-                  ? "bg-blue-600 text-white shadow"
-                  : "text-slate-600 hover:bg-white hover:shadow-sm"
+              aria-current={isActive ? "page" : undefined}
+              title={item.description}
+              className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-3 text-left text-[13px] font-medium transition-all duration-200 ${
+                isActive
+                  ? "bg-blue-600 text-white shadow-sm"
+                  : "text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-sm"
               }`}
             >
+              <Icon
+                size={17}
+                className="shrink-0"
+              />
 
-              <Icon size={17} />
-
-              <span>{item.title}</span>
-
+              <span className="min-w-0 break-words">
+                {item.title}
+              </span>
             </button>
-
           );
-
         })}
+      </nav>
 
-      </div>
+      {/* Meeting guidance */}
+      <div className="mt-6 rounded-xl border border-blue-100 bg-blue-50 p-3 sm:p-4">
+        <div className="flex items-center gap-2">
+          <MessageCircle
+            size={17}
+            className="shrink-0 text-blue-600"
+          />
 
-      {/* Progress Card */}
-
-      <div className="mt-8 rounded-xl bg-blue-50 p-4">
-
-        <h4 className="text-[15px] font-semibold text-blue-700">
-          Meeting Progress
-        </h4>
-
-        <div className="mt-4">
-
-          <div className="mb-2 flex items-center justify-between text-[11px]">
-
-            <span>Completion</span>
-
-            <span>72%</span>
-
-          </div>
-
-          <div className="h-1.5 overflow-hidden rounded-full bg-blue-100">
-
-            <div className="h-full w-[72%] rounded-full bg-blue-600" />
-
-          </div>
-
-          <p className="mt-4 text-[12px] leading-5 text-slate-600">
-
-            Continue documenting discussion,
-            assign action items and schedule the
-            follow-up meeting.
-
-          </p>
-
+          <h4 className="text-sm font-semibold text-blue-800">
+            Meeting Notes
+          </h4>
         </div>
 
-      </div>
+        <p className="mt-3 text-xs leading-5 text-slate-600">
+          Record important discussions, provide meaningful feedback,
+          and schedule a follow-up when needed.
+        </p>
 
-    </div>
+        <p className="mt-3 border-t border-blue-100 pt-3 text-xs leading-5 text-slate-500">
+          Remember to save your changes before ending the meeting.
+        </p>
+      </div>
+    </aside>
   );
 };
 

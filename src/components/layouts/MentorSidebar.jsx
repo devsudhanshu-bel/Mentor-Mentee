@@ -19,12 +19,7 @@ import {
 
 const menuItems = [
   {
-    title: "Dashboard",
-    path: "/mentor/dashboard",
-    icon: LayoutDashboard,
-  },
-  {
-    title: "My Students",
+    title: "Dasboard",
     path: "/mentor/students",
     icon: Users,
   },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import {
   FileText,
@@ -9,7 +9,44 @@ import {
 
 import { getDocumentsDashboard } from "../../api/document.api";
 
-const ExtraCurricularStats = () => {
+// ==========================================================
+// REVIEW STATUS
+// ==========================================================
+
+const getReviewStatus = (document) => {
+  const status =
+    document?.extraCurricularReviewStatus ??
+    document?.extraCurricularStatus ??
+    document?.researchReviewStatus ??
+    document?.reviewStatus ??
+    document?.verificationStatus ??
+    document?.approvalStatus ??
+    document?.status;
+
+  return typeof status === "string"
+    ? status.trim().toUpperCase()
+    : "";
+};
+
+const APPROVED_STATUSES = ["APPROVED", "VERIFIED"];
+
+const UNDER_REVIEW_STATUSES = [
+  "PENDING",
+  "PENDING_REVIEW",
+  "NOT_REVIEWED",
+  "UNDER_REVIEW",
+  "SUBMITTED",
+  "CORRECTIONS_REQUESTED",
+  "REJECTED",
+];
+
+const DRAFT_STATUSES = ["DRAFT"];
+
+// ==========================================================
+// COMPONENT
+// ==========================================================
+
+const ExtraCurricularStats = ({ refreshKey = 0 }) => {
   const [stats, setStats] = useState({
     totalSubmissions: 0,
     approved: 0,
@@ -20,83 +57,69 @@ const ExtraCurricularStats = () => {
   const [loading, setLoading] = useState(true);
 
   // ==========================================================
-  // FETCH EXTRA-CURRICULAR STATS
+  // FETCH STATS
   // ==========================================================
 
-  useEffect(() => {
-    const fetchExtraCurricularStats = async () => {
-      try {
-        setLoading(true);
+  const fetchStats = useCallback(async () => {
+    try {
+      setLoading(true);
 
-        const data = await getDocumentsDashboard(
-          "EXTRA_CURRICULAR"
-        );
+      const data = await getDocumentsDashboard("EXTRA_CURRICULAR");
 
-        console.log(
-          "ExtraCurricularStats API response:",
-          data
-        );
-
-        const documents = Array.isArray(data?.documents)
+      const documents = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.documents)
           ? data.documents
           : [];
 
-        /*
-         * API is already requesting only
-         * EXTRA_CURRICULAR documents.
-         *
-         * We still filter here as an extra
-         * safety check.
-         */
+      const extraCurricularDocuments = documents.filter(
+        (document) => document?.category === "EXTRA_CURRICULAR"
+      );
 
-        const extraCurricularDocuments =
-          documents.filter(
-            (document) =>
-              document.category === "EXTRA_CURRICULAR"
+      let approved = 0;
+      let underReview = 0;
+      let drafts = 0;
+
+      extraCurricularDocuments.forEach((document) => {
+        const status = getReviewStatus(document);
+
+        if (APPROVED_STATUSES.includes(status)) {
+          approved += 1;
+        } else if (DRAFT_STATUSES.includes(status)) {
+          drafts += 1;
+        } else if (UNDER_REVIEW_STATUSES.includes(status)) {
+          underReview += 1;
+        } else {
+          console.warn(
+            "Unknown Extra-Curricular review status:",
+            {
+              id: document?.id,
+              status: status || "MISSING",
+            }
           );
+        }
+      });
 
-        /*
-         * Current StudentDocument data does not
-         * provide a status field that we can safely
-         * use for:
-         *
-         * APPROVED
-         * UNDER_REVIEW
-         * DRAFT
-         *
-         * Therefore only Total Submissions is
-         * calculated dynamically for now.
-         */
-
-        setStats({
-          totalSubmissions:
-            extraCurricularDocuments.length,
-
-          approved: 0,
-
-          underReview: 0,
-
-          drafts: 0,
-        });
-      } catch (error) {
-        console.error(
-          "ExtraCurricularStats: Failed to fetch extra-curricular documents:",
-          error
-        );
-
-        setStats({
-          totalSubmissions: 0,
-          approved: 0,
-          underReview: 0,
-          drafts: 0,
-        });
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchExtraCurricularStats();
+      setStats({
+        totalSubmissions: extraCurricularDocuments.length,
+        approved,
+        underReview,
+        drafts,
+      });
+    } catch (error) {
+      console.error("Failed to fetch Extra-Curricular stats:", error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  // ==========================================================
+  // INITIAL LOAD + REFRESH AFTER UPLOAD/REUPLOAD
+  // ==========================================================
+
+  useEffect(() => {
+    fetchStats();
+  }, [fetchStats, refreshKey]);
 
   // ==========================================================
   // STAT ITEMS
@@ -106,12 +129,11 @@ const ExtraCurricularStats = () => {
     {
       title: "Total Submissions",
       value: stats.totalSubmissions,
-      subtitle: "All time",
+      subtitle: "All activities",
       icon: FileText,
       bg: "bg-blue-50",
       color: "text-blue-600",
     },
-
     {
       title: "Approved",
       value: stats.approved,
@@ -120,7 +142,6 @@ const ExtraCurricularStats = () => {
       bg: "bg-green-50",
       color: "text-green-500",
     },
-
     {
       title: "Under Review",
       value: stats.underReview,
@@ -129,7 +150,6 @@ const ExtraCurricularStats = () => {
       bg: "bg-orange-50",
       color: "text-orange-500",
     },
-
     {
       title: "Drafts",
       value: stats.drafts,
@@ -145,37 +165,31 @@ const ExtraCurricularStats = () => {
   // ==========================================================
 
   return (
-    <div className="grid grid-cols-4 gap-3">
-      {statItems.map((item, index) => {
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {statItems.map((item) => {
         const Icon = item.icon;
 
         return (
           <div
-            key={index}
-            className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-4 flex items-center gap-3 hover:shadow-md transition-all"
+            key={item.title}
+            className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm transition-all hover:shadow-md"
           >
-            {/* ICON */}
-
             <div
-              className={`w-11 h-11 rounded-full ${item.bg} flex items-center justify-center`}
+              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${item.bg}`}
             >
-              <Icon
-                className={`w-5 h-5 ${item.color}`}
-              />
+              <Icon className={`h-5 w-5 ${item.color}`} />
             </div>
 
-            {/* CONTENT */}
-
-            <div>
+            <div className="min-w-0">
               <p className="text-xs font-medium text-slate-500">
                 {item.title}
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-800 leading-none mt-0.5">
+              <h2 className="mt-0.5 text-2xl font-bold leading-none text-slate-800">
                 {loading ? "—" : item.value}
               </h2>
 
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="mt-1 text-xs text-slate-400">
                 {item.subtitle}
               </p>
             </div>

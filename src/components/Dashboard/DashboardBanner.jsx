@@ -1,42 +1,48 @@
 import React from "react";
 import banner from "../../assets/banner.png";
 
-const DashboardBanner = () => {
+const DashboardBanner = ({ studentName }) => {
+  const hour = new Date().getHours();
+
+  const greeting =
+    hour < 12
+      ? "Good Morning"
+      : hour < 17
+        ? "Good Afternoon"
+        : "Good Evening";
+
+  const displayName =
+    typeof studentName === "string" && studentName.trim()
+      ? studentName.trim()
+      : "Student";
+
   return (
     <div
       className="
-        relative
-        w-full
-        h-[165px]
-        rounded-3xl
-        overflow-hidden
-        shadow-sm
-        border
-        border-slate-200
+        relative w-full h-[165px] rounded-3xl overflow-hidden
+        shadow-sm border border-slate-200
       "
     >
-      {/* Banner Image */}
       <img
         src={banner}
-        alt="Dashboard Banner"
+        alt=""
+        aria-hidden="true"
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      {/* Overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-white/90 via-white/30 to-transparent" />
 
-      {/* Text */}
-      <div className="relative z-10 h-full flex flex-col justify-center px-9">
-        <p className="text-[16spx] text-slate-700 mb-1">
-          Good Morning,
+      <div className="relative z-10 h-full flex flex-col justify-center px-5 sm:px-9">
+        <p className="text-[16px] text-slate-700 mb-1">
+          {greeting},
         </p>
 
-        <h1 className="text-[30px] font-bold text-slate-900 leading-tight">
-          Sudhanshu Sreedhara! 👋
+        <h1 className="text-2xl sm:text-[30px] font-bold text-slate-900 leading-tight">
+          {displayName}! 👋
         </h1>
 
-        <p className="mt-3 text-[14px] text-slate-600">
-          Welcome back! You're doing great. Keep up the good work.
+        <p className="mt-3 text-xs sm:text-[14px] text-slate-600">
+          Welcome back! Keep learning, growing, and moving forward.
         </p>
       </div>
     </div>

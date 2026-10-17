@@ -2,125 +2,181 @@ import React from "react";
 
 import {
   Trophy,
-  Medal,
   Award,
   Star,
   Eye,
   Download,
   Trash2,
+  Pencil,
+  RotateCcw,
+  Clock3,
+  CircleCheck,
+  AlertCircle,
+  FileClock,
 } from "lucide-react";
+
+// ==========================================================
+// REVIEW STATUS CONFIGURATION
+// ==========================================================
+
+const STATUS_CONFIG = {
+  NOT_REVIEWED: {
+    label: "Pending Review",
+    className: "bg-amber-50 text-amber-700 border-amber-200",
+    icon: Clock3,
+  },
+  PENDING: {
+    label: "Pending Review",
+    className: "bg-amber-50 text-amber-700 border-amber-200",
+    icon: Clock3,
+  },
+  PENDING_REVIEW: {
+    label: "Pending Review",
+    className: "bg-amber-50 text-amber-700 border-amber-200",
+    icon: Clock3,
+  },
+  UNDER_REVIEW: {
+    label: "Under Review",
+    className: "bg-blue-50 text-blue-700 border-blue-200",
+    icon: FileClock,
+  },
+  SUBMITTED: {
+    label: "Submitted",
+    className: "bg-blue-50 text-blue-700 border-blue-200",
+    icon: FileClock,
+  },
+  APPROVED: {
+    label: "Approved",
+    className: "bg-green-50 text-green-700 border-green-200",
+    icon: CircleCheck,
+  },
+  VERIFIED: {
+    label: "Verified",
+    className: "bg-green-50 text-green-700 border-green-200",
+    icon: CircleCheck,
+  },
+  CORRECTIONS_REQUESTED: {
+    label: "Corrections Requested",
+    className: "bg-orange-50 text-orange-700 border-orange-200",
+    icon: AlertCircle,
+  },
+  REJECTED: {
+    label: "Changes Required",
+    className: "bg-red-50 text-red-700 border-red-200",
+    icon: AlertCircle,
+  },
+  DRAFT: {
+    label: "Draft",
+    className: "bg-purple-50 text-purple-700 border-purple-200",
+    icon: FileClock,
+  },
+};
+
+// ==========================================================
+// HELPERS
+// ==========================================================
+
+const getReviewStatus = (achievement) => {
+  const status =
+    achievement?.achievementReviewStatus ??
+    achievement?.awardReviewStatus ??
+    achievement?.researchReviewStatus ??
+    achievement?.reviewStatus ??
+    achievement?.verificationStatus ??
+    achievement?.approvalStatus ??
+    achievement?.status;
+
+  return typeof status === "string"
+    ? status.trim().toUpperCase()
+    : "";
+};
+
+const getDocumentName = (achievement) =>
+  achievement?.documentName ??
+  achievement?.fileName ??
+  achievement?.title ??
+  "Untitled Achievement";
+
+const getMentorFeedback = (achievement) =>
+  achievement?.mentorRemark ??
+  achievement?.reviewRemark ??
+  achievement?.reviewComments ??
+  achievement?.feedback ??
+  "";
+
+const getAchievementLevel = (achievement) =>
+  achievement?.level ??
+  achievement?.achievementLevel ??
+  "University Level";
+
+const getAchievementType = (achievement) =>
+  achievement?.achievementType ??
+  achievement?.type ??
+  achievement?.awardType ??
+  achievement?.documentType ??
+  "Award / Achievement";
+
+const formatDate = (date) => {
+  if (!date) return "";
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) return "";
+
+  return parsedDate.toLocaleDateString("en-US", {
+    month: "long",
+    year: "numeric",
+  });
+};
+
+const formatFileSize = (bytes) => {
+  if (bytes == null || bytes === "") return "";
+
+  const size = Number(bytes);
+
+  if (!Number.isFinite(size) || size < 0) return "";
+  if (size < 1024) return `${size} B`;
+  if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+
+  return `${(size / (1024 * 1024)).toFixed(2)} MB`;
+};
+
+// ==========================================================
+// COMPONENT
+// ==========================================================
 
 const AchievementCard = ({
   achievement,
   onView,
   onDownload,
   onDelete,
+  onEdit,
+  onResubmit,
   deleting = false,
 }) => {
-  if (!achievement) {
-    return null;
-  }
+  if (!achievement) return null;
 
-  // ==========================================================
-  // ACHIEVEMENT LEVEL
-  // ==========================================================
-
-  const achievementLevel =
-    achievement?.level ||
-    achievement?.achievementLevel ||
-    "University Level";
-
-  // ==========================================================
-  // ACHIEVEMENT TYPE
-  // ==========================================================
-
-  const achievementType =
-    achievement?.achievementType ||
-    achievement?.type ||
-    achievement?.awardType ||
-    achievement?.documentType ||
-    "Award / Achievement";
-
-  // ==========================================================
-  // DESCRIPTION
-  // ==========================================================
+  const achievementLevel = getAchievementLevel(achievement);
+  const achievementType = getAchievementType(achievement);
 
   const description =
-    achievement?.description ||
-    achievement?.organization ||
-    achievement?.eventName ||
+    achievement.description ||
+    achievement.organization ||
+    achievement.eventName ||
     "Achievement / recognition document";
 
-  // ==========================================================
-  // DATE
-  // ==========================================================
+  const achievementDate = formatDate(
+    achievement.achievementDate ||
+      achievement.date ||
+      achievement.uploadedAt
+  );
 
-  const formatDate = (date) => {
-    if (!date) {
-      return "";
-    }
-
-    try {
-      const parsedDate = new Date(date);
-
-      if (
-        Number.isNaN(
-          parsedDate.getTime()
-        )
-      ) {
-        return "";
-      }
-
-      return parsedDate.toLocaleDateString(
-        "en-US",
-        {
-          month: "long",
-          year: "numeric",
-        }
-      );
-    } catch {
-      return "";
-    }
-  };
-
-  const achievementDate =
-    formatDate(
-      achievement?.achievementDate ||
-        achievement?.date ||
-        achievement?.uploadedAt
-    );
-
-  // ==========================================================
-  // FILE SIZE
-  // ==========================================================
-
-  const formatFileSize = (bytes) => {
-    if (!bytes) {
-      return "";
-    }
-
-    if (bytes < 1024) {
-      return `${bytes} B`;
-    }
-
-    if (bytes < 1024 * 1024) {
-      return `${(
-        bytes / 1024
-      ).toFixed(1)} KB`;
-    }
-
-    return `${(
-      bytes /
-      (1024 * 1024)
-    ).toFixed(2)} MB`;
-  };
-
-  // ==========================================================
+  // ========================================================
   // FILE EXTENSION
-  // ==========================================================
+  // ========================================================
 
   const getFileExtension = () => {
-    if (achievement?.fileType) {
+    if (achievement.fileType) {
       return achievement.fileType
         .toLowerCase()
         .replace(".", "")
@@ -128,262 +184,281 @@ const AchievementCard = ({
         .pop();
     }
 
-    if (achievement?.documentName) {
-      const parts =
-        achievement.documentName.split(
-          "."
-        );
+    const name = getDocumentName(achievement);
+    const parts = name.split(".");
 
-      if (parts.length > 1) {
-        return parts
-          .pop()
-          .toLowerCase();
-      }
-    }
-
-    return "";
+    return parts.length > 1 ? parts.pop().toLowerCase() : "";
   };
 
-  const fileExtension =
-    getFileExtension();
+  const fileExtension = getFileExtension();
 
-  // ==========================================================
-  // ICON
-  // ==========================================================
+  // ========================================================
+  // FILE ICON
+  // ========================================================
 
   const getIcon = () => {
-    switch (fileExtension) {
-      case "pdf":
-        return (
-          <div className="w-11 h-11 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-            <Award
-              size={19}
-              className="text-red-500"
-            />
-          </div>
-        );
+    const baseClass =
+      "flex h-11 w-11 shrink-0 items-center justify-center rounded-lg";
 
-      case "jpg":
-      case "jpeg":
-      case "png":
-        return (
-          <div className="w-11 h-11 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-            <Star
-              size={19}
-              className="text-purple-500"
-            />
-          </div>
-        );
-
-      case "doc":
-      case "docx":
-        return (
-          <div className="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-            <Trophy
-              size={19}
-              className="text-blue-500"
-            />
-          </div>
-        );
-
-      default:
-        return (
-          <div className="w-11 h-11 rounded-lg bg-amber-50 flex items-center justify-center shrink-0">
-            <Trophy
-              size={19}
-              className="text-amber-500"
-            />
-          </div>
-        );
+    if (fileExtension === "pdf") {
+      return (
+        <div className={`${baseClass} bg-red-50`}>
+          <Award size={19} className="text-red-500" />
+        </div>
+      );
     }
+
+    if (["jpg", "jpeg", "png"].includes(fileExtension)) {
+      return (
+        <div className={`${baseClass} bg-purple-50`}>
+          <Star size={19} className="text-purple-500" />
+        </div>
+      );
+    }
+
+    if (["doc", "docx"].includes(fileExtension)) {
+      return (
+        <div className={`${baseClass} bg-blue-50`}>
+          <Trophy size={19} className="text-blue-500" />
+        </div>
+      );
+    }
+
+    return (
+      <div className={`${baseClass} bg-amber-50`}>
+        <Trophy size={19} className="text-amber-500" />
+      </div>
+    );
   };
 
-  // ==========================================================
+  // ========================================================
   // LEVEL BADGE
-  // ==========================================================
+  // ========================================================
 
   const badgeColor = {
-    "University Level":
-      "bg-blue-50 text-blue-600",
-
-    "Department Level":
-      "bg-slate-100 text-slate-600",
-
-    "National Level":
-      "bg-indigo-50 text-indigo-600",
-
-    "International Level":
-      "bg-purple-50 text-purple-600",
+    "University Level": "bg-blue-50 text-blue-600",
+    "Department Level": "bg-slate-100 text-slate-600",
+    "National Level": "bg-indigo-50 text-indigo-600",
+    "International Level": "bg-purple-50 text-purple-600",
   };
 
   const levelClass =
-    badgeColor[
-      achievementLevel
-    ] ||
+    badgeColor[achievementLevel] ||
     "bg-slate-100 text-slate-600";
 
-  // ==========================================================
-  // VIEW
-  // ==========================================================
+  // ========================================================
+  // REVIEW STATUS
+  // ========================================================
 
-  const handleView = (event) => {
+  const reviewStatus = getReviewStatus(achievement);
+  const statusConfig = STATUS_CONFIG[reviewStatus];
+
+  const isApproved = ["APPROVED", "VERIFIED"].includes(reviewStatus);
+
+  const canResubmit = [
+    "CORRECTIONS_REQUESTED",
+    "REJECTED",
+  ].includes(reviewStatus);
+
+  const mentorFeedback = getMentorFeedback(achievement);
+
+  // ========================================================
+  // ACTION HANDLERS
+  // ========================================================
+
+  const handleAction = (event, callback) => {
     event.preventDefault();
     event.stopPropagation();
 
-    onView?.(achievement);
+    callback?.(achievement);
   };
 
-  // ==========================================================
-  // DOWNLOAD
-  // ==========================================================
-
-  const handleDownload = (
-    event
-  ) => {
+  const handleDelete = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    onDownload?.(achievement);
-  };
-
-  // ==========================================================
-  // DELETE
-  // ==========================================================
-
-  const handleDelete = (
-    event
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (deleting) {
-      return;
-    }
+    if (deleting || isApproved) return;
 
     onDelete?.(achievement);
   };
 
-  // ==========================================================
+  const handleEdit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (isApproved) return;
+
+    onEdit?.(achievement);
+  };
+
+  const handleResubmit = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (!canResubmit || isApproved) return;
+
+    if (onResubmit) {
+      onResubmit(achievement);
+    } else {
+      onEdit?.(achievement);
+    }
+  };
+
+  // ========================================================
   // RENDER
-  // ==========================================================
+  // ========================================================
 
   return (
-    <div className="border border-slate-200 rounded-lg px-4 py-3 flex items-center justify-between hover:shadow-sm transition bg-white">
+    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 transition hover:shadow-sm">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+        {/* LEFT: FILE + DETAILS */}
 
-      {/* ====================================================
-          LEFT
-      ==================================================== */}
+        <div className="flex min-w-0 items-start gap-4">
+          {getIcon()}
 
-      <div className="flex items-center gap-4 min-w-0">
+          <div className="min-w-0 flex-1">
+            <h3
+              className="max-w-[520px] truncate text-sm font-semibold text-slate-800"
+              title={getDocumentName(achievement)}
+            >
+              {getDocumentName(achievement)}
+            </h3>
 
-        {getIcon()}
+            <p className="mt-1 max-w-[520px] truncate text-xs text-slate-500">
+              {achievementType}
 
-        <div className="min-w-0">
+              {achievementDate && (
+                <>
+                  <span className="mx-1.5">•</span>
+                  {achievementDate}
+                </>
+              )}
 
-          {/* TITLE */}
+              {achievement.fileSize != null && (
+                <>
+                  <span className="mx-1.5">•</span>
+                  {formatFileSize(achievement.fileSize)}
+                </>
+              )}
+            </p>
 
-          <h3
-            className="text-sm font-semibold text-slate-800 truncate max-w-[520px]"
-            title={
-              achievement?.documentName
-            }
-          >
-            {achievement?.documentName ||
-              "Untitled Achievement"}
-          </h3>
-
-          {/* META */}
-
-          <p className="text-xs text-slate-500 mt-1 truncate max-w-[520px]">
-
-            {achievementType}
-
-            {achievementDate && (
-              <>
-                <span className="mx-1.5">
-                  •
-                </span>
-
-                {achievementDate}
-              </>
+            {description && (
+              <p
+                className="mt-1 max-w-[520px] truncate text-xs text-slate-400"
+                title={description}
+              >
+                {description}
+              </p>
             )}
 
-            {achievement?.fileSize && (
-              <>
-                <span className="mx-1.5">
-                  •
-                </span>
+            {/* REVIEW STATUS */}
 
-                {formatFileSize(
-                  achievement.fileSize
-                )}
-              </>
+            {statusConfig ? (
+              <span
+                className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[10px] font-medium ${statusConfig.className}`}
+              >
+                <statusConfig.icon size={12} />
+                {statusConfig.label}
+              </span>
+            ) : (
+              <span className="mt-2 inline-flex rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-medium text-slate-500">
+                Status unavailable
+              </span>
             )}
 
-          </p>
+            {/* MENTOR FEEDBACK */}
 
+            {mentorFeedback && canResubmit && (
+              <div className="mt-2 max-w-xl rounded-md border border-orange-200 bg-orange-50 px-3 py-2">
+                <p className="text-[10px] font-semibold text-orange-800">
+                  Mentor&apos;s Feedback
+                </p>
+
+                <p className="mt-1 whitespace-pre-wrap text-xs leading-5 text-orange-900">
+                  {mentorFeedback}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* ====================================================
-          RIGHT
-      ==================================================== */}
+        {/* RIGHT: LEVEL + ACTIONS */}
 
-      <div className="flex items-center gap-3 ml-4 shrink-0">
+        <div className="ml-0 flex shrink-0 flex-wrap items-center gap-2 sm:ml-4 sm:justify-end">
+          <span
+            className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${levelClass}`}
+          >
+            {achievementLevel.replace(" Level", "")}
+          </span>
 
-        {/* LEVEL */}
+          {/* VIEW */}
 
-        <span
-          className={`
-            px-2.5
-            py-1
-            rounded-full
-            text-[11px]
-            font-medium
-            whitespace-nowrap
-            ${levelClass}
-          `}
-        >
-          {achievementLevel.replace(
-            " Level",
-            ""
+          <button
+            type="button"
+            onClick={(event) => handleAction(event, onView)}
+            title="View achievement"
+            aria-label="View achievement"
+            className="rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+          >
+            <Eye size={17} />
+          </button>
+
+          {/* DOWNLOAD */}
+
+          <button
+            type="button"
+            onClick={(event) => handleAction(event, onDownload)}
+            title="Download achievement"
+            aria-label="Download achievement"
+            className="rounded-md p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+          >
+            <Download size={17} />
+          </button>
+
+          {/* EDIT / REPLACE */}
+
+          {!isApproved && !canResubmit && (
+            <button
+              type="button"
+              onClick={handleEdit}
+              title="Edit / Replace"
+              aria-label="Edit or replace achievement"
+              className="rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+            >
+              <Pencil size={17} />
+            </button>
           )}
-        </span>
 
-        {/* VIEW */}
+          {/* RESUBMIT AFTER CORRECTIONS */}
 
-        <button
-          type="button"
-          onClick={handleView}
-          title="View"
-          className="p-2 rounded-md text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition"
-        >
-          <Eye size={17} />
-        </button>
+          {canResubmit && (
+            <button
+              type="button"
+              onClick={handleResubmit}
+              title="Edit and resubmit"
+              aria-label="Edit and resubmit achievement"
+              className="flex items-center gap-1 rounded-md bg-orange-50 px-2.5 py-2 text-xs font-medium text-orange-700 transition hover:bg-orange-100"
+            >
+              <RotateCcw size={14} />
+              Resubmit
+            </button>
+          )}
 
-        {/* DOWNLOAD */}
+          {/* DELETE */}
 
-        <button
-          type="button"
-          onClick={handleDownload}
-          title="Download"
-          className="p-2 rounded-md text-slate-500 hover:text-slate-700 hover:bg-slate-100 transition"
-        >
-          <Download size={17} />
-        </button>
-
-        {/* DELETE */}
-
-        <button
-          type="button"
-          onClick={handleDelete}
-          disabled={deleting}
-          title="Delete"
-          className="p-2 rounded-md text-slate-500 hover:text-red-600 hover:bg-red-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Trash2 size={17} />
-        </button>
-
+          {!isApproved && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleting}
+              title="Delete achievement"
+              aria-label="Delete achievement"
+              className="rounded-md p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Trash2 size={17} />
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

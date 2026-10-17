@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-
+import React, { useCallback, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import AdminSidebar from "../../components/layouts/AdminSidebar";
@@ -11,64 +10,189 @@ import MentorStats from "../../components/Admin/MentorDetails/MentorStats";
 import MentorTabs from "../../components/Admin/MentorDetails/MentorTabs";
 
 import StudentsTab from "../../components/Admin/MentorDetails/Students/StudentsTab";
+import MeetingsTab from "../../components/Admin/MentorDetails/MeetingsTab";
 
-import { getMentorDetails } from "../../api/mentor.api";
+import {
+  getMentorDetails,
+  getMentorMeetings,
+} from "../../api/mentor.api";
+
+// ==========================================================
+// MENTOR DETAILS PAGE
+// ==========================================================
 
 const MentorDetails = () => {
   const { mentorId } = useParams();
 
+  // --------------------------------------------------------
+  // STATE
+  // --------------------------------------------------------
+
   const [activeTab, setActiveTab] = useState("students");
 
   const [data, setData] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
 
+  const [meetings, setMeetings] = useState([]);
+  const [meetingsLoading, setMeetingsLoading] = useState(false);
+  const [meetingsError, setMeetingsError] = useState("");
+  const [meetingsRefreshKey, setMeetingsRefreshKey] = useState(0);
+
+  // --------------------------------------------------------
+  // LOAD MENTOR DETAILS
+  // --------------------------------------------------------
+
+  const loadMentor = useCallback(async () => {
+    if (!mentorId) {
+      setData(null);
+      setError("Mentor ID is missing.");
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const payload = await getMentorDetails(mentorId);
+
+      if (!payload?.mentor) {
+        throw new Error("Mentor details could not be found.");
+      }
+
+      setData(payload);
+    } catch (err) {
+      console.error("Failed to load mentor details:", err);
+
+      setData(null);
+      setError(
+        err?.response?.data?.message ||
+          err?.message ||
+          "Failed to load mentor details."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }, [mentorId]);
+
   useEffect(() => {
-    let mounted = true;
+    let cancelled = false;
 
-    const loadMentor = async () => {
+    const fetchMentor = async () => {
+      if (!mentorId) {
+        setData(null);
+        setError("Mentor ID is missing.");
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+      setError("");
+
       try {
-        setLoading(true);
-        setError("");
+        const payload = await getMentorDetails(mentorId);
 
-        const result = await getMentorDetails(mentorId);
+        if (cancelled) return;
 
-        if (mounted) {
-          setData(result);
+        if (!payload?.mentor) {
+          throw new Error("Mentor details could not be found.");
         }
+
+        setData(payload);
       } catch (err) {
+        if (cancelled) return;
+
         console.error("Failed to load mentor details:", err);
 
-        if (mounted) {
-          setError(
-            err?.response?.data?.message ||
-              err?.message ||
-              "Failed to load mentor details.",
-          );
-        }
+        setData(null);
+        setError(
+          err?.response?.data?.message ||
+            err?.message ||
+            "Failed to load mentor details."
+        );
       } finally {
-        if (mounted) {
+        if (!cancelled) {
           setLoading(false);
         }
       }
     };
 
-    if (mentorId) {
-      loadMentor();
-    }
+    fetchMentor();
 
     return () => {
-      mounted = false;
+      cancelled = true;
     };
   }, [mentorId]);
 
-  const mentor = data?.mentor || null;
+  // --------------------------------------------------------
+  // LOAD MEETINGS WHEN THE MEETINGS TAB IS ACTIVE
+  // --------------------------------------------------------
 
-  const stats = data?.stats || {};
+  useEffect(() => {
+    if (activeTab !== "meetings" || !mentorId) {
+      return undefined;
+    }
 
-  const students = data?.students || [];
+    let cancelled = false;
+
+    const fetchMeetings = async () => {
+      setMeetingsLoading(true);
+      setMeetingsError("");
+
+      try {
+        const result = await getMentorMeetings(mentorId);
+
+        if (cancelled) return;
+
+        setMeetings(Array.isArray(result) ? result : []);
+      } catch (err) {
+        if (cancelled) return;
+
+        console.error("Failed to load mentor meetings:", err);
+
+        setMeetings([]);
+        setMeetingsError(
+          err?.response?.data?.message ||
+            err?.message ||
+            "Failed to load mentor meetings."
+        );
+      } finally {
+        if (!cancelled) {
+          setMeetingsLoading(false);
+        }
+      }
+    };
+
+    fetchMeetings();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTab, mentorId, meetingsRefreshKey]);
+
+  // --------------------------------------------------------
+  // NORMALIZE API DATA
+  // --------------------------------------------------------
+
+  const mentor = data?.mentor ?? null;
+  const stats = data?.metrics ?? data?.stats ?? {};
+
+  const students = Array.isArray(data?.students)
+    ? data.students
+    : [];
+
+  // --------------------------------------------------------
+  // REFRESH MEETINGS
+  // --------------------------------------------------------
+
+  const refreshMeetings = useCallback(() => {
+    setMeetingsRefreshKey((current) => current + 1);
+  }, []);
+
+  // --------------------------------------------------------
+  // RENDER
+  // --------------------------------------------------------
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -80,61 +204,110 @@ const MentorDetails = () => {
         <main className="flex-1 space-y-5 px-6 py-5">
           <MentorDetailsHeader />
 
+          {/* Mentor details error */}
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {error}
+            <div
+              role="alert"
+              className="flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 sm:flex-row sm:items-center sm:justify-between"
+            >
+              <p>{error}</p>
+
+              <button
+                type="button"
+                onClick={loadMentor}
+                disabled={loading}
+                className="self-start rounded-lg border border-red-200 bg-white px-3 py-2 font-semibold transition hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50 sm:self-center"
+              >
+                {loading ? "Retrying..." : "Retry"}
+              </button>
             </div>
           )}
 
+          {/* Mentor details loading */}
           {loading ? (
-            <>
-              <div className="h-[190px] animate-pulse rounded-2xl bg-white" />
+            <div className="space-y-5">
+              <div className="grid grid-cols-1 gap-3 xl:grid-cols-12">
+                <div className="h-[190px] animate-pulse rounded-2xl border border-slate-200 bg-white xl:col-span-4" />
 
-              <div className="h-[190px] animate-pulse rounded-2xl bg-white" />
-            </>
+                <div className="h-[190px] animate-pulse rounded-2xl border border-slate-200 bg-white xl:col-span-8" />
+              </div>
+
+              <div className="h-[66px] animate-pulse rounded-2xl border border-slate-200 bg-white" />
+
+              <div className="h-[250px] animate-pulse rounded-2xl border border-slate-200 bg-white" />
+            </div>
           ) : !mentor ? (
-            <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
-              Mentor details could not be found.
+            /* Mentor not found */
+            <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+              <h2 className="text-lg font-semibold text-slate-900">
+                Mentor Not Found
+              </h2>
+
+              <p className="mt-2 text-sm text-slate-500">
+                {error ||
+                  "Mentor details could not be found. Please verify the mentor ID and try again."}
+              </p>
+
+              {!error && (
+                <button
+                  type="button"
+                  onClick={loadMentor}
+                  className="mt-4 rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                >
+                  Try Again
+                </button>
+              )}
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 gap-3 xl:grid-cols-12">
-                <div className="xl:col-span-4">
+              {/* Mentor profile and statistics */}
+              <section className="grid grid-cols-1 gap-3 xl:grid-cols-12">
+                <div className="min-w-0 xl:col-span-4">
                   <MentorProfileCard mentor={mentor} />
                 </div>
 
-                <div className="xl:col-span-8">
+                <div className="min-w-0 xl:col-span-8">
                   <MentorStats stats={stats} />
                 </div>
-              </div>
+              </section>
 
-              <MentorTabs activeTab={activeTab} setActiveTab={setActiveTab} />
+              {/* Tab navigation */}
+              <MentorTabs
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+              />
 
-              {activeTab === "students" && <StudentsTab students={students} />}
-
-              {activeTab === "overview" && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm">
-                  Mentor overview is based on the current HOD mentor and
-                  assignment data.
+              {/* Students tab */}
+              {activeTab === "students" && (
+                <div
+                  id="mentor-panel-students"
+                  role="tabpanel"
+                  aria-labelledby="mentor-tab-students"
+                  tabIndex={0}
+                  className="min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  <StudentsTab
+                    students={students}
+                    mentorId={mentorId}
+                  />
                 </div>
               )}
 
+              {/* Meetings tab */}
               {activeTab === "meetings" && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm">
-                  Meeting data is not available in the current HOD schema.
-                </div>
-              )}
-
-              {activeTab === "reports" && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm">
-                  Reports data is not available in the current HOD schema.
-                </div>
-              )}
-
-              {activeTab === "documents" && (
-                <div className="rounded-2xl border border-slate-200 bg-white p-6 text-sm text-slate-500 shadow-sm">
-                  Mentor document data is not available in the current HOD
-                  schema.
+                <div
+                  id="mentor-panel-meetings"
+                  role="tabpanel"
+                  aria-labelledby="mentor-tab-meetings"
+                  tabIndex={0}
+                  className="min-w-0 outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                >
+                  <MeetingsTab
+                    meetings={meetings}
+                    loading={meetingsLoading}
+                    error={meetingsError}
+                    onRefresh={refreshMeetings}
+                  />
                 </div>
               )}
             </>

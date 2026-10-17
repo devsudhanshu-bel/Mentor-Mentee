@@ -1,7 +1,4 @@
-import React, {
-  useRef,
-  useState,
-} from "react";
+import React, { useRef, useState } from "react";
 
 import {
   X,
@@ -17,10 +14,8 @@ const MAX_FILE_SIZE = 20 * 1024 * 1024;
 
 const ALLOWED_FILE_TYPES = [
   "application/pdf",
-
   "application/msword",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-
   "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 ];
@@ -38,27 +33,13 @@ const UploadResearchModal = ({
   onClose,
   onSuccess,
 }) => {
-
-  // ==========================================================
-  // STATE
-  // ==========================================================
-
   const fileInputRef = useRef(null);
 
-  const [documentName, setDocumentName] =
-    useState("");
-
-  const [description, setDescription] =
-    useState("");
-
-  const [selectedFile, setSelectedFile] =
-    useState(null);
-
-  const [isUploading, setIsUploading] =
-    useState(false);
-
-  const [errorMessage, setErrorMessage] =
-    useState("");
+  const [documentName, setDocumentName] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   // ==========================================================
   // RESET FORM
@@ -80,38 +61,24 @@ const UploadResearchModal = ({
   // ==========================================================
 
   const handleClose = () => {
-
-    if (isUploading) {
-      return;
-    }
+    if (isUploading) return;
 
     resetForm();
-
-    if (onClose) {
-      onClose();
-    }
+    onClose?.();
   };
 
   // ==========================================================
-  // GET FILE EXTENSION
+  // FILE EXTENSION
   // ==========================================================
 
   const getFileExtension = (fileName) => {
+    if (!fileName) return "";
 
-    if (!fileName) {
-      return "";
-    }
+    const lastDotIndex = fileName.lastIndexOf(".");
 
-    const lastDotIndex =
-      fileName.lastIndexOf(".");
+    if (lastDotIndex === -1) return "";
 
-    if (lastDotIndex === -1) {
-      return "";
-    }
-
-    return fileName
-      .substring(lastDotIndex)
-      .toLowerCase();
+    return fileName.substring(lastDotIndex).toLowerCase();
   };
 
   // ==========================================================
@@ -119,24 +86,22 @@ const UploadResearchModal = ({
   // ==========================================================
 
   const validateFile = (file) => {
-
     if (!file) {
       return "Please select a file.";
     }
 
-    // File size
+    if (file.size === 0) {
+      return "The selected file is empty.";
+    }
+
     if (file.size > MAX_FILE_SIZE) {
       return "File size must not exceed 20MB.";
     }
 
-    const extension =
-      getFileExtension(file.name);
+    const extension = getFileExtension(file.name);
 
-    const isValidType =
-      ALLOWED_FILE_TYPES.includes(file.type);
-
-    const isValidExtension =
-      ALLOWED_EXTENSIONS.includes(extension);
+    const isValidType = ALLOWED_FILE_TYPES.includes(file.type);
+    const isValidExtension = ALLOWED_EXTENSIONS.includes(extension);
 
     if (!isValidType && !isValidExtension) {
       return "Invalid file format. Please upload PDF, DOC, DOCX, PPT, or PPTX.";
@@ -146,107 +111,71 @@ const UploadResearchModal = ({
   };
 
   // ==========================================================
-  // HANDLE FILE
+  // HANDLE FILE SELECTION
   // ==========================================================
 
   const handleFileChange = (event) => {
+    const file = event.target.files?.[0];
 
-    const file =
-      event.target.files?.[0];
-
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     setErrorMessage("");
 
-    const validationError =
-      validateFile(file);
+    const validationError = validateFile(file);
 
     if (validationError) {
-
       setSelectedFile(null);
-
-      setErrorMessage(
-        validationError
-      );
-
+      setErrorMessage(validationError);
+      event.target.value = "";
       return;
     }
 
     setSelectedFile(file);
 
-    // Automatically use file name
-    // as document name
+    // Use the file name automatically when the name is empty.
     if (!documentName.trim()) {
+      const extension = getFileExtension(file.name);
 
-      const extension =
-        getFileExtension(file.name);
+      const nameWithoutExtension = extension
+        ? file.name.slice(0, -extension.length)
+        : file.name;
 
-      const nameWithoutExtension =
-        extension
-          ? file.name.slice(
-              0,
-              -extension.length
-            )
-          : file.name;
-
-      setDocumentName(
-        nameWithoutExtension
-      );
+      setDocumentName(nameWithoutExtension);
     }
   };
 
   // ==========================================================
-  // HANDLE DROP
+  // HANDLE DRAG AND DROP
   // ==========================================================
 
   const handleDrop = (event) => {
-
     event.preventDefault();
     event.stopPropagation();
 
-    const file =
-      event.dataTransfer.files?.[0];
+    const file = event.dataTransfer.files?.[0];
 
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
     setErrorMessage("");
 
-    const validationError =
-      validateFile(file);
+    const validationError = validateFile(file);
 
     if (validationError) {
-
       setSelectedFile(null);
-
-      setErrorMessage(
-        validationError
-      );
-
+      setErrorMessage(validationError);
       return;
     }
 
     setSelectedFile(file);
 
     if (!documentName.trim()) {
+      const extension = getFileExtension(file.name);
 
-      const extension =
-        getFileExtension(file.name);
+      const nameWithoutExtension = extension
+        ? file.name.slice(0, -extension.length)
+        : file.name;
 
-      const nameWithoutExtension =
-        extension
-          ? file.name.slice(
-              0,
-              -extension.length
-            )
-          : file.name;
-
-      setDocumentName(
-        nameWithoutExtension
-      );
+      setDocumentName(nameWithoutExtension);
     }
   };
 
@@ -255,127 +184,70 @@ const UploadResearchModal = ({
   // ==========================================================
 
   const formatFileSize = (bytes) => {
-
-    if (!bytes) {
-      return "0 KB";
-    }
+    if (!bytes) return "0 KB";
 
     if (bytes < 1024) {
       return `${bytes} B`;
     }
 
     if (bytes < 1024 * 1024) {
-      return `${(
-        bytes / 1024
-      ).toFixed(1)} KB`;
+      return `${(bytes / 1024).toFixed(1)} KB`;
     }
 
-    return `${(
-      bytes /
-      (1024 * 1024)
-    ).toFixed(2)} MB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
   // ==========================================================
-  // UPLOAD
+  // UPLOAD RESEARCH
   // ==========================================================
 
   const handleUpload = async (event) => {
-
     event.preventDefault();
-
     setErrorMessage("");
 
-    // Document name
     if (!documentName.trim()) {
-
-      setErrorMessage(
-        "Please enter a research document name."
-      );
-
+      setErrorMessage("Please enter a research document name.");
       return;
     }
 
-    // File
     if (!selectedFile) {
-
-      setErrorMessage(
-        "Please select a research document."
-      );
-
+      setErrorMessage("Please select a research document.");
       return;
     }
 
-    // Validate again
-    const validationError =
-      validateFile(selectedFile);
+    const validationError = validateFile(selectedFile);
 
     if (validationError) {
-
-      setErrorMessage(
-        validationError
-      );
-
+      setErrorMessage(validationError);
       return;
     }
 
     try {
-
       setIsUploading(true);
 
-      console.log(
-        "Uploading research document:",
-        {
-          documentName:
-            documentName.trim(),
-          category: "RESEARCH",
-          description:
-            description.trim(),
-          file:
-            selectedFile.name,
-        }
-      );
-
       await uploadDocument({
-        documentName:
-          documentName.trim(),
-
+        documentName: documentName.trim(),
         category: "RESEARCH",
-
-        description:
-          description.trim(),
-
-        file:
-          selectedFile,
+        description: description.trim(),
+        file: selectedFile,
       });
-
-      console.log(
-        "Research document uploaded successfully."
-      );
 
       resetForm();
 
-      if (onSuccess) {
-        onSuccess();
-      }
+      // Refresh the research list after a successful upload.
+      onSuccess?.();
 
+      // Close the modal after success.
+      onClose?.();
     } catch (error) {
-
-      console.error(
-        "UploadResearchModal.handleUpload error:",
-        error
-      );
-
-      const backendMessage =
-        error?.response?.data?.message;
+      console.error("UploadResearchModal.handleUpload error:", error);
 
       setErrorMessage(
-        backendMessage ||
-        "Failed to upload research document. Please try again."
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to upload research document. Please try again."
       );
-
     } finally {
-
       setIsUploading(false);
     }
   };
@@ -384,141 +256,126 @@ const UploadResearchModal = ({
   // IF CLOSED
   // ==========================================================
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   // ==========================================================
   // RENDER
   // ==========================================================
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget && !isUploading) {
+          handleClose();
+        }
+      }}
+    >
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="upload-research-title"
+        className="w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl"
+      >
+        {/* HEADER */}
 
-      <div className="w-full max-w-lg bg-white rounded-xl shadow-2xl overflow-hidden">
-
-        {/* ====================================================
-            HEADER
-        ==================================================== */}
-
-        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
-
+        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
           <div>
-
-            <h2 className="text-base font-semibold text-slate-800">
+            <h2
+              id="upload-research-title"
+              className="text-base font-semibold text-slate-800"
+            >
               Upload Research
             </h2>
 
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="mt-1 text-xs text-slate-400">
               Add a research paper, presentation, or report.
             </p>
-
           </div>
 
           <button
             type="button"
             onClick={handleClose}
             disabled={isUploading}
-            className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 transition disabled:opacity-50"
+            aria-label="Close upload modal"
+            className="rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={19} />
           </button>
-
         </div>
 
-        {/* ====================================================
-            FORM
-        ==================================================== */}
+        {/* FORM */}
 
         <form onSubmit={handleUpload}>
-
-          <div className="px-5 py-5 space-y-4">
-
-            {/* ==================================================
-                ERROR
-            ================================================== */}
+          <div className="space-y-4 px-5 py-5">
+            {/* ERROR */}
 
             {errorMessage && (
-
-              <div className="flex items-start gap-2 p-3 rounded-md bg-red-50 border border-red-200">
-
+              <div
+                role="alert"
+                className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3"
+              >
                 <AlertCircle
                   size={17}
-                  className="text-red-600 mt-0.5 shrink-0"
+                  className="mt-0.5 shrink-0 text-red-600"
                 />
 
-                <p className="text-xs text-red-600 leading-5">
+                <p className="text-xs leading-5 text-red-600">
                   {errorMessage}
                 </p>
-
               </div>
-
             )}
 
-            {/* ==================================================
-                DOCUMENT NAME
-            ================================================== */}
+            {/* RESEARCH NAME */}
 
             <div>
-
-              <label className="block text-xs font-medium text-slate-700 mb-1.5">
-                Research Name
-                <span className="text-red-500 ml-1">
-                  *
-                </span>
+              <label
+                htmlFor="upload-research-name"
+                className="mb-1.5 block text-xs font-medium text-slate-700"
+              >
+                Research Name <span className="text-red-500">*</span>
               </label>
 
               <input
+                id="upload-research-name"
                 type="text"
                 value={documentName}
-                onChange={(event) =>
-                  setDocumentName(
-                    event.target.value
-                  )
-                }
+                onChange={(event) => setDocumentName(event.target.value)}
                 placeholder="Enter research document name"
                 disabled={isUploading}
-                className="w-full h-10 px-3 rounded-md border border-slate-300 bg-white text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition disabled:bg-slate-50"
+                maxLength={200}
+                required
+                className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
-
             </div>
 
-            {/* ==================================================
-                DESCRIPTION
-            ================================================== */}
+            {/* DESCRIPTION */}
 
             <div>
-
-              <label className="block text-xs font-medium text-slate-700 mb-1.5">
+              <label
+                htmlFor="upload-research-description"
+                className="mb-1.5 block text-xs font-medium text-slate-700"
+              >
                 Description
               </label>
 
               <textarea
+                id="upload-research-description"
                 value={description}
-                onChange={(event) =>
-                  setDescription(
-                    event.target.value
-                  )
-                }
+                onChange={(event) => setDescription(event.target.value)}
                 placeholder="Add a short description about this research..."
                 rows={3}
+                maxLength={5000}
                 disabled={isUploading}
-                className="w-full px-3 py-2.5 rounded-md border border-slate-300 bg-white text-sm text-slate-700 outline-none resize-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition disabled:bg-slate-50"
+                className="w-full resize-none rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
-
             </div>
 
-            {/* ==================================================
-                FILE
-            ================================================== */}
+            {/* RESEARCH FILE */}
 
             <div>
-
-              <label className="block text-xs font-medium text-slate-700 mb-1.5">
-                Research File
-                <span className="text-red-500 ml-1">
-                  *
-                </span>
+              <label className="mb-1.5 block text-xs font-medium text-slate-700">
+                Research File <span className="text-red-500">*</span>
               </label>
 
               <input
@@ -529,8 +386,6 @@ const UploadResearchModal = ({
                 disabled={isUploading}
                 className="hidden"
               />
-
-              {/* DROP AREA */}
 
               <div
                 onDragOver={(event) => {
@@ -543,86 +398,57 @@ const UploadResearchModal = ({
                     fileInputRef.current?.click();
                   }
                 }}
-                className="border-2 border-dashed border-blue-200 rounded-lg px-5 py-7 text-center cursor-pointer hover:border-blue-400 hover:bg-blue-50/30 transition"
+                className="cursor-pointer rounded-lg border-2 border-dashed border-blue-200 px-5 py-7 text-center transition hover:border-blue-400 hover:bg-blue-50/30"
               >
-
-                <div className="w-11 h-11 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-3">
-
-                  <UploadCloud
-                    size={22}
-                    className="text-blue-600"
-                  />
-
+                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50">
+                  <UploadCloud size={22} className="text-blue-600" />
                 </div>
 
                 {selectedFile ? (
-
                   <>
-
                     <div className="flex items-center justify-center gap-2">
+                      <FileText size={17} className="shrink-0 text-blue-600" />
 
-                      <FileText
-                        size={17}
-                        className="text-blue-600"
-                      />
-
-                      <p className="text-sm font-medium text-slate-700 truncate max-w-[300px]">
+                      <p className="max-w-[300px] truncate text-sm font-medium text-slate-700">
                         {selectedFile.name}
                       </p>
-
                     </div>
 
-                    <p className="text-xs text-slate-400 mt-1">
-                      {formatFileSize(
-                        selectedFile.size
-                      )}
+                    <p className="mt-1 text-xs text-slate-400">
+                      {formatFileSize(selectedFile.size)}
                     </p>
 
-                    <p className="text-xs text-blue-600 mt-2">
+                    <p className="mt-2 text-xs text-blue-600">
                       Click to choose another file
                     </p>
-
                   </>
-
                 ) : (
-
                   <>
-
                     <p className="text-sm font-medium text-slate-700">
                       Drag & drop your file here
                     </p>
 
-                    <p className="text-xs text-slate-400 mt-1">
+                    <p className="mt-1 text-xs text-slate-400">
                       or click to browse
                     </p>
 
-                    <p className="text-[11px] text-slate-400 mt-3">
-                      PDF, DOC, DOCX, PPT, PPTX
-                      {" • "}
-                      Maximum 20MB
+                    <p className="mt-3 text-[11px] text-slate-400">
+                      PDF, DOC, DOCX, PPT, PPTX · Maximum 20MB
                     </p>
-
                   </>
-
                 )}
-
               </div>
-
             </div>
-
           </div>
 
-          {/* ==================================================
-              FOOTER
-          ================================================== */}
+          {/* FOOTER */}
 
-          <div className="px-5 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
-
+          <div className="flex justify-end gap-2 border-t border-slate-200 bg-slate-50 px-5 py-4">
             <button
               type="button"
               onClick={handleClose}
               disabled={isUploading}
-              className="h-9 px-4 rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition disabled:opacity-50"
+              className="h-9 rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
             >
               Cancel
             </button>
@@ -630,38 +456,23 @@ const UploadResearchModal = ({
             <button
               type="submit"
               disabled={isUploading}
-              className="h-9 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex h-9 items-center gap-2 rounded-md bg-blue-600 px-5 text-xs font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
-
               {isUploading ? (
-
                 <>
-                  <Loader2
-                    size={14}
-                    className="animate-spin"
-                  />
-
+                  <Loader2 size={14} className="animate-spin" />
                   Uploading...
                 </>
-
               ) : (
-
                 <>
                   <UploadCloud size={14} />
-
                   Upload Research
                 </>
-
               )}
-
             </button>
-
           </div>
-
         </form>
-
       </div>
-
     </div>
   );
 };

@@ -1,84 +1,63 @@
+
 import React from "react";
 
-import { Users, CalendarDays, TrendingUp, Target } from "lucide-react";
+import {
+  Users,
+  CalendarDays,
+  TrendingUp,
+} from "lucide-react";
 
 import MentorStatCard from "./MentorStatCard";
 
 const MentorStats = ({ stats = {} }) => {
-  const capacity = stats.capacity || 0;
+  const capacity = stats.maxMentees ?? stats.capacity ?? 0;
 
-  const assigned = stats.studentsAssigned || 0;
+  const assigned = stats.studentsAssigned ?? 0;
 
-  const utilization = stats.utilization ?? 0;
+  const utilization =
+    stats.capacityPercentage ?? stats.utilization ?? 0;
+
+  const meetingsConducted =
+    stats.meetingsConducted ??
+    stats.completedMeetings ??
+    stats.totalMeetingsConducted ??
+    0;
+
+  const averageAttendance = stats.averageAttendance ?? null;
 
   const cards = [
     {
       icon: Users,
-
       value: `${assigned} / ${capacity}`,
-
       subtitle: "Students Assigned",
-
       description: `${utilization}% Capacity`,
-
       color: "text-blue-600",
-
       bg: "bg-blue-50",
     },
-
     {
       icon: CalendarDays,
-
-      value: stats.meetingsConducted ?? "—",
-
+      value: meetingsConducted,
       subtitle: "Meetings Conducted",
-
-      description:
-        stats.meetingsConducted !== null
-          ? "This Academic Year"
-          : "Meeting data unavailable",
-
+      description: "Completed mentor meetings",
       color: "text-emerald-600",
-
       bg: "bg-emerald-50",
     },
-
     {
       icon: TrendingUp,
-
       value:
-        stats.averageAttendance !== null &&
-        stats.averageAttendance !== undefined
-          ? `${stats.averageAttendance}%`
+        averageAttendance !== null
+          ? `${averageAttendance}%`
           : "—",
-
       subtitle: "Average Attendance",
-
       description: "Across assigned students",
-
       color: "text-violet-600",
-
       bg: "bg-violet-50",
-    },
-
-    {
-      icon: Target,
-
-      value: stats.goalCompletion ?? "—",
-
-      subtitle: "Goal Completion",
-
-      description: "Goal data unavailable",
-
-      color: "text-orange-600",
-
-      bg: "bg-orange-50",
     },
   ];
 
   return (
     <div className="h-full rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="grid h-full grid-cols-2 xl:grid-cols-4">
+      <div className="grid h-full grid-cols-1 sm:grid-cols-3">
         {cards.map((stat, index) => (
           <MentorStatCard
             key={stat.subtitle}

@@ -8,54 +8,60 @@ import {
   Star,
 } from "lucide-react";
 
-const stats = [
-  {
-    title: "Attendance",
-    value: "92%",
-    subtitle: "Overall",
-    icon: UserRoundCheck,
-    color: "bg-emerald-100 text-emerald-600",
-  },
-  {
-    title: "CGPA",
-    value: "8.72",
-    subtitle: "Current",
-    icon: BarChart3,
-    color: "bg-blue-100 text-blue-600",
-  },
-  {
-    title: "Internships",
-    value: "1",
-    subtitle: "Completed",
-    icon: BriefcaseBusiness,
-    color: "bg-orange-100 text-orange-600",
-  },
-  {
-    title: "Research",
-    value: "2",
-    subtitle: "Submitted",
-    icon: FlaskConical,
-    color: "bg-violet-100 text-violet-600",
-  },
-  {
-    title: "Certificates",
-    value: "5",
-    subtitle: "Earned",
-    icon: BadgeCheck,
-    color: "bg-cyan-100 text-cyan-600",
-  },
-  {
-    title: "Co-Curricular",
-    value: "7",
-    subtitle: "Activities",
-    icon: Star,
-    color: "bg-amber-100 text-amber-600",
-  },
-];
+const OverviewStats = ({ statistics = {}, student = {} }) => {
+  const stats = [
+    {
+      title: "Attendance",
+      value:
+        statistics.attendance != null
+          ? `${statistics.attendance}%`
+          : "—",
+      subtitle: "Overall",
+      icon: UserRoundCheck,
+      color: "bg-emerald-100 text-emerald-600",
+    },
+    {
+      title: "CGPA",
+      value:
+        student.currentCGPA != null
+          ? Number(student.currentCGPA).toFixed(2)
+          : "—",
+      subtitle: "Current",
+      icon: BarChart3,
+      color: "bg-blue-100 text-blue-600",
+    },
+    {
+      title: "Internships",
+      value: statistics.internships?.completed ?? 0,
+      subtitle: "Completed",
+      icon: BriefcaseBusiness,
+      color: "bg-orange-100 text-orange-600",
+    },
+    {
+      title: "Research",
+      value: statistics.research?.total ?? 0,
+      subtitle: "Submitted",
+      icon: FlaskConical,
+      color: "bg-violet-100 text-violet-600",
+    },
+    {
+      title: "Certificates",
+      value: statistics.certificates?.total ?? 0,
+      subtitle: "Earned",
+      icon: BadgeCheck,
+      color: "bg-cyan-100 text-cyan-600",
+    },
+    {
+      title: "Co-Curricular",
+      value: statistics.coCurricular?.total ?? 0,
+      subtitle: "Activities",
+      icon: Star,
+      color: "bg-amber-100 text-amber-600",
+    },
+  ];
 
-const OverviewStats = () => {
   return (
-    <section className="grid grid-cols-6 gap-3">
+    <section className="grid grid-cols-2 gap-3 sm:grid-cols-3 2xl:grid-cols-6">
       {stats.map((item) => {
         const Icon = item.icon;
 

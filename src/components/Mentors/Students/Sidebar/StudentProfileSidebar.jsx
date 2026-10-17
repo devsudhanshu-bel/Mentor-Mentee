@@ -1,161 +1,118 @@
+
 import React from "react";
-import { Mail, Phone, MapPin } from "lucide-react";
+import {
+  Trophy,
+  UserRound,
+  GraduationCap,
+  CalendarDays,
+  Hash,
+} from "lucide-react";
 
-const StudentProfileSidebar = () => {
+const StudentProfileSidebar = ({ student, mentor }) => {
+  const studentName = student?.fullName || "Student";
+  const registerNumber = student?.registerNumber || "Not available";
+  const programme = student?.programme || "Not available";
+  const semester = student?.semester ?? "Not available";
+  const profileImage = student?.profileImage;
+
+  const getInitials = (name) =>
+    String(name || "Student")
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part.charAt(0).toUpperCase())
+      .join("") || "ST";
+
+  const InfoRow = ({ icon: Icon, label, children, color }) => (
+    <div className="flex items-start gap-2.5">
+      <div
+        className={`rounded-md p-1.5 ${
+          color || "bg-slate-50 text-slate-500"
+        }`}
+      >
+        <Icon size={15} strokeWidth={1.8} />
+      </div>
+
+      <div className="min-w-0 flex-1">
+        <p className="text-[11px] leading-4 text-slate-400">
+          {label}
+        </p>
+
+        <p className="mt-0.5 break-words text-[13px] font-medium leading-[18px] text-slate-800">
+          {children}
+        </p>
+      </div>
+    </div>
+  );
+
   return (
-    <aside className="w-[260px] shrink-0 space-y-3">
-      {/* ================= Profile Card ================= */}
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-        {/* Cover */}
-        <div className="relative h-20 bg-gradient-to-r from-sky-100 via-slate-50 to-sky-100">
+    <aside className="h-fit overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      {/* PROFILE HEADER */}
+      <div className="flex flex-col items-center border-b border-slate-100 px-4 py-4 text-center">
+        {profileImage ? (
           <img
-            src="https://i.pravatar.cc/180?img=12"
-            alt="Student"
-            className="absolute left-1/2 top-full h-16 w-16 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-white object-cover shadow"
+            src={profileImage}
+            alt={`${studentName}'s profile`}
+            className="h-16 w-16 rounded-full border-2 border-blue-50 object-cover"
+            onError={(event) => {
+              event.currentTarget.style.display = "none";
+            }}
           />
-        </div>
+        ) : (
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-50 text-lg font-semibold text-blue-700">
+            {getInitials(studentName)}
+          </div>
+        )}
 
-        {/* Body */}
-        <div className="px-4 pb-4 pt-10 text-center">
-          <h2 className="text-[18px] font-semibold text-slate-900">
-            Aarav Sharma
-          </h2>
+        <h2 className="mt-3 break-words text-[15px] font-semibold leading-5 text-slate-900">
+          {studentName}
+        </h2>
 
-          <span className="mt-2 inline-flex rounded-full bg-emerald-100 px-2.5 py-1 text-[10px] font-medium text-emerald-700">
-            Active
+        <p className="mt-1 text-xs text-slate-500">
+          Student Profile
+        </p>
+
+        <span className="mt-2 inline-flex items-center gap-1 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-700">
+          <UserRound size={11} />
+          Mentee
+        </span>
+      </div>
+
+      {/* STUDENT INFORMATION */}
+      <div className="p-4">
+        <section>
+          <p className="mb-3 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+            Student Information
+          </p>
+
+          <div className="space-y-3.5">
+            <InfoRow icon={Hash} label="Register Number">
+              {registerNumber}
+            </InfoRow>
+
+            <InfoRow icon={GraduationCap} label="Programme">
+              {programme}
+            </InfoRow>
+
+            <InfoRow icon={CalendarDays} label="Current Semester">
+              {semester}
+            </InfoRow>
+          </div>
+        </section>
+      </div>
+
+      {/* FOOTER */}
+      <div className="border-t border-slate-100 bg-slate-50 px-4 py-2.5">
+        <div className="flex items-start gap-2 text-[11px] leading-4 text-slate-500">
+          <Trophy
+            size={13}
+            className="mt-0.5 shrink-0 text-blue-600"
+          />
+
+          <span>
+            Student information and academic details are displayed
+            for the selected mentee.
           </span>
-
-          <div className="mt-4 space-y-1 text-[12px] text-slate-600">
-            <p>
-              <span className="font-semibold">Reg. No:</span> 23CS1001
-            </p>
-
-            <p>BCA – Computer Science</p>
-
-            <p>Semester IV</p>
-          </div>
-
-          <div className="mt-4 border-t border-slate-100 pt-4">
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-[11px] text-slate-600">
-                <Mail size={13} className="text-slate-400" />
-
-                <span className="truncate">
-                  aarav.sharma@christuniversity.in
-                </span>
-              </div>
-
-              <div className="flex items-center gap-2 text-[11px] text-slate-600">
-                <Phone size={13} className="text-slate-400" />
-
-                <span>+91 98765 43210</span>
-              </div>
-
-              <div className="flex items-center gap-2 text-[11px] text-slate-600">
-                <MapPin size={13} className="text-slate-400" />
-
-                <span>Bangalore, Karnataka</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ================= Academic Snapshot ================= */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-4 text-[14px] font-semibold text-slate-900">
-          Academic Snapshot
-        </h3>
-
-        <div className="space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-slate-500">CGPA</span>
-
-            <span className="text-[13px] font-semibold text-blue-600">
-              8.72
-              <span className="text-[11px] text-slate-400"> /10</span>
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-slate-500">
-              Credits Earned
-            </span>
-
-            <span className="text-[13px] font-semibold text-slate-800">
-              88
-              <span className="text-[11px] text-slate-400"> /120</span>
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-slate-500">
-              Backlogs
-            </span>
-
-            <span className="text-[13px] font-semibold text-slate-800">
-              0
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-slate-500">
-              Academic Standing
-            </span>
-
-            <span className="text-[12px] font-semibold text-emerald-600">
-              Excellent
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ================= Mentor Information ================= */}
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-4 text-[14px] font-semibold text-slate-900">
-          Mentor Information
-        </h3>
-
-        <div className="space-y-3">
-          <div>
-            <p className="text-[10px] text-slate-500">
-              Mentor
-            </p>
-
-            <p className="text-[12px] font-medium text-blue-600">
-              Dr. Arjun Mehta
-            </p>
-          </div>
-
-          <div>
-            <p className="text-[10px] text-slate-500">
-              Department
-            </p>
-
-            <p className="text-[12px] text-slate-700">
-              Computer Science
-            </p>
-          </div>
-
-          <div>
-            <p className="text-[10px] text-slate-500">
-              Designation
-            </p>
-
-            <p className="text-[12px] text-slate-700">
-              Associate Professor
-            </p>
-          </div>
-
-          <div>
-            <p className="text-[10px] text-slate-500">
-              Mentorship Start Date
-            </p>
-
-            <p className="text-[12px] text-slate-700">
-              01 Aug 2024
-            </p>
-          </div>
         </div>
       </div>
     </aside>

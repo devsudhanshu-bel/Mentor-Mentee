@@ -2,44 +2,44 @@ import React from "react";
 
 const CertificateStatCard = ({
   icon: Icon,
-  iconBg,
-  iconColor,
+  iconBg = "bg-blue-50",
+  iconColor = "text-blue-600",
   title,
-  value,
+  value = 0,
   subtitle,
 }) => {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm transition-all duration-200 hover:shadow-md">
-      <div className="flex items-center gap-3">
-        {/* Icon */}
-
-        <div
-          className={`flex h-11 w-11 items-center justify-center rounded-2xl ${iconBg}`}
-        >
-          <Icon
-            size={20}
-            className={iconColor}
-            strokeWidth={2}
-          />
-        </div>
-
-        {/* Content */}
-
-        <div>
-          <p className="text-[10px] font-medium text-slate-500">
+    <article className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-xs font-medium leading-4 text-slate-500">
             {title}
           </p>
 
-          <h3 className="mt-0.5 text-[18px] font-bold leading-none text-slate-900">
+          <p className="mt-1.5 text-xl font-bold leading-6 text-slate-900">
             {value}
-          </h3>
-
-          <p className="mt-1 text-[10px] text-slate-500">
-            {subtitle}
           </p>
         </div>
+
+        {Icon && (
+          <div
+            className={`shrink-0 rounded-lg p-2 ${iconBg}`}
+          >
+            <Icon
+              size={18}
+              className={iconColor}
+              strokeWidth={2}
+            />
+          </div>
+        )}
       </div>
-    </div>
+
+      {subtitle && (
+        <p className="mt-2 text-[10px] leading-4 text-slate-500">
+          {subtitle}
+        </p>
+      )}
+    </article>
   );
 };
 

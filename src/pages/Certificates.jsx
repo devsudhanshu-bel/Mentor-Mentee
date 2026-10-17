@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
 import Header from "../components/layouts/Header";
@@ -12,11 +12,29 @@ import UploadCertificateModal from "../components/Certificates/UploadCertificate
 
 const Certificates = () => {
   // ==========================================================
-  // UPLOAD MODAL
+  // MODAL STATE
   // ==========================================================
 
-  const [isUploadModalOpen, setIsUploadModalOpen] =
-    useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+
+  // ==========================================================
+  // REFRESH STATE
+  // Refreshes certificate statistics and list after changes.
+  // ==========================================================
+
+  const [refreshKey, setRefreshKey] = useState(0);
+
+  const handleOpenUploadModal = useCallback(() => {
+    setIsUploadModalOpen(true);
+  }, []);
+
+  const handleCloseUploadModal = useCallback(() => {
+    setIsUploadModalOpen(false);
+  }, []);
+
+  const handleCertificatesRefresh = useCallback(() => {
+    setRefreshKey((previousKey) => previousKey + 1);
+  }, []);
 
   // ==========================================================
   // RENDER
@@ -24,7 +42,6 @@ const Certificates = () => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-
       {/* ======================================================
           SIDEBAR
       ====================================================== */}
@@ -35,8 +52,7 @@ const Certificates = () => {
           MAIN CONTENT
       ====================================================== */}
 
-      <div className="ml-[290px] min-h-screen flex flex-col">
-
+      <div className="ml-[290px] flex min-h-screen flex-col">
         {/* ====================================================
             HEADER
         ==================================================== */}
@@ -48,7 +64,6 @@ const Certificates = () => {
         ==================================================== */}
 
         <main className="flex-1 p-6">
-
           {/* ==================================================
               BANNER
           ================================================== */}
@@ -62,53 +77,39 @@ const Certificates = () => {
           ================================================== */}
 
           <div className="mb-3">
-            <CertificatesStats />
+            <CertificatesStats refreshKey={refreshKey} />
           </div>
 
           {/* ==================================================
               MAIN CONTENT
           ================================================== */}
 
-          <div className="grid grid-cols-12 gap-3 items-start">
-
+          <div className="grid grid-cols-12 items-start gap-3">
             {/* ==================================================
-                LEFT SECTION
+                LEFT SECTION — CERTIFICATE LIST
             ================================================== */}
 
             <div className="col-span-8">
-
               <CertificateList
-                onUploadClick={() =>
-                  setIsUploadModalOpen(true)
-                }
+                onUploadClick={handleOpenUploadModal}
+                refreshKey={refreshKey}
+                onRefresh={handleCertificatesRefresh}
               />
-
             </div>
 
             {/* ==================================================
-                RIGHT SECTION
+                RIGHT SECTION — TIPS AND UPLOAD CARD
             ================================================== */}
 
             <div className="col-span-4 flex flex-col gap-3">
-
-              {/* TIPS */}
-
               <CertificatesTips />
 
-              {/* UPLOAD CARD */}
-
               <UploadCertificateCard
-                onUploadClick={() =>
-                  setIsUploadModalOpen(true)
-                }
+                onUploadClick={handleOpenUploadModal}
               />
-
             </div>
-
           </div>
-
         </main>
-
       </div>
 
       {/* ======================================================
@@ -117,11 +118,12 @@ const Certificates = () => {
 
       <UploadCertificateModal
         isOpen={isUploadModalOpen}
-        onClose={() =>
-          setIsUploadModalOpen(false)
-        }
+        onClose={handleCloseUploadModal}
+        onSuccess={() => {
+          handleCertificatesRefresh();
+          handleCloseUploadModal();
+        }}
       />
-
     </div>
   );
 };

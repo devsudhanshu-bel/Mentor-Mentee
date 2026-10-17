@@ -31,10 +31,6 @@ const StudentTableHeader = () => {
         <th className="px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-500">
           Status
         </th>
-
-        <th className="px-4 py-3 text-center text-[11px] font-semibold uppercase tracking-wide text-slate-500">
-          Actions
-        </th>
       </tr>
     </thead>
   );

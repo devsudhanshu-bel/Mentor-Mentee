@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 
 import AdminSidebar from "../../components/layouts/AdminSidebar";
@@ -12,9 +13,7 @@ import { getAdminDashboardOverview } from "../../api/dashboard.api";
 
 const Dashboard = () => {
   const [dashboard, setDashboard] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -37,7 +36,7 @@ const Dashboard = () => {
           setError(
             err?.response?.data?.message ||
               err?.message ||
-              "Failed to load dashboard.",
+              "Failed to load dashboard."
           );
         }
       } finally {
@@ -55,7 +54,6 @@ const Dashboard = () => {
   }, []);
 
   const kpis = dashboard?.kpis || {};
-
   const mentors = dashboard?.mentorWorkload || [];
 
   const unsupportedMetrics = dashboard?.unsupportedMetrics || {
@@ -65,39 +63,36 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* ================= Sidebar ================= */}
-
+      {/* Sidebar */}
       <AdminSidebar />
 
-      {/* ================= Main Content ================= */}
-
+      {/* Main content */}
       <div className="ml-[290px] min-h-screen flex flex-col">
-        {/* ================= Header ================= */}
-
+        {/* Header */}
         <AdminHeader />
 
-        {/* ================= Dashboard Content ================= */}
-
+        {/* Dashboard content */}
         <main className="flex-1 px-6 py-6 space-y-5">
-          {/* ================= Welcome Banner ================= */}
-
+          {/* Welcome banner */}
           <DashboardBanner />
 
-          {/* ================= Error ================= */}
-
+          {/* Error message */}
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div
+              role="alert"
+              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            >
               {error}
             </div>
           )}
 
-          {/* ================= KPI Cards ================= */}
-
+          {/* KPI cards */}
           {loading ? (
-            <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2">
-              {Array.from({
-                length: 8,
-              }).map((_, index) => (
+            <section
+              aria-label="Loading dashboard metrics"
+              className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2"
+            >
+              {Array.from({ length: 8 }).map((_, index) => (
                 <div
                   key={index}
                   className="h-[88px] rounded-xl bg-white border border-slate-200 animate-pulse"
@@ -105,14 +100,18 @@ const Dashboard = () => {
               ))}
             </section>
           ) : (
-            <KPICards kpis={kpis} unsupportedMetrics={unsupportedMetrics} />
+            <KPICards
+              kpis={kpis}
+              unsupportedMetrics={unsupportedMetrics}
+            />
           )}
 
-          {/* ================= Analytics Section ================= */}
-
-          <div className="grid grid-cols-1 xl:grid-cols-12 gap-5">
-            {/* ================= Students Per Mentor ================= */}
-
+          {/* Analytics */}
+          <section
+            aria-label="Dashboard analytics"
+            className="grid grid-cols-1 xl:grid-cols-12 gap-5"
+          >
+            {/* Students per mentor */}
             <div className="xl:col-span-4">
               {loading ? (
                 <div className="h-[420px] rounded-3xl bg-white border border-slate-200 animate-pulse" />
@@ -121,8 +120,7 @@ const Dashboard = () => {
               )}
             </div>
 
-            {/* ================= Mentor Workload ================= */}
-
+            {/* Mentor workload */}
             <div className="xl:col-span-8">
               {loading ? (
                 <div className="h-[420px] rounded-3xl bg-white border border-slate-200 animate-pulse" />
@@ -130,7 +128,7 @@ const Dashboard = () => {
                 <MentorWorkloadOverview mentors={mentors} />
               )}
             </div>
-          </div>
+          </section>
         </main>
       </div>
     </div>

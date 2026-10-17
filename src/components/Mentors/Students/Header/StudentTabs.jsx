@@ -1,8 +1,17 @@
 import React from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams } from "react-router-dom";
 
 const StudentTabs = () => {
   const { id } = useParams();
+  const location = useLocation();
+
+  const isAdminRoute = location.pathname.startsWith(
+    "/admin/overview/students/",
+  );
+
+  const basePath = isAdminRoute
+    ? `/admin/overview/students/${id}`
+    : `/mentor/students/${id}`;
 
   const tabs = [
     { name: "Overview", path: "overview" },
@@ -11,6 +20,8 @@ const StudentTabs = () => {
     { name: "Internships", path: "internships" },
     { name: "Research", path: "research" },
     { name: "Co-Curricular", path: "co-curricular" },
+    { name: "Extra Curricular", path: "extra-curricular" },
+    { name: "Awards & Achievements", path: "awards-achievements" },
     { name: "Documents", path: "documents" },
     { name: "Certificates", path: "certificates" },
   ];
@@ -21,7 +32,11 @@ const StudentTabs = () => {
         {tabs.map((tab) => (
           <NavLink
             key={tab.path}
-            to={`/mentor/students/${id}/${tab.path}`}
+            to={
+              tab.path === "overview"
+                ? basePath
+                : `${basePath}/${tab.path}`
+            }
             className={({ isActive }) =>
               `border-b-2 px-5 py-4 text-[13px] font-medium whitespace-nowrap transition-all duration-200 ${
                 isActive

@@ -1,117 +1,81 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
-import {
-  Plus,
-  FileSearch,
-} from "lucide-react";
+import { Plus, FileSearch } from "lucide-react";
 
 import ExtraCurricularActivityCard from "./ExtraCurricularActivityCard";
 import ExtraCurricularDocumentViewerModal from "./ExtraCurricularDocumentViewerModal";
 import ExtraCurricularDeleteModal from "./ExtraCurricularDeleteModal";
+import EditExtraCurricularModal from "./EditExtraCurricularModal";
 
 import {
   getDocumentsDashboard,
   deleteDocument,
+  updateDocument,
 } from "../../api/document.api";
 
-const ExtraCurricularActivityList = ({
-  onUploadClick,
-}) => {
+const ExtraCurricularActivityList = ({ onUploadClick }) => {
   // ==========================================================
   // ACTIVITIES
   // ==========================================================
 
-  const [
-    activities,
-    setActivities,
-  ] = useState([]);
+  const [activities, setActivities] = useState([]);
 
   // ==========================================================
-  // LOADING
+  // LOADING STATES
   // ==========================================================
 
-  const [loading, setLoading] =
-    useState(true);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
 
   // ==========================================================
-  // DELETE LOADING
+  // SELECTED ACTIVITY
   // ==========================================================
 
-  const [deleting, setDeleting] =
-    useState(false);
+  const [selectedActivity, setSelectedActivity] = useState(null);
 
   // ==========================================================
-  // SELECTED DOCUMENT
+  // DOCUMENT VIEWER
   // ==========================================================
 
-  const [
-    selectedActivity,
-    setSelectedActivity,
-  ] = useState(null);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
 
   // ==========================================================
-  // VIEWER STATE
+  // DELETE MODAL
   // ==========================================================
 
-  const [
-    isViewerOpen,
-    setIsViewerOpen,
-  ] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [documentToDelete, setDocumentToDelete] = useState(null);
 
   // ==========================================================
-  // DELETE MODAL STATE
+  // EDIT / REPLACE MODAL
   // ==========================================================
 
-  const [
-    isDeleteModalOpen,
-    setIsDeleteModalOpen,
-  ] = useState(false);
-
-  const [
-    documentToDelete,
-    setDocumentToDelete,
-  ] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [activityToEdit, setActivityToEdit] = useState(null);
 
   // ==========================================================
   // FETCH EXTRA-CURRICULAR DOCUMENTS
   // ==========================================================
 
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     try {
       setLoading(true);
 
-      const data =
-        await getDocumentsDashboard(
-          "EXTRA_CURRICULAR"
-        );
+      const data = await getDocumentsDashboard("EXTRA_CURRICULAR");
 
-      console.log(
-        "Extra-Curricular documents response:",
-        data
-      );
+      console.log("Extra-Curricular documents response:", data);
 
-      const documents =
-        Array.isArray(data?.documents)
+      const documents = Array.isArray(data)
+        ? data
+        : Array.isArray(data?.documents)
           ? data.documents
           : [];
 
-      // ======================================================
-      // ONLY EXTRA_CURRICULAR DOCUMENTS
-      // ======================================================
-
-      const extraCurricularDocuments =
-        documents.filter(
-          (document) =>
-            document?.category ===
-            "EXTRA_CURRICULAR"
-        );
-
-      setActivities(
-        extraCurricularDocuments
+      const extraCurricularDocuments = documents.filter(
+        (document) => document?.category === "EXTRA_CURRICULAR"
       );
+
+      setActivities(extraCurricularDocuments);
     } catch (error) {
       console.error(
         "ExtraCurricularActivityList.fetchActivities error:",
@@ -119,10 +83,15 @@ const ExtraCurricularActivityList = ({
       );
 
       setActivities([]);
+
+      alert(
+        error?.response?.data?.message ||
+          "Failed to load extra-curricular activities."
+      );
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // ==========================================================
   // INITIAL LOAD
@@ -130,26 +99,16 @@ const ExtraCurricularActivityList = ({
 
   useEffect(() => {
     fetchActivities();
-  }, []);
+  }, [fetchActivities]);
 
   // ==========================================================
   // VIEW DOCUMENT
   // ==========================================================
 
   const handleView = (activity) => {
-    if (!activity) {
-      return;
-    }
+    if (!activity) return;
 
-    console.log(
-      "Opening Extra-Curricular document:",
-      activity
-    );
-
-    // Store the exact uploaded document
     setSelectedActivity(activity);
-
-    // Open viewer modal
     setIsViewerOpen(true);
   };
 
@@ -168,39 +127,93 @@ const ExtraCurricularActivityList = ({
 
   const handleDownload = (activity) => {
     if (!activity?.fileUrl) {
-      alert(
-        "File URL is not available."
-      );
-
+      alert("File URL is not available.");
       return;
     }
 
-    const link =
-      window.document.createElement(
-        "a"
+    const link = window.document.createElement("a");
+
+    link.href = activity.fileUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.download =
+      activity.documentName || "extra-curricular-activity";
+
+    window.document.body.appendChild(link);
+    link.click();
+    window.document.body.removeChild(link);
+  };
+
+  // ==========================================================
+  // OPEN EDIT / REPLACE MODAL
+  // ==========================================================
+
+  const handleEdit = (activity) => {
+    if (!activity?.id) {
+      alert("The selected activity has no valid document ID.");
+      return;
+    }
+
+    setActivityToEdit(activity);
+    setIsEditModalOpen(true);
+  };
+
+  // ==========================================================
+  // CLOSE EDIT / REPLACE MODAL
+  // ==========================================================
+
+  const handleCloseEdit = () => {
+    setIsEditModalOpen(false);
+    setActivityToEdit(null);
+  };
+
+  // ==========================================================
+  // UPDATE AND RESUBMIT EXTRA-CURRICULAR DOCUMENT
+  // ==========================================================
+
+  const handleSaveEdit = async ({
+    id,
+    documentName,
+    description,
+    file,
+  }) => {
+    if (!id) {
+      throw new Error("The activity document ID is missing.");
+    }
+
+    if (!file) {
+      throw new Error("Please select the revised activity file.");
+    }
+
+    try {
+      await updateDocument({
+        documentId: id,
+        documentName,
+        category: "EXTRA_CURRICULAR",
+        description,
+        file,
+      });
+
+      // Refresh the list after the backend update succeeds.
+      await fetchActivities();
+
+      // Keep the viewer closed if the edited record was open.
+      if (selectedActivity?.id === id) {
+        setIsViewerOpen(false);
+        setSelectedActivity(null);
+      }
+
+      console.log(
+        "Extra-Curricular document updated and resubmitted successfully."
+      );
+    } catch (error) {
+      console.error(
+        "ExtraCurricularActivityList.handleSaveEdit error:",
+        error
       );
 
-    link.href =
-      activity.fileUrl;
-
-    link.target = "_blank";
-
-    link.rel =
-      "noopener noreferrer";
-
-    link.download =
-      activity.documentName ||
-      "extra-curricular-activity";
-
-    window.document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    window.document.body.removeChild(
-      link
-    );
+      throw error;
+    }
   };
 
   // ==========================================================
@@ -208,19 +221,9 @@ const ExtraCurricularActivityList = ({
   // ==========================================================
 
   const handleDelete = (activity) => {
-    if (!activity?.id) {
-      return;
-    }
+    if (!activity?.id) return;
 
-    console.log(
-      "Opening delete confirmation for:",
-      activity
-    );
-
-    // Store document selected for deletion
     setDocumentToDelete(activity);
-
-    // Open custom Extra-Curricular delete modal
     setIsDeleteModalOpen(true);
   };
 
@@ -229,9 +232,7 @@ const ExtraCurricularActivityList = ({
   // ==========================================================
 
   const handleCancelDelete = () => {
-    if (deleting) {
-      return;
-    }
+    if (deleting) return;
 
     setIsDeleteModalOpen(false);
     setDocumentToDelete(null);
@@ -242,56 +243,30 @@ const ExtraCurricularActivityList = ({
   // ==========================================================
 
   const handleConfirmDelete = async () => {
-    if (!documentToDelete?.id) {
-      return;
-    }
+    if (!documentToDelete?.id) return;
+
+    const deletingId = documentToDelete.id;
 
     try {
       setDeleting(true);
 
-      console.log(
-        "Deleting Extra-Curricular document:",
-        documentToDelete
+      await deleteDocument(deletingId);
+
+      setActivities((previous) =>
+        previous.filter((item) => item.id !== deletingId)
       );
-
-      // ======================================================
-      // DELETE FROM BACKEND
-      // ======================================================
-
-      await deleteDocument(
-        documentToDelete.id
-      );
-
-      // ======================================================
-      // REMOVE FROM UI
-      // ======================================================
-
-      setActivities(
-        (previous) =>
-          previous.filter(
-            (item) =>
-              item.id !==
-              documentToDelete.id
-          )
-      );
-
-      // ======================================================
-      // CLOSE DELETE MODAL
-      // ======================================================
 
       setIsDeleteModalOpen(false);
       setDocumentToDelete(null);
 
-      // ======================================================
-      // CLOSE VIEWER IF DELETED DOCUMENT IS OPEN
-      // ======================================================
-
-      if (
-        selectedActivity?.id ===
-        documentToDelete.id
-      ) {
+      if (selectedActivity?.id === deletingId) {
         setIsViewerOpen(false);
         setSelectedActivity(null);
+      }
+
+      if (activityToEdit?.id === deletingId) {
+        setIsEditModalOpen(false);
+        setActivityToEdit(null);
       }
 
       console.log(
@@ -318,18 +293,12 @@ const ExtraCurricularActivityList = ({
 
   return (
     <>
-      {/* ======================================================
-          MAIN ACTIVITY SECTION
-      ====================================================== */}
+      {/* MAIN ACTIVITY SECTION */}
 
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+        {/* HEADER */}
 
-        {/* ==================================================
-            HEADER
-        ================================================== */}
-
-        <div className="flex items-center justify-between mb-4">
-
+        <div className="mb-4 flex items-center justify-between gap-3">
           <h2 className="text-lg font-semibold text-slate-800">
             My Extra-Curricular Activities
           </h2>
@@ -337,102 +306,72 @@ const ExtraCurricularActivityList = ({
           <button
             type="button"
             onClick={onUploadClick}
-            className="h-9 px-3 flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium transition"
+            className="flex h-9 shrink-0 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={15} />
-
             Upload Activity
           </button>
-
         </div>
 
-        {/* ==================================================
-            LOADING
-        ================================================== */}
+        {/* LOADING */}
 
         {loading ? (
-
-          <div className="border border-slate-200 rounded-lg px-4 py-12 flex flex-col items-center justify-center">
-
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
+          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12">
+            <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
 
             <p className="text-sm text-slate-500">
               Loading extra-curricular activities...
             </p>
-
           </div>
-
         ) : activities.length === 0 ? (
+          /* EMPTY STATE */
 
-          /* ==================================================
-             EMPTY STATE
-          ================================================== */
-
-          <div className="border-2 border-dashed border-slate-200 rounded-lg px-6 py-12 flex flex-col items-center justify-center text-center">
-
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
-
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-6 py-12 text-center">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
               <FileSearch
                 size={23}
                 className="text-blue-600"
               />
-
             </div>
 
             <h3 className="text-sm font-semibold text-slate-700">
               No extra-curricular activities yet
             </h3>
 
-            <p className="text-xs text-slate-400 mt-1">
-              Upload your first certificate,
-              activity record, or participation
-              document.
+            <p className="mt-1 text-xs text-slate-400">
+              Upload your first certificate, activity record, or
+              participation document.
             </p>
 
             <button
               type="button"
               onClick={onUploadClick}
-              className="mt-4 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
+              className="mt-4 h-9 rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700"
             >
               Upload Activity
             </button>
-
           </div>
-
         ) : (
-
-          /* ==================================================
-             ACTIVITY LIST
-          ================================================== */
+          /* ACTIVITY LIST */
 
           <div className="space-y-2.5">
-
-            {activities.map(
-              (activity) => (
-                <ExtraCurricularActivityCard
-                  key={activity.id}
-                  activity={activity}
-                  onView={handleView}
-                  onDownload={
-                    handleDownload
-                  }
-                  onDelete={
-                    handleDelete
-                  }
-                  deleting={deleting}
-                />
-              )
-            )}
-
+            {activities.map((activity) => (
+              <ExtraCurricularActivityCard
+                key={activity.id}
+                activity={activity}
+                onView={handleView}
+                onDownload={handleDownload}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                onResubmit={handleEdit}
+                deleting={deleting}
+              />
+            ))}
           </div>
-
         )}
-
       </div>
 
-      {/* ======================================================
-          DOCUMENT VIEWER MODAL
-      ====================================================== */}
+      {/* DOCUMENT VIEWER MODAL */}
 
       <ExtraCurricularDocumentViewerModal
         isOpen={isViewerOpen}
@@ -440,9 +379,7 @@ const ExtraCurricularActivityList = ({
         document={selectedActivity}
       />
 
-      {/* ======================================================
-          EXTRA-CURRICULAR DELETE MODAL
-      ====================================================== */}
+      {/* DELETE CONFIRMATION MODAL */}
 
       <ExtraCurricularDeleteModal
         isOpen={isDeleteModalOpen}
@@ -450,6 +387,15 @@ const ExtraCurricularActivityList = ({
         onCancel={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         isDeleting={deleting}
+      />
+
+      {/* EDIT / REPLACE / RESUBMIT MODAL */}
+
+      <EditExtraCurricularModal
+        isOpen={isEditModalOpen}
+        onClose={handleCloseEdit}
+        onSave={handleSaveEdit}
+        activity={activityToEdit}
       />
     </>
   );

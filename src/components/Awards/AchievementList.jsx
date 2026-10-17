@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -11,12 +12,14 @@ import {
 
 import AchievementFilter from "./AchievementFilter";
 import AchievementCard from "./AchievementCard";
+import EditAchievementModal from "./EditAchievementModal";
 
 import AwardsDocumentViewerModal from "./AwardsDocumentViewerModal";
 import AwardsDeleteModal from "./AwardsDeleteModal";
 
 import {
   getDocumentsDashboard,
+  updateDocument,
   deleteDocument,
 } from "../../api/document.api";
 
@@ -28,152 +31,114 @@ const AchievementList = ({
   // STATE
   // ==========================================================
 
-  const [
-    achievements,
-    setAchievements,
-  ] = useState([]);
-
-  const [loading, setLoading] =
-    useState(true);
-
-  const [deleting, setDeleting] =
-    useState(false);
+  const [achievements, setAchievements] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false);
 
   // ==========================================================
   // VIEWER
   // ==========================================================
 
-  const [
-    selectedAchievement,
-    setSelectedAchievement,
-  ] = useState(null);
+  const [selectedAchievement, setSelectedAchievement] =
+    useState(null);
 
-  const [
-    isViewerOpen,
-    setIsViewerOpen,
-  ] = useState(false);
+  const [isViewerOpen, setIsViewerOpen] = useState(false);
+
+  // ==========================================================
+  // EDIT / RESUBMIT MODAL
+  // ==========================================================
+
+  const [achievementToEdit, setAchievementToEdit] =
+    useState(null);
+
+  const [isEditModalOpen, setIsEditModalOpen] =
+    useState(false);
 
   // ==========================================================
   // DELETE MODAL
   // ==========================================================
 
-  const [
-    isDeleteModalOpen,
-    setIsDeleteModalOpen,
-  ] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] =
+    useState(false);
 
-  const [
-    achievementToDelete,
-    setAchievementToDelete,
-  ] = useState(null);
+  const [achievementToDelete, setAchievementToDelete] =
+    useState(null);
 
   // ==========================================================
   // FILTER
   // ==========================================================
 
-  const [filter, setFilter] =
-    useState("ALL");
+  const [filter, setFilter] = useState("ALL");
 
   // ==========================================================
   // FETCH AWARDS
   // ==========================================================
 
-  const fetchAchievements =
-    async () => {
-      try {
-        setLoading(true);
+  const fetchAchievements = useCallback(async () => {
+    try {
+      setLoading(true);
 
-        const data =
-          await getDocumentsDashboard(
-            "AWARDS"
-          );
+      const data = await getDocumentsDashboard("AWARDS");
 
-        console.log(
-          "Awards documents response:",
-          data
-        );
+      const documents = Array.isArray(data?.documents)
+        ? data.documents
+        : Array.isArray(data)
+          ? data
+          : [];
 
-        const documents =
-          Array.isArray(
-            data?.documents
-          )
-            ? data.documents
-            : [];
+      const awardDocuments = documents.filter(
+        (document) => document?.category === "AWARDS"
+      );
 
-        const awardDocuments =
-          documents.filter(
-            (document) =>
-              document?.category ===
-              "AWARDS"
-          );
+      setAchievements(awardDocuments);
+    } catch (error) {
+      console.error(
+        "AchievementList.fetchAchievements error:",
+        error
+      );
 
-        setAchievements(
-          awardDocuments
-        );
-      } catch (error) {
-        console.error(
-          "AchievementList.fetchAchievements error:",
-          error
-        );
-
-        setAchievements([]);
-      } finally {
-        setLoading(false);
-      }
-    };
+      setAchievements([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   // ==========================================================
-  // INITIAL LOAD + REFRESH AFTER UPLOAD
+  // INITIAL LOAD + REFRESH AFTER UPLOAD / UPDATE
   // ==========================================================
 
   useEffect(() => {
     fetchAchievements();
-  }, [refreshKey]);
+  }, [fetchAchievements, refreshKey]);
 
   // ==========================================================
   // FILTERED DATA
   // ==========================================================
 
-  const filteredAchievements =
-    useMemo(() => {
-      if (filter === "ALL") {
-        return achievements;
-      }
+  const filteredAchievements = useMemo(() => {
+    if (filter === "ALL") {
+      return achievements;
+    }
 
-      return achievements.filter(
-        (achievement) => {
-          const level =
-            achievement?.level ||
-            achievement?.achievementLevel;
+    return achievements.filter((achievement) => {
+      const level =
+        achievement?.level ||
+        achievement?.achievementLevel;
 
-          return level === filter;
-        }
-      );
-    }, [
-      achievements,
-      filter,
-    ]);
+      return level === filter;
+    });
+  }, [achievements, filter]);
 
   // ==========================================================
   // VIEW
   // ==========================================================
 
-  const handleView = (
-    achievement
-  ) => {
+  const handleView = (achievement) => {
     if (!achievement) {
       return;
     }
 
-    console.log(
-      "Opening Award document:",
-      achievement
-    );
-
-    setSelectedAchievement(
-      achievement
-    );
-
+    setSelectedAchievement(achievement);
     setIsViewerOpen(true);
   };
 
@@ -181,70 +146,114 @@ const AchievementList = ({
   // CLOSE VIEWER
   // ==========================================================
 
-  const handleCloseViewer =
-    () => {
-      setIsViewerOpen(false);
-      setSelectedAchievement(null);
-    };
+  const handleCloseViewer = () => {
+    setIsViewerOpen(false);
+    setSelectedAchievement(null);
+  };
 
   // ==========================================================
   // DOWNLOAD
   // ==========================================================
 
-  const handleDownload = (
-    achievement
-  ) => {
+  const handleDownload = (achievement) => {
     if (!achievement?.fileUrl) {
-      alert(
-        "File URL is not available."
-      );
-
+      alert("File URL is not available.");
       return;
     }
 
-    const link =
-      window.document.createElement(
-        "a"
+    const link = window.document.createElement("a");
+
+    link.href = achievement.fileUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.download =
+      achievement.documentName || "award-document";
+
+    window.document.body.appendChild(link);
+    link.click();
+    window.document.body.removeChild(link);
+  };
+
+  // ==========================================================
+  // OPEN EDIT / REPLACE / RESUBMIT MODAL
+  // ==========================================================
+
+  const handleEdit = (achievement) => {
+    if (!achievement?.id) {
+      return;
+    }
+
+    setAchievementToEdit(achievement);
+    setIsEditModalOpen(true);
+  };
+
+  // ==========================================================
+  // CLOSE EDIT MODAL
+  // ==========================================================
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setAchievementToEdit(null);
+  };
+
+  // ==========================================================
+  // SAVE EDIT / RESUBMISSION
+  // ==========================================================
+
+  const handleSaveEdit = async ({
+    id,
+    documentName,
+    description,
+    file,
+  }) => {
+    if (!id) {
+      throw new Error("Achievement ID is missing.");
+    }
+
+    if (!file) {
+      throw new Error(
+        "Please select the revised achievement document."
+      );
+    }
+
+    try {
+      await updateDocument({
+        documentId: id,
+        documentName: documentName.trim(),
+        category: "AWARDS",
+        description: description?.trim() || "",
+        file,
+      });
+
+      // Close the viewer if the edited achievement is open.
+      if (selectedAchievement?.id === id) {
+        setIsViewerOpen(false);
+        setSelectedAchievement(null);
+      }
+
+      // The edit modal calls onSuccess after onSave resolves.
+      // Its onSuccess callback refreshes the list.
+      return true;
+    } catch (error) {
+      console.error(
+        "AchievementList.handleSaveEdit error:",
+        error
       );
 
-    link.href =
-      achievement.fileUrl;
-
-    link.target = "_blank";
-
-    link.rel =
-      "noopener noreferrer";
-
-    link.download =
-      achievement.documentName ||
-      "award-document";
-
-    window.document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    window.document.body.removeChild(
-      link
-    );
+      throw error;
+    }
   };
 
   // ==========================================================
   // OPEN DELETE MODAL
   // ==========================================================
 
-  const handleDelete = (
-    achievement
-  ) => {
+  const handleDelete = (achievement) => {
     if (!achievement?.id) {
       return;
     }
 
-    setAchievementToDelete(
-      achievement
-    );
-
+    setAchievementToDelete(achievement);
     setIsDeleteModalOpen(true);
   };
 
@@ -252,78 +261,58 @@ const AchievementList = ({
   // CANCEL DELETE
   // ==========================================================
 
-  const handleCancelDelete =
-    () => {
-      if (deleting) {
-        return;
-      }
+  const handleCancelDelete = () => {
+    if (deleting) {
+      return;
+    }
 
-      setIsDeleteModalOpen(false);
-      setAchievementToDelete(null);
-    };
+    setIsDeleteModalOpen(false);
+    setAchievementToDelete(null);
+  };
 
   // ==========================================================
   // CONFIRM DELETE
   // ==========================================================
 
-  const handleConfirmDelete =
-    async () => {
+  const handleConfirmDelete = async () => {
+    if (!achievementToDelete?.id || deleting) {
+      return;
+    }
+
+    try {
+      setDeleting(true);
+
+      await deleteDocument(achievementToDelete.id);
+
+      setAchievements((previous) =>
+        previous.filter(
+          (item) => item.id !== achievementToDelete.id
+        )
+      );
+
       if (
-        !achievementToDelete?.id ||
-        deleting
+        selectedAchievement?.id === achievementToDelete.id
       ) {
-        return;
+        setIsViewerOpen(false);
+        setSelectedAchievement(null);
       }
 
-      try {
-        setDeleting(true);
+      setIsDeleteModalOpen(false);
+      setAchievementToDelete(null);
+    } catch (error) {
+      console.error(
+        "AchievementList.handleConfirmDelete error:",
+        error
+      );
 
-        await deleteDocument(
-          achievementToDelete.id
-        );
-
-        setAchievements(
-          (previous) =>
-            previous.filter(
-              (item) =>
-                item.id !==
-                achievementToDelete.id
-            )
-        );
-
-        if (
-          selectedAchievement?.id ===
-          achievementToDelete.id
-        ) {
-          setIsViewerOpen(false);
-          setSelectedAchievement(
-            null
-          );
-        }
-
-        setIsDeleteModalOpen(false);
-        setAchievementToDelete(
-          null
-        );
-
-        console.log(
-          "Award deleted successfully."
-        );
-      } catch (error) {
-        console.error(
-          "AchievementList.handleConfirmDelete error:",
-          error
-        );
-
-        alert(
-          error?.response?.data
-            ?.message ||
-            "Failed to delete the award."
-        );
-      } finally {
-        setDeleting(false);
-      }
-    };
+      alert(
+        error?.response?.data?.message ||
+          "Failed to delete the award."
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   // ==========================================================
   // RENDER
@@ -332,19 +321,14 @@ const AchievementList = ({
   return (
     <>
       <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+        {/* HEADER */}
 
-        {/* ==================================================
-            HEADER
-        ================================================== */}
-
-        <div className="flex items-center justify-between mb-5">
-
+        <div className="flex items-center justify-between mb-5 gap-3">
           <h2 className="text-lg font-semibold text-slate-800">
             Your Achievements
           </h2>
 
           <div className="flex items-center gap-2">
-
             <AchievementFilter
               value={filter}
               onChange={setFilter}
@@ -356,46 +340,30 @@ const AchievementList = ({
               className="h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium flex items-center gap-2 transition"
             >
               <Plus size={15} />
-
               Add Achievement
             </button>
-
           </div>
-
         </div>
 
-        {/* ==================================================
-            LOADING
-        ================================================== */}
+        {/* LOADING */}
 
         {loading ? (
-
           <div className="border border-slate-200 rounded-lg px-4 py-12 flex flex-col items-center justify-center">
-
             <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
 
             <p className="text-sm text-slate-500">
               Loading achievements...
             </p>
-
           </div>
-
-        ) : filteredAchievements.length ===
-          0 ? (
-
-          /* ==================================================
-             EMPTY STATE
-          ================================================== */
+        ) : filteredAchievements.length === 0 ? (
+          /* EMPTY STATE */
 
           <div className="border-2 border-dashed border-slate-200 rounded-lg px-6 py-12 flex flex-col items-center justify-center text-center">
-
             <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
-
               <FileSearch
                 size={23}
                 className="text-blue-600"
               />
-
             </div>
 
             <h3 className="text-sm font-semibold text-slate-700">
@@ -413,89 +381,59 @@ const AchievementList = ({
             {filter === "ALL" && (
               <button
                 type="button"
-                onClick={
-                  onUploadClick
-                }
+                onClick={onUploadClick}
                 className="mt-4 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
               >
                 Upload Achievement
               </button>
             )}
-
           </div>
-
         ) : (
-
-          /* ==================================================
-             LIST
-          ================================================== */
+          /* ACHIEVEMENT LIST */
 
           <div className="space-y-2.5">
-
-            {filteredAchievements.map(
-              (achievement) => (
-                <AchievementCard
-                  key={
-                    achievement.id
-                  }
-                  achievement={
-                    achievement
-                  }
-                  onView={
-                    handleView
-                  }
-                  onDownload={
-                    handleDownload
-                  }
-                  onDelete={
-                    handleDelete
-                  }
-                  deleting={
-                    deleting
-                  }
-                />
-              )
-            )}
-
+            {filteredAchievements.map((achievement) => (
+              <AchievementCard
+                key={achievement.id}
+                achievement={achievement}
+                onView={handleView}
+                onDownload={handleDownload}
+                onDelete={handleDelete}
+                onEdit={handleEdit}
+                onResubmit={handleEdit}
+                deleting={deleting}
+              />
+            ))}
           </div>
         )}
-
       </div>
 
-      {/* ======================================================
-          VIEWER
-      ====================================================== */}
+      {/* EDIT / REPLACE / RESUBMIT MODAL */}
+
+      <EditAchievementModal
+        isOpen={isEditModalOpen}
+        achievement={achievementToEdit}
+        onClose={handleCloseEditModal}
+        onSave={handleSaveEdit}
+        onSuccess={fetchAchievements}
+      />
+
+      {/* DOCUMENT VIEWER */}
 
       <AwardsDocumentViewerModal
         isOpen={isViewerOpen}
-        onClose={
-          handleCloseViewer
-        }
-        document={
-          selectedAchievement
-        }
+        onClose={handleCloseViewer}
+        document={selectedAchievement}
       />
 
-      {/* ======================================================
-          DELETE MODAL
-      ====================================================== */}
+      {/* DELETE CONFIRMATION */}
 
       <AwardsDeleteModal
-        isOpen={
-          isDeleteModalOpen
-        }
-        document={
-          achievementToDelete
-        }
-        onCancel={
-          handleCancelDelete
-        }
-        onConfirm={
-          handleConfirmDelete
-        }
-        isDeleting={
-          deleting
-        }
+        isOpen={isDeleteModalOpen}
+        document={achievementToDelete}
+        onCancel={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        isDeleting={deleting}
       />
     </>
   );

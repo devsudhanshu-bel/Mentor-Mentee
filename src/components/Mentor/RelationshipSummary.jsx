@@ -25,6 +25,9 @@ const formatDate = (value) => {
 };
 
 const RelationshipSummary = ({ mentorData, loading = false }) => {
+  // ==========================================================
+  // LOADING STATE
+  // ==========================================================
   if (loading) {
     return (
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
@@ -46,41 +49,56 @@ const RelationshipSummary = ({ mentorData, loading = false }) => {
     );
   }
 
+  // ==========================================================
+  // ASSIGNMENT DATA
+  // ==========================================================
   const assigned = mentorData?.assigned === true;
 
+  const assignment = mentorData?.assignment;
   const relationship = mentorData?.relationship;
+
+  // Support both the current backend response and a future
+  // normalized relationship response.
+  const term = relationship?.term ?? assignment?.term;
+
+  const mentorSince =
+    relationship?.mentorSince ?? assignment?.assignedAt;
+
+  const assignmentStatus =
+    relationship?.assignmentStatus ?? assignment?.status;
+
+  const semesterNumber = term?.semesterNumber;
+
+  const termName =
+    term?.name ||
+    (semesterNumber ? `Semester ${semesterNumber}` : null);
 
   const items = [
     {
       icon: <UserRound size={15} />,
       label: "Mentor Since",
-      value: assigned ? formatDate(relationship?.mentorSince) : "Not assigned",
+      value: assigned ? formatDate(mentorSince) : "Not assigned",
     },
-
     {
       icon: <CalendarDays size={15} />,
       label: "Current Term",
-      value:
-        relationship?.term?.name || relationship?.term?.semesterNumber
-          ? `Semester ${relationship.term.semesterNumber}`
-          : "Not available",
+      value: assigned ? termName || "Not available" : "Not assigned",
     },
-
     {
       icon: <ShieldCheck size={15} />,
       label: "Assignment Status",
-      value: relationship?.assignmentStatus || "Not assigned",
+      value: assigned ? assignmentStatus || "Not available" : "Not assigned",
     },
-
     {
       icon: <CalendarDays size={15} />,
       label: "Term Ends",
-      value: relationship?.term?.endDate
-        ? formatDate(relationship.term.endDate)
-        : "Not available",
+      value: term?.endDate ? formatDate(term.endDate) : "Not available",
     },
   ];
 
+  // ==========================================================
+  // RENDER
+  // ==========================================================
   return (
     <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 hover:shadow-md transition-all duration-300 h-full">
       {/* Header */}
@@ -94,8 +112,11 @@ const RelationshipSummary = ({ mentorData, loading = false }) => {
 
       {/* Details */}
       <div className="space-y-4">
-        {items.map((item, index) => (
-          <div key={index} className="flex items-center justify-between gap-4">
+        {items.map((item) => (
+          <div
+            key={item.label}
+            className="flex items-center justify-between gap-4"
+          >
             <div className="flex items-center gap-2 text-slate-600">
               {item.icon}
 

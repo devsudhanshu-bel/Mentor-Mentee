@@ -2,40 +2,40 @@ import React from "react";
 
 const DocumentStatCard = ({
   icon: Icon,
-  iconBg,
-  iconColor,
+  iconBg = "bg-blue-100",
+  iconColor = "text-blue-600",
   title,
-  value,
+  value = 0,
   subtitle,
 }) => {
   return (
-    <div className="flex items-center gap-4 rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-      {/* Icon */}
+    <div className="flex min-w-0 items-center gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2.5 shadow-sm">
+      {Icon && (
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${iconBg}`}
+        >
+          <Icon
+            size={18}
+            className={iconColor}
+            strokeWidth={2}
+          />
+        </div>
+      )}
 
-      <div
-        className={`flex h-14 w-14 items-center justify-center rounded-2xl ${iconBg}`}
-      >
-        <Icon
-          size={24}
-          className={iconColor}
-          strokeWidth={2}
-        />
-      </div>
-
-      {/* Content */}
-
-      <div className="flex flex-col">
-        <span className="text-[12px] font-medium text-slate-500">
+      <div className="flex min-w-0 flex-col">
+        <span className="text-[10px] font-medium leading-4 text-slate-500">
           {title}
         </span>
 
-        <span className="mt-0.5 text-[18px] font-bold leading-none text-slate-800">
+        <span className="mt-0.5 text-base font-bold leading-5 text-slate-800">
           {value}
         </span>
 
-        <span className="mt-1 text-[11px] text-slate-500">
-          {subtitle}
-        </span>
+        {subtitle && (
+          <span className="mt-1 text-[9px] leading-3 text-slate-500">
+            {subtitle}
+          </span>
+        )}
       </div>
     </div>
   );

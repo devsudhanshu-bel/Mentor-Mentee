@@ -7,371 +7,486 @@ import {
   Eye,
   Download,
   Trash2,
+  CalendarDays,
+  MessageSquare,
+  BadgeCheck,
+  Clock3,
+  RotateCcw,
+  Pencil,
 } from "lucide-react";
+
+// ==========================================================
+// REVIEW STATUS CONFIGURATION
+// ==========================================================
+
+const STATUS_CONFIG = {
+  NOT_REVIEWED: {
+    label: "Pending Review",
+    className: "border-amber-200 bg-amber-50 text-amber-700",
+    icon: Clock3,
+  },
+  PENDING: {
+    label: "Pending Review",
+    className: "border-amber-200 bg-amber-50 text-amber-700",
+    icon: Clock3,
+  },
+  PENDING_REVIEW: {
+    label: "Pending Review",
+    className: "border-amber-200 bg-amber-50 text-amber-700",
+    icon: Clock3,
+  },
+  UNDER_REVIEW: {
+    label: "Under Review",
+    className: "border-blue-200 bg-blue-50 text-blue-700",
+    icon: Clock3,
+  },
+  SUBMITTED: {
+    label: "Pending Review",
+    className: "border-amber-200 bg-amber-50 text-amber-700",
+    icon: Clock3,
+  },
+  VERIFIED: {
+    label: "Verified",
+    className: "border-green-200 bg-green-50 text-green-700",
+    icon: BadgeCheck,
+  },
+  APPROVED: {
+    label: "Verified",
+    className: "border-green-200 bg-green-50 text-green-700",
+    icon: BadgeCheck,
+  },
+  CORRECTIONS_REQUESTED: {
+    label: "Corrections Requested",
+    className: "border-orange-200 bg-orange-50 text-orange-700",
+    icon: RotateCcw,
+  },
+  REJECTED: {
+    label: "Not Approved",
+    className: "border-red-200 bg-red-50 text-red-700",
+    icon: RotateCcw,
+  },
+  DRAFT: {
+    label: "Draft",
+    className: "border-slate-200 bg-slate-50 text-slate-600",
+    icon: FileText,
+  },
+};
+
+// ==========================================================
+// STATUS HELPERS
+// ==========================================================
+
+const normalizeStatus = (value) =>
+  String(value ?? "")
+    .trim()
+    .toUpperCase()
+    .replace(/[\s-]+/g, "_");
+
+const getActivityStatus = (activity) => {
+  const rawStatus =
+    activity?.extraCurricularReviewStatus ??
+    activity?.extraCurricularStatus ??
+    activity?.researchReviewStatus ??
+    activity?.reviewStatus ??
+    activity?.verificationStatus ??
+    activity?.approvalStatus ??
+    activity?.status;
+
+  const normalized = normalizeStatus(rawStatus);
+
+  const correctionRequested =
+    activity?.correctionsRequested === true ||
+    activity?.requiresCorrection === true ||
+    activity?.correctionRequired === true;
+
+  if (
+    correctionRequested &&
+    !["VERIFIED", "APPROVED"].includes(normalized)
+  ) {
+    return "CORRECTIONS_REQUESTED";
+  }
+
+  return STATUS_CONFIG[normalized] ? normalized : "NOT_REVIEWED";
+};
+
+const isApproved = (activity) =>
+  ["VERIFIED", "APPROVED"].includes(getActivityStatus(activity));
+
+const canResubmit = (activity) =>
+  ["CORRECTIONS_REQUESTED", "REJECTED"].includes(
+    getActivityStatus(activity)
+  );
+
+// ==========================================================
+// COMPONENT
+// ==========================================================
 
 const ExtraCurricularActivityCard = ({
   activity,
   onView,
   onDownload,
   onDelete,
+  onEdit,
+  onResubmit,
   deleting = false,
 }) => {
-  // ==========================================================
-  // SAFETY
-  // ==========================================================
+  if (!activity) return null;
 
-  if (!activity) {
-    return null;
-  }
+  const currentStatus = getActivityStatus(activity);
+  const status = STATUS_CONFIG[currentStatus];
+  const StatusIcon = status.icon;
 
-  // ==========================================================
+  const approved = isApproved(activity);
+  const editable = canResubmit(activity);
+
+  // ========================================================
+  // DOCUMENT DETAILS
+  // ========================================================
+
+  const documentName =
+    activity.documentName ??
+    activity.fileName ??
+    activity.title ??
+    "Untitled Activity";
+
+  const description = activity.description ?? "";
+
+  const mentorRemark =
+    activity.mentorRemark ??
+    activity.reviewRemark ??
+    activity.reviewComments ??
+    activity.feedback ??
+    "";
+
+  const submittedDate =
+    activity.submittedAt ??
+    activity.uploadedAt ??
+    activity.createdAt;
+
+  const reviewedDate =
+    activity.reviewedAt ??
+    activity.verifiedAt ??
+    activity.approvedAt;
+
+  // ========================================================
   // FILE EXTENSION
-  // ==========================================================
+  // ========================================================
 
   const getFileExtension = () => {
-    if (activity?.fileType) {
-      return activity.fileType
-        .toLowerCase()
-        .replace(".", "")
-        .split("/")
-        .pop();
+    const fileType = String(activity.fileType ?? "")
+      .toLowerCase()
+      .trim();
+
+    if (fileType.includes("/")) {
+      const subtype = fileType.split("/").pop();
+
+      if (subtype === "pdf") return "pdf";
+      if (subtype.includes("word")) return "docx";
+      if (subtype.includes("presentation")) return "pptx";
+      if (subtype.includes("spreadsheet")) return "xlsx";
+      if (subtype.includes("jpeg")) return "jpg";
+      if (subtype.includes("png")) return "png";
     }
 
-    if (activity?.documentName) {
-      const parts =
-        activity.documentName.split(".");
-
-      if (parts.length > 1) {
-        return parts.pop().toLowerCase();
-      }
+    if (fileType) {
+      return fileType.replace(/^\./, "");
     }
 
-    return "";
+    const fileName =
+      activity.originalFileName ??
+      activity.fileName ??
+      activity.documentName ??
+      "";
+
+    const parts = fileName.split(".");
+    return parts.length > 1 ? parts.pop().toLowerCase() : "";
   };
 
   const fileExtension = getFileExtension();
 
-  // ==========================================================
+  // ========================================================
   // FILE ICON
-  // ==========================================================
+  // ========================================================
 
-  const getIcon = () => {
-    switch (fileExtension) {
-      // ------------------------------------------------------
-      // PDF
-      // ------------------------------------------------------
-
-      case "pdf":
-        return (
-          <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-            <FileText
-              size={18}
-              className="text-red-500"
-            />
-          </div>
-        );
-
-      // ------------------------------------------------------
-      // WORD
-      // ------------------------------------------------------
-
-      case "doc":
-      case "docx":
-        return (
-          <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-            <FileText
-              size={18}
-              className="text-blue-500"
-            />
-          </div>
-        );
-
-      // ------------------------------------------------------
-      // POWERPOINT
-      // ------------------------------------------------------
-
-      case "ppt":
-      case "pptx":
-        return (
-          <div className="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center shrink-0">
-            <Presentation
-              size={18}
-              className="text-orange-500"
-            />
-          </div>
-        );
-
-      // ------------------------------------------------------
-      // EXCEL
-      // ------------------------------------------------------
-
-      case "xls":
-      case "xlsx":
-        return (
-          <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center shrink-0">
-            <FileSpreadsheet
-              size={18}
-              className="text-green-500"
-            />
-          </div>
-        );
-
-      // ------------------------------------------------------
-      // OTHER
-      // ------------------------------------------------------
-
-      default:
-        return (
-          <div className="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center shrink-0">
-            <FileText
-              size={18}
-              className="text-slate-500"
-            />
-          </div>
-        );
-    }
-  };
-
-  // ==========================================================
-  // FORMAT DATE
-  // ==========================================================
-
-  const formatDate = (date) => {
-    if (!date) {
-      return "Unknown date";
-    }
-
-    try {
-      const parsedDate = new Date(date);
-
-      if (
-        Number.isNaN(
-          parsedDate.getTime()
-        )
-      ) {
-        return "Unknown date";
-      }
-
-      return parsedDate.toLocaleDateString(
-        "en-US",
-        {
-          month: "long",
-          year: "numeric",
-        }
+  const renderFileIcon = () => {
+    if (fileExtension === "pdf") {
+      return (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50">
+          <FileText size={18} className="text-red-500" />
+        </div>
       );
-    } catch {
-      return "Unknown date";
     }
+
+    if (["doc", "docx"].includes(fileExtension)) {
+      return (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+          <FileText size={18} className="text-blue-500" />
+        </div>
+      );
+    }
+
+    if (["ppt", "pptx"].includes(fileExtension)) {
+      return (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50">
+          <Presentation size={18} className="text-orange-500" />
+        </div>
+      );
+    }
+
+    if (["xls", "xlsx"].includes(fileExtension)) {
+      return (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-green-50">
+          <FileSpreadsheet size={18} className="text-green-500" />
+        </div>
+      );
+    }
+
+    return (
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100">
+        <FileText size={18} className="text-slate-500" />
+      </div>
+    );
   };
 
-  // ==========================================================
-  // FILE SIZE
-  // ==========================================================
+  // ========================================================
+  // FORMATTERS
+  // ========================================================
 
-  const formatFileSize = (bytes) => {
-    if (!bytes) {
+  const formatDate = (value) => {
+    if (!value) return "Unknown date";
+
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return "Unknown date";
+    }
+
+    return date.toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
+  const formatFileSize = (value) => {
+    if (
+      value == null ||
+      value === "" ||
+      !Number.isFinite(Number(value)) ||
+      Number(value) < 0
+    ) {
       return "";
     }
 
-    if (bytes < 1024) {
-      return `${bytes} B`;
+    const bytes = Number(value);
+
+    if (bytes < 1024) return `${bytes} B`;
+
+    if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(1)} KB`;
     }
 
-    if (
-      bytes <
-      1024 * 1024
-    ) {
-      return `${(
-        bytes / 1024
-      ).toFixed(1)} KB`;
-    }
-
-    return `${(
-      bytes /
-      (1024 * 1024)
-    ).toFixed(2)} MB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
   };
 
-  // ==========================================================
-  // VIEW
-  // ==========================================================
+  const fileSize = formatFileSize(activity.fileSize);
 
-  const handleViewClick = (
-    event
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
+  // ========================================================
+  // ACTIONS
+  // ========================================================
 
-    if (!activity) {
+  const handleView = () => {
+    if (!activity.id) {
+      alert("This activity does not have a valid ID.");
       return;
     }
 
     onView?.(activity);
   };
 
-  // ==========================================================
-  // DOWNLOAD
-  // ==========================================================
-
-  const handleDownloadClick = (
-    event
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (!activity) {
+  const handleDownload = () => {
+    if (!activity.id) {
+      alert("This activity does not have a valid ID.");
       return;
     }
 
     onDownload?.(activity);
   };
 
-  // ==========================================================
-  // DELETE
-  // ==========================================================
+  const handleEdit = () => {
+    if (!activity.id || !editable) return;
 
-  const handleDeleteClick = (
-    event
-  ) => {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (
-      deleting ||
-      !activity
-    ) {
+    if (typeof onEdit !== "function") {
+      alert("The edit action is not connected to the Extra-Curricular page.");
       return;
     }
 
-    /*
-     * IMPORTANT:
-     *
-     * The card does NOT delete directly.
-     *
-     * It sends the selected activity
-     * to ExtraCurricularActivityList,
-     * which opens ExtraCurricularDeleteModal.
-     */
+    onEdit(activity);
+  };
+
+  const handleResubmit = () => {
+    if (!activity.id || !editable) return;
+
+    if (typeof onResubmit !== "function") {
+      alert("The resubmit action is not connected to the Extra-Curricular page.");
+      return;
+    }
+
+    onResubmit(activity);
+  };
+
+  const handleDelete = () => {
+    if (!activity.id || approved || deleting) return;
 
     onDelete?.(activity);
   };
 
-  // ==========================================================
+  // ========================================================
   // RENDER
-  // ==========================================================
+  // ========================================================
 
   return (
-    <div className="border border-slate-200 rounded-lg px-4 py-3 flex items-center justify-between hover:shadow-sm transition">
-
-      {/* ====================================================
-          LEFT SIDE
-      ==================================================== */}
-
-      <div className="flex items-center gap-3 min-w-0">
-
-        {/* FILE ICON */}
-
-        {getIcon()}
-
+    <article className="rounded-xl border border-slate-200 bg-white px-4 py-4 transition hover:border-blue-200 hover:shadow-sm">
+      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
         {/* DOCUMENT DETAILS */}
 
-        <div className="min-w-0">
+        <div className="flex min-w-0 flex-1 items-start gap-3">
+          {renderFileIcon()}
 
-          <h3
-            className="text-sm font-semibold text-slate-800 truncate max-w-[600px]"
-            title={
-              activity?.documentName
-            }
-          >
-            {activity?.documentName ||
-              "Untitled Activity"}
-          </h3>
+          <div className="min-w-0 flex-1">
+            <h3
+              className="break-words text-sm font-semibold text-slate-800"
+              title={documentName}
+            >
+              {documentName}
+            </h3>
 
-          <p className="text-xs text-slate-500 mt-0.5">
+            <p className="mt-1 text-xs text-slate-500">
+              Extra-Curricular Activity
+            </p>
 
-            Extra-Curricular Activity
-
-            <span className="mx-1.5">
-              •
-            </span>
-
-            {formatDate(
-              activity?.uploadedAt
+            {description && (
+              <p className="mt-2 whitespace-pre-wrap break-words text-sm text-slate-600">
+                {description}
+              </p>
             )}
 
-            {activity?.fileSize ? (
-              <>
-                <span className="mx-1.5">
-                  •
-                </span>
+            <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
+              <span className="inline-flex items-center gap-1.5">
+                <CalendarDays size={13} />
+                Submitted {formatDate(submittedDate)}
+              </span>
 
-                {formatFileSize(
-                  activity.fileSize
-                )}
-              </>
-            ) : null}
-
-          </p>
-
+              {fileSize && <span>{fileSize}</span>}
+            </div>
+          </div>
         </div>
 
+        {/* STATUS AND ACTIONS */}
+
+        <div className="flex shrink-0 flex-wrap items-center gap-2 xl:justify-end">
+          <span
+            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${status.className}`}
+          >
+            <StatusIcon size={14} />
+            {status.label}
+          </span>
+
+          <button
+            type="button"
+            onClick={handleView}
+            title="View document"
+            aria-label={`View ${documentName}`}
+            className="rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+          >
+            <Eye size={17} />
+          </button>
+
+          <button
+            type="button"
+            onClick={handleDownload}
+            title="Download document"
+            aria-label={`Download ${documentName}`}
+            className="rounded-md p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+          >
+            <Download size={17} />
+          </button>
+
+          {/* EDIT / REPLACE AND RESUBMIT */}
+
+          {editable && (
+            <>
+              <button
+                type="button"
+                onClick={handleEdit}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-medium text-orange-700 transition hover:bg-orange-100"
+              >
+                <Pencil size={15} />
+                Edit / Replace
+              </button>
+
+              <button
+                type="button"
+                onClick={handleResubmit}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+              >
+                <RotateCcw size={15} />
+                Resubmit
+              </button>
+            </>
+          )}
+
+          {/* DELETE */}
+
+          {!approved && (
+            <button
+              type="button"
+              disabled={deleting}
+              onClick={handleDelete}
+              title="Delete activity"
+              aria-label={`Delete ${documentName}`}
+              className="rounded-md p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              <Trash2 size={17} />
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* ====================================================
-          ACTIONS
-      ==================================================== */}
+      {/* MENTOR FEEDBACK */}
 
-      <div className="flex items-center gap-1 ml-4 shrink-0">
+      {(mentorRemark || reviewedDate) && (
+        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3">
+          <p className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+            <MessageSquare size={14} />
+            Mentor Feedback
+          </p>
 
-        {/* ==================================================
-            VIEW
-        ================================================== */}
+          {mentorRemark && (
+            <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-5 text-slate-600">
+              {mentorRemark}
+            </p>
+          )}
 
-        <button
-          type="button"
-          onClick={
-            handleViewClick
-          }
-          title="View"
-          className="p-2 rounded-md hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition"
-        >
-          <Eye size={17} />
-        </button>
+          {reviewedDate && (
+            <p className="mt-2 text-xs text-slate-400">
+              Reviewed on {formatDate(reviewedDate)}
+            </p>
+          )}
+        </div>
+      )}
 
-        {/* ==================================================
-            DOWNLOAD
-        ================================================== */}
+      {/* CORRECTION INSTRUCTIONS */}
 
-        <button
-          type="button"
-          onClick={
-            handleDownloadClick
-          }
-          title="Download"
-          className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition"
-        >
-          <Download size={17} />
-        </button>
-
-        {/* ==================================================
-            DELETE
-        ================================================== */}
-
-        <button
-          type="button"
-          disabled={deleting}
-          onClick={
-            handleDeleteClick
-          }
-          title="Delete"
-          className="p-2 rounded-md hover:bg-red-50 text-slate-500 hover:text-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          <Trash2 size={17} />
-        </button>
-
-      </div>
-
-    </div>
+      {editable && (
+        <div className="mt-3 rounded-lg border border-orange-100 bg-orange-50/70 px-3 py-2">
+          <p className="text-xs leading-5 text-orange-800">
+            Please review your mentor&apos;s feedback, update your document,
+            and resubmit it for review.
+          </p>
+        </div>
+      )}
+    </article>
   );
 };
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 
 import AdminSidebar from "../../components/layouts/AdminSidebar";
 import AdminHeader from "../../components/layouts/AdminHeader";
@@ -25,8 +26,35 @@ import MentorRemarks from "../../components/Mentors/Students/Overview/MentorRema
 import ActionItems from "../../components/Mentors/Students/Overview/ActionItems";
 
 const AdminStudentDetails = () => {
+  const { studentId, mentorId } = useParams();
+
+  // Supports both Admin URL formats:
+  // /admin/overview/students/:studentId
+  // /admin/mentor/:mentorId/student/:studentId/overview
+
+  if (!studentId) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-slate-100">
+        <div className="rounded-xl border border-red-100 bg-white p-6 text-center shadow-sm">
+          <h2 className="text-lg font-semibold text-slate-800">
+            Student ID Missing
+          </h2>
+
+          <p className="mt-2 text-sm text-slate-500">
+            Unable to display the student overview because no student ID
+            was provided in the URL.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div
+      className="min-h-screen bg-slate-100"
+      data-student-id={studentId}
+      data-mentor-id={mentorId || ""}
+    >
       {/* ================= Sidebar ================= */}
       <AdminSidebar />
 
@@ -87,7 +115,7 @@ const AdminStudentDetails = () => {
               </div>
 
               {/* Mentor Section */}
-              <div className="grid grid-cols-12 gap-2 items-start">
+              <div className="grid grid-cols-12 items-start gap-2">
                 <div className="col-span-4">
                   <MentorRemarks />
                 </div>

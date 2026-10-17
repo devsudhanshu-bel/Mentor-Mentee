@@ -1,8 +1,7 @@
+
 import {
   FileText,
   MessageCircle,
-  CheckSquare,
-  BookOpen,
   Star,
   CalendarDays,
 } from "lucide-react";
@@ -15,22 +14,12 @@ export const sidebarItems = [
   },
   {
     id: "discussion",
-    title: "Discussion",
+    title: "Discussion Points",
     icon: MessageCircle,
   },
   {
-    id: "actions",
-    title: "Action Items",
-    icon: CheckSquare,
-  },
-  {
-    id: "resources",
-    title: "Resources",
-    icon: BookOpen,
-  },
-  {
     id: "feedback",
-    title: "Feedback",
+    title: "Mentor Feedback",
     icon: Star,
   },
   {
