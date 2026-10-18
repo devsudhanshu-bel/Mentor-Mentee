@@ -77,11 +77,7 @@ const getRequiredInitialDocuments = (internship) => {
   return ["OFFER_LETTER"];
 };
 
-const getMissingDocuments = (
-  internship,
-  requiredTypes,
-  stage
-) => {
+const getMissingDocuments = (internship, requiredTypes, stage) => {
   const documents = internship.internship_documents ?? [];
 
   const uploadedTypes = new Set(
@@ -95,11 +91,7 @@ const getMissingDocuments = (
   );
 };
 
-const ensureDocumentsPresent = (
-  internship,
-  requiredTypes,
-  stage
-) => {
+const ensureDocumentsPresent = (internship, requiredTypes, stage) => {
   const missingDocuments = getMissingDocuments(
     internship,
     requiredTypes,
@@ -151,10 +143,7 @@ const validateRating = (rating) => {
 // FETCH AN INTERNSHIP FOR AN AUTHORIZED MENTOR
 // ============================================================
 
-const getInternshipForReview = async (
-  internshipId,
-  teacherId
-) => {
+const getInternshipForReview = async (internshipId, teacherId) => {
   const internship = await prisma.student_internships.findUnique({
     where: {
       id: internshipId,
@@ -165,6 +154,7 @@ const getInternshipForReview = async (
           id: true,
           fullName: true,
           registerNumber: true,
+          profileImage: true,
           departmentId: true,
           userAccountId: true,
         },
@@ -186,10 +176,7 @@ const getInternshipForReview = async (
     throw new ApiError(404, "Internship not found");
   }
 
-  await assertAssignedMentor(
-    teacherId,
-    internship.studentId
-  );
+  await assertAssignedMentor(teacherId, internship.studentId);
 
   return internship;
 };
@@ -199,10 +186,7 @@ const getInternshipForReview = async (
 // GET /api/mentor/internships/student/:studentId
 // ============================================================
 
-const getStudentInternships = async (
-  userAccountId,
-  studentId
-) => {
+const getStudentInternships = async (userAccountId, studentId) => {
   if (!studentId) {
     throw new ApiError(400, "Student ID is required");
   }
@@ -211,6 +195,9 @@ const getStudentInternships = async (
 
   await assertAssignedMentor(teacher.id, studentId);
 
+  // IMPORTANT:
+  // Include profileImage so the Mentor frontend can display
+  // the student's uploaded profile picture.
   const student = await prisma.students.findUnique({
     where: {
       id: studentId,
@@ -219,6 +206,7 @@ const getStudentInternships = async (
       id: true,
       fullName: true,
       registerNumber: true,
+      profileImage: true,
     },
   });
 
@@ -247,13 +235,12 @@ const getStudentInternships = async (
     },
   });
 
-  const current = internships.filter(
-    (internship) =>
-      [
-        "ONGOING",
-        "PENDING_INITIAL_VERIFICATION",
-        "PENDING_COMPLETION_VERIFICATION",
-      ].includes(internship.status)
+  const current = internships.filter((internship) =>
+    [
+      "ONGOING",
+      "PENDING_INITIAL_VERIFICATION",
+      "PENDING_COMPLETION_VERIFICATION",
+    ].includes(internship.status)
   );
 
   const history = internships.filter(
@@ -312,6 +299,7 @@ const getInitialQueue = async (userAccountId) => {
           id: true,
           fullName: true,
           registerNumber: true,
+          profileImage: true,
           departmentId: true,
         },
       },
@@ -331,9 +319,8 @@ const getInitialQueue = async (userAccountId) => {
     },
   });
 
-  // IMPORTANT:
-  // Do not filter out incomplete submissions.
-  // Return them so the mentor can see the missing documents.
+  // Keep incomplete submissions visible so the mentor
+  // can identify missing documents.
 
   return internships.map((internship) => {
     const requiredDocuments =
@@ -382,6 +369,7 @@ const getCompletionQueue = async (userAccountId) => {
           id: true,
           fullName: true,
           registerNumber: true,
+          profileImage: true,
           departmentId: true,
         },
       },
@@ -408,7 +396,6 @@ const getCompletionQueue = async (userAccountId) => {
 
   // ALREADY_COMPLETED internships submit their completion
   // documents during the INITIAL submission stage.
-  // Other internships submit them during COMPLETION.
 
   return internships.map((internship) => {
     const documentStage =
@@ -504,10 +491,6 @@ const reviewInitial = async (
     );
   }
 
-  // Incomplete submissions are visible in the queue,
-  // but cannot be approved or rejected through review
-  // until the required documents are present.
-
   ensureDocumentsPresent(
     internship,
     getRequiredInitialDocuments(internship),
@@ -554,6 +537,7 @@ const reviewInitial = async (
             id: true,
             fullName: true,
             registerNumber: true,
+            profileImage: true,
           },
         },
         internship_documents: true,
@@ -651,6 +635,7 @@ const reviewCompletion = async (
             id: true,
             fullName: true,
             registerNumber: true,
+            profileImage: true,
           },
         },
         internship_documents: true,

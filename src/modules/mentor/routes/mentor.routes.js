@@ -2,6 +2,10 @@ import express from "express";
 
 import MentorController from "../controllers/mentor.controller.js";
 
+import ProfilePictureController, {
+  mentorAvatarUpload,
+} from "../controllers/profile-picture.controller.js";
+
 import dashboardRoutes from "./dashboard.routes.js";
 import internshipsRoutes from "./internships.routes.js";
 import meetingsRoutes from "./meetings.routes.js";
@@ -42,19 +46,53 @@ router.use("/internships", internshipsRoutes);
 router.use("/meetings", meetingsRoutes);
 
 /* ==========================================================
-   MENTOR PROFILE
+   MENTOR PROFILE PICTURE
 ========================================================== */
 
-router.get("/profile", MentorController.getProfile);
+// Upload or replace mentor profile picture.
+// POST /api/mentor/profile/picture
+router.post(
+  "/profile/picture",
+  mentorAvatarUpload,
+  ProfilePictureController.upload
+);
 
-router.post("/profile", MentorController.createProfile);
-
-router.put("/profile", MentorController.updateProfile);
+// Remove mentor profile picture.
+// DELETE /api/mentor/profile/picture
+router.delete(
+  "/profile/picture",
+  ProfilePictureController.remove
+);
 
 /* ==========================================================
-   MENTORING OVERVIEW
+   MENTOR PROFILE completed... //
 ========================================================== */
 
-router.get("/overview", MentorController.getOverview);
+// Fetch mentor profile.
+router.get(
+  "/profile",
+  MentorController.getProfile
+);
+
+// Create mentor profile.
+router.post(
+  "/profile",
+  MentorController.createProfile
+);
+
+// Update mentor profile.
+router.put(
+  "/profile",
+  MentorController.updateProfile
+);
+
+/* ==========================================================
+   MENTORING OVERVIEW comepleted ... //
+========================================================== */
+
+router.get(
+  "/overview",
+  MentorController.getOverview
+);
 
 export default router;

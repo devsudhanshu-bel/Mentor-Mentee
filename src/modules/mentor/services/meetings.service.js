@@ -18,7 +18,6 @@ const FREQUENCIES = ["WEEKLY", "BIWEEKLY", "MONTHLY"];
 
 // ==========================================================
 // SHARED MEETING RESPONSE
-// Includes student academic details and mentor information.
 // ==========================================================
 
 const meetingInclude = {
@@ -33,7 +32,6 @@ const meetingInclude = {
       semester: true,
       programme: true,
       section: true,
-
       departments: {
         select: {
           id: true,
@@ -41,7 +39,6 @@ const meetingInclude = {
           code: true,
         },
       },
-
       academicSemesters: {
         select: {
           semesterNumber: true,
@@ -51,11 +48,8 @@ const meetingInclude = {
           semesterNumber: "desc",
         },
       },
-
       mentor_assignments: {
-        where: {
-          status: "ACTIVE",
-        },
+        where: { status: "ACTIVE" },
         select: {
           id: true,
           status: true,
@@ -77,7 +71,6 @@ const meetingInclude = {
       },
     },
   },
-
   teachers: {
     select: {
       id: true,
@@ -86,15 +79,10 @@ const meetingInclude = {
       email: true,
     },
   },
-
   mentor_meeting_notes: true,
-
   mentor_meeting_discussion_points: {
-    orderBy: {
-      position: "asc",
-    },
+    orderBy: { position: "asc" },
   },
-
   mentor_meeting_feedback: true,
 };
 
@@ -358,9 +346,7 @@ function validateModeDetails(data, existing = null) {
   const mode = data.mode ?? existing?.mode;
 
   const venue =
-    data.venue !== undefined
-      ? data.venue
-      : existing?.venue;
+    data.venue !== undefined ? data.venue : existing?.venue;
 
   const meetingLink =
     data.meetingLink !== undefined
@@ -477,6 +463,10 @@ function combineDateAndTime(dateValue, timeValue) {
 // ==========================================================
 
 const MeetingsService = {
+  // --------------------------------------------------------
+  // ASSIGNED STUDENTS
+  // --------------------------------------------------------
+
   async listAssignedStudents(user) {
     const mentorTeacherId = await resolveTeacherId(user);
 
@@ -525,10 +515,12 @@ const MeetingsService = {
     );
   },
 
+  // --------------------------------------------------------
+  // CREATE MEETING - INDIVIDUAL OR ALL MENTEES
+  // --------------------------------------------------------
+
   async createMeeting(user, input) {
     const mentorTeacherId = await resolveTeacherId(user);
-
-    ensure(input?.studentId, 400, "studentId is required");
 
     validateMeetingInput(input, { creating: true });
 
@@ -537,10 +529,113 @@ const MeetingsService = {
 
     validateTimeRange(startAt, endAt);
 
-    await ensureAssignedMentor(mentorTeacherId, input.studentId);
-
     const data = buildMeetingData(input, { creating: true });
+
     validateModeDetails(data);
+
+    // ======================================================
+    // BULK CREATION FOR ALL ACTIVE ASSIGNED MENTEES
+    // ======================================================
+
+    if (input.allStudents === true) {
+      ensure(
+        !input.studentId,
+        400,
+        "Do not provide studentId when scheduling for all mentees"
+      );
+
+      ensure(
+        !input.followUpToMeetingId,
+        400,
+        "Follow-up meetings must target one specific student"
+      );
+
+      const assignments = await prisma.mentor_assignments.findMany({
+        where: {
+          teacherId: mentorTeacherId,
+          status: "ACTIVE",
+        },
+        select: {
+          students: {
+            select: {
+              id: true,
+              status: true,
+            },
+          },
+        },
+      });
+
+      const uniqueStudentIds = new Set();
+
+      for (const assignment of assignments) {
+        const student = assignment.students;
+
+        if (
+          student?.id &&
+          !["INACTIVE", "DISABLED"].includes(
+            String(student.status ?? "").toUpperCase()
+          )
+        ) {
+          uniqueStudentIds.add(student.id);
+        }
+      }
+
+      const studentIds = [...uniqueStudentIds];
+
+      ensure(
+        studentIds.length > 0,
+        400,
+        "No active assigned mentees were found"
+      );
+
+      // Prepare all meeting records before starting the transaction.
+      const meetingRecords = studentIds.map((studentId) => ({
+        id: randomUUID(),
+        mentorTeacherId,
+        studentId,
+        ...data,
+      }));
+
+      // Bulk insert and fetch the created meetings atomically.
+      return prisma.$transaction(
+        async (tx) => {
+          await tx.mentor_meetings.createMany({
+            data: meetingRecords,
+          });
+
+          const meetings = await tx.mentor_meetings.findMany({
+            where: {
+              id: {
+                in: meetingRecords.map((meeting) => meeting.id),
+              },
+              mentorTeacherId,
+            },
+            include: meetingInclude,
+            orderBy: {
+              startAt: "asc",
+            },
+          });
+
+          return {
+            allStudents: true,
+            totalCreated: meetings.length,
+            meetings,
+          };
+        },
+        {
+          maxWait: 10000,
+          timeout: 20000,
+        }
+      );
+    }
+
+    // ======================================================
+    // EXISTING SINGLE-MENTEE CREATION
+    // ======================================================
+
+    ensure(input.studentId, 400, "studentId is required");
+
+    await ensureAssignedMentor(mentorTeacherId, input.studentId);
 
     if (input.followUpToMeetingId) {
       const parentMeeting = await getMentorMeeting(
@@ -567,6 +662,10 @@ const MeetingsService = {
       include: meetingInclude,
     });
   },
+
+  // --------------------------------------------------------
+  // LIST MENTOR MEETINGS
+  // --------------------------------------------------------
 
   async listMentorMeetings(user, query = {}) {
     const mentorTeacherId = await resolveTeacherId(user);
@@ -613,10 +712,18 @@ const MeetingsService = {
     });
   },
 
+  // --------------------------------------------------------
+  // GET MENTOR MEETING
+  // --------------------------------------------------------
+
   async getMentorMeeting(user, meetingId) {
     const mentorTeacherId = await resolveTeacherId(user);
     return getMentorMeeting(mentorTeacherId, meetingId);
   },
+
+  // --------------------------------------------------------
+  // UPDATE MEETING
+  // --------------------------------------------------------
 
   async updateMeeting(user, meetingId, input) {
     const mentorTeacherId = await resolveTeacherId(user);
@@ -654,6 +761,10 @@ const MeetingsService = {
     });
   },
 
+  // --------------------------------------------------------
+  // CANCEL MEETING
+  // --------------------------------------------------------
+
   async cancelMeeting(user, meetingId) {
     const mentorTeacherId = await resolveTeacherId(user);
 
@@ -670,6 +781,10 @@ const MeetingsService = {
       include: meetingInclude,
     });
   },
+
+  // --------------------------------------------------------
+  // CHANGE MEETING STATUS
+  // --------------------------------------------------------
 
   async changeMeetingStatus(user, meetingId, status) {
     const mentorTeacherId = await resolveTeacherId(user);
@@ -697,6 +812,10 @@ const MeetingsService = {
       include: meetingInclude,
     });
   },
+
+  // --------------------------------------------------------
+  // STUDENT MEETING LIST
+  // --------------------------------------------------------
 
   async listStudentMeetings(user, query = {}) {
     const studentId = await resolveStudentId(user);
@@ -738,6 +857,10 @@ const MeetingsService = {
       orderBy: { startAt: "asc" },
     });
   },
+
+  // --------------------------------------------------------
+  // GET STUDENT MEETING
+  // --------------------------------------------------------
 
   async getStudentMeeting(user, meetingId) {
     const studentId = await resolveStudentId(user);
@@ -888,8 +1011,7 @@ const MeetingsService = {
   },
 
   // --------------------------------------------------------
-  // FEEDBACK
-  // Allows saving during IN_PROGRESS and COMPLETED meetings.
+  // MENTOR FEEDBACK
   // --------------------------------------------------------
 
   async saveFeedback(user, meetingId, input = {}) {
@@ -1114,93 +1236,99 @@ const MeetingsService = {
       "Recurring series cannot exceed one year"
     );
 
-    return prisma.$transaction(async (tx) => {
-      const seriesId = randomUUID();
+    return prisma.$transaction(
+      async (tx) => {
+        const seriesId = randomUUID();
 
-      await tx.mentor_meeting_series.create({
-        data: {
-          id: seriesId,
-          mentorTeacherId,
-          studentId,
-          frequency: input.frequency,
-          startDate,
-          endDate,
-          dayOfWeek: input.dayOfWeek ?? null,
-          startTime: input.startTime,
-          endTime: input.endTime,
-          timezone: input.timezone ?? "Asia/Kolkata",
-        },
-      });
+        await tx.mentor_meeting_series.create({
+          data: {
+            id: seriesId,
+            mentorTeacherId,
+            studentId,
+            frequency: input.frequency,
+            startDate,
+            endDate,
+            dayOfWeek: input.dayOfWeek ?? null,
+            startTime: input.startTime,
+            endTime: input.endTime,
+            timezone: input.timezone ?? "Asia/Kolkata",
+          },
+        });
 
-      const occurrences = [];
-      let current = new Date(startDate);
+        const occurrences = [];
+        let current = new Date(startDate);
 
-      if (input.frequency !== "MONTHLY") {
-        const offset =
-          (input.dayOfWeek - current.getDay() + 7) % 7;
+        if (input.frequency !== "MONTHLY") {
+          const offset =
+            (input.dayOfWeek - current.getDay() + 7) % 7;
 
-        current.setDate(current.getDate() + offset);
-      }
+          current.setDate(current.getDate() + offset);
+        }
 
-      let count = 0;
+        let count = 0;
 
-      while (current <= maxDate && count < 53) {
-        const startAt = dateWithTime(
-          current,
-          input.startTime,
-          "startTime"
-        );
+        while (current <= maxDate && count < 53) {
+          const startAt = dateWithTime(
+            current,
+            input.startTime,
+            "startTime"
+          );
 
-        const endAt = dateWithTime(
-          current,
-          input.endTime,
-          "endTime"
-        );
+          const endAt = dateWithTime(
+            current,
+            input.endTime,
+            "endTime"
+          );
 
-        validateTimeRange(startAt, endAt);
+          validateTimeRange(startAt, endAt);
 
-        occurrences.push({
-          id: randomUUID(),
-          mentorTeacherId,
-          studentId,
+          occurrences.push({
+            id: randomUUID(),
+            mentorTeacherId,
+            studentId,
+            seriesId,
+            title: input.title.trim(),
+            meetingType,
+            mode,
+            priority,
+            startAt,
+            endAt,
+            venue: input.venue?.trim() || null,
+            meetingLink: input.meetingLink?.trim() || null,
+            agenda: input.agenda?.trim() || null,
+            description: input.description?.trim() || null,
+            status: "SCHEDULED",
+          });
+
+          count++;
+
+          const next = addRecurrence(current, input.frequency);
+
+          ensure(
+            next.getTime() > current.getTime(),
+            400,
+            "Could not calculate the next recurring meeting date"
+          );
+
+          current = next;
+        }
+
+        if (occurrences.length) {
+          await tx.mentor_meetings.createMany({
+            data: occurrences,
+          });
+        }
+
+        return {
           seriesId,
-          title: input.title.trim(),
-          meetingType,
-          mode,
-          priority,
-          startAt,
-          endAt,
-          venue: input.venue?.trim() || null,
-          meetingLink: input.meetingLink?.trim() || null,
-          agenda: input.agenda?.trim() || null,
-          description: input.description?.trim() || null,
-          status: "SCHEDULED",
-        });
-
-        count++;
-
-        const next = addRecurrence(current, input.frequency);
-
-        ensure(
-          next.getTime() > current.getTime(),
-          400,
-          "Could not calculate the next recurring meeting date"
-        );
-
-        current = next;
+          occurrencesCreated: occurrences.length,
+        };
+      },
+      {
+        maxWait: 10000,
+        timeout: 20000,
       }
-
-      if (occurrences.length) {
-        await tx.mentor_meetings.createMany({
-          data: occurrences,
-        });
-      }
-
-      return {
-        seriesId,
-        occurrencesCreated: occurrences.length,
-      };
-    });
+    );
   },
 
   async listRecurringSeries(user) {
@@ -1258,33 +1386,39 @@ const MeetingsService = {
       };
     }
 
-    return prisma.$transaction(async (tx) => {
-      await tx.mentor_meeting_series.update({
-        where: { id: seriesId },
-        data: {
+    return prisma.$transaction(
+      async (tx) => {
+        await tx.mentor_meeting_series.update({
+          where: { id: seriesId },
+          data: {
+            isActive: false,
+            updatedAt: new Date(),
+          },
+        });
+
+        const result = await tx.mentor_meetings.updateMany({
+          where: {
+            seriesId,
+            status: "SCHEDULED",
+            startAt: { gte: new Date() },
+          },
+          data: {
+            status: "CANCELLED",
+            updatedAt: new Date(),
+          },
+        });
+
+        return {
+          id: seriesId,
           isActive: false,
-          updatedAt: new Date(),
-        },
-      });
-
-      const result = await tx.mentor_meetings.updateMany({
-        where: {
-          seriesId,
-          status: "SCHEDULED",
-          startAt: { gte: new Date() },
-        },
-        data: {
-          status: "CANCELLED",
-          updatedAt: new Date(),
-        },
-      });
-
-      return {
-        id: seriesId,
-        isActive: false,
-        cancelledOccurrences: result.count,
-      };
-    });
+          cancelledOccurrences: result.count,
+        };
+      },
+      {
+        maxWait: 10000,
+        timeout: 20000,
+      }
+    );
   },
 };
 

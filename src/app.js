@@ -4,6 +4,7 @@ import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
+import multer from "multer";
 
 /* ==========================================================
    ROUTES
@@ -63,8 +64,11 @@ app.use(
         new Error(`CORS blocked request from origin: ${origin}`)
       );
     },
+
     credentials: true,
+
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
@@ -133,7 +137,6 @@ app.use("/api/admin", adminRoutes);
 
 /* ==========================================================
    MENTOR
-   Includes routes defined in mentor.routes.js
 ========================================================== */
 
 app.use("/api/mentor", mentorRoutes);
@@ -198,6 +201,28 @@ app.use("/api/mentor/students", mentorCertificatesRoutes);
 
 app.use("/api/mentor/students", mentorOverviewRoutes);
 app.use("/api/mentor/students", studentReportRoutes);
+
+/* ==========================================================
+   UPLOAD ERROR HANDLER
+   Must be before the 404 and global error handlers.
+========================================================== */
+
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    const message =
+      err.code === "LIMIT_FILE_SIZE"
+        ? "Profile picture must be 5 MB or smaller."
+        : "Invalid file upload.";
+
+    return res.status(400).json({
+      success: false,
+      statusCode: 400,
+      message,
+    });
+  }
+
+  next(err);
+});
 
 /* ==========================================================
    404 HANDLER
