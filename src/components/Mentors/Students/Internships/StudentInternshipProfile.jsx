@@ -1,5 +1,6 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
+
 import {
   UserRound,
   Building2,
@@ -8,6 +9,10 @@ import {
   Star,
   CalendarDays,
 } from "lucide-react";
+
+/* ==========================================================
+   HELPERS
+========================================================== */
 
 const getInitials = (name) =>
   String(name || "Student")
@@ -19,9 +24,55 @@ const getInitials = (name) =>
     .join("") || "ST";
 
 const formatValue = (value, fallback = "Not available") =>
-  value !== null && value !== undefined && String(value).trim() !== ""
+  value !== null &&
+  value !== undefined &&
+  String(value).trim() !== ""
     ? value
     : fallback;
+
+const formatDate = (date) => {
+  if (!date) return null;
+
+  const parsedDate = new Date(date);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return null;
+  }
+
+  return parsedDate.toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
+};
+
+/* ==========================================================
+   PROFILE IMAGE RESOLVER
+========================================================== */
+
+const getProfileImage = (student) => {
+  const possibleImages = [
+    student?.profileImage,
+    student?.profile?.profileImage,
+    student?.student_profiles?.profileImage,
+    student?.studentProfile?.profileImage,
+    student?.profilePicture,
+    student?.avatar,
+    student?.imageUrl,
+  ];
+
+  const image = possibleImages.find(
+    (value) =>
+      typeof value === "string" &&
+      value.trim().length > 0
+  );
+
+  return image ? image.trim() : null;
+};
+
+/* ==========================================================
+   DETAIL ROW
+========================================================== */
 
 const DetailRow = ({ icon: Icon, label, value, color }) => (
   <div className="flex items-start gap-3 border-b border-slate-100 py-4 last:border-0">
@@ -45,46 +96,77 @@ const DetailRow = ({ icon: Icon, label, value, color }) => (
   </div>
 );
 
+/* ==========================================================
+   STUDENT INTERNSHIP PROFILE
+========================================================== */
+
 const StudentInternshipProfile = ({
   student,
   internships = [],
 }) => {
+  const [imageFailed, setImageFailed] = useState(false);
+
+  /* ==========================================================
+     STUDENT DETAILS
+  ========================================================== */
+
   const studentName =
     student?.fullName ||
     student?.name ||
-    [student?.firstName, student?.lastName].filter(Boolean).join(" ") ||
+    [student?.firstName, student?.lastName]
+      .filter(Boolean)
+      .join(" ") ||
     "Student";
 
   const registerNumber =
     student?.registerNumber ||
     student?.registrationNumber ||
-    student?.rollNumber;
+    student?.rollNumber ||
+    "";
 
-  const profileImage =
-    student?.profileImage ||
-    student?.profilePicture ||
-    student?.avatar ||
-    student?.imageUrl;
+  const studentId = student?.id || student?.studentId || "";
 
-  const currentInternship = internships.find(
+  const profileImage = getProfileImage(student);
+
+  /* ==========================================================
+     RESET IMAGE ERROR WHEN STUDENT OR URL CHANGES
+  ========================================================== */
+
+  useEffect(() => {
+    setImageFailed(false);
+  }, [profileImage, studentId, registerNumber]);
+
+  /* ==========================================================
+     INTERNSHIP DATA
+  ========================================================== */
+
+  const safeInternships = Array.isArray(internships)
+    ? internships
+    : [];
+
+  const currentInternship = safeInternships.find(
     (item) =>
-      item.status === "ONGOING" ||
-      item.status === "PENDING_INITIAL_VERIFICATION" ||
-      item.status === "PENDING_COMPLETION_VERIFICATION"
+      item?.status === "ONGOING" ||
+      item?.status === "PENDING_INITIAL_VERIFICATION" ||
+      item?.status === "PENDING_COMPLETION_VERIFICATION"
   );
 
-  const completedInternships = internships.filter(
+  const completedInternships = safeInternships.filter(
     (item) =>
-      item.status === "COMPLETED" &&
-      item.verificationStatus === "APPROVED" &&
-      item.completionVerificationStatus === "APPROVED"
+      item?.status === "COMPLETED" &&
+      item?.verificationStatus === "APPROVED" &&
+      item?.completionVerificationStatus === "APPROVED"
   );
+
+  /* ==========================================================
+     MENTOR RATINGS
+  ========================================================== */
 
   const ratedInternships = completedInternships.filter(
     (item) =>
-      item.rating !== null &&
-      item.rating !== undefined &&
-      item.rating !== "" &&
+      item?.rating !== null &&
+      item?.rating !== undefined &&
+      item?.rating !== "" &&
       Number.isFinite(Number(item.rating))
   );
 
@@ -97,21 +179,44 @@ const StudentInternshipProfile = ({
       ).toFixed(1)
     : null;
 
+  /* ==========================================================
+     CURRENT INTERNSHIP STATUS
+  ========================================================== */
+
   const isActive = currentInternship?.status === "ONGOING";
 
-  const internshipStartDate = currentInternship?.startDate;
+  const internshipStatus = isActive
+    ? "Internship Active"
+    : currentInternship
+      ? "Internship Under Review"
+      : "No Active Internship";
+
+  /* ==========================================================
+     RENDER
+  ========================================================== */
 
   return (
     <aside className="flex h-full min-h-[972px] flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* PROFILE HEADER */}
       <div className="flex flex-col items-center border-b border-slate-100 px-4 py-6 text-center">
-        {profileImage ? (
+        {profileImage && !imageFailed ? (
           <img
+            key={`${studentId}-${profileImage}`}
             src={profileImage}
             alt={`${studentName}'s profile`}
             className="h-20 w-20 rounded-full border-4 border-blue-100 object-cover"
-            onError={(event) => {
-              event.currentTarget.style.display = "none";
+            referrerPolicy="no-referrer"
+            onError={() => {
+              console.error(
+                "Internship profile image failed to load.",
+                {
+                  studentId,
+                  registerNumber,
+                  profileImage,
+                }
+              );
+
+              setImageFailed(true);
             }}
           />
         ) : (
@@ -125,7 +230,7 @@ const StudentInternshipProfile = ({
         </h2>
 
         <p className="mt-1 text-xs text-slate-500">
-          {formatValue(registerNumber)}
+          Student Internship Profile
         </p>
 
         <span
@@ -138,11 +243,7 @@ const StudentInternshipProfile = ({
           }`}
         >
           <UserRound size={12} />
-          {isActive
-            ? "Internship Active"
-            : currentInternship
-              ? "Internship Under Review"
-              : "No Active Internship"}
+          {internshipStatus}
         </span>
       </div>
 
@@ -187,29 +288,18 @@ const StudentInternshipProfile = ({
             <DetailRow
               icon={CalendarDays}
               label="Internship Start Date"
-              value={
-                internshipStartDate
-                  ? new Date(internshipStartDate).toLocaleDateString(
-                      "en-IN",
-                      {
-                        day: "2-digit",
-                        month: "short",
-                        year: "numeric",
-                      }
-                    )
-                  : null
-              }
+              value={formatDate(currentInternship?.startDate)}
               color="bg-blue-50 text-blue-600"
             />
           </div>
         </section>
       </div>
 
-      {/* FOOTER — STAYS AT THE BOTTOM */}
+      {/* FOOTER */}
       <div className="mt-auto border-t border-slate-100 bg-slate-50 px-4 py-4">
         <p className="text-[11px] leading-5 text-slate-500">
-          Internship details and completion counts reflect the records supplied
-          to this profile.
+          Internship details and completion counts reflect
+          the records supplied to this profile.
         </p>
       </div>
     </aside>

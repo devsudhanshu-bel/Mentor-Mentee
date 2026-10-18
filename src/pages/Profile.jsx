@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
 import Header from "../components/layouts/Header";
@@ -13,6 +14,25 @@ import AcademicInformationCard from "../components/Profile/AcademicInformationCa
 
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal");
+  const [profileImageVersion, setProfileImageVersion] = useState(0);
+
+  useEffect(() => {
+    const handleProfileUpdate = () => {
+      setProfileImageVersion((version) => version + 1);
+    };
+
+    window.addEventListener(
+      "student-profile-updated",
+      handleProfileUpdate
+    );
+
+    return () => {
+      window.removeEventListener(
+        "student-profile-updated",
+        handleProfileUpdate
+      );
+    };
+  }, []);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -34,7 +54,10 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div
+      className="min-h-screen bg-slate-100"
+      data-profile-image-version={profileImageVersion}
+    >
       {/* Sidebar */}
       <Sidebar />
 

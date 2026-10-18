@@ -12,12 +12,19 @@ const SummaryCard = ({
   const displayValue =
     value === null || value === undefined || value === ""
       ? 0
-      : value;
+      : typeof value === "number"
+        ? value.toLocaleString()
+        : String(value);
+
+  const displaySubtitle =
+    subtitle === null || subtitle === undefined
+      ? ""
+      : String(subtitle);
 
   return (
     <div
       className="
-        flex min-w-0 items-center gap-3
+        flex min-w-0 items-start gap-3
         rounded-xl border border-slate-200 bg-white
         px-3 py-4
         transition-all duration-200
@@ -48,25 +55,35 @@ const SummaryCard = ({
       {/* Summary information */}
       <div className="min-w-0 flex-1">
         <p
-          className="truncate text-[11px] font-medium leading-4 text-slate-500"
+          className="
+            text-[11px] font-medium leading-4 text-slate-500
+            break-words
+          "
           title={title}
         >
           {title}
         </p>
 
         <p
-          className="mt-1 break-words text-2xl font-bold leading-tight tabular-nums text-slate-900"
+          className="
+            mt-1 text-2xl font-bold leading-tight
+            tabular-nums text-slate-900
+            break-words [overflow-wrap:anywhere]
+          "
           aria-label={`${title}: ${displayValue}`}
         >
           {displayValue}
         </p>
 
-        {subtitle && (
+        {displaySubtitle !== "" && (
           <p
-            className="mt-1 break-words text-[10px] leading-4 text-slate-400"
-            title={subtitle}
+            className="
+              mt-1 text-[10px] leading-4 text-slate-400
+              break-words [overflow-wrap:anywhere]
+            "
+            title={displaySubtitle}
           >
-            {subtitle}
+            {displaySubtitle}
           </p>
         )}
       </div>

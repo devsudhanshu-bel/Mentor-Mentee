@@ -1,5 +1,5 @@
-
 import React, { useEffect, useState } from "react";
+
 import {
   X,
   MapPin,
@@ -8,9 +8,12 @@ import {
   Clock3,
   LoaderCircle,
   Video,
+  Users,
 } from "lucide-react";
 
 import meetingsService from "../../../services/meetingsService.js";
+
+const ALL_STUDENTS = "__ALL_STUDENTS__";
 
 const EMPTY_FORM = {
   studentId: "",
@@ -39,20 +42,20 @@ const getLocalDateString = (date = new Date()) => {
   return `${year}-${month}-${day}`;
 };
 
-const getLocalTimeString = (date) => {
-  if (!date || Number.isNaN(new Date(date).getTime())) return "";
+const getLocalTimeString = (value) => {
+  if (!value || Number.isNaN(new Date(value).getTime())) return "";
 
-  const parsed = new Date(date);
-  const hours = String(parsed.getHours()).padStart(2, "0");
-  const minutes = String(parsed.getMinutes()).padStart(2, "0");
+  const date = new Date(value);
 
-  return `${hours}:${minutes}`;
+  return `${String(date.getHours()).padStart(2, "0")}:${String(
+    date.getMinutes()
+  ).padStart(2, "0")}`;
 };
 
 const extractData = (response) => {
   let value = response;
 
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
     if (Array.isArray(value)) return value;
     if (!value || typeof value !== "object") return [];
 
@@ -74,7 +77,7 @@ const extractData = (response) => {
 const unwrapResponse = (response) => {
   let value = response;
 
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < 5; i += 1) {
     if (!value || typeof value !== "object" || Array.isArray(value)) {
       return value;
     }
@@ -99,6 +102,7 @@ const getStudentName = (student) =>
 
 const getMeetingStudentId = (meeting) =>
   meeting?.studentId ??
+  meeting?.students?.id ??
   meeting?.student?.id ??
   meeting?.student?.studentId ??
   "";
@@ -108,17 +112,12 @@ const getMeetingDate = (meeting) => {
 
   if (!value) return "";
 
-  const parsed = new Date(value);
+  const date = new Date(value);
 
-  return Number.isNaN(parsed.getTime())
-    ? ""
-    : getLocalDateString(parsed);
+  return Number.isNaN(date.getTime()) ? "" : getLocalDateString(date);
 };
 
 const buildFormFromMeeting = (meeting, mode, initialValues) => {
-  const startAt = meeting?.startAt ?? meeting?.startTime;
-  const endAt = meeting?.endAt ?? meeting?.endTime;
-
   const base = {
     ...EMPTY_FORM,
     studentId: String(getMeetingStudentId(meeting)),
@@ -126,8 +125,12 @@ const buildFormFromMeeting = (meeting, mode, initialValues) => {
     meetingType: meeting?.meetingType ?? "REGULAR",
     mode: meeting?.mode ?? "IN_PERSON",
     date: getMeetingDate(meeting),
-    startTime: getLocalTimeString(startAt),
-    endTime: getLocalTimeString(endAt),
+    startTime: getLocalTimeString(
+      meeting?.startAt ?? meeting?.startTime
+    ),
+    endTime: getLocalTimeString(
+      meeting?.endAt ?? meeting?.endTime
+    ),
     venue: meeting?.venue ?? "",
     meetingLink: meeting?.meetingLink ?? "",
     priority: meeting?.priority ?? "NORMAL",
@@ -135,15 +138,10 @@ const buildFormFromMeeting = (meeting, mode, initialValues) => {
     description: meeting?.description ?? "",
   };
 
-  const values = {
-    ...base,
-    ...(initialValues || {}),
-  };
+  const values = { ...base, ...(initialValues || {}) };
 
   if (mode === "DUPLICATE" && !initialValues?.title) {
-    values.title = meeting?.title
-      ? `Copy of ${meeting.title}`
-      : "";
+    values.title = meeting?.title ? `Copy of ${meeting.title}` : "";
   }
 
   return {
@@ -152,9 +150,7 @@ const buildFormFromMeeting = (meeting, mode, initialValues) => {
     meetingType: VALID_TYPES.includes(values.meetingType)
       ? values.meetingType
       : "REGULAR",
-    mode: VALID_MODES.includes(values.mode)
-      ? values.mode
-      : "IN_PERSON",
+    mode: VALID_MODES.includes(values.mode) ? values.mode : "IN_PERSON",
     priority: VALID_PRIORITIES.includes(values.priority)
       ? values.priority
       : "NORMAL",
@@ -186,10 +182,13 @@ const ScheduleMeetingModal = ({
   const [studentError, setStudentError] = useState("");
 
   const isOnline = form.mode === "ONLINE";
+
   const isEditing =
-    normalizedMode === "EDIT" ||
-    normalizedMode === "RESCHEDULE";
+    normalizedMode === "EDIT" || normalizedMode === "RESCHEDULE";
+
   const isDuplicate = normalizedMode === "DUPLICATE";
+
+  const isAllStudents = form.studentId === ALL_STUDENTS;
 
   const meetingId = meeting?.id ?? meeting?.meetingId ?? null;
 
@@ -201,7 +200,9 @@ const ScheduleMeetingModal = ({
   }[normalizedMode];
 
   const submitLabel = {
-    CREATE: "Schedule Meeting",
+    CREATE: isAllStudents
+      ? "Schedule for All Mentees"
+      : "Schedule Meeting",
     EDIT: "Save Changes",
     RESCHEDULE: "Reschedule Meeting",
     DUPLICATE: "Create Duplicate",
@@ -236,9 +237,7 @@ const ScheduleMeetingModal = ({
 
         if (cancelled) return;
 
-        const assignedStudents = extractData(response);
-
-        const activeStudents = assignedStudents.filter(
+        const activeStudents = extractData(response).filter(
           (student) =>
             student?.id &&
             !["INACTIVE", "DISABLED"].includes(
@@ -247,19 +246,6 @@ const ScheduleMeetingModal = ({
         );
 
         setStudents(activeStudents);
-
-        setForm((previous) => {
-          const selectedExists = activeStudents.some(
-            (student) =>
-              String(student.id) === String(previous.studentId)
-          );
-
-          // Keep an existing selection even if it is not returned
-          // in the currently active assignment list.
-          return selectedExists || !previous.studentId
-            ? previous
-            : previous;
-        });
       } catch (err) {
         if (!cancelled) {
           setStudentError(
@@ -267,9 +253,7 @@ const ScheduleMeetingModal = ({
           );
         }
       } finally {
-        if (!cancelled) {
-          setLoadingStudents(false);
-        }
+        if (!cancelled) setLoadingStudents(false);
       }
     };
 
@@ -281,11 +265,7 @@ const ScheduleMeetingModal = ({
   }, [open]);
 
   const handleChange = (field, value) => {
-    setForm((previous) => ({
-      ...previous,
-      [field]: value,
-    }));
-
+    setForm((previous) => ({ ...previous, [field]: value }));
     setError("");
   };
 
@@ -329,7 +309,11 @@ const ScheduleMeetingModal = ({
 
   const validateForm = () => {
     if (!form.studentId) {
-      return "Please select an assigned student.";
+      return "Please select a student or All Mentees.";
+    }
+
+    if (isAllStudents && (isEditing || isDuplicate)) {
+      return "All Mentees is available when creating a new meeting.";
     }
 
     if (!form.title.trim()) {
@@ -408,6 +392,26 @@ const ScheduleMeetingModal = ({
       return "Only scheduled meetings can be edited or rescheduled.";
     }
 
+    if (
+      !isAllStudents &&
+      !students.some(
+        (student) => String(student.id) === String(form.studentId)
+      )
+    ) {
+      // Allow an existing meeting to retain its student if the student
+      // no longer appears in the current assignment list.
+      if (
+        !meeting ||
+        String(getMeetingStudentId(meeting)) !== String(form.studentId)
+      ) {
+        return "Please select a currently assigned student.";
+      }
+    }
+
+    if (students.length === 0) {
+      return "No active assigned students were found.";
+    }
+
     return null;
   };
 
@@ -429,7 +433,10 @@ const ScheduleMeetingModal = ({
     const endAt = new Date(`${form.date}T${form.endTime}`);
 
     const meetingData = {
-      studentId: form.studentId,
+      ...(isAllStudents
+        ? { allStudents: true }
+        : { studentId: form.studentId }),
+
       title: form.title.trim(),
       meetingType: form.meetingType,
       mode: form.mode,
@@ -465,7 +472,9 @@ const ScheduleMeetingModal = ({
     } catch (err) {
       setError(
         err.message ||
-          `Failed to ${isEditing ? "update" : "schedule"} the meeting. Please try again.`
+          `Failed to ${
+            isEditing ? "update" : "schedule"
+          } the meeting. Please try again.`
       );
     } finally {
       setSubmitting(false);
@@ -503,7 +512,7 @@ const ScheduleMeetingModal = ({
                 ? "Update the meeting details and schedule."
                 : isDuplicate
                   ? "Review the copied details and choose a new time."
-                  : "Schedule a meeting with your assigned mentee."}
+                  : "Schedule a meeting with one or all of your assigned mentees."}
             </p>
           </div>
 
@@ -529,19 +538,28 @@ const ScheduleMeetingModal = ({
               </div>
             )}
 
+            {/* STUDENT SELECTION */}
             <div>
               <label
                 htmlFor="meeting-student"
                 className="mb-1 block text-[12px] font-medium text-slate-700"
               >
-                Student <span className="text-red-500">*</span>
+                Student / Attendees{" "}
+                <span className="text-red-500">*</span>
               </label>
 
               <div className="relative">
-                <User
-                  size={16}
-                  className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-                />
+                {isAllStudents ? (
+                  <Users
+                    size={16}
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-blue-600"
+                  />
+                ) : (
+                  <User
+                    size={16}
+                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+                  />
+                )}
 
                 <select
                   id="meeting-student"
@@ -549,7 +567,12 @@ const ScheduleMeetingModal = ({
                   onChange={(event) =>
                     handleChange("studentId", event.target.value)
                   }
-                  disabled={loadingStudents || submitting}
+                  disabled={
+                    loadingStudents ||
+                    submitting ||
+                    isEditing ||
+                    isDuplicate
+                  }
                   required
                   className="h-10 w-full rounded-lg border border-slate-300 bg-white pl-10 pr-3 text-[13px] outline-none focus:border-blue-500 disabled:bg-slate-100"
                 >
@@ -558,6 +581,12 @@ const ScheduleMeetingModal = ({
                       ? "Loading assigned students..."
                       : "Select Student"}
                   </option>
+
+                  {normalizedMode === "CREATE" && students.length > 0 && (
+                    <option value={ALL_STUDENTS}>
+                      All Mentees ({students.length} students)
+                    </option>
+                  )}
 
                   {students.map((student) => (
                     <option key={student.id} value={student.id}>
@@ -569,6 +598,7 @@ const ScheduleMeetingModal = ({
                   ))}
 
                   {form.studentId &&
+                    form.studentId !== ALL_STUDENTS &&
                     !students.some(
                       (student) =>
                         String(student.id) === String(form.studentId)
@@ -582,16 +612,31 @@ const ScheduleMeetingModal = ({
                 </select>
               </div>
 
+              {isAllStudents && (
+                <div className="mt-2 rounded-lg border border-blue-100 bg-blue-50 p-3 text-[12px] text-blue-800">
+                  <p className="font-semibold">
+                    This meeting will be created for all {students.length} active assigned mentees.
+                  </p>
+
+                  <p className="mt-1">
+                    Each student will receive their own meeting record. All
+                    records will initially have the same scheduled date and
+                    time.
+                  </p>
+                </div>
+              )}
+
               {studentError && (
                 <div
                   role="alert"
                   className="mt-2 text-[12px] text-red-600"
                 >
                   {studentError}
+
                   <button
                     type="button"
                     onClick={handleRetryStudents}
-                    disabled={loadingStudents}
+                    disabled={loadingStudents || submitting}
                     className="ml-2 font-semibold underline disabled:opacity-50"
                   >
                     {loadingStudents ? "Retrying..." : "Retry"}
@@ -603,11 +648,12 @@ const ScheduleMeetingModal = ({
                 !studentError &&
                 students.length === 0 && (
                   <p className="mt-1 text-[12px] text-amber-600">
-                    No assigned students were found for your account.
+                    No active assigned students were found for your account.
                   </p>
                 )}
             </div>
 
+            {/* MEETING TITLE */}
             <div>
               <label
                 htmlFor="meeting-title"
@@ -631,6 +677,7 @@ const ScheduleMeetingModal = ({
               />
             </div>
 
+            {/* MEETING TYPE AND MODE */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="mb-2 block text-[12px] font-medium text-slate-700">
@@ -692,6 +739,7 @@ const ScheduleMeetingModal = ({
               </div>
             </div>
 
+            {/* DATE AND TIME */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
               <div>
                 <label
@@ -761,6 +809,7 @@ const ScheduleMeetingModal = ({
               </div>
             </div>
 
+            {/* VENUE / LINK AND PRIORITY */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label
@@ -831,6 +880,7 @@ const ScheduleMeetingModal = ({
               </div>
             </div>
 
+            {/* AGENDA */}
             <div>
               <label
                 htmlFor="meeting-agenda"
@@ -853,6 +903,7 @@ const ScheduleMeetingModal = ({
               />
             </div>
 
+            {/* DESCRIPTION */}
             <div>
               <label
                 htmlFor="meeting-description"
@@ -876,6 +927,7 @@ const ScheduleMeetingModal = ({
             </div>
           </div>
 
+          {/* ACTION BUTTONS */}
           <div className="sticky bottom-0 flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4">
             <button
               type="button"
@@ -888,7 +940,11 @@ const ScheduleMeetingModal = ({
 
             <button
               type="submit"
-              disabled={submitting || loadingStudents}
+              disabled={
+                submitting ||
+                loadingStudents ||
+                students.length === 0
+              }
               className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-5 py-2 text-[13px] font-medium text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {submitting && (

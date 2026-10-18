@@ -210,6 +210,13 @@ const getInitials = (name) => {
 };
 
 // ==========================================================
+// RESPONSE NORMALIZATION
+// ==========================================================
+
+const unwrapResponse = (response) =>
+  response?.data?.data ?? response?.data ?? response ?? null;
+
+// ==========================================================
 // HEADER
 // ==========================================================
 
@@ -234,10 +241,12 @@ const Header = () => {
   // LOAD STUDENT PROFILE
   // ========================================================
 
-  useEffect(() => {
-    let cancelled = false;
+  const loadStudentProfile = useCallback(async (showLoading = false) => {
+    if (showLoading) {
+      setProfileLoading(true);
+    }
 
-    const loadStudentProfile = async () => {
+    try {
       let storedUser = {};
 
       try {
@@ -248,79 +257,183 @@ const Header = () => {
         console.error("Unable to read stored user:", error);
       }
 
-      if (cancelled) return;
+      // Display cached information immediately.
+      setUser((previous) => ({
+        ...storedUser,
+        ...(previous || {}),
+      }));
 
-      setUser(storedUser);
+      // Fetch the authoritative personal profile.
+      try {
+        const response = await api.get(
+          "/mentee/profile/personal/"
+        );
 
-      if (getFullName(storedUser)) {
-        setProfileLoading(false);
-        return;
+        const payload = unwrapResponse(response);
+
+        if (payload && typeof payload === "object") {
+          const profileData =
+            payload.student ||
+            payload.profile ||
+            payload;
+
+          const updatedUser = {
+            ...storedUser,
+            ...profileData,
+            fullName:
+              profileData.fullName ||
+              storedUser.fullName ||
+              "",
+            profileImage:
+              profileData.profileImage ??
+              storedUser.profileImage ??
+              null,
+          };
+
+          setUser(updatedUser);
+
+          localStorage.setItem(
+            "user",
+            JSON.stringify(updatedUser)
+          );
+
+          return;
+        }
+      } catch (error) {
+        if (
+          error.response?.status !== 404 &&
+          error.response?.status !== 405
+        ) {
+          console.warn(
+            "Unable to fetch personal profile:",
+            error.response?.data?.message || error.message
+          );
+        }
       }
 
-      try {
-        const endpoints = [
-          "/mentee/profile",
-          "/mentee/dashboard",
-          "/mentee/dashboard/banner",
-        ];
+      // Fallback endpoints for deployments where profile details
+      // are provided by a dashboard endpoint.
+      const endpoints = [
+        "/mentee/profile",
+        "/mentee/dashboard",
+        "/mentee/dashboard/banner",
+      ];
 
-        for (const endpoint of endpoints) {
-          if (cancelled) return;
+      for (const endpoint of endpoints) {
+        try {
+          const response = await api.get(endpoint);
+          const payload = unwrapResponse(response);
+          const fullName = getFullName(payload);
 
-          try {
-            const response = await api.get(endpoint);
-            const payload = response.data?.data ?? response.data;
-            const fullName = getFullName(payload);
+          if (!fullName) continue;
 
-            if (!fullName) continue;
+          const updatedUser = {
+            ...storedUser,
+            fullName,
+            profileImage:
+              getProfileImage(payload) ||
+              getProfileImage(storedUser) ||
+              null,
+          };
 
-            const updatedUser = {
-              ...storedUser,
-              fullName,
-              profileImage:
-                getProfileImage(payload) ||
-                getProfileImage(storedUser),
-            };
+          setUser(updatedUser);
 
-            setUser(updatedUser);
+          localStorage.setItem(
+            "user",
+            JSON.stringify(updatedUser)
+          );
 
-            localStorage.setItem(
-              "user",
-              JSON.stringify(updatedUser)
+          break;
+        } catch (error) {
+          if (
+            error.response?.status !== 404 &&
+            error.response?.status !== 405
+          ) {
+            console.warn(
+              `Profile request failed for ${endpoint}:`,
+              error.response?.data?.message || error.message
             );
-
-            break;
-          } catch (error) {
-            if (
-              error.response?.status !== 404 &&
-              error.response?.status !== 405
-            ) {
-              console.warn(
-                `Profile request failed for ${endpoint}:`,
-                error.response?.data?.message || error.message
-              );
-            }
           }
         }
+      }
+    } finally {
+      if (showLoading) {
+        setProfileLoading(false);
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+
+    const initializeProfile = async () => {
+      try {
+        await loadStudentProfile(true);
+      } catch (error) {
+        console.error("Unable to load student profile:", error);
       } finally {
-        if (!cancelled) {
+        if (active) {
           setProfileLoading(false);
         }
       }
     };
 
-    loadStudentProfile().catch((error) => {
-      console.error("Unable to load student profile:", error);
+    initializeProfile();
 
-      if (!cancelled) {
-        setProfileLoading(false);
+    const handleProfileUpdated = (event) => {
+      const updatedImage = event?.detail?.profileImage;
+
+      // Reflect the new avatar immediately without waiting for a request.
+      if (updatedImage !== undefined) {
+        setUser((previous) => {
+          const nextUser = {
+            ...(previous || {}),
+            profileImage: updatedImage || null,
+          };
+
+          try {
+            const storedUser = JSON.parse(
+              localStorage.getItem("user") || "{}"
+            );
+
+            localStorage.setItem(
+              "user",
+              JSON.stringify({
+                ...storedUser,
+                ...nextUser,
+              })
+            );
+          } catch (error) {
+            console.warn(
+              "Unable to update cached profile image:",
+              error
+            );
+          }
+
+          return nextUser;
+        });
       }
-    });
+
+      // Refresh from the backend so the saved profile remains authoritative.
+      loadStudentProfile(false).catch((error) => {
+        console.error("Unable to refresh student profile:", error);
+      });
+    };
+
+    window.addEventListener(
+      "student-profile-updated",
+      handleProfileUpdated
+    );
 
     return () => {
-      cancelled = true;
+      active = false;
+
+      window.removeEventListener(
+        "student-profile-updated",
+        handleProfileUpdated
+      );
     };
-  }, []);
+  }, [loadStudentProfile]);
 
   // ========================================================
   // LOAD DOCUMENTS
@@ -377,6 +490,7 @@ const Header = () => {
       if (event.key === "Escape") {
         setSearchOpen(false);
         searchRef.current?.blur();
+        setProfileOpen(false);
       }
     };
 
@@ -489,7 +603,6 @@ const Header = () => {
     setProfileOpen(false);
 
     try {
-      // Use the existing authentication logout function.
       await logout();
     } catch (error) {
       console.error(
@@ -497,8 +610,6 @@ const Header = () => {
         error.response?.data?.message || error.message
       );
     } finally {
-      // Clear local authentication state even if the API
-      // request fails, so the user can leave the session.
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       localStorage.removeItem("user");
@@ -750,7 +861,7 @@ const Header = () => {
         )}
       </div>
 
-      {/* STATIC NOTIFICATIONS + PROFILE */}
+      {/* NOTIFICATIONS AND PROFILE */}
 
       <div className="ml-1 flex shrink-0 items-center gap-2 sm:ml-4 sm:gap-4">
         <button
@@ -758,7 +869,7 @@ const Header = () => {
           aria-label="Notifications"
           title="Notifications"
           onClick={() => {
-            // Notifications will be integrated later.
+            // Notification integration can be added later.
           }}
           className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-700 transition hover:bg-slate-100 hover:text-blue-600 sm:h-11 sm:w-11"
         >
@@ -767,7 +878,7 @@ const Header = () => {
 
         <div className="hidden h-10 w-px bg-slate-200 sm:block" />
 
-        {/* PROFILE */}
+        {/* PROFILE MENU */}
 
         <div className="relative">
           <button
@@ -779,21 +890,15 @@ const Header = () => {
             }
             className="flex items-center gap-2 rounded-xl px-1.5 py-2 transition hover:bg-slate-100 sm:gap-3 sm:px-2"
           >
-            {getProfileImage(user) ? (
-              <img
-                src={profileImage}
-                alt={displayName}
-                onError={(event) => {
-                  event.currentTarget.onerror = null;
-                  event.currentTarget.src = defaultProfile;
-                }}
-                className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm sm:h-11 sm:w-11"
-              />
-            ) : (
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-sm font-semibold text-white shadow-sm sm:h-11 sm:w-11">
-                {getInitials(displayName)}
-              </div>
-            )}
+            <img
+              src={profileImage}
+              alt={displayName}
+              onError={(event) => {
+                event.currentTarget.onerror = null;
+                event.currentTarget.src = defaultProfile;
+              }}
+              className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm sm:h-11 sm:w-11"
+            />
 
             <div className="hidden min-w-0 text-left sm:block">
               <h3 className="max-w-44 truncate text-sm font-semibold text-slate-800">
@@ -829,6 +934,7 @@ const Header = () => {
                   <p className="mt-1 truncate text-xs text-slate-500">
                     {displayRole}
                   </p>
+
                   {user?.email && (
                     <p className="mt-1 truncate text-xs text-slate-400">
                       {user.email}
@@ -861,6 +967,7 @@ const Header = () => {
                   ) : (
                     <LogOut size={17} />
                   )}
+
                   {loggingOut ? "Signing out..." : "Sign Out"}
                 </button>
               </div>

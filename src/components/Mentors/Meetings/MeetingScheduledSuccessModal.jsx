@@ -10,6 +10,7 @@ import {
   ClipboardList,
   CalendarCheck2,
   Video,
+  Users,
 } from "lucide-react";
 
 // =========================================================
@@ -24,23 +25,43 @@ const firstValue = (...values) =>
       value !== ""
   );
 
-const unwrapMeeting = (value) => {
+const isObject = (value) =>
+  value !== null &&
+  typeof value === "object" &&
+  !Array.isArray(value);
+
+// Handles common API response wrappers without mistaking
+// the bulk response's `meetings` array for a single meeting.
+const unwrapResponse = (value) => {
   let result = value;
 
-  for (let i = 0; i < 4; i += 1) {
-    if (
-      result &&
-      !Array.isArray(result) &&
-      typeof result === "object" &&
-      Object.prototype.hasOwnProperty.call(result, "data")
-    ) {
-      result = result.data;
-    } else {
-      break;
+  for (let i = 0; i < 5; i += 1) {
+    if (!isObject(result)) break;
+
+    if (Array.isArray(result.meetings)) break;
+
+    if (isObject(result.meeting)) {
+      result = result.meeting;
+      continue;
     }
+
+    if (isObject(result.data)) {
+      result = result.data;
+      continue;
+    }
+
+    break;
   }
 
   return result;
+};
+
+const parseDate = (value) => {
+  if (!value) return null;
+
+  const date = new Date(value);
+
+  return Number.isNaN(date.getTime()) ? null : date;
 };
 
 const getStartAt = (meeting) =>
@@ -61,14 +82,6 @@ const getEndAt = (meeting) =>
     meeting?.end_time,
     null
   );
-
-const parseDate = (value) => {
-  if (!value) return null;
-
-  const date = new Date(value);
-
-  return Number.isNaN(date.getTime()) ? null : date;
-};
 
 const formatDate = (value) => {
   const date = parseDate(value);
@@ -107,9 +120,11 @@ const getMeetingType = (meeting) => {
 };
 
 const getMeetingMode = (meeting) =>
-  String(meeting?.mode ?? "").trim().toUpperCase();
+  String(meeting?.mode ?? "")
+    .trim()
+    .toUpperCase();
 
-const formatVenue = (meeting) => {
+const getMeetingVenue = (meeting) => {
   const mode = getMeetingMode(meeting);
 
   if (mode === "ONLINE") {
@@ -127,6 +142,20 @@ const formatVenue = (meeting) => {
   );
 };
 
+const getMeetingArray = (response) => {
+  if (Array.isArray(response)) return response;
+
+  if (Array.isArray(response?.meetings)) {
+    return response.meetings;
+  }
+
+  if (Array.isArray(response?.data)) {
+    return response.data;
+  }
+
+  return [];
+};
+
 // =========================================================
 // COMPONENT
 // =========================================================
@@ -136,9 +165,32 @@ const MeetingScheduledSuccessModal = ({
   onClose,
   meeting = null,
 }) => {
-  const actualMeeting = useMemo(
-    () => unwrapMeeting(meeting),
+  const response = useMemo(
+    () => unwrapResponse(meeting),
     [meeting]
+  );
+
+  const meetings = useMemo(
+    () => getMeetingArray(response),
+    [response]
+  );
+
+  const isBulk =
+    response?.allStudents === true ||
+    meetings.length > 1;
+
+  // Prefer an actual created meeting record. The first
+  // record contains the shared schedule for bulk meetings.
+  const actualMeeting = isBulk
+    ? meetings[0] ?? null
+    : response;
+
+  const totalCreated = Number(
+    firstValue(
+      response?.totalCreated,
+      meetings.length,
+      0
+    )
   );
 
   const startAt = getStartAt(actualMeeting);
@@ -158,9 +210,23 @@ const MeetingScheduledSuccessModal = ({
     ? `${startTime}${endTime ? ` - ${endTime}` : ""}`
     : "Time unavailable";
 
-  const meetingVenue = formatVenue(actualMeeting);
+  const meetingVenue = getMeetingVenue(actualMeeting);
   const meetingType = getMeetingType(actualMeeting);
   const isOnline = getMeetingMode(actualMeeting) === "ONLINE";
+
+  const studentNames = meetings
+    .map((item) => item?.students?.fullName)
+    .filter(Boolean);
+
+  const successTitle = isBulk
+    ? "Meetings Scheduled!"
+    : "Meeting Scheduled!";
+
+  const successDescription = isBulk
+    ? `Meetings successfully scheduled for ${totalCreated} ${
+        totalCreated === 1 ? "mentee" : "mentees"
+      }.`
+    : "Your meeting has been scheduled successfully.";
 
   useEffect(() => {
     if (!open) return undefined;
@@ -180,22 +246,26 @@ const MeetingScheduledSuccessModal = ({
 
   if (!open) return null;
 
-  // =======================================================
-  // RENDER
-  // =======================================================
-
   return (
     <>
+      {/* Backdrop */}
       <div
         onClick={onClose}
         className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-[2px]"
       />
 
+      {/* Modal */}
       <section
         role="dialog"
         aria-modal="true"
         aria-labelledby="meeting-success-title"
-        className="fixed left-1/2 top-1/2 z-[9999] flex max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl"
+        className="
+          fixed left-1/2 top-1/2 z-[9999]
+          flex max-h-[90vh] w-[calc(100%-2rem)]
+          max-w-lg -translate-x-1/2 -translate-y-1/2
+          flex-col overflow-hidden rounded-2xl
+          border border-slate-200 bg-white shadow-2xl
+        "
       >
         {/* Header */}
         <div className="flex items-center justify-end px-5 pt-3">
@@ -223,13 +293,43 @@ const MeetingScheduledSuccessModal = ({
               id="meeting-success-title"
               className="mt-4 text-center text-[22px] font-semibold text-slate-800"
             >
-              Meeting Scheduled!
+              {successTitle}
             </h2>
 
             <p className="mt-2 text-center text-[13px] text-slate-500">
-              Your meeting has been scheduled successfully.
+              {successDescription}
             </p>
           </div>
+
+          {/* Bulk mentee information */}
+          {isBulk && (
+            <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50 p-4">
+              <div className="flex items-center gap-2">
+                <Users
+                  size={18}
+                  className="shrink-0 text-blue-600"
+                />
+
+                <p className="text-sm font-semibold text-blue-900">
+                  {totalCreated} meeting{" "}
+                  {totalCreated === 1 ? "record" : "records"} created
+                </p>
+              </div>
+
+              {studentNames.length > 0 && (
+                <div className="mt-3 space-y-1">
+                  {studentNames.map((name, index) => (
+                    <p
+                      key={`${name}-${index}`}
+                      className="break-words text-xs text-blue-800"
+                    >
+                      • {name}
+                    </p>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Meeting details */}
           <div className="mt-6 space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
@@ -258,7 +358,7 @@ const MeetingScheduledSuccessModal = ({
                 className="mt-0.5 shrink-0 text-blue-600"
               />
 
-              <div>
+              <div className="min-w-0">
                 <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
                   Date
                 </p>
@@ -276,7 +376,7 @@ const MeetingScheduledSuccessModal = ({
                 className="mt-0.5 shrink-0 text-blue-600"
               />
 
-              <div>
+              <div className="min-w-0">
                 <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
                   Time
                 </p>
@@ -287,7 +387,7 @@ const MeetingScheduledSuccessModal = ({
               </div>
             </div>
 
-            {/* Venue or meeting link */}
+            {/* Venue / meeting link */}
             <div className="flex items-start gap-3">
               {isOnline ? (
                 <Video
@@ -301,7 +401,7 @@ const MeetingScheduledSuccessModal = ({
                 />
               )}
 
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
                   {isOnline ? "Meeting Link" : "Venue"}
                 </p>
@@ -310,7 +410,7 @@ const MeetingScheduledSuccessModal = ({
                   <a
                     href={actualMeeting.meetingLink}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="mt-1 block break-all text-sm font-medium text-blue-600 underline"
                   >
                     {actualMeeting.meetingLink}
@@ -330,7 +430,7 @@ const MeetingScheduledSuccessModal = ({
                 className="mt-0.5 shrink-0 text-blue-600"
               />
 
-              <div>
+              <div className="min-w-0">
                 <p className="text-[11px] font-medium uppercase tracking-wide text-slate-400">
                   Type
                 </p>

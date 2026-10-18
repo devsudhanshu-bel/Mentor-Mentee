@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+
 import {
   X,
   Camera,
@@ -6,11 +7,34 @@ import {
   Mail,
   Phone,
   Save,
+  LoaderCircle,
+  Check,
+  Trash2,
 } from "lucide-react";
 
 import {
   updateMentorProfile,
 } from "../../../../api/profile.api";
+
+import api from "../../../../api/axios";
+
+// ==========================================================
+// CONFIGURATION
+// ==========================================================
+
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
+
+const ALLOWED_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+];
+
+const PROFILE_PICTURE_ENDPOINT = "/mentor/profile/picture";
+
+// ==========================================================
+// COMPONENT
+// ==========================================================
 
 const EditProfileModal = ({
   open,
@@ -26,9 +50,27 @@ const EditProfileModal = ({
 
   const [loading, setLoading] = useState(false);
 
-  /* ==========================================================
-     LOAD MENTOR DATA
-  ========================================================== */
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [uploadingPicture, setUploadingPicture] = useState(false);
+  const [removingPicture, setRemovingPicture] = useState(false);
+
+  const fileInputRef = useRef(null);
+  const previewUrlRef = useRef("");
+
+  // ========================================================
+  // CLEAN UP IMAGE PREVIEW
+  // ========================================================
+
+  const clearPreview = () => {
+    if (previewUrlRef.current) {
+      URL.revokeObjectURL(previewUrlRef.current);
+      previewUrlRef.current = "";
+    }
+
+    setPreviewUrl("");
+    setSelectedFile(null);
+  };
 
   useEffect(() => {
     if (open && mentor) {
@@ -37,23 +79,177 @@ const EditProfileModal = ({
         email: mentor.email || "",
         phone: mentor.phone || "",
       });
+
+      clearPreview();
     }
   }, [mentor, open]);
 
-  /* ==========================================================
-     HANDLE INPUT CHANGE
-  ========================================================== */
+  useEffect(() => {
+    return () => {
+      if (previewUrlRef.current) {
+        URL.revokeObjectURL(previewUrlRef.current);
+      }
+    };
+  }, []);
+
+  // ========================================================
+  // HANDLE INPUT CHANGE
+  // ========================================================
 
   const handleChange = (field, value) => {
-    setFormData((prev) => ({
-      ...prev,
+    setFormData((previous) => ({
+      ...previous,
       [field]: value,
     }));
   };
 
-  /* ==========================================================
-     HANDLE SAVE
-  ========================================================== */
+  // ========================================================
+  // OPEN FILE PICKER
+  // ========================================================
+
+  const handleChoosePicture = () => {
+    if (uploadingPicture || removingPicture) return;
+
+    fileInputRef.current?.click();
+  };
+
+  // ========================================================
+  // SELECT PICTURE
+  // ========================================================
+
+  const handlePictureChange = (event) => {
+    const file = event.target.files?.[0];
+
+    event.target.value = "";
+
+    if (!file) return;
+
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      alert("Please select a JPEG, PNG, or WebP image.");
+      return;
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+      alert("Profile pictures must be 5 MB or smaller.");
+      return;
+    }
+
+    clearPreview();
+
+    const objectUrl = URL.createObjectURL(file);
+
+    previewUrlRef.current = objectUrl;
+
+    setSelectedFile(file);
+    setPreviewUrl(objectUrl);
+  };
+
+  // ========================================================
+  // UPLOAD PROFILE PICTURE
+  // ========================================================
+
+  const handleUploadPicture = async () => {
+    if (!selectedFile || uploadingPicture || removingPicture) {
+      return;
+    }
+
+    const formData = new FormData();
+
+    // Must match multer.single("profileImage") on the backend.
+    formData.append("profileImage", selectedFile);
+
+    try {
+      setUploadingPicture(true);
+
+      const response = await api.post(
+        PROFILE_PICTURE_ENDPOINT,
+        formData
+      );
+
+      const payload =
+        response?.data?.data ?? response?.data;
+
+      const imageUrl = payload?.profileImage;
+
+      if (!imageUrl) {
+        throw new Error(
+          "The server did not return the uploaded profile picture."
+        );
+      }
+
+      clearPreview();
+
+      // Notify the mentor header and other listening components.
+      window.dispatchEvent(
+        new CustomEvent("mentor-profile-updated", {
+          detail: {
+            profileImage: imageUrl,
+          },
+        })
+      );
+
+      // Refresh the parent profile so it displays the saved URL.
+      await fetchProfile();
+
+      alert("Profile picture updated successfully.");
+    } catch (error) {
+      console.error("Mentor picture upload failed:", error);
+
+      alert(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to upload profile picture."
+      );
+    } finally {
+      setUploadingPicture(false);
+    }
+  };
+
+  // ========================================================
+  // REMOVE PROFILE PICTURE
+  // ========================================================
+
+  const handleRemovePicture = async () => {
+    if (uploadingPicture || removingPicture) return;
+
+    if (!mentor?.profileImage) {
+      alert("There is no uploaded profile picture to remove.");
+      return;
+    }
+
+    try {
+      setRemovingPicture(true);
+
+      await api.delete(PROFILE_PICTURE_ENDPOINT);
+
+      clearPreview();
+
+      window.dispatchEvent(
+        new CustomEvent("mentor-profile-updated", {
+          detail: {
+            profileImage: "",
+          },
+        })
+      );
+
+      await fetchProfile();
+
+      alert("Profile picture removed successfully.");
+    } catch (error) {
+      console.error("Mentor picture removal failed:", error);
+
+      alert(
+        error?.response?.data?.message ||
+          "Failed to remove profile picture."
+      );
+    } finally {
+      setRemovingPicture(false);
+    }
+  };
+
+  // ========================================================
+  // HANDLE PROFILE SAVE
+  // ========================================================
 
   const handleSave = async () => {
     if (!formData.fullName.trim()) {
@@ -74,18 +270,7 @@ const EditProfileModal = ({
         phone: formData.phone.trim(),
       };
 
-      console.log(
-        "Updating mentor profile:",
-        updatedData
-      );
-
       await updateMentorProfile(updatedData);
-
-      /*
-       * Fetch fresh profile data from backend
-       * so the main profile page immediately
-       * reflects the changes.
-       */
 
       await fetchProfile();
 
@@ -93,10 +278,7 @@ const EditProfileModal = ({
 
       alert("Profile updated successfully.");
     } catch (error) {
-      console.error(
-        "Update Profile Error:",
-        error
-      );
+      console.error("Update Profile Error:", error);
 
       alert(
         error?.response?.data?.message ||
@@ -107,33 +289,45 @@ const EditProfileModal = ({
     }
   };
 
-  /* ==========================================================
-     MODAL CLOSED
-  ========================================================== */
+  // ========================================================
+  // CLOSE MODAL
+  // ========================================================
+
+  const handleClose = () => {
+    if (loading || uploadingPicture || removingPicture) return;
+
+    clearPreview();
+    onClose();
+  };
+
+  // ========================================================
+  // MODAL CLOSED
+  // ========================================================
 
   if (!open) {
     return null;
   }
 
-  /* ==========================================================
-     RENDER
-  ========================================================== */
+  // ========================================================
+  // DISPLAY IMAGE
+  // ========================================================
+
+  const displayedImage =
+    previewUrl || mentor?.profileImage || "";
+
+  const pictureBusy = uploadingPicture || removingPicture;
+
+  // ========================================================
+  // RENDER
+  // ========================================================
 
   return (
     <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
-
-      {/* ======================================================
-          MODAL
-      ====================================================== */}
-
       <div className="flex max-h-[90vh] w-full max-w-[980px] flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
 
-        {/* ====================================================
-            HEADER
-        ==================================================== */}
+        {/* HEADER */}
 
         <div className="flex items-center justify-between border-b border-slate-200 px-7 py-5">
-
           <div>
             <h2 className="text-xl font-bold text-slate-900">
               Edit Mentor Profile
@@ -146,39 +340,35 @@ const EditProfileModal = ({
 
           <button
             type="button"
-            onClick={onClose}
-            disabled={loading}
+            onClick={handleClose}
+            disabled={loading || pictureBusy}
+            aria-label="Close edit profile"
             className="rounded-lg p-2 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X size={20} />
           </button>
-
         </div>
 
-        {/* ====================================================
-            BODY
-        ==================================================== */}
+        {/* BODY */}
 
         <div className="flex-1 overflow-y-auto px-7 py-7">
 
-          {/* ==================================================
-              PROFILE PICTURE
-          ================================================== */}
+          {/* PROFILE PICTURE */}
 
           <div className="border-b border-slate-200 pb-7">
+            <div className="flex flex-wrap items-center gap-6">
 
-            <div className="flex items-center gap-6">
+              {/* AVATAR */}
 
-              {/* Profile Picture */}
-
-              <div className="relative">
-
+              <div className="relative shrink-0">
                 <div className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full border-4 border-slate-200 bg-slate-100">
-
-                  {mentor?.profileImage ? (
+                  {displayedImage ? (
                     <img
-                      src={mentor.profileImage}
+                      src={displayedImage}
                       alt="Mentor profile"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                      }}
                       className="h-full w-full object-cover"
                     />
                   ) : (
@@ -187,26 +377,43 @@ const EditProfileModal = ({
                       className="text-slate-400"
                     />
                   )}
-
                 </div>
 
-                {/* Camera Button */}
+                {/* CAMERA BUTTON */}
 
                 <button
                   type="button"
-                  disabled
-                  title="Profile picture upload will be added later"
-                  className="absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg opacity-90"
+                  onClick={handleChoosePicture}
+                  disabled={pictureBusy || loading}
+                  title="Change profile picture"
+                  aria-label="Choose profile picture"
+                  className="absolute bottom-1 right-1 flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 text-white shadow-lg transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  <Camera size={18} />
+                  {uploadingPicture ? (
+                    <LoaderCircle
+                      size={18}
+                      className="animate-spin"
+                    />
+                  ) : (
+                    <Camera size={18} />
+                  )}
                 </button>
 
+                {/* HIDDEN FILE INPUT */}
+
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handlePictureChange}
+                  className="hidden"
+                  aria-label="Select mentor profile picture"
+                />
               </div>
 
-              {/* Picture Information */}
+              {/* PICTURE DETAILS */}
 
-              <div>
-
+              <div className="min-w-0 flex-1">
                 <h3 className="text-lg font-semibold text-slate-900">
                   Profile Picture
                 </h3>
@@ -216,75 +423,113 @@ const EditProfileModal = ({
                 </p>
 
                 <p className="mt-2 text-xs text-slate-400">
-                  JPG, PNG • Max 2MB
+                  JPEG, PNG or WebP · Maximum 5 MB
                 </p>
 
-                <p className="mt-1 text-[11px] text-blue-500">
-                  Profile picture upload will be available later.
-                </p>
+                {selectedFile && (
+                  <p className="mt-2 max-w-xs truncate text-xs text-blue-600">
+                    {selectedFile.name}
+                  </p>
+                )}
 
+                {/* IMAGE ACTIONS */}
+
+                {selectedFile && (
+                  <div className="mt-3 flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handleUploadPicture}
+                      disabled={pictureBusy || loading}
+                      className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+                    >
+                      {uploadingPicture ? (
+                        <LoaderCircle
+                          size={14}
+                          className="animate-spin"
+                        />
+                      ) : (
+                        <Check size={14} />
+                      )}
+
+                      {uploadingPicture
+                        ? "Uploading..."
+                        : "Save Picture"}
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={clearPreview}
+                      disabled={pictureBusy}
+                      className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 disabled:opacity-60"
+                    >
+                      <X size={13} />
+                      Cancel
+                    </button>
+                  </div>
+                )}
+
+                {!selectedFile && mentor?.profileImage && (
+                  <button
+                    type="button"
+                    onClick={handleRemovePicture}
+                    disabled={pictureBusy || loading}
+                    className="mt-3 inline-flex items-center gap-2 text-xs font-semibold text-red-600 transition hover:text-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    {removingPicture ? (
+                      <LoaderCircle
+                        size={14}
+                        className="animate-spin"
+                      />
+                    ) : (
+                      <Trash2 size={14} />
+                    )}
+
+                    {removingPicture
+                      ? "Removing..."
+                      : "Remove Picture"}
+                  </button>
+                )}
               </div>
-
             </div>
-
           </div>
 
-          {/* ==================================================
-              PERSONAL INFORMATION
-          ================================================== */}
+          {/* PERSONAL INFORMATION */}
 
           <div className="pt-7">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 
-            <div className="grid grid-cols-2 gap-6">
-
-              {/* =================================================
-                  FULL NAME
-              ================================================= */}
+              {/* FULL NAME */}
 
               <div>
-
                 <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
-
                   <User
                     size={16}
                     className="text-blue-600"
                   />
-
                   Full Name
-
                 </label>
 
                 <input
                   type="text"
                   value={formData.fullName}
-                  onChange={(e) =>
-                    handleChange(
-                      "fullName",
-                      e.target.value
-                    )
+                  onChange={(event) =>
+                    handleChange("fullName", event.target.value)
                   }
-                  disabled={loading}
+                  disabled={loading || pictureBusy}
                   placeholder="Enter your full name"
                   className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                 />
-
               </div>
 
-              {/* =================================================
-                  EMAIL
-              ================================================= */}
+              {/* EMAIL */}
 
               <div>
-
                 <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
-
                   <Mail
                     size={16}
                     className="text-blue-600"
                   />
-
                   Email Address
-
                 </label>
 
                 <input
@@ -297,86 +542,66 @@ const EditProfileModal = ({
                 <p className="mt-1.5 text-[11px] text-slate-400">
                   Email address cannot be changed here.
                 </p>
-
               </div>
 
-              {/* =================================================
-                  PHONE
-              ================================================= */}
+              {/* PHONE */}
 
               <div>
-
                 <label className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-700">
-
                   <Phone
                     size={16}
                     className="text-blue-600"
                   />
-
                   Phone Number
-
                 </label>
 
                 <input
                   type="tel"
                   value={formData.phone}
-                  onChange={(e) =>
-                    handleChange(
-                      "phone",
-                      e.target.value
-                    )
+                  onChange={(event) =>
+                    handleChange("phone", event.target.value)
                   }
-                  disabled={loading}
+                  disabled={loading || pictureBusy}
                   placeholder="Enter your phone number"
                   className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-800 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
                 />
-
               </div>
-
             </div>
-
           </div>
-
         </div>
 
-        {/* ====================================================
-            FOOTER
-        ==================================================== */}
+        {/* FOOTER */}
 
         <div className="flex items-center justify-end gap-3 border-t border-slate-200 bg-slate-50 px-7 py-5">
-
-          {/* Cancel */}
-
           <button
             type="button"
-            onClick={onClose}
-            disabled={loading}
+            onClick={handleClose}
+            disabled={loading || pictureBusy}
             className="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X size={16} />
-
             Cancel
           </button>
-
-          {/* Save */}
 
           <button
             type="button"
             onClick={handleSave}
-            disabled={loading}
+            disabled={loading || pictureBusy}
             className="flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <Save size={16} />
+            {loading ? (
+              <LoaderCircle
+                size={16}
+                className="animate-spin"
+              />
+            ) : (
+              <Save size={16} />
+            )}
 
-            {loading
-              ? "Saving..."
-              : "Save Changes"}
+            {loading ? "Saving..." : "Save Changes"}
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };

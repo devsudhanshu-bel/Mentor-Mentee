@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
@@ -31,6 +32,10 @@ import StudentInternshipProfile from "../../../components/Mentors/Students/Inter
 import InternshipStatCard from "../../../components/Mentors/Students/Internships/InternshipStatCard";
 
 import api from "../../../api/axios";
+
+/* =========================================================
+   API HELPERS
+========================================================= */
 
 const unwrap = (response) => {
   const result = response?.data;
@@ -127,6 +132,45 @@ const getStudentIdFromInternship = (item) =>
   null;
 
 /* =========================================================
+   STUDENT PROFILE NORMALIZATION
+
+   Supports:
+   - API response: { student: {...}, internships: [...] }
+   - API response: { data: { student: {...} } }
+     (handled by unwrap)
+   - Navigation state containing a partial student object
+
+   The API student data takes precedence over navigation
+   state, especially for profileImage.
+========================================================= */
+
+const normalizeStudentProfile = (apiStudent, navigationStudent) => {
+  const apiProfile =
+    apiStudent && typeof apiStudent === "object"
+      ? apiStudent
+      : {};
+
+  const navigationProfile =
+    navigationStudent && typeof navigationStudent === "object"
+      ? navigationStudent
+      : {};
+
+  return {
+    ...navigationProfile,
+    ...apiProfile,
+
+    // If the API does not supply an image, preserve an image
+    // already present in the navigation object.
+    profileImage:
+      apiProfile.profileImage ||
+      apiProfile.profile?.profileImage ||
+      navigationProfile.profileImage ||
+      navigationProfile.profile?.profileImage ||
+      null,
+  };
+};
+
+/* =========================================================
    MAIN INTERNSHIPS PAGE
 ========================================================= */
 
@@ -144,6 +188,10 @@ const Internships = () => {
     location.state?.studentId ||
     selectedStudent?.id ||
     null;
+
+  const [studentProfile, setStudentProfile] = useState(
+    () => selectedStudent || null
+  );
 
   const [internships, setInternships] = useState([]);
   const [initialQueue, setInitialQueue] = useState([]);
@@ -166,7 +214,18 @@ const Internships = () => {
   const [reviewError, setReviewError] = useState("");
 
   /* =======================================================
-     LOAD INTERNSHIP DATA
+     SYNC NAVIGATION STUDENT
+
+     Initialize the profile when the selected student changes.
+     The API response below will supply the latest data.
+  ======================================================= */
+
+  useEffect(() => {
+    setStudentProfile(selectedStudent || null);
+  }, [studentId, selectedStudent]);
+
+  /* =======================================================
+     LOAD INTERNSHIP DATA AND STUDENT PROFILE
   ======================================================= */
 
   const loadPage = useCallback(
@@ -175,6 +234,7 @@ const Internships = () => {
         setError(
           "Student ID is missing. Open this page from the selected student's profile."
         );
+
         setLoading(false);
         setRefreshing(false);
         return;
@@ -195,17 +255,62 @@ const Internships = () => {
             )}`,
             { signal }
           ),
+
           api.get("/mentor/internships/initial", { signal }),
+
           api.get("/mentor/internships/completion", { signal }),
         ]);
+
+        if (signal?.aborted) return;
 
         const allItems = unwrap(studentResponse);
         const initialItems = unwrap(initialResponse);
         const completionItems = unwrap(completionResponse);
 
+        /* ---------------------------------------------------
+           IMPORTANT FIX: EXTRACT STUDENT PROFILE FROM API
+
+           getStudentInternships returns:
+           {
+             student: {
+               id,
+               fullName,
+               registerNumber,
+               profileImage
+             },
+             internships: [],
+             current: [],
+             history: [],
+             pendingVerifications: []
+           }
+        --------------------------------------------------- */
+
+        const studentFromApi =
+          allItems &&
+          !Array.isArray(allItems) &&
+          typeof allItems === "object"
+            ? allItems.student ||
+              allItems.data?.student ||
+              null
+            : null;
+
+        const normalizedStudent = normalizeStudentProfile(
+          studentFromApi,
+          selectedStudent
+        );
+
+        setStudentProfile(normalizedStudent);
+
+        /* ---------------------------------------------------
+           EXTRACT INTERNSHIP RECORDS
+        --------------------------------------------------- */
+
         const all = Array.isArray(allItems)
           ? allItems
-          : allItems?.internships || allItems?.items || [];
+          : allItems?.internships ||
+            allItems?.items ||
+            allItems?.data?.internships ||
+            [];
 
         const initial = Array.isArray(initialItems)
           ? initialItems
@@ -224,14 +329,16 @@ const Internships = () => {
         setInitialQueue(
           initial.filter(
             (item) =>
-              getStudentIdFromInternship(item) === studentId
+              String(getStudentIdFromInternship(item)) ===
+              String(studentId)
           )
         );
 
         setCompletionQueue(
           completion.filter(
             (item) =>
-              getStudentIdFromInternship(item) === studentId
+              String(getStudentIdFromInternship(item)) ===
+              String(studentId)
           )
         );
       } catch (err) {
@@ -255,7 +362,7 @@ const Internships = () => {
         }
       }
     },
-    [studentId]
+    [studentId, selectedStudent]
   );
 
   useEffect(() => {
@@ -416,6 +523,7 @@ const Internships = () => {
     const payload = {
       decision,
       remarks: remarks.trim(),
+
       ...(stage === "completion" && decision === "APPROVED"
         ? { rating: Number(rating) }
         : {}),
@@ -480,6 +588,7 @@ const Internships = () => {
                     loading || refreshing ? "animate-spin" : ""
                   }
                 />
+
                 Refresh
               </button>
 
@@ -501,6 +610,7 @@ const Internships = () => {
                 <p className="font-semibold">
                   Could not load internships
                 </p>
+
                 <p className="mt-1">{error}</p>
               </div>
 
@@ -530,9 +640,12 @@ const Internships = () => {
 
           <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">
             <aside className="min-w-0">
+              {/* IMPORTANT FIX:
+                  Pass the student object from the API,
+                  including profileImage. */}
+
               <StudentInternshipProfile
-                student={selectedStudent}
-                mentor={mentorName}
+                student={studentProfile}
                 internships={internships}
               />
             </aside>
@@ -677,10 +790,7 @@ function CurrentInternshipPanel({ internship, onReview }) {
           </p>
 
           <div className="mt-4 space-y-3 text-sm text-slate-600">
-            <InfoLine
-              icon={CalendarDays}
-              label="Start date"
-            >
+            <InfoLine icon={CalendarDays} label="Start date">
               {dateText(internship.startDate)}
             </InfoLine>
 
@@ -1309,7 +1419,6 @@ function ReviewModal({
             </>
           )}
 
-          {/* Improved error feedback */}
           {error && (
             <div
               role="alert"
