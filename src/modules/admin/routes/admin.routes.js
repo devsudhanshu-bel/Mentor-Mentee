@@ -9,6 +9,7 @@ import assignmentRoutes from "../assignments/assignment.routes.js";
 import studentRoutes from "../students/student.routes.js";
 import termChangeRoutes from "../term-change/termChange.routes.js";
 import overviewRoutes from "../overview/overview.routes.js";
+import announcementsRoutes from "../announcements/announcements.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -41,9 +42,9 @@ router.post("/mentors", AdminController.createMentor);
 |--------------------------------------------------------------------------
 | ADMIN PROFILE
 |--------------------------------------------------------------------------
-| GET    /api/admin/profile  - Fetch the logged-in Admin's profile
-| POST   /api/admin/profile  - Create the profile
-| PUT    /api/admin/profile  - Update the profile
+| GET    /api/admin/profile
+| POST   /api/admin/profile
+| PUT    /api/admin/profile
 */
 
 router.use("/profile", profileRoutes);
@@ -55,6 +56,18 @@ router.use("/profile", profileRoutes);
 */
 
 router.use("/dashboard", dashboardRoutes);
+
+/*
+|--------------------------------------------------------------------------
+| ANNOUNCEMENTS
+|--------------------------------------------------------------------------
+| GET    /api/admin/announcements
+| POST   /api/admin/announcements
+| GET    /api/admin/announcements/:id
+| PATCH  /api/admin/announcements/:id/archive
+*/
+
+router.use("/announcements", announcementsRoutes);
 
 /*
 |--------------------------------------------------------------------------

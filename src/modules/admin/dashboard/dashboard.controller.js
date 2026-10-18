@@ -6,6 +6,7 @@ import asyncHandler from "../../../utils/asyncHandler.js";
 class DashboardController {
   /* ==========================================================
      GET ADMIN DASHBOARD OVERVIEW
+     GET /api/admin/dashboard/overview
   ========================================================== */
 
   getOverview = asyncHandler(async (req, res) => {
@@ -14,7 +15,7 @@ class DashboardController {
     return res.status(200).json(
       new ApiResponse(
         200,
-        "Admin dashboard data fetched successfully",
+        "Admin dashboard data fetched successfully.",
         overview
       )
     );
@@ -22,6 +23,7 @@ class DashboardController {
 
   /* ==========================================================
      GET ADMIN PROFILE OVERVIEW STATISTICS
+     GET /api/admin/dashboard/profile-overview
   ========================================================== */
 
   getProfileOverview = asyncHandler(async (req, res) => {
@@ -30,7 +32,7 @@ class DashboardController {
     return res.status(200).json(
       new ApiResponse(
         200,
-        "Admin profile overview fetched successfully",
+        "Admin profile overview fetched successfully.",
         stats
       )
     );
@@ -38,6 +40,7 @@ class DashboardController {
 
   /* ==========================================================
      GET ADMIN DASHBOARD BANNER
+     GET /api/admin/dashboard/banner
   ========================================================== */
 
   getBanner = asyncHandler(async (req, res) => {
@@ -46,7 +49,7 @@ class DashboardController {
     return res.status(200).json(
       new ApiResponse(
         200,
-        "Dashboard banner fetched successfully",
+        "Admin dashboard banner fetched successfully.",
         banner
       )
     );

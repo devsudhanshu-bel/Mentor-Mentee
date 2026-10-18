@@ -621,6 +621,30 @@ exports.Prisma.Admin_profilesScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.Announcement_recipientsScalarFieldEnum = {
+  id: 'id',
+  announcementId: 'announcementId',
+  userAccountId: 'userAccountId',
+  deliveredAt: 'deliveredAt',
+  readAt: 'readAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.AnnouncementsScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  message: 'message',
+  audience: 'audience',
+  category: 'category',
+  priority: 'priority',
+  status: 'status',
+  publishedById: 'publishedById',
+  publishedAt: 'publishedAt',
+  expiresAt: 'expiresAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -843,6 +867,31 @@ exports.UserRole = exports.$Enums.UserRole = {
   STUDENT: 'STUDENT'
 };
 
+exports.AnnouncementAudience = exports.$Enums.AnnouncementAudience = {
+  MENTORS: 'MENTORS',
+  STUDENTS: 'STUDENTS',
+  ALL: 'ALL'
+};
+
+exports.AnnouncementCategory = exports.$Enums.AnnouncementCategory = {
+  GENERAL: 'GENERAL',
+  ACADEMIC: 'ACADEMIC',
+  MEETING_EVENT: 'MEETING_EVENT',
+  URGENT_NOTICE: 'URGENT_NOTICE'
+};
+
+exports.AnnouncementPriority = exports.$Enums.AnnouncementPriority = {
+  NORMAL: 'NORMAL',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+};
+
+exports.AnnouncementStatus = exports.$Enums.AnnouncementStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  ARCHIVED: 'ARCHIVED'
+};
+
 exports.Prisma.ModelName = {
   academic_term_requests: 'academic_term_requests',
   academic_terms: 'academic_terms',
@@ -874,7 +923,9 @@ exports.Prisma.ModelName = {
   mentor_meeting_notes: 'mentor_meeting_notes',
   mentor_meeting_series: 'mentor_meeting_series',
   mentor_meetings: 'mentor_meetings',
-  admin_profiles: 'admin_profiles'
+  admin_profiles: 'admin_profiles',
+  announcement_recipients: 'announcement_recipients',
+  announcements: 'announcements'
 };
 
 /**

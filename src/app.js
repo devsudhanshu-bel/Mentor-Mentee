@@ -60,7 +60,7 @@ const corsOptions = {
     }
 
     return callback(
-      new Error(`CORS blocked request from origin: ${origin}`),
+      new Error(`CORS blocked request from origin: ${origin}`)
     );
   },
 
@@ -75,7 +75,6 @@ const corsOptions = {
     "OPTIONS",
   ],
 
-  // Allow common headers used by Axios and browser requests.
   allowedHeaders: [
     "Accept",
     "Authorization",
@@ -109,7 +108,7 @@ app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
-  }),
+  })
 );
 
 app.use(cookieParser());
@@ -152,6 +151,8 @@ app.use("/api/admin", mentorDetailsRoutes);
 
 /* ==========================================================
    ADMIN
+   Includes dashboard, profile, assignments,
+   students, term changes and announcements.
 ========================================================== */
 
 app.use("/api/admin", adminRoutes);

@@ -77,14 +77,49 @@ class DashboardService {
   }
 
   /* ==========================================================
-     PROFILE OVERVIEW STATISTICS
+     MEETING STATISTICS
+     Completed: All completed meetings across all mentors.
+     Upcoming: Scheduled meetings within the next 7 days.
   ========================================================== */
 
-  async getProfileOverview(userId) {
-    await this.getAdminAccount(userId);
+  async getMeetingStatistics() {
+    const now = new Date();
 
-    const activeTerm = await this.getActiveAcademicTerm();
+    const nextSevenDays = new Date(
+      now.getTime() + 7 * 24 * 60 * 60 * 1000
+    );
 
+    const [completedMeetings, upcomingMeetings] =
+      await Promise.all([
+        hodPrisma.mentor_meetings.count({
+          where: {
+            status: "COMPLETED",
+          },
+        }),
+
+        hodPrisma.mentor_meetings.count({
+          where: {
+            status: "SCHEDULED",
+
+            startAt: {
+              gte: now,
+              lt: nextSevenDays,
+            },
+          },
+        }),
+      ]);
+
+    return {
+      completedMeetings,
+      upcomingMeetings,
+    };
+  }
+
+  /* ==========================================================
+     SHARED STUDENT AND ASSIGNMENT STATISTICS
+  ========================================================== */
+
+  async getCoreStatistics(activeTerm) {
     const assignmentWhere = this.buildAssignmentWhere(activeTerm);
 
     const [
@@ -92,7 +127,6 @@ class DashboardService {
       totalStudents,
       assignedStudents,
       attendanceAggregate,
-      completedMeetings,
     ] = await Promise.all([
       // Active mentors.
       hodPrisma.teachers.count({
@@ -108,13 +142,12 @@ class DashboardService {
         },
       }),
 
-      // Active assignments for the current term.
+      // Active assignments for the current academic term.
       hodPrisma.mentor_assignments.count({
         where: assignmentWhere,
       }),
 
-      // Average attendance among active students
-      // who have an attendance value.
+      // Average attendance for active students with attendance data.
       hodPrisma.students.aggregate({
         where: {
           status: "ACTIVE",
@@ -126,13 +159,6 @@ class DashboardService {
 
         _avg: {
           overallAttendance: true,
-        },
-      }),
-
-      // Total completed meetings across all mentors.
-      hodPrisma.mentor_meetings.count({
-        where: {
-          status: "COMPLETED",
         },
       }),
     ]);
@@ -150,17 +176,39 @@ class DashboardService {
         : null;
 
     return {
-      mentors: totalMentors,
-      students: totalStudents,
-
-      // Total completed meetings across all mentors.
-      meetings: completedMeetings,
-
-      // Null means attendance data is unavailable.
-      attendance: averageAttendance,
-
+      totalMentors,
+      totalStudents,
       assignedStudents,
       unassignedStudents,
+      averageAttendance,
+    };
+  }
+
+  /* ==========================================================
+     PROFILE OVERVIEW STATISTICS
+  ========================================================== */
+
+  async getProfileOverview(userId) {
+    await this.getAdminAccount(userId);
+
+    const activeTerm = await this.getActiveAcademicTerm();
+
+    const [statistics, meetingStatistics] = await Promise.all([
+      this.getCoreStatistics(activeTerm),
+      this.getMeetingStatistics(),
+    ]);
+
+    return {
+      mentors: statistics.totalMentors,
+      students: statistics.totalStudents,
+
+      // Completed meetings across all mentors and all dates.
+      meetings: meetingStatistics.completedMeetings,
+
+      attendance: statistics.averageAttendance,
+
+      assignedStudents: statistics.assignedStudents,
+      unassignedStudents: statistics.unassignedStudents,
 
       academicTerm: activeTerm,
     };
@@ -175,70 +223,17 @@ class DashboardService {
 
     const activeTerm = await this.getActiveAcademicTerm();
 
-    const assignmentWhere = this.buildAssignmentWhere(activeTerm);
-
-    const [
-      totalMentors,
-      totalStudents,
-      assignedStudents,
-      attendanceAggregate,
-      completedMeetings,
-    ] = await Promise.all([
-      // Active mentors.
-      hodPrisma.teachers.count({
-        where: {
-          isActive: true,
-        },
-      }),
-
-      // Active students.
-      hodPrisma.students.count({
-        where: {
-          status: "ACTIVE",
-        },
-      }),
-
-      // Active assignments for the current term.
-      hodPrisma.mentor_assignments.count({
-        where: assignmentWhere,
-      }),
-
-      // Average attendance.
-      hodPrisma.students.aggregate({
-        where: {
-          status: "ACTIVE",
-
-          overallAttendance: {
-            not: null,
-          },
-        },
-
-        _avg: {
-          overallAttendance: true,
-        },
-      }),
-
-      // Total completed meetings across all mentors.
-      hodPrisma.mentor_meetings.count({
-        where: {
-          status: "COMPLETED",
-        },
-      }),
+    const [statistics, meetingStatistics] = await Promise.all([
+      this.getCoreStatistics(activeTerm),
+      this.getMeetingStatistics(),
     ]);
 
-    const unassignedStudents = Math.max(
-      totalStudents - assignedStudents,
-      0
-    );
+    const assignmentWhere = this.buildAssignmentWhere(activeTerm);
 
-    const averageAttendance =
-      attendanceAggregate._avg.overallAttendance != null
-        ? Number(
-            attendanceAggregate._avg.overallAttendance.toFixed(1)
-          )
-        : null;
+    // --------------------------------------------------
+    // MENTOR WORKLOAD
+    // --------------------------------------------------
 
-    // Mentor workload.
     const mentors = await hodPrisma.teachers.findMany({
       where: {
         isActive: true,
@@ -271,7 +266,10 @@ class DashboardService {
       },
     });
 
-    // Pending transfer requests.
+    // --------------------------------------------------
+    // PENDING TRANSFER REQUESTS BY CURRENT MENTOR
+    // --------------------------------------------------
+
     const pendingTransfers =
       await hodPrisma.mentor_transfer_requests.findMany({
         where: {
@@ -303,7 +301,10 @@ class DashboardService {
       {}
     );
 
-    // Format mentor workload.
+    // --------------------------------------------------
+    // FORMAT MENTOR WORKLOAD
+    // --------------------------------------------------
+
     const mentorWorkload = mentors
       .map((mentor) => {
         const students = mentor.mentor_assignments.length;
@@ -327,6 +328,7 @@ class DashboardService {
           employeeCode: mentor.employeeCode,
           name: mentor.fullName,
           designation: mentor.designation || "Faculty Mentor",
+
           students,
           capacity,
           utilization: Number(utilization.toFixed(1)),
@@ -344,12 +346,18 @@ class DashboardService {
 
     const topMentors = mentorWorkload.slice(0, 5);
 
-    // Meeting metrics are now supported by mentor_meetings.
-    // Goal metrics remain unsupported.
+    // --------------------------------------------------
+    // METRIC AVAILABILITY
+    // --------------------------------------------------
+
     const unsupportedMetrics = {
       meetings: false,
-      goals: false,
+      goals: true,
     };
+
+    // --------------------------------------------------
+    // RESPONSE
+    // --------------------------------------------------
 
     return {
       admin: {
@@ -362,14 +370,16 @@ class DashboardService {
       academicTerm: activeTerm,
 
       kpis: {
-        totalMentors,
-        totalStudents,
-        assignedStudents,
-        unassignedStudents,
-        averageAttendance,
+        totalMentors: statistics.totalMentors,
+        totalStudents: statistics.totalStudents,
+        assignedStudents: statistics.assignedStudents,
+        unassignedStudents: statistics.unassignedStudents,
+        averageAttendance: statistics.averageAttendance,
 
-        meetingsConducted: completedMeetings,
-        upcomingMeetings: null,
+        meetingsConducted: meetingStatistics.completedMeetings,
+        upcomingMeetings: meetingStatistics.upcomingMeetings,
+
+        // Goals are not implemented yet.
         activeGoals: null,
       },
 

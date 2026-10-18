@@ -532,6 +532,8 @@ model user_accounts {
   updatedAt                                                                          DateTime
   mustChangePassword                                                                 Boolean                    @default(false)
   admin_profiles                                                                     admin_profiles?
+  announcement_recipients                                                            announcement_recipients[]
+  announcements                                                                      announcements[]
   detentions                                                                         detentions[]
   import_batches                                                                     import_batches[]
   mentor_assignments                                                                 mentor_assignments[]
@@ -703,6 +705,43 @@ model admin_profiles {
   user_accounts  user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
 
   @@index([department])
+}
+
+model announcement_recipients {
+  id             String        @id
+  announcementId String
+  userAccountId  String
+  deliveredAt    DateTime?
+  readAt         DateTime?
+  createdAt      DateTime      @default(now())
+  announcements  announcements @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user_accounts  user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([announcementId, userAccountId])
+  @@index([announcementId])
+  @@index([userAccountId, readAt])
+}
+
+model announcements {
+  id                      String                    @id
+  title                   String                    @db.VarChar(150)
+  message                 String
+  audience                AnnouncementAudience      @default(ALL)
+  category                AnnouncementCategory      @default(GENERAL)
+  priority                AnnouncementPriority      @default(NORMAL)
+  status                  AnnouncementStatus        @default(DRAFT)
+  publishedById           String
+  publishedAt             DateTime?
+  expiresAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now())
+  announcement_recipients announcement_recipients[]
+  user_accounts           user_accounts             @relation(fields: [publishedById], references: [id])
+
+  @@index([audience, status])
+  @@index([expiresAt])
+  @@index([publishedById])
+  @@index([status, publishedAt])
 }
 
 enum InternshipType {
@@ -911,4 +950,29 @@ enum UserRole {
   ADMIN
   MENTOR
   STUDENT
+}
+
+enum AnnouncementAudience {
+  MENTORS
+  STUDENTS
+  ALL
+}
+
+enum AnnouncementCategory {
+  GENERAL
+  ACADEMIC
+  MEETING_EVENT
+  URGENT_NOTICE
+}
+
+enum AnnouncementPriority {
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
 }
