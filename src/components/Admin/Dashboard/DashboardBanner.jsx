@@ -1,15 +1,79 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 
 import banner from "../../../assets/banner.png";
+import api from "../../../api/axios";
 
 const DashboardBanner = () => {
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  const [adminName, setAdminName] = useState(() => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const fullName =
-    user?.fullName ||
-    user?.username ||
-    "Administrator";
+      return (
+        user?.fullName ||
+        user?.username ||
+        "Administrator"
+      );
+    } catch {
+      return "Administrator";
+    }
+  });
+
+  // --------------------------------------------------
+  // FETCH ACTUAL ADMIN NAME FROM DATABASE
+  // GET /api/admin/profile
+  // --------------------------------------------------
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const fetchAdminProfile = async () => {
+      try {
+        const response = await api.get("/admin/profile");
+
+        const body = response?.data?.data ?? response?.data;
+        const profile = body?.profile ?? body?.data?.profile;
+
+        if (cancelled || !profile) return;
+
+        const actualName =
+          profile.fullName?.trim() ||
+          profile.username?.trim() ||
+          profile.email?.trim() ||
+          "Administrator";
+
+        setAdminName(actualName);
+      } catch (error) {
+        console.error(
+          "Unable to fetch admin name for dashboard banner:",
+          error.response?.data?.message || error.message
+        );
+      }
+    };
+
+    fetchAdminProfile();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // --------------------------------------------------
+  // GREETING
+  // --------------------------------------------------
+
+  const hour = new Date().getHours();
+
+  const greeting =
+    hour < 12
+      ? "Good Morning,"
+      : hour < 17
+        ? "Good Afternoon,"
+        : "Good Evening,";
+
+  // --------------------------------------------------
+  // CURRENT DATE
+  // --------------------------------------------------
 
   const today = new Date().toLocaleDateString("en-IN", {
     weekday: "long",
@@ -17,6 +81,10 @@ const DashboardBanner = () => {
     month: "long",
     year: "numeric",
   });
+
+  // --------------------------------------------------
+  // RENDER
+  // --------------------------------------------------
 
   return (
     <section
@@ -31,7 +99,7 @@ const DashboardBanner = () => {
         shadow-sm
       "
     >
-      {/* ================= Banner Image ================= */}
+      {/* BANNER IMAGE */}
 
       <img
         src={banner}
@@ -45,7 +113,7 @@ const DashboardBanner = () => {
         "
       />
 
-      {/* ================= Overlay ================= */}
+      {/* OVERLAY */}
 
       <div
         className="
@@ -58,7 +126,7 @@ const DashboardBanner = () => {
         "
       />
 
-      {/* ================= Content ================= */}
+      {/* CONTENT */}
 
       <div
         className="
@@ -72,12 +140,12 @@ const DashboardBanner = () => {
         "
       >
         <p className="text-[15px] font-medium text-slate-700">
-          Good Morning,
+          {greeting}
         </p>
 
         <div className="mt-1 flex items-center gap-2">
           <h1 className="text-[30px] font-bold text-slate-900">
-            {fullName}
+            {adminName}
           </h1>
 
           <ShieldCheck

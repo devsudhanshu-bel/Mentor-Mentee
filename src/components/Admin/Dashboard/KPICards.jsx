@@ -8,7 +8,7 @@ import {
   CalendarCheck2,
   CalendarClock,
   TrendingUp,
-  Target,
+  ArrowLeftRight,
 } from "lucide-react";
 
 import StatCard from "./StatCard";
@@ -18,10 +18,14 @@ const formatNumber = (value) => {
     return "—";
   }
 
-  return value.toLocaleString("en-IN");
+  return Number(value).toLocaleString("en-IN");
 };
 
 const KPICards = ({ kpis = {}, unsupportedMetrics = {} }) => {
+  // Meeting metrics are available when the backend explicitly
+  // marks them as supported.
+  const meetingsAvailable = unsupportedMetrics.meetings === false;
+
   const stats = [
     {
       title: "Total Mentors",
@@ -61,11 +65,11 @@ const KPICards = ({ kpis = {}, unsupportedMetrics = {} }) => {
 
     {
       title: "Meetings Conducted",
-      value: unsupportedMetrics.meetings
+      value: meetingsAvailable
         ? formatNumber(kpis.meetingsConducted)
         : "—",
-      subtitle: unsupportedMetrics.meetings
-        ? "Academic year"
+      subtitle: meetingsAvailable
+        ? "Completed across all mentors"
         : "Meeting data unavailable",
       icon: CalendarCheck2,
       iconBg: "bg-violet-50",
@@ -74,10 +78,10 @@ const KPICards = ({ kpis = {}, unsupportedMetrics = {} }) => {
 
     {
       title: "Upcoming Meetings",
-      value: unsupportedMetrics.meetings
+      value: meetingsAvailable
         ? formatNumber(kpis.upcomingMeetings)
         : "—",
-      subtitle: unsupportedMetrics.meetings
+      subtitle: meetingsAvailable
         ? "Next 7 days"
         : "Meeting data unavailable",
       icon: CalendarClock,
@@ -88,7 +92,8 @@ const KPICards = ({ kpis = {}, unsupportedMetrics = {} }) => {
     {
       title: "Average Attendance",
       value:
-        kpis.averageAttendance !== null && kpis.averageAttendance !== undefined
+        kpis.averageAttendance !== null &&
+        kpis.averageAttendance !== undefined
           ? `${kpis.averageAttendance}%`
           : "—",
       subtitle: "Across active students",
@@ -98,19 +103,17 @@ const KPICards = ({ kpis = {}, unsupportedMetrics = {} }) => {
     },
 
     {
-      title: "Active Goals",
-      value: unsupportedMetrics.goals ? formatNumber(kpis.activeGoals) : "—",
-      subtitle: unsupportedMetrics.goals
-        ? "Currently in progress"
-        : "Goal data unavailable",
-      icon: Target,
+      title: "Pending Transfer Requests",
+      value: "0",
+      subtitle: "Transfer requests awaiting review",
+      icon: ArrowLeftRight,
       iconBg: "bg-amber-50",
       iconColor: "text-amber-600",
     },
   ];
 
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2">
+    <section className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-4">
       {stats.map((item) => (
         <StatCard key={item.title} {...item} />
       ))}

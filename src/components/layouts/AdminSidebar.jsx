@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   NavLink,
@@ -14,6 +15,7 @@ import {
   User,
   LogOut,
   ChevronRight,
+  Megaphone,
 } from "lucide-react";
 
 const menuItems = [
@@ -26,6 +28,11 @@ const menuItems = [
     title: "Mentors",
     path: "/admin/mentors",
     icon: Users,
+  },
+  {
+    title: "Announcements",
+    path: "/admin/announcements",
+    icon: Megaphone,
   },
   {
     title: "Assignments",
@@ -56,9 +63,7 @@ const AdminSidebar = () => {
     user?.username ||
     "Administrator";
 
-  const userRole =
-    user?.role ||
-    "ADMIN";
+  const userRole = user?.role || "ADMIN";
 
   const initial = userName.charAt(0).toUpperCase();
 
@@ -139,7 +144,7 @@ const AdminSidebar = () => {
             const active =
               item.path === "/admin/mentors"
                 ? location.pathname.startsWith("/admin/mentors") ||
-                  location.pathname.startsWith("/admin/mentor/") 
+                  location.pathname.startsWith("/admin/mentor/")
                 : location.pathname.startsWith(item.path);
 
             return (

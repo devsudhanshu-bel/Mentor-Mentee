@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 /* ========================= AUTH ========================= */
@@ -64,6 +65,7 @@ import AdminStudentDocuments from "./pages/Admin/AdminStudentDocuments";
 import AdminStudentCertificates from "./pages/Admin/AdminStudentCertificates";
 import Assignments from "./pages/Admin/Assignments.jsx";
 import AdminProfile from "./pages/Admin/Profile";
+import AdminAnnouncements from "./pages/Admin/Announcements";
 
 function App() {
   return (
@@ -324,6 +326,13 @@ function App() {
           <Route
             path="/admin/assignments"
             element={<Assignments />}
+          />
+
+          {/* Announcements */}
+
+          <Route
+            path="/admin/announcements"
+            element={<AdminAnnouncements />}
           />
 
           {/* Admin Profile */}
