@@ -11,15 +11,29 @@ class DashboardController {
   getOverview = asyncHandler(async (req, res) => {
     const overview = await DashboardService.getOverview(req.user.id);
 
-    return res
-      .status(200)
-      .json(
-        new ApiResponse(
-          200,
-          "Admin dashboard data fetched successfully",
-          overview,
-        ),
-      );
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        "Admin dashboard data fetched successfully",
+        overview
+      )
+    );
+  });
+
+  /* ==========================================================
+     GET ADMIN PROFILE OVERVIEW STATISTICS
+  ========================================================== */
+
+  getProfileOverview = asyncHandler(async (req, res) => {
+    const stats = await DashboardService.getProfileOverview(req.user.id);
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        "Admin profile overview fetched successfully",
+        stats
+      )
+    );
   });
 
   /* ==========================================================
@@ -29,11 +43,13 @@ class DashboardController {
   getBanner = asyncHandler(async (req, res) => {
     const banner = await DashboardService.getBanner(req.user.id);
 
-    return res
-      .status(200)
-      .json(
-        new ApiResponse(200, "Dashboard banner fetched successfully", banner),
-      );
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        "Dashboard banner fetched successfully",
+        banner
+      )
+    );
   });
 }
 

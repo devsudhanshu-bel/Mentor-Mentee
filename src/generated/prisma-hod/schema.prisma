@@ -531,6 +531,7 @@ model user_accounts {
   createdAt                                                                          DateTime                   @default(now())
   updatedAt                                                                          DateTime
   mustChangePassword                                                                 Boolean                    @default(false)
+  admin_profiles                                                                     admin_profiles?
   detentions                                                                         detentions[]
   import_batches                                                                     import_batches[]
   mentor_assignments                                                                 mentor_assignments[]
@@ -675,6 +676,33 @@ model mentor_meetings {
   @@index([seriesId], map: "mentor_meetings_series_idx")
   @@index([status, startAt], map: "mentor_meetings_status_start_idx")
   @@index([studentId, startAt], map: "mentor_meetings_student_start_idx")
+}
+
+model admin_profiles {
+  id             String        @id
+  userAccountId  String        @unique
+  fullName       String?
+  employeeId     String?
+  designation    String?
+  department     String?
+  school         String?
+  qualification  String?
+  specialization String?
+  dateOfBirth    DateTime?
+  gender         String?
+  nationality    String?
+  dateOfJoining  DateTime?
+  office         String?
+  officePhone    String?
+  officeHours    String?
+  phone          String?
+  profileImage   String?
+  about          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now())
+  user_accounts  user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@index([department])
 }
 
 enum InternshipType {

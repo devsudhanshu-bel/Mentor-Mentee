@@ -1,20 +1,47 @@
-import express from "express";
 
+import express from "express";
 import AdminProfileController from "./profile.controller.js";
 
 const router = express.Router();
 
-/* ==========================================================
-   Admin Profile
-========================================================== */
+/*
+|--------------------------------------------------------------------------
+| GET ADMIN PROFILE
+|--------------------------------------------------------------------------
+| GET /api/admin/profile
+*/
 
-// Get Logged-in Admin Profile
-router.get("/", AdminProfileController.getProfile);
+router.get(
+  "/",
+  (req, res, next) => {
+    res.set("Cache-Control", "no-store");
+    next();
+  },
+  AdminProfileController.getProfile,
+);
 
-// Create Admin Profile (Only Once)
-router.post("/", AdminProfileController.createProfile);
+/*
+|--------------------------------------------------------------------------
+| CREATE ADMIN PROFILE
+|--------------------------------------------------------------------------
+| POST /api/admin/profile
+*/
 
-// Update Admin Profile
-router.put("/", AdminProfileController.updateProfile);
+router.post(
+  "/",
+  AdminProfileController.createProfile,
+);
+
+/*
+|--------------------------------------------------------------------------
+| UPDATE ADMIN PROFILE
+|--------------------------------------------------------------------------
+| PUT /api/admin/profile
+*/
+
+router.put(
+  "/",
+  AdminProfileController.updateProfile,
+);
 
 export default router;

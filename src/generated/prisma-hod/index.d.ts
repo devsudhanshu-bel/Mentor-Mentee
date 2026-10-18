@@ -163,6 +163,11 @@ export type mentor_meeting_series = $Result.DefaultSelection<Prisma.$mentor_meet
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  */
 export type mentor_meetings = $Result.DefaultSelection<Prisma.$mentor_meetingsPayload>
+/**
+ * Model admin_profiles
+ * 
+ */
+export type admin_profiles = $Result.DefaultSelection<Prisma.$admin_profilesPayload>
 
 /**
  * Enums
@@ -1011,6 +1016,16 @@ export class PrismaClient<
     * ```
     */
   get mentor_meetings(): Prisma.mentor_meetingsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.admin_profiles`: Exposes CRUD operations for the **admin_profiles** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Admin_profiles
+    * const admin_profiles = await prisma.admin_profiles.findMany()
+    * ```
+    */
+  get admin_profiles(): Prisma.admin_profilesDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1481,7 +1496,8 @@ export namespace Prisma {
     mentor_meeting_feedback: 'mentor_meeting_feedback',
     mentor_meeting_notes: 'mentor_meeting_notes',
     mentor_meeting_series: 'mentor_meeting_series',
-    mentor_meetings: 'mentor_meetings'
+    mentor_meetings: 'mentor_meetings',
+    admin_profiles: 'admin_profiles'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1500,7 +1516,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings"
+      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings" | "admin_profiles"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3724,6 +3740,80 @@ export namespace Prisma {
           }
         }
       }
+      admin_profiles: {
+        payload: Prisma.$admin_profilesPayload<ExtArgs>
+        fields: Prisma.admin_profilesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.admin_profilesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.admin_profilesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>
+          }
+          findFirst: {
+            args: Prisma.admin_profilesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.admin_profilesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>
+          }
+          findMany: {
+            args: Prisma.admin_profilesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>[]
+          }
+          create: {
+            args: Prisma.admin_profilesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>
+          }
+          createMany: {
+            args: Prisma.admin_profilesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.admin_profilesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>[]
+          }
+          delete: {
+            args: Prisma.admin_profilesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>
+          }
+          update: {
+            args: Prisma.admin_profilesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>
+          }
+          deleteMany: {
+            args: Prisma.admin_profilesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.admin_profilesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.admin_profilesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>[]
+          }
+          upsert: {
+            args: Prisma.admin_profilesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$admin_profilesPayload>
+          }
+          aggregate: {
+            args: Prisma.Admin_profilesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAdmin_profiles>
+          }
+          groupBy: {
+            args: Prisma.admin_profilesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Admin_profilesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.admin_profilesCountArgs<ExtArgs>
+            result: $Utils.Optional<Admin_profilesCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3850,6 +3940,7 @@ export namespace Prisma {
     mentor_meeting_notes?: mentor_meeting_notesOmit
     mentor_meeting_series?: mentor_meeting_seriesOmit
     mentor_meetings?: mentor_meetingsOmit
+    admin_profiles?: admin_profilesOmit
   }
 
   /* Types for Logging */
@@ -32320,6 +32411,7 @@ export namespace Prisma {
     createdAt?: boolean
     updatedAt?: boolean
     mustChangePassword?: boolean
+    admin_profiles?: boolean | user_accounts$admin_profilesArgs<ExtArgs>
     detentions?: boolean | user_accounts$detentionsArgs<ExtArgs>
     import_batches?: boolean | user_accounts$import_batchesArgs<ExtArgs>
     mentor_assignments?: boolean | user_accounts$mentor_assignmentsArgs<ExtArgs>
@@ -32372,6 +32464,7 @@ export namespace Prisma {
 
   export type user_accountsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "username" | "email" | "password" | "role" | "isActive" | "lastLogin" | "createdAt" | "updatedAt" | "mustChangePassword", ExtArgs["result"]["user_accounts"]>
   export type user_accountsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    admin_profiles?: boolean | user_accounts$admin_profilesArgs<ExtArgs>
     detentions?: boolean | user_accounts$detentionsArgs<ExtArgs>
     import_batches?: boolean | user_accounts$import_batchesArgs<ExtArgs>
     mentor_assignments?: boolean | user_accounts$mentor_assignmentsArgs<ExtArgs>
@@ -32388,6 +32481,7 @@ export namespace Prisma {
   export type $user_accountsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "user_accounts"
     objects: {
+      admin_profiles: Prisma.$admin_profilesPayload<ExtArgs> | null
       detentions: Prisma.$detentionsPayload<ExtArgs>[]
       import_batches: Prisma.$import_batchesPayload<ExtArgs>[]
       mentor_assignments: Prisma.$mentor_assignmentsPayload<ExtArgs>[]
@@ -32802,6 +32896,7 @@ export namespace Prisma {
    */
   export interface Prisma__user_accountsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    admin_profiles<T extends user_accounts$admin_profilesArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$admin_profilesArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     detentions<T extends user_accounts$detentionsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$detentionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$detentionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     import_batches<T extends user_accounts$import_batchesArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$import_batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$import_batchesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_assignments<T extends user_accounts$mentor_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$mentor_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -33234,6 +33329,25 @@ export namespace Prisma {
      * Limit how many user_accounts to delete.
      */
     limit?: number
+  }
+
+  /**
+   * user_accounts.admin_profiles
+   */
+  export type user_accounts$admin_profilesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    where?: admin_profilesWhereInput
   }
 
   /**
@@ -41740,6 +41854,1272 @@ export namespace Prisma {
 
 
   /**
+   * Model admin_profiles
+   */
+
+  export type AggregateAdmin_profiles = {
+    _count: Admin_profilesCountAggregateOutputType | null
+    _min: Admin_profilesMinAggregateOutputType | null
+    _max: Admin_profilesMaxAggregateOutputType | null
+  }
+
+  export type Admin_profilesMinAggregateOutputType = {
+    id: string | null
+    userAccountId: string | null
+    fullName: string | null
+    employeeId: string | null
+    designation: string | null
+    department: string | null
+    school: string | null
+    qualification: string | null
+    specialization: string | null
+    dateOfBirth: Date | null
+    gender: string | null
+    nationality: string | null
+    dateOfJoining: Date | null
+    office: string | null
+    officePhone: string | null
+    officeHours: string | null
+    phone: string | null
+    profileImage: string | null
+    about: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Admin_profilesMaxAggregateOutputType = {
+    id: string | null
+    userAccountId: string | null
+    fullName: string | null
+    employeeId: string | null
+    designation: string | null
+    department: string | null
+    school: string | null
+    qualification: string | null
+    specialization: string | null
+    dateOfBirth: Date | null
+    gender: string | null
+    nationality: string | null
+    dateOfJoining: Date | null
+    office: string | null
+    officePhone: string | null
+    officeHours: string | null
+    phone: string | null
+    profileImage: string | null
+    about: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type Admin_profilesCountAggregateOutputType = {
+    id: number
+    userAccountId: number
+    fullName: number
+    employeeId: number
+    designation: number
+    department: number
+    school: number
+    qualification: number
+    specialization: number
+    dateOfBirth: number
+    gender: number
+    nationality: number
+    dateOfJoining: number
+    office: number
+    officePhone: number
+    officeHours: number
+    phone: number
+    profileImage: number
+    about: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type Admin_profilesMinAggregateInputType = {
+    id?: true
+    userAccountId?: true
+    fullName?: true
+    employeeId?: true
+    designation?: true
+    department?: true
+    school?: true
+    qualification?: true
+    specialization?: true
+    dateOfBirth?: true
+    gender?: true
+    nationality?: true
+    dateOfJoining?: true
+    office?: true
+    officePhone?: true
+    officeHours?: true
+    phone?: true
+    profileImage?: true
+    about?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Admin_profilesMaxAggregateInputType = {
+    id?: true
+    userAccountId?: true
+    fullName?: true
+    employeeId?: true
+    designation?: true
+    department?: true
+    school?: true
+    qualification?: true
+    specialization?: true
+    dateOfBirth?: true
+    gender?: true
+    nationality?: true
+    dateOfJoining?: true
+    office?: true
+    officePhone?: true
+    officeHours?: true
+    phone?: true
+    profileImage?: true
+    about?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type Admin_profilesCountAggregateInputType = {
+    id?: true
+    userAccountId?: true
+    fullName?: true
+    employeeId?: true
+    designation?: true
+    department?: true
+    school?: true
+    qualification?: true
+    specialization?: true
+    dateOfBirth?: true
+    gender?: true
+    nationality?: true
+    dateOfJoining?: true
+    office?: true
+    officePhone?: true
+    officeHours?: true
+    phone?: true
+    profileImage?: true
+    about?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type Admin_profilesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which admin_profiles to aggregate.
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of admin_profiles to fetch.
+     */
+    orderBy?: admin_profilesOrderByWithRelationInput | admin_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: admin_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` admin_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` admin_profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned admin_profiles
+    **/
+    _count?: true | Admin_profilesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Admin_profilesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Admin_profilesMaxAggregateInputType
+  }
+
+  export type GetAdmin_profilesAggregateType<T extends Admin_profilesAggregateArgs> = {
+        [P in keyof T & keyof AggregateAdmin_profiles]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAdmin_profiles[P]>
+      : GetScalarType<T[P], AggregateAdmin_profiles[P]>
+  }
+
+
+
+
+  export type admin_profilesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: admin_profilesWhereInput
+    orderBy?: admin_profilesOrderByWithAggregationInput | admin_profilesOrderByWithAggregationInput[]
+    by: Admin_profilesScalarFieldEnum[] | Admin_profilesScalarFieldEnum
+    having?: admin_profilesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Admin_profilesCountAggregateInputType | true
+    _min?: Admin_profilesMinAggregateInputType
+    _max?: Admin_profilesMaxAggregateInputType
+  }
+
+  export type Admin_profilesGroupByOutputType = {
+    id: string
+    userAccountId: string
+    fullName: string | null
+    employeeId: string | null
+    designation: string | null
+    department: string | null
+    school: string | null
+    qualification: string | null
+    specialization: string | null
+    dateOfBirth: Date | null
+    gender: string | null
+    nationality: string | null
+    dateOfJoining: Date | null
+    office: string | null
+    officePhone: string | null
+    officeHours: string | null
+    phone: string | null
+    profileImage: string | null
+    about: string | null
+    createdAt: Date
+    updatedAt: Date
+    _count: Admin_profilesCountAggregateOutputType | null
+    _min: Admin_profilesMinAggregateOutputType | null
+    _max: Admin_profilesMaxAggregateOutputType | null
+  }
+
+  type GetAdmin_profilesGroupByPayload<T extends admin_profilesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Admin_profilesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Admin_profilesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Admin_profilesGroupByOutputType[P]>
+            : GetScalarType<T[P], Admin_profilesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type admin_profilesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userAccountId?: boolean
+    fullName?: boolean
+    employeeId?: boolean
+    designation?: boolean
+    department?: boolean
+    school?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    dateOfBirth?: boolean
+    gender?: boolean
+    nationality?: boolean
+    dateOfJoining?: boolean
+    office?: boolean
+    officePhone?: boolean
+    officeHours?: boolean
+    phone?: boolean
+    profileImage?: boolean
+    about?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["admin_profiles"]>
+
+  export type admin_profilesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userAccountId?: boolean
+    fullName?: boolean
+    employeeId?: boolean
+    designation?: boolean
+    department?: boolean
+    school?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    dateOfBirth?: boolean
+    gender?: boolean
+    nationality?: boolean
+    dateOfJoining?: boolean
+    office?: boolean
+    officePhone?: boolean
+    officeHours?: boolean
+    phone?: boolean
+    profileImage?: boolean
+    about?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["admin_profiles"]>
+
+  export type admin_profilesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    userAccountId?: boolean
+    fullName?: boolean
+    employeeId?: boolean
+    designation?: boolean
+    department?: boolean
+    school?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    dateOfBirth?: boolean
+    gender?: boolean
+    nationality?: boolean
+    dateOfJoining?: boolean
+    office?: boolean
+    officePhone?: boolean
+    officeHours?: boolean
+    phone?: boolean
+    profileImage?: boolean
+    about?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["admin_profiles"]>
+
+  export type admin_profilesSelectScalar = {
+    id?: boolean
+    userAccountId?: boolean
+    fullName?: boolean
+    employeeId?: boolean
+    designation?: boolean
+    department?: boolean
+    school?: boolean
+    qualification?: boolean
+    specialization?: boolean
+    dateOfBirth?: boolean
+    gender?: boolean
+    nationality?: boolean
+    dateOfJoining?: boolean
+    office?: boolean
+    officePhone?: boolean
+    officeHours?: boolean
+    phone?: boolean
+    profileImage?: boolean
+    about?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type admin_profilesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userAccountId" | "fullName" | "employeeId" | "designation" | "department" | "school" | "qualification" | "specialization" | "dateOfBirth" | "gender" | "nationality" | "dateOfJoining" | "office" | "officePhone" | "officeHours" | "phone" | "profileImage" | "about" | "createdAt" | "updatedAt", ExtArgs["result"]["admin_profiles"]>
+  export type admin_profilesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+  export type admin_profilesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+  export type admin_profilesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+
+  export type $admin_profilesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "admin_profiles"
+    objects: {
+      user_accounts: Prisma.$user_accountsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      userAccountId: string
+      fullName: string | null
+      employeeId: string | null
+      designation: string | null
+      department: string | null
+      school: string | null
+      qualification: string | null
+      specialization: string | null
+      dateOfBirth: Date | null
+      gender: string | null
+      nationality: string | null
+      dateOfJoining: Date | null
+      office: string | null
+      officePhone: string | null
+      officeHours: string | null
+      phone: string | null
+      profileImage: string | null
+      about: string | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["admin_profiles"]>
+    composites: {}
+  }
+
+  type admin_profilesGetPayload<S extends boolean | null | undefined | admin_profilesDefaultArgs> = $Result.GetResult<Prisma.$admin_profilesPayload, S>
+
+  type admin_profilesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<admin_profilesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Admin_profilesCountAggregateInputType | true
+    }
+
+  export interface admin_profilesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['admin_profiles'], meta: { name: 'admin_profiles' } }
+    /**
+     * Find zero or one Admin_profiles that matches the filter.
+     * @param {admin_profilesFindUniqueArgs} args - Arguments to find a Admin_profiles
+     * @example
+     * // Get one Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends admin_profilesFindUniqueArgs>(args: SelectSubset<T, admin_profilesFindUniqueArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Admin_profiles that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {admin_profilesFindUniqueOrThrowArgs} args - Arguments to find a Admin_profiles
+     * @example
+     * // Get one Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends admin_profilesFindUniqueOrThrowArgs>(args: SelectSubset<T, admin_profilesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Admin_profiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {admin_profilesFindFirstArgs} args - Arguments to find a Admin_profiles
+     * @example
+     * // Get one Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends admin_profilesFindFirstArgs>(args?: SelectSubset<T, admin_profilesFindFirstArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Admin_profiles that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {admin_profilesFindFirstOrThrowArgs} args - Arguments to find a Admin_profiles
+     * @example
+     * // Get one Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends admin_profilesFindFirstOrThrowArgs>(args?: SelectSubset<T, admin_profilesFindFirstOrThrowArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Admin_profiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {admin_profilesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.findMany()
+     * 
+     * // Get first 10 Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const admin_profilesWithIdOnly = await prisma.admin_profiles.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends admin_profilesFindManyArgs>(args?: SelectSubset<T, admin_profilesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Admin_profiles.
+     * @param {admin_profilesCreateArgs} args - Arguments to create a Admin_profiles.
+     * @example
+     * // Create one Admin_profiles
+     * const Admin_profiles = await prisma.admin_profiles.create({
+     *   data: {
+     *     // ... data to create a Admin_profiles
+     *   }
+     * })
+     * 
+     */
+    create<T extends admin_profilesCreateArgs>(args: SelectSubset<T, admin_profilesCreateArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Admin_profiles.
+     * @param {admin_profilesCreateManyArgs} args - Arguments to create many Admin_profiles.
+     * @example
+     * // Create many Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends admin_profilesCreateManyArgs>(args?: SelectSubset<T, admin_profilesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Admin_profiles and returns the data saved in the database.
+     * @param {admin_profilesCreateManyAndReturnArgs} args - Arguments to create many Admin_profiles.
+     * @example
+     * // Create many Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Admin_profiles and only return the `id`
+     * const admin_profilesWithIdOnly = await prisma.admin_profiles.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends admin_profilesCreateManyAndReturnArgs>(args?: SelectSubset<T, admin_profilesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Admin_profiles.
+     * @param {admin_profilesDeleteArgs} args - Arguments to delete one Admin_profiles.
+     * @example
+     * // Delete one Admin_profiles
+     * const Admin_profiles = await prisma.admin_profiles.delete({
+     *   where: {
+     *     // ... filter to delete one Admin_profiles
+     *   }
+     * })
+     * 
+     */
+    delete<T extends admin_profilesDeleteArgs>(args: SelectSubset<T, admin_profilesDeleteArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Admin_profiles.
+     * @param {admin_profilesUpdateArgs} args - Arguments to update one Admin_profiles.
+     * @example
+     * // Update one Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends admin_profilesUpdateArgs>(args: SelectSubset<T, admin_profilesUpdateArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Admin_profiles.
+     * @param {admin_profilesDeleteManyArgs} args - Arguments to filter Admin_profiles to delete.
+     * @example
+     * // Delete a few Admin_profiles
+     * const { count } = await prisma.admin_profiles.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends admin_profilesDeleteManyArgs>(args?: SelectSubset<T, admin_profilesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Admin_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {admin_profilesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends admin_profilesUpdateManyArgs>(args: SelectSubset<T, admin_profilesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Admin_profiles and returns the data updated in the database.
+     * @param {admin_profilesUpdateManyAndReturnArgs} args - Arguments to update many Admin_profiles.
+     * @example
+     * // Update many Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Admin_profiles and only return the `id`
+     * const admin_profilesWithIdOnly = await prisma.admin_profiles.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends admin_profilesUpdateManyAndReturnArgs>(args: SelectSubset<T, admin_profilesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Admin_profiles.
+     * @param {admin_profilesUpsertArgs} args - Arguments to update or create a Admin_profiles.
+     * @example
+     * // Update or create a Admin_profiles
+     * const admin_profiles = await prisma.admin_profiles.upsert({
+     *   create: {
+     *     // ... data to create a Admin_profiles
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Admin_profiles we want to update
+     *   }
+     * })
+     */
+    upsert<T extends admin_profilesUpsertArgs>(args: SelectSubset<T, admin_profilesUpsertArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Admin_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {admin_profilesCountArgs} args - Arguments to filter Admin_profiles to count.
+     * @example
+     * // Count the number of Admin_profiles
+     * const count = await prisma.admin_profiles.count({
+     *   where: {
+     *     // ... the filter for the Admin_profiles we want to count
+     *   }
+     * })
+    **/
+    count<T extends admin_profilesCountArgs>(
+      args?: Subset<T, admin_profilesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Admin_profilesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Admin_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Admin_profilesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Admin_profilesAggregateArgs>(args: Subset<T, Admin_profilesAggregateArgs>): Prisma.PrismaPromise<GetAdmin_profilesAggregateType<T>>
+
+    /**
+     * Group by Admin_profiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {admin_profilesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends admin_profilesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: admin_profilesGroupByArgs['orderBy'] }
+        : { orderBy?: admin_profilesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, admin_profilesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAdmin_profilesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the admin_profiles model
+   */
+  readonly fields: admin_profilesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for admin_profiles.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__admin_profilesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user_accounts<T extends user_accountsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, user_accountsDefaultArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the admin_profiles model
+   */
+  interface admin_profilesFieldRefs {
+    readonly id: FieldRef<"admin_profiles", 'String'>
+    readonly userAccountId: FieldRef<"admin_profiles", 'String'>
+    readonly fullName: FieldRef<"admin_profiles", 'String'>
+    readonly employeeId: FieldRef<"admin_profiles", 'String'>
+    readonly designation: FieldRef<"admin_profiles", 'String'>
+    readonly department: FieldRef<"admin_profiles", 'String'>
+    readonly school: FieldRef<"admin_profiles", 'String'>
+    readonly qualification: FieldRef<"admin_profiles", 'String'>
+    readonly specialization: FieldRef<"admin_profiles", 'String'>
+    readonly dateOfBirth: FieldRef<"admin_profiles", 'DateTime'>
+    readonly gender: FieldRef<"admin_profiles", 'String'>
+    readonly nationality: FieldRef<"admin_profiles", 'String'>
+    readonly dateOfJoining: FieldRef<"admin_profiles", 'DateTime'>
+    readonly office: FieldRef<"admin_profiles", 'String'>
+    readonly officePhone: FieldRef<"admin_profiles", 'String'>
+    readonly officeHours: FieldRef<"admin_profiles", 'String'>
+    readonly phone: FieldRef<"admin_profiles", 'String'>
+    readonly profileImage: FieldRef<"admin_profiles", 'String'>
+    readonly about: FieldRef<"admin_profiles", 'String'>
+    readonly createdAt: FieldRef<"admin_profiles", 'DateTime'>
+    readonly updatedAt: FieldRef<"admin_profiles", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * admin_profiles findUnique
+   */
+  export type admin_profilesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which admin_profiles to fetch.
+     */
+    where: admin_profilesWhereUniqueInput
+  }
+
+  /**
+   * admin_profiles findUniqueOrThrow
+   */
+  export type admin_profilesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which admin_profiles to fetch.
+     */
+    where: admin_profilesWhereUniqueInput
+  }
+
+  /**
+   * admin_profiles findFirst
+   */
+  export type admin_profilesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which admin_profiles to fetch.
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of admin_profiles to fetch.
+     */
+    orderBy?: admin_profilesOrderByWithRelationInput | admin_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for admin_profiles.
+     */
+    cursor?: admin_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` admin_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` admin_profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of admin_profiles.
+     */
+    distinct?: Admin_profilesScalarFieldEnum | Admin_profilesScalarFieldEnum[]
+  }
+
+  /**
+   * admin_profiles findFirstOrThrow
+   */
+  export type admin_profilesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which admin_profiles to fetch.
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of admin_profiles to fetch.
+     */
+    orderBy?: admin_profilesOrderByWithRelationInput | admin_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for admin_profiles.
+     */
+    cursor?: admin_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` admin_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` admin_profiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of admin_profiles.
+     */
+    distinct?: Admin_profilesScalarFieldEnum | Admin_profilesScalarFieldEnum[]
+  }
+
+  /**
+   * admin_profiles findMany
+   */
+  export type admin_profilesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * Filter, which admin_profiles to fetch.
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of admin_profiles to fetch.
+     */
+    orderBy?: admin_profilesOrderByWithRelationInput | admin_profilesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing admin_profiles.
+     */
+    cursor?: admin_profilesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` admin_profiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` admin_profiles.
+     */
+    skip?: number
+    distinct?: Admin_profilesScalarFieldEnum | Admin_profilesScalarFieldEnum[]
+  }
+
+  /**
+   * admin_profiles create
+   */
+  export type admin_profilesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a admin_profiles.
+     */
+    data: XOR<admin_profilesCreateInput, admin_profilesUncheckedCreateInput>
+  }
+
+  /**
+   * admin_profiles createMany
+   */
+  export type admin_profilesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many admin_profiles.
+     */
+    data: admin_profilesCreateManyInput | admin_profilesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * admin_profiles createManyAndReturn
+   */
+  export type admin_profilesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * The data used to create many admin_profiles.
+     */
+    data: admin_profilesCreateManyInput | admin_profilesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * admin_profiles update
+   */
+  export type admin_profilesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a admin_profiles.
+     */
+    data: XOR<admin_profilesUpdateInput, admin_profilesUncheckedUpdateInput>
+    /**
+     * Choose, which admin_profiles to update.
+     */
+    where: admin_profilesWhereUniqueInput
+  }
+
+  /**
+   * admin_profiles updateMany
+   */
+  export type admin_profilesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update admin_profiles.
+     */
+    data: XOR<admin_profilesUpdateManyMutationInput, admin_profilesUncheckedUpdateManyInput>
+    /**
+     * Filter which admin_profiles to update
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * Limit how many admin_profiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * admin_profiles updateManyAndReturn
+   */
+  export type admin_profilesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * The data used to update admin_profiles.
+     */
+    data: XOR<admin_profilesUpdateManyMutationInput, admin_profilesUncheckedUpdateManyInput>
+    /**
+     * Filter which admin_profiles to update
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * Limit how many admin_profiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * admin_profiles upsert
+   */
+  export type admin_profilesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the admin_profiles to update in case it exists.
+     */
+    where: admin_profilesWhereUniqueInput
+    /**
+     * In case the admin_profiles found by the `where` argument doesn't exist, create a new admin_profiles with this data.
+     */
+    create: XOR<admin_profilesCreateInput, admin_profilesUncheckedCreateInput>
+    /**
+     * In case the admin_profiles was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<admin_profilesUpdateInput, admin_profilesUncheckedUpdateInput>
+  }
+
+  /**
+   * admin_profiles delete
+   */
+  export type admin_profilesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+    /**
+     * Filter which admin_profiles to delete.
+     */
+    where: admin_profilesWhereUniqueInput
+  }
+
+  /**
+   * admin_profiles deleteMany
+   */
+  export type admin_profilesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which admin_profiles to delete
+     */
+    where?: admin_profilesWhereInput
+    /**
+     * Limit how many admin_profiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * admin_profiles without action
+   */
+  export type admin_profilesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the admin_profiles
+     */
+    select?: admin_profilesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the admin_profiles
+     */
+    omit?: admin_profilesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: admin_profilesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -42317,6 +43697,33 @@ export namespace Prisma {
   };
 
   export type Mentor_meetingsScalarFieldEnum = (typeof Mentor_meetingsScalarFieldEnum)[keyof typeof Mentor_meetingsScalarFieldEnum]
+
+
+  export const Admin_profilesScalarFieldEnum: {
+    id: 'id',
+    userAccountId: 'userAccountId',
+    fullName: 'fullName',
+    employeeId: 'employeeId',
+    designation: 'designation',
+    department: 'department',
+    school: 'school',
+    qualification: 'qualification',
+    specialization: 'specialization',
+    dateOfBirth: 'dateOfBirth',
+    gender: 'gender',
+    nationality: 'nationality',
+    dateOfJoining: 'dateOfJoining',
+    office: 'office',
+    officePhone: 'officePhone',
+    officeHours: 'officeHours',
+    phone: 'phone',
+    profileImage: 'profileImage',
+    about: 'about',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type Admin_profilesScalarFieldEnum = (typeof Admin_profilesScalarFieldEnum)[keyof typeof Admin_profilesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -45187,6 +46594,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"user_accounts"> | Date | string
     updatedAt?: DateTimeFilter<"user_accounts"> | Date | string
     mustChangePassword?: BoolFilter<"user_accounts"> | boolean
+    admin_profiles?: XOR<Admin_profilesNullableScalarRelationFilter, admin_profilesWhereInput> | null
     detentions?: DetentionsListRelationFilter
     import_batches?: Import_batchesListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
@@ -45208,6 +46616,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     mustChangePassword?: SortOrder
+    admin_profiles?: admin_profilesOrderByWithRelationInput
     detentions?: detentionsOrderByRelationAggregateInput
     import_batches?: import_batchesOrderByRelationAggregateInput
     mentor_assignments?: mentor_assignmentsOrderByRelationAggregateInput
@@ -45232,6 +46641,7 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"user_accounts"> | Date | string
     updatedAt?: DateTimeFilter<"user_accounts"> | Date | string
     mustChangePassword?: BoolFilter<"user_accounts"> | boolean
+    admin_profiles?: XOR<Admin_profilesNullableScalarRelationFilter, admin_profilesWhereInput> | null
     detentions?: DetentionsListRelationFilter
     import_batches?: Import_batchesListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
@@ -45927,6 +47337,141 @@ export namespace Prisma {
     endedAt?: DateTimeNullableWithAggregatesFilter<"mentor_meetings"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"mentor_meetings"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"mentor_meetings"> | Date | string
+  }
+
+  export type admin_profilesWhereInput = {
+    AND?: admin_profilesWhereInput | admin_profilesWhereInput[]
+    OR?: admin_profilesWhereInput[]
+    NOT?: admin_profilesWhereInput | admin_profilesWhereInput[]
+    id?: StringFilter<"admin_profiles"> | string
+    userAccountId?: StringFilter<"admin_profiles"> | string
+    fullName?: StringNullableFilter<"admin_profiles"> | string | null
+    employeeId?: StringNullableFilter<"admin_profiles"> | string | null
+    designation?: StringNullableFilter<"admin_profiles"> | string | null
+    department?: StringNullableFilter<"admin_profiles"> | string | null
+    school?: StringNullableFilter<"admin_profiles"> | string | null
+    qualification?: StringNullableFilter<"admin_profiles"> | string | null
+    specialization?: StringNullableFilter<"admin_profiles"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"admin_profiles"> | Date | string | null
+    gender?: StringNullableFilter<"admin_profiles"> | string | null
+    nationality?: StringNullableFilter<"admin_profiles"> | string | null
+    dateOfJoining?: DateTimeNullableFilter<"admin_profiles"> | Date | string | null
+    office?: StringNullableFilter<"admin_profiles"> | string | null
+    officePhone?: StringNullableFilter<"admin_profiles"> | string | null
+    officeHours?: StringNullableFilter<"admin_profiles"> | string | null
+    phone?: StringNullableFilter<"admin_profiles"> | string | null
+    profileImage?: StringNullableFilter<"admin_profiles"> | string | null
+    about?: StringNullableFilter<"admin_profiles"> | string | null
+    createdAt?: DateTimeFilter<"admin_profiles"> | Date | string
+    updatedAt?: DateTimeFilter<"admin_profiles"> | Date | string
+    user_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+  }
+
+  export type admin_profilesOrderByWithRelationInput = {
+    id?: SortOrder
+    userAccountId?: SortOrder
+    fullName?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    designation?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    school?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
+    specialization?: SortOrderInput | SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    nationality?: SortOrderInput | SortOrder
+    dateOfJoining?: SortOrderInput | SortOrder
+    office?: SortOrderInput | SortOrder
+    officePhone?: SortOrderInput | SortOrder
+    officeHours?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    profileImage?: SortOrderInput | SortOrder
+    about?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user_accounts?: user_accountsOrderByWithRelationInput
+  }
+
+  export type admin_profilesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    userAccountId?: string
+    AND?: admin_profilesWhereInput | admin_profilesWhereInput[]
+    OR?: admin_profilesWhereInput[]
+    NOT?: admin_profilesWhereInput | admin_profilesWhereInput[]
+    fullName?: StringNullableFilter<"admin_profiles"> | string | null
+    employeeId?: StringNullableFilter<"admin_profiles"> | string | null
+    designation?: StringNullableFilter<"admin_profiles"> | string | null
+    department?: StringNullableFilter<"admin_profiles"> | string | null
+    school?: StringNullableFilter<"admin_profiles"> | string | null
+    qualification?: StringNullableFilter<"admin_profiles"> | string | null
+    specialization?: StringNullableFilter<"admin_profiles"> | string | null
+    dateOfBirth?: DateTimeNullableFilter<"admin_profiles"> | Date | string | null
+    gender?: StringNullableFilter<"admin_profiles"> | string | null
+    nationality?: StringNullableFilter<"admin_profiles"> | string | null
+    dateOfJoining?: DateTimeNullableFilter<"admin_profiles"> | Date | string | null
+    office?: StringNullableFilter<"admin_profiles"> | string | null
+    officePhone?: StringNullableFilter<"admin_profiles"> | string | null
+    officeHours?: StringNullableFilter<"admin_profiles"> | string | null
+    phone?: StringNullableFilter<"admin_profiles"> | string | null
+    profileImage?: StringNullableFilter<"admin_profiles"> | string | null
+    about?: StringNullableFilter<"admin_profiles"> | string | null
+    createdAt?: DateTimeFilter<"admin_profiles"> | Date | string
+    updatedAt?: DateTimeFilter<"admin_profiles"> | Date | string
+    user_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+  }, "id" | "userAccountId">
+
+  export type admin_profilesOrderByWithAggregationInput = {
+    id?: SortOrder
+    userAccountId?: SortOrder
+    fullName?: SortOrderInput | SortOrder
+    employeeId?: SortOrderInput | SortOrder
+    designation?: SortOrderInput | SortOrder
+    department?: SortOrderInput | SortOrder
+    school?: SortOrderInput | SortOrder
+    qualification?: SortOrderInput | SortOrder
+    specialization?: SortOrderInput | SortOrder
+    dateOfBirth?: SortOrderInput | SortOrder
+    gender?: SortOrderInput | SortOrder
+    nationality?: SortOrderInput | SortOrder
+    dateOfJoining?: SortOrderInput | SortOrder
+    office?: SortOrderInput | SortOrder
+    officePhone?: SortOrderInput | SortOrder
+    officeHours?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    profileImage?: SortOrderInput | SortOrder
+    about?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: admin_profilesCountOrderByAggregateInput
+    _max?: admin_profilesMaxOrderByAggregateInput
+    _min?: admin_profilesMinOrderByAggregateInput
+  }
+
+  export type admin_profilesScalarWhereWithAggregatesInput = {
+    AND?: admin_profilesScalarWhereWithAggregatesInput | admin_profilesScalarWhereWithAggregatesInput[]
+    OR?: admin_profilesScalarWhereWithAggregatesInput[]
+    NOT?: admin_profilesScalarWhereWithAggregatesInput | admin_profilesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"admin_profiles"> | string
+    userAccountId?: StringWithAggregatesFilter<"admin_profiles"> | string
+    fullName?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    employeeId?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    designation?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    department?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    school?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    qualification?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    specialization?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    dateOfBirth?: DateTimeNullableWithAggregatesFilter<"admin_profiles"> | Date | string | null
+    gender?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    nationality?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    dateOfJoining?: DateTimeNullableWithAggregatesFilter<"admin_profiles"> | Date | string | null
+    office?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    officePhone?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    officeHours?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    profileImage?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    about?: StringNullableWithAggregatesFilter<"admin_profiles"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"admin_profiles"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"admin_profiles"> | Date | string
   }
 
   export type academic_term_requestsCreateInput = {
@@ -48569,6 +50114,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -48590,6 +50136,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -48611,6 +50158,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -48632,6 +50180,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -49407,6 +50956,173 @@ export namespace Prisma {
     description?: NullableStringFieldUpdateOperationsInput | string | null
     startedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     endedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type admin_profilesCreateInput = {
+    id: string
+    fullName?: string | null
+    employeeId?: string | null
+    designation?: string | null
+    department?: string | null
+    school?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: string | null
+    nationality?: string | null
+    dateOfJoining?: Date | string | null
+    office?: string | null
+    officePhone?: string | null
+    officeHours?: string | null
+    phone?: string | null
+    profileImage?: string | null
+    about?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user_accounts: user_accountsCreateNestedOneWithoutAdmin_profilesInput
+  }
+
+  export type admin_profilesUncheckedCreateInput = {
+    id: string
+    userAccountId: string
+    fullName?: string | null
+    employeeId?: string | null
+    designation?: string | null
+    department?: string | null
+    school?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: string | null
+    nationality?: string | null
+    dateOfJoining?: Date | string | null
+    office?: string | null
+    officePhone?: string | null
+    officeHours?: string | null
+    phone?: string | null
+    profileImage?: string | null
+    about?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type admin_profilesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_accounts?: user_accountsUpdateOneRequiredWithoutAdmin_profilesNestedInput
+  }
+
+  export type admin_profilesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userAccountId?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type admin_profilesCreateManyInput = {
+    id: string
+    userAccountId: string
+    fullName?: string | null
+    employeeId?: string | null
+    designation?: string | null
+    department?: string | null
+    school?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: string | null
+    nationality?: string | null
+    dateOfJoining?: Date | string | null
+    office?: string | null
+    officePhone?: string | null
+    officeHours?: string | null
+    phone?: string | null
+    profileImage?: string | null
+    about?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type admin_profilesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type admin_profilesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userAccountId?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -51692,6 +53408,11 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type Admin_profilesNullableScalarRelationFilter = {
+    is?: admin_profilesWhereInput | null
+    isNot?: admin_profilesWhereInput | null
+  }
+
   export type Otp_verificationsListRelationFilter = {
     every?: otp_verificationsWhereInput
     some?: otp_verificationsWhereInput
@@ -52128,6 +53849,78 @@ export namespace Prisma {
     description?: SortOrder
     startedAt?: SortOrder
     endedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type admin_profilesCountOrderByAggregateInput = {
+    id?: SortOrder
+    userAccountId?: SortOrder
+    fullName?: SortOrder
+    employeeId?: SortOrder
+    designation?: SortOrder
+    department?: SortOrder
+    school?: SortOrder
+    qualification?: SortOrder
+    specialization?: SortOrder
+    dateOfBirth?: SortOrder
+    gender?: SortOrder
+    nationality?: SortOrder
+    dateOfJoining?: SortOrder
+    office?: SortOrder
+    officePhone?: SortOrder
+    officeHours?: SortOrder
+    phone?: SortOrder
+    profileImage?: SortOrder
+    about?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type admin_profilesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userAccountId?: SortOrder
+    fullName?: SortOrder
+    employeeId?: SortOrder
+    designation?: SortOrder
+    department?: SortOrder
+    school?: SortOrder
+    qualification?: SortOrder
+    specialization?: SortOrder
+    dateOfBirth?: SortOrder
+    gender?: SortOrder
+    nationality?: SortOrder
+    dateOfJoining?: SortOrder
+    office?: SortOrder
+    officePhone?: SortOrder
+    officeHours?: SortOrder
+    phone?: SortOrder
+    profileImage?: SortOrder
+    about?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type admin_profilesMinOrderByAggregateInput = {
+    id?: SortOrder
+    userAccountId?: SortOrder
+    fullName?: SortOrder
+    employeeId?: SortOrder
+    designation?: SortOrder
+    department?: SortOrder
+    school?: SortOrder
+    qualification?: SortOrder
+    specialization?: SortOrder
+    dateOfBirth?: SortOrder
+    gender?: SortOrder
+    nationality?: SortOrder
+    dateOfJoining?: SortOrder
+    office?: SortOrder
+    officePhone?: SortOrder
+    officeHours?: SortOrder
+    phone?: SortOrder
+    profileImage?: SortOrder
+    about?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -54374,6 +56167,12 @@ export namespace Prisma {
     update?: XOR<XOR<teacher_profilesUpdateToOneWithWhereWithoutTeachersInput, teacher_profilesUpdateWithoutTeachersInput>, teacher_profilesUncheckedUpdateWithoutTeachersInput>
   }
 
+  export type admin_profilesCreateNestedOneWithoutUser_accountsInput = {
+    create?: XOR<admin_profilesCreateWithoutUser_accountsInput, admin_profilesUncheckedCreateWithoutUser_accountsInput>
+    connectOrCreate?: admin_profilesCreateOrConnectWithoutUser_accountsInput
+    connect?: admin_profilesWhereUniqueInput
+  }
+
   export type detentionsCreateNestedManyWithoutUser_accountsInput = {
     create?: XOR<detentionsCreateWithoutUser_accountsInput, detentionsUncheckedCreateWithoutUser_accountsInput> | detentionsCreateWithoutUser_accountsInput[] | detentionsUncheckedCreateWithoutUser_accountsInput[]
     connectOrCreate?: detentionsCreateOrConnectWithoutUser_accountsInput | detentionsCreateOrConnectWithoutUser_accountsInput[]
@@ -54426,6 +56225,12 @@ export namespace Prisma {
     create?: XOR<teachersCreateWithoutUser_accountsInput, teachersUncheckedCreateWithoutUser_accountsInput>
     connectOrCreate?: teachersCreateOrConnectWithoutUser_accountsInput
     connect?: teachersWhereUniqueInput
+  }
+
+  export type admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput = {
+    create?: XOR<admin_profilesCreateWithoutUser_accountsInput, admin_profilesUncheckedCreateWithoutUser_accountsInput>
+    connectOrCreate?: admin_profilesCreateOrConnectWithoutUser_accountsInput
+    connect?: admin_profilesWhereUniqueInput
   }
 
   export type detentionsUncheckedCreateNestedManyWithoutUser_accountsInput = {
@@ -54484,6 +56289,16 @@ export namespace Prisma {
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
     set?: $Enums.UserRole
+  }
+
+  export type admin_profilesUpdateOneWithoutUser_accountsNestedInput = {
+    create?: XOR<admin_profilesCreateWithoutUser_accountsInput, admin_profilesUncheckedCreateWithoutUser_accountsInput>
+    connectOrCreate?: admin_profilesCreateOrConnectWithoutUser_accountsInput
+    upsert?: admin_profilesUpsertWithoutUser_accountsInput
+    disconnect?: admin_profilesWhereInput | boolean
+    delete?: admin_profilesWhereInput | boolean
+    connect?: admin_profilesWhereUniqueInput
+    update?: XOR<XOR<admin_profilesUpdateToOneWithWhereWithoutUser_accountsInput, admin_profilesUpdateWithoutUser_accountsInput>, admin_profilesUncheckedUpdateWithoutUser_accountsInput>
   }
 
   export type detentionsUpdateManyWithoutUser_accountsNestedInput = {
@@ -54588,6 +56403,16 @@ export namespace Prisma {
     delete?: teachersWhereInput | boolean
     connect?: teachersWhereUniqueInput
     update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutUser_accountsInput, teachersUpdateWithoutUser_accountsInput>, teachersUncheckedUpdateWithoutUser_accountsInput>
+  }
+
+  export type admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput = {
+    create?: XOR<admin_profilesCreateWithoutUser_accountsInput, admin_profilesUncheckedCreateWithoutUser_accountsInput>
+    connectOrCreate?: admin_profilesCreateOrConnectWithoutUser_accountsInput
+    upsert?: admin_profilesUpsertWithoutUser_accountsInput
+    disconnect?: admin_profilesWhereInput | boolean
+    delete?: admin_profilesWhereInput | boolean
+    connect?: admin_profilesWhereUniqueInput
+    update?: XOR<XOR<admin_profilesUpdateToOneWithWhereWithoutUser_accountsInput, admin_profilesUpdateWithoutUser_accountsInput>, admin_profilesUncheckedUpdateWithoutUser_accountsInput>
   }
 
   export type detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput = {
@@ -55040,6 +56865,20 @@ export namespace Prisma {
     update?: mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput | mentor_meetingsUpdateWithWhereUniqueWithoutMentor_meetingsInput[]
     updateMany?: mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput | mentor_meetingsUpdateManyWithWhereWithoutMentor_meetingsInput[]
     deleteMany?: mentor_meetingsScalarWhereInput | mentor_meetingsScalarWhereInput[]
+  }
+
+  export type user_accountsCreateNestedOneWithoutAdmin_profilesInput = {
+    create?: XOR<user_accountsCreateWithoutAdmin_profilesInput, user_accountsUncheckedCreateWithoutAdmin_profilesInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutAdmin_profilesInput
+    connect?: user_accountsWhereUniqueInput
+  }
+
+  export type user_accountsUpdateOneRequiredWithoutAdmin_profilesNestedInput = {
+    create?: XOR<user_accountsCreateWithoutAdmin_profilesInput, user_accountsUncheckedCreateWithoutAdmin_profilesInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutAdmin_profilesInput
+    upsert?: user_accountsUpsertWithoutAdmin_profilesInput
+    connect?: user_accountsWhereUniqueInput
+    update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutAdmin_profilesInput, user_accountsUpdateWithoutAdmin_profilesInput>, user_accountsUncheckedUpdateWithoutAdmin_profilesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -56987,6 +58826,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -57007,6 +58847,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -57169,6 +59010,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -57189,6 +59031,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -57380,6 +59223,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -57400,6 +59244,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -57503,6 +59348,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -57523,6 +59369,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -57640,6 +59487,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -57660,6 +59508,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
@@ -57875,6 +59724,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -57895,6 +59745,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
@@ -58218,6 +60069,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -58238,6 +60090,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -58316,6 +60169,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -58336,6 +60190,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -58616,6 +60471,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -58636,6 +60492,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -58726,6 +60583,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -58746,6 +60604,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -58904,6 +60763,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -58924,6 +60784,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -58960,6 +60821,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -58980,6 +60842,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -59835,6 +61698,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -59855,6 +61719,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -60317,6 +62182,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -60337,6 +62203,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -62653,6 +64520,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
@@ -62673,6 +64541,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt: Date | string
     mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
@@ -62967,6 +64836,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
@@ -62987,6 +64857,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -62994,6 +64865,57 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type admin_profilesCreateWithoutUser_accountsInput = {
+    id: string
+    fullName?: string | null
+    employeeId?: string | null
+    designation?: string | null
+    department?: string | null
+    school?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: string | null
+    nationality?: string | null
+    dateOfJoining?: Date | string | null
+    office?: string | null
+    officePhone?: string | null
+    officeHours?: string | null
+    phone?: string | null
+    profileImage?: string | null
+    about?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type admin_profilesUncheckedCreateWithoutUser_accountsInput = {
+    id: string
+    fullName?: string | null
+    employeeId?: string | null
+    designation?: string | null
+    department?: string | null
+    school?: string | null
+    qualification?: string | null
+    specialization?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: string | null
+    nationality?: string | null
+    dateOfJoining?: Date | string | null
+    office?: string | null
+    officePhone?: string | null
+    officeHours?: string | null
+    phone?: string | null
+    profileImage?: string | null
+    about?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type admin_profilesCreateOrConnectWithoutUser_accountsInput = {
+    where: admin_profilesWhereUniqueInput
+    create: XOR<admin_profilesCreateWithoutUser_accountsInput, admin_profilesUncheckedCreateWithoutUser_accountsInput>
   }
 
   export type detentionsCreateWithoutUser_accountsInput = {
@@ -63360,6 +65282,63 @@ export namespace Prisma {
   export type teachersCreateOrConnectWithoutUser_accountsInput = {
     where: teachersWhereUniqueInput
     create: XOR<teachersCreateWithoutUser_accountsInput, teachersUncheckedCreateWithoutUser_accountsInput>
+  }
+
+  export type admin_profilesUpsertWithoutUser_accountsInput = {
+    update: XOR<admin_profilesUpdateWithoutUser_accountsInput, admin_profilesUncheckedUpdateWithoutUser_accountsInput>
+    create: XOR<admin_profilesCreateWithoutUser_accountsInput, admin_profilesUncheckedCreateWithoutUser_accountsInput>
+    where?: admin_profilesWhereInput
+  }
+
+  export type admin_profilesUpdateToOneWithWhereWithoutUser_accountsInput = {
+    where?: admin_profilesWhereInput
+    data: XOR<admin_profilesUpdateWithoutUser_accountsInput, admin_profilesUncheckedUpdateWithoutUser_accountsInput>
+  }
+
+  export type admin_profilesUpdateWithoutUser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type admin_profilesUncheckedUpdateWithoutUser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    fullName?: NullableStringFieldUpdateOperationsInput | string | null
+    employeeId?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    department?: NullableStringFieldUpdateOperationsInput | string | null
+    school?: NullableStringFieldUpdateOperationsInput | string | null
+    qualification?: NullableStringFieldUpdateOperationsInput | string | null
+    specialization?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableStringFieldUpdateOperationsInput | string | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfJoining?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    office?: NullableStringFieldUpdateOperationsInput | string | null
+    officePhone?: NullableStringFieldUpdateOperationsInput | string | null
+    officeHours?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    about?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type detentionsUpsertWithWhereUniqueWithoutUser_accountsInput = {
@@ -65316,6 +67295,106 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type user_accountsCreateWithoutAdmin_profilesInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
+    students?: studentsCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsUncheckedCreateWithoutAdmin_profilesInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
+    students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsCreateOrConnectWithoutAdmin_profilesInput = {
+    where: user_accountsWhereUniqueInput
+    create: XOR<user_accountsCreateWithoutAdmin_profilesInput, user_accountsUncheckedCreateWithoutAdmin_profilesInput>
+  }
+
+  export type user_accountsUpsertWithoutAdmin_profilesInput = {
+    update: XOR<user_accountsUpdateWithoutAdmin_profilesInput, user_accountsUncheckedUpdateWithoutAdmin_profilesInput>
+    create: XOR<user_accountsCreateWithoutAdmin_profilesInput, user_accountsUncheckedCreateWithoutAdmin_profilesInput>
+    where?: user_accountsWhereInput
+  }
+
+  export type user_accountsUpdateToOneWithWhereWithoutAdmin_profilesInput = {
+    where?: user_accountsWhereInput
+    data: XOR<user_accountsUpdateWithoutAdmin_profilesInput, user_accountsUncheckedUpdateWithoutAdmin_profilesInput>
+  }
+
+  export type user_accountsUpdateWithoutAdmin_profilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type user_accountsUncheckedUpdateWithoutAdmin_profilesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
   export type detentionsCreateManyAcademic_termsInput = {

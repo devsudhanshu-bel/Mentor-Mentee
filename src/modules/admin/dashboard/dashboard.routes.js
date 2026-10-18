@@ -11,6 +11,12 @@ const router = express.Router();
 router.get("/overview", DashboardController.getOverview);
 
 /* ==========================================================
+   ADMIN PROFILE OVERVIEW STATISTICS
+========================================================== */
+
+router.get("/profile-overview", DashboardController.getProfileOverview);
+
+/* ==========================================================
    ADMIN DASHBOARD BANNER
 ========================================================== */
 

@@ -1,3 +1,4 @@
+
 import express from "express";
 
 import AdminController from "../controllers/admin.controller.js";
@@ -18,6 +19,7 @@ const router = express.Router();
 |--------------------------------------------------------------------------
 | ADMIN SECURITY
 |--------------------------------------------------------------------------
+| All routes below require authentication and an authorized Admin role.
 */
 
 router.use(authenticate);
@@ -39,6 +41,9 @@ router.post("/mentors", AdminController.createMentor);
 |--------------------------------------------------------------------------
 | ADMIN PROFILE
 |--------------------------------------------------------------------------
+| GET    /api/admin/profile  - Fetch the logged-in Admin's profile
+| POST   /api/admin/profile  - Create the profile
+| PUT    /api/admin/profile  - Update the profile
 */
 
 router.use("/profile", profileRoutes);

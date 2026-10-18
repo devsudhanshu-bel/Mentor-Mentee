@@ -1,17 +1,12 @@
 import hodPrisma from "../../../config/prisma.hod.js";
-
 import ApiError from "../../../utils/ApiError.js";
 
 class DashboardService {
   /* ==========================================================
-     ADMIN DASHBOARD OVERVIEW
+     VERIFY ADMIN ACCOUNT
   ========================================================== */
 
-  async getOverview(userId) {
-    // ========================================================
-    // 1. VERIFY ADMIN ACCOUNT
-    // ========================================================
-
+  async getAdminAccount(userId) {
     const admin = await hodPrisma.user_accounts.findUnique({
       where: {
         id: userId,
@@ -30,11 +25,22 @@ class DashboardService {
       throw new ApiError(404, "Admin account not found.");
     }
 
-    // ========================================================
-    // 2. FIND CURRENT ACTIVE ACADEMIC TERM
-    // ========================================================
+    if (!["ADMIN", "SYSTEM_ADMIN"].includes(admin.role)) {
+      throw new ApiError(
+        403,
+        "This account cannot access the Admin dashboard."
+      );
+    }
 
-    const activeTerm = await hodPrisma.academic_terms.findFirst({
+    return admin;
+  }
+
+  /* ==========================================================
+     FIND ACTIVE ACADEMIC TERM
+  ========================================================== */
+
+  async getActiveAcademicTerm() {
+    return hodPrisma.academic_terms.findFirst({
       where: {
         status: "ACTIVE",
       },
@@ -52,92 +58,187 @@ class DashboardService {
         status: true,
       },
     });
+  }
 
-    // ========================================================
-    // 3. ASSIGNMENT FILTER
-    // ========================================================
+  /* ==========================================================
+     BUILD ACTIVE ASSIGNMENT FILTER
+  ========================================================== */
 
-    const assignmentWhere = {
+  buildAssignmentWhere(activeTerm) {
+    return {
       status: "ACTIVE",
+
       ...(activeTerm
         ? {
             termId: activeTerm.id,
           }
         : {}),
     };
+  }
 
-    // ========================================================
-    // 4. BASIC COUNTS
-    // ========================================================
+  /* ==========================================================
+     PROFILE OVERVIEW STATISTICS
+  ========================================================== */
 
-    const [totalMentors, totalStudents, assignedStudents, attendanceAggregate] =
-      await Promise.all([
-        // ------------------------------------------------------
-        // Active mentors
-        // ------------------------------------------------------
+  async getProfileOverview(userId) {
+    await this.getAdminAccount(userId);
 
-        hodPrisma.teachers.count({
-          where: {
-            isActive: true,
+    const activeTerm = await this.getActiveAcademicTerm();
+
+    const assignmentWhere = this.buildAssignmentWhere(activeTerm);
+
+    const [
+      totalMentors,
+      totalStudents,
+      assignedStudents,
+      attendanceAggregate,
+      completedMeetings,
+    ] = await Promise.all([
+      // Active mentors.
+      hodPrisma.teachers.count({
+        where: {
+          isActive: true,
+        },
+      }),
+
+      // Active students.
+      hodPrisma.students.count({
+        where: {
+          status: "ACTIVE",
+        },
+      }),
+
+      // Active assignments for the current term.
+      hodPrisma.mentor_assignments.count({
+        where: assignmentWhere,
+      }),
+
+      // Average attendance among active students
+      // who have an attendance value.
+      hodPrisma.students.aggregate({
+        where: {
+          status: "ACTIVE",
+
+          overallAttendance: {
+            not: null,
           },
-        }),
+        },
 
-        // ------------------------------------------------------
-        // Active students
-        // ------------------------------------------------------
+        _avg: {
+          overallAttendance: true,
+        },
+      }),
 
-        hodPrisma.students.count({
-          where: {
-            status: "ACTIVE",
-          },
-        }),
+      // Total completed meetings across all mentors.
+      hodPrisma.mentor_meetings.count({
+        where: {
+          status: "COMPLETED",
+        },
+      }),
+    ]);
 
-        // ------------------------------------------------------
-        // Current active assignments
-        // ------------------------------------------------------
-
-        hodPrisma.mentor_assignments.count({
-          where: assignmentWhere,
-        }),
-
-        // ------------------------------------------------------
-        // Average attendance
-        // ------------------------------------------------------
-
-        hodPrisma.students.aggregate({
-          where: {
-            status: "ACTIVE",
-
-            overallAttendance: {
-              not: null,
-            },
-          },
-
-          _avg: {
-            overallAttendance: true,
-          },
-        }),
-      ]);
-
-    // ========================================================
-    // 5. UNASSIGNED STUDENTS
-    // ========================================================
-
-    const unassignedStudents = Math.max(totalStudents - assignedStudents, 0);
-
-    // ========================================================
-    // 6. AVERAGE ATTENDANCE
-    // ========================================================
+    const unassignedStudents = Math.max(
+      totalStudents - assignedStudents,
+      0
+    );
 
     const averageAttendance =
-      attendanceAggregate._avg.overallAttendance !== null
-        ? Number(attendanceAggregate._avg.overallAttendance.toFixed(1))
+      attendanceAggregate._avg.overallAttendance != null
+        ? Number(
+            attendanceAggregate._avg.overallAttendance.toFixed(1)
+          )
         : null;
 
-    // ========================================================
-    // 7. MENTOR WORKLOAD
-    // ========================================================
+    return {
+      mentors: totalMentors,
+      students: totalStudents,
 
+      // Total completed meetings across all mentors.
+      meetings: completedMeetings,
+
+      // Null means attendance data is unavailable.
+      attendance: averageAttendance,
+
+      assignedStudents,
+      unassignedStudents,
+
+      academicTerm: activeTerm,
+    };
+  }
+
+  /* ==========================================================
+     ADMIN DASHBOARD OVERVIEW
+  ========================================================== */
+
+  async getOverview(userId) {
+    const admin = await this.getAdminAccount(userId);
+
+    const activeTerm = await this.getActiveAcademicTerm();
+
+    const assignmentWhere = this.buildAssignmentWhere(activeTerm);
+
+    const [
+      totalMentors,
+      totalStudents,
+      assignedStudents,
+      attendanceAggregate,
+      completedMeetings,
+    ] = await Promise.all([
+      // Active mentors.
+      hodPrisma.teachers.count({
+        where: {
+          isActive: true,
+        },
+      }),
+
+      // Active students.
+      hodPrisma.students.count({
+        where: {
+          status: "ACTIVE",
+        },
+      }),
+
+      // Active assignments for the current term.
+      hodPrisma.mentor_assignments.count({
+        where: assignmentWhere,
+      }),
+
+      // Average attendance.
+      hodPrisma.students.aggregate({
+        where: {
+          status: "ACTIVE",
+
+          overallAttendance: {
+            not: null,
+          },
+        },
+
+        _avg: {
+          overallAttendance: true,
+        },
+      }),
+
+      // Total completed meetings across all mentors.
+      hodPrisma.mentor_meetings.count({
+        where: {
+          status: "COMPLETED",
+        },
+      }),
+    ]);
+
+    const unassignedStudents = Math.max(
+      totalStudents - assignedStudents,
+      0
+    );
+
+    const averageAttendance =
+      attendanceAggregate._avg.overallAttendance != null
+        ? Number(
+            attendanceAggregate._avg.overallAttendance.toFixed(1)
+          )
+        : null;
+
+    // Mentor workload.
     const mentors = await hodPrisma.teachers.findMany({
       where: {
         isActive: true,
@@ -170,28 +271,23 @@ class DashboardService {
       },
     });
 
-    // ========================================================
-    // 8. PENDING TRANSFER REQUESTS
-    //
-    // These are real pending workflow records from the
-    // HOD database.
-    // ========================================================
+    // Pending transfer requests.
+    const pendingTransfers =
+      await hodPrisma.mentor_transfer_requests.findMany({
+        where: {
+          status: "PENDING",
 
-    const pendingTransfers = await hodPrisma.mentor_transfer_requests.findMany({
-      where: {
-        status: "PENDING",
+          ...(activeTerm
+            ? {
+                termId: activeTerm.id,
+              }
+            : {}),
+        },
 
-        ...(activeTerm
-          ? {
-              termId: activeTerm.id,
-            }
-          : {}),
-      },
-
-      select: {
-        currentMentorId: true,
-      },
-    });
+        select: {
+          currentMentorId: true,
+        },
+      });
 
     const pendingTransferCountByMentor = pendingTransfers.reduce(
       (result, request) => {
@@ -204,20 +300,17 @@ class DashboardService {
 
         return result;
       },
-      {},
+      {}
     );
 
-    // ========================================================
-    // 9. FORMAT WORKLOAD
-    // ========================================================
-
+    // Format mentor workload.
     const mentorWorkload = mentors
       .map((mentor) => {
         const students = mentor.mentor_assignments.length;
-
         const capacity = mentor.maxMentees || 0;
 
-        const utilization = capacity > 0 ? (students / capacity) * 100 : 0;
+        const utilization =
+          capacity > 0 ? (students / capacity) * 100 : 0;
 
         let status = "Active";
 
@@ -231,51 +324,32 @@ class DashboardService {
 
         return {
           id: mentor.id,
-
           employeeCode: mentor.employeeCode,
-
           name: mentor.fullName,
-
           designation: mentor.designation || "Faculty Mentor",
-
           students,
-
           capacity,
-
           utilization: Number(utilization.toFixed(1)),
 
-          pendingTransfers: pendingTransferCountByMentor[mentor.id] || 0,
+          pendingTransfers:
+            pendingTransferCountByMentor[mentor.id] || 0,
 
           status,
 
-          profileImage: mentor.teacher_profiles?.profileImage || null,
+          profileImage:
+            mentor.teacher_profiles?.profileImage || null,
         };
       })
       .sort((a, b) => b.students - a.students);
 
-    // ========================================================
-    // 10. TOP 5 MENTORS
-    // ========================================================
-
     const topMentors = mentorWorkload.slice(0, 5);
 
-    // ========================================================
-    // 11. DATA AVAILABILITY
-    //
-    // There are currently NO meeting/goal models in the
-    // HOD Prisma schema.
-    //
-    // Therefore we intentionally do NOT fabricate numbers.
-    // ========================================================
-
+    // Meeting metrics are now supported by mentor_meetings.
+    // Goal metrics remain unsupported.
     const unsupportedMetrics = {
       meetings: false,
       goals: false,
     };
-
-    // ========================================================
-    // 12. RESPONSE
-    // ========================================================
 
     return {
       admin: {
@@ -289,19 +363,13 @@ class DashboardService {
 
       kpis: {
         totalMentors,
-
         totalStudents,
-
         assignedStudents,
-
         unassignedStudents,
-
         averageAttendance,
 
-        meetingsConducted: null,
-
+        meetingsConducted: completedMeetings,
         upcomingMeetings: null,
-
         activeGoals: null,
       },
 
@@ -316,23 +384,7 @@ class DashboardService {
   ========================================================== */
 
   async getBanner(userId) {
-    const admin = await hodPrisma.user_accounts.findUnique({
-      where: {
-        id: userId,
-      },
-
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        role: true,
-        isActive: true,
-      },
-    });
-
-    if (!admin) {
-      throw new ApiError(404, "Admin account not found.");
-    }
+    const admin = await this.getAdminAccount(userId);
 
     const hour = new Date().getHours();
 

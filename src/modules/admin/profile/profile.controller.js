@@ -1,57 +1,78 @@
-import AdminProfileService from "../services/profile.service.js";
 
+import AdminProfileService from "../services/profile.service.js";
 import ApiResponse from "../../../utils/ApiResponse.js";
 import asyncHandler from "../../../utils/asyncHandler.js";
 
 class AdminProfileController {
-  /**
-   * GET /api/admin/profile
-   */
+  /*
+  |--------------------------------------------------------------------------
+  | GET ADMIN PROFILE
+  |--------------------------------------------------------------------------
+  | GET /api/admin/profile
+  */
+
   getProfile = asyncHandler(async (req, res) => {
-    const profile = await AdminProfileService.getProfile(req.user.id);
+    const result = await AdminProfileService.getProfile(req.user.id);
 
     return res.status(200).json(
       new ApiResponse(
         200,
-        "Profile fetched successfully",
-        profile
-      )
+        "Admin profile fetched successfully.",
+        {
+          profileExists: result.profileExists,
+          profile: result.profile,
+        },
+      ),
     );
   });
 
-  /**
-   * POST /api/admin/profile
-   */
+  /*
+  |--------------------------------------------------------------------------
+  | CREATE ADMIN PROFILE
+  |--------------------------------------------------------------------------
+  | POST /api/admin/profile
+  */
+
   createProfile = asyncHandler(async (req, res) => {
-    const profile = await AdminProfileService.createProfile(
+    const result = await AdminProfileService.createProfile(
       req.user.id,
-      req.body
+      req.body,
     );
 
     return res.status(201).json(
       new ApiResponse(
         201,
-        "Profile created successfully",
-        profile
-      )
+        "Admin profile created successfully.",
+        {
+          profileExists: result.profileExists,
+          profile: result.profile,
+        },
+      ),
     );
   });
 
-  /**
-   * PUT /api/admin/profile
-   */
+  /*
+  |--------------------------------------------------------------------------
+  | UPDATE ADMIN PROFILE
+  |--------------------------------------------------------------------------
+  | PUT /api/admin/profile
+  */
+
   updateProfile = asyncHandler(async (req, res) => {
-    const profile = await AdminProfileService.updateProfile(
+    const result = await AdminProfileService.updateProfile(
       req.user.id,
-      req.body
+      req.body,
     );
 
     return res.status(200).json(
       new ApiResponse(
         200,
-        "Profile updated successfully",
-        profile
-      )
+        "Admin profile updated successfully.",
+        {
+          profileExists: result.profileExists,
+          profile: result.profile,
+        },
+      ),
     );
   });
 }

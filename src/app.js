@@ -52,26 +52,47 @@ const allowedOrigins = [
     : []),
 ];
 
-app.use(
-  cors({
-    origin(origin, callback) {
-      // Allow requests without an Origin header, such as CLI tools.
-      if (!origin || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+const corsOptions = {
+  origin(origin, callback) {
+    // Allow requests without an Origin header, such as CLI tools.
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
 
-      return callback(
-        new Error(`CORS blocked request from origin: ${origin}`)
-      );
-    },
+    return callback(
+      new Error(`CORS blocked request from origin: ${origin}`),
+    );
+  },
 
-    credentials: true,
+  credentials: true,
 
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  methods: [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+  ],
 
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+  // Allow common headers used by Axios and browser requests.
+  allowedHeaders: [
+    "Accept",
+    "Authorization",
+    "Content-Type",
+    "Cache-Control",
+    "Pragma",
+    "X-Requested-With",
+  ],
+
+  optionsSuccessStatus: 204,
+};
+
+// Register CORS before routes and other middleware.
+app.use(cors(corsOptions));
+
+// Explicitly handle browser preflight requests.
+app.options(/.*/, cors(corsOptions));
 
 /* ==========================================================
    SECURITY
@@ -88,7 +109,7 @@ app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
-  })
+  }),
 );
 
 app.use(cookieParser());
@@ -204,7 +225,6 @@ app.use("/api/mentor/students", studentReportRoutes);
 
 /* ==========================================================
    UPLOAD ERROR HANDLER
-   Must be before the 404 and global error handlers.
 ========================================================== */
 
 app.use((err, req, res, next) => {

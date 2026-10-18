@@ -597,6 +597,30 @@ exports.Prisma.Mentor_meetingsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.Admin_profilesScalarFieldEnum = {
+  id: 'id',
+  userAccountId: 'userAccountId',
+  fullName: 'fullName',
+  employeeId: 'employeeId',
+  designation: 'designation',
+  department: 'department',
+  school: 'school',
+  qualification: 'qualification',
+  specialization: 'specialization',
+  dateOfBirth: 'dateOfBirth',
+  gender: 'gender',
+  nationality: 'nationality',
+  dateOfJoining: 'dateOfJoining',
+  office: 'office',
+  officePhone: 'officePhone',
+  officeHours: 'officeHours',
+  phone: 'phone',
+  profileImage: 'profileImage',
+  about: 'about',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -849,7 +873,8 @@ exports.Prisma.ModelName = {
   mentor_meeting_feedback: 'mentor_meeting_feedback',
   mentor_meeting_notes: 'mentor_meeting_notes',
   mentor_meeting_series: 'mentor_meeting_series',
-  mentor_meetings: 'mentor_meetings'
+  mentor_meetings: 'mentor_meetings',
+  admin_profiles: 'admin_profiles'
 };
 
 /**
