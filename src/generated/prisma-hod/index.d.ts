@@ -178,6 +178,16 @@ export type announcement_recipients = $Result.DefaultSelection<Prisma.$announcem
  * 
  */
 export type announcements = $Result.DefaultSelection<Prisma.$announcementsPayload>
+/**
+ * Model conversations
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ */
+export type conversations = $Result.DefaultSelection<Prisma.$conversationsPayload>
+/**
+ * Model messages
+ * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+ */
+export type messages = $Result.DefaultSelection<Prisma.$messagesPayload>
 
 /**
  * Enums
@@ -1109,6 +1119,26 @@ export class PrismaClient<
     * ```
     */
   get announcements(): Prisma.announcementsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.conversations`: Exposes CRUD operations for the **conversations** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Conversations
+    * const conversations = await prisma.conversations.findMany()
+    * ```
+    */
+  get conversations(): Prisma.conversationsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.messages`: Exposes CRUD operations for the **messages** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Messages
+    * const messages = await prisma.messages.findMany()
+    * ```
+    */
+  get messages(): Prisma.messagesDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1582,7 +1612,9 @@ export namespace Prisma {
     mentor_meetings: 'mentor_meetings',
     admin_profiles: 'admin_profiles',
     announcement_recipients: 'announcement_recipients',
-    announcements: 'announcements'
+    announcements: 'announcements',
+    conversations: 'conversations',
+    messages: 'messages'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1601,7 +1633,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings" | "admin_profiles" | "announcement_recipients" | "announcements"
+      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings" | "admin_profiles" | "announcement_recipients" | "announcements" | "conversations" | "messages"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4047,6 +4079,154 @@ export namespace Prisma {
           }
         }
       }
+      conversations: {
+        payload: Prisma.$conversationsPayload<ExtArgs>
+        fields: Prisma.conversationsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.conversationsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.conversationsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>
+          }
+          findFirst: {
+            args: Prisma.conversationsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.conversationsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>
+          }
+          findMany: {
+            args: Prisma.conversationsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>[]
+          }
+          create: {
+            args: Prisma.conversationsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>
+          }
+          createMany: {
+            args: Prisma.conversationsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.conversationsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>[]
+          }
+          delete: {
+            args: Prisma.conversationsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>
+          }
+          update: {
+            args: Prisma.conversationsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>
+          }
+          deleteMany: {
+            args: Prisma.conversationsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.conversationsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.conversationsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>[]
+          }
+          upsert: {
+            args: Prisma.conversationsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$conversationsPayload>
+          }
+          aggregate: {
+            args: Prisma.ConversationsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateConversations>
+          }
+          groupBy: {
+            args: Prisma.conversationsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ConversationsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.conversationsCountArgs<ExtArgs>
+            result: $Utils.Optional<ConversationsCountAggregateOutputType> | number
+          }
+        }
+      }
+      messages: {
+        payload: Prisma.$messagesPayload<ExtArgs>
+        fields: Prisma.messagesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.messagesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.messagesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>
+          }
+          findFirst: {
+            args: Prisma.messagesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.messagesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>
+          }
+          findMany: {
+            args: Prisma.messagesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>[]
+          }
+          create: {
+            args: Prisma.messagesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>
+          }
+          createMany: {
+            args: Prisma.messagesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.messagesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>[]
+          }
+          delete: {
+            args: Prisma.messagesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>
+          }
+          update: {
+            args: Prisma.messagesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>
+          }
+          deleteMany: {
+            args: Prisma.messagesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.messagesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.messagesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>[]
+          }
+          upsert: {
+            args: Prisma.messagesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$messagesPayload>
+          }
+          aggregate: {
+            args: Prisma.MessagesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMessages>
+          }
+          groupBy: {
+            args: Prisma.messagesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MessagesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.messagesCountArgs<ExtArgs>
+            result: $Utils.Optional<MessagesCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4176,6 +4356,8 @@ export namespace Prisma {
     admin_profiles?: admin_profilesOmit
     announcement_recipients?: announcement_recipientsOmit
     announcements?: announcementsOmit
+    conversations?: conversationsOmit
+    messages?: messagesOmit
   }
 
   /* Types for Logging */
@@ -4731,22 +4913,28 @@ export namespace Prisma {
   export type User_accountsCountOutputType = {
     announcement_recipients: number
     announcements: number
+    conversations_conversations_menteeUserAccountIdTouser_accounts: number
+    conversations_conversations_mentorUserAccountIdTouser_accounts: number
     detentions: number
     import_batches: number
     mentor_assignments: number
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts: number
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts: number
+    messages: number
     otp_verifications: number
   }
 
   export type User_accountsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     announcement_recipients?: boolean | User_accountsCountOutputTypeCountAnnouncement_recipientsArgs
     announcements?: boolean | User_accountsCountOutputTypeCountAnnouncementsArgs
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: boolean | User_accountsCountOutputTypeCountConversations_conversations_menteeUserAccountIdTouser_accountsArgs
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: boolean | User_accountsCountOutputTypeCountConversations_conversations_mentorUserAccountIdTouser_accountsArgs
     detentions?: boolean | User_accountsCountOutputTypeCountDetentionsArgs
     import_batches?: boolean | User_accountsCountOutputTypeCountImport_batchesArgs
     mentor_assignments?: boolean | User_accountsCountOutputTypeCountMentor_assignmentsArgs
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: boolean | User_accountsCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsArgs
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: boolean | User_accountsCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsArgs
+    messages?: boolean | User_accountsCountOutputTypeCountMessagesArgs
     otp_verifications?: boolean | User_accountsCountOutputTypeCountOtp_verificationsArgs
   }
 
@@ -4773,6 +4961,20 @@ export namespace Prisma {
    */
   export type User_accountsCountOutputTypeCountAnnouncementsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: announcementsWhereInput
+  }
+
+  /**
+   * User_accountsCountOutputType without action
+   */
+  export type User_accountsCountOutputTypeCountConversations_conversations_menteeUserAccountIdTouser_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: conversationsWhereInput
+  }
+
+  /**
+   * User_accountsCountOutputType without action
+   */
+  export type User_accountsCountOutputTypeCountConversations_conversations_mentorUserAccountIdTouser_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: conversationsWhereInput
   }
 
   /**
@@ -4808,6 +5010,13 @@ export namespace Prisma {
    */
   export type User_accountsCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: mentor_transfer_requestsWhereInput
+  }
+
+  /**
+   * User_accountsCountOutputType without action
+   */
+  export type User_accountsCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: messagesWhereInput
   }
 
   /**
@@ -4917,6 +5126,37 @@ export namespace Prisma {
    */
   export type AnnouncementsCountOutputTypeCountAnnouncement_recipientsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: announcement_recipientsWhereInput
+  }
+
+
+  /**
+   * Count Type ConversationsCountOutputType
+   */
+
+  export type ConversationsCountOutputType = {
+    messages: number
+  }
+
+  export type ConversationsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    messages?: boolean | ConversationsCountOutputTypeCountMessagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ConversationsCountOutputType without action
+   */
+  export type ConversationsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the ConversationsCountOutputType
+     */
+    select?: ConversationsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ConversationsCountOutputType without action
+   */
+  export type ConversationsCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: messagesWhereInput
   }
 
 
@@ -32698,11 +32938,14 @@ export namespace Prisma {
     admin_profiles?: boolean | user_accounts$admin_profilesArgs<ExtArgs>
     announcement_recipients?: boolean | user_accounts$announcement_recipientsArgs<ExtArgs>
     announcements?: boolean | user_accounts$announcementsArgs<ExtArgs>
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accounts$conversations_conversations_menteeUserAccountIdTouser_accountsArgs<ExtArgs>
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accounts$conversations_conversations_mentorUserAccountIdTouser_accountsArgs<ExtArgs>
     detentions?: boolean | user_accounts$detentionsArgs<ExtArgs>
     import_batches?: boolean | user_accounts$import_batchesArgs<ExtArgs>
     mentor_assignments?: boolean | user_accounts$mentor_assignmentsArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: boolean | user_accounts$mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: boolean | user_accounts$mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsArgs<ExtArgs>
+    messages?: boolean | user_accounts$messagesArgs<ExtArgs>
     otp_verifications?: boolean | user_accounts$otp_verificationsArgs<ExtArgs>
     students?: boolean | user_accounts$studentsArgs<ExtArgs>
     teachers?: boolean | user_accounts$teachersArgs<ExtArgs>
@@ -32753,11 +32996,14 @@ export namespace Prisma {
     admin_profiles?: boolean | user_accounts$admin_profilesArgs<ExtArgs>
     announcement_recipients?: boolean | user_accounts$announcement_recipientsArgs<ExtArgs>
     announcements?: boolean | user_accounts$announcementsArgs<ExtArgs>
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accounts$conversations_conversations_menteeUserAccountIdTouser_accountsArgs<ExtArgs>
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accounts$conversations_conversations_mentorUserAccountIdTouser_accountsArgs<ExtArgs>
     detentions?: boolean | user_accounts$detentionsArgs<ExtArgs>
     import_batches?: boolean | user_accounts$import_batchesArgs<ExtArgs>
     mentor_assignments?: boolean | user_accounts$mentor_assignmentsArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: boolean | user_accounts$mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsArgs<ExtArgs>
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: boolean | user_accounts$mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsArgs<ExtArgs>
+    messages?: boolean | user_accounts$messagesArgs<ExtArgs>
     otp_verifications?: boolean | user_accounts$otp_verificationsArgs<ExtArgs>
     students?: boolean | user_accounts$studentsArgs<ExtArgs>
     teachers?: boolean | user_accounts$teachersArgs<ExtArgs>
@@ -32772,11 +33018,14 @@ export namespace Prisma {
       admin_profiles: Prisma.$admin_profilesPayload<ExtArgs> | null
       announcement_recipients: Prisma.$announcement_recipientsPayload<ExtArgs>[]
       announcements: Prisma.$announcementsPayload<ExtArgs>[]
+      conversations_conversations_menteeUserAccountIdTouser_accounts: Prisma.$conversationsPayload<ExtArgs>[]
+      conversations_conversations_mentorUserAccountIdTouser_accounts: Prisma.$conversationsPayload<ExtArgs>[]
       detentions: Prisma.$detentionsPayload<ExtArgs>[]
       import_batches: Prisma.$import_batchesPayload<ExtArgs>[]
       mentor_assignments: Prisma.$mentor_assignmentsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
       mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts: Prisma.$mentor_transfer_requestsPayload<ExtArgs>[]
+      messages: Prisma.$messagesPayload<ExtArgs>[]
       otp_verifications: Prisma.$otp_verificationsPayload<ExtArgs>[]
       students: Prisma.$studentsPayload<ExtArgs> | null
       teachers: Prisma.$teachersPayload<ExtArgs> | null
@@ -33189,11 +33438,14 @@ export namespace Prisma {
     admin_profiles<T extends user_accounts$admin_profilesArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$admin_profilesArgs<ExtArgs>>): Prisma__admin_profilesClient<$Result.GetResult<Prisma.$admin_profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     announcement_recipients<T extends user_accounts$announcement_recipientsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$announcement_recipientsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$announcement_recipientsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     announcements<T extends user_accounts$announcementsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$announcementsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$announcementsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    conversations_conversations_menteeUserAccountIdTouser_accounts<T extends user_accounts$conversations_conversations_menteeUserAccountIdTouser_accountsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$conversations_conversations_menteeUserAccountIdTouser_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    conversations_conversations_mentorUserAccountIdTouser_accounts<T extends user_accounts$conversations_conversations_mentorUserAccountIdTouser_accountsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$conversations_conversations_mentorUserAccountIdTouser_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     detentions<T extends user_accounts$detentionsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$detentionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$detentionsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     import_batches<T extends user_accounts$import_batchesArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$import_batchesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$import_batchesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_assignments<T extends user_accounts$mentor_assignmentsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$mentor_assignmentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_assignmentsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts<T extends user_accounts$mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts<T extends user_accounts$mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_transfer_requestsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    messages<T extends user_accounts$messagesArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     otp_verifications<T extends user_accounts$otp_verificationsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$otp_verificationsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$otp_verificationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     students<T extends user_accounts$studentsArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$studentsArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     teachers<T extends user_accounts$teachersArgs<ExtArgs> = {}>(args?: Subset<T, user_accounts$teachersArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
@@ -33691,6 +33943,54 @@ export namespace Prisma {
   }
 
   /**
+   * user_accounts.conversations_conversations_menteeUserAccountIdTouser_accounts
+   */
+  export type user_accounts$conversations_conversations_menteeUserAccountIdTouser_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    where?: conversationsWhereInput
+    orderBy?: conversationsOrderByWithRelationInput | conversationsOrderByWithRelationInput[]
+    cursor?: conversationsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationsScalarFieldEnum | ConversationsScalarFieldEnum[]
+  }
+
+  /**
+   * user_accounts.conversations_conversations_mentorUserAccountIdTouser_accounts
+   */
+  export type user_accounts$conversations_conversations_mentorUserAccountIdTouser_accountsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    where?: conversationsWhereInput
+    orderBy?: conversationsOrderByWithRelationInput | conversationsOrderByWithRelationInput[]
+    cursor?: conversationsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ConversationsScalarFieldEnum | ConversationsScalarFieldEnum[]
+  }
+
+  /**
    * user_accounts.detentions
    */
   export type user_accounts$detentionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -33808,6 +34108,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: Mentor_transfer_requestsScalarFieldEnum | Mentor_transfer_requestsScalarFieldEnum[]
+  }
+
+  /**
+   * user_accounts.messages
+   */
+  export type user_accounts$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    where?: messagesWhereInput
+    orderBy?: messagesOrderByWithRelationInput | messagesOrderByWithRelationInput[]
+    cursor?: messagesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessagesScalarFieldEnum | MessagesScalarFieldEnum[]
   }
 
   /**
@@ -45718,6 +46042,2220 @@ export namespace Prisma {
 
 
   /**
+   * Model conversations
+   */
+
+  export type AggregateConversations = {
+    _count: ConversationsCountAggregateOutputType | null
+    _min: ConversationsMinAggregateOutputType | null
+    _max: ConversationsMaxAggregateOutputType | null
+  }
+
+  export type ConversationsMinAggregateOutputType = {
+    id: string | null
+    mentorUserAccountId: string | null
+    menteeUserAccountId: string | null
+    mentorLastReadAt: Date | null
+    menteeLastReadAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ConversationsMaxAggregateOutputType = {
+    id: string | null
+    mentorUserAccountId: string | null
+    menteeUserAccountId: string | null
+    mentorLastReadAt: Date | null
+    menteeLastReadAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ConversationsCountAggregateOutputType = {
+    id: number
+    mentorUserAccountId: number
+    menteeUserAccountId: number
+    mentorLastReadAt: number
+    menteeLastReadAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+
+  export type ConversationsMinAggregateInputType = {
+    id?: true
+    mentorUserAccountId?: true
+    menteeUserAccountId?: true
+    mentorLastReadAt?: true
+    menteeLastReadAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ConversationsMaxAggregateInputType = {
+    id?: true
+    mentorUserAccountId?: true
+    menteeUserAccountId?: true
+    mentorLastReadAt?: true
+    menteeLastReadAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ConversationsCountAggregateInputType = {
+    id?: true
+    mentorUserAccountId?: true
+    menteeUserAccountId?: true
+    mentorLastReadAt?: true
+    menteeLastReadAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ConversationsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which conversations to aggregate.
+     */
+    where?: conversationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of conversations to fetch.
+     */
+    orderBy?: conversationsOrderByWithRelationInput | conversationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: conversationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` conversations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` conversations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned conversations
+    **/
+    _count?: true | ConversationsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: ConversationsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: ConversationsMaxAggregateInputType
+  }
+
+  export type GetConversationsAggregateType<T extends ConversationsAggregateArgs> = {
+        [P in keyof T & keyof AggregateConversations]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateConversations[P]>
+      : GetScalarType<T[P], AggregateConversations[P]>
+  }
+
+
+
+
+  export type conversationsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: conversationsWhereInput
+    orderBy?: conversationsOrderByWithAggregationInput | conversationsOrderByWithAggregationInput[]
+    by: ConversationsScalarFieldEnum[] | ConversationsScalarFieldEnum
+    having?: conversationsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ConversationsCountAggregateInputType | true
+    _min?: ConversationsMinAggregateInputType
+    _max?: ConversationsMaxAggregateInputType
+  }
+
+  export type ConversationsGroupByOutputType = {
+    id: string
+    mentorUserAccountId: string
+    menteeUserAccountId: string
+    mentorLastReadAt: Date | null
+    menteeLastReadAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: ConversationsCountAggregateOutputType | null
+    _min: ConversationsMinAggregateOutputType | null
+    _max: ConversationsMaxAggregateOutputType | null
+  }
+
+  type GetConversationsGroupByPayload<T extends conversationsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<ConversationsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof ConversationsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ConversationsGroupByOutputType[P]>
+            : GetScalarType<T[P], ConversationsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type conversationsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorUserAccountId?: boolean
+    menteeUserAccountId?: boolean
+    mentorLastReadAt?: boolean
+    menteeLastReadAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    messages?: boolean | conversations$messagesArgs<ExtArgs>
+    _count?: boolean | ConversationsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["conversations"]>
+
+  export type conversationsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorUserAccountId?: boolean
+    menteeUserAccountId?: boolean
+    mentorLastReadAt?: boolean
+    menteeLastReadAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["conversations"]>
+
+  export type conversationsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    mentorUserAccountId?: boolean
+    menteeUserAccountId?: boolean
+    mentorLastReadAt?: boolean
+    menteeLastReadAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["conversations"]>
+
+  export type conversationsSelectScalar = {
+    id?: boolean
+    mentorUserAccountId?: boolean
+    menteeUserAccountId?: boolean
+    mentorLastReadAt?: boolean
+    menteeLastReadAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type conversationsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "mentorUserAccountId" | "menteeUserAccountId" | "mentorLastReadAt" | "menteeLastReadAt" | "createdAt" | "updatedAt", ExtArgs["result"]["conversations"]>
+  export type conversationsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    messages?: boolean | conversations$messagesArgs<ExtArgs>
+    _count?: boolean | ConversationsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type conversationsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+  export type conversationsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+
+  export type $conversationsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "conversations"
+    objects: {
+      user_accounts_conversations_menteeUserAccountIdTouser_accounts: Prisma.$user_accountsPayload<ExtArgs>
+      user_accounts_conversations_mentorUserAccountIdTouser_accounts: Prisma.$user_accountsPayload<ExtArgs>
+      messages: Prisma.$messagesPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      mentorUserAccountId: string
+      menteeUserAccountId: string
+      mentorLastReadAt: Date | null
+      menteeLastReadAt: Date | null
+      createdAt: Date
+      updatedAt: Date
+    }, ExtArgs["result"]["conversations"]>
+    composites: {}
+  }
+
+  type conversationsGetPayload<S extends boolean | null | undefined | conversationsDefaultArgs> = $Result.GetResult<Prisma.$conversationsPayload, S>
+
+  type conversationsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<conversationsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: ConversationsCountAggregateInputType | true
+    }
+
+  export interface conversationsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['conversations'], meta: { name: 'conversations' } }
+    /**
+     * Find zero or one Conversations that matches the filter.
+     * @param {conversationsFindUniqueArgs} args - Arguments to find a Conversations
+     * @example
+     * // Get one Conversations
+     * const conversations = await prisma.conversations.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends conversationsFindUniqueArgs>(args: SelectSubset<T, conversationsFindUniqueArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Conversations that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {conversationsFindUniqueOrThrowArgs} args - Arguments to find a Conversations
+     * @example
+     * // Get one Conversations
+     * const conversations = await prisma.conversations.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends conversationsFindUniqueOrThrowArgs>(args: SelectSubset<T, conversationsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Conversations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {conversationsFindFirstArgs} args - Arguments to find a Conversations
+     * @example
+     * // Get one Conversations
+     * const conversations = await prisma.conversations.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends conversationsFindFirstArgs>(args?: SelectSubset<T, conversationsFindFirstArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Conversations that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {conversationsFindFirstOrThrowArgs} args - Arguments to find a Conversations
+     * @example
+     * // Get one Conversations
+     * const conversations = await prisma.conversations.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends conversationsFindFirstOrThrowArgs>(args?: SelectSubset<T, conversationsFindFirstOrThrowArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Conversations that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {conversationsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Conversations
+     * const conversations = await prisma.conversations.findMany()
+     * 
+     * // Get first 10 Conversations
+     * const conversations = await prisma.conversations.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const conversationsWithIdOnly = await prisma.conversations.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends conversationsFindManyArgs>(args?: SelectSubset<T, conversationsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Conversations.
+     * @param {conversationsCreateArgs} args - Arguments to create a Conversations.
+     * @example
+     * // Create one Conversations
+     * const Conversations = await prisma.conversations.create({
+     *   data: {
+     *     // ... data to create a Conversations
+     *   }
+     * })
+     * 
+     */
+    create<T extends conversationsCreateArgs>(args: SelectSubset<T, conversationsCreateArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Conversations.
+     * @param {conversationsCreateManyArgs} args - Arguments to create many Conversations.
+     * @example
+     * // Create many Conversations
+     * const conversations = await prisma.conversations.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends conversationsCreateManyArgs>(args?: SelectSubset<T, conversationsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Conversations and returns the data saved in the database.
+     * @param {conversationsCreateManyAndReturnArgs} args - Arguments to create many Conversations.
+     * @example
+     * // Create many Conversations
+     * const conversations = await prisma.conversations.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Conversations and only return the `id`
+     * const conversationsWithIdOnly = await prisma.conversations.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends conversationsCreateManyAndReturnArgs>(args?: SelectSubset<T, conversationsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Conversations.
+     * @param {conversationsDeleteArgs} args - Arguments to delete one Conversations.
+     * @example
+     * // Delete one Conversations
+     * const Conversations = await prisma.conversations.delete({
+     *   where: {
+     *     // ... filter to delete one Conversations
+     *   }
+     * })
+     * 
+     */
+    delete<T extends conversationsDeleteArgs>(args: SelectSubset<T, conversationsDeleteArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Conversations.
+     * @param {conversationsUpdateArgs} args - Arguments to update one Conversations.
+     * @example
+     * // Update one Conversations
+     * const conversations = await prisma.conversations.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends conversationsUpdateArgs>(args: SelectSubset<T, conversationsUpdateArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Conversations.
+     * @param {conversationsDeleteManyArgs} args - Arguments to filter Conversations to delete.
+     * @example
+     * // Delete a few Conversations
+     * const { count } = await prisma.conversations.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends conversationsDeleteManyArgs>(args?: SelectSubset<T, conversationsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Conversations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {conversationsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Conversations
+     * const conversations = await prisma.conversations.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends conversationsUpdateManyArgs>(args: SelectSubset<T, conversationsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Conversations and returns the data updated in the database.
+     * @param {conversationsUpdateManyAndReturnArgs} args - Arguments to update many Conversations.
+     * @example
+     * // Update many Conversations
+     * const conversations = await prisma.conversations.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Conversations and only return the `id`
+     * const conversationsWithIdOnly = await prisma.conversations.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends conversationsUpdateManyAndReturnArgs>(args: SelectSubset<T, conversationsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Conversations.
+     * @param {conversationsUpsertArgs} args - Arguments to update or create a Conversations.
+     * @example
+     * // Update or create a Conversations
+     * const conversations = await prisma.conversations.upsert({
+     *   create: {
+     *     // ... data to create a Conversations
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Conversations we want to update
+     *   }
+     * })
+     */
+    upsert<T extends conversationsUpsertArgs>(args: SelectSubset<T, conversationsUpsertArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Conversations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {conversationsCountArgs} args - Arguments to filter Conversations to count.
+     * @example
+     * // Count the number of Conversations
+     * const count = await prisma.conversations.count({
+     *   where: {
+     *     // ... the filter for the Conversations we want to count
+     *   }
+     * })
+    **/
+    count<T extends conversationsCountArgs>(
+      args?: Subset<T, conversationsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], ConversationsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Conversations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ConversationsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends ConversationsAggregateArgs>(args: Subset<T, ConversationsAggregateArgs>): Prisma.PrismaPromise<GetConversationsAggregateType<T>>
+
+    /**
+     * Group by Conversations.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {conversationsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends conversationsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: conversationsGroupByArgs['orderBy'] }
+        : { orderBy?: conversationsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, conversationsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetConversationsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the conversations model
+   */
+  readonly fields: conversationsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for conversations.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__conversationsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts<T extends user_accountsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, user_accountsDefaultArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts<T extends user_accountsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, user_accountsDefaultArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    messages<T extends conversations$messagesArgs<ExtArgs> = {}>(args?: Subset<T, conversations$messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the conversations model
+   */
+  interface conversationsFieldRefs {
+    readonly id: FieldRef<"conversations", 'String'>
+    readonly mentorUserAccountId: FieldRef<"conversations", 'String'>
+    readonly menteeUserAccountId: FieldRef<"conversations", 'String'>
+    readonly mentorLastReadAt: FieldRef<"conversations", 'DateTime'>
+    readonly menteeLastReadAt: FieldRef<"conversations", 'DateTime'>
+    readonly createdAt: FieldRef<"conversations", 'DateTime'>
+    readonly updatedAt: FieldRef<"conversations", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * conversations findUnique
+   */
+  export type conversationsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * Filter, which conversations to fetch.
+     */
+    where: conversationsWhereUniqueInput
+  }
+
+  /**
+   * conversations findUniqueOrThrow
+   */
+  export type conversationsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * Filter, which conversations to fetch.
+     */
+    where: conversationsWhereUniqueInput
+  }
+
+  /**
+   * conversations findFirst
+   */
+  export type conversationsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * Filter, which conversations to fetch.
+     */
+    where?: conversationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of conversations to fetch.
+     */
+    orderBy?: conversationsOrderByWithRelationInput | conversationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for conversations.
+     */
+    cursor?: conversationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` conversations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` conversations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of conversations.
+     */
+    distinct?: ConversationsScalarFieldEnum | ConversationsScalarFieldEnum[]
+  }
+
+  /**
+   * conversations findFirstOrThrow
+   */
+  export type conversationsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * Filter, which conversations to fetch.
+     */
+    where?: conversationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of conversations to fetch.
+     */
+    orderBy?: conversationsOrderByWithRelationInput | conversationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for conversations.
+     */
+    cursor?: conversationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` conversations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` conversations.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of conversations.
+     */
+    distinct?: ConversationsScalarFieldEnum | ConversationsScalarFieldEnum[]
+  }
+
+  /**
+   * conversations findMany
+   */
+  export type conversationsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * Filter, which conversations to fetch.
+     */
+    where?: conversationsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of conversations to fetch.
+     */
+    orderBy?: conversationsOrderByWithRelationInput | conversationsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing conversations.
+     */
+    cursor?: conversationsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` conversations from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` conversations.
+     */
+    skip?: number
+    distinct?: ConversationsScalarFieldEnum | ConversationsScalarFieldEnum[]
+  }
+
+  /**
+   * conversations create
+   */
+  export type conversationsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a conversations.
+     */
+    data: XOR<conversationsCreateInput, conversationsUncheckedCreateInput>
+  }
+
+  /**
+   * conversations createMany
+   */
+  export type conversationsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many conversations.
+     */
+    data: conversationsCreateManyInput | conversationsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * conversations createManyAndReturn
+   */
+  export type conversationsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * The data used to create many conversations.
+     */
+    data: conversationsCreateManyInput | conversationsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * conversations update
+   */
+  export type conversationsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a conversations.
+     */
+    data: XOR<conversationsUpdateInput, conversationsUncheckedUpdateInput>
+    /**
+     * Choose, which conversations to update.
+     */
+    where: conversationsWhereUniqueInput
+  }
+
+  /**
+   * conversations updateMany
+   */
+  export type conversationsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update conversations.
+     */
+    data: XOR<conversationsUpdateManyMutationInput, conversationsUncheckedUpdateManyInput>
+    /**
+     * Filter which conversations to update
+     */
+    where?: conversationsWhereInput
+    /**
+     * Limit how many conversations to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * conversations updateManyAndReturn
+   */
+  export type conversationsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * The data used to update conversations.
+     */
+    data: XOR<conversationsUpdateManyMutationInput, conversationsUncheckedUpdateManyInput>
+    /**
+     * Filter which conversations to update
+     */
+    where?: conversationsWhereInput
+    /**
+     * Limit how many conversations to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * conversations upsert
+   */
+  export type conversationsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the conversations to update in case it exists.
+     */
+    where: conversationsWhereUniqueInput
+    /**
+     * In case the conversations found by the `where` argument doesn't exist, create a new conversations with this data.
+     */
+    create: XOR<conversationsCreateInput, conversationsUncheckedCreateInput>
+    /**
+     * In case the conversations was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<conversationsUpdateInput, conversationsUncheckedUpdateInput>
+  }
+
+  /**
+   * conversations delete
+   */
+  export type conversationsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+    /**
+     * Filter which conversations to delete.
+     */
+    where: conversationsWhereUniqueInput
+  }
+
+  /**
+   * conversations deleteMany
+   */
+  export type conversationsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which conversations to delete
+     */
+    where?: conversationsWhereInput
+    /**
+     * Limit how many conversations to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * conversations.messages
+   */
+  export type conversations$messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    where?: messagesWhereInput
+    orderBy?: messagesOrderByWithRelationInput | messagesOrderByWithRelationInput[]
+    cursor?: messagesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: MessagesScalarFieldEnum | MessagesScalarFieldEnum[]
+  }
+
+  /**
+   * conversations without action
+   */
+  export type conversationsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the conversations
+     */
+    select?: conversationsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the conversations
+     */
+    omit?: conversationsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: conversationsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model messages
+   */
+
+  export type AggregateMessages = {
+    _count: MessagesCountAggregateOutputType | null
+    _min: MessagesMinAggregateOutputType | null
+    _max: MessagesMaxAggregateOutputType | null
+  }
+
+  export type MessagesMinAggregateOutputType = {
+    id: string | null
+    conversationId: string | null
+    senderId: string | null
+    content: string | null
+    createdAt: Date | null
+    editedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type MessagesMaxAggregateOutputType = {
+    id: string | null
+    conversationId: string | null
+    senderId: string | null
+    content: string | null
+    createdAt: Date | null
+    editedAt: Date | null
+    deletedAt: Date | null
+  }
+
+  export type MessagesCountAggregateOutputType = {
+    id: number
+    conversationId: number
+    senderId: number
+    content: number
+    createdAt: number
+    editedAt: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type MessagesMinAggregateInputType = {
+    id?: true
+    conversationId?: true
+    senderId?: true
+    content?: true
+    createdAt?: true
+    editedAt?: true
+    deletedAt?: true
+  }
+
+  export type MessagesMaxAggregateInputType = {
+    id?: true
+    conversationId?: true
+    senderId?: true
+    content?: true
+    createdAt?: true
+    editedAt?: true
+    deletedAt?: true
+  }
+
+  export type MessagesCountAggregateInputType = {
+    id?: true
+    conversationId?: true
+    senderId?: true
+    content?: true
+    createdAt?: true
+    editedAt?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type MessagesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which messages to aggregate.
+     */
+    where?: messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of messages to fetch.
+     */
+    orderBy?: messagesOrderByWithRelationInput | messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned messages
+    **/
+    _count?: true | MessagesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: MessagesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: MessagesMaxAggregateInputType
+  }
+
+  export type GetMessagesAggregateType<T extends MessagesAggregateArgs> = {
+        [P in keyof T & keyof AggregateMessages]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMessages[P]>
+      : GetScalarType<T[P], AggregateMessages[P]>
+  }
+
+
+
+
+  export type messagesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: messagesWhereInput
+    orderBy?: messagesOrderByWithAggregationInput | messagesOrderByWithAggregationInput[]
+    by: MessagesScalarFieldEnum[] | MessagesScalarFieldEnum
+    having?: messagesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MessagesCountAggregateInputType | true
+    _min?: MessagesMinAggregateInputType
+    _max?: MessagesMaxAggregateInputType
+  }
+
+  export type MessagesGroupByOutputType = {
+    id: string
+    conversationId: string
+    senderId: string
+    content: string
+    createdAt: Date
+    editedAt: Date | null
+    deletedAt: Date | null
+    _count: MessagesCountAggregateOutputType | null
+    _min: MessagesMinAggregateOutputType | null
+    _max: MessagesMaxAggregateOutputType | null
+  }
+
+  type GetMessagesGroupByPayload<T extends messagesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MessagesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof MessagesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], MessagesGroupByOutputType[P]>
+            : GetScalarType<T[P], MessagesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type messagesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    conversationId?: boolean
+    senderId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    editedAt?: boolean
+    deletedAt?: boolean
+    conversations?: boolean | conversationsDefaultArgs<ExtArgs>
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messages"]>
+
+  export type messagesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    conversationId?: boolean
+    senderId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    editedAt?: boolean
+    deletedAt?: boolean
+    conversations?: boolean | conversationsDefaultArgs<ExtArgs>
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messages"]>
+
+  export type messagesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    conversationId?: boolean
+    senderId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    editedAt?: boolean
+    deletedAt?: boolean
+    conversations?: boolean | conversationsDefaultArgs<ExtArgs>
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["messages"]>
+
+  export type messagesSelectScalar = {
+    id?: boolean
+    conversationId?: boolean
+    senderId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    editedAt?: boolean
+    deletedAt?: boolean
+  }
+
+  export type messagesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "conversationId" | "senderId" | "content" | "createdAt" | "editedAt" | "deletedAt", ExtArgs["result"]["messages"]>
+  export type messagesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversations?: boolean | conversationsDefaultArgs<ExtArgs>
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+  export type messagesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversations?: boolean | conversationsDefaultArgs<ExtArgs>
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+  export type messagesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    conversations?: boolean | conversationsDefaultArgs<ExtArgs>
+    user_accounts?: boolean | user_accountsDefaultArgs<ExtArgs>
+  }
+
+  export type $messagesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "messages"
+    objects: {
+      conversations: Prisma.$conversationsPayload<ExtArgs>
+      user_accounts: Prisma.$user_accountsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      conversationId: string
+      senderId: string
+      content: string
+      createdAt: Date
+      editedAt: Date | null
+      deletedAt: Date | null
+    }, ExtArgs["result"]["messages"]>
+    composites: {}
+  }
+
+  type messagesGetPayload<S extends boolean | null | undefined | messagesDefaultArgs> = $Result.GetResult<Prisma.$messagesPayload, S>
+
+  type messagesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<messagesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: MessagesCountAggregateInputType | true
+    }
+
+  export interface messagesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['messages'], meta: { name: 'messages' } }
+    /**
+     * Find zero or one Messages that matches the filter.
+     * @param {messagesFindUniqueArgs} args - Arguments to find a Messages
+     * @example
+     * // Get one Messages
+     * const messages = await prisma.messages.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends messagesFindUniqueArgs>(args: SelectSubset<T, messagesFindUniqueArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Messages that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {messagesFindUniqueOrThrowArgs} args - Arguments to find a Messages
+     * @example
+     * // Get one Messages
+     * const messages = await prisma.messages.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends messagesFindUniqueOrThrowArgs>(args: SelectSubset<T, messagesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Messages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {messagesFindFirstArgs} args - Arguments to find a Messages
+     * @example
+     * // Get one Messages
+     * const messages = await prisma.messages.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends messagesFindFirstArgs>(args?: SelectSubset<T, messagesFindFirstArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Messages that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {messagesFindFirstOrThrowArgs} args - Arguments to find a Messages
+     * @example
+     * // Get one Messages
+     * const messages = await prisma.messages.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends messagesFindFirstOrThrowArgs>(args?: SelectSubset<T, messagesFindFirstOrThrowArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Messages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {messagesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Messages
+     * const messages = await prisma.messages.findMany()
+     * 
+     * // Get first 10 Messages
+     * const messages = await prisma.messages.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const messagesWithIdOnly = await prisma.messages.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends messagesFindManyArgs>(args?: SelectSubset<T, messagesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Messages.
+     * @param {messagesCreateArgs} args - Arguments to create a Messages.
+     * @example
+     * // Create one Messages
+     * const Messages = await prisma.messages.create({
+     *   data: {
+     *     // ... data to create a Messages
+     *   }
+     * })
+     * 
+     */
+    create<T extends messagesCreateArgs>(args: SelectSubset<T, messagesCreateArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Messages.
+     * @param {messagesCreateManyArgs} args - Arguments to create many Messages.
+     * @example
+     * // Create many Messages
+     * const messages = await prisma.messages.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends messagesCreateManyArgs>(args?: SelectSubset<T, messagesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Messages and returns the data saved in the database.
+     * @param {messagesCreateManyAndReturnArgs} args - Arguments to create many Messages.
+     * @example
+     * // Create many Messages
+     * const messages = await prisma.messages.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Messages and only return the `id`
+     * const messagesWithIdOnly = await prisma.messages.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends messagesCreateManyAndReturnArgs>(args?: SelectSubset<T, messagesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Messages.
+     * @param {messagesDeleteArgs} args - Arguments to delete one Messages.
+     * @example
+     * // Delete one Messages
+     * const Messages = await prisma.messages.delete({
+     *   where: {
+     *     // ... filter to delete one Messages
+     *   }
+     * })
+     * 
+     */
+    delete<T extends messagesDeleteArgs>(args: SelectSubset<T, messagesDeleteArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Messages.
+     * @param {messagesUpdateArgs} args - Arguments to update one Messages.
+     * @example
+     * // Update one Messages
+     * const messages = await prisma.messages.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends messagesUpdateArgs>(args: SelectSubset<T, messagesUpdateArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Messages.
+     * @param {messagesDeleteManyArgs} args - Arguments to filter Messages to delete.
+     * @example
+     * // Delete a few Messages
+     * const { count } = await prisma.messages.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends messagesDeleteManyArgs>(args?: SelectSubset<T, messagesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {messagesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Messages
+     * const messages = await prisma.messages.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends messagesUpdateManyArgs>(args: SelectSubset<T, messagesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Messages and returns the data updated in the database.
+     * @param {messagesUpdateManyAndReturnArgs} args - Arguments to update many Messages.
+     * @example
+     * // Update many Messages
+     * const messages = await prisma.messages.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Messages and only return the `id`
+     * const messagesWithIdOnly = await prisma.messages.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends messagesUpdateManyAndReturnArgs>(args: SelectSubset<T, messagesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Messages.
+     * @param {messagesUpsertArgs} args - Arguments to update or create a Messages.
+     * @example
+     * // Update or create a Messages
+     * const messages = await prisma.messages.upsert({
+     *   create: {
+     *     // ... data to create a Messages
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Messages we want to update
+     *   }
+     * })
+     */
+    upsert<T extends messagesUpsertArgs>(args: SelectSubset<T, messagesUpsertArgs<ExtArgs>>): Prisma__messagesClient<$Result.GetResult<Prisma.$messagesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {messagesCountArgs} args - Arguments to filter Messages to count.
+     * @example
+     * // Count the number of Messages
+     * const count = await prisma.messages.count({
+     *   where: {
+     *     // ... the filter for the Messages we want to count
+     *   }
+     * })
+    **/
+    count<T extends messagesCountArgs>(
+      args?: Subset<T, messagesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], MessagesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MessagesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends MessagesAggregateArgs>(args: Subset<T, MessagesAggregateArgs>): Prisma.PrismaPromise<GetMessagesAggregateType<T>>
+
+    /**
+     * Group by Messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {messagesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends messagesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: messagesGroupByArgs['orderBy'] }
+        : { orderBy?: messagesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, messagesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMessagesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the messages model
+   */
+  readonly fields: messagesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for messages.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__messagesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    conversations<T extends conversationsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, conversationsDefaultArgs<ExtArgs>>): Prisma__conversationsClient<$Result.GetResult<Prisma.$conversationsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    user_accounts<T extends user_accountsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, user_accountsDefaultArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the messages model
+   */
+  interface messagesFieldRefs {
+    readonly id: FieldRef<"messages", 'String'>
+    readonly conversationId: FieldRef<"messages", 'String'>
+    readonly senderId: FieldRef<"messages", 'String'>
+    readonly content: FieldRef<"messages", 'String'>
+    readonly createdAt: FieldRef<"messages", 'DateTime'>
+    readonly editedAt: FieldRef<"messages", 'DateTime'>
+    readonly deletedAt: FieldRef<"messages", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * messages findUnique
+   */
+  export type messagesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which messages to fetch.
+     */
+    where: messagesWhereUniqueInput
+  }
+
+  /**
+   * messages findUniqueOrThrow
+   */
+  export type messagesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which messages to fetch.
+     */
+    where: messagesWhereUniqueInput
+  }
+
+  /**
+   * messages findFirst
+   */
+  export type messagesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which messages to fetch.
+     */
+    where?: messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of messages to fetch.
+     */
+    orderBy?: messagesOrderByWithRelationInput | messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for messages.
+     */
+    cursor?: messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of messages.
+     */
+    distinct?: MessagesScalarFieldEnum | MessagesScalarFieldEnum[]
+  }
+
+  /**
+   * messages findFirstOrThrow
+   */
+  export type messagesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which messages to fetch.
+     */
+    where?: messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of messages to fetch.
+     */
+    orderBy?: messagesOrderByWithRelationInput | messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for messages.
+     */
+    cursor?: messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of messages.
+     */
+    distinct?: MessagesScalarFieldEnum | MessagesScalarFieldEnum[]
+  }
+
+  /**
+   * messages findMany
+   */
+  export type messagesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which messages to fetch.
+     */
+    where?: messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of messages to fetch.
+     */
+    orderBy?: messagesOrderByWithRelationInput | messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing messages.
+     */
+    cursor?: messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` messages.
+     */
+    skip?: number
+    distinct?: MessagesScalarFieldEnum | MessagesScalarFieldEnum[]
+  }
+
+  /**
+   * messages create
+   */
+  export type messagesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a messages.
+     */
+    data: XOR<messagesCreateInput, messagesUncheckedCreateInput>
+  }
+
+  /**
+   * messages createMany
+   */
+  export type messagesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many messages.
+     */
+    data: messagesCreateManyInput | messagesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * messages createManyAndReturn
+   */
+  export type messagesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * The data used to create many messages.
+     */
+    data: messagesCreateManyInput | messagesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * messages update
+   */
+  export type messagesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a messages.
+     */
+    data: XOR<messagesUpdateInput, messagesUncheckedUpdateInput>
+    /**
+     * Choose, which messages to update.
+     */
+    where: messagesWhereUniqueInput
+  }
+
+  /**
+   * messages updateMany
+   */
+  export type messagesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update messages.
+     */
+    data: XOR<messagesUpdateManyMutationInput, messagesUncheckedUpdateManyInput>
+    /**
+     * Filter which messages to update
+     */
+    where?: messagesWhereInput
+    /**
+     * Limit how many messages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * messages updateManyAndReturn
+   */
+  export type messagesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * The data used to update messages.
+     */
+    data: XOR<messagesUpdateManyMutationInput, messagesUncheckedUpdateManyInput>
+    /**
+     * Filter which messages to update
+     */
+    where?: messagesWhereInput
+    /**
+     * Limit how many messages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * messages upsert
+   */
+  export type messagesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the messages to update in case it exists.
+     */
+    where: messagesWhereUniqueInput
+    /**
+     * In case the messages found by the `where` argument doesn't exist, create a new messages with this data.
+     */
+    create: XOR<messagesCreateInput, messagesUncheckedCreateInput>
+    /**
+     * In case the messages was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<messagesUpdateInput, messagesUncheckedUpdateInput>
+  }
+
+  /**
+   * messages delete
+   */
+  export type messagesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+    /**
+     * Filter which messages to delete.
+     */
+    where: messagesWhereUniqueInput
+  }
+
+  /**
+   * messages deleteMany
+   */
+  export type messagesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which messages to delete
+     */
+    where?: messagesWhereInput
+    /**
+     * Limit how many messages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * messages without action
+   */
+  export type messagesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the messages
+     */
+    select?: messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the messages
+     */
+    omit?: messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: messagesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -46352,6 +48890,32 @@ export namespace Prisma {
   };
 
   export type AnnouncementsScalarFieldEnum = (typeof AnnouncementsScalarFieldEnum)[keyof typeof AnnouncementsScalarFieldEnum]
+
+
+  export const ConversationsScalarFieldEnum: {
+    id: 'id',
+    mentorUserAccountId: 'mentorUserAccountId',
+    menteeUserAccountId: 'menteeUserAccountId',
+    mentorLastReadAt: 'mentorLastReadAt',
+    menteeLastReadAt: 'menteeLastReadAt',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
+  };
+
+  export type ConversationsScalarFieldEnum = (typeof ConversationsScalarFieldEnum)[keyof typeof ConversationsScalarFieldEnum]
+
+
+  export const MessagesScalarFieldEnum: {
+    id: 'id',
+    conversationId: 'conversationId',
+    senderId: 'senderId',
+    content: 'content',
+    createdAt: 'createdAt',
+    editedAt: 'editedAt',
+    deletedAt: 'deletedAt'
+  };
+
+  export type MessagesScalarFieldEnum = (typeof MessagesScalarFieldEnum)[keyof typeof MessagesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -49281,11 +51845,14 @@ export namespace Prisma {
     admin_profiles?: XOR<Admin_profilesNullableScalarRelationFilter, admin_profilesWhereInput> | null
     announcement_recipients?: Announcement_recipientsListRelationFilter
     announcements?: AnnouncementsListRelationFilter
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: ConversationsListRelationFilter
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: ConversationsListRelationFilter
     detentions?: DetentionsListRelationFilter
     import_batches?: Import_batchesListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: Mentor_transfer_requestsListRelationFilter
+    messages?: MessagesListRelationFilter
     otp_verifications?: Otp_verificationsListRelationFilter
     students?: XOR<StudentsNullableScalarRelationFilter, studentsWhereInput> | null
     teachers?: XOR<TeachersNullableScalarRelationFilter, teachersWhereInput> | null
@@ -49305,11 +51872,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesOrderByWithRelationInput
     announcement_recipients?: announcement_recipientsOrderByRelationAggregateInput
     announcements?: announcementsOrderByRelationAggregateInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsOrderByRelationAggregateInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsOrderByRelationAggregateInput
     detentions?: detentionsOrderByRelationAggregateInput
     import_batches?: import_batchesOrderByRelationAggregateInput
     mentor_assignments?: mentor_assignmentsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsOrderByRelationAggregateInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsOrderByRelationAggregateInput
+    messages?: messagesOrderByRelationAggregateInput
     otp_verifications?: otp_verificationsOrderByRelationAggregateInput
     students?: studentsOrderByWithRelationInput
     teachers?: teachersOrderByWithRelationInput
@@ -49332,11 +51902,14 @@ export namespace Prisma {
     admin_profiles?: XOR<Admin_profilesNullableScalarRelationFilter, admin_profilesWhereInput> | null
     announcement_recipients?: Announcement_recipientsListRelationFilter
     announcements?: AnnouncementsListRelationFilter
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: ConversationsListRelationFilter
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: ConversationsListRelationFilter
     detentions?: DetentionsListRelationFilter
     import_batches?: Import_batchesListRelationFilter
     mentor_assignments?: Mentor_assignmentsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: Mentor_transfer_requestsListRelationFilter
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: Mentor_transfer_requestsListRelationFilter
+    messages?: MessagesListRelationFilter
     otp_verifications?: Otp_verificationsListRelationFilter
     students?: XOR<StudentsNullableScalarRelationFilter, studentsWhereInput> | null
     teachers?: XOR<TeachersNullableScalarRelationFilter, teachersWhereInput> | null
@@ -50319,6 +52892,146 @@ export namespace Prisma {
     expiresAt?: DateTimeNullableWithAggregatesFilter<"announcements"> | Date | string | null
     createdAt?: DateTimeWithAggregatesFilter<"announcements"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"announcements"> | Date | string
+  }
+
+  export type conversationsWhereInput = {
+    AND?: conversationsWhereInput | conversationsWhereInput[]
+    OR?: conversationsWhereInput[]
+    NOT?: conversationsWhereInput | conversationsWhereInput[]
+    id?: StringFilter<"conversations"> | string
+    mentorUserAccountId?: StringFilter<"conversations"> | string
+    menteeUserAccountId?: StringFilter<"conversations"> | string
+    mentorLastReadAt?: DateTimeNullableFilter<"conversations"> | Date | string | null
+    menteeLastReadAt?: DateTimeNullableFilter<"conversations"> | Date | string | null
+    createdAt?: DateTimeFilter<"conversations"> | Date | string
+    updatedAt?: DateTimeFilter<"conversations"> | Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+    messages?: MessagesListRelationFilter
+  }
+
+  export type conversationsOrderByWithRelationInput = {
+    id?: SortOrder
+    mentorUserAccountId?: SortOrder
+    menteeUserAccountId?: SortOrder
+    mentorLastReadAt?: SortOrderInput | SortOrder
+    menteeLastReadAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: user_accountsOrderByWithRelationInput
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: user_accountsOrderByWithRelationInput
+    messages?: messagesOrderByRelationAggregateInput
+  }
+
+  export type conversationsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    mentorUserAccountId_menteeUserAccountId?: conversationsMentorUserAccountIdMenteeUserAccountIdCompoundUniqueInput
+    AND?: conversationsWhereInput | conversationsWhereInput[]
+    OR?: conversationsWhereInput[]
+    NOT?: conversationsWhereInput | conversationsWhereInput[]
+    mentorUserAccountId?: StringFilter<"conversations"> | string
+    menteeUserAccountId?: StringFilter<"conversations"> | string
+    mentorLastReadAt?: DateTimeNullableFilter<"conversations"> | Date | string | null
+    menteeLastReadAt?: DateTimeNullableFilter<"conversations"> | Date | string | null
+    createdAt?: DateTimeFilter<"conversations"> | Date | string
+    updatedAt?: DateTimeFilter<"conversations"> | Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+    messages?: MessagesListRelationFilter
+  }, "id" | "mentorUserAccountId_menteeUserAccountId">
+
+  export type conversationsOrderByWithAggregationInput = {
+    id?: SortOrder
+    mentorUserAccountId?: SortOrder
+    menteeUserAccountId?: SortOrder
+    mentorLastReadAt?: SortOrderInput | SortOrder
+    menteeLastReadAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: conversationsCountOrderByAggregateInput
+    _max?: conversationsMaxOrderByAggregateInput
+    _min?: conversationsMinOrderByAggregateInput
+  }
+
+  export type conversationsScalarWhereWithAggregatesInput = {
+    AND?: conversationsScalarWhereWithAggregatesInput | conversationsScalarWhereWithAggregatesInput[]
+    OR?: conversationsScalarWhereWithAggregatesInput[]
+    NOT?: conversationsScalarWhereWithAggregatesInput | conversationsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"conversations"> | string
+    mentorUserAccountId?: StringWithAggregatesFilter<"conversations"> | string
+    menteeUserAccountId?: StringWithAggregatesFilter<"conversations"> | string
+    mentorLastReadAt?: DateTimeNullableWithAggregatesFilter<"conversations"> | Date | string | null
+    menteeLastReadAt?: DateTimeNullableWithAggregatesFilter<"conversations"> | Date | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"conversations"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"conversations"> | Date | string
+  }
+
+  export type messagesWhereInput = {
+    AND?: messagesWhereInput | messagesWhereInput[]
+    OR?: messagesWhereInput[]
+    NOT?: messagesWhereInput | messagesWhereInput[]
+    id?: StringFilter<"messages"> | string
+    conversationId?: StringFilter<"messages"> | string
+    senderId?: StringFilter<"messages"> | string
+    content?: StringFilter<"messages"> | string
+    createdAt?: DateTimeFilter<"messages"> | Date | string
+    editedAt?: DateTimeNullableFilter<"messages"> | Date | string | null
+    deletedAt?: DateTimeNullableFilter<"messages"> | Date | string | null
+    conversations?: XOR<ConversationsScalarRelationFilter, conversationsWhereInput>
+    user_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+  }
+
+  export type messagesOrderByWithRelationInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    senderId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    editedAt?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    conversations?: conversationsOrderByWithRelationInput
+    user_accounts?: user_accountsOrderByWithRelationInput
+  }
+
+  export type messagesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: messagesWhereInput | messagesWhereInput[]
+    OR?: messagesWhereInput[]
+    NOT?: messagesWhereInput | messagesWhereInput[]
+    conversationId?: StringFilter<"messages"> | string
+    senderId?: StringFilter<"messages"> | string
+    content?: StringFilter<"messages"> | string
+    createdAt?: DateTimeFilter<"messages"> | Date | string
+    editedAt?: DateTimeNullableFilter<"messages"> | Date | string | null
+    deletedAt?: DateTimeNullableFilter<"messages"> | Date | string | null
+    conversations?: XOR<ConversationsScalarRelationFilter, conversationsWhereInput>
+    user_accounts?: XOR<User_accountsScalarRelationFilter, user_accountsWhereInput>
+  }, "id">
+
+  export type messagesOrderByWithAggregationInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    senderId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    editedAt?: SortOrderInput | SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: messagesCountOrderByAggregateInput
+    _max?: messagesMaxOrderByAggregateInput
+    _min?: messagesMinOrderByAggregateInput
+  }
+
+  export type messagesScalarWhereWithAggregatesInput = {
+    AND?: messagesScalarWhereWithAggregatesInput | messagesScalarWhereWithAggregatesInput[]
+    OR?: messagesScalarWhereWithAggregatesInput[]
+    NOT?: messagesScalarWhereWithAggregatesInput | messagesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"messages"> | string
+    conversationId?: StringWithAggregatesFilter<"messages"> | string
+    senderId?: StringWithAggregatesFilter<"messages"> | string
+    content?: StringWithAggregatesFilter<"messages"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"messages"> | Date | string
+    editedAt?: DateTimeNullableWithAggregatesFilter<"messages"> | Date | string | null
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"messages"> | Date | string | null
   }
 
   export type academic_term_requestsCreateInput = {
@@ -52964,11 +55677,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -52988,11 +55704,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -53012,11 +55731,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -53036,11 +55758,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -54149,6 +56874,146 @@ export namespace Prisma {
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type conversationsCreateInput = {
+    id: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts: user_accountsCreateNestedOneWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts: user_accountsCreateNestedOneWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutConversationsInput
+  }
+
+  export type conversationsUncheckedCreateInput = {
+    id: string
+    mentorUserAccountId: string
+    menteeUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: messagesUncheckedCreateNestedManyWithoutConversationsInput
+  }
+
+  export type conversationsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: user_accountsUpdateOneRequiredWithoutConversations_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: user_accountsUpdateOneRequiredWithoutConversations_conversations_mentorUserAccountIdTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutConversationsNestedInput
+  }
+
+  export type conversationsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorUserAccountId?: StringFieldUpdateOperationsInput | string
+    menteeUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: messagesUncheckedUpdateManyWithoutConversationsNestedInput
+  }
+
+  export type conversationsCreateManyInput = {
+    id: string
+    mentorUserAccountId: string
+    menteeUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type conversationsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type conversationsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorUserAccountId?: StringFieldUpdateOperationsInput | string
+    menteeUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type messagesCreateInput = {
+    id: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+    conversations: conversationsCreateNestedOneWithoutMessagesInput
+    user_accounts: user_accountsCreateNestedOneWithoutMessagesInput
+  }
+
+  export type messagesUncheckedCreateInput = {
+    id: string
+    conversationId: string
+    senderId: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+  }
+
+  export type messagesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conversations?: conversationsUpdateOneRequiredWithoutMessagesNestedInput
+    user_accounts?: user_accountsUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type messagesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type messagesCreateManyInput = {
+    id: string
+    conversationId: string
+    senderId: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+  }
+
+  export type messagesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type messagesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -56449,6 +59314,18 @@ export namespace Prisma {
     none?: announcementsWhereInput
   }
 
+  export type ConversationsListRelationFilter = {
+    every?: conversationsWhereInput
+    some?: conversationsWhereInput
+    none?: conversationsWhereInput
+  }
+
+  export type MessagesListRelationFilter = {
+    every?: messagesWhereInput
+    some?: messagesWhereInput
+    none?: messagesWhereInput
+  }
+
   export type Otp_verificationsListRelationFilter = {
     every?: otp_verificationsWhereInput
     some?: otp_verificationsWhereInput
@@ -56465,6 +59342,14 @@ export namespace Prisma {
   }
 
   export type announcementsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type conversationsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type messagesOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -57117,6 +60002,76 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAnnouncementStatusFilter<$PrismaModel>
     _max?: NestedEnumAnnouncementStatusFilter<$PrismaModel>
+  }
+
+  export type conversationsMentorUserAccountIdMenteeUserAccountIdCompoundUniqueInput = {
+    mentorUserAccountId: string
+    menteeUserAccountId: string
+  }
+
+  export type conversationsCountOrderByAggregateInput = {
+    id?: SortOrder
+    mentorUserAccountId?: SortOrder
+    menteeUserAccountId?: SortOrder
+    mentorLastReadAt?: SortOrder
+    menteeLastReadAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type conversationsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    mentorUserAccountId?: SortOrder
+    menteeUserAccountId?: SortOrder
+    mentorLastReadAt?: SortOrder
+    menteeLastReadAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type conversationsMinOrderByAggregateInput = {
+    id?: SortOrder
+    mentorUserAccountId?: SortOrder
+    menteeUserAccountId?: SortOrder
+    mentorLastReadAt?: SortOrder
+    menteeLastReadAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ConversationsScalarRelationFilter = {
+    is?: conversationsWhereInput
+    isNot?: conversationsWhereInput
+  }
+
+  export type messagesCountOrderByAggregateInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    senderId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    editedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type messagesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    senderId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    editedAt?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type messagesMinOrderByAggregateInput = {
+    id?: SortOrder
+    conversationId?: SortOrder
+    senderId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    editedAt?: SortOrder
+    deletedAt?: SortOrder
   }
 
   export type academic_yearsCreateNestedOneWithoutAcademic_term_requestsInput = {
@@ -59381,6 +62336,20 @@ export namespace Prisma {
     connect?: announcementsWhereUniqueInput | announcementsWhereUniqueInput[]
   }
 
+  export type conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInputEnvelope
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+  }
+
+  export type conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInputEnvelope
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+  }
+
   export type detentionsCreateNestedManyWithoutUser_accountsInput = {
     create?: XOR<detentionsCreateWithoutUser_accountsInput, detentionsUncheckedCreateWithoutUser_accountsInput> | detentionsCreateWithoutUser_accountsInput[] | detentionsUncheckedCreateWithoutUser_accountsInput[]
     connectOrCreate?: detentionsCreateOrConnectWithoutUser_accountsInput | detentionsCreateOrConnectWithoutUser_accountsInput[]
@@ -59414,6 +62383,13 @@ export namespace Prisma {
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsCreateOrConnectWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
     createMany?: mentor_transfer_requestsCreateManyUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInputEnvelope
     connect?: mentor_transfer_requestsWhereUniqueInput | mentor_transfer_requestsWhereUniqueInput[]
+  }
+
+  export type messagesCreateNestedManyWithoutUser_accountsInput = {
+    create?: XOR<messagesCreateWithoutUser_accountsInput, messagesUncheckedCreateWithoutUser_accountsInput> | messagesCreateWithoutUser_accountsInput[] | messagesUncheckedCreateWithoutUser_accountsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutUser_accountsInput | messagesCreateOrConnectWithoutUser_accountsInput[]
+    createMany?: messagesCreateManyUser_accountsInputEnvelope
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
   }
 
   export type otp_verificationsCreateNestedManyWithoutUser_accountsInput = {
@@ -59455,6 +62431,20 @@ export namespace Prisma {
     connect?: announcementsWhereUniqueInput | announcementsWhereUniqueInput[]
   }
 
+  export type conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInputEnvelope
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+  }
+
+  export type conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInputEnvelope
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+  }
+
   export type detentionsUncheckedCreateNestedManyWithoutUser_accountsInput = {
     create?: XOR<detentionsCreateWithoutUser_accountsInput, detentionsUncheckedCreateWithoutUser_accountsInput> | detentionsCreateWithoutUser_accountsInput[] | detentionsUncheckedCreateWithoutUser_accountsInput[]
     connectOrCreate?: detentionsCreateOrConnectWithoutUser_accountsInput | detentionsCreateOrConnectWithoutUser_accountsInput[]
@@ -59488,6 +62478,13 @@ export namespace Prisma {
     connectOrCreate?: mentor_transfer_requestsCreateOrConnectWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsCreateOrConnectWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
     createMany?: mentor_transfer_requestsCreateManyUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInputEnvelope
     connect?: mentor_transfer_requestsWhereUniqueInput | mentor_transfer_requestsWhereUniqueInput[]
+  }
+
+  export type messagesUncheckedCreateNestedManyWithoutUser_accountsInput = {
+    create?: XOR<messagesCreateWithoutUser_accountsInput, messagesUncheckedCreateWithoutUser_accountsInput> | messagesCreateWithoutUser_accountsInput[] | messagesUncheckedCreateWithoutUser_accountsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutUser_accountsInput | messagesCreateOrConnectWithoutUser_accountsInput[]
+    createMany?: messagesCreateManyUser_accountsInputEnvelope
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
   }
 
   export type otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput = {
@@ -59549,6 +62546,34 @@ export namespace Prisma {
     update?: announcementsUpdateWithWhereUniqueWithoutUser_accountsInput | announcementsUpdateWithWhereUniqueWithoutUser_accountsInput[]
     updateMany?: announcementsUpdateManyWithWhereWithoutUser_accountsInput | announcementsUpdateManyWithWhereWithoutUser_accountsInput[]
     deleteMany?: announcementsScalarWhereInput | announcementsScalarWhereInput[]
+  }
+
+  export type conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    upsert?: conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInputEnvelope
+    set?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    disconnect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    delete?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    update?: conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    updateMany?: conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    deleteMany?: conversationsScalarWhereInput | conversationsScalarWhereInput[]
+  }
+
+  export type conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    upsert?: conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInputEnvelope
+    set?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    disconnect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    delete?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    update?: conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    updateMany?: conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    deleteMany?: conversationsScalarWhereInput | conversationsScalarWhereInput[]
   }
 
   export type detentionsUpdateManyWithoutUser_accountsNestedInput = {
@@ -59619,6 +62644,20 @@ export namespace Prisma {
     update?: mentor_transfer_requestsUpdateWithWhereUniqueWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsUpdateWithWhereUniqueWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
     updateMany?: mentor_transfer_requestsUpdateManyWithWhereWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsUpdateManyWithWhereWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
     deleteMany?: mentor_transfer_requestsScalarWhereInput | mentor_transfer_requestsScalarWhereInput[]
+  }
+
+  export type messagesUpdateManyWithoutUser_accountsNestedInput = {
+    create?: XOR<messagesCreateWithoutUser_accountsInput, messagesUncheckedCreateWithoutUser_accountsInput> | messagesCreateWithoutUser_accountsInput[] | messagesUncheckedCreateWithoutUser_accountsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutUser_accountsInput | messagesCreateOrConnectWithoutUser_accountsInput[]
+    upsert?: messagesUpsertWithWhereUniqueWithoutUser_accountsInput | messagesUpsertWithWhereUniqueWithoutUser_accountsInput[]
+    createMany?: messagesCreateManyUser_accountsInputEnvelope
+    set?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    disconnect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    delete?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    update?: messagesUpdateWithWhereUniqueWithoutUser_accountsInput | messagesUpdateWithWhereUniqueWithoutUser_accountsInput[]
+    updateMany?: messagesUpdateManyWithWhereWithoutUser_accountsInput | messagesUpdateManyWithWhereWithoutUser_accountsInput[]
+    deleteMany?: messagesScalarWhereInput | messagesScalarWhereInput[]
   }
 
   export type otp_verificationsUpdateManyWithoutUser_accountsNestedInput = {
@@ -59693,6 +62732,34 @@ export namespace Prisma {
     deleteMany?: announcementsScalarWhereInput | announcementsScalarWhereInput[]
   }
 
+  export type conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    upsert?: conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInputEnvelope
+    set?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    disconnect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    delete?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    update?: conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    updateMany?: conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    deleteMany?: conversationsScalarWhereInput | conversationsScalarWhereInput[]
+  }
+
+  export type conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput = {
+    create?: XOR<conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput> | conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[] | conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    connectOrCreate?: conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    upsert?: conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    createMany?: conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInputEnvelope
+    set?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    disconnect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    delete?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    connect?: conversationsWhereUniqueInput | conversationsWhereUniqueInput[]
+    update?: conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    updateMany?: conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
+    deleteMany?: conversationsScalarWhereInput | conversationsScalarWhereInput[]
+  }
+
   export type detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput = {
     create?: XOR<detentionsCreateWithoutUser_accountsInput, detentionsUncheckedCreateWithoutUser_accountsInput> | detentionsCreateWithoutUser_accountsInput[] | detentionsUncheckedCreateWithoutUser_accountsInput[]
     connectOrCreate?: detentionsCreateOrConnectWithoutUser_accountsInput | detentionsCreateOrConnectWithoutUser_accountsInput[]
@@ -59761,6 +62828,20 @@ export namespace Prisma {
     update?: mentor_transfer_requestsUpdateWithWhereUniqueWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsUpdateWithWhereUniqueWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
     updateMany?: mentor_transfer_requestsUpdateManyWithWhereWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsUpdateManyWithWhereWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
     deleteMany?: mentor_transfer_requestsScalarWhereInput | mentor_transfer_requestsScalarWhereInput[]
+  }
+
+  export type messagesUncheckedUpdateManyWithoutUser_accountsNestedInput = {
+    create?: XOR<messagesCreateWithoutUser_accountsInput, messagesUncheckedCreateWithoutUser_accountsInput> | messagesCreateWithoutUser_accountsInput[] | messagesUncheckedCreateWithoutUser_accountsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutUser_accountsInput | messagesCreateOrConnectWithoutUser_accountsInput[]
+    upsert?: messagesUpsertWithWhereUniqueWithoutUser_accountsInput | messagesUpsertWithWhereUniqueWithoutUser_accountsInput[]
+    createMany?: messagesCreateManyUser_accountsInputEnvelope
+    set?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    disconnect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    delete?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    update?: messagesUpdateWithWhereUniqueWithoutUser_accountsInput | messagesUpdateWithWhereUniqueWithoutUser_accountsInput[]
+    updateMany?: messagesUpdateManyWithWhereWithoutUser_accountsInput | messagesUpdateManyWithWhereWithoutUser_accountsInput[]
+    deleteMany?: messagesScalarWhereInput | messagesScalarWhereInput[]
   }
 
   export type otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput = {
@@ -60257,6 +63338,104 @@ export namespace Prisma {
     update?: announcement_recipientsUpdateWithWhereUniqueWithoutAnnouncementsInput | announcement_recipientsUpdateWithWhereUniqueWithoutAnnouncementsInput[]
     updateMany?: announcement_recipientsUpdateManyWithWhereWithoutAnnouncementsInput | announcement_recipientsUpdateManyWithWhereWithoutAnnouncementsInput[]
     deleteMany?: announcement_recipientsScalarWhereInput | announcement_recipientsScalarWhereInput[]
+  }
+
+  export type user_accountsCreateNestedOneWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    create?: XOR<user_accountsCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput
+    connect?: user_accountsWhereUniqueInput
+  }
+
+  export type user_accountsCreateNestedOneWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    create?: XOR<user_accountsCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput
+    connect?: user_accountsWhereUniqueInput
+  }
+
+  export type messagesCreateNestedManyWithoutConversationsInput = {
+    create?: XOR<messagesCreateWithoutConversationsInput, messagesUncheckedCreateWithoutConversationsInput> | messagesCreateWithoutConversationsInput[] | messagesUncheckedCreateWithoutConversationsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutConversationsInput | messagesCreateOrConnectWithoutConversationsInput[]
+    createMany?: messagesCreateManyConversationsInputEnvelope
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+  }
+
+  export type messagesUncheckedCreateNestedManyWithoutConversationsInput = {
+    create?: XOR<messagesCreateWithoutConversationsInput, messagesUncheckedCreateWithoutConversationsInput> | messagesCreateWithoutConversationsInput[] | messagesUncheckedCreateWithoutConversationsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutConversationsInput | messagesCreateOrConnectWithoutConversationsInput[]
+    createMany?: messagesCreateManyConversationsInputEnvelope
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+  }
+
+  export type user_accountsUpdateOneRequiredWithoutConversations_conversations_menteeUserAccountIdTouser_accountsNestedInput = {
+    create?: XOR<user_accountsCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput
+    upsert?: user_accountsUpsertWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput
+    connect?: user_accountsWhereUniqueInput
+    update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>, user_accountsUncheckedUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type user_accountsUpdateOneRequiredWithoutConversations_conversations_mentorUserAccountIdTouser_accountsNestedInput = {
+    create?: XOR<user_accountsCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput
+    upsert?: user_accountsUpsertWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput
+    connect?: user_accountsWhereUniqueInput
+    update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>, user_accountsUncheckedUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
+  export type messagesUpdateManyWithoutConversationsNestedInput = {
+    create?: XOR<messagesCreateWithoutConversationsInput, messagesUncheckedCreateWithoutConversationsInput> | messagesCreateWithoutConversationsInput[] | messagesUncheckedCreateWithoutConversationsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutConversationsInput | messagesCreateOrConnectWithoutConversationsInput[]
+    upsert?: messagesUpsertWithWhereUniqueWithoutConversationsInput | messagesUpsertWithWhereUniqueWithoutConversationsInput[]
+    createMany?: messagesCreateManyConversationsInputEnvelope
+    set?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    disconnect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    delete?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    update?: messagesUpdateWithWhereUniqueWithoutConversationsInput | messagesUpdateWithWhereUniqueWithoutConversationsInput[]
+    updateMany?: messagesUpdateManyWithWhereWithoutConversationsInput | messagesUpdateManyWithWhereWithoutConversationsInput[]
+    deleteMany?: messagesScalarWhereInput | messagesScalarWhereInput[]
+  }
+
+  export type messagesUncheckedUpdateManyWithoutConversationsNestedInput = {
+    create?: XOR<messagesCreateWithoutConversationsInput, messagesUncheckedCreateWithoutConversationsInput> | messagesCreateWithoutConversationsInput[] | messagesUncheckedCreateWithoutConversationsInput[]
+    connectOrCreate?: messagesCreateOrConnectWithoutConversationsInput | messagesCreateOrConnectWithoutConversationsInput[]
+    upsert?: messagesUpsertWithWhereUniqueWithoutConversationsInput | messagesUpsertWithWhereUniqueWithoutConversationsInput[]
+    createMany?: messagesCreateManyConversationsInputEnvelope
+    set?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    disconnect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    delete?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    connect?: messagesWhereUniqueInput | messagesWhereUniqueInput[]
+    update?: messagesUpdateWithWhereUniqueWithoutConversationsInput | messagesUpdateWithWhereUniqueWithoutConversationsInput[]
+    updateMany?: messagesUpdateManyWithWhereWithoutConversationsInput | messagesUpdateManyWithWhereWithoutConversationsInput[]
+    deleteMany?: messagesScalarWhereInput | messagesScalarWhereInput[]
+  }
+
+  export type conversationsCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<conversationsCreateWithoutMessagesInput, conversationsUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: conversationsCreateOrConnectWithoutMessagesInput
+    connect?: conversationsWhereUniqueInput
+  }
+
+  export type user_accountsCreateNestedOneWithoutMessagesInput = {
+    create?: XOR<user_accountsCreateWithoutMessagesInput, user_accountsUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutMessagesInput
+    connect?: user_accountsWhereUniqueInput
+  }
+
+  export type conversationsUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<conversationsCreateWithoutMessagesInput, conversationsUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: conversationsCreateOrConnectWithoutMessagesInput
+    upsert?: conversationsUpsertWithoutMessagesInput
+    connect?: conversationsWhereUniqueInput
+    update?: XOR<XOR<conversationsUpdateToOneWithWhereWithoutMessagesInput, conversationsUpdateWithoutMessagesInput>, conversationsUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type user_accountsUpdateOneRequiredWithoutMessagesNestedInput = {
+    create?: XOR<user_accountsCreateWithoutMessagesInput, user_accountsUncheckedCreateWithoutMessagesInput>
+    connectOrCreate?: user_accountsCreateOrConnectWithoutMessagesInput
+    upsert?: user_accountsUpsertWithoutMessagesInput
+    connect?: user_accountsWhereUniqueInput
+    update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutMessagesInput, user_accountsUpdateWithoutMessagesInput>, user_accountsUncheckedUpdateWithoutMessagesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -62275,10 +65454,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -62298,10 +65480,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -62463,10 +65648,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -62486,10 +65674,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -62680,10 +65871,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -62703,10 +65897,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -62809,10 +66006,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -62832,10 +66032,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -62952,10 +66155,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -62975,10 +66181,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -63193,10 +66402,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -63216,10 +66428,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -63542,10 +66757,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -63565,10 +66783,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -63646,10 +66867,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -63669,10 +66893,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -63952,10 +67179,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -63975,10 +67205,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -64068,10 +67301,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -64091,10 +67327,13 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -64252,11 +67491,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
   }
@@ -64275,11 +67517,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
   }
@@ -64314,11 +67559,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
   }
@@ -64337,11 +67585,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
@@ -65195,11 +68446,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
   }
@@ -65218,11 +68472,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
   }
@@ -65683,11 +68940,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
   }
@@ -65706,11 +68966,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
@@ -68025,11 +71288,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
   }
@@ -68048,11 +71314,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
   }
@@ -68345,11 +71614,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
   }
@@ -68368,11 +71640,14 @@ export namespace Prisma {
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
@@ -68491,6 +71766,66 @@ export namespace Prisma {
 
   export type announcementsCreateManyUser_accountsInputEnvelope = {
     data: announcementsCreateManyUser_accountsInput | announcementsCreateManyUser_accountsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts: user_accountsCreateNestedOneWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutConversationsInput
+  }
+
+  export type conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id: string
+    mentorUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: messagesUncheckedCreateNestedManyWithoutConversationsInput
+  }
+
+  export type conversationsCreateOrConnectWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    where: conversationsWhereUniqueInput
+    create: XOR<conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInputEnvelope = {
+    data: conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput | conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts: user_accountsCreateNestedOneWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutConversationsInput
+  }
+
+  export type conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id: string
+    menteeUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    messages?: messagesUncheckedCreateNestedManyWithoutConversationsInput
+  }
+
+  export type conversationsCreateOrConnectWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    where: conversationsWhereUniqueInput
+    create: XOR<conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInputEnvelope = {
+    data: conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput | conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput[]
     skipDuplicates?: boolean
   }
 
@@ -68683,6 +72018,34 @@ export namespace Prisma {
 
   export type mentor_transfer_requestsCreateManyUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInputEnvelope = {
     data: mentor_transfer_requestsCreateManyUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput | mentor_transfer_requestsCreateManyUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type messagesCreateWithoutUser_accountsInput = {
+    id: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+    conversations: conversationsCreateNestedOneWithoutMessagesInput
+  }
+
+  export type messagesUncheckedCreateWithoutUser_accountsInput = {
+    id: string
+    conversationId: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+  }
+
+  export type messagesCreateOrConnectWithoutUser_accountsInput = {
+    where: messagesWhereUniqueInput
+    create: XOR<messagesCreateWithoutUser_accountsInput, messagesUncheckedCreateWithoutUser_accountsInput>
+  }
+
+  export type messagesCreateManyUser_accountsInputEnvelope = {
+    data: messagesCreateManyUser_accountsInput | messagesCreateManyUser_accountsInput[]
     skipDuplicates?: boolean
   }
 
@@ -68979,6 +72342,51 @@ export namespace Prisma {
     updatedAt?: DateTimeFilter<"announcements"> | Date | string
   }
 
+  export type conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    where: conversationsWhereUniqueInput
+    update: XOR<conversationsUpdateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedUpdateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput>
+    create: XOR<conversationsCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    where: conversationsWhereUniqueInput
+    data: XOR<conversationsUpdateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput, conversationsUncheckedUpdateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    where: conversationsScalarWhereInput
+    data: XOR<conversationsUpdateManyMutationInput, conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsScalarWhereInput = {
+    AND?: conversationsScalarWhereInput | conversationsScalarWhereInput[]
+    OR?: conversationsScalarWhereInput[]
+    NOT?: conversationsScalarWhereInput | conversationsScalarWhereInput[]
+    id?: StringFilter<"conversations"> | string
+    mentorUserAccountId?: StringFilter<"conversations"> | string
+    menteeUserAccountId?: StringFilter<"conversations"> | string
+    mentorLastReadAt?: DateTimeNullableFilter<"conversations"> | Date | string | null
+    menteeLastReadAt?: DateTimeNullableFilter<"conversations"> | Date | string | null
+    createdAt?: DateTimeFilter<"conversations"> | Date | string
+    updatedAt?: DateTimeFilter<"conversations"> | Date | string
+  }
+
+  export type conversationsUpsertWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    where: conversationsWhereUniqueInput
+    update: XOR<conversationsUpdateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedUpdateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput>
+    create: XOR<conversationsCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedCreateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsUpdateWithWhereUniqueWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    where: conversationsWhereUniqueInput
+    data: XOR<conversationsUpdateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput, conversationsUncheckedUpdateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
+  export type conversationsUpdateManyWithWhereWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    where: conversationsScalarWhereInput
+    data: XOR<conversationsUpdateManyMutationInput, conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
   export type detentionsUpsertWithWhereUniqueWithoutUser_accountsInput = {
     where: detentionsWhereUniqueInput
     update: XOR<detentionsUpdateWithoutUser_accountsInput, detentionsUncheckedUpdateWithoutUser_accountsInput>
@@ -69057,6 +72465,35 @@ export namespace Prisma {
   export type mentor_transfer_requestsUpdateManyWithWhereWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput = {
     where: mentor_transfer_requestsScalarWhereInput
     data: XOR<mentor_transfer_requestsUpdateManyMutationInput, mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput>
+  }
+
+  export type messagesUpsertWithWhereUniqueWithoutUser_accountsInput = {
+    where: messagesWhereUniqueInput
+    update: XOR<messagesUpdateWithoutUser_accountsInput, messagesUncheckedUpdateWithoutUser_accountsInput>
+    create: XOR<messagesCreateWithoutUser_accountsInput, messagesUncheckedCreateWithoutUser_accountsInput>
+  }
+
+  export type messagesUpdateWithWhereUniqueWithoutUser_accountsInput = {
+    where: messagesWhereUniqueInput
+    data: XOR<messagesUpdateWithoutUser_accountsInput, messagesUncheckedUpdateWithoutUser_accountsInput>
+  }
+
+  export type messagesUpdateManyWithWhereWithoutUser_accountsInput = {
+    where: messagesScalarWhereInput
+    data: XOR<messagesUpdateManyMutationInput, messagesUncheckedUpdateManyWithoutUser_accountsInput>
+  }
+
+  export type messagesScalarWhereInput = {
+    AND?: messagesScalarWhereInput | messagesScalarWhereInput[]
+    OR?: messagesScalarWhereInput[]
+    NOT?: messagesScalarWhereInput | messagesScalarWhereInput[]
+    id?: StringFilter<"messages"> | string
+    conversationId?: StringFilter<"messages"> | string
+    senderId?: StringFilter<"messages"> | string
+    content?: StringFilter<"messages"> | string
+    createdAt?: DateTimeFilter<"messages"> | Date | string
+    editedAt?: DateTimeNullableFilter<"messages"> | Date | string | null
+    deletedAt?: DateTimeNullableFilter<"messages"> | Date | string | null
   }
 
   export type otp_verificationsUpsertWithWhereUniqueWithoutUser_accountsInput = {
@@ -70948,11 +74385,14 @@ export namespace Prisma {
     mustChangePassword?: boolean
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -70971,11 +74411,14 @@ export namespace Prisma {
     mustChangePassword?: boolean
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -71010,11 +74453,14 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -71033,11 +74479,14 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -71091,11 +74540,14 @@ export namespace Prisma {
     mustChangePassword?: boolean
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -71114,11 +74566,14 @@ export namespace Prisma {
     mustChangePassword?: boolean
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -71194,11 +74649,14 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -71217,11 +74675,14 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
@@ -71266,11 +74727,14 @@ export namespace Prisma {
     mustChangePassword?: boolean
     admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
     students?: studentsCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersCreateNestedOneWithoutUser_accountsInput
@@ -71289,11 +74753,14 @@ export namespace Prisma {
     mustChangePassword?: boolean
     admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
     announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
     detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
     import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
     otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
     students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
     teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
@@ -71344,11 +74811,14 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
     mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUpdateOneWithoutUser_accountsNestedInput
     teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
@@ -71367,6 +74837,469 @@ export namespace Prisma {
     mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
     announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type user_accountsCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
+    announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
+    announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
+    detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
+    otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
+    students?: studentsCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsUncheckedCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
+    announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
+    announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
+    otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
+    students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsCreateOrConnectWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    where: user_accountsWhereUniqueInput
+    create: XOR<user_accountsCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type user_accountsCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
+    announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
+    announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesCreateNestedManyWithoutUser_accountsInput
+    otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
+    students?: studentsCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsUncheckedCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
+    announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
+    announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    messages?: messagesUncheckedCreateNestedManyWithoutUser_accountsInput
+    otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
+    students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsCreateOrConnectWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    where: user_accountsWhereUniqueInput
+    create: XOR<user_accountsCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
+  export type messagesCreateWithoutConversationsInput = {
+    id: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+    user_accounts: user_accountsCreateNestedOneWithoutMessagesInput
+  }
+
+  export type messagesUncheckedCreateWithoutConversationsInput = {
+    id: string
+    senderId: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+  }
+
+  export type messagesCreateOrConnectWithoutConversationsInput = {
+    where: messagesWhereUniqueInput
+    create: XOR<messagesCreateWithoutConversationsInput, messagesUncheckedCreateWithoutConversationsInput>
+  }
+
+  export type messagesCreateManyConversationsInputEnvelope = {
+    data: messagesCreateManyConversationsInput | messagesCreateManyConversationsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type user_accountsUpsertWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    update: XOR<user_accountsUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUncheckedUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+    create: XOR<user_accountsCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+    where?: user_accountsWhereInput
+  }
+
+  export type user_accountsUpdateToOneWithWhereWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    where?: user_accountsWhereInput
+    data: XOR<user_accountsUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput, user_accountsUncheckedUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput>
+  }
+
+  export type user_accountsUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
+    announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
+    announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
+    detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
+    otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type user_accountsUncheckedUpdateWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
+    announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type user_accountsUpsertWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    update: XOR<user_accountsUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUncheckedUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+    create: XOR<user_accountsCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUncheckedCreateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+    where?: user_accountsWhereInput
+  }
+
+  export type user_accountsUpdateToOneWithWhereWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    where?: user_accountsWhereInput
+    data: XOR<user_accountsUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput, user_accountsUncheckedUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput>
+  }
+
+  export type user_accountsUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
+    announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
+    announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutUser_accountsNestedInput
+    otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type user_accountsUncheckedUpdateWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
+    announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
+    otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type messagesUpsertWithWhereUniqueWithoutConversationsInput = {
+    where: messagesWhereUniqueInput
+    update: XOR<messagesUpdateWithoutConversationsInput, messagesUncheckedUpdateWithoutConversationsInput>
+    create: XOR<messagesCreateWithoutConversationsInput, messagesUncheckedCreateWithoutConversationsInput>
+  }
+
+  export type messagesUpdateWithWhereUniqueWithoutConversationsInput = {
+    where: messagesWhereUniqueInput
+    data: XOR<messagesUpdateWithoutConversationsInput, messagesUncheckedUpdateWithoutConversationsInput>
+  }
+
+  export type messagesUpdateManyWithWhereWithoutConversationsInput = {
+    where: messagesScalarWhereInput
+    data: XOR<messagesUpdateManyMutationInput, messagesUncheckedUpdateManyWithoutConversationsInput>
+  }
+
+  export type conversationsCreateWithoutMessagesInput = {
+    id: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts: user_accountsCreateNestedOneWithoutConversations_conversations_menteeUserAccountIdTouser_accountsInput
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts: user_accountsCreateNestedOneWithoutConversations_conversations_mentorUserAccountIdTouser_accountsInput
+  }
+
+  export type conversationsUncheckedCreateWithoutMessagesInput = {
+    id: string
+    mentorUserAccountId: string
+    menteeUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type conversationsCreateOrConnectWithoutMessagesInput = {
+    where: conversationsWhereUniqueInput
+    create: XOR<conversationsCreateWithoutMessagesInput, conversationsUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type user_accountsCreateWithoutMessagesInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    admin_profiles?: admin_profilesCreateNestedOneWithoutUser_accountsInput
+    announcement_recipients?: announcement_recipientsCreateNestedManyWithoutUser_accountsInput
+    announcements?: announcementsCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
+    detentions?: detentionsCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    otp_verifications?: otp_verificationsCreateNestedManyWithoutUser_accountsInput
+    students?: studentsCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsUncheckedCreateWithoutMessagesInput = {
+    id: string
+    username: string
+    email?: string | null
+    password?: string | null
+    role: $Enums.UserRole
+    isActive?: boolean
+    lastLogin?: Date | string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    mustChangePassword?: boolean
+    admin_profiles?: admin_profilesUncheckedCreateNestedOneWithoutUser_accountsInput
+    announcement_recipients?: announcement_recipientsUncheckedCreateNestedManyWithoutUser_accountsInput
+    announcements?: announcementsUncheckedCreateNestedManyWithoutUser_accountsInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedCreateNestedManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutUser_accountsInput
+    import_batches?: import_batchesUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutUser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsInput
+    otp_verifications?: otp_verificationsUncheckedCreateNestedManyWithoutUser_accountsInput
+    students?: studentsUncheckedCreateNestedOneWithoutUser_accountsInput
+    teachers?: teachersUncheckedCreateNestedOneWithoutUser_accountsInput
+  }
+
+  export type user_accountsCreateOrConnectWithoutMessagesInput = {
+    where: user_accountsWhereUniqueInput
+    create: XOR<user_accountsCreateWithoutMessagesInput, user_accountsUncheckedCreateWithoutMessagesInput>
+  }
+
+  export type conversationsUpsertWithoutMessagesInput = {
+    update: XOR<conversationsUpdateWithoutMessagesInput, conversationsUncheckedUpdateWithoutMessagesInput>
+    create: XOR<conversationsCreateWithoutMessagesInput, conversationsUncheckedCreateWithoutMessagesInput>
+    where?: conversationsWhereInput
+  }
+
+  export type conversationsUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: conversationsWhereInput
+    data: XOR<conversationsUpdateWithoutMessagesInput, conversationsUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type conversationsUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: user_accountsUpdateOneRequiredWithoutConversations_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: user_accountsUpdateOneRequiredWithoutConversations_conversations_mentorUserAccountIdTouser_accountsNestedInput
+  }
+
+  export type conversationsUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorUserAccountId?: StringFieldUpdateOperationsInput | string
+    menteeUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type user_accountsUpsertWithoutMessagesInput = {
+    update: XOR<user_accountsUpdateWithoutMessagesInput, user_accountsUncheckedUpdateWithoutMessagesInput>
+    create: XOR<user_accountsCreateWithoutMessagesInput, user_accountsUncheckedCreateWithoutMessagesInput>
+    where?: user_accountsWhereInput
+  }
+
+  export type user_accountsUpdateToOneWithWhereWithoutMessagesInput = {
+    where?: user_accountsWhereInput
+    data: XOR<user_accountsUpdateWithoutMessagesInput, user_accountsUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type user_accountsUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUpdateOneWithoutUser_accountsNestedInput
+    announcement_recipients?: announcement_recipientsUpdateManyWithoutUser_accountsNestedInput
+    announcements?: announcementsUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
+    detentions?: detentionsUpdateManyWithoutUser_accountsNestedInput
+    import_batches?: import_batchesUpdateManyWithoutUser_accountsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutUser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accountsNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts?: mentor_transfer_requestsUpdateManyWithoutUser_accounts_mentor_transfer_requests_reviewedByTouser_accountsNestedInput
+    otp_verifications?: otp_verificationsUpdateManyWithoutUser_accountsNestedInput
+    students?: studentsUpdateOneWithoutUser_accountsNestedInput
+    teachers?: teachersUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type user_accountsUncheckedUpdateWithoutMessagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    username?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    password?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    lastLogin?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
+    admin_profiles?: admin_profilesUncheckedUpdateOneWithoutUser_accountsNestedInput
+    announcement_recipients?: announcement_recipientsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    announcements?: announcementsUncheckedUpdateManyWithoutUser_accountsNestedInput
+    conversations_conversations_menteeUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    conversations_conversations_mentorUserAccountIdTouser_accounts?: conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsNestedInput
     detentions?: detentionsUncheckedUpdateManyWithoutUser_accountsNestedInput
     import_batches?: import_batchesUncheckedUpdateManyWithoutUser_accountsNestedInput
     mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutUser_accountsNestedInput
@@ -73465,6 +77398,24 @@ export namespace Prisma {
     updatedAt?: Date | string
   }
 
+  export type conversationsCreateManyUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id: string
+    mentorUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type conversationsCreateManyUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id: string
+    menteeUserAccountId: string
+    mentorLastReadAt?: Date | string | null
+    menteeLastReadAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
   export type detentionsCreateManyUser_accountsInput = {
     id: string
     studentId: string
@@ -73533,6 +77484,15 @@ export namespace Prisma {
     rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+  }
+
+  export type messagesCreateManyUser_accountsInput = {
+    id: string
+    conversationId: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
   }
 
   export type otp_verificationsCreateManyUser_accountsInput = {
@@ -73609,6 +77569,64 @@ export namespace Prisma {
     status?: EnumAnnouncementStatusFieldUpdateOperationsInput | $Enums.AnnouncementStatus
     publishedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     expiresAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type conversationsUpdateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_accounts_conversations_mentorUserAccountIdTouser_accounts?: user_accountsUpdateOneRequiredWithoutConversations_conversations_mentorUserAccountIdTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutConversationsNestedInput
+  }
+
+  export type conversationsUncheckedUpdateWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: messagesUncheckedUpdateManyWithoutConversationsNestedInput
+  }
+
+  export type conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_menteeUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type conversationsUpdateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user_accounts_conversations_menteeUserAccountIdTouser_accounts?: user_accountsUpdateOneRequiredWithoutConversations_conversations_menteeUserAccountIdTouser_accountsNestedInput
+    messages?: messagesUpdateManyWithoutConversationsNestedInput
+  }
+
+  export type conversationsUncheckedUpdateWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    menteeUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    messages?: messagesUncheckedUpdateManyWithoutConversationsNestedInput
+  }
+
+  export type conversationsUncheckedUpdateManyWithoutUser_accounts_conversations_mentorUserAccountIdTouser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    menteeUserAccountId?: StringFieldUpdateOperationsInput | string
+    mentorLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    menteeLastReadAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -73823,6 +77841,33 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type messagesUpdateWithoutUser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    conversations?: conversationsUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type messagesUncheckedUpdateWithoutUser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type messagesUncheckedUpdateManyWithoutUser_accountsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    conversationId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
   export type otp_verificationsUpdateWithoutUser_accountsInput = {
@@ -74109,6 +78154,42 @@ export namespace Prisma {
     deliveredAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     readAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type messagesCreateManyConversationsInput = {
+    id: string
+    senderId: string
+    content: string
+    createdAt?: Date | string
+    editedAt?: Date | string | null
+    deletedAt?: Date | string | null
+  }
+
+  export type messagesUpdateWithoutConversationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    user_accounts?: user_accountsUpdateOneRequiredWithoutMessagesNestedInput
+  }
+
+  export type messagesUncheckedUpdateWithoutConversationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type messagesUncheckedUpdateManyWithoutConversationsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
 

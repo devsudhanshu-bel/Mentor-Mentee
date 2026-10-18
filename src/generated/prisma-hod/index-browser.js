@@ -645,6 +645,26 @@ exports.Prisma.AnnouncementsScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ConversationsScalarFieldEnum = {
+  id: 'id',
+  mentorUserAccountId: 'mentorUserAccountId',
+  menteeUserAccountId: 'menteeUserAccountId',
+  mentorLastReadAt: 'mentorLastReadAt',
+  menteeLastReadAt: 'menteeLastReadAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MessagesScalarFieldEnum = {
+  id: 'id',
+  conversationId: 'conversationId',
+  senderId: 'senderId',
+  content: 'content',
+  createdAt: 'createdAt',
+  editedAt: 'editedAt',
+  deletedAt: 'deletedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -925,7 +945,9 @@ exports.Prisma.ModelName = {
   mentor_meetings: 'mentor_meetings',
   admin_profiles: 'admin_profiles',
   announcement_recipients: 'announcement_recipients',
-  announcements: 'announcements'
+  announcements: 'announcements',
+  conversations: 'conversations',
+  messages: 'messages'
 };
 
 /**

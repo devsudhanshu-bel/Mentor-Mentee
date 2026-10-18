@@ -534,11 +534,14 @@ model user_accounts {
   admin_profiles                                                                     admin_profiles?
   announcement_recipients                                                            announcement_recipients[]
   announcements                                                                      announcements[]
+  conversations_conversations_menteeUserAccountIdTouser_accounts                     conversations[]            @relation("conversations_menteeUserAccountIdTouser_accounts")
+  conversations_conversations_mentorUserAccountIdTouser_accounts                     conversations[]            @relation("conversations_mentorUserAccountIdTouser_accounts")
   detentions                                                                         detentions[]
   import_batches                                                                     import_batches[]
   mentor_assignments                                                                 mentor_assignments[]
   mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByUserIdTouser_accounts")
   mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts        mentor_transfer_requests[] @relation("mentor_transfer_requests_reviewedByTouser_accounts")
+  messages                                                                           messages[]
   otp_verifications                                                                  otp_verifications[]
   students                                                                           students?
   teachers                                                                           teachers?
@@ -742,6 +745,40 @@ model announcements {
   @@index([expiresAt])
   @@index([publishedById])
   @@index([status, publishedAt])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model conversations {
+  id                                                             String        @id
+  mentorUserAccountId                                            String
+  menteeUserAccountId                                            String
+  mentorLastReadAt                                               DateTime?
+  menteeLastReadAt                                               DateTime?
+  createdAt                                                      DateTime      @default(now())
+  updatedAt                                                      DateTime      @default(now())
+  user_accounts_conversations_menteeUserAccountIdTouser_accounts user_accounts @relation("conversations_menteeUserAccountIdTouser_accounts", fields: [menteeUserAccountId], references: [id], map: "conversations_mentee_fk")
+  user_accounts_conversations_mentorUserAccountIdTouser_accounts user_accounts @relation("conversations_mentorUserAccountIdTouser_accounts", fields: [mentorUserAccountId], references: [id], map: "conversations_mentor_fk")
+  messages                                                       messages[]
+
+  @@unique([mentorUserAccountId, menteeUserAccountId], map: "conversations_unique_mentor_mentee")
+  @@index([menteeUserAccountId, updatedAt(sort: Desc)], map: "conversations_mentee_idx")
+  @@index([mentorUserAccountId, updatedAt(sort: Desc)], map: "conversations_mentor_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model messages {
+  id             String        @id
+  conversationId String
+  senderId       String
+  content        String
+  createdAt      DateTime      @default(now())
+  editedAt       DateTime?
+  deletedAt      DateTime?
+  conversations  conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade, map: "messages_conversation_fk")
+  user_accounts  user_accounts @relation(fields: [senderId], references: [id], map: "messages_sender_fk")
+
+  @@index([conversationId, createdAt(sort: Desc)], map: "messages_conversation_created_idx")
+  @@index([senderId], map: "messages_sender_idx")
 }
 
 enum InternshipType {

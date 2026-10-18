@@ -1,4 +1,3 @@
-
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -30,6 +29,14 @@ import mentorOverviewRoutes from "./modules/mentor/routes/overview.routes.js";
 import mentorMeetingsRoutes from "./modules/mentor/routes/meetings.routes.js";
 import studentReportRoutes from "./modules/mentor/routes/studentReport.routes.js";
 
+import messagesRoutes from "./modules/chat/messages.routes.js";
+
+/* ==========================================================
+   AUTHENTICATION
+========================================================== */
+
+import { authenticate } from "./middleware/auth.middleware.js";
+
 /* ==========================================================
    APP
 ========================================================== */
@@ -54,7 +61,7 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin(origin, callback) {
-    // Allow requests without an Origin header, such as CLI tools.
+    // Allow requests from tools without an Origin header.
     if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
@@ -87,10 +94,7 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-// Register CORS before routes and other middleware.
 app.use(cors(corsOptions));
-
-// Explicitly handle browser preflight requests.
 app.options(/.*/, cors(corsOptions));
 
 /* ==========================================================
@@ -144,15 +148,12 @@ app.use("/api/mentee", menteeRoutes);
 
 /* ==========================================================
    ADMIN MENTOR DETAILS
-   GET /api/admin/mentors/:mentorId
 ========================================================== */
 
 app.use("/api/admin", mentorDetailsRoutes);
 
 /* ==========================================================
    ADMIN
-   Includes dashboard, profile, assignments,
-   students, term changes and announcements.
 ========================================================== */
 
 app.use("/api/admin", adminRoutes);
@@ -223,6 +224,13 @@ app.use("/api/mentor/students", mentorCertificatesRoutes);
 
 app.use("/api/mentor/students", mentorOverviewRoutes);
 app.use("/api/mentor/students", studentReportRoutes);
+
+/* ==========================================================
+   CHAT / MESSAGES
+   REST endpoints remain authenticated.
+========================================================== */
+
+app.use("/api/chat", authenticate, messagesRoutes);
 
 /* ==========================================================
    UPLOAD ERROR HANDLER
