@@ -36,6 +36,62 @@ export const getMentorOverview = async () => {
 };
 
 /* ==========================================================
+   ADMIN PROFILE
+========================================================== */
+
+/**
+ * Normalize Admin profile API responses.
+ *
+ * Expected backend response:
+ * {
+ *   success: true,
+ *   statusCode: 200,
+ *   message: "Admin profile fetched successfully.",
+ *   data: {
+ *     profileExists: true,
+ *     profile: { ... }
+ *   }
+ * }
+ *
+ * Supports both wrapped and direct response formats.
+ */
+const normalizeAdminProfileResponse = (responseData) => {
+  const body = responseData?.data ?? responseData;
+
+  return {
+    profileExists: body?.profileExists === true,
+    profile: body?.profile ?? null,
+  };
+};
+
+/**
+ * Get admin profile
+ */
+export const getAdminProfile = async () => {
+  const response = await api.get("/admin/profile");
+
+  return normalizeAdminProfileResponse(response.data);
+};
+
+/**
+ * Create admin profile
+ */
+export const createAdminProfile = async (data) => {
+  const response = await api.post("/admin/profile", data);
+
+  return normalizeAdminProfileResponse(response.data);
+};
+
+/**
+ * Update admin profile
+ */
+export const updateAdminProfile = async (data) => {
+  const response = await api.put("/admin/profile", data);
+
+  return normalizeAdminProfileResponse(response.data);
+};
+
+/* ==========================================================
    STUDENT PERSONAL PROFILE
 ========================================================== */
 
