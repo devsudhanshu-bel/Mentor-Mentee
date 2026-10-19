@@ -19,11 +19,15 @@ import {
 } from "recharts";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentAttendanceProfile from "../../../components/Mentors/Students/Attendence/StudentAttendanceProfile";
 
@@ -100,6 +104,7 @@ const formatPercentage = (value) =>
 const Attendance = () => {
   const { studentId: routeStudentId, id: routeId } = useParams();
   const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
 
   const selectedStudent = location.state?.student || null;
 
@@ -136,7 +141,7 @@ const Attendance = () => {
         setError("");
 
         const response = await api.get(
-          `/mentor/students/${encodeURIComponent(studentId)}/attendance`,
+          `${isAdminRoute ? "/admin/student-profile" : "/mentor/students"}/${encodeURIComponent(studentId)}/attendance`,
           {
             params: { semester },
             signal,
@@ -309,15 +314,15 @@ const Attendance = () => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       <div className="ml-[290px] min-h-screen min-w-0">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="space-y-4 p-5">
           {/* HEADER ACTIONS */}
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
 
             <div className="flex items-center gap-2">
               <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600">
@@ -368,7 +373,7 @@ const Attendance = () => {
 
             <section className="min-w-0 space-y-3">
               <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <StudentTabs />
+                {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
               </div>
 
               <div>

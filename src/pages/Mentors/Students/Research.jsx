@@ -27,11 +27,15 @@ import {
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentResearchProfile from "../../../components/Mentors/Students/Research/StudentResearchProfile";
 import ResearchStatCard from "../../../components/Mentors/Students/Research/ResearchStatCard";
@@ -45,7 +49,7 @@ import api from "../../../api/axios";
 
 // Your shared Axios client is used by Students.jsx with
 // api.get("/mentor/students"). Reuse that configured base URL.
-const RESEARCH_API = "/mentor/students";
+const getResearchApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -612,6 +616,9 @@ function ResearchVerificationModal({
 // ==========================================================
 
 const Research = ({ studentId: studentIdProp }) => {
+  const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
+  const RESEARCH_API = getResearchApiRoot(isAdminRoute);
   const studentId = useSelectedStudentId(studentIdProp);
 
   const [researchWorks, setResearchWorks] = useState([]);
@@ -843,14 +850,14 @@ const Research = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="space-y-5 p-4 md:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
             <ActionButtons />
           </div>
 
@@ -928,7 +935,7 @@ const Research = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              <StudentTabs />
+              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>

@@ -2,7 +2,10 @@ const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "http://localhost:5000/api"
 ).replace(/\/+$/, "");
 
-const BASE_PATH = `${API_BASE_URL}/mentor/students`;
+const getBasePath = () =>
+  window.location.pathname.startsWith("/admin/")
+    ? `${API_BASE_URL}/admin/student-profile`
+    : `${API_BASE_URL}/mentor/students`;
 
 // =========================================================
 // AUTHENTICATION
@@ -108,7 +111,7 @@ const studentReportService = {
 
     try {
       response = await fetch(
-        `${BASE_PATH}/${encodedStudentId}/report`,
+        `${getBasePath()}/${encodedStudentId}/report`,
         {
           method: "GET",
           headers,

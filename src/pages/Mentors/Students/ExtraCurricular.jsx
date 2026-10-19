@@ -25,11 +25,15 @@ import {
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentExtraCurricularProfile from "../../../components/Mentors/Students/ExtraCurricular/StudentExtraCurricularProfile";
 import ExtraCurricularStatCard from "../../../components/Mentors/Students/ExtraCurricular/ExtraCurricularStatCard";
@@ -38,7 +42,7 @@ import ExtraCurricularVerificationModal from "../../../components/Mentors/Studen
 
 import api from "../../../api/axios";
 
-const API = "/mentor/students";
+const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -255,6 +259,9 @@ function ActivityPreviewModal({ activity, onClose }) {
 // ==========================================================
 
 const ExtraCurricular = ({ studentId: studentIdProp }) => {
+  const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
+  const API = getProfileApiRoot(isAdminRoute);
   const studentId = useSelectedStudentId(studentIdProp);
 
   const [activities, setActivities] = useState([]);
@@ -487,15 +494,15 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="space-y-5 p-4 md:p-6">
           {/* Page actions */}
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
             <ActionButtons />
           </div>
 
@@ -553,7 +560,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              <StudentTabs />
+              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 
               {/* Page title */}
               <div className="flex flex-wrap items-center justify-between gap-3">

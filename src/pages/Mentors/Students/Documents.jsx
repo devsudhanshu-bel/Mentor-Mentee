@@ -15,11 +15,15 @@ import {
 import api from "../../../api/axios";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentProfileSidebar from "../../../components/Mentors/Students/Sidebar/StudentProfileSidebar";
 
@@ -27,7 +31,7 @@ import DocumentStatCard from "../../../components/Mentors/Students/Documents/Doc
 import StudentDocumentsTable from "../../../components/Mentors/Students/Documents/DocumentsTable/StudentDocumentsTable";
 import MentorNote from "../../../components/Mentors/Students/Documents/MentorNote";
 
-const API = "/mentor/students";
+const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
 
 const DEFAULT_STATS = {
   totalDocuments: 0,
@@ -73,6 +77,8 @@ function resolveStudentId(value) {
 const Documents = () => {
   const params = useParams();
   const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
+  const API = getProfileApiRoot(isAdminRoute);
   const [searchParams] = useSearchParams();
 
   const studentId =
@@ -337,10 +343,10 @@ const Documents = () => {
   if (!studentId) {
     return (
       <div className="min-h-screen bg-slate-100">
-        <MentorSidebar />
+        {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
         <div className="ml-[290px] min-h-screen">
-          <MentorHeader />
+          {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
           <main className="p-6">
             <div className="rounded-xl border border-amber-200 bg-white p-6">
@@ -365,16 +371,16 @@ const Documents = () => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       <div className="ml-[290px] min-h-screen">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="p-6">
           {/* HEADER ACTIONS */}
 
           <div className="mb-4 flex items-center justify-between">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
             <ActionButtons />
           </div>
 
@@ -431,7 +437,7 @@ const Documents = () => {
             {/* MAIN CONTENT */}
 
             <div className="flex min-w-0 flex-col gap-2">
-              <StudentTabs />
+              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 
               {/* STATISTICS */}
 

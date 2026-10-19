@@ -24,11 +24,15 @@ import {
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentAwardsAchievementsProfile from "../../../components/Mentors/Students/AwardsAchievements/StudentAwardsAchievementsProfile";
 import AwardsAchievementsStatCard from "../../../components/Mentors/Students/AwardsAchievements/AwardsAchievementsStatCard";
@@ -37,7 +41,7 @@ import AwardsAchievementsVerificationModal from "../../../components/Mentors/Stu
 
 import api from "../../../api/axios";
 
-const API = "/mentor/students";
+const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -253,6 +257,9 @@ function AchievementPreviewModal({ achievement, onClose }) {
 // ==========================================================
 
 const AwardsAchievements = ({ studentId: studentIdProp }) => {
+  const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
+  const API = getProfileApiRoot(isAdminRoute);
   const studentId = useSelectedStudentId(studentIdProp);
 
   const [achievements, setAchievements] = useState([]);
@@ -485,16 +492,16 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="space-y-5 p-4 md:p-6">
           {/* PAGE ACTIONS */}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
             <ActionButtons />
           </div>
 
@@ -554,7 +561,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              <StudentTabs />
+              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 
               {/* PAGE TITLE */}
 

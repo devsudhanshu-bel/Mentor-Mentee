@@ -1,15 +1,6 @@
+import React, { useCallback, useEffect, useState } from "react";
 
-import React, {
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
-
-import {
-  AlertCircle,
-  Loader2,
-  RefreshCw,
-} from "lucide-react";
+import { AlertCircle, Loader2, RefreshCw } from "lucide-react";
 
 import api from "../../../../api/axios";
 
@@ -24,15 +15,11 @@ import SGPATrend from "./SGPATrend";
 ========================================================= */
 
 const isObject = (value) =>
-  value !== null &&
-  typeof value === "object" &&
-  !Array.isArray(value);
+  value !== null && typeof value === "object" && !Array.isArray(value);
 
 const unwrapResponse = (response) => {
   let result = response?.data ?? response;
 
-  // Supports:
-  // { success, statusCode, message, data: {...} }
   for (let i = 0; i < 4; i += 1) {
     if (
       isObject(result) &&
@@ -70,40 +57,43 @@ const getErrorMessage = (error, fallback) => {
     );
   }
 
-  return (
-    error?.response?.data?.message ||
-    error?.message ||
-    fallback
-  );
+  return error?.response?.data?.message || error?.message || fallback;
 };
 
 const isCancelledRequest = (error) =>
-  error?.code === "ERR_CANCELED" ||
-  error?.name === "CanceledError";
+  error?.code === "ERR_CANCELED" || error?.name === "CanceledError";
 
 /* =========================================================
-   API URL
+   ROLE / API URL RESOLUTION
 ========================================================= */
 
-// Uses the base URL and authentication interceptor configured
-// in src/api/axios.js. Do not add /api again here.
-const getAcademicUrl = (studentId) =>
-  `/mentor/students/${encodeURIComponent(studentId)}/academics`;
+// Admin student profiles use the Admin API.
+// Mentor student profiles continue using the Mentor API.
+const isAdminProfile = () => {
+  if (typeof window === "undefined") {
+    return false;
+  }
+
+  return window.location.pathname.startsWith("/admin/");
+};
+
+const getAcademicUrl = (studentId, isAdmin) => {
+  const prefix = isAdmin ? "/admin/student-profile" : "/mentor/students";
+
+  return `${prefix}/${encodeURIComponent(studentId)}/academics`;
+};
 
 /* =========================================================
    STUDENT ID RESOLUTION
 ========================================================= */
 
-// Passing studentId from the parent is preferred.
-// The URL fallback supports routes such as:
-// /mentor/students/:studentId/academics
 const getStudentIdFromPath = () => {
   if (typeof window === "undefined") {
     return null;
   }
 
   const match = window.location.pathname.match(
-    /\/students\/([^/]+)(?:\/academics)?\/?$/
+    /\/students?\/([^/]+)(?:\/academics)?\/?$/,
   );
 
   return match?.[1] || null;
@@ -113,23 +103,19 @@ const getStudentIdFromPath = () => {
    ACADEMIC INFORMATION
 ========================================================= */
 
-const AcademicInformation = ({
-  studentId: suppliedStudentId,
-}) => {
-  const studentId =
-    suppliedStudentId || getStudentIdFromPath();
+const AcademicInformation = ({ studentId: suppliedStudentId }) => {
+  const studentId = suppliedStudentId || getStudentIdFromPath();
 
-  const [selectedSemester, setSelectedSemester] =
-    useState(1);
+  const isAdmin = isAdminProfile();
+
+  const [selectedSemester, setSelectedSemester] = useState(1);
 
   const [academicData, setAcademicData] = useState(null);
   const [semesterData, setSemesterData] = useState(null);
 
-  const [loadingOverview, setLoadingOverview] =
-    useState(true);
+  const [loadingOverview, setLoadingOverview] = useState(true);
 
-  const [loadingSemester, setLoadingSemester] =
-    useState(false);
+  const [loadingSemester, setLoadingSemester] = useState(false);
 
   const [overviewError, setOverviewError] = useState("");
   const [semesterError, setSemesterError] = useState("");
@@ -145,7 +131,7 @@ const AcademicInformation = ({
       if (!studentId) {
         setAcademicData(null);
         setOverviewError(
-          "Student ID is missing. Pass the selected student's database ID to AcademicInformation."
+          "Student ID is missing. Pass the selected student's database ID to AcademicInformation.",
         );
         setLoadingOverview(false);
         return;
@@ -155,16 +141,15 @@ const AcademicInformation = ({
       setOverviewError("");
 
       try {
-        const response = await api.get(
-          getAcademicUrl(studentId),
-          { signal }
-        );
+        const response = await api.get(getAcademicUrl(studentId, isAdmin), {
+          signal,
+        });
 
         const result = unwrapResponse(response);
 
         if (!isObject(result)) {
           throw new Error(
-            "The academic overview response has an invalid format."
+            "The academic overview response has an invalid format.",
           );
         }
 
@@ -176,16 +161,14 @@ const AcademicInformation = ({
 
         if (!Array.isArray(overview.semesters)) {
           throw new Error(
-            "The academic overview response is missing the semesters array."
+            "The academic overview response is missing the semesters array.",
           );
         }
 
         setAcademicData(overview);
 
         const currentSemester = Number(
-          overview.currentSemester ??
-            overview.student?.semester ??
-            1
+          overview.currentSemester ?? overview.student?.semester ?? 1,
         );
 
         setSelectedSemester((previous) => {
@@ -194,8 +177,7 @@ const AcademicInformation = ({
             currentSemester >= 1 &&
             currentSemester <= 8
           ) {
-            return previous >= 1 &&
-              previous <= currentSemester
+            return previous >= 1 && previous <= currentSemester
               ? previous
               : currentSemester;
           }
@@ -207,23 +189,17 @@ const AcademicInformation = ({
           return;
         }
 
-        console.error(
-          "[Mentor Academics] Overview request failed:",
-          error
-        );
+        console.error("[Student Academics] Overview request failed:", error);
 
         console.error(
-          "[Mentor Academics] Error response:",
-          error?.response?.data
+          "[Student Academics] Error response:",
+          error?.response?.data,
         );
 
         setAcademicData(null);
 
         setOverviewError(
-          getErrorMessage(
-            error,
-            "Unable to load academic information."
-          )
+          getErrorMessage(error, "Unable to load academic information."),
         );
       } finally {
         if (!signal?.aborted) {
@@ -231,7 +207,7 @@ const AcademicInformation = ({
         }
       }
     },
-    [studentId]
+    [studentId, isAdmin],
   );
 
   useEffect(() => {
@@ -262,12 +238,15 @@ const AcademicInformation = ({
       }
 
       const currentSemester = Number(
-        academicData.currentSemester ??
-          academicData.student?.semester ??
-          1
+        academicData.currentSemester ?? academicData.student?.semester ?? 1,
       );
 
-      if (selectedSemester > currentSemester) {
+      if (
+        !Number.isInteger(selectedSemester) ||
+        selectedSemester < 1 ||
+        selectedSemester > 8 ||
+        selectedSemester > currentSemester
+      ) {
         setSemesterData(null);
         setSemesterError("");
         setLoadingSemester(false);
@@ -280,16 +259,14 @@ const AcademicInformation = ({
 
       try {
         const response = await api.get(
-          `${getAcademicUrl(studentId)}/semester/${selectedSemester}`,
-          { signal }
+          `${getAcademicUrl(studentId, isAdmin)}/semester/${selectedSemester}`,
+          { signal },
         );
 
         const result = unwrapResponse(response);
 
         if (!isObject(result)) {
-          throw new Error(
-            "The semester response has an invalid format."
-          );
+          throw new Error("The semester response has an invalid format.");
         }
 
         const semester = isObject(result.semester)
@@ -304,23 +281,17 @@ const AcademicInformation = ({
           return;
         }
 
-        console.error(
-          "[Mentor Academics] Semester request failed:",
-          error
-        );
+        console.error("[Student Academics] Semester request failed:", error);
 
         console.error(
-          "[Mentor Academics] Semester error response:",
-          error?.response?.data
+          "[Student Academics] Semester error response:",
+          error?.response?.data,
         );
 
         setSemesterData(null);
 
         setSemesterError(
-          getErrorMessage(
-            error,
-            "Unable to load semester details."
-          )
+          getErrorMessage(error, "Unable to load semester details."),
         );
       } finally {
         if (!signal?.aborted) {
@@ -328,7 +299,7 @@ const AcademicInformation = ({
         }
       }
     },
-    [studentId, academicData, selectedSemester]
+    [studentId, isAdmin, academicData, selectedSemester],
   );
 
   useEffect(() => {
@@ -364,9 +335,7 @@ const AcademicInformation = ({
     : [];
 
   const currentSemester = Number(
-    academicData?.currentSemester ??
-      academicData?.student?.semester ??
-      1
+    academicData?.currentSemester ?? academicData?.student?.semester ?? 1,
   );
 
   const resolvedSemesterData = semesterData
@@ -387,10 +356,7 @@ const AcademicInformation = ({
   if (loadingOverview && !academicData) {
     return (
       <div className="flex min-h-[320px] flex-col items-center justify-center rounded-xl border border-slate-200 bg-white">
-        <Loader2
-          size={30}
-          className="animate-spin text-[#0B63F6]"
-        />
+        <Loader2 size={30} className="animate-spin text-[#0B63F6]" />
 
         <p className="mt-3 text-sm font-medium text-slate-600">
           Loading student academics...
@@ -407,10 +373,7 @@ const AcademicInformation = ({
     return (
       <div className="rounded-xl border border-slate-200 bg-white p-6">
         <div className="flex items-start gap-3">
-          <AlertCircle
-            size={22}
-            className="shrink-0 text-red-500"
-          />
+          <AlertCircle size={22} className="shrink-0 text-red-500" />
 
           <div className="min-w-0 flex-1">
             <h2 className="text-sm font-semibold text-slate-800">
@@ -455,8 +418,7 @@ const AcademicInformation = ({
 
           {academicData?.student?.registerNumber && (
             <p className="mt-1 text-xs text-slate-400">
-              Register Number:{" "}
-              {academicData.student.registerNumber}
+              Register Number: {academicData.student.registerNumber}
             </p>
           )}
         </div>
@@ -491,9 +453,7 @@ const AcademicInformation = ({
 
       {semesterError ? (
         <div className="rounded-xl border border-red-200 bg-white p-5">
-          <p className="text-sm font-medium text-red-600">
-            {semesterError}
-          </p>
+          <p className="text-sm font-medium text-red-600">{semesterError}</p>
 
           <button
             type="button"
@@ -513,9 +473,7 @@ const AcademicInformation = ({
       )}
 
       <div className="grid grid-cols-1 items-stretch gap-4 xl:grid-cols-3">
-        <SemesterSummary
-          semesterData={resolvedSemesterData}
-        />
+        <SemesterSummary semesterData={resolvedSemesterData} />
 
         <GradeDistribution
           semesterData={resolvedSemesterData}
@@ -533,9 +491,8 @@ const AcademicInformation = ({
       {academicData?.academicSetupCompleted === false && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
           <p className="text-xs text-amber-800">
-            Academic setup has not been completed for this
-            student. Some semester details may not be
-            available yet.
+            Academic setup has not been completed for this student. Some
+            semester details may not be available yet.
           </p>
         </div>
       )}

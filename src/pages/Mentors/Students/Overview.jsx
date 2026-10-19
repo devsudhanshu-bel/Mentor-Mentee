@@ -33,12 +33,13 @@ import MeetingHistory from "../../../components/Mentors/Students/Overview/Meetin
 import mentorOverviewService from "../../../services/mentorOverviewService";
 
 const Overview = () => {
-  const { id: studentId } = useParams();
+  const { id, studentId: routeStudentId } = useParams();
+  const studentId = id || routeStudentId;
   const location = useLocation();
 
-  const isAdminRoute = location.pathname.startsWith(
-    "/admin/overview/students/",
-  );
+  const isAdminRoute =
+    location.pathname.startsWith("/admin/overview/students/") ||
+    location.pathname.startsWith("/admin/mentor/");
 
   const [overview, setOverview] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -180,11 +181,20 @@ const Overview = () => {
 
           <section className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
             {isAdminRoute ? (
-              <AdminBackButton />
+              <>
+                <AdminBackButton />
+                <ActionButtons
+                  studentId={studentId}
+                  student={overview?.student}
+                />
+              </>
             ) : (
               <>
                 <BackButton />
-                <ActionButtons />
+                <ActionButtons
+                  studentId={studentId}
+                  student={overview?.student}
+                />
               </>
             )}
           </section>

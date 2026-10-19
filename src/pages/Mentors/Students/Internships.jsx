@@ -23,10 +23,14 @@ import {
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentInternshipProfile from "../../../components/Mentors/Students/Internships/StudentInternshipProfile";
 import InternshipStatCard from "../../../components/Mentors/Students/Internships/InternshipStatCard";
@@ -175,8 +179,9 @@ const normalizeStudentProfile = (apiStudent, navigationStudent) => {
 ========================================================= */
 
 const Internships = () => {
-  const { id } = useParams();
+  const { id, studentId: routeStudentId } = useParams();
   const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
 
   const selectedStudent =
     location.state?.student ||
@@ -185,6 +190,7 @@ const Internships = () => {
 
   const studentId =
     id ||
+    routeStudentId ||
     location.state?.studentId ||
     selectedStudent?.id ||
     null;
@@ -250,15 +256,13 @@ const Internships = () => {
           completionResponse,
         ] = await Promise.all([
           api.get(
-            `/mentor/internships/student/${encodeURIComponent(
-              studentId
-            )}`,
+            `${isAdminRoute ? "/admin/student-profile/internships/student" : "/mentor/internships/student"}/${encodeURIComponent(studentId)}`,
             { signal }
           ),
 
-          api.get("/mentor/internships/initial", { signal }),
+          api.get(isAdminRoute ? `/admin/student-profile/internships/initial?studentId=${encodeURIComponent(studentId)}` : "/mentor/internships/initial", { signal }),
 
-          api.get("/mentor/internships/completion", { signal }),
+          api.get(isAdminRoute ? `/admin/student-profile/internships/completion?studentId=${encodeURIComponent(studentId)}` : "/mentor/internships/completion", { signal }),
         ]);
 
         if (signal?.aborted) return;
@@ -472,9 +476,7 @@ const Internships = () => {
 
     try {
       const response = await api.get(
-        `/mentor/internships/${encodeURIComponent(
-          internship.id
-        )}`
+        `${isAdminRoute ? "/admin/student-profile/internships" : "/mentor/internships"}/${encodeURIComponent(internship.id)}`
       );
 
       setReviewDetails(unwrap(response));
@@ -513,10 +515,10 @@ const Internships = () => {
 
     const path =
       stage === "completion"
-        ? `/mentor/internships/${encodeURIComponent(
+        ? `${isAdminRoute ? "/admin/student-profile/internships" : "/mentor/internships"}/${encodeURIComponent(
             selectedInternship.id
           )}/completion-review`
-        : `/mentor/internships/${encodeURIComponent(
+        : `${isAdminRoute ? "/admin/student-profile/internships" : "/mentor/internships"}/${encodeURIComponent(
             selectedInternship.id
           )}/initial-review`;
 
@@ -566,14 +568,14 @@ const Internships = () => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       <div className="ml-[290px] min-h-screen min-w-0 max-lg:ml-0">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="space-y-4 p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
 
             <div className="flex flex-wrap items-center gap-2">
               <button
@@ -652,7 +654,7 @@ const Internships = () => {
 
             <div className="min-w-0 space-y-4">
               <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-                <StudentTabs />
+                {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
               </div>
 
               <div>

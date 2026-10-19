@@ -11,6 +11,7 @@ import logo from "../../assets/logo.png";
 import {
   LayoutDashboard,
   Users,
+  GraduationCap,
   ClipboardList,
   User,
   LogOut,
@@ -28,6 +29,11 @@ const menuItems = [
     title: "Mentors",
     path: "/admin/mentors",
     icon: Users,
+  },
+  {
+    title: "Students",
+    path: "/admin/students",
+    icon: GraduationCap,
   },
   {
     title: "Announcements",
@@ -145,7 +151,10 @@ const AdminSidebar = () => {
               item.path === "/admin/mentors"
                 ? location.pathname.startsWith("/admin/mentors") ||
                   location.pathname.startsWith("/admin/mentor/")
-                : location.pathname.startsWith(item.path);
+                : item.path === "/admin/students"
+                  ? location.pathname.startsWith("/admin/students") ||
+                    location.pathname.startsWith("/admin/overview/students/")
+                  : location.pathname.startsWith(item.path);
 
             return (
               <NavLink

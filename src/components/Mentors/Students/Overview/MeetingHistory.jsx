@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 
 import meetingsService from "../../../../services/meetingsService";
+import api from "../../../../api/axios";
+import { useLocation } from "react-router-dom";
 
 // =========================================================
 // RESPONSE HELPERS
@@ -381,6 +383,10 @@ const MeetingHistory = ({
   error: suppliedError = "",
   onRetry: suppliedRetry,
 }) => {
+  const location = useLocation();
+  const isAdminRoute =
+    location.pathname.startsWith("/admin/overview/students/") ||
+    location.pathname.startsWith("/admin/mentor/");
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
   const [fetchedMeetings, setFetchedMeetings] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
@@ -398,9 +404,9 @@ const MeetingHistory = ({
     setFetchError("");
 
     try {
-      const response = await meetingsService.getMeetings({
-        studentId,
-      });
+      const response = isAdminRoute
+        ? await api.get(`/admin/student-profile/${encodeURIComponent(studentId)}/meetings`)
+        : await meetingsService.getMeetings({ studentId });
 
       const records = unwrapResponse(response);
 
@@ -419,7 +425,7 @@ const MeetingHistory = ({
     } finally {
       setIsFetching(false);
     }
-  }, [studentId]);
+  }, [studentId, isAdminRoute]);
 
   useEffect(() => {
     fetchStudentMeetings();

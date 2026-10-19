@@ -18,18 +18,22 @@ import {
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentAcademicsProfile from "../../../components/Mentors/Students/Academics/StudentAcademicsProfile";
 import AcademicInformation from "../../../components/Mentors/Students/Academics/AcademicInformation";
 
 import api from "../../../api/axios";
 
-const API = "/mentor/students";
+const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -138,6 +142,8 @@ const Academics = ({
 }) => {
   const studentId = useSelectedStudentId(studentIdProp);
   const location = useLocation();
+  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
+  const API = getProfileApiRoot(isAdminRoute);
 
   const [student, setStudent] = useState(
     studentProp || location.state?.student || null
@@ -286,16 +292,16 @@ const Academics = ({
   return (
     <div className="min-h-screen bg-[#EEF4F9]">
       {/* SIDEBAR */}
-      <MentorSidebar />
+      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       {/* MAIN CONTENT */}
       <div className="ml-[290px] min-h-screen">
-        <MentorHeader />
+        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
         <main className="p-5">
           {/* TOP ACTIONS */}
           <div className="mb-3 flex items-center justify-between gap-3">
-            <BackButton />
+            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
 
             <div className="flex items-center gap-2">
               <ActionButtons />
@@ -359,7 +365,7 @@ const Academics = ({
             {/* RIGHT: ACADEMIC INFORMATION */}
             <section className="min-w-0 space-y-3">
               {/* STUDENT NAVIGATION */}
-              <StudentTabs />
+              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 
               {/* EXISTING ACADEMIC CONTENT */}
               <AcademicInformation />
