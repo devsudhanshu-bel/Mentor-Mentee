@@ -1,0 +1,1015 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma-hod"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("NEW_DATABASE_URL")
+}
+
+model academic_term_requests {
+  id                String                    @id
+  academicYearId    String
+  semesterNumber    Int
+  name              String?
+  proposedStartDate DateTime
+  proposedEndDate   DateTime
+  reason            String?
+  requestedBy       String
+  status            AcademicTermRequestStatus @default(PENDING)
+  reviewedBy        String?
+  reviewedAt        DateTime?
+  rejectionReason   String?
+  createdAt         DateTime                  @default(now())
+  updatedAt         DateTime
+  academic_years    academic_years            @relation(fields: [academicYearId], references: [id])
+
+  @@index([academicYearId])
+  @@index([requestedBy])
+  @@index([status])
+}
+
+model academic_terms {
+  id                       String                     @id
+  academicYearId           String
+  semesterNumber           Int
+  name                     String?
+  startDate                DateTime
+  endDate                  DateTime
+  status                   AcademicTermStatus         @default(UPCOMING)
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime
+  academic_years           academic_years             @relation(fields: [academicYearId], references: [id])
+  detentions               detentions[]
+  mentor_assignments       mentor_assignments[]
+  mentor_transfer_requests mentor_transfer_requests[]
+  student_enrollments      student_enrollments[]
+
+  @@unique([academicYearId, semesterNumber])
+  @@index([academicYearId])
+  @@index([status])
+}
+
+model academic_years {
+  id                     String                   @id
+  name                   String
+  startDate              DateTime
+  endDate                DateTime
+  status                 AcademicYearStatus       @default(UPCOMING)
+  departmentId           String
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime
+  academic_semesters     academic_semesters[]
+  academic_term_requests academic_term_requests[]
+  academic_terms         academic_terms[]
+  departments            departments              @relation(fields: [departmentId], references: [id])
+  import_batches         import_batches[]
+
+  @@unique([departmentId, name])
+  @@index([departmentId])
+  @@index([status])
+}
+
+model departments {
+  id                                          String           @id
+  name                                        String
+  code                                        String           @unique
+  hodTeacherId                                String?          @unique
+  createdAt                                   DateTime         @default(now())
+  updatedAt                                   DateTime
+  academic_years                              academic_years[]
+  teachers_departments_hodTeacherIdToteachers teachers?        @relation("departments_hodTeacherIdToteachers", fields: [hodTeacherId], references: [id])
+  students                                    students[]
+  teachers_teachers_departmentIdTodepartments teachers[]       @relation("teachers_departmentIdTodepartments")
+}
+
+model detentions {
+  id             String          @id
+  studentId      String
+  termId         String
+  reason         String?
+  status         DetentionStatus @default(ACTIVE)
+  detainedAt     DateTime        @default(now())
+  resumedAt      DateTime?
+  resumedBy      String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime
+  user_accounts  user_accounts?  @relation(fields: [resumedBy], references: [id])
+  students       students        @relation(fields: [studentId], references: [id])
+  academic_terms academic_terms  @relation(fields: [termId], references: [id])
+
+  @@index([status])
+  @@index([studentId])
+  @@index([termId])
+}
+
+model import_batches {
+  id              String            @id
+  academicYearId  String
+  fileName        String?
+  totalRecords    Int               @default(0)
+  successfulCount Int               @default(0)
+  failedCount     Int               @default(0)
+  status          ImportBatchStatus @default(PROCESSING)
+  uploadedBy      String
+  createdAt       DateTime          @default(now())
+  completedAt     DateTime?
+  academic_years  academic_years    @relation(fields: [academicYearId], references: [id])
+  user_accounts   user_accounts     @relation(fields: [uploadedBy], references: [id])
+  import_errors   import_errors[]
+
+  @@index([academicYearId])
+  @@index([status])
+  @@index([uploadedBy])
+}
+
+model import_errors {
+  id             String         @id
+  importBatchId  String
+  rowNumber      Int
+  field          String?
+  value          String?
+  message        String
+  createdAt      DateTime       @default(now())
+  import_batches import_batches @relation(fields: [importBatchId], references: [id])
+
+  @@index([importBatchId])
+}
+
+model mentor_assignments {
+  id             String                 @id
+  studentId      String
+  teacherId      String
+  termId         String
+  status         MentorAssignmentStatus @default(ACTIVE)
+  assignedAt     DateTime               @default(now())
+  endedAt        DateTime?
+  assignedBy     String
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime
+  user_accounts  user_accounts          @relation(fields: [assignedBy], references: [id])
+  students       students               @relation(fields: [studentId], references: [id])
+  teachers       teachers               @relation(fields: [teacherId], references: [id])
+  academic_terms academic_terms         @relation(fields: [termId], references: [id])
+
+  @@index([status])
+  @@index([studentId, termId])
+  @@index([teacherId, termId])
+  @@index([termId])
+}
+
+model mentor_transfer_requests {
+  id                                                                      String                      @id
+  studentId                                                               String
+  currentMentorId                                                         String?
+  requestedMentorId                                                       String?
+  termId                                                                  String
+  requestSource                                                           MentorTransferRequestSource
+  initiatedByTeacherId                                                    String?
+  initiatedByUserId                                                       String
+  reason                                                                  String?
+  status                                                                  MentorTransferStatus        @default(PENDING)
+  reviewedBy                                                              String?
+  reviewedAt                                                              DateTime?
+  rejectionReason                                                         String?
+  createdAt                                                               DateTime                    @default(now())
+  updatedAt                                                               DateTime
+  teachers_mentor_transfer_requests_currentMentorIdToteachers             teachers?                   @relation("mentor_transfer_requests_currentMentorIdToteachers", fields: [currentMentorId], references: [id])
+  teachers_mentor_transfer_requests_initiatedByTeacherIdToteachers        teachers?                   @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers", fields: [initiatedByTeacherId], references: [id])
+  user_accounts_mentor_transfer_requests_initiatedByUserIdTouser_accounts user_accounts               @relation("mentor_transfer_requests_initiatedByUserIdTouser_accounts", fields: [initiatedByUserId], references: [id])
+  teachers_mentor_transfer_requests_requestedMentorIdToteachers           teachers?                   @relation("mentor_transfer_requests_requestedMentorIdToteachers", fields: [requestedMentorId], references: [id])
+  user_accounts_mentor_transfer_requests_reviewedByTouser_accounts        user_accounts?              @relation("mentor_transfer_requests_reviewedByTouser_accounts", fields: [reviewedBy], references: [id])
+  students                                                                students                    @relation(fields: [studentId], references: [id])
+  academic_terms                                                          academic_terms              @relation(fields: [termId], references: [id])
+
+  @@index([currentMentorId])
+  @@index([initiatedByTeacherId])
+  @@index([initiatedByUserId])
+  @@index([requestSource])
+  @@index([requestedMentorId])
+  @@index([status])
+  @@index([studentId])
+  @@index([termId])
+}
+
+model otp_verifications {
+  id            String        @id
+  userAccountId String
+  otpHash       String
+  purpose       OtpPurpose
+  expiresAt     DateTime
+  verifiedAt    DateTime?
+  attempts      Int           @default(0)
+  createdAt     DateTime      @default(now())
+  user_accounts user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@index([expiresAt])
+  @@index([userAccountId])
+}
+
+model student_enrollments {
+  id             String           @id
+  studentId      String
+  termId         String
+  semesterNumber Int
+  status         EnrollmentStatus @default(ACTIVE)
+  enrolledAt     DateTime         @default(now())
+  completedAt    DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime
+  students       students         @relation(fields: [studentId], references: [id])
+  academic_terms academic_terms   @relation(fields: [termId], references: [id])
+
+  @@unique([studentId, termId])
+  @@index([status])
+  @@index([studentId])
+  @@index([termId])
+}
+
+model students {
+  id                       String                     @id
+  registerNumber           String                     @unique
+  admissionNumber          String?                    @unique
+  fullName                 String
+  email                    String?
+  phone                    String?
+  dateOfBirth              DateTime?
+  gender                   Gender?
+  status                   StudentStatus              @default(INVITED)
+  departmentId             String
+  userAccountId            String?                    @unique
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime
+  academicSetupCompleted   Boolean                    @default(false)
+  academicStanding         String?
+  address                  String?
+  bloodGroup               BloodGroup?
+  currentCGPA              Float?
+  nationality              String?
+  overallAttendance        Float?
+  permanentAddress         String?
+  profileImage             String?
+  programme                String?
+  religion                 String?
+  section                  String?
+  semester                 String?
+  studentType              StudentType?
+  totalCredits             Int?
+  yearsAtUniversity        String?
+  academicBacklogs         academic_backlogs[]
+  academicSemesters        academic_semesters[]
+  detentions               detentions[]
+  mentor_assignments       mentor_assignments[]
+  mentor_meeting_series    mentor_meeting_series[]
+  mentor_meetings          mentor_meetings[]
+  mentor_transfer_requests mentor_transfer_requests[]
+  contactDetails           student_contact_details?
+  documents                student_documents[]
+  student_enrollments      student_enrollments[]
+  internships              student_internships[]
+  parentDetails            student_parent_details?
+  departments              departments                @relation(fields: [departmentId], references: [id])
+  user_accounts            user_accounts?             @relation(fields: [userAccountId], references: [id])
+
+  @@index([departmentId])
+  @@index([status])
+}
+
+model student_internships {
+  id                           String                       @id
+  studentId                    String
+  companyName                  String
+  internshipTitle              String
+  role                         String?
+  startDate                    DateTime
+  endDate                      DateTime?
+  location                     String?
+  mode                         InternshipMode?
+  projectName                  String?
+  description                  String?
+  status                       InternshipStatus             @default(ONGOING)
+  verificationStatus           InternshipVerificationStatus @default(PENDING)
+  mentorRemark                 String?
+  verifiedAt                   DateTime?
+  rating                       Float?
+  completionRequested          Boolean                      @default(false)
+  completionRequestedAt        DateTime?
+  createdAt                    DateTime                     @default(now())
+  updatedAt                    DateTime                     @updatedAt
+  internshipType               InternshipType               @default(ONGOING)
+  completionVerificationStatus CompletionVerificationStatus @default(NOT_SUBMITTED)
+  completionMentorRemark       String?
+  completionVerifiedAt         DateTime?
+  internship_documents         internship_documents[]
+  internship_reviews           internship_reviews[]
+  student                      students                     @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([studentId])
+  @@index([studentId, completionVerificationStatus], map: "student_internships_studentid_completionverificationstatus_idx")
+  @@index([studentId, status], map: "student_internships_studentid_status_idx")
+  @@index([studentId, verificationStatus], map: "student_internships_studentid_verificationstatus_idx")
+  @@index([verificationStatus])
+}
+
+model internship_reviews {
+  id                String                   @id
+  internshipId      String
+  reviewerTeacherId String
+  reviewStage       InternshipReviewStage
+  decision          InternshipReviewDecision
+  remarks           String?
+  reviewedAt        DateTime                 @default(now())
+  createdAt         DateTime                 @default(now())
+  internship        student_internships      @relation(fields: [internshipId], references: [id], onDelete: Cascade, map: "internship_reviews_internshipid_fkey")
+  reviewer          teachers                 @relation(fields: [reviewerTeacherId], references: [id], map: "internship_reviews_reviewerteacherid_fkey")
+
+  @@index([internshipId, reviewStage, reviewedAt], map: "internship_reviews_internshipid_reviewstage_reviewedat_idx")
+  @@index([reviewerTeacherId, reviewedAt], map: "internship_reviews_reviewerteacherid_reviewedat_idx")
+}
+
+model internship_documents {
+  id                 String                  @id
+  internshipId       String
+  documentType       InternshipDocumentType
+  submissionStage    InternshipDocumentStage
+  documentName       String
+  fileType           String
+  fileSize           Int
+  cloudinaryPublicId String
+  fileUrl            String
+  resourceType       String
+  uploadedAt         DateTime                @default(now())
+  updatedAt          DateTime                @updatedAt
+  internship         student_internships     @relation(fields: [internshipId], references: [id], onDelete: Cascade, map: "internship_documents_internshipid_fkey")
+
+  @@index([internshipId, documentType], map: "internship_documents_internshipid_documenttype_idx")
+  @@index([internshipId, submissionStage], map: "internship_documents_internshipid_submissionstage_idx")
+}
+
+model student_contact_details {
+  id                           String                        @id
+  studentId                    String                        @unique
+  permanentAddress             String?
+  currentAddress               String?
+  addressType                  AddressType?
+  durationAtCurrentAddress     String?
+  personalMobile               String?
+  alternateMobile              String?
+  personalEmail                String?
+  alternateEmail               String?
+  whatsappNumber               String?
+  telegramUsername             String?
+  linkedInProfile              String?
+  githubProfile                String?
+  preferredContactMethod       PreferredContactMethod?
+  preferredContactTime         String?
+  communicationEmailPreference CommunicationEmailPreference?
+  allowWhatsappCommunication   Boolean                       @default(false)
+  createdAt                    DateTime                      @default(now())
+  updatedAt                    DateTime
+  student                      students                      @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model student_parent_details {
+  id                     String   @id
+  studentId              String   @unique
+  fatherName             String?
+  fatherOccupation       String?
+  fatherCompany          String?
+  fatherAnnualIncome     String?
+  fatherQualification    String?
+  fatherEmail            String?
+  fatherPhone            String?
+  fatherAddress          String?
+  motherName             String?
+  motherOccupation       String?
+  motherCompany          String?
+  motherAnnualIncome     String?
+  motherQualification    String?
+  motherEmail            String?
+  motherPhone            String?
+  motherAddress          String?
+  guardianName           String?
+  guardianRelationship   String?
+  guardianPhone          String?
+  guardianAlternatePhone String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime
+  student                students @relation(fields: [studentId], references: [id], onDelete: Cascade)
+}
+
+model student_documents {
+  id                   String           @id
+  studentId            String
+  documentName         String
+  category             DocumentCategory
+  description          String?
+  fileType             String
+  fileSize             Int
+  cloudinaryPublicId   String
+  fileUrl              String
+  resourceType         String
+  uploadedAt           DateTime         @default(now())
+  updatedAt            DateTime
+  researchReviewStatus String           @default("NOT_REVIEWED")
+  reviewedByTeacherId  String?
+  reviewedAt           DateTime?
+  mentorRemark         String?
+  student              students         @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+}
+
+model academic_semesters {
+  id             String                 @id
+  studentId      String
+  academicYearId String?
+  semesterNumber Int
+  status         AcademicSemesterStatus @default(LOCKED)
+  entryStatus    AcademicEntryStatus    @default(DRAFT)
+  sgpa           Float?
+  totalCredits   Int                    @default(0)
+  creditsEarned  Int                    @default(0)
+  backlogs       Int                    @default(0)
+  createdAt      DateTime               @default(now())
+  updatedAt      DateTime
+  academic_years academic_years?        @relation(fields: [academicYearId], references: [id])
+  students       students               @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  subjects       academic_subjects[]
+
+  @@unique([studentId, semesterNumber])
+  @@index([studentId])
+  @@index([academicYearId])
+}
+
+model academic_subjects {
+  id                 String             @id
+  academicSemesterId String
+  courseCode         String
+  courseName         String
+  credits            Int
+  cia1               Float?
+  cia2               Float?
+  cia3               Float?
+  mse                Float?
+  ese                Float?
+  maximumMarks       Float?
+  totalMarksObtained Float?
+  grade              String?
+  gradePoint         Float?
+  attendance         Float?
+  classesAttended    Int                @default(0)
+  classesHeld        Int                @default(0)
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime
+  academicSemester   academic_semesters @relation(fields: [academicSemesterId], references: [id], onDelete: Cascade)
+
+  @@unique([academicSemesterId, courseCode])
+  @@index([academicSemesterId])
+  @@index([courseCode])
+}
+
+model academic_backlogs {
+  id                    String                @id
+  studentId             String
+  subjectCode           String
+  subjectName           String
+  semesterNumber        Int
+  status                AcademicBacklogStatus @default(ACTIVE)
+  clearedSemesterNumber Int?
+  clearedGrade          String?
+  clearedMarks          Float?
+  clearedAt             DateTime?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime
+  students              students              @relation(fields: [studentId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([studentId, status])
+}
+
+model teachers {
+  id                                                                               String                     @id
+  employeeCode                                                                     String                     @unique
+  fullName                                                                         String
+  email                                                                            String?
+  phone                                                                            String?
+  designation                                                                      String?
+  maxMentees                                                                       Int                        @default(30)
+  isActive                                                                         Boolean                    @default(true)
+  departmentId                                                                     String
+  userAccountId                                                                    String?                    @unique
+  createdAt                                                                        DateTime                   @default(now())
+  updatedAt                                                                        DateTime                   @updatedAt
+  departments_departments_hodTeacherIdToteachers                                   departments?               @relation("departments_hodTeacherIdToteachers")
+  internship_reviews                                                               internship_reviews[]
+  mentor_assignments                                                               mentor_assignments[]
+  mentor_meeting_feedback                                                          mentor_meeting_feedback[]
+  mentor_meeting_series                                                            mentor_meeting_series[]
+  mentor_meetings                                                                  mentor_meetings[]
+  mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers      mentor_transfer_requests[] @relation("mentor_transfer_requests_currentMentorIdToteachers")
+  mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers")
+  mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers    mentor_transfer_requests[] @relation("mentor_transfer_requests_requestedMentorIdToteachers")
+  teacher_profiles                                                                 teacher_profiles?
+  departments_teachers_departmentIdTodepartments                                   departments                @relation("teachers_departmentIdTodepartments", fields: [departmentId], references: [id])
+  user_accounts                                                                    user_accounts?             @relation(fields: [userAccountId], references: [id])
+
+  @@index([departmentId])
+  @@index([isActive])
+}
+
+model user_accounts {
+  id                                                                                 String                     @id
+  username                                                                           String                     @unique
+  email                                                                              String?                    @unique
+  password                                                                           String?
+  role                                                                               UserRole
+  isActive                                                                           Boolean                    @default(true)
+  lastLogin                                                                          DateTime?
+  createdAt                                                                          DateTime                   @default(now())
+  updatedAt                                                                          DateTime
+  mustChangePassword                                                                 Boolean                    @default(false)
+  admin_profiles                                                                     admin_profiles?
+  announcement_recipients                                                            announcement_recipients[]
+  announcements                                                                      announcements[]
+  conversations_conversations_menteeUserAccountIdTouser_accounts                     conversations[]            @relation("conversations_menteeUserAccountIdTouser_accounts")
+  conversations_conversations_mentorUserAccountIdTouser_accounts                     conversations[]            @relation("conversations_mentorUserAccountIdTouser_accounts")
+  detentions                                                                         detentions[]
+  import_batches                                                                     import_batches[]
+  mentor_assignments                                                                 mentor_assignments[]
+  mentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accounts mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByUserIdTouser_accounts")
+  mentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accounts        mentor_transfer_requests[] @relation("mentor_transfer_requests_reviewedByTouser_accounts")
+  messages                                                                           messages[]
+  otp_verifications                                                                  otp_verifications[]
+  students                                                                           students?
+  teachers                                                                           teachers?
+}
+
+model term_change_requests {
+  id                      String    @id
+  currentTermId           String
+  requestedTermName       String
+  requestedSemesterNumber Int
+  requestedStartDate      DateTime
+  requestedEndDate        DateTime
+  requestedBy             String
+  status                  String    @default("PENDING")
+  reviewedBy              String?
+  reviewedAt              DateTime?
+  reviewComment           String?
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @default(now()) @updatedAt
+
+  @@index([status])
+  @@index([requestedBy])
+  @@index([currentTermId])
+  @@index([createdAt])
+}
+
+model teacher_profiles {
+  id             String   @id
+  teacherId      String   @unique
+  profileImage   String?
+  qualification  String?
+  specialization String?
+  office         String?
+  officeHours    String?
+  about          String?
+  highlightOne   String?
+  highlightTwo   String?
+  highlightThree String?
+  linkedIn       String?
+  googleScholar  String?
+  researchGate   String?
+  orcid          String?
+  website        String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime
+  teachers       teachers @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+}
+
+model mentor_meeting_discussion_points {
+  id              String          @id
+  meetingId       String
+  content         String
+  position        Int             @default(0)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  mentor_meetings mentor_meetings @relation(fields: [meetingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mentor_meeting_discussion_points_meeting_fk")
+
+  @@index([meetingId, position], map: "mentor_meeting_discussion_points_order_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentor_meeting_feedback {
+  id              String          @id
+  meetingId       String          @unique
+  mentorTeacherId String
+  rating          Int
+  feedback        String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  mentor_meetings mentor_meetings @relation(fields: [meetingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mentor_meeting_feedback_meeting_fk")
+  teachers        teachers        @relation(fields: [mentorTeacherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meeting_feedback_teacher_fk")
+}
+
+model mentor_meeting_notes {
+  id              String          @id
+  meetingId       String          @unique
+  content         String          @default("")
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @default(now())
+  mentor_meetings mentor_meetings @relation(fields: [meetingId], references: [id], onDelete: Cascade, onUpdate: NoAction, map: "mentor_meeting_notes_meeting_fk")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentor_meeting_series {
+  id              String            @id
+  mentorTeacherId String
+  studentId       String
+  frequency       String
+  startDate       DateTime
+  endDate         DateTime?
+  dayOfWeek       Int?
+  startTime       String
+  endTime         String
+  timezone        String            @default("Asia/Kolkata")
+  isActive        Boolean           @default(true)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @default(now())
+  students        students          @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meeting_series_student_fk")
+  teachers        teachers          @relation(fields: [mentorTeacherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meeting_series_teacher_fk")
+  mentor_meetings mentor_meetings[]
+
+  @@index([mentorTeacherId, studentId], map: "mentor_meeting_series_mentor_student_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentor_meetings {
+  id                               String                             @id
+  mentorTeacherId                  String
+  studentId                        String
+  seriesId                         String?
+  followUpToMeetingId              String?
+  title                            String
+  meetingType                      String                             @default("REGULAR")
+  mode                             String                             @default("IN_PERSON")
+  status                           String                             @default("SCHEDULED")
+  priority                         String                             @default("NORMAL")
+  startAt                          DateTime
+  endAt                            DateTime
+  venue                            String?
+  meetingLink                      String?
+  agenda                           String?
+  description                      String?
+  startedAt                        DateTime?
+  endedAt                          DateTime?
+  createdAt                        DateTime                           @default(now())
+  updatedAt                        DateTime                           @default(now())
+  mentor_meeting_discussion_points mentor_meeting_discussion_points[]
+  mentor_meeting_feedback          mentor_meeting_feedback?
+  mentor_meeting_notes             mentor_meeting_notes?
+  mentor_meetings                  mentor_meetings?                   @relation("mentor_meetingsTomentor_meetings", fields: [followUpToMeetingId], references: [id], onUpdate: NoAction, map: "mentor_meetings_followup_fk")
+  other_mentor_meetings            mentor_meetings[]                  @relation("mentor_meetingsTomentor_meetings")
+  mentor_meeting_series            mentor_meeting_series?             @relation(fields: [seriesId], references: [id], onUpdate: NoAction, map: "mentor_meetings_series_fk")
+  students                         students                           @relation(fields: [studentId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meetings_student_fk")
+  teachers                         teachers                           @relation(fields: [mentorTeacherId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "mentor_meetings_teacher_fk")
+
+  @@index([mentorTeacherId, startAt], map: "mentor_meetings_mentor_start_idx")
+  @@index([seriesId], map: "mentor_meetings_series_idx")
+  @@index([status, startAt], map: "mentor_meetings_status_start_idx")
+  @@index([studentId, startAt], map: "mentor_meetings_student_start_idx")
+}
+
+model admin_profiles {
+  id             String        @id
+  userAccountId  String        @unique
+  fullName       String?
+  employeeId     String?
+  designation    String?
+  department     String?
+  school         String?
+  qualification  String?
+  specialization String?
+  dateOfBirth    DateTime?
+  gender         String?
+  nationality    String?
+  dateOfJoining  DateTime?
+  office         String?
+  officePhone    String?
+  officeHours    String?
+  phone          String?
+  profileImage   String?
+  about          String?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @default(now())
+  user_accounts  user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@index([department])
+}
+
+model announcement_recipients {
+  id             String        @id
+  announcementId String
+  userAccountId  String
+  deliveredAt    DateTime?
+  readAt         DateTime?
+  createdAt      DateTime      @default(now())
+  announcements  announcements @relation(fields: [announcementId], references: [id], onDelete: Cascade)
+  user_accounts  user_accounts @relation(fields: [userAccountId], references: [id], onDelete: Cascade)
+
+  @@unique([announcementId, userAccountId])
+  @@index([announcementId])
+  @@index([userAccountId, readAt])
+}
+
+model announcements {
+  id                      String                    @id
+  title                   String                    @db.VarChar(150)
+  message                 String
+  audience                AnnouncementAudience      @default(ALL)
+  category                AnnouncementCategory      @default(GENERAL)
+  priority                AnnouncementPriority      @default(NORMAL)
+  status                  AnnouncementStatus        @default(DRAFT)
+  publishedById           String
+  publishedAt             DateTime?
+  expiresAt               DateTime?
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now())
+  announcement_recipients announcement_recipients[]
+  user_accounts           user_accounts             @relation(fields: [publishedById], references: [id])
+
+  @@index([audience, status])
+  @@index([expiresAt])
+  @@index([publishedById])
+  @@index([status, publishedAt])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model conversations {
+  id                                                             String        @id
+  mentorUserAccountId                                            String
+  menteeUserAccountId                                            String
+  mentorLastReadAt                                               DateTime?
+  menteeLastReadAt                                               DateTime?
+  createdAt                                                      DateTime      @default(now())
+  updatedAt                                                      DateTime      @default(now())
+  user_accounts_conversations_menteeUserAccountIdTouser_accounts user_accounts @relation("conversations_menteeUserAccountIdTouser_accounts", fields: [menteeUserAccountId], references: [id], map: "conversations_mentee_fk")
+  user_accounts_conversations_mentorUserAccountIdTouser_accounts user_accounts @relation("conversations_mentorUserAccountIdTouser_accounts", fields: [mentorUserAccountId], references: [id], map: "conversations_mentor_fk")
+  messages                                                       messages[]
+
+  @@unique([mentorUserAccountId, menteeUserAccountId], map: "conversations_unique_mentor_mentee")
+  @@index([menteeUserAccountId, updatedAt(sort: Desc)], map: "conversations_mentee_idx")
+  @@index([mentorUserAccountId, updatedAt(sort: Desc)], map: "conversations_mentor_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model messages {
+  id             String        @id
+  conversationId String
+  senderId       String
+  content        String
+  createdAt      DateTime      @default(now())
+  editedAt       DateTime?
+  deletedAt      DateTime?
+  conversations  conversations @relation(fields: [conversationId], references: [id], onDelete: Cascade, map: "messages_conversation_fk")
+  user_accounts  user_accounts @relation(fields: [senderId], references: [id], map: "messages_sender_fk")
+
+  @@index([conversationId, createdAt(sort: Desc)], map: "messages_conversation_created_idx")
+  @@index([senderId], map: "messages_sender_idx")
+}
+
+enum InternshipType {
+  ONGOING
+  ALREADY_COMPLETED
+}
+
+enum InternshipStatus {
+  ONGOING
+  COMPLETED
+  CANCELLED
+  PENDING_INITIAL_VERIFICATION
+  PENDING_COMPLETION_VERIFICATION
+}
+
+enum InternshipVerificationStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum CompletionVerificationStatus {
+  NOT_SUBMITTED
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum InternshipDocumentType {
+  OFFER_LETTER
+  COMPLETION_CERTIFICATE
+  COMPLETION_LETTER
+  FINAL_REPORT
+  OTHER
+}
+
+enum InternshipDocumentStage {
+  INITIAL
+  COMPLETION
+}
+
+enum InternshipReviewStage {
+  INITIAL
+  COMPLETION
+}
+
+enum InternshipReviewDecision {
+  APPROVED
+  REJECTED
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum BloodGroup {
+  A_POSITIVE
+  A_NEGATIVE
+  B_POSITIVE
+  B_NEGATIVE
+  AB_POSITIVE
+  AB_NEGATIVE
+  O_POSITIVE
+  O_NEGATIVE
+}
+
+enum StudentType {
+  DAY_SCHOLAR
+  HOSTELLER
+}
+
+enum AddressType {
+  HOME
+  HOSTEL
+  RENTED
+  OTHER
+}
+
+enum PreferredContactMethod {
+  MOBILE
+  EMAIL
+  WHATSAPP
+}
+
+enum CommunicationEmailPreference {
+  UNIVERSITY_EMAIL
+  PERSONAL_EMAIL
+}
+
+enum AcademicSemesterStatus {
+  LOCKED
+  CURRENT
+  COMPLETED
+  FAILED
+}
+
+enum AcademicEntryStatus {
+  DRAFT
+  SUBMITTED
+  VERIFIED
+}
+
+enum DocumentCategory {
+  ACADEMICS
+  CERTIFICATES
+  INTERNSHIPS
+  PROJECTS
+  RESEARCH
+  CO_CURRICULAR
+  EXTRA_CURRICULAR
+  AWARDS
+  PERSONAL
+  OTHER
+}
+
+enum InternshipMode {
+  ONSITE
+  REMOTE
+  HYBRID
+}
+
+enum AcademicBacklogStatus {
+  ACTIVE
+  CLEARED
+}
+
+enum AcademicTermRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum AcademicTermStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  LOCKED
+}
+
+enum AcademicYearStatus {
+  UPCOMING
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum DetentionStatus {
+  ACTIVE
+  RESUMED
+  CANCELLED
+}
+
+enum EnrollmentStatus {
+  ACTIVE
+  COMPLETED
+  FAILED
+  DETAINED
+  WITHDRAWN
+}
+
+enum ImportBatchStatus {
+  PROCESSING
+  COMPLETED
+  COMPLETED_WITH_ERRORS
+  FAILED
+}
+
+enum MentorAssignmentStatus {
+  ACTIVE
+  ENDED
+  TRANSFERRED
+  REMOVED
+}
+
+enum MentorTransferRequestSource {
+  TEACHER
+  IN_PERSON
+}
+
+enum MentorTransferStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+}
+
+enum OtpPurpose {
+  ACCOUNT_ACTIVATION
+  LOGIN
+  PASSWORD_RESET
+}
+
+enum StudentStatus {
+  INVITED
+  ACTIVE
+  DETAINED
+  GRADUATED
+  INACTIVE
+}
+
+enum UserRole {
+  SYSTEM_ADMIN
+  ADMIN
+  MENTOR
+  STUDENT
+}
+
+enum AnnouncementAudience {
+  MENTORS
+  STUDENTS
+  ALL
+}
+
+enum AnnouncementCategory {
+  GENERAL
+  ACADEMIC
+  MEETING_EVENT
+  URGENT_NOTICE
+}
+
+enum AnnouncementPriority {
+  NORMAL
+  HIGH
+  URGENT
+}
+
+enum AnnouncementStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}

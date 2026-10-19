@@ -177,7 +177,8 @@ class StudentReportController {
   download = asyncHandler(async (req, res) => {
     const report = await studentReportService.getStudentReport(
       req.user?.id,
-      req.params.studentId
+      req.params.studentId,
+      req.user?.role
     );
 
     const {

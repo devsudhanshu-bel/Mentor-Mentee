@@ -34,6 +34,9 @@ router.use(authorize("ADMIN", "SYSTEM_ADMIN"));
 
 router.get("/mentors", AdminController.getMentors);
 
+// Institution-wide student directory with active mentor assignment.
+router.get("/students/directory", AdminController.getStudentDirectory);
+
 router.get("/mentors/:mentorId", AdminController.getMentorDetails);
 
 router.post("/mentors", AdminController.createMentor);

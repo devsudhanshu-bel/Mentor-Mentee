@@ -13,6 +13,7 @@ import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
 
 import adminRoutes from "./modules/admin/routes/admin.routes.js";
+import adminStudentProfileRoutes from "./modules/admin/student-profile/studentProfile.routes.js";
 import mentorDetailsRoutes from "./modules/admin/routes/mentorDetails.routes.js";
 
 import mentorRoutes from "./modules/mentor/routes/mentor.routes.js";
@@ -157,6 +158,7 @@ app.use("/api/admin", mentorDetailsRoutes);
 ========================================================== */
 
 app.use("/api/admin", adminRoutes);
+app.use("/api/admin/student-profile", adminStudentProfileRoutes);
 
 /* ==========================================================
    MENTOR

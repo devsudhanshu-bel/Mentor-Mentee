@@ -60,6 +60,12 @@ class AdminController {
         new ApiResponse(200, "Mentor details fetched successfully", result),
       );
   });
+  // GET /api/admin/students/directory
+  getStudentDirectory = asyncHandler(async (req, res) => {
+    const { search = "", semester = "", sort = "name-asc", mentorId = "" } = req.query;
+    const result = await AdminService.getStudentDirectory({ search, semester, sort, mentorId });
+    return res.status(200).json(new ApiResponse(200, "Student directory fetched successfully", result));
+  });
 }
 
 export default new AdminController();

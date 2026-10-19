@@ -365,7 +365,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Project\\Mentor-Mentee Project\\Mentor-Mentee-Backend\\src\\generated\\prisma",
+      "value": "C:\\Project\\Mentor-Mentee Project\\Backend-Final\\src\\generated\\prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -379,11 +379,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Project\\Mentor-Mentee Project\\Mentor-Mentee-Backend\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\Project\\Mentor-Mentee Project\\Backend-Final\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../../../prisma",

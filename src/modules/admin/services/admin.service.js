@@ -609,6 +609,78 @@ class AdminService {
       assignmentCount: assignments.length,
     };
   }
+
+  // ==========================================================
+  // ADMIN STUDENT DIRECTORY WITH CURRENT MENTOR ASSIGNMENTS
+  // ==========================================================
+  async getStudentDirectory({ search = "", semester = "", sort = "name-asc", mentorId = "" } = {}) {
+    const where = {};
+    const term = String(search || "").trim();
+    if (term) {
+      where.OR = [
+        { fullName: { contains: term, mode: "insensitive" } },
+        { registerNumber: { contains: term, mode: "insensitive" } },
+        { email: { contains: term, mode: "insensitive" } },
+      ];
+    }
+    if (semester) where.semester = String(semester);
+
+    // Only students with an ACTIVE assignment to the selected mentor.
+    // Students without active assignments remain visible when "All mentors" is selected.
+    if (mentorId) {
+      where.mentor_assignments = {
+        some: {
+          status: "ACTIVE",
+          teachers: { id: String(mentorId) },
+        },
+      };
+    }
+
+    const orderBy = sort === "name-desc" ? { fullName: "desc" }
+      : sort === "semester-desc" ? { semester: "desc" }
+      : { fullName: "asc" };
+
+    const students = await hodPrisma.students.findMany({
+      where, orderBy,
+      select: {
+        id: true, registerNumber: true, fullName: true, email: true, phone: true,
+        status: true, profileImage: true, programme: true, semester: true,
+        currentCGPA: true, overallAttendance: true, departmentId: true,
+        mentor_assignments: {
+          where: { status: "ACTIVE" },
+          orderBy: { assignedAt: "desc" },
+          select: { id: true, status: true, assignedAt: true, termId: true,
+            teachers: { select: { id: true, fullName: true, employeeCode: true, email: true, designation: true, isActive: true,
+              departments_teachers_departmentIdTodepartments: { select: { id: true, name: true, code: true } } } },
+            academic_terms: { select: { id: true, name: true, semesterNumber: true, status: true } },
+          },
+        },
+      },
+    });
+
+    return {
+      total: students.length,
+      students: students.map((student) => {
+        const assignments = student.mentor_assignments || [];
+        const current = assignments[0] || null;
+        return {
+          id: student.id, registerNumber: student.registerNumber, fullName: student.fullName,
+          email: student.email, phone: student.phone, status: student.status,
+          profileImage: student.profileImage, programme: student.programme, semester: student.semester,
+          currentCGPA: student.currentCGPA, overallAttendance: student.overallAttendance,
+          mentor: current?.teachers ? {
+            id: current.teachers.id, fullName: current.teachers.fullName,
+            employeeCode: current.teachers.employeeCode, email: current.teachers.email,
+            designation: current.teachers.designation, isActive: current.teachers.isActive,
+            department: current.teachers.departments_teachers_departmentIdTodepartments,
+            assignmentStatus: current.status, assignedAt: current.assignedAt,
+            term: current.academic_terms,
+          } : null,
+          activeAssignmentCount: assignments.length,
+        };
+      }),
+    };
+  }
 }
 
 export default new AdminService();
