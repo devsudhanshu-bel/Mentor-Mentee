@@ -11,6 +11,7 @@ import mentorRoutes from "../mentor/routes/mentor.routes.js";
 import internshipRoutes from "../internships/routes/internship.routes.js";
 import meetingsRoutes from "../mentor/routes/meetings.routes.js";
 import dashboardRoutes from "../dashboard/routes/dashboard.routes.js";
+import projectsRoutes from "../projects/routes/projects.routes.js";
 
 const router = express.Router();
 
@@ -58,6 +59,12 @@ router.use("/mentor", mentorRoutes);
 router.use("/internships", internshipRoutes);
 
 router.use("/dashboard", dashboardRoutes);
+
+/* ==========================================================
+   STUDENT PROJECTS + UNREAD ASSIGNMENT NOTIFICATIONS
+========================================================== */
+
+router.use("/projects", projectsRoutes);
 
 /* ==========================================================
    STUDENT MEETINGS

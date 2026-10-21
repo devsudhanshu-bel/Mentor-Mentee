@@ -271,6 +271,7 @@ model students {
   parentDetails            student_parent_details?
   departments              departments                @relation(fields: [departmentId], references: [id])
   user_accounts            user_accounts?             @relation(fields: [userAccountId], references: [id])
+  mentor_projects          mentor_projects[]
 
   @@index([departmentId])
   @@index([status])
@@ -515,6 +516,7 @@ model teachers {
   teacher_profiles                                                                 teacher_profiles?
   departments_teachers_departmentIdTodepartments                                   departments                @relation("teachers_departmentIdTodepartments", fields: [departmentId], references: [id])
   user_accounts                                                                    user_accounts?             @relation(fields: [userAccountId], references: [id])
+  mentor_projects                                                                  mentor_projects[]
 
   @@index([departmentId])
   @@index([isActive])
@@ -779,6 +781,44 @@ model messages {
 
   @@index([conversationId, createdAt(sort: Desc)], map: "messages_conversation_created_idx")
   @@index([senderId], map: "messages_sender_idx")
+}
+
+model mentor_projects {
+  id                      String                    @id
+  studentId               String
+  mentorId                String
+  title                   String                    @db.VarChar(180)
+  projectType             String                    @db.VarChar(80)
+  deadline                DateTime?
+  status                  String                    @default("ASSIGNED")
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now())
+  students                students                  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  teachers                teachers                  @relation(fields: [mentorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  studentViewedAt         DateTime?
+  submissionUrl           String?
+  submissionPublicId      String?
+  submissionFilename      String?
+  submissionMimeType      String?
+  submissionSize          Int?
+  submittedAt             DateTime?
+  mentor_project_messages mentor_project_messages[]
+  description             String?                   @db.Text
+
+  @@index([mentorId, studentId, createdAt(sort: Desc)])
+  @@index([studentId, status])
+}
+
+model mentor_project_messages {
+  id                  String          @id
+  projectId           String
+  senderUserAccountId String
+  senderRole          String
+  message             String
+  createdAt           DateTime        @default(now())
+  mentor_projects     mentor_projects @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt])
 }
 
 enum InternshipType {

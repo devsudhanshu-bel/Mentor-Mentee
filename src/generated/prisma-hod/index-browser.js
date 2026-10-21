@@ -665,6 +665,35 @@ exports.Prisma.MessagesScalarFieldEnum = {
   deletedAt: 'deletedAt'
 };
 
+exports.Prisma.Mentor_projectsScalarFieldEnum = {
+  id: 'id',
+  studentId: 'studentId',
+  mentorId: 'mentorId',
+  title: 'title',
+  projectType: 'projectType',
+  deadline: 'deadline',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  studentViewedAt: 'studentViewedAt',
+  submissionUrl: 'submissionUrl',
+  submissionPublicId: 'submissionPublicId',
+  submissionFilename: 'submissionFilename',
+  submissionMimeType: 'submissionMimeType',
+  submissionSize: 'submissionSize',
+  submittedAt: 'submittedAt',
+  description: 'description'
+};
+
+exports.Prisma.Mentor_project_messagesScalarFieldEnum = {
+  id: 'id',
+  projectId: 'projectId',
+  senderUserAccountId: 'senderUserAccountId',
+  senderRole: 'senderRole',
+  message: 'message',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -947,7 +976,9 @@ exports.Prisma.ModelName = {
   announcement_recipients: 'announcement_recipients',
   announcements: 'announcements',
   conversations: 'conversations',
-  messages: 'messages'
+  messages: 'messages',
+  mentor_projects: 'mentor_projects',
+  mentor_project_messages: 'mentor_project_messages'
 };
 
 /**

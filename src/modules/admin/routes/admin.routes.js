@@ -10,6 +10,7 @@ import studentRoutes from "../students/student.routes.js";
 import termChangeRoutes from "../term-change/termChange.routes.js";
 import overviewRoutes from "../overview/overview.routes.js";
 import announcementsRoutes from "../announcements/announcements.routes.js";
+import projectsRoutes from "../projects/projects.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -33,6 +34,9 @@ router.use(authorize("ADMIN", "SYSTEM_ADMIN"));
 */
 
 router.get("/mentors", AdminController.getMentors);
+
+// Institution-wide student directory with active mentor assignment.
+router.get("/students/directory", AdminController.getStudentDirectory);
 
 // Institution-wide student directory with active mentor assignment.
 router.get("/students/directory", AdminController.getStudentDirectory);
@@ -71,6 +75,9 @@ router.use("/dashboard", dashboardRoutes);
 */
 
 router.use("/announcements", announcementsRoutes);
+
+/* Read-only project monitoring */
+router.use("/projects", projectsRoutes);
 
 /*
 |--------------------------------------------------------------------------

@@ -9,6 +9,7 @@ import ProfilePictureController, {
 import dashboardRoutes from "./dashboard.routes.js";
 import internshipsRoutes from "./internships.routes.js";
 import meetingsRoutes from "./meetings.routes.js";
+import projectsRoutes from "./projects.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -44,6 +45,12 @@ router.use("/internships", internshipsRoutes);
 ========================================================== */
 
 router.use("/meetings", meetingsRoutes);
+
+/* ==========================================================
+   MENTOR PROJECTS
+========================================================== */
+
+router.use("/projects", projectsRoutes);
 
 /* ==========================================================
    MENTOR PROFILE PICTURE

@@ -188,6 +188,16 @@ export type conversations = $Result.DefaultSelection<Prisma.$conversationsPayloa
  * This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
  */
 export type messages = $Result.DefaultSelection<Prisma.$messagesPayload>
+/**
+ * Model mentor_projects
+ * 
+ */
+export type mentor_projects = $Result.DefaultSelection<Prisma.$mentor_projectsPayload>
+/**
+ * Model mentor_project_messages
+ * 
+ */
+export type mentor_project_messages = $Result.DefaultSelection<Prisma.$mentor_project_messagesPayload>
 
 /**
  * Enums
@@ -1139,6 +1149,26 @@ export class PrismaClient<
     * ```
     */
   get messages(): Prisma.messagesDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_projects`: Exposes CRUD operations for the **mentor_projects** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_projects
+    * const mentor_projects = await prisma.mentor_projects.findMany()
+    * ```
+    */
+  get mentor_projects(): Prisma.mentor_projectsDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.mentor_project_messages`: Exposes CRUD operations for the **mentor_project_messages** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Mentor_project_messages
+    * const mentor_project_messages = await prisma.mentor_project_messages.findMany()
+    * ```
+    */
+  get mentor_project_messages(): Prisma.mentor_project_messagesDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -1614,7 +1644,9 @@ export namespace Prisma {
     announcement_recipients: 'announcement_recipients',
     announcements: 'announcements',
     conversations: 'conversations',
-    messages: 'messages'
+    messages: 'messages',
+    mentor_projects: 'mentor_projects',
+    mentor_project_messages: 'mentor_project_messages'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1633,7 +1665,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings" | "admin_profiles" | "announcement_recipients" | "announcements" | "conversations" | "messages"
+      modelProps: "academic_term_requests" | "academic_terms" | "academic_years" | "departments" | "detentions" | "import_batches" | "import_errors" | "mentor_assignments" | "mentor_transfer_requests" | "otp_verifications" | "student_enrollments" | "students" | "student_internships" | "internship_reviews" | "internship_documents" | "student_contact_details" | "student_parent_details" | "student_documents" | "academic_semesters" | "academic_subjects" | "academic_backlogs" | "teachers" | "user_accounts" | "term_change_requests" | "teacher_profiles" | "mentor_meeting_discussion_points" | "mentor_meeting_feedback" | "mentor_meeting_notes" | "mentor_meeting_series" | "mentor_meetings" | "admin_profiles" | "announcement_recipients" | "announcements" | "conversations" | "messages" | "mentor_projects" | "mentor_project_messages"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4227,6 +4259,154 @@ export namespace Prisma {
           }
         }
       }
+      mentor_projects: {
+        payload: Prisma.$mentor_projectsPayload<ExtArgs>
+        fields: Prisma.mentor_projectsFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_projectsFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_projectsFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_projectsFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_projectsFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_projectsFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_projectsCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_projectsCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_projectsCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_projectsDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>
+          }
+          update: {
+            args: Prisma.mentor_projectsUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_projectsDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_projectsUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_projectsUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_projectsUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_projectsPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_projectsAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_projects>
+          }
+          groupBy: {
+            args: Prisma.mentor_projectsGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_projectsGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_projectsCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_projectsCountAggregateOutputType> | number
+          }
+        }
+      }
+      mentor_project_messages: {
+        payload: Prisma.$mentor_project_messagesPayload<ExtArgs>
+        fields: Prisma.mentor_project_messagesFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.mentor_project_messagesFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.mentor_project_messagesFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>
+          }
+          findFirst: {
+            args: Prisma.mentor_project_messagesFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.mentor_project_messagesFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>
+          }
+          findMany: {
+            args: Prisma.mentor_project_messagesFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>[]
+          }
+          create: {
+            args: Prisma.mentor_project_messagesCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>
+          }
+          createMany: {
+            args: Prisma.mentor_project_messagesCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.mentor_project_messagesCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>[]
+          }
+          delete: {
+            args: Prisma.mentor_project_messagesDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>
+          }
+          update: {
+            args: Prisma.mentor_project_messagesUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>
+          }
+          deleteMany: {
+            args: Prisma.mentor_project_messagesDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.mentor_project_messagesUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.mentor_project_messagesUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>[]
+          }
+          upsert: {
+            args: Prisma.mentor_project_messagesUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$mentor_project_messagesPayload>
+          }
+          aggregate: {
+            args: Prisma.Mentor_project_messagesAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMentor_project_messages>
+          }
+          groupBy: {
+            args: Prisma.mentor_project_messagesGroupByArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_project_messagesGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.mentor_project_messagesCountArgs<ExtArgs>
+            result: $Utils.Optional<Mentor_project_messagesCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4358,6 +4538,8 @@ export namespace Prisma {
     announcements?: announcementsOmit
     conversations?: conversationsOmit
     messages?: messagesOmit
+    mentor_projects?: mentor_projectsOmit
+    mentor_project_messages?: mentor_project_messagesOmit
   }
 
   /* Types for Logging */
@@ -4644,6 +4826,7 @@ export namespace Prisma {
     documents: number
     student_enrollments: number
     internships: number
+    mentor_projects: number
   }
 
   export type StudentsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4657,6 +4840,7 @@ export namespace Prisma {
     documents?: boolean | StudentsCountOutputTypeCountDocumentsArgs
     student_enrollments?: boolean | StudentsCountOutputTypeCountStudent_enrollmentsArgs
     internships?: boolean | StudentsCountOutputTypeCountInternshipsArgs
+    mentor_projects?: boolean | StudentsCountOutputTypeCountMentor_projectsArgs
   }
 
   // Custom InputTypes
@@ -4738,6 +4922,13 @@ export namespace Prisma {
    */
   export type StudentsCountOutputTypeCountInternshipsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: student_internshipsWhereInput
+  }
+
+  /**
+   * StudentsCountOutputType without action
+   */
+  export type StudentsCountOutputTypeCountMentor_projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_projectsWhereInput
   }
 
 
@@ -4825,6 +5016,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers: number
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers: number
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers: number
+    mentor_projects: number
   }
 
   export type TeachersCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -4836,6 +5028,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: boolean | TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersArgs
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: boolean | TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersArgs
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: boolean | TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs
+    mentor_projects?: boolean | TeachersCountOutputTypeCountMentor_projectsArgs
   }
 
   // Custom InputTypes
@@ -4903,6 +5096,13 @@ export namespace Prisma {
    */
   export type TeachersCountOutputTypeCountMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: mentor_transfer_requestsWhereInput
+  }
+
+  /**
+   * TeachersCountOutputType without action
+   */
+  export type TeachersCountOutputTypeCountMentor_projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_projectsWhereInput
   }
 
 
@@ -5157,6 +5357,37 @@ export namespace Prisma {
    */
   export type ConversationsCountOutputTypeCountMessagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: messagesWhereInput
+  }
+
+
+  /**
+   * Count Type Mentor_projectsCountOutputType
+   */
+
+  export type Mentor_projectsCountOutputType = {
+    mentor_project_messages: number
+  }
+
+  export type Mentor_projectsCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_project_messages?: boolean | Mentor_projectsCountOutputTypeCountMentor_project_messagesArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * Mentor_projectsCountOutputType without action
+   */
+  export type Mentor_projectsCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Mentor_projectsCountOutputType
+     */
+    select?: Mentor_projectsCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * Mentor_projectsCountOutputType without action
+   */
+  export type Mentor_projectsCountOutputTypeCountMentor_project_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_project_messagesWhereInput
   }
 
 
@@ -18651,6 +18882,7 @@ export namespace Prisma {
     parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
+    mentor_projects?: boolean | students$mentor_projectsArgs<ExtArgs>
     _count?: boolean | StudentsCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["students"]>
 
@@ -18770,6 +19002,7 @@ export namespace Prisma {
     parentDetails?: boolean | students$parentDetailsArgs<ExtArgs>
     departments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | students$user_accountsArgs<ExtArgs>
+    mentor_projects?: boolean | students$mentor_projectsArgs<ExtArgs>
     _count?: boolean | StudentsCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type studentsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -18798,6 +19031,7 @@ export namespace Prisma {
       parentDetails: Prisma.$student_parent_detailsPayload<ExtArgs> | null
       departments: Prisma.$departmentsPayload<ExtArgs>
       user_accounts: Prisma.$user_accountsPayload<ExtArgs> | null
+      mentor_projects: Prisma.$mentor_projectsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -19237,6 +19471,7 @@ export namespace Prisma {
     parentDetails<T extends students$parentDetailsArgs<ExtArgs> = {}>(args?: Subset<T, students$parentDetailsArgs<ExtArgs>>): Prisma__student_parent_detailsClient<$Result.GetResult<Prisma.$student_parent_detailsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     departments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user_accounts<T extends students$user_accountsArgs<ExtArgs> = {}>(args?: Subset<T, students$user_accountsArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    mentor_projects<T extends students$mentor_projectsArgs<ExtArgs> = {}>(args?: Subset<T, students$mentor_projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -19985,6 +20220,30 @@ export namespace Prisma {
      */
     include?: user_accountsInclude<ExtArgs> | null
     where?: user_accountsWhereInput
+  }
+
+  /**
+   * students.mentor_projects
+   */
+  export type students$mentor_projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    where?: mentor_projectsWhereInput
+    orderBy?: mentor_projectsOrderByWithRelationInput | mentor_projectsOrderByWithRelationInput[]
+    cursor?: mentor_projectsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_projectsScalarFieldEnum | Mentor_projectsScalarFieldEnum[]
   }
 
   /**
@@ -31515,6 +31774,7 @@ export namespace Prisma {
     teacher_profiles?: boolean | teachers$teacher_profilesArgs<ExtArgs>
     departments_teachers_departmentIdTodepartments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | teachers$user_accountsArgs<ExtArgs>
+    mentor_projects?: boolean | teachers$mentor_projectsArgs<ExtArgs>
     _count?: boolean | TeachersCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["teachers"]>
 
@@ -31581,6 +31841,7 @@ export namespace Prisma {
     teacher_profiles?: boolean | teachers$teacher_profilesArgs<ExtArgs>
     departments_teachers_departmentIdTodepartments?: boolean | departmentsDefaultArgs<ExtArgs>
     user_accounts?: boolean | teachers$user_accountsArgs<ExtArgs>
+    mentor_projects?: boolean | teachers$mentor_projectsArgs<ExtArgs>
     _count?: boolean | TeachersCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type teachersIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -31607,6 +31868,7 @@ export namespace Prisma {
       teacher_profiles: Prisma.$teacher_profilesPayload<ExtArgs> | null
       departments_teachers_departmentIdTodepartments: Prisma.$departmentsPayload<ExtArgs>
       user_accounts: Prisma.$user_accountsPayload<ExtArgs> | null
+      mentor_projects: Prisma.$mentor_projectsPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -32027,6 +32289,7 @@ export namespace Prisma {
     teacher_profiles<T extends teachers$teacher_profilesArgs<ExtArgs> = {}>(args?: Subset<T, teachers$teacher_profilesArgs<ExtArgs>>): Prisma__teacher_profilesClient<$Result.GetResult<Prisma.$teacher_profilesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     departments_teachers_departmentIdTodepartments<T extends departmentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, departmentsDefaultArgs<ExtArgs>>): Prisma__departmentsClient<$Result.GetResult<Prisma.$departmentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     user_accounts<T extends teachers$user_accountsArgs<ExtArgs> = {}>(args?: Subset<T, teachers$user_accountsArgs<ExtArgs>>): Prisma__user_accountsClient<$Result.GetResult<Prisma.$user_accountsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    mentor_projects<T extends teachers$mentor_projectsArgs<ExtArgs> = {}>(args?: Subset<T, teachers$mentor_projectsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -32710,6 +32973,30 @@ export namespace Prisma {
      */
     include?: user_accountsInclude<ExtArgs> | null
     where?: user_accountsWhereInput
+  }
+
+  /**
+   * teachers.mentor_projects
+   */
+  export type teachers$mentor_projectsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    where?: mentor_projectsWhereInput
+    orderBy?: mentor_projectsOrderByWithRelationInput | mentor_projectsOrderByWithRelationInput[]
+    cursor?: mentor_projectsWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_projectsScalarFieldEnum | Mentor_projectsScalarFieldEnum[]
   }
 
   /**
@@ -48256,6 +48543,2363 @@ export namespace Prisma {
 
 
   /**
+   * Model mentor_projects
+   */
+
+  export type AggregateMentor_projects = {
+    _count: Mentor_projectsCountAggregateOutputType | null
+    _avg: Mentor_projectsAvgAggregateOutputType | null
+    _sum: Mentor_projectsSumAggregateOutputType | null
+    _min: Mentor_projectsMinAggregateOutputType | null
+    _max: Mentor_projectsMaxAggregateOutputType | null
+  }
+
+  export type Mentor_projectsAvgAggregateOutputType = {
+    submissionSize: number | null
+  }
+
+  export type Mentor_projectsSumAggregateOutputType = {
+    submissionSize: number | null
+  }
+
+  export type Mentor_projectsMinAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    mentorId: string | null
+    title: string | null
+    projectType: string | null
+    deadline: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    studentViewedAt: Date | null
+    submissionUrl: string | null
+    submissionPublicId: string | null
+    submissionFilename: string | null
+    submissionMimeType: string | null
+    submissionSize: number | null
+    submittedAt: Date | null
+    description: string | null
+  }
+
+  export type Mentor_projectsMaxAggregateOutputType = {
+    id: string | null
+    studentId: string | null
+    mentorId: string | null
+    title: string | null
+    projectType: string | null
+    deadline: Date | null
+    status: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+    studentViewedAt: Date | null
+    submissionUrl: string | null
+    submissionPublicId: string | null
+    submissionFilename: string | null
+    submissionMimeType: string | null
+    submissionSize: number | null
+    submittedAt: Date | null
+    description: string | null
+  }
+
+  export type Mentor_projectsCountAggregateOutputType = {
+    id: number
+    studentId: number
+    mentorId: number
+    title: number
+    projectType: number
+    deadline: number
+    status: number
+    createdAt: number
+    updatedAt: number
+    studentViewedAt: number
+    submissionUrl: number
+    submissionPublicId: number
+    submissionFilename: number
+    submissionMimeType: number
+    submissionSize: number
+    submittedAt: number
+    description: number
+    _all: number
+  }
+
+
+  export type Mentor_projectsAvgAggregateInputType = {
+    submissionSize?: true
+  }
+
+  export type Mentor_projectsSumAggregateInputType = {
+    submissionSize?: true
+  }
+
+  export type Mentor_projectsMinAggregateInputType = {
+    id?: true
+    studentId?: true
+    mentorId?: true
+    title?: true
+    projectType?: true
+    deadline?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    studentViewedAt?: true
+    submissionUrl?: true
+    submissionPublicId?: true
+    submissionFilename?: true
+    submissionMimeType?: true
+    submissionSize?: true
+    submittedAt?: true
+    description?: true
+  }
+
+  export type Mentor_projectsMaxAggregateInputType = {
+    id?: true
+    studentId?: true
+    mentorId?: true
+    title?: true
+    projectType?: true
+    deadline?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    studentViewedAt?: true
+    submissionUrl?: true
+    submissionPublicId?: true
+    submissionFilename?: true
+    submissionMimeType?: true
+    submissionSize?: true
+    submittedAt?: true
+    description?: true
+  }
+
+  export type Mentor_projectsCountAggregateInputType = {
+    id?: true
+    studentId?: true
+    mentorId?: true
+    title?: true
+    projectType?: true
+    deadline?: true
+    status?: true
+    createdAt?: true
+    updatedAt?: true
+    studentViewedAt?: true
+    submissionUrl?: true
+    submissionPublicId?: true
+    submissionFilename?: true
+    submissionMimeType?: true
+    submissionSize?: true
+    submittedAt?: true
+    description?: true
+    _all?: true
+  }
+
+  export type Mentor_projectsAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_projects to aggregate.
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_projects to fetch.
+     */
+    orderBy?: mentor_projectsOrderByWithRelationInput | mentor_projectsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_projectsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_projects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_projects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_projects
+    **/
+    _count?: true | Mentor_projectsCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: Mentor_projectsAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: Mentor_projectsSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_projectsMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_projectsMaxAggregateInputType
+  }
+
+  export type GetMentor_projectsAggregateType<T extends Mentor_projectsAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_projects]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_projects[P]>
+      : GetScalarType<T[P], AggregateMentor_projects[P]>
+  }
+
+
+
+
+  export type mentor_projectsGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_projectsWhereInput
+    orderBy?: mentor_projectsOrderByWithAggregationInput | mentor_projectsOrderByWithAggregationInput[]
+    by: Mentor_projectsScalarFieldEnum[] | Mentor_projectsScalarFieldEnum
+    having?: mentor_projectsScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_projectsCountAggregateInputType | true
+    _avg?: Mentor_projectsAvgAggregateInputType
+    _sum?: Mentor_projectsSumAggregateInputType
+    _min?: Mentor_projectsMinAggregateInputType
+    _max?: Mentor_projectsMaxAggregateInputType
+  }
+
+  export type Mentor_projectsGroupByOutputType = {
+    id: string
+    studentId: string
+    mentorId: string
+    title: string
+    projectType: string
+    deadline: Date | null
+    status: string
+    createdAt: Date
+    updatedAt: Date
+    studentViewedAt: Date | null
+    submissionUrl: string | null
+    submissionPublicId: string | null
+    submissionFilename: string | null
+    submissionMimeType: string | null
+    submissionSize: number | null
+    submittedAt: Date | null
+    description: string | null
+    _count: Mentor_projectsCountAggregateOutputType | null
+    _avg: Mentor_projectsAvgAggregateOutputType | null
+    _sum: Mentor_projectsSumAggregateOutputType | null
+    _min: Mentor_projectsMinAggregateOutputType | null
+    _max: Mentor_projectsMaxAggregateOutputType | null
+  }
+
+  type GetMentor_projectsGroupByPayload<T extends mentor_projectsGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_projectsGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_projectsGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_projectsGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_projectsGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_projectsSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    mentorId?: boolean
+    title?: boolean
+    projectType?: boolean
+    deadline?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    studentViewedAt?: boolean
+    submissionUrl?: boolean
+    submissionPublicId?: boolean
+    submissionFilename?: boolean
+    submissionMimeType?: boolean
+    submissionSize?: boolean
+    submittedAt?: boolean
+    description?: boolean
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+    mentor_project_messages?: boolean | mentor_projects$mentor_project_messagesArgs<ExtArgs>
+    _count?: boolean | Mentor_projectsCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_projects"]>
+
+  export type mentor_projectsSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    mentorId?: boolean
+    title?: boolean
+    projectType?: boolean
+    deadline?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    studentViewedAt?: boolean
+    submissionUrl?: boolean
+    submissionPublicId?: boolean
+    submissionFilename?: boolean
+    submissionMimeType?: boolean
+    submissionSize?: boolean
+    submittedAt?: boolean
+    description?: boolean
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_projects"]>
+
+  export type mentor_projectsSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    studentId?: boolean
+    mentorId?: boolean
+    title?: boolean
+    projectType?: boolean
+    deadline?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    studentViewedAt?: boolean
+    submissionUrl?: boolean
+    submissionPublicId?: boolean
+    submissionFilename?: boolean
+    submissionMimeType?: boolean
+    submissionSize?: boolean
+    submittedAt?: boolean
+    description?: boolean
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_projects"]>
+
+  export type mentor_projectsSelectScalar = {
+    id?: boolean
+    studentId?: boolean
+    mentorId?: boolean
+    title?: boolean
+    projectType?: boolean
+    deadline?: boolean
+    status?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+    studentViewedAt?: boolean
+    submissionUrl?: boolean
+    submissionPublicId?: boolean
+    submissionFilename?: boolean
+    submissionMimeType?: boolean
+    submissionSize?: boolean
+    submittedAt?: boolean
+    description?: boolean
+  }
+
+  export type mentor_projectsOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "studentId" | "mentorId" | "title" | "projectType" | "deadline" | "status" | "createdAt" | "updatedAt" | "studentViewedAt" | "submissionUrl" | "submissionPublicId" | "submissionFilename" | "submissionMimeType" | "submissionSize" | "submittedAt" | "description", ExtArgs["result"]["mentor_projects"]>
+  export type mentor_projectsInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+    mentor_project_messages?: boolean | mentor_projects$mentor_project_messagesArgs<ExtArgs>
+    _count?: boolean | Mentor_projectsCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type mentor_projectsIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+  export type mentor_projectsIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    students?: boolean | studentsDefaultArgs<ExtArgs>
+    teachers?: boolean | teachersDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_projectsPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_projects"
+    objects: {
+      students: Prisma.$studentsPayload<ExtArgs>
+      teachers: Prisma.$teachersPayload<ExtArgs>
+      mentor_project_messages: Prisma.$mentor_project_messagesPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      studentId: string
+      mentorId: string
+      title: string
+      projectType: string
+      deadline: Date | null
+      status: string
+      createdAt: Date
+      updatedAt: Date
+      studentViewedAt: Date | null
+      submissionUrl: string | null
+      submissionPublicId: string | null
+      submissionFilename: string | null
+      submissionMimeType: string | null
+      submissionSize: number | null
+      submittedAt: Date | null
+      description: string | null
+    }, ExtArgs["result"]["mentor_projects"]>
+    composites: {}
+  }
+
+  type mentor_projectsGetPayload<S extends boolean | null | undefined | mentor_projectsDefaultArgs> = $Result.GetResult<Prisma.$mentor_projectsPayload, S>
+
+  type mentor_projectsCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_projectsFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_projectsCountAggregateInputType | true
+    }
+
+  export interface mentor_projectsDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_projects'], meta: { name: 'mentor_projects' } }
+    /**
+     * Find zero or one Mentor_projects that matches the filter.
+     * @param {mentor_projectsFindUniqueArgs} args - Arguments to find a Mentor_projects
+     * @example
+     * // Get one Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_projectsFindUniqueArgs>(args: SelectSubset<T, mentor_projectsFindUniqueArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_projects that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_projectsFindUniqueOrThrowArgs} args - Arguments to find a Mentor_projects
+     * @example
+     * // Get one Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_projectsFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_projectsFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_projects that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_projectsFindFirstArgs} args - Arguments to find a Mentor_projects
+     * @example
+     * // Get one Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_projectsFindFirstArgs>(args?: SelectSubset<T, mentor_projectsFindFirstArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_projects that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_projectsFindFirstOrThrowArgs} args - Arguments to find a Mentor_projects
+     * @example
+     * // Get one Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_projectsFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_projectsFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_projects that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_projectsFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.findMany()
+     * 
+     * // Get first 10 Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_projectsWithIdOnly = await prisma.mentor_projects.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_projectsFindManyArgs>(args?: SelectSubset<T, mentor_projectsFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_projects.
+     * @param {mentor_projectsCreateArgs} args - Arguments to create a Mentor_projects.
+     * @example
+     * // Create one Mentor_projects
+     * const Mentor_projects = await prisma.mentor_projects.create({
+     *   data: {
+     *     // ... data to create a Mentor_projects
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_projectsCreateArgs>(args: SelectSubset<T, mentor_projectsCreateArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_projects.
+     * @param {mentor_projectsCreateManyArgs} args - Arguments to create many Mentor_projects.
+     * @example
+     * // Create many Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_projectsCreateManyArgs>(args?: SelectSubset<T, mentor_projectsCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_projects and returns the data saved in the database.
+     * @param {mentor_projectsCreateManyAndReturnArgs} args - Arguments to create many Mentor_projects.
+     * @example
+     * // Create many Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_projects and only return the `id`
+     * const mentor_projectsWithIdOnly = await prisma.mentor_projects.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_projectsCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_projectsCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_projects.
+     * @param {mentor_projectsDeleteArgs} args - Arguments to delete one Mentor_projects.
+     * @example
+     * // Delete one Mentor_projects
+     * const Mentor_projects = await prisma.mentor_projects.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_projects
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_projectsDeleteArgs>(args: SelectSubset<T, mentor_projectsDeleteArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_projects.
+     * @param {mentor_projectsUpdateArgs} args - Arguments to update one Mentor_projects.
+     * @example
+     * // Update one Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_projectsUpdateArgs>(args: SelectSubset<T, mentor_projectsUpdateArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_projects.
+     * @param {mentor_projectsDeleteManyArgs} args - Arguments to filter Mentor_projects to delete.
+     * @example
+     * // Delete a few Mentor_projects
+     * const { count } = await prisma.mentor_projects.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_projectsDeleteManyArgs>(args?: SelectSubset<T, mentor_projectsDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_projects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_projectsUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_projectsUpdateManyArgs>(args: SelectSubset<T, mentor_projectsUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_projects and returns the data updated in the database.
+     * @param {mentor_projectsUpdateManyAndReturnArgs} args - Arguments to update many Mentor_projects.
+     * @example
+     * // Update many Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_projects and only return the `id`
+     * const mentor_projectsWithIdOnly = await prisma.mentor_projects.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_projectsUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_projectsUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_projects.
+     * @param {mentor_projectsUpsertArgs} args - Arguments to update or create a Mentor_projects.
+     * @example
+     * // Update or create a Mentor_projects
+     * const mentor_projects = await prisma.mentor_projects.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_projects
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_projects we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_projectsUpsertArgs>(args: SelectSubset<T, mentor_projectsUpsertArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_projects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_projectsCountArgs} args - Arguments to filter Mentor_projects to count.
+     * @example
+     * // Count the number of Mentor_projects
+     * const count = await prisma.mentor_projects.count({
+     *   where: {
+     *     // ... the filter for the Mentor_projects we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_projectsCountArgs>(
+      args?: Subset<T, mentor_projectsCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_projectsCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_projects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_projectsAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_projectsAggregateArgs>(args: Subset<T, Mentor_projectsAggregateArgs>): Prisma.PrismaPromise<GetMentor_projectsAggregateType<T>>
+
+    /**
+     * Group by Mentor_projects.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_projectsGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_projectsGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_projectsGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_projectsGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_projectsGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_projectsGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_projects model
+   */
+  readonly fields: mentor_projectsFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_projects.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_projectsClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    students<T extends studentsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, studentsDefaultArgs<ExtArgs>>): Prisma__studentsClient<$Result.GetResult<Prisma.$studentsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    teachers<T extends teachersDefaultArgs<ExtArgs> = {}>(args?: Subset<T, teachersDefaultArgs<ExtArgs>>): Prisma__teachersClient<$Result.GetResult<Prisma.$teachersPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    mentor_project_messages<T extends mentor_projects$mentor_project_messagesArgs<ExtArgs> = {}>(args?: Subset<T, mentor_projects$mentor_project_messagesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_projects model
+   */
+  interface mentor_projectsFieldRefs {
+    readonly id: FieldRef<"mentor_projects", 'String'>
+    readonly studentId: FieldRef<"mentor_projects", 'String'>
+    readonly mentorId: FieldRef<"mentor_projects", 'String'>
+    readonly title: FieldRef<"mentor_projects", 'String'>
+    readonly projectType: FieldRef<"mentor_projects", 'String'>
+    readonly deadline: FieldRef<"mentor_projects", 'DateTime'>
+    readonly status: FieldRef<"mentor_projects", 'String'>
+    readonly createdAt: FieldRef<"mentor_projects", 'DateTime'>
+    readonly updatedAt: FieldRef<"mentor_projects", 'DateTime'>
+    readonly studentViewedAt: FieldRef<"mentor_projects", 'DateTime'>
+    readonly submissionUrl: FieldRef<"mentor_projects", 'String'>
+    readonly submissionPublicId: FieldRef<"mentor_projects", 'String'>
+    readonly submissionFilename: FieldRef<"mentor_projects", 'String'>
+    readonly submissionMimeType: FieldRef<"mentor_projects", 'String'>
+    readonly submissionSize: FieldRef<"mentor_projects", 'Int'>
+    readonly submittedAt: FieldRef<"mentor_projects", 'DateTime'>
+    readonly description: FieldRef<"mentor_projects", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_projects findUnique
+   */
+  export type mentor_projectsFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_projects to fetch.
+     */
+    where: mentor_projectsWhereUniqueInput
+  }
+
+  /**
+   * mentor_projects findUniqueOrThrow
+   */
+  export type mentor_projectsFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_projects to fetch.
+     */
+    where: mentor_projectsWhereUniqueInput
+  }
+
+  /**
+   * mentor_projects findFirst
+   */
+  export type mentor_projectsFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_projects to fetch.
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_projects to fetch.
+     */
+    orderBy?: mentor_projectsOrderByWithRelationInput | mentor_projectsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_projects.
+     */
+    cursor?: mentor_projectsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_projects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_projects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_projects.
+     */
+    distinct?: Mentor_projectsScalarFieldEnum | Mentor_projectsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_projects findFirstOrThrow
+   */
+  export type mentor_projectsFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_projects to fetch.
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_projects to fetch.
+     */
+    orderBy?: mentor_projectsOrderByWithRelationInput | mentor_projectsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_projects.
+     */
+    cursor?: mentor_projectsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_projects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_projects.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_projects.
+     */
+    distinct?: Mentor_projectsScalarFieldEnum | Mentor_projectsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_projects findMany
+   */
+  export type mentor_projectsFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_projects to fetch.
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_projects to fetch.
+     */
+    orderBy?: mentor_projectsOrderByWithRelationInput | mentor_projectsOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_projects.
+     */
+    cursor?: mentor_projectsWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_projects from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_projects.
+     */
+    skip?: number
+    distinct?: Mentor_projectsScalarFieldEnum | Mentor_projectsScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_projects create
+   */
+  export type mentor_projectsCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_projects.
+     */
+    data: XOR<mentor_projectsCreateInput, mentor_projectsUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_projects createMany
+   */
+  export type mentor_projectsCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_projects.
+     */
+    data: mentor_projectsCreateManyInput | mentor_projectsCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_projects createManyAndReturn
+   */
+  export type mentor_projectsCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_projects.
+     */
+    data: mentor_projectsCreateManyInput | mentor_projectsCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_projects update
+   */
+  export type mentor_projectsUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_projects.
+     */
+    data: XOR<mentor_projectsUpdateInput, mentor_projectsUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_projects to update.
+     */
+    where: mentor_projectsWhereUniqueInput
+  }
+
+  /**
+   * mentor_projects updateMany
+   */
+  export type mentor_projectsUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_projects.
+     */
+    data: XOR<mentor_projectsUpdateManyMutationInput, mentor_projectsUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_projects to update
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * Limit how many mentor_projects to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_projects updateManyAndReturn
+   */
+  export type mentor_projectsUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_projects.
+     */
+    data: XOR<mentor_projectsUpdateManyMutationInput, mentor_projectsUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_projects to update
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * Limit how many mentor_projects to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_projects upsert
+   */
+  export type mentor_projectsUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_projects to update in case it exists.
+     */
+    where: mentor_projectsWhereUniqueInput
+    /**
+     * In case the mentor_projects found by the `where` argument doesn't exist, create a new mentor_projects with this data.
+     */
+    create: XOR<mentor_projectsCreateInput, mentor_projectsUncheckedCreateInput>
+    /**
+     * In case the mentor_projects was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_projectsUpdateInput, mentor_projectsUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_projects delete
+   */
+  export type mentor_projectsDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_projects to delete.
+     */
+    where: mentor_projectsWhereUniqueInput
+  }
+
+  /**
+   * mentor_projects deleteMany
+   */
+  export type mentor_projectsDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_projects to delete
+     */
+    where?: mentor_projectsWhereInput
+    /**
+     * Limit how many mentor_projects to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_projects.mentor_project_messages
+   */
+  export type mentor_projects$mentor_project_messagesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    where?: mentor_project_messagesWhereInput
+    orderBy?: mentor_project_messagesOrderByWithRelationInput | mentor_project_messagesOrderByWithRelationInput[]
+    cursor?: mentor_project_messagesWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: Mentor_project_messagesScalarFieldEnum | Mentor_project_messagesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_projects without action
+   */
+  export type mentor_projectsDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_projects
+     */
+    select?: mentor_projectsSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_projects
+     */
+    omit?: mentor_projectsOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_projectsInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model mentor_project_messages
+   */
+
+  export type AggregateMentor_project_messages = {
+    _count: Mentor_project_messagesCountAggregateOutputType | null
+    _min: Mentor_project_messagesMinAggregateOutputType | null
+    _max: Mentor_project_messagesMaxAggregateOutputType | null
+  }
+
+  export type Mentor_project_messagesMinAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    senderUserAccountId: string | null
+    senderRole: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type Mentor_project_messagesMaxAggregateOutputType = {
+    id: string | null
+    projectId: string | null
+    senderUserAccountId: string | null
+    senderRole: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type Mentor_project_messagesCountAggregateOutputType = {
+    id: number
+    projectId: number
+    senderUserAccountId: number
+    senderRole: number
+    message: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type Mentor_project_messagesMinAggregateInputType = {
+    id?: true
+    projectId?: true
+    senderUserAccountId?: true
+    senderRole?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type Mentor_project_messagesMaxAggregateInputType = {
+    id?: true
+    projectId?: true
+    senderUserAccountId?: true
+    senderRole?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type Mentor_project_messagesCountAggregateInputType = {
+    id?: true
+    projectId?: true
+    senderUserAccountId?: true
+    senderRole?: true
+    message?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type Mentor_project_messagesAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_project_messages to aggregate.
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_project_messages to fetch.
+     */
+    orderBy?: mentor_project_messagesOrderByWithRelationInput | mentor_project_messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: mentor_project_messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_project_messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_project_messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned mentor_project_messages
+    **/
+    _count?: true | Mentor_project_messagesCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: Mentor_project_messagesMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: Mentor_project_messagesMaxAggregateInputType
+  }
+
+  export type GetMentor_project_messagesAggregateType<T extends Mentor_project_messagesAggregateArgs> = {
+        [P in keyof T & keyof AggregateMentor_project_messages]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMentor_project_messages[P]>
+      : GetScalarType<T[P], AggregateMentor_project_messages[P]>
+  }
+
+
+
+
+  export type mentor_project_messagesGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: mentor_project_messagesWhereInput
+    orderBy?: mentor_project_messagesOrderByWithAggregationInput | mentor_project_messagesOrderByWithAggregationInput[]
+    by: Mentor_project_messagesScalarFieldEnum[] | Mentor_project_messagesScalarFieldEnum
+    having?: mentor_project_messagesScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: Mentor_project_messagesCountAggregateInputType | true
+    _min?: Mentor_project_messagesMinAggregateInputType
+    _max?: Mentor_project_messagesMaxAggregateInputType
+  }
+
+  export type Mentor_project_messagesGroupByOutputType = {
+    id: string
+    projectId: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt: Date
+    _count: Mentor_project_messagesCountAggregateOutputType | null
+    _min: Mentor_project_messagesMinAggregateOutputType | null
+    _max: Mentor_project_messagesMaxAggregateOutputType | null
+  }
+
+  type GetMentor_project_messagesGroupByPayload<T extends mentor_project_messagesGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<Mentor_project_messagesGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof Mentor_project_messagesGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], Mentor_project_messagesGroupByOutputType[P]>
+            : GetScalarType<T[P], Mentor_project_messagesGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type mentor_project_messagesSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    senderUserAccountId?: boolean
+    senderRole?: boolean
+    message?: boolean
+    createdAt?: boolean
+    mentor_projects?: boolean | mentor_projectsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_project_messages"]>
+
+  export type mentor_project_messagesSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    senderUserAccountId?: boolean
+    senderRole?: boolean
+    message?: boolean
+    createdAt?: boolean
+    mentor_projects?: boolean | mentor_projectsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_project_messages"]>
+
+  export type mentor_project_messagesSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    projectId?: boolean
+    senderUserAccountId?: boolean
+    senderRole?: boolean
+    message?: boolean
+    createdAt?: boolean
+    mentor_projects?: boolean | mentor_projectsDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["mentor_project_messages"]>
+
+  export type mentor_project_messagesSelectScalar = {
+    id?: boolean
+    projectId?: boolean
+    senderUserAccountId?: boolean
+    senderRole?: boolean
+    message?: boolean
+    createdAt?: boolean
+  }
+
+  export type mentor_project_messagesOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "projectId" | "senderUserAccountId" | "senderRole" | "message" | "createdAt", ExtArgs["result"]["mentor_project_messages"]>
+  export type mentor_project_messagesInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_projects?: boolean | mentor_projectsDefaultArgs<ExtArgs>
+  }
+  export type mentor_project_messagesIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_projects?: boolean | mentor_projectsDefaultArgs<ExtArgs>
+  }
+  export type mentor_project_messagesIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    mentor_projects?: boolean | mentor_projectsDefaultArgs<ExtArgs>
+  }
+
+  export type $mentor_project_messagesPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "mentor_project_messages"
+    objects: {
+      mentor_projects: Prisma.$mentor_projectsPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      projectId: string
+      senderUserAccountId: string
+      senderRole: string
+      message: string
+      createdAt: Date
+    }, ExtArgs["result"]["mentor_project_messages"]>
+    composites: {}
+  }
+
+  type mentor_project_messagesGetPayload<S extends boolean | null | undefined | mentor_project_messagesDefaultArgs> = $Result.GetResult<Prisma.$mentor_project_messagesPayload, S>
+
+  type mentor_project_messagesCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<mentor_project_messagesFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: Mentor_project_messagesCountAggregateInputType | true
+    }
+
+  export interface mentor_project_messagesDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['mentor_project_messages'], meta: { name: 'mentor_project_messages' } }
+    /**
+     * Find zero or one Mentor_project_messages that matches the filter.
+     * @param {mentor_project_messagesFindUniqueArgs} args - Arguments to find a Mentor_project_messages
+     * @example
+     * // Get one Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends mentor_project_messagesFindUniqueArgs>(args: SelectSubset<T, mentor_project_messagesFindUniqueArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Mentor_project_messages that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {mentor_project_messagesFindUniqueOrThrowArgs} args - Arguments to find a Mentor_project_messages
+     * @example
+     * // Get one Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends mentor_project_messagesFindUniqueOrThrowArgs>(args: SelectSubset<T, mentor_project_messagesFindUniqueOrThrowArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_project_messages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_project_messagesFindFirstArgs} args - Arguments to find a Mentor_project_messages
+     * @example
+     * // Get one Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends mentor_project_messagesFindFirstArgs>(args?: SelectSubset<T, mentor_project_messagesFindFirstArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Mentor_project_messages that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_project_messagesFindFirstOrThrowArgs} args - Arguments to find a Mentor_project_messages
+     * @example
+     * // Get one Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends mentor_project_messagesFindFirstOrThrowArgs>(args?: SelectSubset<T, mentor_project_messagesFindFirstOrThrowArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Mentor_project_messages that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_project_messagesFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.findMany()
+     * 
+     * // Get first 10 Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const mentor_project_messagesWithIdOnly = await prisma.mentor_project_messages.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends mentor_project_messagesFindManyArgs>(args?: SelectSubset<T, mentor_project_messagesFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Mentor_project_messages.
+     * @param {mentor_project_messagesCreateArgs} args - Arguments to create a Mentor_project_messages.
+     * @example
+     * // Create one Mentor_project_messages
+     * const Mentor_project_messages = await prisma.mentor_project_messages.create({
+     *   data: {
+     *     // ... data to create a Mentor_project_messages
+     *   }
+     * })
+     * 
+     */
+    create<T extends mentor_project_messagesCreateArgs>(args: SelectSubset<T, mentor_project_messagesCreateArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Mentor_project_messages.
+     * @param {mentor_project_messagesCreateManyArgs} args - Arguments to create many Mentor_project_messages.
+     * @example
+     * // Create many Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends mentor_project_messagesCreateManyArgs>(args?: SelectSubset<T, mentor_project_messagesCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Mentor_project_messages and returns the data saved in the database.
+     * @param {mentor_project_messagesCreateManyAndReturnArgs} args - Arguments to create many Mentor_project_messages.
+     * @example
+     * // Create many Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Mentor_project_messages and only return the `id`
+     * const mentor_project_messagesWithIdOnly = await prisma.mentor_project_messages.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends mentor_project_messagesCreateManyAndReturnArgs>(args?: SelectSubset<T, mentor_project_messagesCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Mentor_project_messages.
+     * @param {mentor_project_messagesDeleteArgs} args - Arguments to delete one Mentor_project_messages.
+     * @example
+     * // Delete one Mentor_project_messages
+     * const Mentor_project_messages = await prisma.mentor_project_messages.delete({
+     *   where: {
+     *     // ... filter to delete one Mentor_project_messages
+     *   }
+     * })
+     * 
+     */
+    delete<T extends mentor_project_messagesDeleteArgs>(args: SelectSubset<T, mentor_project_messagesDeleteArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Mentor_project_messages.
+     * @param {mentor_project_messagesUpdateArgs} args - Arguments to update one Mentor_project_messages.
+     * @example
+     * // Update one Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends mentor_project_messagesUpdateArgs>(args: SelectSubset<T, mentor_project_messagesUpdateArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Mentor_project_messages.
+     * @param {mentor_project_messagesDeleteManyArgs} args - Arguments to filter Mentor_project_messages to delete.
+     * @example
+     * // Delete a few Mentor_project_messages
+     * const { count } = await prisma.mentor_project_messages.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends mentor_project_messagesDeleteManyArgs>(args?: SelectSubset<T, mentor_project_messagesDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_project_messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_project_messagesUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends mentor_project_messagesUpdateManyArgs>(args: SelectSubset<T, mentor_project_messagesUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Mentor_project_messages and returns the data updated in the database.
+     * @param {mentor_project_messagesUpdateManyAndReturnArgs} args - Arguments to update many Mentor_project_messages.
+     * @example
+     * // Update many Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Mentor_project_messages and only return the `id`
+     * const mentor_project_messagesWithIdOnly = await prisma.mentor_project_messages.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends mentor_project_messagesUpdateManyAndReturnArgs>(args: SelectSubset<T, mentor_project_messagesUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Mentor_project_messages.
+     * @param {mentor_project_messagesUpsertArgs} args - Arguments to update or create a Mentor_project_messages.
+     * @example
+     * // Update or create a Mentor_project_messages
+     * const mentor_project_messages = await prisma.mentor_project_messages.upsert({
+     *   create: {
+     *     // ... data to create a Mentor_project_messages
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Mentor_project_messages we want to update
+     *   }
+     * })
+     */
+    upsert<T extends mentor_project_messagesUpsertArgs>(args: SelectSubset<T, mentor_project_messagesUpsertArgs<ExtArgs>>): Prisma__mentor_project_messagesClient<$Result.GetResult<Prisma.$mentor_project_messagesPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Mentor_project_messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_project_messagesCountArgs} args - Arguments to filter Mentor_project_messages to count.
+     * @example
+     * // Count the number of Mentor_project_messages
+     * const count = await prisma.mentor_project_messages.count({
+     *   where: {
+     *     // ... the filter for the Mentor_project_messages we want to count
+     *   }
+     * })
+    **/
+    count<T extends mentor_project_messagesCountArgs>(
+      args?: Subset<T, mentor_project_messagesCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], Mentor_project_messagesCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Mentor_project_messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {Mentor_project_messagesAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends Mentor_project_messagesAggregateArgs>(args: Subset<T, Mentor_project_messagesAggregateArgs>): Prisma.PrismaPromise<GetMentor_project_messagesAggregateType<T>>
+
+    /**
+     * Group by Mentor_project_messages.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {mentor_project_messagesGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends mentor_project_messagesGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: mentor_project_messagesGroupByArgs['orderBy'] }
+        : { orderBy?: mentor_project_messagesGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, mentor_project_messagesGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetMentor_project_messagesGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the mentor_project_messages model
+   */
+  readonly fields: mentor_project_messagesFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for mentor_project_messages.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__mentor_project_messagesClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    mentor_projects<T extends mentor_projectsDefaultArgs<ExtArgs> = {}>(args?: Subset<T, mentor_projectsDefaultArgs<ExtArgs>>): Prisma__mentor_projectsClient<$Result.GetResult<Prisma.$mentor_projectsPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the mentor_project_messages model
+   */
+  interface mentor_project_messagesFieldRefs {
+    readonly id: FieldRef<"mentor_project_messages", 'String'>
+    readonly projectId: FieldRef<"mentor_project_messages", 'String'>
+    readonly senderUserAccountId: FieldRef<"mentor_project_messages", 'String'>
+    readonly senderRole: FieldRef<"mentor_project_messages", 'String'>
+    readonly message: FieldRef<"mentor_project_messages", 'String'>
+    readonly createdAt: FieldRef<"mentor_project_messages", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * mentor_project_messages findUnique
+   */
+  export type mentor_project_messagesFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_project_messages to fetch.
+     */
+    where: mentor_project_messagesWhereUniqueInput
+  }
+
+  /**
+   * mentor_project_messages findUniqueOrThrow
+   */
+  export type mentor_project_messagesFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_project_messages to fetch.
+     */
+    where: mentor_project_messagesWhereUniqueInput
+  }
+
+  /**
+   * mentor_project_messages findFirst
+   */
+  export type mentor_project_messagesFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_project_messages to fetch.
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_project_messages to fetch.
+     */
+    orderBy?: mentor_project_messagesOrderByWithRelationInput | mentor_project_messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_project_messages.
+     */
+    cursor?: mentor_project_messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_project_messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_project_messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_project_messages.
+     */
+    distinct?: Mentor_project_messagesScalarFieldEnum | Mentor_project_messagesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_project_messages findFirstOrThrow
+   */
+  export type mentor_project_messagesFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_project_messages to fetch.
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_project_messages to fetch.
+     */
+    orderBy?: mentor_project_messagesOrderByWithRelationInput | mentor_project_messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for mentor_project_messages.
+     */
+    cursor?: mentor_project_messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_project_messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_project_messages.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of mentor_project_messages.
+     */
+    distinct?: Mentor_project_messagesScalarFieldEnum | Mentor_project_messagesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_project_messages findMany
+   */
+  export type mentor_project_messagesFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * Filter, which mentor_project_messages to fetch.
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of mentor_project_messages to fetch.
+     */
+    orderBy?: mentor_project_messagesOrderByWithRelationInput | mentor_project_messagesOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing mentor_project_messages.
+     */
+    cursor?: mentor_project_messagesWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` mentor_project_messages from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` mentor_project_messages.
+     */
+    skip?: number
+    distinct?: Mentor_project_messagesScalarFieldEnum | Mentor_project_messagesScalarFieldEnum[]
+  }
+
+  /**
+   * mentor_project_messages create
+   */
+  export type mentor_project_messagesCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * The data needed to create a mentor_project_messages.
+     */
+    data: XOR<mentor_project_messagesCreateInput, mentor_project_messagesUncheckedCreateInput>
+  }
+
+  /**
+   * mentor_project_messages createMany
+   */
+  export type mentor_project_messagesCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many mentor_project_messages.
+     */
+    data: mentor_project_messagesCreateManyInput | mentor_project_messagesCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * mentor_project_messages createManyAndReturn
+   */
+  export type mentor_project_messagesCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * The data used to create many mentor_project_messages.
+     */
+    data: mentor_project_messagesCreateManyInput | mentor_project_messagesCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_project_messages update
+   */
+  export type mentor_project_messagesUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * The data needed to update a mentor_project_messages.
+     */
+    data: XOR<mentor_project_messagesUpdateInput, mentor_project_messagesUncheckedUpdateInput>
+    /**
+     * Choose, which mentor_project_messages to update.
+     */
+    where: mentor_project_messagesWhereUniqueInput
+  }
+
+  /**
+   * mentor_project_messages updateMany
+   */
+  export type mentor_project_messagesUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update mentor_project_messages.
+     */
+    data: XOR<mentor_project_messagesUpdateManyMutationInput, mentor_project_messagesUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_project_messages to update
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * Limit how many mentor_project_messages to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_project_messages updateManyAndReturn
+   */
+  export type mentor_project_messagesUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * The data used to update mentor_project_messages.
+     */
+    data: XOR<mentor_project_messagesUpdateManyMutationInput, mentor_project_messagesUncheckedUpdateManyInput>
+    /**
+     * Filter which mentor_project_messages to update
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * Limit how many mentor_project_messages to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * mentor_project_messages upsert
+   */
+  export type mentor_project_messagesUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * The filter to search for the mentor_project_messages to update in case it exists.
+     */
+    where: mentor_project_messagesWhereUniqueInput
+    /**
+     * In case the mentor_project_messages found by the `where` argument doesn't exist, create a new mentor_project_messages with this data.
+     */
+    create: XOR<mentor_project_messagesCreateInput, mentor_project_messagesUncheckedCreateInput>
+    /**
+     * In case the mentor_project_messages was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<mentor_project_messagesUpdateInput, mentor_project_messagesUncheckedUpdateInput>
+  }
+
+  /**
+   * mentor_project_messages delete
+   */
+  export type mentor_project_messagesDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+    /**
+     * Filter which mentor_project_messages to delete.
+     */
+    where: mentor_project_messagesWhereUniqueInput
+  }
+
+  /**
+   * mentor_project_messages deleteMany
+   */
+  export type mentor_project_messagesDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which mentor_project_messages to delete
+     */
+    where?: mentor_project_messagesWhereInput
+    /**
+     * Limit how many mentor_project_messages to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * mentor_project_messages without action
+   */
+  export type mentor_project_messagesDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the mentor_project_messages
+     */
+    select?: mentor_project_messagesSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the mentor_project_messages
+     */
+    omit?: mentor_project_messagesOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: mentor_project_messagesInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -48916,6 +51560,41 @@ export namespace Prisma {
   };
 
   export type MessagesScalarFieldEnum = (typeof MessagesScalarFieldEnum)[keyof typeof MessagesScalarFieldEnum]
+
+
+  export const Mentor_projectsScalarFieldEnum: {
+    id: 'id',
+    studentId: 'studentId',
+    mentorId: 'mentorId',
+    title: 'title',
+    projectType: 'projectType',
+    deadline: 'deadline',
+    status: 'status',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt',
+    studentViewedAt: 'studentViewedAt',
+    submissionUrl: 'submissionUrl',
+    submissionPublicId: 'submissionPublicId',
+    submissionFilename: 'submissionFilename',
+    submissionMimeType: 'submissionMimeType',
+    submissionSize: 'submissionSize',
+    submittedAt: 'submittedAt',
+    description: 'description'
+  };
+
+  export type Mentor_projectsScalarFieldEnum = (typeof Mentor_projectsScalarFieldEnum)[keyof typeof Mentor_projectsScalarFieldEnum]
+
+
+  export const Mentor_project_messagesScalarFieldEnum: {
+    id: 'id',
+    projectId: 'projectId',
+    senderUserAccountId: 'senderUserAccountId',
+    senderRole: 'senderRole',
+    message: 'message',
+    createdAt: 'createdAt'
+  };
+
+  export type Mentor_project_messagesScalarFieldEnum = (typeof Mentor_project_messagesScalarFieldEnum)[keyof typeof Mentor_project_messagesScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -50500,6 +53179,7 @@ export namespace Prisma {
     parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
+    mentor_projects?: Mentor_projectsListRelationFilter
   }
 
   export type studentsOrderByWithRelationInput = {
@@ -50546,6 +53226,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsOrderByWithRelationInput
     departments?: departmentsOrderByWithRelationInput
     user_accounts?: user_accountsOrderByWithRelationInput
+    mentor_projects?: mentor_projectsOrderByRelationAggregateInput
   }
 
   export type studentsWhereUniqueInput = Prisma.AtLeast<{
@@ -50595,6 +53276,7 @@ export namespace Prisma {
     parentDetails?: XOR<Student_parent_detailsNullableScalarRelationFilter, student_parent_detailsWhereInput> | null
     departments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
+    mentor_projects?: Mentor_projectsListRelationFilter
   }, "id" | "registerNumber" | "admissionNumber" | "userAccountId">
 
   export type studentsOrderByWithAggregationInput = {
@@ -51731,6 +54413,7 @@ export namespace Prisma {
     teacher_profiles?: XOR<Teacher_profilesNullableScalarRelationFilter, teacher_profilesWhereInput> | null
     departments_teachers_departmentIdTodepartments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
+    mentor_projects?: Mentor_projectsListRelationFilter
   }
 
   export type teachersOrderByWithRelationInput = {
@@ -51758,6 +54441,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesOrderByWithRelationInput
     departments_teachers_departmentIdTodepartments?: departmentsOrderByWithRelationInput
     user_accounts?: user_accountsOrderByWithRelationInput
+    mentor_projects?: mentor_projectsOrderByRelationAggregateInput
   }
 
   export type teachersWhereUniqueInput = Prisma.AtLeast<{
@@ -51788,6 +54472,7 @@ export namespace Prisma {
     teacher_profiles?: XOR<Teacher_profilesNullableScalarRelationFilter, teacher_profilesWhereInput> | null
     departments_teachers_departmentIdTodepartments?: XOR<DepartmentsScalarRelationFilter, departmentsWhereInput>
     user_accounts?: XOR<User_accountsNullableScalarRelationFilter, user_accountsWhereInput> | null
+    mentor_projects?: Mentor_projectsListRelationFilter
   }, "id" | "employeeCode" | "userAccountId">
 
   export type teachersOrderByWithAggregationInput = {
@@ -53034,6 +55719,189 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"messages"> | Date | string | null
   }
 
+  export type mentor_projectsWhereInput = {
+    AND?: mentor_projectsWhereInput | mentor_projectsWhereInput[]
+    OR?: mentor_projectsWhereInput[]
+    NOT?: mentor_projectsWhereInput | mentor_projectsWhereInput[]
+    id?: StringFilter<"mentor_projects"> | string
+    studentId?: StringFilter<"mentor_projects"> | string
+    mentorId?: StringFilter<"mentor_projects"> | string
+    title?: StringFilter<"mentor_projects"> | string
+    projectType?: StringFilter<"mentor_projects"> | string
+    deadline?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    status?: StringFilter<"mentor_projects"> | string
+    createdAt?: DateTimeFilter<"mentor_projects"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_projects"> | Date | string
+    studentViewedAt?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    submissionUrl?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionPublicId?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionFilename?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionMimeType?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionSize?: IntNullableFilter<"mentor_projects"> | number | null
+    submittedAt?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    description?: StringNullableFilter<"mentor_projects"> | string | null
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+    mentor_project_messages?: Mentor_project_messagesListRelationFilter
+  }
+
+  export type mentor_projectsOrderByWithRelationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    mentorId?: SortOrder
+    title?: SortOrder
+    projectType?: SortOrder
+    deadline?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    studentViewedAt?: SortOrderInput | SortOrder
+    submissionUrl?: SortOrderInput | SortOrder
+    submissionPublicId?: SortOrderInput | SortOrder
+    submissionFilename?: SortOrderInput | SortOrder
+    submissionMimeType?: SortOrderInput | SortOrder
+    submissionSize?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    students?: studentsOrderByWithRelationInput
+    teachers?: teachersOrderByWithRelationInput
+    mentor_project_messages?: mentor_project_messagesOrderByRelationAggregateInput
+  }
+
+  export type mentor_projectsWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: mentor_projectsWhereInput | mentor_projectsWhereInput[]
+    OR?: mentor_projectsWhereInput[]
+    NOT?: mentor_projectsWhereInput | mentor_projectsWhereInput[]
+    studentId?: StringFilter<"mentor_projects"> | string
+    mentorId?: StringFilter<"mentor_projects"> | string
+    title?: StringFilter<"mentor_projects"> | string
+    projectType?: StringFilter<"mentor_projects"> | string
+    deadline?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    status?: StringFilter<"mentor_projects"> | string
+    createdAt?: DateTimeFilter<"mentor_projects"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_projects"> | Date | string
+    studentViewedAt?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    submissionUrl?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionPublicId?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionFilename?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionMimeType?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionSize?: IntNullableFilter<"mentor_projects"> | number | null
+    submittedAt?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    description?: StringNullableFilter<"mentor_projects"> | string | null
+    students?: XOR<StudentsScalarRelationFilter, studentsWhereInput>
+    teachers?: XOR<TeachersScalarRelationFilter, teachersWhereInput>
+    mentor_project_messages?: Mentor_project_messagesListRelationFilter
+  }, "id">
+
+  export type mentor_projectsOrderByWithAggregationInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    mentorId?: SortOrder
+    title?: SortOrder
+    projectType?: SortOrder
+    deadline?: SortOrderInput | SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    studentViewedAt?: SortOrderInput | SortOrder
+    submissionUrl?: SortOrderInput | SortOrder
+    submissionPublicId?: SortOrderInput | SortOrder
+    submissionFilename?: SortOrderInput | SortOrder
+    submissionMimeType?: SortOrderInput | SortOrder
+    submissionSize?: SortOrderInput | SortOrder
+    submittedAt?: SortOrderInput | SortOrder
+    description?: SortOrderInput | SortOrder
+    _count?: mentor_projectsCountOrderByAggregateInput
+    _avg?: mentor_projectsAvgOrderByAggregateInput
+    _max?: mentor_projectsMaxOrderByAggregateInput
+    _min?: mentor_projectsMinOrderByAggregateInput
+    _sum?: mentor_projectsSumOrderByAggregateInput
+  }
+
+  export type mentor_projectsScalarWhereWithAggregatesInput = {
+    AND?: mentor_projectsScalarWhereWithAggregatesInput | mentor_projectsScalarWhereWithAggregatesInput[]
+    OR?: mentor_projectsScalarWhereWithAggregatesInput[]
+    NOT?: mentor_projectsScalarWhereWithAggregatesInput | mentor_projectsScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_projects"> | string
+    studentId?: StringWithAggregatesFilter<"mentor_projects"> | string
+    mentorId?: StringWithAggregatesFilter<"mentor_projects"> | string
+    title?: StringWithAggregatesFilter<"mentor_projects"> | string
+    projectType?: StringWithAggregatesFilter<"mentor_projects"> | string
+    deadline?: DateTimeNullableWithAggregatesFilter<"mentor_projects"> | Date | string | null
+    status?: StringWithAggregatesFilter<"mentor_projects"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_projects"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"mentor_projects"> | Date | string
+    studentViewedAt?: DateTimeNullableWithAggregatesFilter<"mentor_projects"> | Date | string | null
+    submissionUrl?: StringNullableWithAggregatesFilter<"mentor_projects"> | string | null
+    submissionPublicId?: StringNullableWithAggregatesFilter<"mentor_projects"> | string | null
+    submissionFilename?: StringNullableWithAggregatesFilter<"mentor_projects"> | string | null
+    submissionMimeType?: StringNullableWithAggregatesFilter<"mentor_projects"> | string | null
+    submissionSize?: IntNullableWithAggregatesFilter<"mentor_projects"> | number | null
+    submittedAt?: DateTimeNullableWithAggregatesFilter<"mentor_projects"> | Date | string | null
+    description?: StringNullableWithAggregatesFilter<"mentor_projects"> | string | null
+  }
+
+  export type mentor_project_messagesWhereInput = {
+    AND?: mentor_project_messagesWhereInput | mentor_project_messagesWhereInput[]
+    OR?: mentor_project_messagesWhereInput[]
+    NOT?: mentor_project_messagesWhereInput | mentor_project_messagesWhereInput[]
+    id?: StringFilter<"mentor_project_messages"> | string
+    projectId?: StringFilter<"mentor_project_messages"> | string
+    senderUserAccountId?: StringFilter<"mentor_project_messages"> | string
+    senderRole?: StringFilter<"mentor_project_messages"> | string
+    message?: StringFilter<"mentor_project_messages"> | string
+    createdAt?: DateTimeFilter<"mentor_project_messages"> | Date | string
+    mentor_projects?: XOR<Mentor_projectsScalarRelationFilter, mentor_projectsWhereInput>
+  }
+
+  export type mentor_project_messagesOrderByWithRelationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    senderUserAccountId?: SortOrder
+    senderRole?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    mentor_projects?: mentor_projectsOrderByWithRelationInput
+  }
+
+  export type mentor_project_messagesWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: mentor_project_messagesWhereInput | mentor_project_messagesWhereInput[]
+    OR?: mentor_project_messagesWhereInput[]
+    NOT?: mentor_project_messagesWhereInput | mentor_project_messagesWhereInput[]
+    projectId?: StringFilter<"mentor_project_messages"> | string
+    senderUserAccountId?: StringFilter<"mentor_project_messages"> | string
+    senderRole?: StringFilter<"mentor_project_messages"> | string
+    message?: StringFilter<"mentor_project_messages"> | string
+    createdAt?: DateTimeFilter<"mentor_project_messages"> | Date | string
+    mentor_projects?: XOR<Mentor_projectsScalarRelationFilter, mentor_projectsWhereInput>
+  }, "id">
+
+  export type mentor_project_messagesOrderByWithAggregationInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    senderUserAccountId?: SortOrder
+    senderRole?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+    _count?: mentor_project_messagesCountOrderByAggregateInput
+    _max?: mentor_project_messagesMaxOrderByAggregateInput
+    _min?: mentor_project_messagesMinOrderByAggregateInput
+  }
+
+  export type mentor_project_messagesScalarWhereWithAggregatesInput = {
+    AND?: mentor_project_messagesScalarWhereWithAggregatesInput | mentor_project_messagesScalarWhereWithAggregatesInput[]
+    OR?: mentor_project_messagesScalarWhereWithAggregatesInput[]
+    NOT?: mentor_project_messagesScalarWhereWithAggregatesInput | mentor_project_messagesScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"mentor_project_messages"> | string
+    projectId?: StringWithAggregatesFilter<"mentor_project_messages"> | string
+    senderUserAccountId?: StringWithAggregatesFilter<"mentor_project_messages"> | string
+    senderRole?: StringWithAggregatesFilter<"mentor_project_messages"> | string
+    message?: StringWithAggregatesFilter<"mentor_project_messages"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"mentor_project_messages"> | Date | string
+  }
+
   export type academic_term_requestsCreateInput = {
     id: string
     semesterNumber: number
@@ -54073,6 +56941,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateInput = {
@@ -54117,6 +56986,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUpdateInput = {
@@ -54161,6 +57031,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateInput = {
@@ -54205,6 +57076,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsCreateManyInput = {
@@ -55543,6 +58415,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateInput = {
@@ -55568,6 +58441,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUpdateInput = {
@@ -55593,6 +58467,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateInput = {
@@ -55618,6 +58493,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersCreateManyInput = {
@@ -57016,6 +59892,210 @@ export namespace Prisma {
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type mentor_projectsCreateInput = {
+    id: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    students: studentsCreateNestedOneWithoutMentor_projectsInput
+    teachers: teachersCreateNestedOneWithoutMentor_projectsInput
+    mentor_project_messages?: mentor_project_messagesCreateNestedManyWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsUncheckedCreateInput = {
+    id: string
+    studentId: string
+    mentorId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    mentor_project_messages?: mentor_project_messagesUncheckedCreateNestedManyWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: studentsUpdateOneRequiredWithoutMentor_projectsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_projectsNestedInput
+    mentor_project_messages?: mentor_project_messagesUpdateManyWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    mentorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mentor_project_messages?: mentor_project_messagesUncheckedUpdateManyWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsCreateManyInput = {
+    id: string
+    studentId: string
+    mentorId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+  }
+
+  export type mentor_projectsUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type mentor_projectsUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    mentorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type mentor_project_messagesCreateInput = {
+    id: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt?: Date | string
+    mentor_projects: mentor_projectsCreateNestedOneWithoutMentor_project_messagesInput
+  }
+
+  export type mentor_project_messagesUncheckedCreateInput = {
+    id: string
+    projectId: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type mentor_project_messagesUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mentor_projects?: mentor_projectsUpdateOneRequiredWithoutMentor_project_messagesNestedInput
+  }
+
+  export type mentor_project_messagesUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_project_messagesCreateManyInput = {
+    id: string
+    projectId: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type mentor_project_messagesUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_project_messagesUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    projectId?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -58078,6 +61158,12 @@ export namespace Prisma {
     isNot?: student_parent_detailsWhereInput | null
   }
 
+  export type Mentor_projectsListRelationFilter = {
+    every?: mentor_projectsWhereInput
+    some?: mentor_projectsWhereInput
+    none?: mentor_projectsWhereInput
+  }
+
   export type academic_backlogsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -58095,6 +61181,10 @@ export namespace Prisma {
   }
 
   export type student_internshipsOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type mentor_projectsOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -60074,6 +63164,116 @@ export namespace Prisma {
     deletedAt?: SortOrder
   }
 
+  export type Mentor_project_messagesListRelationFilter = {
+    every?: mentor_project_messagesWhereInput
+    some?: mentor_project_messagesWhereInput
+    none?: mentor_project_messagesWhereInput
+  }
+
+  export type mentor_project_messagesOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type mentor_projectsCountOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    mentorId?: SortOrder
+    title?: SortOrder
+    projectType?: SortOrder
+    deadline?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    studentViewedAt?: SortOrder
+    submissionUrl?: SortOrder
+    submissionPublicId?: SortOrder
+    submissionFilename?: SortOrder
+    submissionMimeType?: SortOrder
+    submissionSize?: SortOrder
+    submittedAt?: SortOrder
+    description?: SortOrder
+  }
+
+  export type mentor_projectsAvgOrderByAggregateInput = {
+    submissionSize?: SortOrder
+  }
+
+  export type mentor_projectsMaxOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    mentorId?: SortOrder
+    title?: SortOrder
+    projectType?: SortOrder
+    deadline?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    studentViewedAt?: SortOrder
+    submissionUrl?: SortOrder
+    submissionPublicId?: SortOrder
+    submissionFilename?: SortOrder
+    submissionMimeType?: SortOrder
+    submissionSize?: SortOrder
+    submittedAt?: SortOrder
+    description?: SortOrder
+  }
+
+  export type mentor_projectsMinOrderByAggregateInput = {
+    id?: SortOrder
+    studentId?: SortOrder
+    mentorId?: SortOrder
+    title?: SortOrder
+    projectType?: SortOrder
+    deadline?: SortOrder
+    status?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    studentViewedAt?: SortOrder
+    submissionUrl?: SortOrder
+    submissionPublicId?: SortOrder
+    submissionFilename?: SortOrder
+    submissionMimeType?: SortOrder
+    submissionSize?: SortOrder
+    submittedAt?: SortOrder
+    description?: SortOrder
+  }
+
+  export type mentor_projectsSumOrderByAggregateInput = {
+    submissionSize?: SortOrder
+  }
+
+  export type Mentor_projectsScalarRelationFilter = {
+    is?: mentor_projectsWhereInput
+    isNot?: mentor_projectsWhereInput
+  }
+
+  export type mentor_project_messagesCountOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    senderUserAccountId?: SortOrder
+    senderRole?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type mentor_project_messagesMaxOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    senderUserAccountId?: SortOrder
+    senderRole?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type mentor_project_messagesMinOrderByAggregateInput = {
+    id?: SortOrder
+    projectId?: SortOrder
+    senderUserAccountId?: SortOrder
+    senderRole?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type academic_yearsCreateNestedOneWithoutAcademic_term_requestsInput = {
     create?: XOR<academic_yearsCreateWithoutAcademic_term_requestsInput, academic_yearsUncheckedCreateWithoutAcademic_term_requestsInput>
     connectOrCreate?: academic_yearsCreateOrConnectWithoutAcademic_term_requestsInput
@@ -61084,6 +64284,13 @@ export namespace Prisma {
     connect?: user_accountsWhereUniqueInput
   }
 
+  export type mentor_projectsCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<mentor_projectsCreateWithoutStudentsInput, mentor_projectsUncheckedCreateWithoutStudentsInput> | mentor_projectsCreateWithoutStudentsInput[] | mentor_projectsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutStudentsInput | mentor_projectsCreateOrConnectWithoutStudentsInput[]
+    createMany?: mentor_projectsCreateManyStudentsInputEnvelope
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+  }
+
   export type academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput = {
     create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
@@ -61164,6 +64371,13 @@ export namespace Prisma {
     create?: XOR<student_parent_detailsCreateWithoutStudentInput, student_parent_detailsUncheckedCreateWithoutStudentInput>
     connectOrCreate?: student_parent_detailsCreateOrConnectWithoutStudentInput
     connect?: student_parent_detailsWhereUniqueInput
+  }
+
+  export type mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput = {
+    create?: XOR<mentor_projectsCreateWithoutStudentsInput, mentor_projectsUncheckedCreateWithoutStudentsInput> | mentor_projectsCreateWithoutStudentsInput[] | mentor_projectsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutStudentsInput | mentor_projectsCreateOrConnectWithoutStudentsInput[]
+    createMany?: mentor_projectsCreateManyStudentsInputEnvelope
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
   }
 
   export type NullableEnumGenderFieldUpdateOperationsInput = {
@@ -61380,6 +64594,20 @@ export namespace Prisma {
     update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutStudentsInput, user_accountsUpdateWithoutStudentsInput>, user_accountsUncheckedUpdateWithoutStudentsInput>
   }
 
+  export type mentor_projectsUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<mentor_projectsCreateWithoutStudentsInput, mentor_projectsUncheckedCreateWithoutStudentsInput> | mentor_projectsCreateWithoutStudentsInput[] | mentor_projectsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutStudentsInput | mentor_projectsCreateOrConnectWithoutStudentsInput[]
+    upsert?: mentor_projectsUpsertWithWhereUniqueWithoutStudentsInput | mentor_projectsUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: mentor_projectsCreateManyStudentsInputEnvelope
+    set?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    disconnect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    delete?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    update?: mentor_projectsUpdateWithWhereUniqueWithoutStudentsInput | mentor_projectsUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: mentor_projectsUpdateManyWithWhereWithoutStudentsInput | mentor_projectsUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: mentor_projectsScalarWhereInput | mentor_projectsScalarWhereInput[]
+  }
+
   export type academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput = {
     create?: XOR<academic_backlogsCreateWithoutStudentsInput, academic_backlogsUncheckedCreateWithoutStudentsInput> | academic_backlogsCreateWithoutStudentsInput[] | academic_backlogsUncheckedCreateWithoutStudentsInput[]
     connectOrCreate?: academic_backlogsCreateOrConnectWithoutStudentsInput | academic_backlogsCreateOrConnectWithoutStudentsInput[]
@@ -61538,6 +64766,20 @@ export namespace Prisma {
     delete?: student_parent_detailsWhereInput | boolean
     connect?: student_parent_detailsWhereUniqueInput
     update?: XOR<XOR<student_parent_detailsUpdateToOneWithWhereWithoutStudentInput, student_parent_detailsUpdateWithoutStudentInput>, student_parent_detailsUncheckedUpdateWithoutStudentInput>
+  }
+
+  export type mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput = {
+    create?: XOR<mentor_projectsCreateWithoutStudentsInput, mentor_projectsUncheckedCreateWithoutStudentsInput> | mentor_projectsCreateWithoutStudentsInput[] | mentor_projectsUncheckedCreateWithoutStudentsInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutStudentsInput | mentor_projectsCreateOrConnectWithoutStudentsInput[]
+    upsert?: mentor_projectsUpsertWithWhereUniqueWithoutStudentsInput | mentor_projectsUpsertWithWhereUniqueWithoutStudentsInput[]
+    createMany?: mentor_projectsCreateManyStudentsInputEnvelope
+    set?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    disconnect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    delete?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    update?: mentor_projectsUpdateWithWhereUniqueWithoutStudentsInput | mentor_projectsUpdateWithWhereUniqueWithoutStudentsInput[]
+    updateMany?: mentor_projectsUpdateManyWithWhereWithoutStudentsInput | mentor_projectsUpdateManyWithWhereWithoutStudentsInput[]
+    deleteMany?: mentor_projectsScalarWhereInput | mentor_projectsScalarWhereInput[]
   }
 
   export type internship_documentsCreateNestedManyWithoutInternshipInput = {
@@ -61966,6 +65208,13 @@ export namespace Prisma {
     connect?: user_accountsWhereUniqueInput
   }
 
+  export type mentor_projectsCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_projectsCreateWithoutTeachersInput, mentor_projectsUncheckedCreateWithoutTeachersInput> | mentor_projectsCreateWithoutTeachersInput[] | mentor_projectsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutTeachersInput | mentor_projectsCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_projectsCreateManyTeachersInputEnvelope
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+  }
+
   export type departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput = {
     create?: XOR<departmentsCreateWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUncheckedCreateWithoutTeachers_departments_hodTeacherIdToteachersInput>
     connectOrCreate?: departmentsCreateOrConnectWithoutTeachers_departments_hodTeacherIdToteachersInput
@@ -62032,6 +65281,13 @@ export namespace Prisma {
     create?: XOR<teacher_profilesCreateWithoutTeachersInput, teacher_profilesUncheckedCreateWithoutTeachersInput>
     connectOrCreate?: teacher_profilesCreateOrConnectWithoutTeachersInput
     connect?: teacher_profilesWhereUniqueInput
+  }
+
+  export type mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput = {
+    create?: XOR<mentor_projectsCreateWithoutTeachersInput, mentor_projectsUncheckedCreateWithoutTeachersInput> | mentor_projectsCreateWithoutTeachersInput[] | mentor_projectsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutTeachersInput | mentor_projectsCreateOrConnectWithoutTeachersInput[]
+    createMany?: mentor_projectsCreateManyTeachersInputEnvelope
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
   }
 
   export type departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput = {
@@ -62184,6 +65440,20 @@ export namespace Prisma {
     update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutTeachersInput, user_accountsUpdateWithoutTeachersInput>, user_accountsUncheckedUpdateWithoutTeachersInput>
   }
 
+  export type mentor_projectsUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_projectsCreateWithoutTeachersInput, mentor_projectsUncheckedCreateWithoutTeachersInput> | mentor_projectsCreateWithoutTeachersInput[] | mentor_projectsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutTeachersInput | mentor_projectsCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_projectsUpsertWithWhereUniqueWithoutTeachersInput | mentor_projectsUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_projectsCreateManyTeachersInputEnvelope
+    set?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    disconnect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    delete?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    update?: mentor_projectsUpdateWithWhereUniqueWithoutTeachersInput | mentor_projectsUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_projectsUpdateManyWithWhereWithoutTeachersInput | mentor_projectsUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_projectsScalarWhereInput | mentor_projectsScalarWhereInput[]
+  }
+
   export type departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput = {
     create?: XOR<departmentsCreateWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUncheckedCreateWithoutTeachers_departments_hodTeacherIdToteachersInput>
     connectOrCreate?: departmentsCreateOrConnectWithoutTeachers_departments_hodTeacherIdToteachersInput
@@ -62314,6 +65584,20 @@ export namespace Prisma {
     delete?: teacher_profilesWhereInput | boolean
     connect?: teacher_profilesWhereUniqueInput
     update?: XOR<XOR<teacher_profilesUpdateToOneWithWhereWithoutTeachersInput, teacher_profilesUpdateWithoutTeachersInput>, teacher_profilesUncheckedUpdateWithoutTeachersInput>
+  }
+
+  export type mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput = {
+    create?: XOR<mentor_projectsCreateWithoutTeachersInput, mentor_projectsUncheckedCreateWithoutTeachersInput> | mentor_projectsCreateWithoutTeachersInput[] | mentor_projectsUncheckedCreateWithoutTeachersInput[]
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutTeachersInput | mentor_projectsCreateOrConnectWithoutTeachersInput[]
+    upsert?: mentor_projectsUpsertWithWhereUniqueWithoutTeachersInput | mentor_projectsUpsertWithWhereUniqueWithoutTeachersInput[]
+    createMany?: mentor_projectsCreateManyTeachersInputEnvelope
+    set?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    disconnect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    delete?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    connect?: mentor_projectsWhereUniqueInput | mentor_projectsWhereUniqueInput[]
+    update?: mentor_projectsUpdateWithWhereUniqueWithoutTeachersInput | mentor_projectsUpdateWithWhereUniqueWithoutTeachersInput[]
+    updateMany?: mentor_projectsUpdateManyWithWhereWithoutTeachersInput | mentor_projectsUpdateManyWithWhereWithoutTeachersInput[]
+    deleteMany?: mentor_projectsScalarWhereInput | mentor_projectsScalarWhereInput[]
   }
 
   export type admin_profilesCreateNestedOneWithoutUser_accountsInput = {
@@ -63436,6 +66720,90 @@ export namespace Prisma {
     upsert?: user_accountsUpsertWithoutMessagesInput
     connect?: user_accountsWhereUniqueInput
     update?: XOR<XOR<user_accountsUpdateToOneWithWhereWithoutMessagesInput, user_accountsUpdateWithoutMessagesInput>, user_accountsUncheckedUpdateWithoutMessagesInput>
+  }
+
+  export type studentsCreateNestedOneWithoutMentor_projectsInput = {
+    create?: XOR<studentsCreateWithoutMentor_projectsInput, studentsUncheckedCreateWithoutMentor_projectsInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutMentor_projectsInput
+    connect?: studentsWhereUniqueInput
+  }
+
+  export type teachersCreateNestedOneWithoutMentor_projectsInput = {
+    create?: XOR<teachersCreateWithoutMentor_projectsInput, teachersUncheckedCreateWithoutMentor_projectsInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_projectsInput
+    connect?: teachersWhereUniqueInput
+  }
+
+  export type mentor_project_messagesCreateNestedManyWithoutMentor_projectsInput = {
+    create?: XOR<mentor_project_messagesCreateWithoutMentor_projectsInput, mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput> | mentor_project_messagesCreateWithoutMentor_projectsInput[] | mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput[]
+    connectOrCreate?: mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput | mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput[]
+    createMany?: mentor_project_messagesCreateManyMentor_projectsInputEnvelope
+    connect?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+  }
+
+  export type mentor_project_messagesUncheckedCreateNestedManyWithoutMentor_projectsInput = {
+    create?: XOR<mentor_project_messagesCreateWithoutMentor_projectsInput, mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput> | mentor_project_messagesCreateWithoutMentor_projectsInput[] | mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput[]
+    connectOrCreate?: mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput | mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput[]
+    createMany?: mentor_project_messagesCreateManyMentor_projectsInputEnvelope
+    connect?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+  }
+
+  export type studentsUpdateOneRequiredWithoutMentor_projectsNestedInput = {
+    create?: XOR<studentsCreateWithoutMentor_projectsInput, studentsUncheckedCreateWithoutMentor_projectsInput>
+    connectOrCreate?: studentsCreateOrConnectWithoutMentor_projectsInput
+    upsert?: studentsUpsertWithoutMentor_projectsInput
+    connect?: studentsWhereUniqueInput
+    update?: XOR<XOR<studentsUpdateToOneWithWhereWithoutMentor_projectsInput, studentsUpdateWithoutMentor_projectsInput>, studentsUncheckedUpdateWithoutMentor_projectsInput>
+  }
+
+  export type teachersUpdateOneRequiredWithoutMentor_projectsNestedInput = {
+    create?: XOR<teachersCreateWithoutMentor_projectsInput, teachersUncheckedCreateWithoutMentor_projectsInput>
+    connectOrCreate?: teachersCreateOrConnectWithoutMentor_projectsInput
+    upsert?: teachersUpsertWithoutMentor_projectsInput
+    connect?: teachersWhereUniqueInput
+    update?: XOR<XOR<teachersUpdateToOneWithWhereWithoutMentor_projectsInput, teachersUpdateWithoutMentor_projectsInput>, teachersUncheckedUpdateWithoutMentor_projectsInput>
+  }
+
+  export type mentor_project_messagesUpdateManyWithoutMentor_projectsNestedInput = {
+    create?: XOR<mentor_project_messagesCreateWithoutMentor_projectsInput, mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput> | mentor_project_messagesCreateWithoutMentor_projectsInput[] | mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput[]
+    connectOrCreate?: mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput | mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput[]
+    upsert?: mentor_project_messagesUpsertWithWhereUniqueWithoutMentor_projectsInput | mentor_project_messagesUpsertWithWhereUniqueWithoutMentor_projectsInput[]
+    createMany?: mentor_project_messagesCreateManyMentor_projectsInputEnvelope
+    set?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    disconnect?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    delete?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    connect?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    update?: mentor_project_messagesUpdateWithWhereUniqueWithoutMentor_projectsInput | mentor_project_messagesUpdateWithWhereUniqueWithoutMentor_projectsInput[]
+    updateMany?: mentor_project_messagesUpdateManyWithWhereWithoutMentor_projectsInput | mentor_project_messagesUpdateManyWithWhereWithoutMentor_projectsInput[]
+    deleteMany?: mentor_project_messagesScalarWhereInput | mentor_project_messagesScalarWhereInput[]
+  }
+
+  export type mentor_project_messagesUncheckedUpdateManyWithoutMentor_projectsNestedInput = {
+    create?: XOR<mentor_project_messagesCreateWithoutMentor_projectsInput, mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput> | mentor_project_messagesCreateWithoutMentor_projectsInput[] | mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput[]
+    connectOrCreate?: mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput | mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput[]
+    upsert?: mentor_project_messagesUpsertWithWhereUniqueWithoutMentor_projectsInput | mentor_project_messagesUpsertWithWhereUniqueWithoutMentor_projectsInput[]
+    createMany?: mentor_project_messagesCreateManyMentor_projectsInputEnvelope
+    set?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    disconnect?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    delete?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    connect?: mentor_project_messagesWhereUniqueInput | mentor_project_messagesWhereUniqueInput[]
+    update?: mentor_project_messagesUpdateWithWhereUniqueWithoutMentor_projectsInput | mentor_project_messagesUpdateWithWhereUniqueWithoutMentor_projectsInput[]
+    updateMany?: mentor_project_messagesUpdateManyWithWhereWithoutMentor_projectsInput | mentor_project_messagesUpdateManyWithWhereWithoutMentor_projectsInput[]
+    deleteMany?: mentor_project_messagesScalarWhereInput | mentor_project_messagesScalarWhereInput[]
+  }
+
+  export type mentor_projectsCreateNestedOneWithoutMentor_project_messagesInput = {
+    create?: XOR<mentor_projectsCreateWithoutMentor_project_messagesInput, mentor_projectsUncheckedCreateWithoutMentor_project_messagesInput>
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutMentor_project_messagesInput
+    connect?: mentor_projectsWhereUniqueInput
+  }
+
+  export type mentor_projectsUpdateOneRequiredWithoutMentor_project_messagesNestedInput = {
+    create?: XOR<mentor_projectsCreateWithoutMentor_project_messagesInput, mentor_projectsUncheckedCreateWithoutMentor_project_messagesInput>
+    connectOrCreate?: mentor_projectsCreateOrConnectWithoutMentor_project_messagesInput
+    upsert?: mentor_projectsUpsertWithoutMentor_project_messagesInput
+    connect?: mentor_projectsWhereUniqueInput
+    update?: XOR<XOR<mentor_projectsUpdateToOneWithWhereWithoutMentor_project_messagesInput, mentor_projectsUpdateWithoutMentor_project_messagesInput>, mentor_projectsUncheckedUpdateWithoutMentor_project_messagesInput>
   }
 
   export type NestedStringFilter<$PrismaModel = never> = {
@@ -65081,6 +68449,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutDepartments_departments_hodTeacherIdToteachersInput = {
@@ -65105,6 +68474,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutDepartments_departments_hodTeacherIdToteachersInput = {
@@ -65153,6 +68523,7 @@ export namespace Prisma {
     internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutDepartmentsInput = {
@@ -65196,6 +68567,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutDepartmentsInput = {
@@ -65230,6 +68602,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -65254,6 +68627,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -65329,6 +68703,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutDepartments_departments_hodTeacherIdToteachersInput = {
@@ -65353,6 +68728,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type studentsUpsertWithWhereUniqueWithoutDepartmentsInput = {
@@ -65538,6 +68914,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutDetentionsInput = {
@@ -65581,6 +68958,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutDetentionsInput = {
@@ -65738,6 +69116,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutDetentionsInput = {
@@ -65781,6 +69160,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type academic_termsUpsertWithoutDetentionsInput = {
@@ -66239,6 +69619,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutMentor_assignmentsInput = {
@@ -66282,6 +69663,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutMentor_assignmentsInput = {
@@ -66311,6 +69693,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_assignmentsInput = {
@@ -66335,6 +69718,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_assignmentsInput = {
@@ -66492,6 +69876,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutMentor_assignmentsInput = {
@@ -66535,6 +69920,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type teachersUpsertWithoutMentor_assignmentsInput = {
@@ -66570,6 +69956,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_assignmentsInput = {
@@ -66594,6 +69981,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type academic_termsUpsertWithoutMentor_assignmentsInput = {
@@ -66659,6 +70047,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -66683,6 +70072,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -66712,6 +70102,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersInput = {
@@ -66736,6 +70127,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersInput = {
@@ -66822,6 +70214,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersInput = {
@@ -66846,6 +70239,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersInput = {
@@ -66951,6 +70345,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutMentor_transfer_requestsInput = {
@@ -66994,6 +70389,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutMentor_transfer_requestsInput = {
@@ -67069,6 +70465,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachersInput = {
@@ -67093,6 +70490,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUpsertWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersInput = {
@@ -67128,6 +70526,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachersInput = {
@@ -67152,6 +70551,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type user_accountsUpsertWithoutMentor_transfer_requests_mentor_transfer_requests_initiatedByUserIdTouser_accountsInput = {
@@ -67250,6 +70650,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachersInput = {
@@ -67274,6 +70675,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type user_accountsUpsertWithoutMentor_transfer_requests_mentor_transfer_requests_reviewedByTouser_accountsInput = {
@@ -67391,6 +70793,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutMentor_transfer_requestsInput = {
@@ -67434,6 +70837,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type academic_termsUpsertWithoutMentor_transfer_requestsInput = {
@@ -67638,6 +71042,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutStudent_enrollmentsInput = {
@@ -67681,6 +71086,7 @@ export namespace Prisma {
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutStudent_enrollmentsInput = {
@@ -67775,6 +71181,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutStudent_enrollmentsInput = {
@@ -67818,6 +71225,7 @@ export namespace Prisma {
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type academic_termsUpsertWithoutStudent_enrollmentsInput = {
@@ -68489,6 +71897,56 @@ export namespace Prisma {
     create: XOR<user_accountsCreateWithoutStudentsInput, user_accountsUncheckedCreateWithoutStudentsInput>
   }
 
+  export type mentor_projectsCreateWithoutStudentsInput = {
+    id: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    teachers: teachersCreateNestedOneWithoutMentor_projectsInput
+    mentor_project_messages?: mentor_project_messagesCreateNestedManyWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsUncheckedCreateWithoutStudentsInput = {
+    id: string
+    mentorId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    mentor_project_messages?: mentor_project_messagesUncheckedCreateNestedManyWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsCreateOrConnectWithoutStudentsInput = {
+    where: mentor_projectsWhereUniqueInput
+    create: XOR<mentor_projectsCreateWithoutStudentsInput, mentor_projectsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type mentor_projectsCreateManyStudentsInputEnvelope = {
+    data: mentor_projectsCreateManyStudentsInput | mentor_projectsCreateManyStudentsInput[]
+    skipDuplicates?: boolean
+  }
+
   export type academic_backlogsUpsertWithWhereUniqueWithoutStudentsInput = {
     where: academic_backlogsWhereUniqueInput
     update: XOR<academic_backlogsUpdateWithoutStudentsInput, academic_backlogsUncheckedUpdateWithoutStudentsInput>
@@ -68978,6 +72436,45 @@ export namespace Prisma {
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
+  export type mentor_projectsUpsertWithWhereUniqueWithoutStudentsInput = {
+    where: mentor_projectsWhereUniqueInput
+    update: XOR<mentor_projectsUpdateWithoutStudentsInput, mentor_projectsUncheckedUpdateWithoutStudentsInput>
+    create: XOR<mentor_projectsCreateWithoutStudentsInput, mentor_projectsUncheckedCreateWithoutStudentsInput>
+  }
+
+  export type mentor_projectsUpdateWithWhereUniqueWithoutStudentsInput = {
+    where: mentor_projectsWhereUniqueInput
+    data: XOR<mentor_projectsUpdateWithoutStudentsInput, mentor_projectsUncheckedUpdateWithoutStudentsInput>
+  }
+
+  export type mentor_projectsUpdateManyWithWhereWithoutStudentsInput = {
+    where: mentor_projectsScalarWhereInput
+    data: XOR<mentor_projectsUpdateManyMutationInput, mentor_projectsUncheckedUpdateManyWithoutStudentsInput>
+  }
+
+  export type mentor_projectsScalarWhereInput = {
+    AND?: mentor_projectsScalarWhereInput | mentor_projectsScalarWhereInput[]
+    OR?: mentor_projectsScalarWhereInput[]
+    NOT?: mentor_projectsScalarWhereInput | mentor_projectsScalarWhereInput[]
+    id?: StringFilter<"mentor_projects"> | string
+    studentId?: StringFilter<"mentor_projects"> | string
+    mentorId?: StringFilter<"mentor_projects"> | string
+    title?: StringFilter<"mentor_projects"> | string
+    projectType?: StringFilter<"mentor_projects"> | string
+    deadline?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    status?: StringFilter<"mentor_projects"> | string
+    createdAt?: DateTimeFilter<"mentor_projects"> | Date | string
+    updatedAt?: DateTimeFilter<"mentor_projects"> | Date | string
+    studentViewedAt?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    submissionUrl?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionPublicId?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionFilename?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionMimeType?: StringNullableFilter<"mentor_projects"> | string | null
+    submissionSize?: IntNullableFilter<"mentor_projects"> | number | null
+    submittedAt?: DateTimeNullableFilter<"mentor_projects"> | Date | string | null
+    description?: StringNullableFilter<"mentor_projects"> | string | null
+  }
+
   export type internship_documentsCreateWithoutInternshipInput = {
     id: string
     documentType: $Enums.InternshipDocumentType
@@ -69087,6 +72584,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutInternshipsInput = {
@@ -69130,6 +72628,7 @@ export namespace Prisma {
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutInternshipsInput = {
@@ -69253,6 +72752,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutInternshipsInput = {
@@ -69296,6 +72796,7 @@ export namespace Prisma {
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type student_internshipsCreateWithoutInternship_reviewsInput = {
@@ -69381,6 +72882,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutInternship_reviewsInput = {
@@ -69405,6 +72907,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutInternship_reviewsInput = {
@@ -69512,6 +73015,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutInternship_reviewsInput = {
@@ -69536,6 +73040,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type student_internshipsCreateWithoutInternship_documentsInput = {
@@ -69707,6 +73212,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutContactDetailsInput = {
@@ -69750,6 +73256,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutContactDetailsInput = {
@@ -69809,6 +73316,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutContactDetailsInput = {
@@ -69852,6 +73360,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsCreateWithoutParentDetailsInput = {
@@ -69895,6 +73404,7 @@ export namespace Prisma {
     internships?: student_internshipsCreateNestedManyWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutParentDetailsInput = {
@@ -69938,6 +73448,7 @@ export namespace Prisma {
     documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutParentDetailsInput = {
@@ -69997,6 +73508,7 @@ export namespace Prisma {
     internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutParentDetailsInput = {
@@ -70040,6 +73552,7 @@ export namespace Prisma {
     documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsCreateWithoutDocumentsInput = {
@@ -70083,6 +73596,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutDocumentsInput = {
@@ -70126,6 +73640,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutDocumentsInput = {
@@ -70185,6 +73700,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutDocumentsInput = {
@@ -70228,6 +73744,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type academic_yearsCreateWithoutAcademic_semestersInput = {
@@ -70304,6 +73821,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutAcademicSemestersInput = {
@@ -70347,6 +73865,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutAcademicSemestersInput = {
@@ -70497,6 +74016,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutAcademicSemestersInput = {
@@ -70540,6 +74060,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type academic_subjectsUpsertWithWhereUniqueWithoutAcademicSemesterInput = {
@@ -70700,6 +74221,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutAcademicBacklogsInput = {
@@ -70743,6 +74265,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutAcademicBacklogsInput = {
@@ -70802,6 +74325,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutAcademicBacklogsInput = {
@@ -70845,6 +74369,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type departmentsCreateWithoutTeachers_departments_hodTeacherIdToteachersInput = {
@@ -71331,6 +74856,56 @@ export namespace Prisma {
     create: XOR<user_accountsCreateWithoutTeachersInput, user_accountsUncheckedCreateWithoutTeachersInput>
   }
 
+  export type mentor_projectsCreateWithoutTeachersInput = {
+    id: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    students: studentsCreateNestedOneWithoutMentor_projectsInput
+    mentor_project_messages?: mentor_project_messagesCreateNestedManyWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsUncheckedCreateWithoutTeachersInput = {
+    id: string
+    studentId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    mentor_project_messages?: mentor_project_messagesUncheckedCreateNestedManyWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsCreateOrConnectWithoutTeachersInput = {
+    where: mentor_projectsWhereUniqueInput
+    create: XOR<mentor_projectsCreateWithoutTeachersInput, mentor_projectsUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_projectsCreateManyTeachersInputEnvelope = {
+    data: mentor_projectsCreateManyTeachersInput | mentor_projectsCreateManyTeachersInput[]
+    skipDuplicates?: boolean
+  }
+
   export type departmentsUpsertWithoutTeachers_departments_hodTeacherIdToteachersInput = {
     update: XOR<departmentsUpdateWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUncheckedUpdateWithoutTeachers_departments_hodTeacherIdToteachersInput>
     create: XOR<departmentsCreateWithoutTeachers_departments_hodTeacherIdToteachersInput, departmentsUncheckedCreateWithoutTeachers_departments_hodTeacherIdToteachersInput>
@@ -71650,6 +75225,22 @@ export namespace Prisma {
     messages?: messagesUncheckedUpdateManyWithoutUser_accountsNestedInput
     otp_verifications?: otp_verificationsUncheckedUpdateManyWithoutUser_accountsNestedInput
     students?: studentsUncheckedUpdateOneWithoutUser_accountsNestedInput
+  }
+
+  export type mentor_projectsUpsertWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_projectsWhereUniqueInput
+    update: XOR<mentor_projectsUpdateWithoutTeachersInput, mentor_projectsUncheckedUpdateWithoutTeachersInput>
+    create: XOR<mentor_projectsCreateWithoutTeachersInput, mentor_projectsUncheckedCreateWithoutTeachersInput>
+  }
+
+  export type mentor_projectsUpdateWithWhereUniqueWithoutTeachersInput = {
+    where: mentor_projectsWhereUniqueInput
+    data: XOR<mentor_projectsUpdateWithoutTeachersInput, mentor_projectsUncheckedUpdateWithoutTeachersInput>
+  }
+
+  export type mentor_projectsUpdateManyWithWhereWithoutTeachersInput = {
+    where: mentor_projectsScalarWhereInput
+    data: XOR<mentor_projectsUpdateManyMutationInput, mentor_projectsUncheckedUpdateManyWithoutTeachersInput>
   }
 
   export type admin_profilesCreateWithoutUser_accountsInput = {
@@ -72120,6 +75711,7 @@ export namespace Prisma {
     internships?: student_internshipsCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutUser_accountsInput = {
@@ -72163,6 +75755,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutUser_accountsInput = {
@@ -72192,6 +75785,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutUser_accountsInput = {
@@ -72216,6 +75810,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutUser_accountsInput = {
@@ -72578,6 +76173,7 @@ export namespace Prisma {
     internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutUser_accountsInput = {
@@ -72621,6 +76217,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type teachersUpsertWithoutUser_accountsInput = {
@@ -72656,6 +76253,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutUser_accountsInput = {
@@ -72680,6 +76278,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersCreateWithoutTeacher_profilesInput = {
@@ -72704,6 +76303,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutTeacher_profilesInput = {
@@ -72728,6 +76328,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutTeacher_profilesInput = {
@@ -72768,6 +76369,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutTeacher_profilesInput = {
@@ -72792,6 +76394,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type mentor_meetingsCreateWithoutMentor_meeting_discussion_pointsInput = {
@@ -72993,6 +76596,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_meeting_feedbackInput = {
@@ -73017,6 +76621,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_meeting_feedbackInput = {
@@ -73120,6 +76725,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_meeting_feedbackInput = {
@@ -73144,6 +76750,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type mentor_meetingsCreateWithoutMentor_meeting_notesInput = {
@@ -73307,6 +76914,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutMentor_meeting_seriesInput = {
@@ -73350,6 +76958,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutMentor_meeting_seriesInput = {
@@ -73379,6 +76988,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_meeting_seriesInput = {
@@ -73403,6 +77013,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_meeting_seriesInput = {
@@ -73524,6 +77135,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutMentor_meeting_seriesInput = {
@@ -73567,6 +77179,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type teachersUpsertWithoutMentor_meeting_seriesInput = {
@@ -73602,6 +77215,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_meeting_seriesInput = {
@@ -73626,6 +77240,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type mentor_meetingsUpsertWithWhereUniqueWithoutMentor_meeting_seriesInput = {
@@ -73909,6 +77524,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
     departments: departmentsCreateNestedOneWithoutStudentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsUncheckedCreateWithoutMentor_meetingsInput = {
@@ -73952,6 +77568,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
     internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
     parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutStudentsInput
   }
 
   export type studentsCreateOrConnectWithoutMentor_meetingsInput = {
@@ -73981,6 +77598,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
     departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
     user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersUncheckedCreateWithoutMentor_meetingsInput = {
@@ -74005,6 +77623,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
     teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+    mentor_projects?: mentor_projectsUncheckedCreateNestedManyWithoutTeachersInput
   }
 
   export type teachersCreateOrConnectWithoutMentor_meetingsInput = {
@@ -74268,6 +77887,7 @@ export namespace Prisma {
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutMentor_meetingsInput = {
@@ -74311,6 +77931,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type teachersUpsertWithoutMentor_meetingsInput = {
@@ -74346,6 +77967,7 @@ export namespace Prisma {
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutMentor_meetingsInput = {
@@ -74370,6 +77992,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type user_accountsCreateWithoutAdmin_profilesInput = {
@@ -75310,6 +78933,464 @@ export namespace Prisma {
     teachers?: teachersUncheckedUpdateOneWithoutUser_accountsNestedInput
   }
 
+  export type studentsCreateWithoutMentor_projectsInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsCreateNestedOneWithoutStudentInput
+    documents?: student_documentsCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsCreateNestedOneWithoutStudentInput
+    departments: departmentsCreateNestedOneWithoutStudentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutStudentsInput
+  }
+
+  export type studentsUncheckedCreateWithoutMentor_projectsInput = {
+    id: string
+    registerNumber: string
+    admissionNumber?: string | null
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    dateOfBirth?: Date | string | null
+    gender?: $Enums.Gender | null
+    status?: $Enums.StudentStatus
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt: Date | string
+    academicSetupCompleted?: boolean
+    academicStanding?: string | null
+    address?: string | null
+    bloodGroup?: $Enums.BloodGroup | null
+    currentCGPA?: number | null
+    nationality?: string | null
+    overallAttendance?: number | null
+    permanentAddress?: string | null
+    profileImage?: string | null
+    programme?: string | null
+    religion?: string | null
+    section?: string | null
+    semester?: string | null
+    studentType?: $Enums.StudentType | null
+    totalCredits?: number | null
+    yearsAtUniversity?: string | null
+    academicBacklogs?: academic_backlogsUncheckedCreateNestedManyWithoutStudentsInput
+    academicSemesters?: academic_semestersUncheckedCreateNestedManyWithoutStudentsInput
+    detentions?: detentionsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutStudentsInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutStudentsInput
+    contactDetails?: student_contact_detailsUncheckedCreateNestedOneWithoutStudentInput
+    documents?: student_documentsUncheckedCreateNestedManyWithoutStudentInput
+    student_enrollments?: student_enrollmentsUncheckedCreateNestedManyWithoutStudentsInput
+    internships?: student_internshipsUncheckedCreateNestedManyWithoutStudentInput
+    parentDetails?: student_parent_detailsUncheckedCreateNestedOneWithoutStudentInput
+  }
+
+  export type studentsCreateOrConnectWithoutMentor_projectsInput = {
+    where: studentsWhereUniqueInput
+    create: XOR<studentsCreateWithoutMentor_projectsInput, studentsUncheckedCreateWithoutMentor_projectsInput>
+  }
+
+  export type teachersCreateWithoutMentor_projectsInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesCreateNestedOneWithoutTeachersInput
+    departments_teachers_departmentIdTodepartments: departmentsCreateNestedOneWithoutTeachers_teachers_departmentIdTodepartmentsInput
+    user_accounts?: user_accountsCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersUncheckedCreateWithoutMentor_projectsInput = {
+    id: string
+    employeeCode: string
+    fullName: string
+    email?: string | null
+    phone?: string | null
+    designation?: string | null
+    maxMentees?: number
+    isActive?: boolean
+    departmentId: string
+    userAccountId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedCreateNestedOneWithoutTeachers_departments_hodTeacherIdToteachersInput
+    internship_reviews?: internship_reviewsUncheckedCreateNestedManyWithoutReviewerInput
+    mentor_assignments?: mentor_assignmentsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_meetings?: mentor_meetingsUncheckedCreateNestedManyWithoutTeachersInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedCreateNestedManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersInput
+    teacher_profiles?: teacher_profilesUncheckedCreateNestedOneWithoutTeachersInput
+  }
+
+  export type teachersCreateOrConnectWithoutMentor_projectsInput = {
+    where: teachersWhereUniqueInput
+    create: XOR<teachersCreateWithoutMentor_projectsInput, teachersUncheckedCreateWithoutMentor_projectsInput>
+  }
+
+  export type mentor_project_messagesCreateWithoutMentor_projectsInput = {
+    id: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput = {
+    id: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type mentor_project_messagesCreateOrConnectWithoutMentor_projectsInput = {
+    where: mentor_project_messagesWhereUniqueInput
+    create: XOR<mentor_project_messagesCreateWithoutMentor_projectsInput, mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput>
+  }
+
+  export type mentor_project_messagesCreateManyMentor_projectsInputEnvelope = {
+    data: mentor_project_messagesCreateManyMentor_projectsInput | mentor_project_messagesCreateManyMentor_projectsInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type studentsUpsertWithoutMentor_projectsInput = {
+    update: XOR<studentsUpdateWithoutMentor_projectsInput, studentsUncheckedUpdateWithoutMentor_projectsInput>
+    create: XOR<studentsCreateWithoutMentor_projectsInput, studentsUncheckedCreateWithoutMentor_projectsInput>
+    where?: studentsWhereInput
+  }
+
+  export type studentsUpdateToOneWithWhereWithoutMentor_projectsInput = {
+    where?: studentsWhereInput
+    data: XOR<studentsUpdateWithoutMentor_projectsInput, studentsUncheckedUpdateWithoutMentor_projectsInput>
+  }
+
+  export type studentsUpdateWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
+    departments?: departmentsUpdateOneRequiredWithoutStudentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+  }
+
+  export type studentsUncheckedUpdateWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    registerNumber?: StringFieldUpdateOperationsInput | string
+    admissionNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    dateOfBirth?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    gender?: NullableEnumGenderFieldUpdateOperationsInput | $Enums.Gender | null
+    status?: EnumStudentStatusFieldUpdateOperationsInput | $Enums.StudentStatus
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    academicSetupCompleted?: BoolFieldUpdateOperationsInput | boolean
+    academicStanding?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    bloodGroup?: NullableEnumBloodGroupFieldUpdateOperationsInput | $Enums.BloodGroup | null
+    currentCGPA?: NullableFloatFieldUpdateOperationsInput | number | null
+    nationality?: NullableStringFieldUpdateOperationsInput | string | null
+    overallAttendance?: NullableFloatFieldUpdateOperationsInput | number | null
+    permanentAddress?: NullableStringFieldUpdateOperationsInput | string | null
+    profileImage?: NullableStringFieldUpdateOperationsInput | string | null
+    programme?: NullableStringFieldUpdateOperationsInput | string | null
+    religion?: NullableStringFieldUpdateOperationsInput | string | null
+    section?: NullableStringFieldUpdateOperationsInput | string | null
+    semester?: NullableStringFieldUpdateOperationsInput | string | null
+    studentType?: NullableEnumStudentTypeFieldUpdateOperationsInput | $Enums.StudentType | null
+    totalCredits?: NullableIntFieldUpdateOperationsInput | number | null
+    yearsAtUniversity?: NullableStringFieldUpdateOperationsInput | string | null
+    academicBacklogs?: academic_backlogsUncheckedUpdateManyWithoutStudentsNestedInput
+    academicSemesters?: academic_semestersUncheckedUpdateManyWithoutStudentsNestedInput
+    detentions?: detentionsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutStudentsNestedInput
+    mentor_transfer_requests?: mentor_transfer_requestsUncheckedUpdateManyWithoutStudentsNestedInput
+    contactDetails?: student_contact_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    documents?: student_documentsUncheckedUpdateManyWithoutStudentNestedInput
+    student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
+    internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
+    parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+  }
+
+  export type teachersUpsertWithoutMentor_projectsInput = {
+    update: XOR<teachersUpdateWithoutMentor_projectsInput, teachersUncheckedUpdateWithoutMentor_projectsInput>
+    create: XOR<teachersCreateWithoutMentor_projectsInput, teachersUncheckedCreateWithoutMentor_projectsInput>
+    where?: teachersWhereInput
+  }
+
+  export type teachersUpdateToOneWithWhereWithoutMentor_projectsInput = {
+    where?: teachersWhereInput
+    data: XOR<teachersUpdateWithoutMentor_projectsInput, teachersUncheckedUpdateWithoutMentor_projectsInput>
+  }
+
+  export type teachersUpdateWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
+    departments_teachers_departmentIdTodepartments?: departmentsUpdateOneRequiredWithoutTeachers_teachers_departmentIdTodepartmentsNestedInput
+    user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type teachersUncheckedUpdateWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    employeeCode?: StringFieldUpdateOperationsInput | string
+    fullName?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    designation?: NullableStringFieldUpdateOperationsInput | string | null
+    maxMentees?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    departmentId?: StringFieldUpdateOperationsInput | string
+    userAccountId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    departments_departments_hodTeacherIdToteachers?: departmentsUncheckedUpdateOneWithoutTeachers_departments_hodTeacherIdToteachersNestedInput
+    internship_reviews?: internship_reviewsUncheckedUpdateManyWithoutReviewerNestedInput
+    mentor_assignments?: mentor_assignmentsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_feedback?: mentor_meeting_feedbackUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meeting_series?: mentor_meeting_seriesUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_meetings?: mentor_meetingsUncheckedUpdateManyWithoutTeachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_currentMentorIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
+    mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
+    teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+  }
+
+  export type mentor_project_messagesUpsertWithWhereUniqueWithoutMentor_projectsInput = {
+    where: mentor_project_messagesWhereUniqueInput
+    update: XOR<mentor_project_messagesUpdateWithoutMentor_projectsInput, mentor_project_messagesUncheckedUpdateWithoutMentor_projectsInput>
+    create: XOR<mentor_project_messagesCreateWithoutMentor_projectsInput, mentor_project_messagesUncheckedCreateWithoutMentor_projectsInput>
+  }
+
+  export type mentor_project_messagesUpdateWithWhereUniqueWithoutMentor_projectsInput = {
+    where: mentor_project_messagesWhereUniqueInput
+    data: XOR<mentor_project_messagesUpdateWithoutMentor_projectsInput, mentor_project_messagesUncheckedUpdateWithoutMentor_projectsInput>
+  }
+
+  export type mentor_project_messagesUpdateManyWithWhereWithoutMentor_projectsInput = {
+    where: mentor_project_messagesScalarWhereInput
+    data: XOR<mentor_project_messagesUpdateManyMutationInput, mentor_project_messagesUncheckedUpdateManyWithoutMentor_projectsInput>
+  }
+
+  export type mentor_project_messagesScalarWhereInput = {
+    AND?: mentor_project_messagesScalarWhereInput | mentor_project_messagesScalarWhereInput[]
+    OR?: mentor_project_messagesScalarWhereInput[]
+    NOT?: mentor_project_messagesScalarWhereInput | mentor_project_messagesScalarWhereInput[]
+    id?: StringFilter<"mentor_project_messages"> | string
+    projectId?: StringFilter<"mentor_project_messages"> | string
+    senderUserAccountId?: StringFilter<"mentor_project_messages"> | string
+    senderRole?: StringFilter<"mentor_project_messages"> | string
+    message?: StringFilter<"mentor_project_messages"> | string
+    createdAt?: DateTimeFilter<"mentor_project_messages"> | Date | string
+  }
+
+  export type mentor_projectsCreateWithoutMentor_project_messagesInput = {
+    id: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+    students: studentsCreateNestedOneWithoutMentor_projectsInput
+    teachers: teachersCreateNestedOneWithoutMentor_projectsInput
+  }
+
+  export type mentor_projectsUncheckedCreateWithoutMentor_project_messagesInput = {
+    id: string
+    studentId: string
+    mentorId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
+  }
+
+  export type mentor_projectsCreateOrConnectWithoutMentor_project_messagesInput = {
+    where: mentor_projectsWhereUniqueInput
+    create: XOR<mentor_projectsCreateWithoutMentor_project_messagesInput, mentor_projectsUncheckedCreateWithoutMentor_project_messagesInput>
+  }
+
+  export type mentor_projectsUpsertWithoutMentor_project_messagesInput = {
+    update: XOR<mentor_projectsUpdateWithoutMentor_project_messagesInput, mentor_projectsUncheckedUpdateWithoutMentor_project_messagesInput>
+    create: XOR<mentor_projectsCreateWithoutMentor_project_messagesInput, mentor_projectsUncheckedCreateWithoutMentor_project_messagesInput>
+    where?: mentor_projectsWhereInput
+  }
+
+  export type mentor_projectsUpdateToOneWithWhereWithoutMentor_project_messagesInput = {
+    where?: mentor_projectsWhereInput
+    data: XOR<mentor_projectsUpdateWithoutMentor_project_messagesInput, mentor_projectsUncheckedUpdateWithoutMentor_project_messagesInput>
+  }
+
+  export type mentor_projectsUpdateWithoutMentor_project_messagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: studentsUpdateOneRequiredWithoutMentor_projectsNestedInput
+    teachers?: teachersUpdateOneRequiredWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsUncheckedUpdateWithoutMentor_project_messagesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    mentorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type detentionsCreateManyAcademic_termsInput = {
     id: string
     studentId: string
@@ -75876,6 +79957,7 @@ export namespace Prisma {
     internships?: student_internshipsUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUpdateOneWithoutStudentNestedInput
     user_accounts?: user_accountsUpdateOneWithoutStudentsNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateWithoutDepartmentsInput = {
@@ -75919,6 +80001,7 @@ export namespace Prisma {
     student_enrollments?: student_enrollmentsUncheckedUpdateManyWithoutStudentsNestedInput
     internships?: student_internshipsUncheckedUpdateManyWithoutStudentNestedInput
     parentDetails?: student_parent_detailsUncheckedUpdateOneWithoutStudentNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutStudentsNestedInput
   }
 
   export type studentsUncheckedUpdateManyWithoutDepartmentsInput = {
@@ -75974,6 +80057,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUpdateOneWithoutTeachersNestedInput
     user_accounts?: user_accountsUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -75998,6 +80082,7 @@ export namespace Prisma {
     mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_initiatedByTeacherIdToteachersNestedInput
     mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers?: mentor_transfer_requestsUncheckedUpdateManyWithoutTeachers_mentor_transfer_requests_requestedMentorIdToteachersNestedInput
     teacher_profiles?: teacher_profilesUncheckedUpdateOneWithoutTeachersNestedInput
+    mentor_projects?: mentor_projectsUncheckedUpdateManyWithoutTeachersNestedInput
   }
 
   export type teachersUncheckedUpdateManyWithoutDepartments_teachers_departmentIdTodepartmentsInput = {
@@ -76209,6 +80294,25 @@ export namespace Prisma {
     completionVerificationStatus?: $Enums.CompletionVerificationStatus
     completionMentorRemark?: string | null
     completionVerifiedAt?: Date | string | null
+  }
+
+  export type mentor_projectsCreateManyStudentsInput = {
+    id: string
+    mentorId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
   }
 
   export type academic_backlogsUpdateWithoutStudentsInput = {
@@ -76710,6 +80814,65 @@ export namespace Prisma {
     completionVerifiedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type mentor_projectsUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    teachers?: teachersUpdateOneRequiredWithoutMentor_projectsNestedInput
+    mentor_project_messages?: mentor_project_messagesUpdateManyWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsUncheckedUpdateWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mentor_project_messages?: mentor_project_messagesUncheckedUpdateManyWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsUncheckedUpdateManyWithoutStudentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    mentorId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type internship_documentsCreateManyInternshipInput = {
     id: string
     documentType: $Enums.InternshipDocumentType
@@ -77007,6 +81170,25 @@ export namespace Prisma {
     rejectionReason?: string | null
     createdAt?: Date | string
     updatedAt: Date | string
+  }
+
+  export type mentor_projectsCreateManyTeachersInput = {
+    id: string
+    studentId: string
+    title: string
+    projectType: string
+    deadline?: Date | string | null
+    status?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    studentViewedAt?: Date | string | null
+    submissionUrl?: string | null
+    submissionPublicId?: string | null
+    submissionFilename?: string | null
+    submissionMimeType?: string | null
+    submissionSize?: number | null
+    submittedAt?: Date | string | null
+    description?: string | null
   }
 
   export type internship_reviewsUpdateWithoutReviewerInput = {
@@ -77374,6 +81556,65 @@ export namespace Prisma {
     rejectionReason?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_projectsUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    students?: studentsUpdateOneRequiredWithoutMentor_projectsNestedInput
+    mentor_project_messages?: mentor_project_messagesUpdateManyWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsUncheckedUpdateWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    mentor_project_messages?: mentor_project_messagesUncheckedUpdateManyWithoutMentor_projectsNestedInput
+  }
+
+  export type mentor_projectsUncheckedUpdateManyWithoutTeachersInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    studentId?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    projectType?: StringFieldUpdateOperationsInput | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    studentViewedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    submissionUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionPublicId?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionFilename?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionMimeType?: NullableStringFieldUpdateOperationsInput | string | null
+    submissionSize?: NullableIntFieldUpdateOperationsInput | number | null
+    submittedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    description?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
   export type announcement_recipientsCreateManyUser_accountsInput = {
@@ -78190,6 +82431,38 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     editedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type mentor_project_messagesCreateManyMentor_projectsInput = {
+    id: string
+    senderUserAccountId: string
+    senderRole: string
+    message: string
+    createdAt?: Date | string
+  }
+
+  export type mentor_project_messagesUpdateWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_project_messagesUncheckedUpdateWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type mentor_project_messagesUncheckedUpdateManyWithoutMentor_projectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    senderUserAccountId?: StringFieldUpdateOperationsInput | string
+    senderRole?: StringFieldUpdateOperationsInput | string
+    message?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 
