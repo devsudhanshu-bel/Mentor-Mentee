@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Users,
   CalendarDays,
+  FolderKanban,
   User,
   Settings,
   LogOut,
@@ -19,7 +20,7 @@ import {
 
 const menuItems = [
   {
-    title: "Dasboard",
+    title: "Dashboard",
     path: "/mentor/students",
     icon: Users,
   },
@@ -27,6 +28,11 @@ const menuItems = [
     title: "Meetings",
     path: "/mentor/meetings",
     icon: CalendarDays,
+  },
+  {
+    title: "Projects",
+    path: "/mentor/projects",
+    icon: FolderKanban,
   },
   {
     title: "Profile",

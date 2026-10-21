@@ -1,10 +1,5 @@
-
 import React from "react";
-import {
-  NavLink,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
 
@@ -17,6 +12,7 @@ import {
   LogOut,
   ChevronRight,
   Megaphone,
+  FolderKanban,
 } from "lucide-react";
 
 const menuItems = [
@@ -46,6 +42,11 @@ const menuItems = [
     icon: ClipboardList,
   },
   {
+    title: "Projects",
+    path: "/admin/projects",
+    icon: FolderKanban,
+  },
+  {
     title: "Profile",
     path: "/admin/admin-profile",
     icon: User,
@@ -56,27 +57,16 @@ const AdminSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  //--------------------------------------------------
-  // Logged In User
-  //--------------------------------------------------
+  // Logged-in user
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
 
-  const user = JSON.parse(
-    localStorage.getItem("user") || "{}"
-  );
-
-  const userName =
-    user?.fullName ||
-    user?.username ||
-    "Administrator";
+  const userName = user?.fullName || user?.username || "Administrator";
 
   const userRole = user?.role || "ADMIN";
 
   const initial = userName.charAt(0).toUpperCase();
 
-  //--------------------------------------------------
   // Logout
-  //--------------------------------------------------
-
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("user");
@@ -106,9 +96,8 @@ const AdminSidebar = () => {
         z-50
       "
     >
-      {/* ================= Header ================= */}
-
       <div className="flex flex-col flex-1 overflow-hidden">
+        {/* University Logo */}
         <div
           className="
             h-24
@@ -128,8 +117,7 @@ const AdminSidebar = () => {
           />
         </div>
 
-        {/* ================= Navigation ================= */}
-
+        {/* Navigation */}
         <nav
           className="
             flex-1
@@ -143,18 +131,15 @@ const AdminSidebar = () => {
           {menuItems.map((item) => {
             const Icon = item.icon;
 
-            // ==========================================
-            // Active Route
-            // ==========================================
-
             const active =
               item.path === "/admin/mentors"
                 ? location.pathname.startsWith("/admin/mentors") ||
                   location.pathname.startsWith("/admin/mentor/")
                 : item.path === "/admin/students"
-                  ? location.pathname.startsWith("/admin/students") ||
-                    location.pathname.startsWith("/admin/overview/students/")
-                  : location.pathname.startsWith(item.path);
+                  ? location.pathname === "/admin/students" ||
+                    location.pathname.startsWith("/admin/students/")
+                  : location.pathname === item.path ||
+                    location.pathname.startsWith(`${item.path}/`);
 
             return (
               <NavLink
@@ -213,10 +198,7 @@ const AdminSidebar = () => {
                       }
                     `}
                   >
-                    <Icon
-                      size={19}
-                      strokeWidth={2}
-                    />
+                    <Icon size={19} strokeWidth={2} />
                   </div>
 
                   <span className="text-[14px] font-medium tracking-wide">
@@ -242,8 +224,7 @@ const AdminSidebar = () => {
         </nav>
       </div>
 
-      {/* ================= User Card ================= */}
-
+      {/* User Card */}
       <div
         className="
           border-t
@@ -327,13 +308,9 @@ const AdminSidebar = () => {
         </div>
 
         <div className="mt-3 text-center">
-          <p className="text-[11px] text-gray-400">
-            Admin Portal
-          </p>
+          <p className="text-[11px] text-gray-400">Admin Portal</p>
 
-          <p className="mt-1 text-[10px] text-gray-300">
-            Version 1.0.0
-          </p>
+          <p className="mt-1 text-[10px] text-gray-300">Version 1.0.0</p>
         </div>
       </div>
     </aside>

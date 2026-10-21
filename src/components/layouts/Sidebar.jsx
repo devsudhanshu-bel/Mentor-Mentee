@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import logo from "../../assets/logo.png";
+import studentProjectsApi from "../../api/studentProjects.api";
 
 import {
   LayoutDashboard,
@@ -10,6 +11,7 @@ import {
   ClipboardCheck,
   Users,
   Briefcase,
+  FolderKanban,
   Microscope,
   Trophy,
   Star,
@@ -49,6 +51,11 @@ const menuItems = [
     title: "Mentor & Meetings",
     path: "/student/mentor-meetings",
     icon: Users,
+  },
+  {
+    title: "Projects",
+    path: "/student/projects",
+    icon: FolderKanban,
   },
   {
     title: "Internships",
@@ -111,6 +118,7 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState(null);
+  const [unreadProjects, setUnreadProjects] = useState(0);
 
   // ========================================================
   // LOAD LOGGED-IN USER
@@ -137,6 +145,34 @@ const Sidebar = () => {
       window.removeEventListener("storage", loadUser);
     };
   }, []);
+
+  // Refresh the unread-project badge periodically. Newly assigned projects
+  // remain unread until the student opens the Projects page.
+  useEffect(() => {
+    let active = true;
+    const refreshUnreadProjects = async () => {
+      try {
+        const count = await studentProjectsApi.getUnreadCount();
+        if (active) setUnreadProjects(count);
+      } catch (error) {
+        // Keep the sidebar usable if the badge endpoint is temporarily unavailable.
+        if (active) console.warn("Could not refresh unread project count:", error);
+      }
+    };
+
+    refreshUnreadProjects();
+    const intervalId = window.setInterval(refreshUnreadProjects, 30000);
+    const onFocus = () => refreshUnreadProjects();
+    const onProjectsRead = () => refreshUnreadProjects();
+    window.addEventListener("focus", onFocus);
+    window.addEventListener("student-projects-read", onProjectsRead);
+    return () => {
+      active = false;
+      window.clearInterval(intervalId);
+      window.removeEventListener("focus", onFocus);
+      window.removeEventListener("student-projects-read", onProjectsRead);
+    };
+  }, [location.pathname]);
 
   // ========================================================
   // LOGOUT — SAME LOGIC AS MENTOR SIDEBAR
@@ -230,6 +266,15 @@ const Sidebar = () => {
                 <span className="text-[14px] font-medium">
                   {item.title}
                 </span>
+                {item.path === "/student/projects" && unreadProjects > 0 && (
+                  <span
+                    aria-label={`${unreadProjects} unread project assignments`}
+                    title={`${unreadProjects} new project${unreadProjects === 1 ? "" : "s"}`}
+                    className={`ml-auto inline-flex min-w-5 items-center justify-center rounded-full px-1.5 py-0.5 text-[11px] font-bold ${active ? "bg-white text-indigo-700" : "bg-red-500 text-white"}`}
+                  >
+                    {unreadProjects > 99 ? "99+" : unreadProjects}
+                  </span>
+                )}
               </div>
 
               <ChevronRight
