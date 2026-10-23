@@ -9,9 +9,10 @@ const StudentTable = ({
   toggleStudent,
   allSelected = false,
   toggleAll,
+  onDeleteStudent,
 }) => {
   return (
-    <table className="w-full min-w-[650px]">
+    <table className="w-full min-w-[760px]">
       <StudentTableHeader allSelected={allSelected} onSelectAll={toggleAll} />
 
       <tbody>
@@ -21,12 +22,13 @@ const StudentTable = ({
             student={student}
             selectedStudents={selectedStudents}
             toggleStudent={toggleStudent}
+            onDeleteStudent={onDeleteStudent}
           />
         ))}
 
         {students.length === 0 && (
           <tr>
-            <td colSpan={5} className="py-8 text-center text-sm text-slate-500">
+            <td colSpan={6} className="py-8 text-center text-sm text-slate-500">
               No students found.
             </td>
           </tr>

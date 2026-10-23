@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 import {
-  createTermChangeRequest,
+  activateAcademicTerm,
   getTermChangeContext,
 } from "../../../api/termChange.api";
 
@@ -367,8 +367,6 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
      PENDING REQUEST
   ======================================================== */
 
-  const pendingRequest = termContext?.pendingRequest || null;
-
   /* ========================================================
      TERM NAME
   ======================================================== */
@@ -480,80 +478,60 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
      SUBMIT REQUEST
   ======================================================== */
 
-  const handleSubmitRequest = async () => {
+  const handleActivateTerm = async () => {
     setRequestError("");
     setRequestSuccess("");
 
-    /* ----------------------------------------------------
-         Required fields
-      ---------------------------------------------------- */
-
     if (!startDate || !endDate) {
       setRequestError("Please select both the start date and end date.");
-
       return;
     }
-
-    /* ----------------------------------------------------
-         Date order
-      ---------------------------------------------------- */
 
     if (endDate <= startDate) {
       setRequestError("End date must be after the start date.");
-
       return;
     }
 
-    /* ----------------------------------------------------
-         Pending request
-      ---------------------------------------------------- */
+    const expectedCurrentTermId =
+      termContext?.currentTerm?.id || currentTerm?.id;
 
-    if (pendingRequest) {
-      setRequestError("A term change request is already pending approval.");
-
+    if (!expectedCurrentTermId) {
+      setRequestError("The current active term could not be identified. Refresh and try again.");
       return;
     }
 
     try {
       setSubmitting(true);
 
-      const request = await createTermChangeRequest({
+      const result = await activateAcademicTerm({
         requestedStartDate: startDate,
-
         requestedEndDate: endDate,
+        expectedCurrentTermId,
       });
 
-      setRequestSuccess("Term change request submitted successfully.");
+      const graduatedCount = Number(result?.graduatedCount || 0);
+      const promotedCount = Number(result?.promotedCount || 0);
 
-      /*
-       * Refresh pending-request status.
-       */
+      setRequestSuccess(
+        `Term activated. ${promotedCount} student(s) promoted and ${graduatedCount} Semester 8 student(s) graduated.`,
+      );
 
       await loadTermContext();
 
-      /*
-       * Allow parent to react if required.
-       */
-
       if (onTermChangeRequested) {
-        onTermChangeRequested(request);
+        onTermChangeRequested(result);
       }
-
-      /*
-       * Close after success.
-       */
 
       setTimeout(() => {
         setShowModal(false);
         setRequestSuccess("");
-      }, 1200);
+      }, 1800);
     } catch (error) {
-      console.error("Term change request failed:", error);
-
+      console.error("Direct academic term activation failed:", error);
       setRequestError(
         error?.response?.data?.message ||
           error?.message ||
-          "Failed to submit term change request.",
+          "Failed to activate the academic term.",
       );
     } finally {
       setSubmitting(false);
@@ -692,9 +670,7 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
           <button
             type="button"
             onClick={handleOpenModal}
-            disabled={
-              loadingContext || Boolean(contextError) || Boolean(pendingRequest)
-            }
+            disabled={loadingContext || Boolean(contextError) || submitting}
             className="
               flex
               h-10
@@ -719,7 +695,7 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
           >
             <CalendarDays size={14} strokeWidth={2} />
 
-            <span>{pendingRequest ? "Request Pending" : "Change Term"}</span>
+            <span>{"Change Term"}</span>
           </button>
         </div>
       </div>
@@ -761,37 +737,6 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
           >
             Retry
           </button>
-        </div>
-      )}
-
-      {/* ====================================================
-          PENDING REQUEST
-      ==================================================== */}
-
-      {pendingRequest && (
-        <div
-          className="
-            mt-3
-            flex
-            items-center
-            gap-2
-            rounded-lg
-            border
-            border-amber-100
-            bg-amber-50
-            px-3
-            py-2
-            text-[10px]
-            font-medium
-            text-amber-700
-          "
-        >
-          <AlertCircle size={14} />
-
-          <span>
-            Term change request pending approval for{" "}
-            <strong>{pendingRequest.requestedTermName}</strong>.
-          </span>
         </div>
       )}
 
@@ -854,7 +799,7 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
                     text-slate-900
                   "
                 >
-                  Request Term Change
+                  Confirm Academic Term Change
                 </h2>
 
                 <p
@@ -865,7 +810,7 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
                     text-slate-500
                   "
                 >
-                  Select the semester date range before submitting your request.
+                  Review the next term and confirm the transition. This action will promote enrolled students and graduate eligible Semester 8 students.
                 </p>
               </div>
 
@@ -1285,8 +1230,8 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
 
               <button
                 type="button"
-                onClick={handleSubmitRequest}
-                disabled={submitting || Boolean(pendingRequest)}
+                onClick={handleActivateTerm}
+                disabled={submitting}
                 className="
                   flex
                   h-9
@@ -1309,10 +1254,10 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
                 {submitting ? (
                   <>
                     <Loader2 size={14} className="animate-spin" />
-                    Submitting...
+                    Activating...
                   </>
                 ) : (
-                  "Request Change"
+                  "Activate Term & Promote Students"
                 )}
               </button>
             </div>

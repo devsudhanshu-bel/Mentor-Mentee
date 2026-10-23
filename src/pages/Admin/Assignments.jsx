@@ -395,6 +395,20 @@ const Assignments = () => {
               term={selectedTerm}
               academicYear={selectedAcademicYear}
               filters={filters}
+              onTermChangeRequested={(result) => {
+                const activatedTerm = result?.activatedTerm;
+                if (!activatedTerm?.id) return;
+
+                setFilters({
+                  ...INITIAL_FILTERS,
+                  academicYearId: activatedTerm.academicYearId || "",
+                  academicYear: activatedTerm.academicYearName || "",
+                  termId: activatedTerm.id,
+                  view: filters.view || "assign",
+                });
+                setContext(null);
+                setRefreshKey((previous) => previous + 1);
+              }}
             />
 
             {/* ==================================================

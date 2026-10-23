@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { importAttendancePdf } from "../../api/attendance.api";
 
 import {
   X,
@@ -74,6 +75,12 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
   const [saving, setSaving] = useState(false);
 
   const [error, setError] = useState("");
+
+  const [showPdfDialog, setShowPdfDialog] = useState(false);
+  const [uploadingPdf, setUploadingPdf] = useState(false);
+  const [selectedPdf, setSelectedPdf] = useState(null);
+  const [pdfError, setPdfError] = useState("");
+  const [uploadedPdfName, setUploadedPdfName] = useState("");
 
   /* ========================================================
      ADD SUBJECT
@@ -464,24 +471,52 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
             </div>
           </div>
 
-          <button
-            type="button"
-            disabled={saving}
-            onClick={onClose}
-            className="
-              w-8
-              h-8
-              rounded-lg
-              flex
-              items-center
-              justify-center
-              text-slate-400
-              hover:bg-slate-100
-              hover:text-slate-700
-            "
-          >
-            <X size={18} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              disabled={saving}
+              onClick={() => {
+                setPdfError("");
+                setSelectedPdf(null);
+                setShowPdfDialog(true);
+              }}
+              className="
+                h-9
+                px-3
+                rounded-lg
+                border
+                border-blue-200
+                bg-blue-50
+                text-blue-700
+                text-[12px]
+                font-medium
+                hover:bg-blue-100
+                disabled:opacity-50
+              "
+            >
+              Upload PDF
+            </button>
+
+            <button
+              type="button"
+              disabled={saving}
+              onClick={onClose}
+              className="
+                w-8
+                h-8
+                rounded-lg
+                flex
+                items-center
+                justify-center
+                text-slate-400
+                hover:bg-slate-100
+                hover:text-slate-700
+              "
+              aria-label="Close attendance dialog"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {/* ====================================================
@@ -1418,6 +1453,144 @@ const AttendanceEntryModal = ({ semester, onClose, onSave }) => {
           </div>
         </div>
       </div>
+
+      {/* PDF picker dialog */}
+      {showPdfDialog && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center p-4">
+          <button
+            type="button"
+            aria-label="Close PDF upload dialog"
+            className="absolute inset-0 bg-slate-900/40"
+            onClick={() => setShowPdfDialog(false)}
+          />
+
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="attendance-pdf-title"
+            className="relative z-10 w-full max-w-md rounded-2xl bg-white p-5 shadow-2xl"
+          >
+            <div className="mb-4 flex items-start justify-between gap-3">
+              <div>
+                <h3
+                  id="attendance-pdf-title"
+                  className="text-base font-semibold text-[#142970]"
+                >
+                  Upload PDF
+                </h3>
+                <p className="mt-1 text-xs text-slate-500">
+                  Choose a PDF file from your device.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowPdfDialog(false)}
+                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <input
+              type="file"
+              accept="application/pdf,.pdf"
+              onChange={(event) => {
+                const file = event.target.files?.[0] || null;
+                setPdfError("");
+                setSelectedPdf(null);
+
+                if (!file) return;
+
+                const isPdf =
+                  file.type === "application/pdf" ||
+                  file.name.toLowerCase().endsWith(".pdf");
+
+                if (!isPdf) {
+                  setPdfError("Please select a PDF file.");
+                  event.target.value = "";
+                  return;
+                }
+
+                setSelectedPdf(file);
+              }}
+              className="block w-full rounded-lg border border-slate-200 p-3 text-sm text-slate-600 file:mr-3 file:rounded-md file:border-0 file:bg-blue-50 file:px-3 file:py-2 file:text-xs file:font-medium file:text-blue-700 hover:file:bg-blue-100"
+            />
+
+            {selectedPdf && (
+              <p className="mt-2 break-all text-xs text-slate-600">
+                Selected: {selectedPdf.name}
+              </p>
+            )}
+
+            {pdfError && (
+              <p role="alert" className="mt-2 text-xs text-red-600">
+                {pdfError}
+              </p>
+            )}
+
+            {uploadedPdfName && !selectedPdf && (
+              <p className="mt-2 text-xs text-emerald-700">
+                Selected PDF: {uploadedPdfName}
+              </p>
+            )}
+
+            <div className="mt-5 flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowPdfDialog(false);
+                  setSelectedPdf(null);
+                  setPdfError("");
+                }}
+                className="h-9 rounded-lg border border-slate-300 px-4 text-xs font-medium text-slate-600 hover:bg-slate-50"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={!selectedPdf || uploadingPdf}
+                onClick={async () => {
+                  if (!selectedPdf) {
+                    setPdfError("Choose a PDF file before clicking Upload.");
+                    return;
+                  }
+
+                  try {
+                    setUploadingPdf(true);
+                    setPdfError("");
+                    const result = await importAttendancePdf(semester, selectedPdf);
+                    const importedSubjects = result?.data?.subjects || result?.subjects;
+                    if (!Array.isArray(importedSubjects) || importedSubjects.length === 0) {
+                      throw new Error("No attendance subjects were found in this PDF.");
+                    }
+                    // Reuse the existing save callback so the established
+                    // persistence and refresh workflow remains unchanged.
+                    await onSave(importedSubjects.map((subject) => ({
+                      subjectName: subject.subjectName,
+                      courseCode: subject.courseCode || "",
+                      credits: 0,
+                      category: "THEORY",
+                      classesHeld: Number(subject.classesHeld),
+                      classesAttended: Number(subject.classesAttended),
+                    })));
+                    setUploadedPdfName(selectedPdf.name);
+                    setShowPdfDialog(false);
+                    setSelectedPdf(null);
+                  } catch (err) {
+                    setPdfError(err?.response?.data?.message || err?.message || "Failed to import attendance PDF.");
+                  } finally {
+                    setUploadingPdf(false);
+                  }
+                }}
+                className="h-9 rounded-lg bg-blue-600 px-4 text-xs font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {uploadingPdf ? "Uploading..." : "Upload"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import AssignmentFooter from "./Footer/AssignmentFooter";
 
 import AllAssignmentsPanel from "./AllAssignments/AllAssignmentsPanel";
 import TransferTicketsPanel from "./TransferTickets/TransferTicketsPanel";
+import BulkAssignModal from "./BulkAssignModal";
 
 import { assignStudentsToMentor } from "../../../api/assignment.api";
 
@@ -48,6 +49,8 @@ const AssignmentWorkspace = ({
   const [message, setMessage] = useState("");
 
   const [error, setError] = useState("");
+
+  const [showBulkAssign, setShowBulkAssign] = useState(false);
 
   // ============================================================
   // REAL BACKEND DATA
@@ -250,23 +253,13 @@ const AssignmentWorkspace = ({
   };
 
   // ============================================================
-  // BULK ASSIGN
+  // BULK ASSIGN MODAL
   // ============================================================
 
   const handleBulkAssign = () => {
-    if (selectedStudents.length === 0) {
-      setError("Select at least one student first.");
-
-      return;
-    }
-
     setError("");
-
-    setMessage(
-      `${selectedStudents.length} student${
-        selectedStudents.length !== 1 ? "s" : ""
-      } selected for assignment.`,
-    );
+    setMessage("");
+    setShowBulkAssign(true);
   };
 
   // ============================================================
@@ -296,6 +289,7 @@ const AssignmentWorkspace = ({
         onFiltersClick={handleFiltersClick}
         onBulkAssign={handleBulkAssign}
         studentCount={counts.unassignedStudents ?? students.length}
+        assignedCount={counts.assignedStudents ?? 0}
         transferCount={counts.pendingTransferRequests ?? 0}
       />
 
@@ -348,6 +342,7 @@ const AssignmentWorkspace = ({
               selectedStudents={selectedStudents}
               setSelectedStudents={setSelectedStudents}
               loading={loading}
+              onRefresh={onRefresh}
             />
 
             {/* ASSIGN */}
@@ -379,6 +374,21 @@ const AssignmentWorkspace = ({
             onAssign={handleAssign}
           />
         </>
+      )}
+
+      {/* ======================================================
+          ASSIGNED STUDENTS
+          Reuses the existing assignment table and remove flow.
+          ====================================================== */}
+
+      {activeTab === "assigned" && (
+        <AllAssignmentsPanel
+          termId={filters.termId}
+          departmentId={filters.departmentId}
+          search={search}
+          showRemove={true}
+          onRefresh={onRefresh}
+        />
       )}
 
       {/* ======================================================
@@ -415,6 +425,13 @@ const AssignmentWorkspace = ({
             Assignment history will appear here.
           </p>
         </div>
+      )}
+      {showBulkAssign && (
+        <BulkAssignModal
+          termId={filters.termId}
+          onClose={() => setShowBulkAssign(false)}
+          onComplete={async () => { if (typeof onRefresh === "function") await onRefresh(); }}
+        />
       )}
     </div>
   );

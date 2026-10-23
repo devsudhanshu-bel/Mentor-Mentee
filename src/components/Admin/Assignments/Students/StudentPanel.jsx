@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 import StudentTable from "./StudentTable";
 import StudentPagination from "./StudentPagination";
+import { deleteStudent } from "../../../../api/student.api";
 
 const StudentPanel = ({
   students = [],
@@ -17,6 +18,9 @@ const StudentPanel = ({
   const ITEMS_PER_PAGE = 10;
 
   const [page, setPage] = useState(1);
+  const [studentToDelete, setStudentToDelete] = useState(null);
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   // ============================================================
   // SEARCH
@@ -110,6 +114,27 @@ const StudentPanel = ({
     filteredStudents.length > 0 &&
     filteredStudents.every((student) => selectedStudents.includes(student.id));
 
+  const handleDeleteStudent = async () => {
+    if (!studentToDelete || deleting) return;
+    try {
+      setDeleting(true);
+      setDeleteError("");
+      await deleteStudent(studentToDelete.id);
+      setStudentToDelete(null);
+      setSelectedStudents((previous) => previous.filter((id) => id !== studentToDelete.id));
+      // Refresh the context from the parent so counts and student rows stay in sync.
+      if (typeof onRefresh === "function") await onRefresh();
+    } catch (error) {
+      setDeleteError(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Unable to delete this student.",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   // ============================================================
   // RENDER
   // ============================================================
@@ -150,6 +175,7 @@ const StudentPanel = ({
           toggleStudent={toggleStudent}
           allSelected={allSelected}
           toggleAll={toggleAll}
+          onDeleteStudent={setStudentToDelete}
         />
       </div>
 
@@ -161,6 +187,38 @@ const StudentPanel = ({
         totalPages={totalPages}
         onPageChange={setPage}
       />
+
+      {studentToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-4">
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-student-title"
+            className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl"
+          >
+            <div className="flex items-start gap-3">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-red-100 text-red-600">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-5 w-5" aria-hidden="true">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v4m0 4h.01M10.3 3.9 1.9 18.2A2 2 0 0 0 3.6 21h16.8a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z" />
+                </svg>
+              </div>
+              <div>
+                <h3 id="delete-student-title" className="text-lg font-semibold text-slate-900">Delete this student?</h3>
+                <p className="mt-2 text-sm leading-6 text-slate-600">
+                  You are about to delete <strong>{studentToDelete.fullName || studentToDelete.name || "this student"}</strong>
+                  {" "}({studentToDelete.registerNumber || studentToDelete.usn || studentToDelete.regNo || "USN unavailable"}).
+                  This action cannot be undone. Continue only if this entry is incorrect.
+                </p>
+              </div>
+            </div>
+            {deleteError && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{deleteError}</p>}
+            <div className="mt-6 flex justify-end gap-3">
+              <button type="button" disabled={deleting} onClick={() => { setStudentToDelete(null); setDeleteError(""); }} className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50">Cancel</button>
+              <button type="button" disabled={deleting} onClick={handleDeleteStudent} className="rounded-lg bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50">{deleting ? "Deleting..." : "Delete Student"}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

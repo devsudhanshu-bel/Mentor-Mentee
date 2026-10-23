@@ -6,11 +6,11 @@ import StudentPanel from "./Students/StudentPanel";
 import MentorPanel from "./Mentors/MentorPanel";
 
 import AssignButton from "./Center/AssignButton";
-
 import AssignmentFooter from "./Footer/AssignmentFooter";
 
 import AllAssignmentsPanel from "./AllAssignments/AllAssignmentsPanel";
 import TransferTicketsPanel from "./TransferTickets/TransferTicketsPanel";
+import AssignedStudentsPanel from "./AssignedStudents/AssignedStudentsPanel";
 
 import { assignStudentsToMentor } from "../../../api/assignment.api";
 
@@ -22,27 +22,17 @@ const AssignmentWorkspace = ({
   onRefresh,
 }) => {
   const [activeTab, setActiveTab] = useState("unassigned");
-
   const [search, setSearch] = useState("");
-
   const [selectedStudents, setSelectedStudents] = useState([]);
-
   const [selectedMentor, setSelectedMentor] = useState(null);
-
   const [assigning, setAssigning] = useState(false);
-
   const [message, setMessage] = useState("");
 
   const students = context?.students || [];
-
   const mentors = context?.mentors || [];
-
   const termId = filters?.termId || context?.termId;
 
-  // ============================================================
-  // CLEAR SELECTION WHEN FILTER CHANGES
-  // ============================================================
-
+  // Clear selections when the assignment filters change.
   useEffect(() => {
     setSelectedStudents([]);
     setSelectedMentor(null);
@@ -53,18 +43,12 @@ const AssignmentWorkspace = ({
     filters?.section,
   ]);
 
-  // ============================================================
-  // ASSIGN STUDENTS
-  // ============================================================
-
+  // Manual assignment: existing behavior preserved.
   const handleAssign = async () => {
-    if (selectedStudents.length === 0 || !selectedMentor) {
-      return;
-    }
+    if (selectedStudents.length === 0 || !selectedMentor) return;
 
     if (!termId) {
       setMessage("Academic term could not be determined.");
-
       return;
     }
 
@@ -73,7 +57,6 @@ const AssignmentWorkspace = ({
       setMessage("");
 
       const storedUser = localStorage.getItem("user");
-
       const user = storedUser ? JSON.parse(storedUser) : null;
 
       const assignedBy = user?.id || user?.userId || user?.userAccountId;
@@ -84,11 +67,8 @@ const AssignmentWorkspace = ({
 
       const response = await assignStudentsToMentor({
         studentIds: selectedStudents,
-
         teacherId: selectedMentor,
-
         termId,
-
         assignedBy,
       });
 
@@ -97,9 +77,7 @@ const AssignmentWorkspace = ({
       setSelectedStudents([]);
       setSelectedMentor(null);
 
-      if (onRefresh) {
-        onRefresh();
-      }
+      await onRefresh?.();
     } catch (err) {
       console.error("Assignment failed:", err);
 
@@ -113,23 +91,14 @@ const AssignmentWorkspace = ({
     }
   };
 
-  // ============================================================
-  // AUTO CLEAR MESSAGE
-  // ============================================================
-
+  // Automatically clear status messages.
   useEffect(() => {
-    if (!message) return;
+    if (!message) return undefined;
 
-    const timer = setTimeout(() => {
-      setMessage("");
-    }, 5000);
+    const timer = setTimeout(() => setMessage(""), 5000);
 
     return () => clearTimeout(timer);
   }, [message]);
-
-  // ============================================================
-  // FILTER BUTTON
-  // ============================================================
 
   const handleFiltersClick = () => {
     window.scrollTo({
@@ -138,12 +107,10 @@ const AssignmentWorkspace = ({
     });
   };
 
-  // ============================================================
-  // BULK ASSIGN
-  // ============================================================
-
+  // Preserve the existing Bulk Assign button behavior.
   const handleBulkAssign = () => {
-    if (students.length === 0) {
+    if (!students.length) {
+      setMessage("No unassigned students are available.");
       return;
     }
 
@@ -151,20 +118,7 @@ const AssignmentWorkspace = ({
   };
 
   return (
-    <div
-      className="
-        overflow-hidden
-        rounded-2xl
-        border
-        border-slate-200
-        bg-white
-        shadow-sm
-      "
-    >
-      {/* ========================================================
-          HEADER
-      ======================================================== */}
-
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <AssignmentHeader
         activeTab={activeTab}
         setActiveTab={setActiveTab}
@@ -173,51 +127,25 @@ const AssignmentWorkspace = ({
         onFiltersClick={handleFiltersClick}
         onBulkAssign={handleBulkAssign}
         studentCount={context?.counts?.unassignedStudents ?? students.length}
+        assignedCount={context?.counts?.assignedStudents ?? 0}
         transferCount={context?.counts?.pendingTransferRequests ?? 0}
       />
 
-      {/* ========================================================
-          STATUS
-      ======================================================== */}
-
+      {/* STATUS MESSAGE */}
       {message && (
-        <div
-          className="
-            border-b
-            border-blue-100
-            bg-blue-50
-            px-5
-            py-2.5
-            text-xs
-            font-medium
-            text-blue-700
-          "
-        >
+        <div className="border-b border-blue-100 bg-blue-50 px-5 py-2.5 text-xs font-medium text-blue-700">
           {message}
         </div>
       )}
 
+      {/* ERROR */}
       {error && (
-        <div
-          className="
-            border-b
-            border-red-100
-            bg-red-50
-            px-5
-            py-2.5
-            text-xs
-            font-medium
-            text-red-700
-          "
-        >
+        <div className="border-b border-red-100 bg-red-50 px-5 py-2.5 text-xs font-medium text-red-700">
           {error}
         </div>
       )}
 
-      {/* ========================================================
-          LOADING
-      ======================================================== */}
-
+      {/* LOADING */}
       {loading && (
         <div className="border-b border-slate-100 px-5 py-2.5">
           <p className="text-[11px] font-medium text-slate-400">
@@ -226,31 +154,16 @@ const AssignmentWorkspace = ({
         </div>
       )}
 
-      {/* ========================================================
-          UNASSIGNED
-      ======================================================== */}
-
+      {/* UNASSIGNED STUDENTS — MANUAL ASSIGNMENT */}
       {activeTab === "unassigned" && (
         <>
-          <div
-            className="
-              grid
-              grid-cols-[minmax(0,1fr)_56px_minmax(0,1fr)]
-              items-stretch
-              gap-5
-              p-5
-            "
-          >
-            {/* ================= Students ================= */}
-
+          <div className="grid grid-cols-[minmax(0,1fr)_56px_minmax(0,1fr)] items-stretch gap-5 p-5">
             <StudentPanel
               students={students}
               search={search}
               selectedStudents={selectedStudents}
               setSelectedStudents={setSelectedStudents}
             />
-
-            {/* ================= Assign ================= */}
 
             <div className="flex items-center justify-center">
               <AssignButton
@@ -260,8 +173,6 @@ const AssignmentWorkspace = ({
                 loading={assigning}
               />
             </div>
-
-            {/* ================= Mentors ================= */}
 
             <MentorPanel
               mentors={mentors}
@@ -278,22 +189,24 @@ const AssignmentWorkspace = ({
         </>
       )}
 
-      {/* ========================================================
-          ALL ASSIGNMENTS
-      ======================================================== */}
+      {/* ASSIGNED STUDENTS */}
+      {activeTab === "assigned" && (
+        <AssignedStudentsPanel
+          termId={termId}
+          search={search}
+          onRefresh={onRefresh}
+        />
+      )}
 
-      {activeTab === "all" && <AllAssignmentsPanel />}
+      {/* ALL ASSIGNMENTS */}
+      {activeTab === "all" && (
+        <AllAssignmentsPanel termId={termId} search={search} />
+      )}
 
-      {/* ========================================================
-          TRANSFER REQUESTS
-      ======================================================== */}
-
+      {/* TRANSFER REQUESTS */}
       {activeTab === "transfer" && <TransferTicketsPanel />}
 
-      {/* ========================================================
-          HISTORY
-      ======================================================== */}
-
+      {/* HISTORY */}
       {activeTab === "history" && (
         <div className="flex min-h-[300px] items-center justify-center p-8">
           <div className="text-center">

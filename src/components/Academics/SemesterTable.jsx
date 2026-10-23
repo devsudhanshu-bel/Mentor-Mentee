@@ -296,8 +296,14 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
           id: subject.id,
 
           /*
-           * ACADEMIC FIELDS ONLY
+           * Editable course metadata plus existing academic marks.
+           * Course Name and Attendance are intentionally not sent.
            */
+          courseCode: String(subject.courseCode ?? subject.code ?? "").trim(),
+          credits:
+            subject.credits === "" || subject.credits === null || subject.credits === undefined
+              ? null
+              : Number(subject.credits),
 
           cia1:
             subject.cia1 === "" ||
@@ -354,24 +360,24 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
         })),
       };
 
-      console.log("ACADEMIC MARKS ONLY PAYLOAD:", payload);
+      console.log("ACADEMIC SEMESTER UPDATE PAYLOAD:", payload);
 
       const response = await updateAcademicSemester(semesterNumber, payload);
 
       console.log("Academic update response:", response);
 
-      setSuccess("Academic marks updated successfully.");
+      setSuccess("Course code, credits and academic marks updated successfully.");
 
       setIsEditing(false);
 
       await fetchSemester();
     } catch (err) {
-      console.error("Failed to update academic marks:", err);
+      console.error("Failed to update semester details:", err);
 
       setError(
         err?.response?.data?.message ||
           err?.message ||
-          "Failed to save academic marks.",
+          "Failed to save semester details.",
       );
     } finally {
       setSaving(false);
@@ -472,7 +478,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
 
           {isEditing && (
             <p className="mt-1 text-[11px] text-blue-500">
-              Editing academic marks only
+              Editing course code, credits and academic marks
             </p>
           )}
         </div>
@@ -547,12 +553,12 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
       {isEditing && (
         <div className="border-b border-blue-100 bg-blue-50 px-5 py-3">
           <p className="text-xs font-semibold text-blue-700">
-            Academic marks editing
+            Semester details editing
           </p>
 
           <p className="mt-0.5 text-[10px] text-blue-500">
-            Course details, credits and attendance are managed from the
-            Attendance page and cannot be changed here.
+            Course Code, Credits and academic marks are editable. Course Name,
+            grade fields not in edit mode, and Attendance remain unchanged.
           </p>
         </div>
       )}
@@ -570,13 +576,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
                 className="w-10 border border-slate-200 px-2 py-2 font-semibold"
               >
                 #
-              </th>
-
-              <th
-                rowSpan="2"
-                className="w-28 border border-slate-200 px-2 py-2 font-semibold"
-              >
-                Course Code
               </th>
 
               <th
@@ -683,14 +682,6 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
                   </td>
 
                   {/* =================================================
-                        COURSE CODE — READ ONLY
-                    ================================================= */}
-
-                  <td className="border border-slate-200 px-2 py-3 text-center font-semibold text-[#0B3B8F]">
-                    {displayValue(subject.courseCode || subject.code)}
-                  </td>
-
-                  {/* =================================================
                         COURSE NAME — READ ONLY
                     ================================================= */}
 
@@ -698,12 +689,24 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
                     {displayValue(subject.courseName || subject.name)}
                   </td>
 
-                  {/* =================================================
-                        CREDITS — READ ONLY / FROM ATTENDANCE
-                    ================================================= */}
-
+                  {/* CREDITS — EDITABLE */}
                   <td className="border border-slate-200 px-2 py-3 text-center font-semibold">
-                    {displayValue(subject.credits)}
+                    {isEditing ? (
+                      <input
+                        type="number"
+                        min="0"
+                        max="60"
+                        step="0.5"
+                        value={subject.credits ?? ""}
+                        onChange={(event) =>
+                          handleSubjectChange(index, "credits", event.target.value)
+                        }
+                        className="w-full min-w-[48px] rounded border border-blue-200 bg-white px-1 py-1.5 text-center text-[11px] outline-none focus:border-blue-500"
+                        aria-label={`Credits for ${subject.courseName || subject.name || `subject ${index + 1}`}`}
+                      />
+                    ) : (
+                      displayValue(subject.credits)
+                    )}
                   </td>
 
                   {/* =================================================
@@ -926,7 +929,7 @@ const SemesterTable = ({ semesterNumber = 1 }) => {
             {subjects.length > 0 && (
               <tr className="bg-white font-semibold">
                 <td
-                  colSpan="8"
+                  colSpan="7"
                   className="border border-slate-300 px-4 py-3 text-right text-[11px] text-slate-700"
                 >
                   <span className="font-bold">Total Marks (In Words):</span>{" "}

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FileText, Pencil } from "lucide-react";
+import { FileText, Pencil, Trash2 } from "lucide-react";
 
 import generateAttendanceReport from "../../utils/generateAttendanceReport";
 
@@ -28,7 +28,12 @@ const badgeColor = (value) => {
    SUBJECT ATTENDANCE
 ========================================================== */
 
-const SubjectAttendance = ({ attendanceData, onEdit }) => {
+const SubjectAttendance = ({
+  attendanceData,
+  onEdit,
+  onClear,
+  clearing = false,
+}) => {
   const subjects = attendanceData?.subjects || [];
 
   /* ========================================================
@@ -39,6 +44,18 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
     if (onEdit) {
       onEdit();
     }
+  };
+
+  /* ========================================================
+     CLEAR SUBJECTS
+  ======================================================== */
+
+  const handleClear = () => {
+    if (clearing || typeof onClear !== "function") {
+      return;
+    }
+
+    onClear();
   };
 
   /* ========================================================
@@ -151,16 +168,6 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
                       text-left
                     "
                   >
-                    Subject Code
-                  </th>
-
-                  <th
-                    className="
-                      py-2
-                      px-3
-                      text-left
-                    "
-                  >
                     Subject Name
                   </th>
 
@@ -235,17 +242,6 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
                         className="
                             px-3
                             text-[11px]
-                            font-medium
-                            text-[#142970]
-                          "
-                      >
-                        {subject.courseCode || "—"}
-                      </td>
-
-                      <td
-                        className="
-                            px-3
-                            text-[11px]
                             text-slate-700
                           "
                       >
@@ -299,7 +295,7 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
               <tfoot>
                 <tr className="border-t border-slate-200 bg-slate-50">
                   <td
-                    colSpan={5}
+                    colSpan={4}
                     className="
         px-4
         py-3
@@ -364,6 +360,7 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
             <button
               type="button"
               onClick={handleEdit}
+              disabled={clearing}
               className="
                 flex
                 items-center
@@ -391,6 +388,7 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
             <button
               type="button"
               onClick={handleDetailedReport}
+              disabled={clearing}
               className="
                 flex
                 items-center
@@ -409,6 +407,41 @@ const SubjectAttendance = ({ attendanceData, onEdit }) => {
             >
               <FileText size={14} />
               View Detailed Report
+            </button>
+
+            {/* =================================================
+                CLEAR SUBJECTS
+            ================================================= */}
+
+            <button
+              type="button"
+              onClick={handleClear}
+              disabled={clearing || typeof onClear !== "function"}
+              className="
+                flex
+                items-center
+                gap-2
+                rounded-lg
+                border
+                border-red-300
+                px-5
+                py-1.5
+                text-[12px]
+                font-medium
+                text-red-600
+                transition
+                hover:bg-red-50
+                disabled:cursor-not-allowed
+                disabled:opacity-50
+              "
+              title={
+                typeof onClear !== "function"
+                  ? "Connect the onClear handler in the parent Attendance page"
+                  : "Clear subjects for the selected semester"
+              }
+            >
+              <Trash2 size={14} />
+              {clearing ? "Clearing..." : "Clear Subjects"}
             </button>
           </div>
         </>

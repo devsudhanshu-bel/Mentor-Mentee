@@ -13,6 +13,7 @@ import AttendanceEntryModal from "../components/Attendance/AttendanceEntryModal"
 import {
   getSemesterAttendance,
   saveSemesterAttendance,
+  clearSemesterSubjects,
 } from "../api/attendance.api";
 
 /* ==========================================================
@@ -35,6 +36,8 @@ const Attendance = () => {
   const [error, setError] = useState("");
 
   const [showEntryModal, setShowEntryModal] = useState(false);
+
+  const [clearingSubjects, setClearingSubjects] = useState(false);
 
   /* ========================================================
      SEMESTER PARSER
@@ -221,6 +224,67 @@ const Attendance = () => {
       mounted = false;
     };
   }, []);
+
+  const handleClearSubjects = async () => {
+    console.log("[Clear Subjects] Clicked", {
+      selectedSemester,
+      clearingSubjects,
+    });
+
+    if (clearingSubjects) {
+      console.warn("[Clear Subjects] Already in progress.");
+      return;
+    }
+
+    if (
+      !Number.isInteger(Number(selectedSemester)) ||
+      Number(selectedSemester) < 1 ||
+      Number(selectedSemester) > 8
+    ) {
+      setError("Please select a valid semester before clearing subjects.");
+      return;
+    }
+
+    const semester = Number(selectedSemester);
+
+    const confirmed = window.confirm(
+      `Permanently delete all subjects for Semester ${semester}?\n\n` +
+        "Subjects in other semesters will remain unchanged. This action cannot be undone.",
+    );
+
+    if (!confirmed) {
+      console.log("[Clear Subjects] Cancelled by user.");
+      return;
+    }
+
+    try {
+      setClearingSubjects(true);
+      setError("");
+
+      console.log("[Clear Subjects] Sending DELETE request...", {
+        semester,
+      });
+
+      const response = await clearSemesterSubjects(semester);
+
+      console.log("[Clear Subjects] API response:", response);
+
+      await loadAttendance(semester, false);
+
+      setShowEntryModal(false);
+
+      console.log("[Clear Subjects] Semester refreshed successfully.");
+    } catch (err) {
+      console.error("[Clear Subjects] Failed:", err);
+
+      setError(
+        err?.message ||
+          "Unable to clear subjects. Please check the server and try again.",
+      );
+    } finally {
+      setClearingSubjects(false);
+    }
+  };
 
   /* ========================================================
      SEMESTER CHANGE
@@ -425,6 +489,8 @@ const Attendance = () => {
                 onEdit={() => {
                   setShowEntryModal(true);
                 }}
+                onClear={handleClearSubjects}
+                clearing={clearingSubjects}
               />
             </div>
           </div>

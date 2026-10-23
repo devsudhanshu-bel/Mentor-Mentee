@@ -385,7 +385,7 @@ const AddStudentsModal = ({
 
   if (success) {
     return (
-      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-6 backdrop-blur-sm">
+      <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-3 sm:p-4 backdrop-blur-sm">
         <div className="w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl">
           {/* ================================================
               SUCCESS HEADER
@@ -538,13 +538,13 @@ const AddStudentsModal = ({
   // ========================================================
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-6 backdrop-blur-sm">
-      <div className="w-full max-w-2xl overflow-hidden rounded-3xl bg-white shadow-2xl">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-3 sm:p-4 backdrop-blur-sm">
+      <div className="flex max-h-[88vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl">
         {/* ==================================================
             HEADER
         ================================================== */}
 
-        <div className="flex items-start justify-between border-b border-slate-200 px-6 py-5">
+        <div className="flex shrink-0 items-start justify-between border-b border-slate-200 px-6 py-3">
           <div>
             <div className="flex items-center gap-3">
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-900">
@@ -577,7 +577,7 @@ const AddStudentsModal = ({
             BODY
         ================================================== */}
 
-        <div className="space-y-6 px-6 py-6">
+        <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-6 py-4">
           {/* =================================================
               DEPARTMENT
           ================================================= */}
@@ -672,7 +672,7 @@ const AddStudentsModal = ({
                 }
               }}
               className={[
-                "cursor-pointer rounded-2xl border-2 border-dashed p-8 text-center transition",
+                "cursor-pointer rounded-2xl border-2 border-dashed p-5 text-center transition",
                 dragActive
                   ? "border-slate-900 bg-slate-50"
                   : "border-slate-200 hover:border-slate-400 hover:bg-slate-50",
@@ -751,7 +751,7 @@ const AddStudentsModal = ({
                 </p>
 
                 <p className="mt-1 text-sm text-slate-500">
-                  Register Number &nbsp; • &nbsp; Name &nbsp; • &nbsp; Email
+                  Register Number &nbsp; • &nbsp; Name &nbsp; • &nbsp; Email &nbsp; • &nbsp; Semester (optional)
                 </p>
 
                 <p className="mt-2 text-xs leading-5 text-slate-400">
@@ -792,7 +792,7 @@ const AddStudentsModal = ({
             FOOTER
         ================================================== */}
 
-        <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-6 py-4">
+        <div className="flex shrink-0 items-center justify-end gap-3 border-t border-slate-200 px-6 py-3">
           {/* =================================================
               CANCEL
           ================================================= */}

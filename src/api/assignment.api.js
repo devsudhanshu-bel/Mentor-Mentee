@@ -3,23 +3,6 @@ import api from "./axios";
 // ============================================================
 // GET ASSIGNMENT CONTEXT
 // ============================================================
-//
-// Dynamic cascade:
-//
-// Academic Year
-//      ↓
-// Term
-//      ↓
-// Department
-//      ↓
-// Year
-//      ↓
-// Section
-//
-// All options come from the backend/database.
-// Nothing academic is hardcoded here.
-//
-// ============================================================
 
 export const getAssignmentContext = async ({
   academicYear,
@@ -31,37 +14,10 @@ export const getAssignmentContext = async ({
 } = {}) => {
   const params = {};
 
-  // ------------------------------------------------------------
-  // Academic Year
-  // ------------------------------------------------------------
-
-  if (academicYear) {
-    params.academicYear = academicYear;
-  }
-
-  if (academicYearId) {
-    params.academicYearId = academicYearId;
-  }
-
-  // ------------------------------------------------------------
-  // Term
-  // ------------------------------------------------------------
-
-  if (termId) {
-    params.termId = termId;
-  }
-
-  // ------------------------------------------------------------
-  // Department
-  // ------------------------------------------------------------
-
-  if (departmentId) {
-    params.departmentId = departmentId;
-  }
-
-  // ------------------------------------------------------------
-  // Semester / Year
-  // ------------------------------------------------------------
+  if (academicYear) params.academicYear = academicYear;
+  if (academicYearId) params.academicYearId = academicYearId;
+  if (termId) params.termId = termId;
+  if (departmentId) params.departmentId = departmentId;
 
   if (
     semesterNumber !== undefined &&
@@ -71,37 +27,13 @@ export const getAssignmentContext = async ({
     params.semesterNumber = semesterNumber;
   }
 
-  // ------------------------------------------------------------
-  // Section
-  // ------------------------------------------------------------
-
   if (section && section !== "All Sections") {
     params.section = section;
   }
 
-  // ============================================================
-  // REQUEST
-  // ============================================================
-
   const response = await api.get("/admin/assignments/context", {
     params,
   });
-
-  // ============================================================
-  // IMPORTANT
-  // ============================================================
-  //
-  // Controller response:
-  //
-  // {
-  //   success: true,
-  //   message: "...",
-  //   data: {...}
-  // }
-  //
-  // Return ONLY the actual context.
-  //
-  // ============================================================
 
   return response?.data?.data ?? response?.data ?? null;
 };
@@ -127,7 +59,7 @@ export const assignStudentsToMentor = async ({
 };
 
 // ============================================================
-// GET ALL ASSIGNMENTS
+// GET ALL ACTIVE ASSIGNMENTS
 // ============================================================
 
 export const getAllAssignments = async ({
@@ -138,17 +70,9 @@ export const getAllAssignments = async ({
 } = {}) => {
   const params = {};
 
-  if (termId) {
-    params.termId = termId;
-  }
-
-  if (departmentId) {
-    params.departmentId = departmentId;
-  }
-
-  if (teacherId) {
-    params.teacherId = teacherId;
-  }
+  if (termId) params.termId = termId;
+  if (departmentId) params.departmentId = departmentId;
+  if (teacherId) params.teacherId = teacherId;
 
   if (search && search.trim()) {
     params.search = search.trim();
@@ -159,4 +83,47 @@ export const getAllAssignments = async ({
   });
 
   return response?.data?.data ?? response?.data ?? [];
+};
+
+// ============================================================
+// BULK ASSIGN STUDENTS FROM PDF
+// ============================================================
+
+export const bulkAssignStudentsFromPdf = async ({
+  file,
+  teacherId,
+  termId,
+  assignedBy,
+}) => {
+  const formData = new FormData();
+
+  formData.append("studentListPdf", file);
+  formData.append("teacherId", teacherId);
+  formData.append("termId", termId);
+  formData.append("assignedBy", assignedBy);
+
+  const response = await api.post("/admin/assignments/bulk-pdf", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  return response?.data?.data ?? response?.data ?? null;
+};
+
+// ============================================================
+// REMOVE ACTIVE MENTOR ASSIGNMENT
+// DELETE /admin/assignments/:assignmentId
+// ============================================================
+
+export const removeMentorAssignment = async (assignmentId) => {
+  if (!assignmentId) {
+    throw new Error("Assignment ID is required.");
+  }
+
+  const response = await api.delete(
+    `/admin/assignments/${encodeURIComponent(assignmentId)}`,
+  );
+
+  return response?.data?.data ?? response?.data ?? null;
 };

@@ -1,6 +1,7 @@
 import React from "react";
+import { Trash2 } from "lucide-react";
 
-const StudentRow = ({ student, selectedStudents = [], toggleStudent }) => {
+const StudentRow = ({ student, selectedStudents = [], toggleStudent, onDeleteStudent }) => {
   const isSelected = selectedStudents.includes(student.id);
 
   // Backend field → UI value
@@ -143,6 +144,23 @@ const StudentRow = ({ student, selectedStudents = [], toggleStudent }) => {
         >
           {status}
         </span>
+      </td>
+
+      {/* ADMIN DELETE ACTION */}
+
+      <td className="px-4 text-right">
+        <button
+          type="button"
+          title={`Delete ${name}`}
+          aria-label={`Delete student ${name}`}
+          onClick={(event) => {
+            event.stopPropagation();
+            onDeleteStudent?.(student);
+          }}
+          className="inline-flex items-center justify-center rounded-lg border border-red-200 p-2 text-red-600 transition hover:border-red-300 hover:bg-red-50 focus:outline-none focus:ring-2 focus:ring-red-300"
+        >
+          <Trash2 size={16} />
+        </button>
       </td>
     </tr>
   );

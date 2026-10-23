@@ -59,3 +59,13 @@ export const importStudentsFromPdf = async ({ file, departmentId, termId }) => {
 
   return response.data;
 };
+
+
+// ==========================================================
+// DELETE A STUDENT RECORD (ADMIN ONLY ON THE BACKEND)
+// ==========================================================
+export const deleteStudent = async (studentId) => {
+  if (!studentId) throw new Error("Student ID is required.");
+  const response = await api.delete(`/admin/students/${encodeURIComponent(studentId)}`);
+  return response.data;
+};

@@ -3,17 +3,25 @@ import React, { useEffect, useMemo, useState } from "react";
 import {
   getAssignmentContext,
   getAllAssignments,
+  removeMentorAssignment,
 } from "../../../../api/assignment.api";
 
 import AssignmentTable from "./Table/AssignmentTable";
 import AssignmentPagination from "./Table/AssignmentPagination";
 
-const AllAssignmentsPanel = () => {
+const AllAssignmentsPanel = ({
+  termId: selectedTermId,
+  departmentId,
+  search = "",
+  showRemove = false,
+  onRefresh,
+}) => {
   const [assignments, setAssignments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   const [page, setPage] = useState(1);
+  const [removingAssignmentId, setRemovingAssignmentId] = useState(null);
 
   const ITEMS_PER_PAGE = 10;
 
@@ -28,7 +36,7 @@ const AllAssignmentsPanel = () => {
         // ---------------------------------------------------------
         const contextResponse = await getAssignmentContext({});
 
-        const termId = contextResponse?.data?.termId || contextResponse?.termId;
+        const termId = selectedTermId || contextResponse?.data?.termId || contextResponse?.termId;
 
         if (!termId) {
           throw new Error("Active academic term could not be determined.");
@@ -39,6 +47,8 @@ const AllAssignmentsPanel = () => {
         // ---------------------------------------------------------
         const response = await getAllAssignments({
           termId,
+          departmentId,
+          search,
         });
 
         const rawAssignments = response?.data || response || [];
@@ -141,7 +151,30 @@ const AllAssignmentsPanel = () => {
     };
 
     loadAssignments();
-  }, []);
+  }, [selectedTermId, departmentId, search]);
+
+  const handleRemoveAssignment = async (assignment) => {
+    if (!showRemove || !assignment?.id || removingAssignmentId) return;
+
+    const confirmed = window.confirm(
+      `Remove ${assignment.mentee.name} from mentor ${assignment.mentor.name}?\n\nThe student will become unassigned for this term and will appear in Unassigned Students. Historical assignment records will be preserved.`,
+    );
+    if (!confirmed) return;
+
+    try {
+      setRemovingAssignmentId(assignment.id);
+      await removeMentorAssignment(assignment.id);
+      setAssignments((current) => current.filter((item) => item.id !== assignment.id));
+      if (typeof onRefresh === "function") {
+        await onRefresh();
+      }
+    } catch (err) {
+      console.error("Failed to remove mentor assignment:", err);
+      setError(err?.response?.data?.message || err?.message || "Failed to remove assignment.");
+    } finally {
+      setRemovingAssignmentId(null);
+    }
+  };
 
   // -------------------------------------------------------------
   // Pagination
@@ -227,7 +260,12 @@ const AllAssignmentsPanel = () => {
   return (
     <div className="overflow-hidden">
       <div className="overflow-x-auto">
-        <AssignmentTable assignments={paginatedAssignments} />
+        <AssignmentTable
+          assignments={paginatedAssignments}
+          showRemove={showRemove}
+          onRemove={handleRemoveAssignment}
+          removingAssignmentId={removingAssignmentId}
+        />
       </div>
 
       <AssignmentPagination

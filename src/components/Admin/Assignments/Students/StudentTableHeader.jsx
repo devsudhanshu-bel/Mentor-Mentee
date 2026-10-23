@@ -22,6 +22,7 @@ const StudentTableHeader = ({
         <th>Year</th>
 
         <th className="pr-4">Status</th>
+        <th className="px-4 text-right">Action</th>
       </tr>
     </thead>
   );
