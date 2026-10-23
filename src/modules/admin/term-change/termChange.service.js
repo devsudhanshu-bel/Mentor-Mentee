@@ -345,6 +345,338 @@ class TermChangeService {
     };
   };
 
+
+  /* ========================================================
+     DIRECT ADMIN TERM ACTIVATION + STUDENT PROGRESSION
+     ADMIN ONLY
+  ======================================================== */
+
+  activateTermDirectly = async ({
+    requestedStartDate,
+    requestedEndDate,
+    expectedCurrentTermId,
+    activatedBy,
+  }) => {
+    if (!requestedStartDate || !requestedEndDate) {
+      throw new Error("Start date and end date are required.");
+    }
+
+    if (!expectedCurrentTermId || !activatedBy) {
+      throw new Error("Current term and administrator identity are required.");
+    }
+
+    const startDate = new Date(requestedStartDate);
+    const endDate = new Date(requestedEndDate);
+
+    if (
+      Number.isNaN(startDate.getTime()) ||
+      Number.isNaN(endDate.getTime()) ||
+      endDate <= startDate
+    ) {
+      throw new Error("Please provide a valid term date range.");
+    }
+
+    return hodPrisma.$transaction(
+      async (tx) => {
+        const currentTerm = await tx.academic_terms.findFirst({
+          where: { status: "ACTIVE" },
+          orderBy: { startDate: "desc" },
+          include: { academic_years: true },
+        });
+
+        if (!currentTerm) {
+          throw new Error("No active academic term was found.");
+        }
+
+        // Prevent a repeated click/request from advancing two terms.
+        if (currentTerm.id !== expectedCurrentTermId) {
+          const error = new Error(
+            "The active term has changed since this dialog was opened. Refresh the page before trying again.",
+          );
+          error.statusCode = 409;
+          throw error;
+        }
+
+        const fixedNextTerm = getFixedNextTerm(currentTerm);
+        let targetYear = await tx.academic_years.findFirst({
+          where: {
+            startDate: { lte: startDate },
+            endDate: { gte: endDate },
+            departmentId: currentTerm.academic_years?.departmentId,
+          },
+          orderBy: { startDate: "desc" },
+        });
+
+        if (!targetYear) {
+          const termMatch = fixedNextTerm.name.match(
+            /^(Odd|Even)\s+Semester\s+(\d{4})$/i,
+          );
+          if (termMatch) {
+            const termYear = Number(termMatch[2]);
+            const yearName = `${termYear}-${String(termYear + 1).slice(-2)}`;
+            targetYear = await tx.academic_years.findFirst({
+              where: {
+                name: yearName,
+                departmentId: currentTerm.academic_years?.departmentId,
+              },
+            });
+          }
+        }
+
+        if (!targetYear) {
+          const error = new Error(
+            "The academic year for the next term was not found. Create the target academic year first, then retry.",
+          );
+          error.statusCode = 400;
+          throw error;
+        }
+
+        let nextTerm = await tx.academic_terms.findFirst({
+          where: {
+            academicYearId: targetYear.id,
+            name: fixedNextTerm.name,
+          },
+        });
+
+        if (!nextTerm) {
+          nextTerm = await tx.academic_terms.create({
+            data: {
+              id: randomUUID(),
+              academicYearId: targetYear.id,
+              name: fixedNextTerm.name,
+              semesterNumber: fixedNextTerm.semesterNumber,
+              startDate,
+              endDate,
+              status: "UPCOMING",
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            },
+          });
+        } else {
+          nextTerm = await tx.academic_terms.update({
+            where: { id: nextTerm.id },
+            data: {
+              semesterNumber: fixedNextTerm.semesterNumber,
+              startDate,
+              endDate,
+              status: "UPCOMING",
+              updatedAt: new Date(),
+            },
+          });
+        }
+
+        // Process students actively enrolled in the term being closed.
+        const activeEnrollments = await tx.student_enrollments.findMany({
+          where: {
+            termId: currentTerm.id,
+            status: "ACTIVE",
+            students: { status: "ACTIVE" },
+          },
+          include: { students: true },
+        });
+
+        let promotedCount = 0;
+        let graduatedCount = 0;
+
+        for (const enrollment of activeEnrollments) {
+          const student = enrollment.students;
+          const currentSemester = Number(enrollment.semesterNumber);
+
+          if (!Number.isInteger(currentSemester) || currentSemester < 1) {
+            throw new Error(
+              `Invalid semester number for student ${student.registerNumber}. No changes were committed.`,
+            );
+          }
+
+          await tx.student_enrollments.update({
+            where: { id: enrollment.id },
+            data: {
+              status: "COMPLETED",
+              completedAt: new Date(),
+              updatedAt: new Date(),
+            },
+          });
+
+          // Preserve the current mentor relationship before closing its
+          // term-specific assignment record. Historical assignments remain
+          // ENDED; an equivalent ACTIVE record is created for the next term.
+          const currentMentorAssignments = await tx.mentor_assignments.findMany({
+            where: {
+              studentId: student.id,
+              termId: currentTerm.id,
+              status: "ACTIVE",
+            },
+            select: {
+              teacherId: true,
+              assignedBy: true,
+            },
+          });
+
+          await tx.mentor_assignments.updateMany({
+            where: {
+              studentId: student.id,
+              termId: currentTerm.id,
+              status: "ACTIVE",
+            },
+            data: {
+              status: "ENDED",
+              endedAt: new Date(),
+              updatedAt: new Date(),
+            },
+          });
+
+          if (currentSemester >= 8) {
+            await tx.students.update({
+              where: { id: student.id },
+              data: {
+                status: "GRADUATED",
+                semester: "8",
+                updatedAt: new Date(),
+              },
+            });
+            graduatedCount += 1;
+            continue;
+          }
+
+          const nextSemester = currentSemester + 1;
+
+          // Upsert makes the transition safe if a target enrollment was
+          // already created in advance; the expected-current-term guard
+          // prevents this same activation from running twice.
+          const existingNextEnrollment =
+            await tx.student_enrollments.findUnique({
+              where: {
+                studentId_termId: {
+                  studentId: student.id,
+                  termId: nextTerm.id,
+                },
+              },
+            });
+
+          if (existingNextEnrollment) {
+            await tx.student_enrollments.update({
+              where: { id: existingNextEnrollment.id },
+              data: {
+                semesterNumber: nextSemester,
+                status: "ACTIVE",
+                enrolledAt: new Date(),
+                completedAt: null,
+                updatedAt: new Date(),
+              },
+            });
+          } else {
+            await tx.student_enrollments.create({
+              data: {
+                id: randomUUID(),
+                studentId: student.id,
+                termId: nextTerm.id,
+                semesterNumber: nextSemester,
+                status: "ACTIVE",
+                enrolledAt: new Date(),
+                createdAt: new Date(),
+                updatedAt: new Date(),
+              },
+            });
+          }
+
+          await tx.students.update({
+            where: { id: student.id },
+            data: {
+              semester: String(nextSemester),
+              updatedAt: new Date(),
+            },
+          });
+
+          // Carry the existing mentor(s) into the new term. The old records
+          // are retained as history, and duplicate active rows are avoided.
+          for (const assignment of currentMentorAssignments) {
+            const existingNextAssignment = await tx.mentor_assignments.findFirst({
+              where: {
+                studentId: student.id,
+                teacherId: assignment.teacherId,
+                termId: nextTerm.id,
+                status: "ACTIVE",
+              },
+              select: { id: true },
+            });
+
+            if (!existingNextAssignment) {
+              await tx.mentor_assignments.create({
+                data: {
+                  id: randomUUID(),
+                  studentId: student.id,
+                  teacherId: assignment.teacherId,
+                  termId: nextTerm.id,
+                  status: "ACTIVE",
+                  assignedAt: new Date(),
+                  assignedBy: assignment.assignedBy,
+                  createdAt: new Date(),
+                  updatedAt: new Date(),
+                },
+              });
+            }
+          }
+
+          promotedCount += 1;
+        }
+
+        await tx.academic_terms.update({
+          where: { id: currentTerm.id },
+          data: { status: "COMPLETED", updatedAt: new Date() },
+        });
+
+        await tx.academic_terms.update({
+          where: { id: nextTerm.id },
+          data: { status: "ACTIVE", updatedAt: new Date() },
+        });
+
+        if (currentTerm.academicYearId !== targetYear.id) {
+          await tx.academic_years.update({
+            where: { id: currentTerm.academicYearId },
+            data: { status: "COMPLETED", updatedAt: new Date() },
+          });
+        }
+
+        await tx.academic_years.update({
+          where: { id: targetYear.id },
+          data: { status: "ACTIVE", updatedAt: new Date() },
+        });
+
+        // Old pending requests are no longer actionable after direct activation.
+        await tx.term_change_requests.updateMany({
+          where: { status: "PENDING" },
+          data: {
+            status: "REJECTED",
+            reviewedBy: activatedBy,
+            reviewedAt: new Date(),
+            reviewComment: "Superseded by direct Admin term activation.",
+            updatedAt: new Date(),
+          },
+        });
+
+        return {
+          previousTerm: {
+            id: currentTerm.id,
+            name: currentTerm.name,
+          },
+          activatedTerm: {
+            id: nextTerm.id,
+            name: nextTerm.name,
+            semesterNumber: nextTerm.semesterNumber,
+            startDate: nextTerm.startDate,
+            endDate: nextTerm.endDate,
+            academicYearId: targetYear.id,
+            academicYearName: targetYear.name,
+          },
+          promotedCount,
+          graduatedCount,
+          skippedCount: Math.max(0, activeEnrollments.length - promotedCount - graduatedCount),
+        };
+      },
+      { maxWait: 10000, timeout: 60000 },
+    );
+  };
+
   /* ========================================================
      GET ALL TERM CHANGE REQUESTS
      SYSTEM ADMIN ONLY

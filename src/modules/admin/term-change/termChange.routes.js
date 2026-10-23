@@ -29,6 +29,13 @@ router.post(
   TermChangeController.createRequest,
 );
 
+router.post(
+  "/activate",
+  authenticate,
+  authorize("ADMIN"),
+  TermChangeController.activateTermDirectly,
+);
+
 /* ==========================================================
    SUPER ADMIN ONLY
 ========================================================== */

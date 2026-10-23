@@ -5,23 +5,9 @@ import AssignmentService from "./assignment.service.js";
 // ============================================================
 
 class AssignmentController {
-  // ============================================================
+  // ==========================================================
   // GET ASSIGNMENT CONTEXT
-  // ============================================================
-  //
-  // GET:
-  // /api/admin/assignments/context
-  //
-  // Query parameters:
-  //
-  // academicYear
-  // academicYearId
-  // termId
-  // departmentId
-  // semesterNumber
-  // section
-  //
-  // ============================================================
+  // ==========================================================
 
   getAssignmentContext = async (req, res, next) => {
     try {
@@ -53,23 +39,9 @@ class AssignmentController {
     }
   };
 
-  // ============================================================
+  // ==========================================================
   // ASSIGN STUDENTS
-  // ============================================================
-  //
-  // POST:
-  // /api/admin/assignments
-  //
-  // Body:
-  //
-  // {
-  //   studentIds: [],
-  //   teacherId: "",
-  //   termId: "",
-  //   assignedBy: ""
-  // }
-  //
-  // ============================================================
+  // ==========================================================
 
   assignStudents = async (req, res, next) => {
     try {
@@ -92,21 +64,40 @@ class AssignmentController {
     }
   };
 
-  // ============================================================
+  // ==========================================================
+  // BULK ASSIGN FROM PDF
+  // ==========================================================
+
+  bulkAssignFromPdf = async (req, res, next) => {
+    try {
+      if (!req.file?.buffer) {
+        const error = new Error("Please select a student-list PDF.");
+        error.statusCode = 400;
+        throw error;
+      }
+
+      const { teacherId, termId, assignedBy } = req.body || {};
+
+      const result = await AssignmentService.bulkAssignFromPdf({
+        buffer: req.file.buffer,
+        teacherId,
+        termId,
+        assignedBy,
+      });
+
+      return res.status(201).json({
+        success: true,
+        message: result.message,
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // ==========================================================
   // GET ALL ASSIGNMENTS
-  // ============================================================
-  //
-  // GET:
-  // /api/admin/assignments
-  //
-  // Query:
-  //
-  // termId
-  // departmentId
-  // teacherId
-  // search
-  //
-  // ============================================================
+  // ==========================================================
 
   getAllAssignments = async (req, res, next) => {
     try {
@@ -123,6 +114,32 @@ class AssignmentController {
         success: true,
         message: "Assignments fetched successfully",
         data: assignments,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // ==========================================================
+  // REMOVE ACTIVE ASSIGNMENT
+  // ==========================================================
+
+  removeAssignment = async (req, res, next) => {
+    try {
+      const { assignmentId } = req.params;
+
+      if (!assignmentId?.trim()) {
+        const error = new Error("Assignment ID is required.");
+        error.statusCode = 400;
+        throw error;
+      }
+
+      const result = await AssignmentService.removeAssignment(assignmentId);
+
+      return res.status(200).json({
+        success: true,
+        message: result.message,
+        data: result,
       });
     } catch (error) {
       next(error);

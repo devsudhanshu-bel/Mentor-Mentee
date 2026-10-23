@@ -58,6 +58,17 @@ const upload = multer({
 // Only ADMIN users are allowed.
 // ==========================================================
 
+router.delete(
+  "/:studentId",
+  authenticate,
+  authorize("ADMIN"),
+  StudentController.deleteStudent,
+);
+
+// ==========================================================
+// IMPORT STUDENTS
+// ==========================================================
+
 router.post(
   "/import",
 

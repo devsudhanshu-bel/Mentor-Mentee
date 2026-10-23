@@ -1,3 +1,4 @@
+import pdfParse from "pdf-parse";
 import { randomUUID } from "crypto";
 
 import hodPrisma from "../../../config/prisma.hod.js";
@@ -479,7 +480,27 @@ class AssignmentService {
     });
 
     // ============================================================
-    // 17. RETURN COMPLETE CONTEXT
+    // 17. COUNT ACTIVE ASSIGNMENTS FOR THE SELECTED SCOPE
+    // ============================================================
+
+    const assignedStudents = selectedTerm
+      ? await hodPrisma.mentor_assignments.count({
+          where: {
+            termId: selectedTerm.id,
+            status: "ACTIVE",
+            ...(departmentId
+              ? {
+                  students: {
+                    departmentId,
+                  },
+                }
+              : {}),
+          },
+        })
+      : 0;
+
+    // ============================================================
+    // 18. RETURN COMPLETE CONTEXT
     // ============================================================
 
     return {
@@ -539,6 +560,8 @@ class AssignmentService {
 
       counts: {
         unassignedStudents: students.length,
+
+        assignedStudents,
 
         availableMentors: formattedMentors.filter(
           (mentor) => mentor.availableSlots > 0,
@@ -733,13 +756,6 @@ class AssignmentService {
           `Student ${student.registerNumber} is already assigned to a mentor for this term`,
         );
       }
-
-      if (student.departmentId !== mentor.departmentId) {
-        throw new ApiError(
-          400,
-          `Student ${student.registerNumber} and selected mentor belong to different departments`,
-        );
-      }
     }
 
     // ==========================================================
@@ -839,6 +855,107 @@ class AssignmentService {
   }
 
   // ============================================================
+  // BULK ASSIGN FROM PDF (REGISTER NUMBER | NAME)
+  // ============================================================
+  async bulkAssignFromPdf({ buffer, teacherId, termId, assignedBy }) {
+    if (!buffer?.length) throw new ApiError(400, "Uploaded PDF is empty");
+    if (!teacherId || !termId || !assignedBy)
+      throw new ApiError(400, "Mentor, academic term, and admin are required");
+
+    let parsed;
+    try {
+      parsed = await pdfParse(buffer);
+    } catch {
+      throw new ApiError(
+        400,
+        "The PDF could not be read. Upload a text-based PDF, not a scanned image.",
+      );
+    }
+
+    // PDF text extraction may concatenate table columns (for example,
+    // "AIDS26TEST003Test Student 3"). Do not guess register numbers by
+    // splitting whitespace. Instead, match known database register numbers
+    // against the extracted text, ignoring layout whitespace/punctuation.
+    const normalize = (value) =>
+      String(value || "")
+        .normalize("NFKC")
+        .trim()
+        .replace(/\\s+/g, " ")
+        .toLocaleLowerCase();
+
+    const normalizeRegister = (value) =>
+      String(value || "")
+        .normalize("NFKC")
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "");
+
+    const extractedText = String(parsed.text || "");
+    const compactText = normalizeRegister(extractedText);
+
+    if (!compactText) {
+      throw new ApiError(
+        400,
+        "No readable text was found in the PDF. Upload a text-based PDF with REGISTER NUMBER and NAME columns.",
+      );
+    }
+
+    // Pull the canonical register numbers from the database. This lets us
+    // recover IDs even when pdf-parse joins the register-number and name
+    // columns without whitespace or line breaks.
+    const candidates = await hodPrisma.students.findMany({
+      where: {
+        status: "ACTIVE",
+      },
+      select: { id: true, registerNumber: true, fullName: true },
+    });
+
+    const matchedCandidates = candidates
+      .filter((student) => {
+        const key = normalizeRegister(student.registerNumber);
+        return key.length > 0 && compactText.includes(key);
+      })
+      // Prefer longer register numbers first to reduce prefix collisions.
+      .sort(
+        (a, b) =>
+          normalizeRegister(b.registerNumber).length -
+          normalizeRegister(a.registerNumber).length,
+      );
+
+    const deduped = [
+      ...new Map(
+        matchedCandidates.map((student) => [
+          normalize(student.registerNumber),
+          {
+            registerNumber: student.registerNumber,
+            name: student.fullName || "",
+            studentId: student.id,
+          },
+        ]),
+      ).values(),
+    ];
+
+    if (!deduped.length) {
+      throw new ApiError(
+        404,
+        "No student register numbers from this PDF matched the database. Check that the PDF contains the students' exact register numbers.",
+      );
+    }
+
+    // Keep the existing all-or-nothing validation and assignment flow.
+    const studentIds = deduped.map((row) => row.studentId);
+    const result = await this.assignStudents({
+      studentIds,
+      teacherId,
+      termId,
+      assignedBy,
+    });
+    return {
+      ...result,
+      message: `${studentIds.length} student(s) assigned successfully from PDF.`,
+    };
+  }
+
+  // ============================================================
   // GET ALL ASSIGNMENTS
   // ============================================================
 
@@ -932,6 +1049,66 @@ class AssignmentService {
         assignedAt: "desc",
       },
     });
+  }
+
+  // ============================================================
+  // REMOVE ACTIVE MENTOR ASSIGNMENT
+  // Preserves the database record for assignment history.
+  // ============================================================
+
+  async removeAssignment(assignmentId) {
+    if (!assignmentId || typeof assignmentId !== "string") {
+      throw new ApiError(400, "A valid assignment ID is required.");
+    }
+
+    const assignment = await hodPrisma.mentor_assignments.findUnique({
+      where: {
+        id: assignmentId,
+      },
+      select: {
+        id: true,
+        studentId: true,
+        teacherId: true,
+        termId: true,
+        status: true,
+        assignedAt: true,
+      },
+    });
+
+    if (!assignment) {
+      throw new ApiError(404, "Mentor assignment not found.");
+    }
+
+    if (assignment.status !== "ACTIVE") {
+      throw new ApiError(409, "This assignment is no longer active.");
+    }
+
+    const now = new Date();
+
+    const updatedAssignment = await hodPrisma.mentor_assignments.update({
+      where: {
+        id: assignmentId,
+      },
+      data: {
+        status: "REMOVED",
+        endedAt: now,
+        updatedAt: now,
+      },
+      select: {
+        id: true,
+        studentId: true,
+        teacherId: true,
+        termId: true,
+        status: true,
+        assignedAt: true,
+        endedAt: true,
+      },
+    });
+
+    return {
+      message: "Mentor assignment removed successfully.",
+      assignment: updatedAssignment,
+    };
   }
 }
 

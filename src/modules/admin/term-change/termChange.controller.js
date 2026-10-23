@@ -66,6 +66,47 @@ class TermChangeController {
     }
   };
 
+
+  /* ========================================================
+     DIRECT ADMIN TERM ACTIVATION
+  ======================================================== */
+
+  activateTermDirectly = async (req, res, next) => {
+    try {
+      const { requestedStartDate, requestedEndDate, expectedCurrentTermId } =
+        req.body || {};
+
+      const activatedBy =
+        req.user?.id ||
+        req.user?.userId ||
+        req.user?.userAccountId ||
+        req.user?.email ||
+        req.user?.username;
+
+      if (!activatedBy) {
+        return res.status(401).json({
+          success: false,
+          message: "Unable to identify the administrator.",
+        });
+      }
+
+      const result = await TermChangeService.activateTermDirectly({
+        requestedStartDate,
+        requestedEndDate,
+        expectedCurrentTermId,
+        activatedBy,
+      });
+
+      return res.status(200).json({
+        success: true,
+        message: "Academic term activated and student progression completed.",
+        data: result,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
   /* ========================================================
      SYSTEM ADMIN
      GET ALL TERM CHANGE REQUESTS

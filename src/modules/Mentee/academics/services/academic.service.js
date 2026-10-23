@@ -836,20 +836,55 @@ class AcademicService {
     }
 
     // ------------------------------------------------------
-    // IMPORTANT
-    //
-    // Only academic fields are accepted.
-    //
-    // NEVER use:
-    // credits
-    // attendance
-    // classesHeld
-    // classesAttended
-    // courseCode
-    // courseName
-    //
-    // from the request for updating the subject.
+    // VALIDATE EDITABLE COURSE METADATA
+    // Only courseCode and credits are editable here.
+    // courseName, attendance, classesHeld and classesAttended
+    // are deliberately never changed by this endpoint.
     // ------------------------------------------------------
+
+    const normalizedCodes = body.subjects.map((incoming) => {
+      if (!incoming?.id) {
+        throw new ApiError(400, "Subject ID is required.");
+      }
+
+      const existingSubject = existingSemester.subjects.find(
+        (subject) => subject.id === incoming.id,
+      );
+
+      if (!existingSubject) {
+        throw new ApiError(
+          400,
+          `Subject ${incoming.id} does not belong to Semester ${number}.`,
+        );
+      }
+
+      const code = String(incoming.courseCode ?? existingSubject.courseCode ?? "").trim();
+      if (!code) {
+        throw new ApiError(400, "Course code cannot be empty.");
+      }
+      if (code.length > 64) {
+        throw new ApiError(400, "Course code must be 64 characters or fewer.");
+      }
+
+      const credits = incoming.credits === undefined
+        ? Number(existingSubject.credits ?? 0)
+        : Number(incoming.credits);
+
+      if (!Number.isFinite(credits) || credits < 0 || credits > 60) {
+        throw new ApiError(400, `Credits for ${code} must be between 0 and 60.`);
+      }
+
+      return { id: incoming.id, code, credits };
+    });
+
+    const codeSet = new Set();
+    for (const item of normalizedCodes) {
+      const key = item.code.toLocaleLowerCase();
+      if (codeSet.has(key)) {
+        throw new ApiError(400, `Duplicate course code: ${item.code}`);
+      }
+      codeSet.add(key);
+    }
 
     for (const incoming of body.subjects) {
       if (!incoming?.id) {
@@ -867,7 +902,14 @@ class AcademicService {
         );
       }
 
+      const editableMetadata = normalizedCodes.find((item) => item.id === incoming.id);
+
       const academicData = {
+        // Only these two course metadata fields are editable here.
+        courseCode: editableMetadata.code,
+        credits: editableMetadata.credits,
+
+        // Course Name and all attendance fields remain untouched.
         cia1:
           incoming.cia1 === "" ||
           incoming.cia1 === null ||
@@ -981,9 +1023,7 @@ class AcademicService {
 
         sgpa: calculated.sgpa,
 
-        /*
-         * Calculated using the existing DB credits.
-         */
+        // Recalculated from the updated subject credits.
         totalCredits: calculated.totalCredits,
 
         creditsEarned: calculated.creditsEarned,

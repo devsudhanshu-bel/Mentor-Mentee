@@ -116,7 +116,10 @@ const isValidRegisterNumber = (value) => {
 const findRegisterMatches = (text) => {
   const matches = [];
 
-  const regex = /\b\d{2}[A-Za-z]{2,}[A-Za-z0-9/_-]*\d+\b/g;
+  // PDF text extraction can join the register number directly to the name.
+  // Example: "AIDS26TEST017Test Student" must split into register "AIDS26TEST017"
+  // and name "Test Student".
+  const regex = /\b[A-Za-z][A-Za-z0-9/_-]*?\d+(?=\s|[A-Z][a-z]+\s|$)|\b\d{2}[A-Za-z][A-Za-z0-9/_-]*?\d+(?=\s|[A-Z][a-z]+\s|$)/g;
 
   let match;
 
@@ -338,13 +341,21 @@ const parseUsingPositions = (text) => {
       continue;
     }
 
+    // Extract an optional semester number after the email,
+    // up to the next student's register number.
+    const afterEmailEnd = email.endIndex;
+    const nextRegisterStart = nextRegister ? nextRegister.index : text.length;
+    const trailingStudentText = text.slice(afterEmailEnd, nextRegisterStart);
+    const semesterMatch =
+      trailingStudentText.match(/\bsemester(?:\s+number)?\s*[:#-]?\s*(\d{1,2})\b/i) ||
+      trailingStudentText.match(/(?:^|\s)([1-8])\s*$/);
+    const semesterNumber = semesterMatch ? Number(semesterMatch[1]) : null;
+
     students.push({
       registerNumber: register.registerNumber,
-
       fullName: nameText,
-
       email: email.email,
-
+      semesterNumber,
       sourceRow: i + 1,
     });
   }
@@ -360,87 +371,164 @@ const parseUsingPositions = (text) => {
 // ==========================================================
 
 const parseUsingLines = (text) => {
-  const lines = text
+  const lines = String(text || "")
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean);
 
   const students = [];
-
   const parsingErrors = [];
 
   for (let i = 0; i < lines.length; i += 1) {
     const line = lines[i];
-
     const emailMatch = line.match(EMAIL_REGEX);
 
-    if (!emailMatch) {
-      continue;
-    }
+    if (!emailMatch) continue;
 
     const email = emailMatch[0].trim().toLowerCase();
+    const emailIndex = line.toLowerCase().indexOf(email);
+    if (emailIndex < 0) continue;
 
-    const emailIndex = line.toLowerCase().lastIndexOf(email);
+    // Only inspect text BEFORE the email for a register number.
+    // This prevents email-domain fragments such as "com4" from
+    // being mistaken for register numbers.
+    let beforeEmail = removeDocumentPrefix(line.slice(0, emailIndex));
+    beforeEmail = beforeEmail.replace(/^\s*\d+\s+/, "").trim();
 
-    let beforeEmail = line.slice(0, emailIndex).trim();
+    // Prefer a register number ending in digits immediately before
+    // a capitalized name token, e.g. AIDS26TEST017Test Student.
+    // The lookahead splits the register at 017, before "Test".
+    let registerNumber = null;
+    let nameText = "";
 
-    if (!beforeEmail) {
-      continue;
-    }
-
-    beforeEmail = removeDocumentPrefix(beforeEmail);
-
-    let tokens = beforeEmail.split(/\s+/).filter(Boolean);
-
-    // Remove serial number.
-    if (tokens.length >= 3 && /^\d+$/.test(tokens[0])) {
-      tokens = tokens.slice(1);
-    }
-
-    // Find register number.
-    const registerIndex = tokens.findIndex((token) =>
-      isValidRegisterNumber(token),
+    const joinedColumnsMatch = beforeEmail.match(
+      /^([A-Za-z][A-Za-z0-9/_-]*?\d{2,})(?=[A-Z][a-z]+\s)([\s\S]*)$/
     );
 
-    if (registerIndex === -1) {
-      continue;
+    if (joinedColumnsMatch) {
+      registerNumber = joinedColumnsMatch[1];
+      nameText = joinedColumnsMatch[2].trim();
+    } else {
+      const tokens = beforeEmail.split(/\s+/).filter(Boolean);
+      const registerIndex = tokens.findIndex((token) =>
+        isValidRegisterNumber(token)
+      );
+
+      if (registerIndex >= 0) {
+        registerNumber = tokens[registerIndex];
+        nameText = tokens.slice(registerIndex + 1).join(" ").trim();
+      }
     }
 
-    const registerNumber = tokens[registerIndex];
-
-    const fullName = cleanStudentName(
-      tokens.slice(registerIndex + 1).join(" "),
-    );
-
-    if (!fullName) {
+    if (!registerNumber || !isValidRegisterNumber(registerNumber)) {
       parsingErrors.push({
         row: i + 1,
-
-        registerNumber,
-
         email,
-
-        reason: "Student name could not be identified",
+        reason: "A valid register number could not be identified before the email",
       });
-
       continue;
     }
+
+    nameText = cleanStudentName(nameText);
+
+    // If a PDF line is laid out as REGISTER+NAME, separate the
+    // leading title-cased name from the register number safely.
+    if (!nameText) {
+      parsingErrors.push({
+        row: i + 1,
+        registerNumber,
+        email,
+        reason: "Student name could not be identified",
+      });
+      continue;
+    }
+
+    const trailingText = line.slice(emailIndex + email.length);
+    const semesterMatch =
+      trailingText.match(/^\s*(?:semester(?:\s+number)?\s*[:#-]?\s*)?([1-8])\b/i) ||
+      trailingText.match(/\bsemester(?:\s+number)?\s*[:#-]?\s*([1-8])\b/i);
+    const semesterNumber = semesterMatch ? Number(semesterMatch[1]) : null;
 
     students.push({
       registerNumber,
-
-      fullName,
-
+      fullName: nameText,
       email,
-
+      semesterNumber,
       sourceRow: i + 1,
     });
   }
 
-  return {
-    students,
-    parsingErrors,
-  };
+  return { students, parsingErrors };
+};
+
+
+// ==========================================================
+// FLATTENED TABLE PARSER
+// Handles PDFs where all table rows are extracted as one line,
+// e.g. 2362044ASHUTOSH DASHashutosh...in7 2362005ABHISHEK...
+// ==========================================================
+const parseFlattenedTable = (text) => {
+  // Use a case-sensitive match first: when the PDF joins an uppercase name
+  // directly to a lowercase email (e.g. DASHashutosh@...), a case-insensitive
+  // regex incorrectly consumes the final name token as part of the email.
+  const emails = [];
+  const emailRegex = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}/g;
+  let emailMatch;
+  while ((emailMatch = emailRegex.exec(text)) !== null) {
+    emails.push({
+      email: emailMatch[0].trim().toLowerCase(),
+      index: emailMatch.index,
+      endIndex: emailMatch.index + emailMatch[0].length,
+    });
+  }
+  const students = [];
+  const parsingErrors = [];
+
+  for (let i = 0; i < emails.length; i += 1) {
+    const email = emails[i];
+    const previousEmailEnd = i === 0 ? 0 : emails[i - 1].endIndex;
+    const beforeEmail = text.slice(previousEmailEnd, email.index);
+
+    // The supplied university register numbers are seven digits and
+    // may be concatenated directly with the student's name.
+    const registerMatches = [...beforeEmail.matchAll(/\d{7}(?=[A-Z])/g)];
+    const registerMatch = registerMatches[registerMatches.length - 1];
+
+    if (!registerMatch) {
+      parsingErrors.push({ row: i + 1, email: email.email, reason: "Could not identify a 7-digit register number before this email" });
+      continue;
+    }
+
+    const registerNumber = registerMatch[0];
+    let fullName = beforeEmail.slice(registerMatch.index + registerNumber.length);
+    fullName = removeDocumentPrefix(fullName)
+      .replace(/^[^A-Za-z]+/, "")
+      .replace(/\s+/g, " ")
+      .trim();
+
+    // Remove stray table/header fragments; names should contain letters only
+    // plus spaces, periods, apostrophes, or hyphens.
+    fullName = fullName.replace(/[^A-Za-z .'-].*$/, "").trim();
+
+    if (!fullName || !/[A-Za-z]/.test(fullName)) {
+      parsingErrors.push({ row: i + 1, registerNumber, email: email.email, reason: "Could not identify a valid student name" });
+      continue;
+    }
+
+    const nextEmailStart = i + 1 < emails.length ? emails[i + 1].index : text.length;
+    const afterEmail = text.slice(email.endIndex, nextEmailStart);
+    const semesterMatch = afterEmail.match(/^\s*([1-8])\b/) || afterEmail.match(/semester(?:\s+number)?\s*[:#-]?\s*([1-8])\b/i);
+
+    students.push({
+      registerNumber,
+      fullName,
+      email: email.email,
+      semesterNumber: semesterMatch ? Number(semesterMatch[1]) : null,
+      sourceRow: i + 1,
+    });
+  }
+
+  return { students, parsingErrors };
 };
 
 // ==========================================================
@@ -488,22 +576,22 @@ const parseStudentPdfText = (text) => {
   // PRIMARY PARSER
   // ======================================================
 
-  const positionalResult = parseUsingPositions(normalizedText);
+  // First parse by email-delimited records. This works even when the PDF
+  // extractor flattens every table row into one long line.
+  const flattenedResult = parseFlattenedTable(normalizedText);
+  let students = flattenedResult.students;
+  let parsingErrors = flattenedResult.parsingErrors;
 
-  let students = positionalResult.students;
-
-  let parsingErrors = positionalResult.parsingErrors;
-
-  // ======================================================
-  // FALLBACK
-  // ======================================================
-
+  // For older alphanumeric register formats, retain existing parsers as fallback.
   if (students.length === 0) {
     const lineResult = parseUsingLines(normalizedText);
-
     students = lineResult.students;
-
     parsingErrors = lineResult.parsingErrors;
+    if (students.length === 0) {
+      const positionalResult = parseUsingPositions(normalizedText);
+      students = positionalResult.students;
+      parsingErrors = positionalResult.parsingErrors;
+    }
   }
 
   // ======================================================
@@ -793,6 +881,8 @@ class StudentService {
     // PARSE PDF
     // ======================================================
 
+    console.log("📄 RAW EXTRACTED PDF TEXT:", JSON.stringify(pdfText));
+
     const { students, parsingErrors } = parseStudentPdfText(pdfText);
 
     console.log("📄 Parsed PDF student count:", students.length);
@@ -972,7 +1062,7 @@ class StudentService {
 
             termId: termId,
 
-            semesterNumber: term.semesterNumber,
+            semesterNumber: student.semesterNumber ?? term.semesterNumber,
 
             status: "ACTIVE",
 
@@ -1020,6 +1110,8 @@ class StudentService {
 
         email: student.email,
 
+        semesterNumber: student.semesterNumber ?? term.semesterNumber,
+
         status: student.status,
       })),
 
@@ -1030,6 +1122,97 @@ class StudentService {
       parsingErrors,
     };
   }
+
+  // ==========================================================
+  // DELETE AN INCORRECT STUDENT ENTRY
+  // ==========================================================
+  // Only safe to hard-delete records that have no academic or
+  // mentoring history. The linked login account is deactivated
+  // rather than deleted to avoid removing unrelated audit data.
+  async deleteStudent(studentId) {
+    if (!studentId || typeof studentId !== "string") {
+      throw new ApiError(400, "A valid student ID is required.");
+    }
+
+    const student = await hodPrisma.students.findUnique({
+      where: { id: studentId },
+      select: {
+        id: true,
+        registerNumber: true,
+        fullName: true,
+        userAccountId: true,
+      },
+    });
+
+    if (!student) {
+      throw new ApiError(404, "Student not found.");
+    }
+
+    // This endpoint is intended for correcting unassigned student
+    // entries. Do not silently delete a student with assignments.
+    const activeAssignment = await hodPrisma.mentor_assignments.findFirst({
+      where: { studentId: student.id },
+      select: { id: true },
+    });
+    if (activeAssignment) {
+      throw new ApiError(
+        409,
+        "This student has mentor assignment records. Remove or review those records before deleting the student.",
+      );
+    }
+
+    // Preserve student data when related academic/history records exist.
+    const dependencyChecks = [
+      ["mentor_meetings", () => hodPrisma.mentor_meetings.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["mentor_meeting_series", () => hodPrisma.mentor_meeting_series.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["mentor_transfer_requests", () => hodPrisma.mentor_transfer_requests.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["mentor_projects", () => hodPrisma.mentor_projects.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["academic_semesters", () => hodPrisma.academic_semesters.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["academic_backlogs", () => hodPrisma.academic_backlogs.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["detentions", () => hodPrisma.detentions.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["student_documents", () => hodPrisma.student_documents.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+      ["student_internships", () => hodPrisma.student_internships.findFirst({ where: { studentId: student.id }, select: { id: true } })],
+    ];
+
+    for (const [relationName, check] of dependencyChecks) {
+      // Some installations may not expose an optional legacy model.
+      if (typeof check !== "function") continue;
+      const relatedRecord = await check();
+      if (relatedRecord) {
+        throw new ApiError(
+          409,
+          `This student has related ${relationName.replaceAll("_", " ")} records. Deletion was blocked to protect historical data.`,
+        );
+      }
+    }
+
+    await hodPrisma.$transaction(async (tx) => {
+      // Enrollment rows belong to the student record and are safe to
+      // remove only after the historical-dependency checks above pass.
+      await tx.student_enrollments.deleteMany({
+        where: { studentId: student.id },
+      });
+
+      await tx.students.delete({
+        where: { id: student.id },
+      });
+
+      if (student.userAccountId) {
+        await tx.user_accounts.updateMany({
+          where: { id: student.userAccountId },
+          data: { isActive: false },
+        });
+      }
+    });
+
+    return {
+      id: student.id,
+      registerNumber: student.registerNumber,
+      fullName: student.fullName,
+      message: "Student entry deleted successfully.",
+    };
+  }
+
 }
 
 // ==========================================================

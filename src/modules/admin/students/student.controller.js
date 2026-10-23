@@ -19,6 +19,20 @@ const pdfParse = require("pdf-parse");
 
 class StudentController {
   // ========================================================
+  // DELETE AN INCORRECT STUDENT ENTRY
+  // ========================================================
+
+  deleteStudent = asyncHandler(async (req, res) => {
+    const result = await StudentService.deleteStudent(req.params.studentId);
+
+    return res.status(200).json({
+      success: true,
+      message: result.message,
+      data: result,
+    });
+  });
+
+  // ========================================================
   // IMPORT STUDENTS FROM PDF
   // ========================================================
 
