@@ -8,6 +8,7 @@ import KPICards from "../../components/Mentors/Dashboard/KPICards";
 import TodaysSchedule from "../../components/Mentors/Dashboard/TodaysSchedule";
 import UpcomingDeadlines from "../../components/Mentors/Dashboard/UpcomingDeadlines";
 import QuickActions from "../../components/Mentors/Dashboard/QuickActions";
+import MentoringAttendancePanel from "../../components/Mentors/Dashboard/MentoringAttendancePanel";
 
 const Dashboard = () => {
   return (
@@ -33,6 +34,9 @@ const Dashboard = () => {
             <TodaysSchedule />
             <UpcomingDeadlines />
           </div>
+
+          {/* Mentoring attendance is embedded in this existing dashboard. */}
+          <MentoringAttendancePanel />
 
           {/* Quick Actions */}
           <QuickActions />

@@ -13,6 +13,7 @@ import Discussion from "../components/Mentor/Discussion";
 
 import { getMyMentor } from "../api/mentor.api";
 import menteeMeetingsService from "../api/menteeMeetings.api";
+import StudentMentoringAttendance from "../components/Mentor/StudentMentoringAttendance";
 
 /* ==========================================================
    NORMALIZE MEETINGS API RESPONSE
@@ -251,6 +252,9 @@ const Mentor = () => {
               </button>
             </div>
           )}
+
+          {/* Student's mentoring attendance summary. This is additive; existing page sections are unchanged. */}
+          <StudentMentoringAttendance />
 
           {/* Mentor, Mentee and Relationship Summary */}
           <div className="grid grid-cols-12 gap-3">

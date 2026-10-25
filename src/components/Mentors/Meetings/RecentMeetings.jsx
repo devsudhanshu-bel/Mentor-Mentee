@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import {
   CalendarClock,
+  ChevronLeft,
   ChevronRight,
   RefreshCw,
 } from "lucide-react";
@@ -288,6 +289,8 @@ const RecentMeetings = ({
   const [selectedMeeting, setSelectedMeeting] = useState(null);
   const [openSummary, setOpenSummary] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedStudent, setSelectedStudent] = useState("ALL");
   const [refreshing, setRefreshing] = useState(false);
   const [error, setError] = useState("");
 
@@ -318,9 +321,80 @@ const RecentMeetings = ({
       .filter(Boolean);
   }, [sourceMeetings]);
 
+  /* =======================================================
+     WEEK + STUDENT FILTERS
+     Both filters work independently. When both are selected,
+     a meeting must match the selected week AND the student.
+  ======================================================= */
+
+  const weekRange = useMemo(() => {
+    const now = new Date();
+    const monday = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+    const daysSinceMonday = (monday.getDay() + 6) % 7;
+    monday.setDate(monday.getDate() - daysSinceMonday + weekOffset * 7);
+    monday.setHours(0, 0, 0, 0);
+
+    const nextMonday = new Date(monday);
+    nextMonday.setDate(nextMonday.getDate() + 7);
+
+    const sunday = new Date(nextMonday);
+    sunday.setDate(sunday.getDate() - 1);
+    sunday.setHours(23, 59, 59, 999);
+
+    return { start: monday, end: sunday };
+  }, [weekOffset]);
+
+  const weekRangeLabel = useMemo(() => {
+    const start = weekRange.start;
+    const end = weekRange.end;
+    const monthStart = start.toLocaleDateString("en-IN", { month: "short" });
+    const monthEnd = end.toLocaleDateString("en-IN", { month: "short" });
+    const yearEnd = end.getFullYear();
+
+    if (start.getFullYear() === end.getFullYear() && start.getMonth() === end.getMonth()) {
+      return `${monthStart} ${start.getDate()} – ${end.getDate()}, ${yearEnd}`;
+    }
+
+    return `${monthStart} ${start.getDate()} – ${monthEnd} ${end.getDate()}, ${yearEnd}`;
+  }, [weekRange]);
+
+  const studentOptions = useMemo(() => {
+    const unique = new Map();
+
+    recentMeetings.forEach((meeting) => {
+      const name = String(meeting.student?.name ?? "").trim();
+      if (!name) return;
+
+      const key = name.toLocaleLowerCase();
+      if (!unique.has(key)) unique.set(key, name);
+    });
+
+    return [...unique.values()].sort((a, b) => a.localeCompare(b));
+  }, [recentMeetings]);
+
+  const filteredMeetings = useMemo(() => {
+    return recentMeetings.filter((meeting) => {
+      const startAt = toValidDate(meeting.startAt);
+      if (!startAt) return false;
+
+      const matchesWeek =
+        startAt >= weekRange.start && startAt <= weekRange.end;
+      const studentName = String(meeting.student?.name ?? "").trim().toLocaleLowerCase();
+      const matchesStudent =
+        selectedStudent === "ALL" ||
+        studentName === selectedStudent.toLocaleLowerCase();
+
+      return matchesWeek && matchesStudent;
+    });
+  }, [recentMeetings, weekRange, selectedStudent]);
+
   const displayedMeetings = showAll
-    ? recentMeetings
-    : recentMeetings.slice(0, 4);
+    ? filteredMeetings
+    : filteredMeetings.slice(0, 4);
 
   /* =======================================================
      SUMMARY MODAL
@@ -395,7 +469,7 @@ const RecentMeetings = ({
             </h2>
 
             <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[11px] font-semibold text-slate-600">
-              {recentMeetings.length}
+              {filteredMeetings.length}
             </span>
           </div>
 
@@ -412,6 +486,68 @@ const RecentMeetings = ({
               className={refreshing ? "animate-spin" : ""}
             />
           </button>
+        </div>
+
+        {/* Standalone week and student filters; selections combine */}
+        <div className="mb-4 space-y-3">
+          <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2">
+            <button
+              type="button"
+              onClick={() => setWeekOffset((offset) => offset - 1)}
+              aria-label="Previous week"
+              title="Previous week"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50 hover:text-blue-600"
+            >
+              <ChevronLeft size={17} />
+            </button>
+
+            <div className="min-w-0 text-center">
+              <p className="text-xs font-semibold text-slate-800">
+                {weekOffset === 0 ? "This Week" : weekOffset < 0 ? `${Math.abs(weekOffset)} ${Math.abs(weekOffset) === 1 ? "Week" : "Weeks"} Ago` : weekOffset === 1 ? "Next Week" : `In ${weekOffset} Weeks`}
+              </p>
+              <p className="mt-0.5 text-[11px] text-slate-500">{weekRangeLabel}</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setWeekOffset((offset) => offset + 1)}
+              aria-label="Next week"
+              title="Next week"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 text-slate-600 transition hover:bg-slate-50 hover:text-blue-600"
+            >
+              <ChevronRight size={17} />
+            </button>
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <label htmlFor="recent-meetings-student-filter" className="shrink-0 text-xs font-medium text-slate-600">
+              Filter by student
+            </label>
+            <select
+              id="recent-meetings-student-filter"
+              value={selectedStudent}
+              onChange={(event) => setSelectedStudent(event.target.value)}
+              className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs text-slate-700 outline-none transition focus:border-blue-400 focus:ring-2 focus:ring-blue-100 sm:flex-1"
+            >
+              <option value="ALL">All students</option>
+              {studentOptions.map((studentName) => (
+                <option key={studentName} value={studentName}>{studentName}</option>
+              ))}
+            </select>
+            {(weekOffset !== 0 || selectedStudent !== "ALL") && (
+              <button
+                type="button"
+                onClick={() => {
+                  setWeekOffset(0);
+                  setSelectedStudent("ALL");
+                  setShowAll(false);
+                }}
+                className="shrink-0 self-start rounded-lg px-2 py-2 text-xs font-semibold text-blue-600 hover:bg-blue-50 sm:self-auto"
+              >
+                Reset filters
+              </button>
+            )}
+          </div>
         </div>
 
         {/* Refresh Error */}
@@ -434,7 +570,7 @@ const RecentMeetings = ({
         )}
 
         {/* List */}
-        {!error && recentMeetings.length > 0 && (
+        {!error && filteredMeetings.length > 0 && (
           <div className="space-y-2.5">
             {displayedMeetings.map((meeting, index) => (
               <RecentMeetingItem
@@ -510,7 +646,7 @@ const RecentMeetings = ({
         )}
 
         {/* Empty State */}
-        {!error && recentMeetings.length === 0 && (
+        {!error && filteredMeetings.length === 0 && (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center">
             <CalendarClock
               size={30}
@@ -518,17 +654,17 @@ const RecentMeetings = ({
             />
 
             <p className="text-sm font-semibold text-slate-700">
-              No recent meetings
+              No meetings match these filters
             </p>
 
             <p className="mt-1 text-xs text-slate-500">
-              Past meetings will appear here after they are scheduled.
+              Try another week or select All students to see more meetings.
             </p>
           </div>
         )}
 
         {/* Footer */}
-        {!error && recentMeetings.length > 4 && (
+        {!error && filteredMeetings.length > 4 && (
           <button
             type="button"
             onClick={() => setShowAll((current) => !current)}

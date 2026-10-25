@@ -29,6 +29,7 @@ import UploadedDocuments from "../../../components/Mentors/Students/Overview/Upl
 import CertificatesOverview from "../../../components/Mentors/Students/Overview/CertificatesOverview";
 
 import MeetingHistory from "../../../components/Mentors/Students/Overview/MeetingHistory";
+import AdminMentoringAttendanceSummary from "../../../components/Admin/Students/AdminMentoringAttendanceSummary";
 
 import mentorOverviewService from "../../../services/mentorOverviewService";
 
@@ -266,6 +267,11 @@ const Overview = () => {
                   statistics={overview.statistics}
                   student={overview.student}
                 />
+
+                {/* Admin-only, read-only mentoring attendance summary. */}
+                {isAdminRoute && (
+                  <AdminMentoringAttendanceSummary studentId={studentId} />
+                )}
 
                 {/* Academic Progress */}
 

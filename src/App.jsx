@@ -29,12 +29,15 @@ import Awards from "./pages/Awards";
 import Certificates from "./pages/Certificates";
 import Documents from "./pages/Documents";
 import Settings from "./pages/Settings";
+import StudentProjects from "./pages/StudentProjects";
 
 /* ========================= MENTOR ========================= */
 
 import MentorStudents from "./pages/Mentors/Students/Students";
 import MentorMeetings from "./pages/Mentors/Meetings";
 import MentorProfile from "./pages/Mentors/Profile";
+import MentorProjects from "./pages/Mentors/Projects/Projects";
+import MentorStudentProjects from "./pages/Mentors/Projects/StudentProjects";
 
 /* ========================= MENTOR STUDENT ========================= */
 
@@ -136,6 +139,8 @@ function App() {
 
           <Route path="/student/documents" element={<Documents />} />
 
+          <Route path="/student/projects" element={<StudentProjects />} />
+
           <Route path="/student/settings" element={<Settings />} />
         </Route>
 
@@ -201,6 +206,15 @@ function App() {
           <Route
             path="/mentor/students/:id/awards-achievements"
             element={<MentorStudentAwardsAchievements />}
+          />
+
+          {/* Mentor Projects */}
+
+          <Route path="/mentor/projects" element={<MentorProjects />} />
+
+          <Route
+            path="/mentor/projects/:studentId"
+            element={<MentorStudentProjects />}
           />
 
           {/* Meetings */}
