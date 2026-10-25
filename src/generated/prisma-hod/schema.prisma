@@ -263,7 +263,9 @@ model students {
   mentor_assignments       mentor_assignments[]
   mentor_meeting_series    mentor_meeting_series[]
   mentor_meetings          mentor_meetings[]
+  mentor_projects          mentor_projects[]
   mentor_transfer_requests mentor_transfer_requests[]
+  mentoring_attendance     mentoring_attendance[]
   contactDetails           student_contact_details?
   documents                student_documents[]
   student_enrollments      student_enrollments[]
@@ -271,7 +273,6 @@ model students {
   parentDetails            student_parent_details?
   departments              departments                @relation(fields: [departmentId], references: [id])
   user_accounts            user_accounts?             @relation(fields: [userAccountId], references: [id])
-  mentor_projects          mentor_projects[]
 
   @@index([departmentId])
   @@index([status])
@@ -510,13 +511,14 @@ model teachers {
   mentor_meeting_feedback                                                          mentor_meeting_feedback[]
   mentor_meeting_series                                                            mentor_meeting_series[]
   mentor_meetings                                                                  mentor_meetings[]
+  mentor_projects                                                                  mentor_projects[]
   mentor_transfer_requests_mentor_transfer_requests_currentMentorIdToteachers      mentor_transfer_requests[] @relation("mentor_transfer_requests_currentMentorIdToteachers")
   mentor_transfer_requests_mentor_transfer_requests_initiatedByTeacherIdToteachers mentor_transfer_requests[] @relation("mentor_transfer_requests_initiatedByTeacherIdToteachers")
   mentor_transfer_requests_mentor_transfer_requests_requestedMentorIdToteachers    mentor_transfer_requests[] @relation("mentor_transfer_requests_requestedMentorIdToteachers")
+  mentoring_attendance                                                             mentoring_attendance[]
   teacher_profiles                                                                 teacher_profiles?
   departments_teachers_departmentIdTodepartments                                   departments                @relation("teachers_departmentIdTodepartments", fields: [departmentId], references: [id])
   user_accounts                                                                    user_accounts?             @relation(fields: [userAccountId], references: [id])
-  mentor_projects                                                                  mentor_projects[]
 
   @@index([departmentId])
   @@index([isActive])
@@ -793,8 +795,6 @@ model mentor_projects {
   status                  String                    @default("ASSIGNED")
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @default(now())
-  students                students                  @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  teachers                teachers                  @relation(fields: [mentorId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   studentViewedAt         DateTime?
   submissionUrl           String?
   submissionPublicId      String?
@@ -802,11 +802,14 @@ model mentor_projects {
   submissionMimeType      String?
   submissionSize          Int?
   submittedAt             DateTime?
+  description             String?
   mentor_project_messages mentor_project_messages[]
-  description             String?                   @db.Text
+  teachers                teachers                  @relation(fields: [mentorId], references: [id], onDelete: Cascade)
+  students                students                  @relation(fields: [studentId], references: [id], onDelete: Cascade)
 
   @@index([mentorId, studentId, createdAt(sort: Desc)])
   @@index([studentId, status])
+  @@index([studentId, studentViewedAt])
 }
 
 model mentor_project_messages {
@@ -816,9 +819,27 @@ model mentor_project_messages {
   senderRole          String
   message             String
   createdAt           DateTime        @default(now())
-  mentor_projects     mentor_projects @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  mentor_projects     mentor_projects @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: NoAction)
 
-  @@index([projectId, createdAt])
+  @@index([projectId, createdAt], map: "mentor_project_messages_project_created_idx")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model mentoring_attendance {
+  id              String   @id
+  mentorTeacherId String
+  studentId       String
+  sessionDate     DateTime @db.Date
+  status          String   @db.VarChar(10)
+  markedAt        DateTime @default(now()) @db.Timestamptz(6)
+  createdAt       DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt       DateTime @default(now()) @db.Timestamptz(6)
+  teachers        teachers @relation(fields: [mentorTeacherId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+  students        students @relation(fields: [studentId], references: [id], onDelete: Cascade, onUpdate: NoAction)
+
+  @@unique([mentorTeacherId, studentId, sessionDate], map: "mentoring_attendance_mentor_student_date_key")
+  @@index([mentorTeacherId, sessionDate], map: "mentoring_attendance_mentor_date_idx")
+  @@index([studentId, sessionDate], map: "mentoring_attendance_student_date_idx")
 }
 
 enum InternshipType {

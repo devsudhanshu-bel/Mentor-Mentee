@@ -11,6 +11,7 @@ import termChangeRoutes from "../term-change/termChange.routes.js";
 import overviewRoutes from "../overview/overview.routes.js";
 import announcementsRoutes from "../announcements/announcements.routes.js";
 import projectsRoutes from "../projects/projects.routes.js";
+import AdminMentoringAttendanceController from "../mentoring-attendance/mentoringAttendance.controller.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -40,6 +41,9 @@ router.get("/students/directory", AdminController.getStudentDirectory);
 
 // Institution-wide student directory with active mentor assignment.
 router.get("/students/directory", AdminController.getStudentDirectory);
+
+// Read-only mentoring attendance summary for an individual student.
+router.get("/students/:studentId/mentoring-attendance", AdminMentoringAttendanceController.getStudentSummary);
 
 router.get("/mentors/:mentorId", AdminController.getMentorDetails);
 

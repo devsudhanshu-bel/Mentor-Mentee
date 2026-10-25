@@ -10,6 +10,7 @@ import attendanceRoutes from "../attendance/routes/attendance.routes.js";
 import mentorRoutes from "../mentor/routes/mentor.routes.js";
 import internshipRoutes from "../internships/routes/internship.routes.js";
 import meetingsRoutes from "../mentor/routes/meetings.routes.js";
+import mentoringAttendanceRoutes from "../mentor/routes/mentoringAttendance.routes.js";
 import dashboardRoutes from "../dashboard/routes/dashboard.routes.js";
 import projectsRoutes from "../projects/routes/projects.routes.js";
 
@@ -73,5 +74,8 @@ router.use("/projects", projectsRoutes);
 ========================================================== */
 
 router.use("/meetings", meetingsRoutes);
+
+/* STUDENT MENTORING ATTENDANCE SUMMARY */
+router.use("/mentoring-attendance", mentoringAttendanceRoutes);
 
 export default router;

@@ -694,6 +694,17 @@ exports.Prisma.Mentor_project_messagesScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.Mentoring_attendanceScalarFieldEnum = {
+  id: 'id',
+  mentorTeacherId: 'mentorTeacherId',
+  studentId: 'studentId',
+  sessionDate: 'sessionDate',
+  status: 'status',
+  markedAt: 'markedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -978,7 +989,8 @@ exports.Prisma.ModelName = {
   conversations: 'conversations',
   messages: 'messages',
   mentor_projects: 'mentor_projects',
-  mentor_project_messages: 'mentor_project_messages'
+  mentor_project_messages: 'mentor_project_messages',
+  mentoring_attendance: 'mentoring_attendance'
 };
 
 /**
