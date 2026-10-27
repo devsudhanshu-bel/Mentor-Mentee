@@ -234,6 +234,37 @@ class AssignmentService {
     }
 
     // ============================================================
+    // NORMALIZE SEMESTER FROM THE ACTIVE ENROLLMENT
+    // ============================================================
+    // The enrollment for the selected term is authoritative for the
+    // assignment screen. Preserve every existing field and use the
+    // legacy students.semester value only when no valid enrollment
+    // semester is available.
+    // ============================================================
+
+    students = students.map((student) => {
+      const matchingEnrollment = student.student_enrollments?.find(
+        (enrollment) =>
+          enrollment.status === "ACTIVE" &&
+          (termId ? enrollment.termId === termId : scopedTermIds.includes(enrollment.termId)),
+      );
+
+      const enrollmentSemester = Number(matchingEnrollment?.semesterNumber);
+      const studentSemester = Number(student.semester);
+      const semester = Number.isFinite(enrollmentSemester) && enrollmentSemester > 0
+        ? String(enrollmentSemester)
+        : Number.isFinite(studentSemester) && studentSemester > 0
+          ? student.semester
+          : null;
+
+      return {
+        ...student,
+        semester,
+        semesterNumber: semester === null ? null : Number(semester),
+      };
+    });
+
+    // ============================================================
     // 12. DEPARTMENT OPTIONS
     // ============================================================
 

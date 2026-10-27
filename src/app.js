@@ -11,6 +11,7 @@ import multer from "multer";
 
 import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
+import announcementFeedRoutes from "./modules/announcements/announcementFeed.routes.js";
 
 import adminRoutes from "./modules/admin/routes/admin.routes.js";
 import adminStudentProfileRoutes from "./modules/admin/student-profile/studentProfile.routes.js";
@@ -140,6 +141,9 @@ app.get("/", (req, res) => {
 ========================================================== */
 
 app.use("/api/auth", authRoutes);
+
+/* Authenticated announcements feed for student and mentor dashboards */
+app.use("/api/announcements", announcementFeedRoutes);
 
 /* ==========================================================
    MENTEE / STUDENT

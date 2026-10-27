@@ -15,6 +15,7 @@ import AdminMentoringAttendanceController from "../mentoring-attendance/mentorin
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
+import adminMemoryCache from "../../../middleware/adminMemoryCache.middleware.js";
 
 const router = express.Router();
 
@@ -27,6 +28,9 @@ const router = express.Router();
 
 router.use(authenticate);
 router.use(authorize("ADMIN", "SYSTEM_ADMIN"));
+
+// Cache short-lived admin GET responses only after authentication and authorization.
+router.use(adminMemoryCache);
 
 /*
 |--------------------------------------------------------------------------

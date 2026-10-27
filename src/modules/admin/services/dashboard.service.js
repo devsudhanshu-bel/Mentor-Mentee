@@ -219,14 +219,26 @@ class DashboardService {
   ========================================================== */
 
   async getOverview(userId) {
+    // Temporary diagnostic timings. These logs contain durations only, not user data.
+    const requestStartedAt = Date.now();
+    const logStage = (stage, startedAt) => {
+      console.info(`[ADMIN DASHBOARD TIMING] ${stage}: ${Date.now() - startedAt}ms`);
+    };
+
+    let stageStartedAt = Date.now();
     const admin = await this.getAdminAccount(userId);
+    logStage("getAdminAccount", stageStartedAt);
 
+    stageStartedAt = Date.now();
     const activeTerm = await this.getActiveAcademicTerm();
+    logStage("getActiveAcademicTerm", stageStartedAt);
 
+    stageStartedAt = Date.now();
     const [statistics, meetingStatistics] = await Promise.all([
       this.getCoreStatistics(activeTerm),
       this.getMeetingStatistics(),
     ]);
+    logStage("core + meeting statistics (parallel total)", stageStartedAt);
 
     const assignmentWhere = this.buildAssignmentWhere(activeTerm);
 
@@ -234,6 +246,7 @@ class DashboardService {
     // MENTOR WORKLOAD
     // --------------------------------------------------
 
+    stageStartedAt = Date.now();
     const mentors = await hodPrisma.teachers.findMany({
       where: {
         isActive: true,
@@ -265,11 +278,13 @@ class DashboardService {
         fullName: "asc",
       },
     });
+    logStage("mentor workload query", stageStartedAt);
 
     // --------------------------------------------------
     // PENDING TRANSFER REQUESTS BY CURRENT MENTOR
     // --------------------------------------------------
 
+    stageStartedAt = Date.now();
     const pendingTransfers =
       await hodPrisma.mentor_transfer_requests.findMany({
         where: {
@@ -286,6 +301,7 @@ class DashboardService {
           currentMentorId: true,
         },
       });
+    logStage("pending transfer requests query", stageStartedAt);
 
     const pendingTransferCountByMentor = pendingTransfers.reduce(
       (result, request) => {
@@ -354,6 +370,8 @@ class DashboardService {
       meetings: false,
       goals: true,
     };
+
+    console.info(`[ADMIN DASHBOARD TIMING] getOverview total before response: ${Date.now() - requestStartedAt}ms`);
 
     // --------------------------------------------------
     // RESPONSE

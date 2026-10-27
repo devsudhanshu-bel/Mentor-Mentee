@@ -11,6 +11,7 @@ import internshipsRoutes from "./internships.routes.js";
 import meetingsRoutes from "./meetings.routes.js";
 import projectsRoutes from "./projects.routes.js";
 import mentoringAttendanceRoutes from "./mentoringAttendance.routes.js";
+import announcementsRoutes from "./announcements.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
@@ -28,6 +29,12 @@ router.use(authenticate);
 ========================================================== */
 
 router.use(authorize("MENTOR"));
+
+/* ==========================================================
+   MENTOR ANNOUNCEMENTS (READ ONLY)
+========================================================== */
+
+router.use("/announcements", announcementsRoutes);
 
 /* ==========================================================
    MENTORING ATTENDANCE

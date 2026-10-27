@@ -1,16 +1,17 @@
-import { randomUUID } from "crypto";
+import { randomBytes, randomUUID } from "crypto";
 
 import hodPrisma from "../../../config/prisma.hod.js";
 
 import ApiError from "../../../utils/ApiError.js";
 
 import { hashPassword } from "../../../utils/hash.js";
+import StudentCredentialsEmailService from "../../../services/studentCredentialsEmail.service.js";
 
 // ==========================================================
-// DEFAULT PASSWORD
+// PER-STUDENT TEMPORARY PASSWORD
 // ==========================================================
 
-const DEFAULT_PASSWORD = "Password@123";
+const generateTemporaryPassword = () => randomBytes(18).toString("base64url");
 
 // ==========================================================
 // EMAIL REGEX
@@ -734,69 +735,61 @@ const validateStudents = async (students) => {
   // ======================================================
   // EXISTING USER ACCOUNTS
   // ======================================================
+  // An inactive STUDENT account with the same username/email and no
+  // linked student profile is an orphan left by a previous deletion or
+  // interrupted workflow. It can be safely reactivated by the import
+  // transaction below. All other account collisions remain validation errors.
 
   const existingUsers = await hodPrisma.user_accounts.findMany({
     where: {
-      email: {
-        in: emails,
-      },
+      OR: [
+        { email: { in: emails } },
+        { username: { in: registerNumbers } },
+      ],
     },
-
     select: {
+      id: true,
+      username: true,
       email: true,
+      role: true,
+      isActive: true,
+      students: { select: { id: true } },
     },
   });
 
-  const existingUserEmails = new Set(
-    existingUsers
-      .filter((user) => user.email)
-      .map((user) => user.email.toLowerCase()),
-  );
-
   for (const student of students) {
-    if (existingUserEmails.has(student.email.toLowerCase())) {
+    const normalizedEmail = student.email.trim().toLowerCase();
+    const normalizedRegister = student.registerNumber.trim().toLowerCase();
+
+    const emailAccount = existingUsers.find(
+      (user) => user.email?.trim().toLowerCase() === normalizedEmail,
+    );
+    const usernameAccount = existingUsers.find(
+      (user) => user.username?.trim().toLowerCase() === normalizedRegister,
+    );
+
+    const reusableOrphan =
+      emailAccount &&
+      usernameAccount &&
+      emailAccount.id === usernameAccount.id &&
+      emailAccount.role === "STUDENT" &&
+      emailAccount.isActive === false &&
+      emailAccount.students === null &&
+      emailAccount.username.trim().toLowerCase() === normalizedRegister &&
+      emailAccount.email?.trim().toLowerCase() === normalizedEmail;
+
+    if (emailAccount && !reusableOrphan) {
       validationErrors.push({
         row: student.sourceRow,
-
         email: student.email,
-
         reason: "Email already exists as a user account",
       });
     }
-  }
 
-  // ======================================================
-  // USERNAME COLLISION
-  // ======================================================
-  //
-  // Username = registerNumber.
-  //
-  // Email remains the authentication identifier.
-  // ======================================================
-
-  const existingUsernames = await hodPrisma.user_accounts.findMany({
-    where: {
-      username: {
-        in: registerNumbers,
-      },
-    },
-
-    select: {
-      username: true,
-    },
-  });
-
-  const existingUsernameSet = new Set(
-    existingUsernames.map((user) => user.username.toLowerCase()),
-  );
-
-  for (const student of students) {
-    if (existingUsernameSet.has(student.registerNumber.toLowerCase())) {
+    if (usernameAccount && !reusableOrphan) {
       validationErrors.push({
         row: student.sourceRow,
-
         registerNumber: student.registerNumber,
-
         reason: "Register number is already used as a username",
       });
     }
@@ -921,12 +914,6 @@ class StudentService {
     }
 
     // ======================================================
-    // HASH TEMPORARY PASSWORD
-    // ======================================================
-
-    const hashedPassword = await hashPassword(DEFAULT_PASSWORD);
-
-    // ======================================================
     // CREATE EVERYTHING ATOMICALLY
     // ======================================================
     //
@@ -950,40 +937,54 @@ class StudentService {
         const studentId = randomUUID();
 
         const enrollmentId = randomUUID();
+        const temporaryPassword = generateTemporaryPassword();
+        const hashedPassword = await hashPassword(temporaryPassword);
 
         // ==================================================
         // USER ACCOUNT
         // ==================================================
+        // Reuse only the exact inactive, unlinked STUDENT account that
+        // passed validation. This repairs orphaned accounts without
+        // weakening duplicate checks for active or unrelated accounts.
 
-        await tx.user_accounts.create({
-          data: {
-            id: userAccountId,
-
-            /*
-             * Username is the register number.
-             * Authentication still uses email.
-             */
+        const existingOrphanAccount = await tx.user_accounts.findFirst({
+          where: {
             username: student.registerNumber,
-
             email: student.email,
-
-            password: hashedPassword,
-
             role: "STUDENT",
-
-            isActive: true,
-
-            /*
-             * Student must replace
-             * Password@123 after first login.
-             */
-            mustChangePassword: true,
-
-            createdAt: now,
-
-            updatedAt: now,
+            isActive: false,
+            students: { is: null },
           },
+          select: { id: true },
         });
+
+        const accountId = existingOrphanAccount?.id || userAccountId;
+
+        if (existingOrphanAccount) {
+          await tx.user_accounts.update({
+            where: { id: existingOrphanAccount.id },
+            data: {
+              password: hashedPassword,
+              isActive: true,
+              mustChangePassword: true,
+              updatedAt: now,
+            },
+          });
+        } else {
+          await tx.user_accounts.create({
+            data: {
+              id: accountId,
+              username: student.registerNumber,
+              email: student.email,
+              password: hashedPassword,
+              role: "STUDENT",
+              isActive: true,
+              mustChangePassword: true,
+              createdAt: now,
+              updatedAt: now,
+            },
+          });
+        }
 
         // ==================================================
         // STUDENT
@@ -1001,7 +1002,7 @@ class StudentService {
 
             departmentId: departmentId,
 
-            userAccountId: userAccountId,
+            userAccountId: accountId,
 
             /*
              * Imported students are ACTIVE immediately.
@@ -1074,11 +1075,49 @@ class StudentService {
           },
         });
 
-        created.push(createdStudent);
+        created.push({
+          student: createdStudent,
+          temporaryPassword,
+        });
       }
 
       return created;
     });
+
+    // ======================================================
+    // SEND TEMPORARY PASSWORD EMAILS AFTER DATABASE COMMIT
+    // ======================================================
+    // Email delivery is deliberately outside the transaction: an SMTP
+    // outage must not roll back already-created student records.
+    // Failed sends are reported so they can be retried safely without
+    // importing the same students a second time.
+    // ======================================================
+
+    const emailResults = await Promise.all(
+      createdStudents.map(async ({ student, temporaryPassword }) => {
+        try {
+          await StudentCredentialsEmailService.sendTemporaryPassword({
+            email: student.email,
+            fullName: student.fullName,
+            registerNumber: student.registerNumber,
+            temporaryPassword,
+          });
+
+          return { email: student.email.toLowerCase(), sent: true };
+        } catch (error) {
+          console.error(
+            `Failed to send temporary-password email to ${student.email}:`,
+            error?.message || error,
+          );
+
+          return { email: student.email.toLowerCase(), sent: false };
+        }
+      }),
+    );
+
+    const emailResultByAddress = new Map(
+      emailResults.map((item) => [item.email, item.sent]),
+    );
 
     // ======================================================
     // RESULT
@@ -1103,7 +1142,7 @@ class StudentService {
         semesterNumber: term.semesterNumber,
       },
 
-      students: createdStudents.map((student) => ({
+      students: createdStudents.map(({ student }) => ({
         registerNumber: student.registerNumber,
 
         fullName: student.fullName,
@@ -1113,9 +1152,15 @@ class StudentService {
         semesterNumber: student.semesterNumber ?? term.semesterNumber,
 
         status: student.status,
+
+        temporaryPasswordEmailSent: emailResultByAddress.get(student.email.toLowerCase()) === true,
       })),
 
-      temporaryPassword: DEFAULT_PASSWORD,
+      emailSummary: {
+        sent: emailResults.filter((item) => item.sent).length,
+        failed: emailResults.filter((item) => !item.sent).length,
+        failedEmails: emailResults.filter((item) => !item.sent).map((item) => item.email),
+      },
 
       mustChangePassword: true,
 
