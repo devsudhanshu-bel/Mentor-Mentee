@@ -16,6 +16,7 @@ import AboutMe from "../../components/Admin/Profile/About/AboutMe";
 import AccountSettings from "../../components/Admin/Profile/Settings/AccountSettings";
 
 import SupportCard from "../../components/Admin/Profile/Support/SupportCard";
+import FontSizeSettings from "../../components/common/FontSizeSettings";
 
 import {
   getAdminProfile,
@@ -286,6 +287,15 @@ const Profile = () => {
           {/* Page Heading */}
           <div className="flex items-start justify-between">
             <PageTitle />
+          </div>
+
+          {/* Application font-size preference */}
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+            <div>
+              <h2 className="text-sm font-semibold text-slate-800">Font Size Settings</h2>
+              <p className="mt-1 text-xs text-slate-500">Choose your preferred text size across the portal.</p>
+            </div>
+            <FontSizeSettings />
           </div>
 
           {/* Profile Error */}

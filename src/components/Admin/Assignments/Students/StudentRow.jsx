@@ -12,13 +12,37 @@ const StudentRow = ({ student, selectedStudents = [], toggleStudent, onDeleteStu
   const registerNumber =
     student.registerNumber || student.usn || student.regNo || "N/A";
 
-  const semester = student.semester ?? student.year ?? "";
+  // The active enrollment for the selected term is the authoritative
+  // semester for assignment context. Older student rows may still have
+  // a stale students.semester value (for example, 0).
+  const enrollmentSemester = Array.isArray(student.student_enrollments)
+    ? student.student_enrollments.find(
+        (enrollment) => enrollment?.status === "ACTIVE",
+      )?.semesterNumber
+    : undefined;
+
+  const semesterCandidates = [
+    enrollmentSemester,
+    student.semesterNumber,
+    student.semester,
+    student.year,
+  ];
+
+  const semester = semesterCandidates.find((value) => {
+    if (value === null || value === undefined || value === "") return false;
+    const numericValue = Number(value);
+    return Number.isFinite(numericValue) && numericValue > 0;
+  }) ?? "";
 
   const getYearLabel = (value) => {
     const semesterNumber = Number(value);
 
-    if (!Number.isFinite(semesterNumber)) {
-      return value || "N/A";
+    if (value === "" || value === null || value === undefined) {
+      return "N/A";
+    }
+
+    if (!Number.isFinite(semesterNumber) || semesterNumber <= 0) {
+      return "N/A";
     }
 
     if (semesterNumber === 1 || semesterNumber === 2) {

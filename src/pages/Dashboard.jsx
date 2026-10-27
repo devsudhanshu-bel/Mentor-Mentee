@@ -8,10 +8,10 @@ import KPICards from "../components/Dashboard/KPICards";
 import CGPATrend from "../components/Dashboard/CGPATrend";
 import AttendanceOverview from "../components/Dashboard/AttendanceOverview";
 import UpcomingMeetings from "../components/Dashboard/UpcomingMeetings";
-import RecentNotifications from "../components/Dashboard/RecentNotifications";
 import QuickLinks from "../components/Dashboard/QuickLinks";
 
 import dashboardApi from "../api/dashboard.api";
+import AnnouncementCards from "../components/Announcements/AnnouncementCards";
 
 const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
@@ -107,7 +107,7 @@ const Dashboard = () => {
           {/* Row 3 */}
           <div className="grid grid-cols-12 gap-4">
             <div className="col-span-12 lg:col-span-6 xl:col-span-4">
-              <RecentNotifications />
+              <AnnouncementCards compact />
             </div>
 
             <div className="col-span-12 xl:col-span-8">

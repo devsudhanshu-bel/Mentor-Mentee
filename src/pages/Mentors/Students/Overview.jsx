@@ -30,6 +30,7 @@ import CertificatesOverview from "../../../components/Mentors/Students/Overview/
 
 import MeetingHistory from "../../../components/Mentors/Students/Overview/MeetingHistory";
 import AdminMentoringAttendanceSummary from "../../../components/Admin/Students/AdminMentoringAttendanceSummary";
+import MentoringAttendanceSummary from "../../../components/Mentors/Students/Overview/MentoringAttendanceSummary";
 
 import mentorOverviewService from "../../../services/mentorOverviewService";
 
@@ -278,9 +279,11 @@ const Overview = () => {
                   student={overview.student}
                 />
 
-                {/* Admin-only read-only mentoring attendance summary. */}
-                {isAdminRoute && (
+                {/* Keep the existing admin summary and restore mentoring attendance for mentors. */}
+                {isAdminRoute ? (
                   <AdminMentoringAttendanceSummary studentId={studentId} />
+                ) : (
+                  <MentoringAttendanceSummary studentId={studentId} />
                 )}
 
                 {/* Academic Progress */}

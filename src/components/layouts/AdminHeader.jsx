@@ -11,7 +11,7 @@ import {
 import { useNavigate } from "react-router-dom";
 
 import profileFallback from "../../assets/profile.jpg";
-import api from "../../api/axios";
+import { getAdminProfile } from "../../api/profile.api";
 
 const AdminHeader = () => {
   const navigate = useNavigate();
@@ -34,9 +34,8 @@ const AdminHeader = () => {
 
     const loadAdminProfile = async () => {
       try {
-        const response = await api.get("/admin/profile");
-        const body = response?.data?.data ?? response?.data;
-        const profile = body?.profile ?? body?.data?.profile;
+        const result = await getAdminProfile();
+        const profile = result?.profile;
 
         if (cancelled) return;
 

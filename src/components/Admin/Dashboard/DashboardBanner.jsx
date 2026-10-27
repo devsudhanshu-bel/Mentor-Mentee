@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ShieldCheck } from "lucide-react";
 
 import banner from "../../../assets/banner.png";
-import api from "../../../api/axios";
+import { getAdminProfile } from "../../../api/profile.api";
 
 const DashboardBanner = () => {
   const [adminName, setAdminName] = useState(() => {
@@ -29,10 +29,8 @@ const DashboardBanner = () => {
 
     const fetchAdminProfile = async () => {
       try {
-        const response = await api.get("/admin/profile");
-
-        const body = response?.data?.data ?? response?.data;
-        const profile = body?.profile ?? body?.data?.profile;
+        const result = await getAdminProfile();
+        const profile = result?.profile;
 
         if (cancelled || !profile) return;
 

@@ -443,25 +443,34 @@ const AddStudentsModal = ({
                 </div>
               </div>
             </div>
-
             {/* ==============================================
-                TEMP PASSWORD
-            =============================================== */}
+                 INDIVIDUAL CREDENTIAL EMAIL STATUS
+             =============================================== */}
 
-            <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-5">
-              <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
-                Temporary Password
+            <div className={`mt-5 rounded-2xl border p-5 ${
+              success.emailSummary?.failed > 0
+                ? "border-amber-200 bg-amber-50"
+                : "border-blue-200 bg-blue-50"
+            }`}>
+              <p className="text-sm font-semibold text-slate-900">
+                Temporary passwords sent individually by email
               </p>
-
-              <p className="mt-2 font-mono text-lg font-bold text-slate-900">
-                {success.temporaryPassword || "Password@123"}
+              <p className="mt-2 text-sm leading-6 text-slate-600">
+                {success.emailSummary?.sent ?? 0} email(s) sent successfully. Each student receives a unique temporary password and must change it on first login.
               </p>
-
-              <p className="mt-2 text-sm leading-6 text-slate-500">
-                Students must change this password after their first successful
-                login.
-              </p>
+              {success.emailSummary?.failed > 0 && (
+                <div className="mt-3 text-sm text-amber-900">
+                  <p className="font-semibold">Email delivery failed for:</p>
+                  <ul className="mt-1 list-inside list-disc">
+                    {(success.emailSummary.failedEmails || []).map((email) => (
+                      <li key={email}>{email}</li>
+                    ))}
+                  </ul>
+                  <p className="mt-2">Configure backend SMTP settings and arrange secure credential delivery for these accounts. Do not rerun the import, as accounts have already been created.</p>
+                </div>
+              )}
             </div>
+
 
             {/* ==============================================
                 ACTIVE STATUS
@@ -755,9 +764,7 @@ const AddStudentsModal = ({
                 </p>
 
                 <p className="mt-2 text-xs leading-5 text-slate-400">
-                  Each imported student receives the temporary password{" "}
-                  <strong>Password@123</strong> and is required to change it on
-                  first login.
+                  Each imported student receives a unique, randomly generated temporary password by email and must change it on first login.
                 </p>
 
                 <p className="mt-1 text-xs leading-5 text-slate-400">

@@ -13,6 +13,7 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 /* ========================= COMMON ROUTE ========================= */
 
 import ScrollToTop from "./components/common/ScrollToTop";
+import FontSizeSettings from "./components/common/FontSizeSettings";
 
 /* ========================= STUDENT ========================= */
 
@@ -85,6 +86,7 @@ function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <FontSizeSettings initializerOnly />
 
       <Routes>
         {/* ========================= DEFAULT ========================= */}

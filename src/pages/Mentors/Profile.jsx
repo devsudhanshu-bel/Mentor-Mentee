@@ -10,6 +10,7 @@ import AboutMe from "../../components/Mentors/Profile/AboutMe";
 import SocialLinks from "../../components/Mentors/Profile/SocialLinks";
 import AccountPreferences from "../../components/Mentors/Profile/AccountPreferences";
 import MentoringExpertise from "../../components/Mentors/Profile/MentoringExpertise";
+import FontSizeSettings from "../../components/common/FontSizeSettings";
 
 import EditProfileModal from "../../components/Mentors/Profile/EditProfile/EditProfileModal";
 
@@ -168,16 +169,6 @@ const Profile = () => {
      LOADING
   ========================================================== */
 
-  if (loading) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-slate-100">
-        <p className="text-slate-500">
-          Loading profile...
-        </p>
-      </div>
-    );
-  }
-
   /* ==========================================================
      RENDER
   ========================================================== */
@@ -209,6 +200,12 @@ const Profile = () => {
           ================================================== */}
 
           <main className="space-y-3 p-6">
+            {loading ? (
+              <div className="flex min-h-[60vh] items-center justify-center">
+                <p className="text-slate-500">Loading profile...</p>
+              </div>
+            ) : (
+              <>
 
             {/* ==================================================
                 PAGE HEADER
@@ -239,6 +236,15 @@ const Profile = () => {
                 Edit Profile
               </button>
 
+            </div>
+
+            {/* Application font-size preference */}
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3">
+              <div>
+                <h2 className="text-sm font-semibold text-slate-800">Font Size Settings</h2>
+                <p className="mt-1 text-xs text-slate-500">Choose your preferred text size across the portal.</p>
+              </div>
+              <FontSizeSettings />
             </div>
 
             {/* ==================================================
@@ -340,6 +346,8 @@ const Profile = () => {
               mentor={mentor}
             />
 
+              </>
+            )}
           </main>
 
         </div>

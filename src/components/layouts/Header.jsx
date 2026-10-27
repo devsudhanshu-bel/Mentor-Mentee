@@ -33,6 +33,7 @@ import {
 
 import defaultProfile from "../../assets/profile.jpg";
 import api from "../../api/axios";
+import FontSizeSettings from "../common/FontSizeSettings";
 import { logout } from "../../api/auth.api";
 import { getDocumentsDashboard } from "../../api/document.api";
 
@@ -861,9 +862,10 @@ const Header = () => {
         )}
       </div>
 
-      {/* NOTIFICATIONS AND PROFILE */}
+      {/* FONT SIZE, NOTIFICATIONS AND PROFILE */}
 
       <div className="ml-1 flex shrink-0 items-center gap-2 sm:ml-4 sm:gap-4">
+        <FontSizeSettings compact />
         <button
           type="button"
           aria-label="Notifications"

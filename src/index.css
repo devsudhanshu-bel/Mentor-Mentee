@@ -27,3 +27,6 @@ input[type="number"] {
   -moz-appearance: textfield;
   appearance: textfield;
 }
+
+/* Font preference scales typography per element in FontSizeSettings.jsx.
+   Do not change root font-size here, as that also changes rem-based layout. */

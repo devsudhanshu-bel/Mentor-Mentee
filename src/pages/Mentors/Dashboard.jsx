@@ -9,6 +9,7 @@ import TodaysSchedule from "../../components/Mentors/Dashboard/TodaysSchedule";
 import UpcomingDeadlines from "../../components/Mentors/Dashboard/UpcomingDeadlines";
 import QuickActions from "../../components/Mentors/Dashboard/QuickActions";
 import MentoringAttendancePanel from "../../components/Mentors/Dashboard/MentoringAttendancePanel";
+import MentorAnnouncementsCard from "../../components/Mentors/Dashboard/MentorAnnouncementsCard";
 
 const Dashboard = () => {
   return (
@@ -34,6 +35,9 @@ const Dashboard = () => {
             <TodaysSchedule />
             <UpcomingDeadlines />
           </div>
+
+          {/* Recent announcements card; no separate announcements page or sidebar item. */}
+          <MentorAnnouncementsCard />
 
           {/* Mentoring attendance is embedded in this existing dashboard. */}
           <MentoringAttendancePanel />

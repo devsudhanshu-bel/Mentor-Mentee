@@ -64,13 +64,62 @@ const normalizeAdminProfileResponse = (responseData) => {
   };
 };
 
-/**
- * Get admin profile
- */
-export const getAdminProfile = async () => {
-  const response = await api.get("/admin/profile");
+// Keep a single in-flight request and reuse the resolved profile while
+// navigating between Admin pages. Mutations refresh this cache.
+let adminProfileCache = null;
+let adminProfileCacheKey = null;
+let adminProfileRequest = null;
+let adminProfileRequestKey = null;
 
-  return normalizeAdminProfileResponse(response.data);
+const getAdminProfileCacheKey = () =>
+  localStorage.getItem("token") ||
+  localStorage.getItem("accessToken") ||
+  localStorage.getItem("access_token") ||
+  "anonymous";
+
+export const invalidateAdminProfileCache = () => {
+  adminProfileCache = null;
+  adminProfileCacheKey = null;
+  adminProfileRequest = null;
+  adminProfileRequestKey = null;
+};
+
+/**
+ * Get admin profile. Prevents the header and dashboard banner from
+ * issuing duplicate requests for the same profile.
+ */
+export const getAdminProfile = async ({ forceRefresh = false } = {}) => {
+  if (forceRefresh) {
+    invalidateAdminProfileCache();
+  }
+
+  const cacheKey = getAdminProfileCacheKey();
+
+  if (adminProfileCache && adminProfileCacheKey === cacheKey) {
+    return adminProfileCache;
+  }
+
+  if (adminProfileRequest && adminProfileRequestKey === cacheKey) {
+    return adminProfileRequest;
+  }
+
+  adminProfileRequestKey = cacheKey;
+  adminProfileRequest = api
+    .get("/admin/profile")
+    .then((response) => {
+      const normalized = normalizeAdminProfileResponse(response.data);
+      adminProfileCache = normalized;
+      adminProfileCacheKey = cacheKey;
+      return normalized;
+    })
+    .finally(() => {
+      if (adminProfileRequestKey === cacheKey) {
+        adminProfileRequest = null;
+        adminProfileRequestKey = null;
+      }
+    });
+
+  return adminProfileRequest;
 };
 
 /**
@@ -78,8 +127,9 @@ export const getAdminProfile = async () => {
  */
 export const createAdminProfile = async (data) => {
   const response = await api.post("/admin/profile", data);
-
-  return normalizeAdminProfileResponse(response.data);
+  adminProfileCache = normalizeAdminProfileResponse(response.data);
+  adminProfileCacheKey = getAdminProfileCacheKey();
+  return adminProfileCache;
 };
 
 /**
@@ -87,8 +137,9 @@ export const createAdminProfile = async (data) => {
  */
 export const updateAdminProfile = async (data) => {
   const response = await api.put("/admin/profile", data);
-
-  return normalizeAdminProfileResponse(response.data);
+  adminProfileCache = normalizeAdminProfileResponse(response.data);
+  adminProfileCacheKey = getAdminProfileCacheKey();
+  return adminProfileCache;
 };
 
 /* ==========================================================

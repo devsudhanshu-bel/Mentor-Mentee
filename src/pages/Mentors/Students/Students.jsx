@@ -8,6 +8,7 @@ import WelcomeBanner from "../../../components/Mentors/Dashboard/WelcomeBanner";
 import TodaysSchedule from "../../../components/Mentors/Dashboard/TodaysSchedule";
 import UpcomingDeadlines from "../../../components/Mentors/Dashboard/UpcomingDeadlines";
 import MentoringAttendancePanel from "../../../components/Mentors/Dashboard/MentoringAttendancePanel";
+import MentorAnnouncementsCard from "../../../components/Mentors/Dashboard/MentorAnnouncementsCard";
 
 // Students components
 import StudentFilters from "../../../components/Mentors/Students/List/StudentFilters";
@@ -212,6 +213,9 @@ const Students = () => {
             <TodaysSchedule />
             <UpcomingDeadlines />
           </section>
+
+          {/* Announcements card on the actual rendered mentor dashboard. */}
+          <MentorAnnouncementsCard />
 
           {/* Mentoring attendance stays on the existing mentor dashboard. */}
           <MentoringAttendancePanel />
