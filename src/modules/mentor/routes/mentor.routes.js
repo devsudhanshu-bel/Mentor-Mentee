@@ -15,6 +15,7 @@ import announcementsRoutes from "./announcements.routes.js";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
+import { mentorResponseCache } from "../../../middleware/mentorResponseCache.js";
 
 const router = express.Router();
 
@@ -29,6 +30,10 @@ router.use(authenticate);
 ========================================================== */
 
 router.use(authorize("MENTOR"));
+
+// Short-lived, per-mentor Redis cache for read-only JSON responses.
+// Writes invalidate that mentor's cached responses before the handler runs.
+router.use(mentorResponseCache);
 
 /* ==========================================================
    MENTOR ANNOUNCEMENTS (READ ONLY)

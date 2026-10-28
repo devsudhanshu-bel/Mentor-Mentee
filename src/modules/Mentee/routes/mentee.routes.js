@@ -2,6 +2,7 @@ import express from "express";
 
 import { authenticate } from "../../../middleware/auth.middleware.js";
 import { authorize } from "../../../middleware/role.middleware.js";
+import { studentResponseCache } from "../../../middleware/studentResponseCache.js";
 
 import profileRoutes from "./profile/profile.routes.js";
 import documentRoutes from "../documents/routes/document.routes.js";
@@ -22,6 +23,10 @@ const router = express.Router();
 
 router.use(authenticate);
 router.use(authorize("STUDENT"));
+
+// Short-lived, per-student Upstash cache for read-only JSON responses.
+// Any student write invalidates that student's cached responses.
+router.use(studentResponseCache);
 
 /* ==========================================================
    PROFILE

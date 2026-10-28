@@ -121,6 +121,26 @@ class AssignmentController {
   };
 
   // ==========================================================
+  // GET ASSIGNMENT HISTORY
+  // ==========================================================
+
+  getAssignmentHistory = async (req, res, next) => {
+    try {
+      const { termId, departmentId, teacherId, search, status } = req.query;
+      const history = await AssignmentService.getAssignmentHistory({
+        termId, departmentId, teacherId, search, status,
+      });
+      return res.status(200).json({
+        success: true,
+        message: "Assignment history fetched successfully",
+        data: history,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  // ==========================================================
   // REMOVE ACTIVE ASSIGNMENT
   // ==========================================================
 

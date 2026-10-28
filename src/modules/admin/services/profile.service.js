@@ -407,18 +407,16 @@ class AdminProfileService {
    * GET /api/admin/profile
    */
   async getProfile(userId) {
-    const account = await getAccount(
-      prisma,
-      userId,
-    );
-
-    const [profile, teacher] = await Promise.all([
+    // These are independent read-only queries. Run them together so the
+    // profile endpoint does not wait for account validation before starting
+    // the profile and linked-teacher lookups.
+    const [account, profile, teacher] = await Promise.all([
+      getAccount(prisma, userId),
       prisma.admin_profiles.findUnique({
         where: {
           userAccountId: userId,
         },
       }),
-
       getLinkedTeacher(prisma, userId),
     ]);
 

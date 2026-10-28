@@ -1083,6 +1083,53 @@ class AssignmentService {
   }
 
   // ============================================================
+  // ASSIGNMENT HISTORY (ACTIVE + REMOVED)
+  // ============================================================
+
+  async getAssignmentHistory({ termId, departmentId, teacherId, search, status } = {}) {
+    const where = {};
+
+    if (termId) where.termId = termId;
+    if (teacherId) where.teacherId = teacherId;
+    if (status && ["ACTIVE", "REMOVED"].includes(status)) where.status = status;
+
+    if (departmentId || (search && search.trim())) {
+      where.students = {};
+      if (departmentId) where.students.departmentId = departmentId;
+      if (search && search.trim()) {
+        const value = search.trim();
+        where.students.OR = [
+          { registerNumber: { contains: value, mode: "insensitive" } },
+          { fullName: { contains: value, mode: "insensitive" } },
+        ];
+      }
+    }
+
+    return hodPrisma.mentor_assignments.findMany({
+      where,
+      select: {
+        id: true,
+        studentId: true,
+        teacherId: true,
+        termId: true,
+        status: true,
+        assignedAt: true,
+        endedAt: true,
+        students: {
+          select: { id: true, registerNumber: true, fullName: true, email: true, semester: true, section: true },
+        },
+        teachers: {
+          select: { id: true, employeeCode: true, fullName: true, email: true },
+        },
+        academic_terms: {
+          select: { id: true, academicYearId: true, semesterNumber: true, name: true, status: true },
+        },
+      },
+      orderBy: [{ updatedAt: "desc" }, { assignedAt: "desc" }],
+    });
+  }
+
+  // ============================================================
   // REMOVE ACTIVE MENTOR ASSIGNMENT
   // Preserves the database record for assignment history.
   // ============================================================

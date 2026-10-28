@@ -189,9 +189,11 @@ class DashboardService {
   ========================================================== */
 
   async getProfileOverview(userId) {
-    await this.getAdminAccount(userId);
-
-    const activeTerm = await this.getActiveAcademicTerm();
+    // These reads are independent, so do not wait for one before starting the other.
+    const [, activeTerm] = await Promise.all([
+      this.getAdminAccount(userId),
+      this.getActiveAcademicTerm(),
+    ]);
 
     const [statistics, meetingStatistics] = await Promise.all([
       this.getCoreStatistics(activeTerm),
@@ -225,83 +227,64 @@ class DashboardService {
       console.info(`[ADMIN DASHBOARD TIMING] ${stage}: ${Date.now() - startedAt}ms`);
     };
 
-    let stageStartedAt = Date.now();
-    const admin = await this.getAdminAccount(userId);
-    logStage("getAdminAccount", stageStartedAt);
-
-    stageStartedAt = Date.now();
-    const activeTerm = await this.getActiveAcademicTerm();
-    logStage("getActiveAcademicTerm", stageStartedAt);
-
-    stageStartedAt = Date.now();
-    const [statistics, meetingStatistics] = await Promise.all([
-      this.getCoreStatistics(activeTerm),
-      this.getMeetingStatistics(),
+    // Account validation and active-term lookup are independent database reads.
+    const initialStageStartedAt = Date.now();
+    const [admin, activeTerm] = await Promise.all([
+      this.getAdminAccount(userId),
+      this.getActiveAcademicTerm(),
     ]);
-    logStage("core + meeting statistics (parallel total)", stageStartedAt);
+    logStage("account + active term (parallel total)", initialStageStartedAt);
 
     const assignmentWhere = this.buildAssignmentWhere(activeTerm);
 
-    // --------------------------------------------------
-    // MENTOR WORKLOAD
-    // --------------------------------------------------
-
-    stageStartedAt = Date.now();
-    const mentors = await hodPrisma.teachers.findMany({
-      where: {
-        isActive: true,
-      },
-
-      select: {
-        id: true,
-        employeeCode: true,
-        fullName: true,
-        designation: true,
-        maxMentees: true,
-
-        teacher_profiles: {
-          select: {
-            profileImage: true,
+    // Run all remaining independent reads together instead of serially waiting
+    // for statistics, mentor workload, and pending transfers one after another.
+    const dataStageStartedAt = Date.now();
+    const [statistics, meetingStatistics, mentors, pendingTransfers] =
+      await Promise.all([
+        this.getCoreStatistics(activeTerm),
+        this.getMeetingStatistics(),
+        hodPrisma.teachers.findMany({
+          where: {
+            isActive: true,
           },
-        },
-
-        mentor_assignments: {
-          where: assignmentWhere,
-
           select: {
             id: true,
+            employeeCode: true,
+            fullName: true,
+            designation: true,
+            maxMentees: true,
+            teacher_profiles: {
+              select: {
+                profileImage: true,
+              },
+            },
+            mentor_assignments: {
+              where: assignmentWhere,
+              select: {
+                id: true,
+              },
+            },
           },
-        },
-      },
-
-      orderBy: {
-        fullName: "asc",
-      },
-    });
-    logStage("mentor workload query", stageStartedAt);
-
-    // --------------------------------------------------
-    // PENDING TRANSFER REQUESTS BY CURRENT MENTOR
-    // --------------------------------------------------
-
-    stageStartedAt = Date.now();
-    const pendingTransfers =
-      await hodPrisma.mentor_transfer_requests.findMany({
-        where: {
-          status: "PENDING",
-
-          ...(activeTerm
-            ? {
-                termId: activeTerm.id,
-              }
-            : {}),
-        },
-
-        select: {
-          currentMentorId: true,
-        },
-      });
-    logStage("pending transfer requests query", stageStartedAt);
+          orderBy: {
+            fullName: "asc",
+          },
+        }),
+        hodPrisma.mentor_transfer_requests.findMany({
+          where: {
+            status: "PENDING",
+            ...(activeTerm
+              ? {
+                  termId: activeTerm.id,
+                }
+              : {}),
+          },
+          select: {
+            currentMentorId: true,
+          },
+        }),
+      ]);
+    logStage("statistics + meetings + mentor workload + transfers (parallel total)", dataStageStartedAt);
 
     const pendingTransferCountByMentor = pendingTransfers.reduce(
       (result, request) => {

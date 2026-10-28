@@ -64,6 +64,14 @@ router.post("/", AssignmentController.assignStudents);
 router.get("/", AssignmentController.getAllAssignments);
 
 // ============================================================
+// ASSIGNMENT HISTORY
+// GET /api/admin/assignments/history
+// Keep this route before /:assignmentId so "history" is not treated as an ID.
+// ============================================================
+
+router.get("/history", AssignmentController.getAssignmentHistory);
+
+// ============================================================
 // REMOVE ASSIGNMENT
 // DELETE /api/admin/assignments/:assignmentId
 // ============================================================
