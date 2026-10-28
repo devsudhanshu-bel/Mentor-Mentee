@@ -127,3 +127,26 @@ export const removeMentorAssignment = async (assignmentId) => {
 
   return response?.data?.data ?? response?.data ?? null;
 };
+
+
+// ============================================================
+// GET ASSIGNMENT HISTORY (ACTIVE + REMOVED)
+// ============================================================
+
+export const getAssignmentHistory = async ({
+  termId,
+  departmentId,
+  teacherId,
+  search,
+  status,
+} = {}) => {
+  const params = {};
+  if (termId) params.termId = termId;
+  if (departmentId) params.departmentId = departmentId;
+  if (teacherId) params.teacherId = teacherId;
+  if (search && search.trim()) params.search = search.trim();
+  if (status) params.status = status;
+
+  const response = await api.get("/admin/assignments/history", { params });
+  return response?.data?.data ?? response?.data ?? [];
+};

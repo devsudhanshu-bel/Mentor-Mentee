@@ -10,6 +10,7 @@ import AssignButton from "./Center/AssignButton";
 import AssignmentFooter from "./Footer/AssignmentFooter";
 
 import AllAssignmentsPanel from "./AllAssignments/AllAssignmentsPanel";
+import AssignmentHistoryPanel from "./AllAssignments/AssignmentHistoryPanel";
 import TransferTicketsPanel from "./TransferTickets/TransferTicketsPanel";
 import BulkAssignModal from "./BulkAssignModal";
 
@@ -416,15 +417,11 @@ const AssignmentWorkspace = ({
           ====================================================== */}
 
       {activeTab === "history" && (
-        <div className="p-10 text-center">
-          <p className="text-sm font-semibold text-slate-700">
-            Assignment History
-          </p>
-
-          <p className="mt-1 text-xs text-slate-400">
-            Assignment history will appear here.
-          </p>
-        </div>
+        <AssignmentHistoryPanel
+          termId={filters?.termId || context?.termId}
+          departmentId={filters?.departmentId}
+          search={search}
+        />
       )}
       {showBulkAssign && (
         <BulkAssignModal
