@@ -5,21 +5,131 @@ import api from "./axios";
 ========================================================== */
 
 /**
- * Get mentor profile
+ * Unwrap common API response envelopes without assuming a single backend
+ * response shape. Older responses use response.data.data; newer ones may
+ * return the profile directly or include teacher/profile relations.
  */
-export const getMentorProfile = async () => {
-  const response = await api.get("/mentor/profile");
+const unwrapMentorPayload = (value) => {
+  let current = value;
 
-  return response.data.data;
+  for (let index = 0; index < 4; index += 1) {
+    if (
+      current &&
+      typeof current === "object" &&
+      !Array.isArray(current) &&
+      current.data &&
+      typeof current.data === "object"
+    ) {
+      current = current.data;
+      continue;
+    }
+
+    break;
+  }
+
+  return current;
+};
+
+const normalizeMentorRecord = (record) => {
+  if (!record || typeof record !== "object" || Array.isArray(record)) {
+    return null;
+  }
+
+  const teacher =
+    record.teacher ??
+    record.mentor ??
+    record.teachers ??
+    null;
+
+  const profileDetails =
+    record.profile ??
+    record.teacherProfile ??
+    record.teacher_profiles ??
+    teacher?.teacherProfile ??
+    teacher?.teacher_profiles ??
+    null;
+
+  const normalized = {
+    ...(teacher && typeof teacher === "object" ? teacher : {}),
+    ...record,
+    ...(profileDetails && typeof profileDetails === "object"
+      ? profileDetails
+      : {}),
+  };
+
+  // Keep relation aliases used by existing profile components.
+  const teacherProfiles =
+    record.teacher_profiles ?? teacher?.teacher_profiles;
+  const teacherProfile =
+    record.teacherProfile ?? teacher?.teacherProfile;
+
+  if (teacherProfiles) normalized.teacher_profiles = teacherProfiles;
+  if (teacherProfile) normalized.teacherProfile = teacherProfile;
+
+  return normalized;
+};
+
+const normalizeMentorProfileResponse = (responseData) => {
+  const body = unwrapMentorPayload(responseData);
+
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return { profileExists: false, profile: null };
+  }
+
+  const explicitProfile =
+    body.profile ??
+    body.mentor ??
+    body.teacher ??
+    body.teachers ??
+    null;
+
+  if (explicitProfile && typeof explicitProfile === "object") {
+    return {
+      profileExists: true,
+      profile: normalizeMentorRecord({
+        ...body,
+        profile: explicitProfile,
+      }),
+    };
+  }
+
+  const directRecordHasMentorFields = [
+    "fullName",
+    "employeeCode",
+    "userAccountId",
+    "teacherId",
+    "designation",
+    "email",
+  ].some((key) => body[key] !== undefined && body[key] !== null);
+
+  if (directRecordHasMentorFields) {
+    return {
+      profileExists: true,
+      profile: normalizeMentorRecord(body),
+    };
+  }
+
+  return {
+    profileExists: body.profileExists === true,
+    profile: null,
+  };
 };
 
 /**
- * Update mentor profile
+ * Get mentor profile.
+ * Always returns { profileExists, profile } for the existing profile page.
+ */
+export const getMentorProfile = async () => {
+  const response = await api.get("/mentor/profile");
+  return normalizeMentorProfileResponse(response.data);
+};
+
+/**
+ * Update mentor profile.
  */
 export const updateMentorProfile = async (data) => {
   const response = await api.put("/mentor/profile", data);
-
-  return response.data.data;
+  return normalizeMentorProfileResponse(response.data);
 };
 
 /* ==========================================================
@@ -64,62 +174,13 @@ const normalizeAdminProfileResponse = (responseData) => {
   };
 };
 
-// Keep a single in-flight request and reuse the resolved profile while
-// navigating between Admin pages. Mutations refresh this cache.
-let adminProfileCache = null;
-let adminProfileCacheKey = null;
-let adminProfileRequest = null;
-let adminProfileRequestKey = null;
-
-const getAdminProfileCacheKey = () =>
-  localStorage.getItem("token") ||
-  localStorage.getItem("accessToken") ||
-  localStorage.getItem("access_token") ||
-  "anonymous";
-
-export const invalidateAdminProfileCache = () => {
-  adminProfileCache = null;
-  adminProfileCacheKey = null;
-  adminProfileRequest = null;
-  adminProfileRequestKey = null;
-};
-
 /**
- * Get admin profile. Prevents the header and dashboard banner from
- * issuing duplicate requests for the same profile.
+ * Get admin profile
  */
-export const getAdminProfile = async ({ forceRefresh = false } = {}) => {
-  if (forceRefresh) {
-    invalidateAdminProfileCache();
-  }
+export const getAdminProfile = async () => {
+  const response = await api.get("/admin/profile");
 
-  const cacheKey = getAdminProfileCacheKey();
-
-  if (adminProfileCache && adminProfileCacheKey === cacheKey) {
-    return adminProfileCache;
-  }
-
-  if (adminProfileRequest && adminProfileRequestKey === cacheKey) {
-    return adminProfileRequest;
-  }
-
-  adminProfileRequestKey = cacheKey;
-  adminProfileRequest = api
-    .get("/admin/profile")
-    .then((response) => {
-      const normalized = normalizeAdminProfileResponse(response.data);
-      adminProfileCache = normalized;
-      adminProfileCacheKey = cacheKey;
-      return normalized;
-    })
-    .finally(() => {
-      if (adminProfileRequestKey === cacheKey) {
-        adminProfileRequest = null;
-        adminProfileRequestKey = null;
-      }
-    });
-
-  return adminProfileRequest;
+  return normalizeAdminProfileResponse(response.data);
 };
 
 /**
@@ -127,9 +188,8 @@ export const getAdminProfile = async ({ forceRefresh = false } = {}) => {
  */
 export const createAdminProfile = async (data) => {
   const response = await api.post("/admin/profile", data);
-  adminProfileCache = normalizeAdminProfileResponse(response.data);
-  adminProfileCacheKey = getAdminProfileCacheKey();
-  return adminProfileCache;
+
+  return normalizeAdminProfileResponse(response.data);
 };
 
 /**
@@ -137,9 +197,8 @@ export const createAdminProfile = async (data) => {
  */
 export const updateAdminProfile = async (data) => {
   const response = await api.put("/admin/profile", data);
-  adminProfileCache = normalizeAdminProfileResponse(response.data);
-  adminProfileCacheKey = getAdminProfileCacheKey();
-  return adminProfileCache;
+
+  return normalizeAdminProfileResponse(response.data);
 };
 
 /* ==========================================================

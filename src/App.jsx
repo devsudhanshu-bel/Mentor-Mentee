@@ -103,7 +103,7 @@ function App() {
         <Route
           element={
             <ProtectedRoute
-              allowedRoles={["STUDENT"]}
+              allowedRoles={["STUDENT", "MENTOR"]}
               allowPasswordChange={true}
             />
           }
@@ -230,7 +230,9 @@ function App() {
 
         {/* ========================= ADMIN ROUTES ========================= */}
 
-        <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
+        <Route
+          element={<ProtectedRoute allowedRoles={["ADMIN", "SYSTEM_ADMIN"]} />}
+        >
           <Route path="/admin/dashboard" element={<AdminDashboard />} />
 
           <Route path="/admin/mentors" element={<AdminMentors />} />

@@ -111,3 +111,12 @@ export const getMyMentor = async () => {
 
   return unwrapResponse(response);
 };
+
+// ==========================================================
+// CREATE MENTOR (ADMIN)
+// POST /api/admin/mentors
+// ==========================================================
+export const createMentor = async (payload) => {
+  const response = await api.post("/admin/mentors", payload);
+  return unwrapResponse(response);
+};

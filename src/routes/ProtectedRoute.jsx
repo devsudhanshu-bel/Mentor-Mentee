@@ -74,7 +74,11 @@ const ProtectedRoute = ({ allowedRoles = [], allowPasswordChange = false }) => {
   //
   // ========================================================
 
-  if (user.mustChangePassword === true && !allowPasswordChange) {
+  if (
+    user.role === "STUDENT" &&
+    user.mustChangePassword === true &&
+    !allowPasswordChange
+  ) {
     return <Navigate to="/change-password" replace />;
   }
 

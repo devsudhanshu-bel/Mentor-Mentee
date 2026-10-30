@@ -34,6 +34,7 @@ const Login = () => {
         // --------------------------------------------------
 
         case "ADMIN":
+        case "SYSTEM_ADMIN":
           navigate("/admin/dashboard");
           break;
 
@@ -42,7 +43,11 @@ const Login = () => {
         // --------------------------------------------------
 
         case "MENTOR":
-          navigate("/mentor/dashboard");
+          if (user.mustChangePassword) {
+            navigate("/change-password");
+          } else {
+            navigate("/mentor/dashboard");
+          }
           break;
 
         // --------------------------------------------------

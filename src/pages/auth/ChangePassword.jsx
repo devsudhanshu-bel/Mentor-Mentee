@@ -1,22 +1,16 @@
 import React, { useState } from "react";
-
 import { useNavigate } from "react-router-dom";
-
 import { changePassword } from "../../api/auth.api";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
 
   const [currentPassword, setCurrentPassword] = useState("");
-
   const [newPassword, setNewPassword] = useState("");
-
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-
   const [error, setError] = useState("");
-
   const [success, setSuccess] = useState("");
 
   // ========================================================
@@ -25,6 +19,8 @@ const ChangePassword = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    if (loading) return;
 
     setError("");
     setSuccess("");
@@ -35,25 +31,21 @@ const ChangePassword = () => {
 
     if (!currentPassword || !newPassword || !confirmPassword) {
       setError("Please fill in all password fields.");
-
       return;
     }
 
     if (newPassword.length < 8) {
       setError("New password must contain at least 8 characters.");
-
       return;
     }
 
     if (newPassword !== confirmPassword) {
       setError("New password and confirmation password do not match.");
-
       return;
     }
 
     if (currentPassword === newPassword) {
       setError("New password must be different from the current password.");
-
       return;
     }
 
@@ -69,16 +61,50 @@ const ChangePassword = () => {
         newPassword,
       });
 
+      // ====================================================
+      // UPDATE LOCAL USER STATE
+      // ====================================================
+
+      let user = {};
+
+      try {
+        user = JSON.parse(localStorage.getItem("user") || "{}");
+      } catch {
+        user = {};
+      }
+
+      const updatedUser = {
+        ...user,
+        mustChangePassword: false,
+      };
+
+      localStorage.setItem("user", JSON.stringify(updatedUser));
+
+      // ====================================================
+      // SUCCESS
+      // ====================================================
+
       setSuccess("Password changed successfully.");
 
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+
       // ====================================================
-      // REDIRECT
+      // ROLE-BASED REDIRECT
       // ====================================================
 
+      const dashboardRoutes = {
+        STUDENT: "/student/dashboard",
+        MENTOR: "/mentor/dashboard",
+        ADMIN: "/admin/dashboard",
+        SYSTEM_ADMIN: "/admin/dashboard",
+      };
+
+      const destination = dashboardRoutes[user.role] || "/login";
+
       setTimeout(() => {
-        navigate("/student/dashboard", {
-          replace: true,
-        });
+        navigate(destination, { replace: true });
       }, 1000);
     } catch (error) {
       console.error("Change password error:", error);
@@ -95,14 +121,10 @@ const ChangePassword = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* ==================================================
-            CARD
-            ================================================== */}
+        {/* CARD */}
 
         <div className="bg-white rounded-2xl shadow-xl border border-slate-200 p-8">
-          {/* ==================================================
-              HEADER
-              ================================================== */}
+          {/* HEADER */}
 
           <div className="text-center mb-8">
             <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-100">
@@ -131,9 +153,7 @@ const ChangePassword = () => {
             </p>
           </div>
 
-          {/* ==================================================
-              ERROR
-              ================================================== */}
+          {/* ERROR */}
 
           {error && (
             <div className="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -141,9 +161,7 @@ const ChangePassword = () => {
             </div>
           )}
 
-          {/* ==================================================
-              SUCCESS
-              ================================================== */}
+          {/* SUCCESS */}
 
           {success && (
             <div className="mb-5 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700">
@@ -151,14 +169,10 @@ const ChangePassword = () => {
             </div>
           )}
 
-          {/* ==================================================
-              FORM
-              ================================================== */}
+          {/* FORM */}
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* ==================================================
-                CURRENT PASSWORD
-                ================================================== */}
+            {/* CURRENT PASSWORD */}
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -170,14 +184,14 @@ const ChangePassword = () => {
                 value={currentPassword}
                 onChange={(event) => setCurrentPassword(event.target.value)}
                 placeholder="Enter temporary password"
+                autoComplete="current-password"
                 disabled={loading}
+                required
                 className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100"
               />
             </div>
 
-            {/* ==================================================
-                NEW PASSWORD
-                ================================================== */}
+            {/* NEW PASSWORD */}
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -189,7 +203,10 @@ const ChangePassword = () => {
                 value={newPassword}
                 onChange={(event) => setNewPassword(event.target.value)}
                 placeholder="Enter new password"
+                autoComplete="new-password"
                 disabled={loading}
+                required
+                minLength={8}
                 className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100"
               />
 
@@ -198,9 +215,7 @@ const ChangePassword = () => {
               </p>
             </div>
 
-            {/* ==================================================
-                CONFIRM PASSWORD
-                ================================================== */}
+            {/* CONFIRM PASSWORD */}
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -212,14 +227,15 @@ const ChangePassword = () => {
                 value={confirmPassword}
                 onChange={(event) => setConfirmPassword(event.target.value)}
                 placeholder="Confirm new password"
+                autoComplete="new-password"
                 disabled={loading}
+                required
+                minLength={8}
                 className="w-full rounded-lg border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-100"
               />
             </div>
 
-            {/* ==================================================
-                SUBMIT
-                ================================================== */}
+            {/* SUBMIT */}
 
             <button
               type="submit"
@@ -230,9 +246,7 @@ const ChangePassword = () => {
             </button>
           </form>
 
-          {/* ==================================================
-              INFORMATION
-              ================================================== */}
+          {/* INFORMATION */}
 
           <div className="mt-6 rounded-lg bg-slate-50 px-4 py-3">
             <p className="text-xs leading-5 text-slate-500">

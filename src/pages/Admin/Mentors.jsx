@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 
 import { Plus, RefreshCw } from "lucide-react";
+import AddMentorModal from "../../components/Admin/Mentors/AddMentorModal";
 
 import AdminSidebar from "../../components/layouts/AdminSidebar";
 import AdminHeader from "../../components/layouts/AdminHeader";
@@ -46,6 +47,8 @@ const Mentors = () => {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
+  const [showAddMentor, setShowAddMentor] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
 
   // ========================================================
   // PAGINATION
@@ -191,6 +194,7 @@ const Mentors = () => {
               {/* Add Mentor */}
               <button
                 type="button"
+                onClick={() => { setSuccessMessage(""); setShowAddMentor(true); }}
                 className="
                   flex
                   items-center
@@ -211,6 +215,12 @@ const Mentors = () => {
               </button>
             </div>
           </div>
+
+          {successMessage && (
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+              {successMessage}
+            </div>
+          )}
 
           {/* ==================================================
               KPI
@@ -257,6 +267,17 @@ const Mentors = () => {
             rowsPerPage={rowsPerPage}
             setRowsPerPage={setRowsPerPage}
             setCurrentPage={setCurrentPage}
+          />
+
+          <AddMentorModal
+            open={showAddMentor}
+            departments={departments}
+            onClose={() => setShowAddMentor(false)}
+            onCreated={async (mentor) => {
+              setShowAddMentor(false);
+              setSuccessMessage(`Mentor ${mentor?.fullName || mentor?.username || "account"} created successfully.`);
+              await fetchMentors();
+            }}
           />
         </main>
       </div>
