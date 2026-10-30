@@ -33,12 +33,7 @@ class AdminController {
   // ==========================================================
 
   createMentor = asyncHandler(async (req, res) => {
-    const { name, password } = req.body;
-
-    const mentor = await AdminService.createMentor({
-      name,
-      password,
-    });
+    const mentor = await AdminService.createMentor(req.body);
 
     return res
       .status(201)

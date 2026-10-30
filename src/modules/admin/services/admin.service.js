@@ -1,3 +1,4 @@
+import crypto from "node:crypto";
 import prisma from "../../../config/prisma.js";
 import hodPrisma from "../../../config/prisma.hod.js";
 
@@ -283,82 +284,143 @@ class AdminService {
   // CREATE MENTOR
   // ==========================================================
 
-  async createMentor({ name, password }) {
-    // --------------------------------------------------------
-    // Validate
-    // --------------------------------------------------------
+  async createMentor({
+    fullName,
+    name,
+    employeeCode,
+    email,
+    username,
+    password,
+    departmentId,
+    phone = null,
+    designation = null,
+    maxMentees = 30,
+    isActive = true,
+  }) {
+    // Keep compatibility with older callers that send `name`.
+    const normalizedName = String(fullName ?? name ?? "").trim();
+    const normalizedEmployeeCode = String(employeeCode ?? "").trim();
+    const normalizedEmail = String(email ?? "").trim().toLowerCase();
+    const normalizedUsername = String(username ?? "").trim().toLowerCase();
+    const normalizedDepartmentId = String(departmentId ?? "").trim();
+    const normalizedPassword = String(password ?? "");
+    const capacity = Number(maxMentees);
 
-    if (!name || !password) {
-      throw new ApiError(400, "Name and password are required");
+    if (!normalizedName || !normalizedEmployeeCode || !normalizedEmail ||
+        !normalizedUsername || !normalizedDepartmentId || !normalizedPassword) {
+      throw new ApiError(
+        400,
+        "Full name, employee code, email, username, password, and department are required.",
+      );
     }
 
-    // --------------------------------------------------------
-    // Username
-    // --------------------------------------------------------
-
-    const username = name.trim().toLowerCase().replace(/\s+/g, "");
-
-    // --------------------------------------------------------
-    // Email
-    // --------------------------------------------------------
-
-    const email = `${username}@mentor.com`;
-
-    // --------------------------------------------------------
-    // Existing user
-    // --------------------------------------------------------
-
-    const existingUser = await prisma.user.findFirst({
-      where: {
-        OR: [
-          {
-            username,
-          },
-
-          {
-            email,
-          },
-        ],
-      },
-    });
-
-    if (existingUser) {
-      throw new ApiError(409, "Mentor already exists");
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      throw new ApiError(400, "Enter a valid email address.");
+    }
+    if (normalizedPassword.length < 8) {
+      throw new ApiError(400, "Temporary password must contain at least 8 characters.");
+    }
+    if (!/^[a-z0-9._-]{3,60}$/.test(normalizedUsername)) {
+      throw new ApiError(400, "Username must be 3–60 characters and contain only letters, numbers, dots, underscores, or hyphens.");
+    }
+    if (!Number.isInteger(capacity) || capacity < 1 || capacity > 500) {
+      throw new ApiError(400, "Maximum mentees must be a whole number between 1 and 500.");
     }
 
-    // --------------------------------------------------------
-    // Hash password
-    // --------------------------------------------------------
-
-    const hashedPassword = await hashPassword(password);
-
-    // --------------------------------------------------------
-    // Create mentor
-    // --------------------------------------------------------
-
-    const mentor = await prisma.user.create({
-      data: {
-        fullName: name,
-
-        username,
-
-        email,
-
-        password: hashedPassword,
-
-        role: "MENTOR",
-
-        isActive: true,
-      },
+    const department = await hodPrisma.departments.findUnique({
+      where: { id: normalizedDepartmentId },
+      select: { id: true, name: true },
     });
+    if (!department) throw new ApiError(400, "Selected department does not exist.");
 
-    // --------------------------------------------------------
-    // Remove password
-    // --------------------------------------------------------
+    const [existingAccount, existingTeacher] = await Promise.all([
+      hodPrisma.user_accounts.findFirst({
+        where: { OR: [{ username: normalizedUsername }, { email: normalizedEmail }] },
+        select: { id: true, username: true, email: true },
+      }),
+      hodPrisma.teachers.findUnique({
+        where: { employeeCode: normalizedEmployeeCode },
+        select: { id: true },
+      }),
+    ]);
+    if (existingAccount) {
+      if (existingAccount.username === normalizedUsername) {
+        throw new ApiError(409, "That username is already in use.");
+      }
+      throw new ApiError(409, "An account with that email already exists.");
+    }
+    if (existingTeacher) throw new ApiError(409, "That employee code is already in use.");
 
-    const { password: _password, ...mentorData } = mentor;
+    const now = new Date();
+    const userId = crypto.randomUUID();
+    const teacherId = crypto.randomUUID();
+    const passwordHash = await hashPassword(normalizedPassword);
 
-    return mentorData;
+    try {
+      await hodPrisma.$transaction(async (tx) => {
+        await tx.user_accounts.create({
+          data: {
+            id: userId,
+            username: normalizedUsername,
+            email: normalizedEmail,
+            password: passwordHash,
+            role: "MENTOR",
+            isActive: Boolean(isActive),
+            mustChangePassword: true,
+            createdAt: now,
+            updatedAt: now,
+          },
+        });
+
+        await tx.teachers.create({
+          data: {
+            id: teacherId,
+            employeeCode: normalizedEmployeeCode,
+            fullName: normalizedName,
+            email: normalizedEmail,
+            phone: phone ? String(phone).trim() : null,
+            designation: designation ? String(designation).trim() : null,
+            maxMentees: capacity,
+            isActive: Boolean(isActive),
+            departmentId: department.id,
+            userAccountId: userId,
+            createdAt: now,
+            updatedAt: now,
+          },
+        });
+
+        // Create the optional profile row so the existing mentor profile
+        // editor can update its fields without a separate profile bootstrap.
+        await tx.teacher_profiles.create({
+          data: {
+            id: crypto.randomUUID(),
+            teacherId,
+            createdAt: now,
+            updatedAt: now,
+          },
+        });
+      });
+    } catch (error) {
+      if (error?.code === "P2002") {
+        throw new ApiError(409, "Username, email, or employee code is already in use.");
+      }
+      throw error;
+    }
+
+    return {
+      id: teacherId,
+      userAccountId: userId,
+      fullName: normalizedName,
+      employeeCode: normalizedEmployeeCode,
+      email: normalizedEmail,
+      username: normalizedUsername,
+      phone: phone ? String(phone).trim() : null,
+      designation: designation ? String(designation).trim() : null,
+      department: { id: department.id, name: department.name },
+      maxMentees: capacity,
+      isActive: Boolean(isActive),
+      mustChangePassword: true,
+    };
   }
 
   // ==========================================================

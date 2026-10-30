@@ -18,11 +18,17 @@ const MENTOR_EMAIL = "mentor1@gmail.com";
 const MENTOR_PASSWORD = "Password@123";
 
 async function main() {
+  
   if (!process.env.NEW_DATABASE_URL) {
     throw new Error(
       "NEW_DATABASE_URL is missing. Configure your Supabase connection in .env.",
     );
   }
+  console.log("Connecting Prisma client...");
+  await hodPrisma.$connect();
+  console.log("Prisma connection established.");
+
+  console.log("Testing department lookup...");
 
   const now = new Date();
 
