@@ -1,7 +1,4 @@
-import React, {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import {
   X,
@@ -11,82 +8,178 @@ import {
   Loader2,
 } from "lucide-react";
 
+import api from "../../api/axios";
+
+// ==========================================================
+// RESOLVE FILE URL
+// ==========================================================
+
+const resolveFileUrl = (fileUrl) => {
+  if (!fileUrl) {
+    return null;
+  }
+
+  if (/^https?:\/\//i.test(fileUrl)) {
+    return fileUrl;
+  }
+
+  // Axios base URL already contains /api.
+  if (fileUrl.startsWith("/api/")) {
+    return fileUrl.replace(/^\/api/, "");
+  }
+
+  return fileUrl.startsWith("/")
+    ? fileUrl
+    : `/${fileUrl}`;
+};
+
 const ExtraCurricularDocumentViewerModal = ({
   isOpen,
   onClose,
   document: selectedDocument,
 }) => {
-  const [loading, setLoading] =
-    useState(true);
-
-  // ==========================================================
-  // RESET LOADING
-  // ==========================================================
-
-  useEffect(() => {
-    if (isOpen) {
-      setLoading(true);
-    }
-  }, [
-    isOpen,
-    selectedDocument?.id,
-    selectedDocument?.fileUrl,
-  ]);
-
-  // ==========================================================
-  // SAFETY
-  // ==========================================================
-
-  if (!isOpen || !selectedDocument) {
-    return null;
-  }
+  const [preview, setPreview] = useState({
+    key: null,
+    url: null,
+    error: null,
+  });
 
   // ==========================================================
   // DOCUMENT DATA
   // ==========================================================
 
-  const fileUrl =
-    selectedDocument?.fileUrl;
+  const fileUrl = selectedDocument?.fileUrl;
 
   const documentName =
     selectedDocument?.documentName ||
     "Extra-Curricular Document";
+
+  const requestKey = [
+    selectedDocument?.id || "",
+    fileUrl || "",
+    isOpen,
+  ].join(":");
+
+  const previewUrl =
+    preview.key === requestKey
+      ? preview.url
+      : null;
+
+  const previewError =
+    preview.key === requestKey
+      ? preview.error
+      : null;
+
+  const isLoading =
+    isOpen &&
+    Boolean(fileUrl) &&
+    preview.key !== requestKey;
+
+  // ==========================================================
+  // AUTHENTICATED FILE FETCH
+  // ==========================================================
+
+  useEffect(() => {
+    if (!isOpen || !fileUrl) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    let objectUrl = null;
+
+    const fetchDocument = async () => {
+      try {
+        const resolvedUrl = resolveFileUrl(fileUrl);
+
+        const response = await api.get(resolvedUrl, {
+          responseType: "blob",
+        });
+
+        if (cancelled) {
+          return;
+        }
+
+        objectUrl = window.URL.createObjectURL(
+          response.data
+        );
+
+        setPreview({
+          key: requestKey,
+          url: objectUrl,
+          error: null,
+        });
+      } catch (error) {
+        if (cancelled) {
+          return;
+        }
+
+        console.error(
+          "Failed to load Extra-Curricular document:",
+          error
+        );
+
+        const status = error.response?.status;
+
+        let errorMessage =
+          "Unable to load this document. Please try again.";
+
+        if (status === 401) {
+          errorMessage =
+            "Your session has expired. Please log in again.";
+        } else if (status === 403) {
+          errorMessage =
+            "You are not authorized to access this document.";
+        } else if (status === 404) {
+          errorMessage =
+            "The requested document could not be found.";
+        }
+
+        setPreview({
+          key: requestKey,
+          url: null,
+          error: errorMessage,
+        });
+      }
+    };
+
+    fetchDocument();
+
+    return () => {
+      cancelled = true;
+
+      if (objectUrl) {
+        window.URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [
+    isOpen,
+    fileUrl,
+    requestKey,
+  ]);
 
   // ==========================================================
   // FILE TYPE
   // ==========================================================
 
   const getFileType = () => {
-    if (
-      selectedDocument?.fileType
-    ) {
-      return selectedDocument.fileType
-        .toLowerCase();
+    const storedType =
+      selectedDocument?.fileType?.toLowerCase() || "";
+
+    if (storedType) {
+      return storedType;
     }
 
-    if (
-      selectedDocument?.documentName
-    ) {
-      const parts =
-        selectedDocument.documentName
-          .split(".");
-
-      if (parts.length > 1) {
-        return parts
-          .pop()
-          .toLowerCase();
-      }
+    if (documentName.includes(".")) {
+      return documentName
+        .split(".")
+        .pop()
+        .toLowerCase();
     }
 
     return "";
   };
 
-  const fileType =
-    getFileType();
-
-  // ==========================================================
-  // FILE CHECKS
-  // ==========================================================
+  const fileType = getFileType();
 
   const isPdf =
     fileType.includes("pdf");
@@ -116,8 +209,6 @@ const ExtraCurricularDocumentViewerModal = ({
   // ==========================================================
 
   const handleClose = () => {
-    setLoading(true);
-
     onClose?.();
   };
 
@@ -126,9 +217,10 @@ const ExtraCurricularDocumentViewerModal = ({
   // ==========================================================
 
   const handleDownload = () => {
-    if (!fileUrl) {
+    if (!previewUrl) {
       alert(
-        "File URL is not available."
+        previewError ||
+        "The document is not ready to download."
       );
 
       return;
@@ -136,42 +228,21 @@ const ExtraCurricularDocumentViewerModal = ({
 
     try {
       const link =
-        window.document.createElement(
-          "a"
-        );
+        window.document.createElement("a");
 
-      link.href =
-        fileUrl;
+      link.href = previewUrl;
+      link.download = documentName;
 
-      link.target =
-        "_blank";
-
-      link.rel =
-        "noopener noreferrer";
-
-      link.download =
-        documentName;
-
-      window.document.body.appendChild(
-        link
-      );
-
+      window.document.body.appendChild(link);
       link.click();
-
-      window.document.body.removeChild(
-        link
-      );
+      window.document.body.removeChild(link);
     } catch (error) {
       console.error(
-        "Viewer download error:",
+        "Document download error:",
         error
       );
 
-      window.open(
-        fileUrl,
-        "_blank",
-        "noopener,noreferrer"
-      );
+      alert("Unable to download this document.");
     }
   };
 
@@ -180,12 +251,12 @@ const ExtraCurricularDocumentViewerModal = ({
   // ==========================================================
 
   const handleOpenExternal = () => {
-    if (!fileUrl) {
+    if (!previewUrl) {
       return;
     }
 
     window.open(
-      fileUrl,
+      previewUrl,
       "_blank",
       "noopener,noreferrer"
     );
@@ -195,20 +266,49 @@ const ExtraCurricularDocumentViewerModal = ({
   // DOCUMENT ERROR
   // ==========================================================
 
-  const handleDocumentError = () => {
-    setLoading(false);
-  };
+  const renderError = () => (
+    <div className="h-full flex flex-col items-center justify-center text-center px-6">
+
+      <FileText
+        size={48}
+        className="text-slate-300 mb-3"
+      />
+
+      <p className="text-sm font-semibold text-slate-700">
+        Document unavailable
+      </p>
+
+      <p className="text-xs text-slate-500 mt-2 max-w-md">
+        {previewError}
+      </p>
+
+    </div>
+  );
+
+  // ==========================================================
+  // LOADING STATE
+  // ==========================================================
+
+  const renderLoading = () => (
+    <div className="h-full flex flex-col items-center justify-center">
+
+      <Loader2
+        size={28}
+        className="animate-spin text-blue-600 mb-3"
+      />
+
+      <p className="text-sm text-slate-500">
+        Loading document...
+      </p>
+
+    </div>
+  );
 
   // ==========================================================
   // RENDER DOCUMENT
   // ==========================================================
 
   const renderDocument = () => {
-
-    // ========================================================
-    // NO URL
-    // ========================================================
-
     if (!fileUrl) {
       return (
         <div className="h-full flex flex-col items-center justify-center text-center px-6">
@@ -230,44 +330,31 @@ const ExtraCurricularDocumentViewerModal = ({
       );
     }
 
+    if (isLoading) {
+      return renderLoading();
+    }
+
+    if (previewError) {
+      return renderError();
+    }
+
+    if (!previewUrl) {
+      return renderLoading();
+    }
+
     // ========================================================
     // PDF
     // ========================================================
 
     if (isPdf) {
       return (
-        <div className="relative w-full h-full bg-slate-100">
-
-          {loading && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
-
-              <div className="flex flex-col items-center gap-3">
-
-                <Loader2
-                  size={28}
-                  className="animate-spin text-blue-600"
-                />
-
-                <p className="text-sm text-slate-500">
-                  Loading document...
-                </p>
-
-              </div>
-
-            </div>
-          )}
+        <div className="w-full h-full bg-slate-100">
 
           <iframe
-            src={fileUrl}
+            src={previewUrl}
             title={documentName}
             className="w-full h-full border-0"
             loading="eager"
-            onLoad={() =>
-              setLoading(false)
-            }
-            onError={
-              handleDocumentError
-            }
           />
 
         </div>
@@ -280,35 +367,12 @@ const ExtraCurricularDocumentViewerModal = ({
 
     if (isImage) {
       return (
-        <div className="relative w-full h-full overflow-auto flex items-center justify-center p-6 bg-slate-100">
-
-          {loading && (
-            <div className="absolute inset-0 flex items-center justify-center">
-
-              <div className="flex items-center gap-2 text-sm text-slate-500">
-
-                <Loader2
-                  size={20}
-                  className="animate-spin"
-                />
-
-                Loading image...
-
-              </div>
-
-            </div>
-          )}
+        <div className="w-full h-full overflow-auto flex items-center justify-center p-6 bg-slate-100">
 
           <img
-            src={fileUrl}
+            src={previewUrl}
             alt={documentName}
             className="max-w-full max-h-full object-contain rounded-lg shadow-sm"
-            onLoad={() =>
-              setLoading(false)
-            }
-            onError={
-              handleDocumentError
-            }
           />
 
         </div>
@@ -324,16 +388,10 @@ const ExtraCurricularDocumentViewerModal = ({
         <div className="w-full h-full flex items-center justify-center bg-black p-6">
 
           <video
-            src={fileUrl}
+            src={previewUrl}
             controls
             playsInline
             className="max-w-full max-h-full"
-            onLoadedData={() =>
-              setLoading(false)
-            }
-            onError={
-              handleDocumentError
-            }
           >
             Your browser does not support
             video playback.
@@ -367,15 +425,9 @@ const ExtraCurricularDocumentViewerModal = ({
             </p>
 
             <audio
-              src={fileUrl}
+              src={previewUrl}
               controls
               className="w-full"
-              onLoadedData={() =>
-                setLoading(false)
-              }
-              onError={
-                handleDocumentError
-              }
             />
 
           </div>
@@ -413,27 +465,19 @@ const ExtraCurricularDocumentViewerModal = ({
 
           <button
             type="button"
-            onClick={
-              handleOpenExternal
-            }
-            disabled={!fileUrl}
-            className="h-9 px-4 rounded-md border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition disabled:opacity-50"
+            onClick={handleOpenExternal}
+            className="h-9 px-4 rounded-md border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition"
           >
             <ExternalLink size={16} />
-
             Open File
           </button>
 
           <button
             type="button"
-            onClick={
-              handleDownload
-            }
-            disabled={!fileUrl}
-            className="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-2 transition disabled:opacity-50"
+            onClick={handleDownload}
+            className="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-2 transition"
           >
             <Download size={16} />
-
             Download
           </button>
 
@@ -444,6 +488,14 @@ const ExtraCurricularDocumentViewerModal = ({
   };
 
   // ==========================================================
+  // SAFETY
+  // ==========================================================
+
+  if (!isOpen || !selectedDocument) {
+    return null;
+  }
+
+  // ==========================================================
   // MODAL
   // ==========================================================
 
@@ -451,10 +503,7 @@ const ExtraCurricularDocumentViewerModal = ({
     <div
       className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
       onMouseDown={(event) => {
-        if (
-          event.target ===
-          event.currentTarget
-        ) {
+        if (event.target === event.currentTarget) {
           handleClose();
         }
       }}
@@ -515,10 +564,8 @@ const ExtraCurricularDocumentViewerModal = ({
 
             <button
               type="button"
-              onClick={
-                handleDownload
-              }
-              disabled={!fileUrl}
+              onClick={handleDownload}
+              disabled={!previewUrl}
               title="Download"
               className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition disabled:opacity-40"
             >
@@ -529,10 +576,8 @@ const ExtraCurricularDocumentViewerModal = ({
 
             <button
               type="button"
-              onClick={
-                handleOpenExternal
-              }
-              disabled={!fileUrl}
+              onClick={handleOpenExternal}
+              disabled={!previewUrl}
               title="Open in new tab"
               className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition disabled:opacity-40"
             >
@@ -543,9 +588,7 @@ const ExtraCurricularDocumentViewerModal = ({
 
             <button
               type="button"
-              onClick={
-                handleClose
-              }
+              onClick={handleClose}
               title="Close"
               className="w-9 h-9 ml-1 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition"
             >

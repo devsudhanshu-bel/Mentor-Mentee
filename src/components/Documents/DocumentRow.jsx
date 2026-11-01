@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   FileText,
   Eye,
@@ -6,6 +6,8 @@ import {
   Trash2,
   Loader2,
 } from "lucide-react";
+
+import api from "../../api/axios";
 
 const DocumentRow = ({
   document,
@@ -53,6 +55,30 @@ const DocumentRow = ({
     : "-";
 
   // ==========================================================
+  // RESOLVE FILE URL
+  // ==========================================================
+
+  const resolveFileUrl = (fileUrl) => {
+    if (!fileUrl) {
+      return null;
+    }
+
+    // Preserve absolute URLs.
+    if (/^https?:\/\//i.test(fileUrl)) {
+      return fileUrl;
+    }
+
+    // Axios instance already uses the configured API base URL.
+    if (fileUrl.startsWith("/api/")) {
+      return fileUrl.replace(/^\/api/, "");
+    }
+
+    return fileUrl.startsWith("/")
+      ? fileUrl
+      : `/${fileUrl}`;
+  };
+
+  // ==========================================================
   // VIEW DOCUMENT
   // ==========================================================
 
@@ -62,9 +88,7 @@ const DocumentRow = ({
       return;
     }
 
-    if (onView) {
-      onView(document);
-    }
+    onView?.(document);
   };
 
   // ==========================================================
@@ -72,50 +96,53 @@ const DocumentRow = ({
   // ==========================================================
 
   const handleDownload = async () => {
-    if (!document.fileUrl) {
-      console.error("Document file URL is not available.");
+    if (!document.fileUrl || isDownloading) {
       return;
     }
+
+    let blobUrl = null;
 
     try {
       setIsDownloading(true);
 
-      const response = await fetch(document.fileUrl);
+      const fileUrl = resolveFileUrl(document.fileUrl);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch document.");
-      }
+      const response = await api.get(fileUrl, {
+        responseType: "blob",
+      });
 
-      const blob = await response.blob();
+      const blob = response.data;
 
-      const blobUrl = window.URL.createObjectURL(blob);
+      blobUrl = window.URL.createObjectURL(blob);
 
       const link = window.document.createElement("a");
 
       link.href = blobUrl;
-      link.download =
-        document.documentName || "document";
+      link.download = document.documentName || "document";
 
       window.document.body.appendChild(link);
-
       link.click();
-
       window.document.body.removeChild(link);
 
-      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      console.error(
-        "Failed to download document:",
-        error
-      );
+      console.error("Failed to download document:", error);
 
-      // Fallback
-      window.open(
-        document.fileUrl,
-        "_blank",
-        "noopener,noreferrer"
-      );
+      const status = error.response?.status;
+
+      if (status === 401 || status === 403) {
+        alert(
+          "You are not authorized to download this document. Please log in again if your session has expired."
+        );
+      } else if (status === 404) {
+        alert("The requested document could not be found.");
+      } else {
+        alert("Unable to download the document. Please try again.");
+      }
     } finally {
+      if (blobUrl) {
+        window.URL.revokeObjectURL(blobUrl);
+      }
+
       setIsDownloading(false);
     }
   };
@@ -133,9 +160,7 @@ const DocumentRow = ({
       return;
     }
 
-    if (onDelete) {
-      onDelete(document);
-    }
+    onDelete?.(document);
   };
 
   // ==========================================================
@@ -218,7 +243,7 @@ const DocumentRow = ({
           <button
             type="button"
             onClick={handleView}
-            disabled={isDownloading}
+            disabled={isDownloading || !document.fileUrl}
             title="View document"
             className="text-slate-500 hover:text-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
           >

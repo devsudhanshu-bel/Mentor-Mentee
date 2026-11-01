@@ -1,5 +1,5 @@
+import { useState } from "react";
 
-import React from "react";
 import {
   Eye,
   ClipboardCheck,
@@ -7,7 +7,10 @@ import {
   CalendarDays,
   HardDrive,
   ExternalLink,
+  LoaderCircle,
 } from "lucide-react";
+
+import api from "../../../../api/axios";
 
 // ==========================================================
 // REVIEW STATUS
@@ -75,6 +78,26 @@ const formatSize = (bytes) => {
 };
 
 // ==========================================================
+// RESOLVE FILE URL
+// ==========================================================
+
+const resolveFileUrl = (fileUrl) => {
+  if (!fileUrl) return null;
+
+  if (/^https?:\/\//i.test(fileUrl)) {
+    return fileUrl;
+  }
+
+  if (fileUrl.startsWith("/api/")) {
+    return fileUrl.replace(/^\/api/, "");
+  }
+
+  return fileUrl.startsWith("/")
+    ? fileUrl
+    : `/${fileUrl}`;
+};
+
+// ==========================================================
 // EXTRA CURRICULAR ACTIVITY CARD
 // ==========================================================
 
@@ -83,6 +106,8 @@ const ExtraCurricularActivityCard = ({
   onView,
   onReview,
 }) => {
+  const [isOpening, setIsOpening] = useState(false);
+
   if (!activity) return null;
 
   const status =
@@ -98,11 +123,6 @@ const ExtraCurricularActivityCard = ({
     activity.title ||
     activity.documentName ||
     "Untitled Activity";
-
-  const fileName =
-    activity.fileName ||
-    activity.documentName ||
-    "Uploaded evidence";
 
   const fileUrl = activity.fileUrl || "";
 
@@ -128,14 +148,79 @@ const ExtraCurricularActivityCard = ({
 
   const mentorRemark = activity.mentorRemark || "";
 
+  // ==========================================================
+  // OPEN DOCUMENT - AUTHENTICATED
+  // ==========================================================
+
+  const handleOpenDocument = async () => {
+    if (!fileUrl || isOpening) return;
+
+    const newWindow = window.open("about:blank", "_blank");
+
+    if (!newWindow) {
+      alert(
+        "Your browser blocked the new tab. Please allow pop-ups and try again."
+      );
+      return;
+    }
+
+    newWindow.opener = null;
+
+    let objectUrl = null;
+
+    try {
+      setIsOpening(true);
+
+      const response = await api.get(resolveFileUrl(fileUrl), {
+        responseType: "blob",
+      });
+
+      objectUrl = window.URL.createObjectURL(response.data);
+
+      newWindow.location.href = objectUrl;
+
+      window.setTimeout(() => {
+        window.URL.revokeObjectURL(objectUrl);
+      }, 60000);
+
+    } catch (error) {
+      console.error(
+        "Failed to open Extra-Curricular document:",
+        error
+      );
+
+      newWindow.close();
+
+      const responseStatus = error.response?.status;
+
+      if (responseStatus === 401 || responseStatus === 403) {
+        alert(
+          "You are not authorized to access this document. Please log in again if your session has expired."
+        );
+      } else if (responseStatus === 404) {
+        alert("The requested document could not be found.");
+      } else {
+        alert("Unable to open the document. Please try again.");
+      }
+
+    } finally {
+      setIsOpening(false);
+    }
+  };
+
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
     <article className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
-      {/* ==================================================
-          ACTIVITY HEADER
-      ================================================== */}
+
+      {/* ACTIVITY HEADER */}
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+
         <div className="flex min-w-0 gap-3">
+
           <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-blue-50">
             <FileText
               size={21}
@@ -144,6 +229,7 @@ const ExtraCurricularActivityCard = ({
           </div>
 
           <div className="min-w-0">
+
             <h3 className="break-words text-sm font-semibold text-slate-900">
               {title}
             </h3>
@@ -158,14 +244,14 @@ const ExtraCurricularActivityCard = ({
               {STATUS_LABELS[status] ||
                 status.replaceAll("_", " ")}
             </span>
+
           </div>
         </div>
 
-        {/* ==================================================
-            ACTIONS
-        ================================================== */}
+        {/* ACTIONS */}
 
         <div className="flex shrink-0 gap-2">
+
           <button
             type="button"
             onClick={() => onView?.(activity)}
@@ -183,12 +269,11 @@ const ExtraCurricularActivityCard = ({
             <ClipboardCheck size={14} />
             Review
           </button>
+
         </div>
       </div>
 
-      {/* ==================================================
-          DESCRIPTION
-      ================================================== */}
+      {/* DESCRIPTION */}
 
       {description && (
         <p className="mt-4 whitespace-pre-wrap break-words text-xs leading-5 text-slate-600">
@@ -196,11 +281,10 @@ const ExtraCurricularActivityCard = ({
         </p>
       )}
 
-      {/* ==================================================
-          FILE INFORMATION
-      ================================================== */}
+      {/* FILE INFORMATION */}
 
       <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2 border-t border-slate-100 pt-3 text-[11px] text-slate-500">
+
         <span className="inline-flex items-center gap-1.5">
           <CalendarDays size={13} />
           Uploaded {formatDate(uploadedAt)}
@@ -212,24 +296,32 @@ const ExtraCurricularActivityCard = ({
         </span>
 
         {fileUrl && (
-          <a
-            href={fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 text-blue-600 hover:text-blue-700"
+          <button
+            type="button"
+            onClick={handleOpenDocument}
+            disabled={isOpening}
+            className="inline-flex items-center gap-1 text-blue-600 transition hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <ExternalLink size={13} />
-            Open file
-          </a>
+            {isOpening ? (
+              <LoaderCircle
+                size={13}
+                className="animate-spin"
+              />
+            ) : (
+              <ExternalLink size={13} />
+            )}
+
+            {isOpening ? "Opening..." : "Open file"}
+          </button>
         )}
+
       </div>
 
-      {/* ==================================================
-          MENTOR REMARK
-      ================================================== */}
+      {/* MENTOR REMARK */}
 
       {mentorRemark && (
         <div className="mt-3 rounded-lg border border-slate-100 bg-slate-50 p-3">
+
           <p className="text-[11px] font-semibold text-slate-700">
             Mentor remark
           </p>
@@ -237,8 +329,10 @@ const ExtraCurricularActivityCard = ({
           <p className="mt-1 whitespace-pre-wrap break-words text-xs leading-5 text-slate-600">
             {mentorRemark}
           </p>
+
         </div>
       )}
+
     </article>
   );
 };

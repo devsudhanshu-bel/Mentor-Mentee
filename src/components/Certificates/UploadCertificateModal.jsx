@@ -1,5 +1,4 @@
-import React, {
-  useEffect,
+import {
   useRef,
   useState,
 } from "react";
@@ -25,56 +24,39 @@ const UploadCertificateModal = ({
   // REFS
   // ==========================================================
 
-  const fileInputRef =
-    useRef(null);
+  const fileInputRef = useRef(null);
 
   // ==========================================================
   // FORM STATE
   // ==========================================================
 
-  const [
-    documentName,
-    setDocumentName,
-  ] = useState("");
+  const [documentName, setDocumentName] =
+    useState("");
 
-  const [
-    certificateType,
-    setCertificateType,
-  ] = useState("Data Science");
+  const [certificateType, setCertificateType] =
+    useState("Data Science");
 
-  const [
-    issueDate,
-    setIssueDate,
-  ] = useState("");
+  const [issueDate, setIssueDate] =
+    useState("");
 
-  const [
-    issuedBy,
-    setIssuedBy,
-  ] = useState("");
+  const [issuedBy, setIssuedBy] =
+    useState("");
 
-  const [
-    description,
-    setDescription,
-  ] = useState("");
+  const [description, setDescription] =
+    useState("");
 
-  const [
-    file,
-    setFile,
-  ] = useState(null);
+  const [file, setFile] =
+    useState(null);
 
   // ==========================================================
   // UI STATE
   // ==========================================================
 
-  const [
-    loading,
-    setLoading,
-  ] = useState(false);
+  const [loading, setLoading] =
+    useState(false);
 
-  const [
-    error,
-    setError,
-  ] = useState("");
+  const [error, setError] =
+    useState("");
 
   // ==========================================================
   // RESET
@@ -95,18 +77,6 @@ const UploadCertificateModal = ({
   };
 
   // ==========================================================
-  // RESET WHEN OPENED
-  // ==========================================================
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    resetForm();
-  }, [isOpen]);
-
-  // ==========================================================
   // CLOSE
   // ==========================================================
 
@@ -116,7 +86,6 @@ const UploadCertificateModal = ({
     }
 
     resetForm();
-
     onClose?.();
   };
 
@@ -124,22 +93,14 @@ const UploadCertificateModal = ({
   // FILE VALIDATION
   // ==========================================================
 
-  const validateFile = (
-    selectedFile
-  ) => {
+  const validateFile = (selectedFile) => {
     if (!selectedFile) {
       return "Please select a certificate file.";
     }
 
-    // 5MB
+    const maxSize = 5 * 1024 * 1024;
 
-    const maxSize =
-      5 * 1024 * 1024;
-
-    if (
-      selectedFile.size >
-      maxSize
-    ) {
+    if (selectedFile.size > maxSize) {
       return "File size must not exceed 5MB.";
     }
 
@@ -160,20 +121,14 @@ const UploadCertificateModal = ({
       selectedFile.name.toLowerCase();
 
     const hasValidType =
-      allowedTypes.includes(
-        selectedFile.type
-      );
+      allowedTypes.includes(selectedFile.type);
 
     const hasValidExtension =
-      allowedExtensions.some(
-        (extension) =>
-          fileName.endsWith(extension)
+      allowedExtensions.some((extension) =>
+        fileName.endsWith(extension)
       );
 
-    if (
-      !hasValidType &&
-      !hasValidExtension
-    ) {
+    if (!hasValidType && !hasValidExtension) {
       return "Only PDF, JPG and PNG files are supported.";
     }
 
@@ -184,9 +139,7 @@ const UploadCertificateModal = ({
   // FILE SELECT
   // ==========================================================
 
-  const handleFileChange = (
-    event
-  ) => {
+  const handleFileChange = (event) => {
     const selectedFile =
       event.target.files?.[0];
 
@@ -195,30 +148,20 @@ const UploadCertificateModal = ({
     }
 
     const validationError =
-      validateFile(
-        selectedFile
-      );
+      validateFile(selectedFile);
 
     if (validationError) {
-      setError(
-        validationError
-      );
-
+      setError(validationError);
       setFile(null);
-
       event.target.value = "";
-
       return;
     }
 
     setError("");
     setFile(selectedFile);
 
-    /*
-     * If certificate title is empty,
-     * automatically use the filename
-     * without extension.
-     */
+    // Automatically populate certificate title
+    // using the filename without its extension.
 
     if (!documentName.trim()) {
       const nameWithoutExtension =
@@ -227,9 +170,7 @@ const UploadCertificateModal = ({
           ""
         );
 
-      setDocumentName(
-        nameWithoutExtension
-      );
+      setDocumentName(nameWithoutExtension);
     }
   };
 
@@ -249,9 +190,7 @@ const UploadCertificateModal = ({
   // DRAG OVER
   // ==========================================================
 
-  const handleDragOver = (
-    event
-  ) => {
+  const handleDragOver = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -264,9 +203,7 @@ const UploadCertificateModal = ({
   // DROP
   // ==========================================================
 
-  const handleDrop = (
-    event
-  ) => {
+  const handleDrop = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -282,17 +219,11 @@ const UploadCertificateModal = ({
     }
 
     const validationError =
-      validateFile(
-        droppedFile
-      );
+      validateFile(droppedFile);
 
     if (validationError) {
-      setError(
-        validationError
-      );
-
+      setError(validationError);
       setFile(null);
-
       return;
     }
 
@@ -306,9 +237,12 @@ const UploadCertificateModal = ({
           ""
         );
 
-      setDocumentName(
-        nameWithoutExtension
-      );
+      setDocumentName(nameWithoutExtension);
+    }
+
+    // Keep the input synchronized with the dropped file.
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -317,6 +251,10 @@ const UploadCertificateModal = ({
   // ==========================================================
 
   const handleUpload = async () => {
+    if (loading) {
+      return;
+    }
+
     setError("");
 
     // ========================================================
@@ -355,12 +293,10 @@ const UploadCertificateModal = ({
       return;
     }
 
-    const fileError =
-      validateFile(file);
+    const fileError = validateFile(file);
 
     if (fileError) {
       setError(fileError);
-
       return;
     }
 
@@ -374,34 +310,19 @@ const UploadCertificateModal = ({
       console.log(
         "Uploading Certificate:",
         {
-          documentName:
-            documentName.trim(),
-
-          category:
-            "CERTIFICATES",
-
+          documentName: documentName.trim(),
+          category: "CERTIFICATES",
           certificateType,
-
           issueDate,
-
-          issuedBy:
-            issuedBy.trim(),
-
-          file:
-            file.name,
+          issuedBy: issuedBy.trim(),
+          file: file.name,
         }
       );
 
       await uploadDocument({
-        documentName:
-          documentName.trim(),
-
-        category:
-          "CERTIFICATES",
-
-        description:
-          description.trim(),
-
+        documentName: documentName.trim(),
+        category: "CERTIFICATES",
+        description: description.trim(),
         file,
       });
 
@@ -415,16 +336,7 @@ const UploadCertificateModal = ({
 
       resetForm();
 
-      /*
-       * Tell the parent component that a new
-       * certificate was uploaded.
-       *
-       * The parent can then re-fetch:
-       *
-       * - Certificate list
-       * - KPI / statistics
-       */
-
+      // Notify parent to refresh certificate list and KPIs.
       onSuccess?.();
 
       onClose?.();
@@ -445,12 +357,13 @@ const UploadCertificateModal = ({
 
       if (status === 429) {
         setError(
-          "Cloudinary upload limit has been reached. Please try again later."
+          message ||
+          "Too many upload requests. Please wait a moment and try again."
         );
       } else {
         setError(
           message ||
-            "Failed to upload certificate. Please try again."
+          "Failed to upload certificate. Please try again."
         );
       }
 
@@ -463,9 +376,7 @@ const UploadCertificateModal = ({
   // FILE SIZE
   // ==========================================================
 
-  const formatFileSize = (
-    bytes
-  ) => {
+  const formatFileSize = (bytes) => {
     if (!bytes) {
       return "";
     }
@@ -474,13 +385,8 @@ const UploadCertificateModal = ({
       return `${bytes} B`;
     }
 
-    if (
-      bytes <
-      1024 * 1024
-    ) {
-      return `${(
-        bytes / 1024
-      ).toFixed(1)} KB`;
+    if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(1)} KB`;
     }
 
     return `${(
@@ -506,8 +412,7 @@ const UploadCertificateModal = ({
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 py-6"
       onMouseDown={(event) => {
         if (
-          event.target ===
-            event.currentTarget &&
+          event.target === event.currentTarget &&
           !loading
         ) {
           handleClose();
@@ -517,9 +422,7 @@ const UploadCertificateModal = ({
 
       <div className="w-full max-w-2xl max-h-[95vh] bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden flex flex-col">
 
-        {/* ==================================================
-            HEADER
-        ================================================== */}
+        {/* HEADER */}
 
         <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 shrink-0">
 
@@ -546,9 +449,7 @@ const UploadCertificateModal = ({
 
         </div>
 
-        {/* ==================================================
-            BODY
-        ================================================== */}
+        {/* BODY */}
 
         <div className="flex-1 overflow-y-auto">
 
@@ -562,9 +463,7 @@ const UploadCertificateModal = ({
               </div>
             )}
 
-            {/* ==================================================
-                CERTIFICATE TITLE
-            ================================================== */}
+            {/* CERTIFICATE TITLE */}
 
             <div>
 
@@ -576,9 +475,7 @@ const UploadCertificateModal = ({
                 type="text"
                 value={documentName}
                 onChange={(event) =>
-                  setDocumentName(
-                    event.target.value
-                  )
+                  setDocumentName(event.target.value)
                 }
                 placeholder="Enter certificate title"
                 disabled={loading}
@@ -587,9 +484,7 @@ const UploadCertificateModal = ({
 
             </div>
 
-            {/* ==================================================
-                CATEGORY & ISSUE DATE
-            ================================================== */}
+            {/* CATEGORY & ISSUE DATE */}
 
             <div className="grid grid-cols-2 gap-4">
 
@@ -602,49 +497,22 @@ const UploadCertificateModal = ({
                 </label>
 
                 <select
-                  value={
-                    certificateType
-                  }
+                  value={certificateType}
                   onChange={(event) =>
-                    setCertificateType(
-                      event.target.value
-                    )
+                    setCertificateType(event.target.value)
                   }
                   disabled={loading}
                   className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
                 >
 
-                  <option>
-                    Data Science
-                  </option>
-
-                  <option>
-                    Machine Learning
-                  </option>
-
-                  <option>
-                    Cloud Computing
-                  </option>
-
-                  <option>
-                    Programming
-                  </option>
-
-                  <option>
-                    Web Development
-                  </option>
-
-                  <option>
-                    Cyber Security
-                  </option>
-
-                  <option>
-                    Business
-                  </option>
-
-                  <option>
-                    Other
-                  </option>
+                  <option>Data Science</option>
+                  <option>Machine Learning</option>
+                  <option>Cloud Computing</option>
+                  <option>Programming</option>
+                  <option>Web Development</option>
+                  <option>Cyber Security</option>
+                  <option>Business</option>
+                  <option>Other</option>
 
                 </select>
 
@@ -662,9 +530,7 @@ const UploadCertificateModal = ({
                   type="date"
                   value={issueDate}
                   onChange={(event) =>
-                    setIssueDate(
-                      event.target.value
-                    )
+                    setIssueDate(event.target.value)
                   }
                   disabled={loading}
                   className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
@@ -674,9 +540,7 @@ const UploadCertificateModal = ({
 
             </div>
 
-            {/* ==================================================
-                ISSUED BY
-            ================================================== */}
+            {/* ISSUED BY */}
 
             <div>
 
@@ -688,9 +552,7 @@ const UploadCertificateModal = ({
                 type="text"
                 value={issuedBy}
                 onChange={(event) =>
-                  setIssuedBy(
-                    event.target.value
-                  )
+                  setIssuedBy(event.target.value)
                 }
                 placeholder="Enter issuing organization"
                 disabled={loading}
@@ -699,9 +561,7 @@ const UploadCertificateModal = ({
 
             </div>
 
-            {/* ==================================================
-                FILE UPLOAD
-            ================================================== */}
+            {/* FILE UPLOAD */}
 
             <div>
 
@@ -713,22 +573,14 @@ const UploadCertificateModal = ({
                 ref={fileInputRef}
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
-                onChange={
-                  handleFileChange
-                }
+                onChange={handleFileChange}
                 className="hidden"
               />
 
               <div
-                onDrop={
-                  handleDrop
-                }
-                onDragOver={
-                  handleDragOver
-                }
-                onClick={
-                  handleBrowse
-                }
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onClick={handleBrowse}
                 className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center transition ${
                   loading
                     ? "border-slate-200 bg-slate-50 cursor-not-allowed"
@@ -765,9 +617,11 @@ const UploadCertificateModal = ({
                     </div>
 
                     <p className="text-xs text-slate-500 mt-1">
-                      {formatFileSize(
-                        file.size
-                      )}
+                      {formatFileSize(file.size)}
+                    </p>
+
+                    <p className="text-[11px] text-blue-500 mt-2">
+                      Click to replace file
                     </p>
 
                   </>
@@ -786,7 +640,6 @@ const UploadCertificateModal = ({
                       type="button"
                       onClick={(event) => {
                         event.stopPropagation();
-
                         handleBrowse();
                       }}
                       disabled={loading}
@@ -806,9 +659,7 @@ const UploadCertificateModal = ({
 
             </div>
 
-            {/* ==================================================
-                DESCRIPTION
-            ================================================== */}
+            {/* DESCRIPTION */}
 
             <div>
 
@@ -820,9 +671,7 @@ const UploadCertificateModal = ({
                 rows={4}
                 value={description}
                 onChange={(event) =>
-                  setDescription(
-                    event.target.value
-                  )
+                  setDescription(event.target.value)
                 }
                 placeholder="Add a short description..."
                 disabled={loading}
@@ -835,9 +684,7 @@ const UploadCertificateModal = ({
 
         </div>
 
-        {/* ==================================================
-            FOOTER
-        ================================================== */}
+        {/* FOOTER */}
 
         <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 bg-white shrink-0">
 
@@ -863,20 +710,22 @@ const UploadCertificateModal = ({
 
             {loading ? (
               <>
+
                 <Loader2
                   size={16}
                   className="animate-spin"
                 />
 
                 Uploading...
+
               </>
             ) : (
               <>
-                <FileBadge
-                  size={16}
-                />
+
+                <FileBadge size={16} />
 
                 Upload Certificate
+
               </>
             )}
 

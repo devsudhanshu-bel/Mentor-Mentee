@@ -1,6 +1,13 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
-import { Plus, FileSearch, AlertCircle, RotateCcw } from "lucide-react";
+import {
+  Plus,
+  FileSearch,
+  AlertCircle,
+  RotateCcw,
+} from "lucide-react";
+
+import api from "../../api/axios";
 
 import CoCurricularActivityCard from "./CoCurricularActivityCard";
 import UploadCoCurricularModal from "./UploadCoCurricularModal";
@@ -9,6 +16,20 @@ import {
   getCoCurricularDocuments,
   deleteDocument,
 } from "../../api/document.api";
+
+const resolveFileUrl = (fileUrl) => {
+  if (!fileUrl) return "";
+
+  if (/^https?:\/\//i.test(fileUrl)) {
+    return fileUrl;
+  }
+
+  if (fileUrl.startsWith("/api/")) {
+    return fileUrl.replace(/^\/api/, "");
+  }
+
+  return fileUrl.startsWith("/") ? fileUrl : `/${fileUrl}`;
+};
 
 const CoCurricularActivityList = ({
   onUploadClick,
@@ -26,9 +47,6 @@ const CoCurricularActivityList = ({
 
   const fetchActivities = useCallback(async () => {
     try {
-      setLoading(true);
-      setLoadError("");
-
       const data = await getCoCurricularDocuments();
 
       const documents = Array.isArray(data?.documents)
@@ -40,6 +58,7 @@ const CoCurricularActivityList = ({
             : [];
 
       setActivities(documents);
+      setLoadError("");
     } catch (error) {
       console.error(
         "CoCurricularActivityList.fetchActivities error:",
@@ -59,49 +78,148 @@ const CoCurricularActivityList = ({
   }, []);
 
   useEffect(() => {
-    fetchActivities();
-  }, [fetchActivities]);
+    let isActive = true;
+
+    getCoCurricularDocuments()
+      .then((data) => {
+        if (!isActive) return;
+
+        const documents = Array.isArray(data?.documents)
+          ? data.documents
+          : Array.isArray(data?.data?.documents)
+            ? data.data.documents
+            : Array.isArray(data)
+              ? data
+              : [];
+
+        setActivities(documents);
+        setLoadError("");
+      })
+      .catch((error) => {
+        if (!isActive) return;
+
+        console.error(
+          "CoCurricularActivityList.fetchActivities error:",
+          error
+        );
+
+        console.error("Backend response:", error?.response?.data);
+
+        setLoadError(
+          error?.response?.data?.message ||
+            error?.response?.data?.error ||
+            "Unable to load your co-curricular activities."
+        );
+      })
+      .finally(() => {
+        if (isActive) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   // ==========================================================
   // VIEW ACTIVITY
   // ==========================================================
 
-  const handleView = (activity) => {
+  const handleView = async (activity) => {
     if (!activity?.fileUrl) {
       alert("File URL is not available.");
       return;
     }
 
-    window.open(
-      activity.fileUrl,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    const newWindow = window.open("", "_blank");
+
+    if (!newWindow) {
+      alert("Your browser blocked the new tab. Please allow pop-ups.");
+      return;
+    }
+
+    try {
+      const response = await api.get(
+        resolveFileUrl(activity.fileUrl),
+        {
+          responseType: "blob",
+        }
+      );
+
+      const previewUrl = window.URL.createObjectURL(response.data);
+
+      newWindow.location.href = previewUrl;
+
+      window.setTimeout(() => {
+        window.URL.revokeObjectURL(previewUrl);
+      }, 60000);
+    } catch (error) {
+      newWindow.close();
+
+      console.error("Co-curricular document preview error:", error);
+      console.error("Backend response:", error?.response?.data);
+
+      if (error.response?.status === 401) {
+        alert("Your session has expired. Please log in again.");
+      } else if (error.response?.status === 403) {
+        alert("You do not have permission to access this document.");
+      } else if (error.response?.status === 404) {
+        alert("The activity document could not be found.");
+      } else {
+        alert("Unable to open the activity document. Please try again.");
+      }
+    }
   };
 
   // ==========================================================
   // DOWNLOAD ACTIVITY
   // ==========================================================
 
-  const handleDownload = (activity) => {
+  const handleDownload = async (activity) => {
     if (!activity?.fileUrl) {
       alert("File URL is not available.");
       return;
     }
 
-    const link = window.document.createElement("a");
+    try {
+      const response = await api.get(
+        resolveFileUrl(activity.fileUrl),
+        {
+          responseType: "blob",
+        }
+      );
 
-    link.href = activity.fileUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.download =
-      activity.documentName ||
-      activity.fileName ||
-      "co-curricular-activity";
+      const downloadUrl = window.URL.createObjectURL(response.data);
+      const link = window.document.createElement("a");
 
-    window.document.body.appendChild(link);
-    link.click();
-    window.document.body.removeChild(link);
+      link.href = downloadUrl;
+      link.download =
+        activity.documentName ||
+        activity.fileName ||
+        "co-curricular-activity";
+
+      window.document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.setTimeout(() => {
+        window.URL.revokeObjectURL(downloadUrl);
+      }, 60000);
+    } catch (error) {
+      console.error("Co-curricular document download error:", error);
+      console.error("Backend response:", error?.response?.data);
+
+      if (error.response?.status === 401) {
+        alert("Your session has expired. Please log in again.");
+      } else if (error.response?.status === 403) {
+        alert("You do not have permission to download this document.");
+      } else if (error.response?.status === 404) {
+        alert("The activity document could not be found.");
+      } else {
+        alert("Unable to download the activity document. Please try again.");
+      }
+    }
   };
 
   // ==========================================================
@@ -134,7 +252,6 @@ const CoCurricularActivityList = ({
   // ==========================================================
 
   const handleResubmit = (activity) => {
-    // Reuse the parent-managed edit modal to replace and resubmit.
     handleEdit(activity);
   };
 
@@ -189,11 +306,24 @@ const CoCurricularActivityList = ({
   };
 
   // ==========================================================
+  // RETRY FETCH
+  // ==========================================================
+
+  const handleRetry = async () => {
+    setLoading(true);
+    setLoadError("");
+
+    await fetchActivities();
+  };
+
+  // ==========================================================
   // UPLOAD SUCCESS
   // ==========================================================
 
   const handleUploadSuccess = async () => {
     setIsUploadModalOpen(false);
+    setLoading(true);
+
     await fetchActivities();
   };
 
@@ -256,7 +386,7 @@ const CoCurricularActivityList = ({
 
             <button
               type="button"
-              onClick={fetchActivities}
+              onClick={handleRetry}
               className="mt-4 flex h-9 items-center gap-2 rounded-md border border-red-200 bg-white px-4 text-xs font-medium text-red-700 transition hover:bg-red-100"
             >
               <RotateCcw size={14} />
@@ -309,9 +439,7 @@ const CoCurricularActivityList = ({
         )}
       </div>
 
-      {/* FALLBACK UPLOAD MODAL
-          The parent page normally controls the upload modal.
-          This fallback allows the list to work independently. */}
+      {/* FALLBACK UPLOAD MODAL */}
 
       {!onUploadClick && (
         <UploadCoCurricularModal

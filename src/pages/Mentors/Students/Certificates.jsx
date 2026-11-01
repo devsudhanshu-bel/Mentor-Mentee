@@ -1,4 +1,5 @@
-import React, {
+
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -22,6 +23,7 @@ import {
   X,
   LoaderCircle,
   ExternalLink,
+  Download,
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
@@ -42,7 +44,12 @@ import CertificateVerificationModal from "../../../components/Mentors/Students/C
 
 import api from "../../../api/axios";
 
-const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
+const getProfileApiRoot = (isAdminRoute) =>
+  isAdminRoute ? "/admin/student-profile" : "/mentor/students";
+
+// ==========================================================
+// STUDENT ID RESOLUTION
+// ==========================================================
 
 function getStudentIdFromValue(value) {
   if (typeof value === "string" && value.trim()) {
@@ -101,6 +108,10 @@ function useSelectedStudentId(studentIdProp) {
   }, [studentIdProp, params, location.state, searchParams]);
 }
 
+// ==========================================================
+// API REQUEST
+// ==========================================================
+
 async function apiRequest(url, options = {}) {
   try {
     const response = await api.request({
@@ -117,7 +128,8 @@ async function apiRequest(url, options = {}) {
       error.response?.data?.message ||
         error.response?.data?.error ||
         error.message ||
-        "The request failed."
+        "The request failed.",
+      { cause: error }
     );
 
     requestError.status = error.response?.status;
@@ -126,6 +138,56 @@ async function apiRequest(url, options = {}) {
     throw requestError;
   }
 }
+
+// ==========================================================
+// PRIVATE FILE URL RESOLUTION
+// ==========================================================
+
+function resolvePrivateFileUrl(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== "string") {
+    throw new Error("The document URL is missing.");
+  }
+
+  const baseURL = api.defaults.baseURL || window.location.origin;
+
+  let base;
+  let target;
+
+  try {
+    base = new URL(baseURL, window.location.origin);
+    target = new URL(fileUrl, base);
+  } catch {
+    throw new Error("The document URL is invalid.");
+  }
+
+  // Do not send authentication headers to an external host.
+  if (target.origin !== base.origin) {
+    throw new Error(
+      "This document belongs to an unsupported external storage location."
+    );
+  }
+
+  let pathname = target.pathname;
+
+  // Axios already has /api in its base URL in this application.
+  // Remove the duplicate prefix when the stored URL contains it.
+  const basePath = base.pathname.replace(/\/$/, "");
+
+  if (basePath && basePath !== "/" && pathname.startsWith(`${basePath}/`)) {
+    pathname = pathname.slice(basePath.length);
+  } else if (
+    basePath.endsWith("/api") &&
+    pathname.startsWith("/api/")
+  ) {
+    pathname = pathname.slice(4);
+  }
+
+  return `${pathname}${target.search}${target.hash}`;
+}
+
+// ==========================================================
+// CERTIFICATE MAPPING
+// ==========================================================
 
 function mapCertificate(document) {
   return {
@@ -145,9 +207,17 @@ function mapCertificate(document) {
   };
 }
 
+// ==========================================================
+// MAIN CERTIFICATES PAGE
+// ==========================================================
+
 const Certificates = ({ studentId: studentIdProp }) => {
   const location = useLocation();
-  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
+
+  const isAdminRoute =
+    location.pathname.startsWith("/admin/overview/students/") ||
+    location.pathname.startsWith("/admin/mentor/");
+
   const API = getProfileApiRoot(isAdminRoute);
   const studentId = useSelectedStudentId(studentIdProp);
 
@@ -169,6 +239,10 @@ const Certificates = ({ studentId: studentIdProp }) => {
   const [errorDetails, setErrorDetails] = useState([]);
   const [notice, setNotice] = useState("");
 
+  // ========================================================
+  // LOAD CERTIFICATES
+  // ========================================================
+
   const loadCertificates = useCallback(async () => {
     if (!studentId) {
       setActivities([]);
@@ -176,9 +250,11 @@ const Certificates = ({ studentId: studentIdProp }) => {
       setMentor(null);
       setDashboardStats(null);
       setIsLoading(false);
+
       setError(
         "Student ID is missing. Open this page from a selected student's profile."
       );
+
       setErrorDetails([]);
       return;
     }
@@ -208,15 +284,30 @@ const Certificates = ({ studentId: studentIdProp }) => {
       setError(
         requestError.message || "Unable to load certificates."
       );
+
       setErrorDetails(requestError.details || []);
     } finally {
       setIsLoading(false);
     }
-  }, [studentId]);
+  }, [studentId, API]);
 
   useEffect(() => {
-    loadCertificates();
+    let active = true;
+
+    Promise.resolve().then(() => {
+      if (active) {
+        loadCertificates();
+      }
+    });
+
+    return () => {
+      active = false;
+    };
   }, [loadCertificates]);
+
+  // ========================================================
+  // STATISTICS
+  // ========================================================
 
   const stats = useMemo(() => {
     const verified = activities.filter(
@@ -282,6 +373,10 @@ const Certificates = ({ studentId: studentIdProp }) => {
     ];
   }, [activities, dashboardStats]);
 
+  // ========================================================
+  // SEARCH AND FILTER
+  // ========================================================
+
   const filteredActivities = useMemo(() => {
     const query = searchTerm.trim().toLowerCase();
 
@@ -302,6 +397,10 @@ const Certificates = ({ studentId: studentIdProp }) => {
       return matchesSearch && matchesStatus;
     });
   }, [activities, searchTerm, statusFilter]);
+
+  // ========================================================
+  // REVIEW SUBMISSION
+  // ========================================================
 
   const handleReviewSubmit = async ({ id, status, remark }) => {
     if (!studentId) {
@@ -340,12 +439,17 @@ const Certificates = ({ studentId: studentIdProp }) => {
         requestError.message ||
           "Unable to submit the certificate review."
       );
+
       setErrorDetails(requestError.details || []);
       throw requestError;
     } finally {
       setIsSubmitting(false);
     }
   };
+
+  // ========================================================
+  // PAGE UI
+  // ========================================================
 
   return (
     <div className="min-h-screen bg-slate-100">
@@ -508,19 +612,159 @@ const Certificates = ({ studentId: studentIdProp }) => {
   );
 };
 
+// ==========================================================
+// CERTIFICATE PREVIEW MODAL
+// ==========================================================
+
 function CertificatePreviewModal({ activity, onClose }) {
   if (!activity) return null;
 
-  const fileType = (activity.fileType || "").toLowerCase();
+  return (
+    <CertificatePreviewContent
+      key={activity.id || activity.fileUrl}
+      activity={activity}
+      onClose={onClose}
+    />
+  );
+}
+
+function CertificatePreviewContent({ activity, onClose }) {
   const fileUrl = activity.fileUrl || "";
 
+  const [blobUrl, setBlobUrl] = useState("");
+  const [blobType, setBlobType] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [fileError, setFileError] = useState("");
+
+  // ========================================================
+  // AUTHENTICATED PRIVATE FILE FETCH
+  // ========================================================
+
+  useEffect(() => {
+    let active = true;
+    let createdObjectUrl = null;
+
+    const loadDocument = async () => {
+      if (!fileUrl) {
+        setFileError("No document URL is available.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        const resolvedUrl = resolvePrivateFileUrl(fileUrl);
+
+        const response = await api.get(resolvedUrl, {
+          responseType: "blob",
+          withCredentials: true,
+        });
+
+        if (!active) return;
+
+        const blob = response.data;
+
+        if (!(blob instanceof Blob) || blob.size === 0) {
+          throw new Error("The document is empty or unavailable.");
+        }
+
+        createdObjectUrl = window.URL.createObjectURL(blob);
+
+        setBlobUrl(createdObjectUrl);
+        setBlobType(
+          blob.type ||
+            response.headers?.["content-type"] ||
+            activity.fileType ||
+            ""
+        );
+      } catch (requestError) {
+        if (!active) return;
+
+        const status = requestError.response?.status;
+
+        if (status === 401 || status === 403) {
+          setFileError(
+            "You are not authorized to access this document. Please sign in again or check your access."
+          );
+        } else if (status === 404) {
+          setFileError(
+            "This document could not be found on the server."
+          );
+        } else {
+          setFileError(
+            requestError.message ||
+              "Unable to load the certificate document."
+          );
+        }
+      } finally {
+        if (active) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    Promise.resolve().then(loadDocument);
+
+    return () => {
+      active = false;
+
+      if (createdObjectUrl) {
+        window.URL.revokeObjectURL(createdObjectUrl);
+      }
+    };
+  }, [fileUrl, activity.fileType]);
+
+  // ========================================================
+  // FILE TYPE DETECTION
+  // ========================================================
+
   const cleanUrl = fileUrl.toLowerCase().split("?")[0];
+  const cleanName = (activity.fileName || "").toLowerCase();
+
+  const detectedType = (
+    blobType ||
+    activity.fileType ||
+    ""
+  ).toLowerCase();
 
   const isPdf =
-    fileType.includes("pdf") || cleanUrl.endsWith(".pdf");
+    detectedType.includes("pdf") ||
+    cleanUrl.endsWith(".pdf") ||
+    cleanName.endsWith(".pdf");
 
   const isImage =
-    /\.(png|jpe?g|gif|webp)$/i.test(cleanUrl);
+    detectedType.startsWith("image/") ||
+    /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(cleanUrl) ||
+    /\.(png|jpe?g|gif|webp|bmp|svg)$/i.test(cleanName);
+
+  // ========================================================
+  // OPEN AND DOWNLOAD
+  // ========================================================
+
+  const handleOpenDocument = () => {
+    if (!blobUrl) return;
+
+    window.open(blobUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleDownloadDocument = () => {
+    if (!blobUrl) return;
+
+    const link = document.createElement("a");
+
+    link.href = blobUrl;
+    link.download =
+      activity.fileName ||
+      activity.title ||
+      "certificate-document";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
+  // ========================================================
+  // MODAL UI
+  // ========================================================
 
   return (
     <div
@@ -535,7 +779,7 @@ function CertificatePreviewModal({ activity, onClose }) {
         aria-label="Certificate document preview"
         className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
       >
-        <header className="flex items-start justify-between border-b p-5">
+        <header className="flex items-start justify-between gap-4 border-b p-5">
           <div className="min-w-0">
             <h2 className="break-words font-bold text-slate-900">
               {activity.title}
@@ -549,47 +793,98 @@ function CertificatePreviewModal({ activity, onClose }) {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close preview"
-            className="ml-3 rounded-lg p-2 text-slate-500 hover:bg-slate-100"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            {blobUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleOpenDocument}
+                  title="Open document in new tab"
+                  className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-100"
+                >
+                  <ExternalLink size={18} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadDocument}
+                  title="Download document"
+                  className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-100"
+                >
+                  <Download size={18} />
+                </button>
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close preview"
+              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 overflow-auto bg-slate-100 p-4">
-          {fileUrl ? (
-            isImage ? (
-              <img
-                src={fileUrl}
-                alt={activity.title}
-                className="mx-auto max-h-[65vh] max-w-full object-contain"
+          {isLoading ? (
+            <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
+              <LoaderCircle
+                size={34}
+                className="animate-spin text-blue-600"
               />
-            ) : isPdf ? (
-              <iframe
-                title={activity.title}
-                src={fileUrl}
-                className="h-[65vh] w-full bg-white"
-              />
-            ) : (
-              <div className="p-8 text-center">
-                <p className="mb-4 text-sm text-slate-600">
-                  Preview is unavailable for this file type.
-                </p>
 
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 text-sm font-medium text-blue-600 underline"
-                >
-                  <ExternalLink size={16} />
-                  Open certificate
-                </a>
-              </div>
-            )
+              <p className="text-sm font-medium text-slate-600">
+                Loading certificate document...
+              </p>
+            </div>
+          ) : fileError ? (
+            <div
+              role="alert"
+              className="flex min-h-[40vh] flex-col items-center justify-center gap-3 p-8 text-center"
+            >
+              <AlertCircle
+                size={36}
+                className="text-red-500"
+              />
+
+              <p className="max-w-lg text-sm text-slate-600">
+                {fileError}
+              </p>
+            </div>
+          ) : blobUrl && isImage ? (
+            <img
+              src={blobUrl}
+              alt={activity.title}
+              className="mx-auto max-h-[65vh] max-w-full object-contain"
+            />
+          ) : blobUrl && isPdf ? (
+            <iframe
+              title={activity.title}
+              src={blobUrl}
+              className="h-[65vh] w-full bg-white"
+            />
+          ) : blobUrl ? (
+            <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 p-8 text-center">
+              <Files
+                size={42}
+                className="text-slate-400"
+              />
+
+              <p className="text-sm text-slate-600">
+                Preview is unavailable for this file type.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleDownloadDocument}
+                className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+              >
+                <Download size={16} />
+                Download certificate
+              </button>
+            </div>
           ) : (
             <p className="p-10 text-center text-sm text-slate-500">
               No document URL is available.

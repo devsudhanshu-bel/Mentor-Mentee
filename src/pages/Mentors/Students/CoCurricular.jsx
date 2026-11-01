@@ -1,5 +1,4 @@
-
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -22,18 +21,17 @@ import {
   CheckCircle2,
   X,
   LoaderCircle,
+  Download,
+  ExternalLink,
+  FileText,
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
-import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
-import AdminHeader from "../../../components/layouts/AdminHeader";
 
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
-import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
-import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentCoCurricularProfile from "../../../components/Mentors/Students/CoCurricular/StudentCoCurricularProfile";
 import CoCurricularStatCard from "../../../components/Mentors/Students/CoCurricular/CoCurricularStatCard";
@@ -42,7 +40,11 @@ import CoCurricularVerificationModal from "../../../components/Mentors/Students/
 
 import api from "../../../api/axios";
 
-const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
+// ==========================================================
+// API CONFIGURATION
+// ==========================================================
+
+const API = "/mentor/students";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -130,14 +132,81 @@ async function apiRequest(url, options = {}) {
   } catch (error) {
     const requestError = new Error(
       error.response?.data?.message ||
-      error.response?.data?.error ||
-      error.message ||
-      "The request failed."
+        error.response?.data?.error ||
+        error.message ||
+        "The request failed.",
+      { cause: error }
     );
 
     requestError.status = error.response?.status;
 
     throw requestError;
+  }
+}
+
+// ==========================================================
+// PRIVATE FILE URL RESOLUTION
+// ==========================================================
+
+function resolvePrivateFileUrl(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== "string") {
+    throw new Error("No document URL is available.");
+  }
+
+  const trimmedUrl = fileUrl.trim();
+
+  if (!trimmedUrl) {
+    throw new Error("No document URL is available.");
+  }
+
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    const parsedUrl = new URL(trimmedUrl);
+
+    if (parsedUrl.origin !== window.location.origin) {
+      throw new Error(
+        "The document URL belongs to an untrusted origin."
+      );
+    }
+
+    return `${parsedUrl.pathname}${parsedUrl.search}`;
+  }
+
+  if (/^(blob:|data:|javascript:)/i.test(trimmedUrl)) {
+    throw new Error("Unsupported document URL.");
+  }
+
+  const normalizedPath = trimmedUrl.startsWith("/")
+    ? trimmedUrl
+    : `/${trimmedUrl}`;
+
+  // Axios baseURL already contains /api.
+  if (normalizedPath.startsWith("/api/")) {
+    return normalizedPath.slice(4);
+  }
+
+  return normalizedPath;
+}
+
+// ==========================================================
+// AUTHENTICATED PRIVATE FILE FETCH
+// ==========================================================
+
+async function fetchPrivateFile(fileUrl) {
+  const resolvedUrl = resolvePrivateFileUrl(fileUrl);
+
+  try {
+    const response = await api.get(resolvedUrl, {
+      responseType: "blob",
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message ||
+        "Unable to load the private document. Please try again.",
+      { cause: error }
+    );
   }
 }
 
@@ -170,9 +239,6 @@ function mapActivity(document) {
 // ==========================================================
 
 const CoCurricular = ({ studentId: studentIdProp }) => {
-  const location = useLocation();
-  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
-  const API = getProfileApiRoot(isAdminRoute);
   const studentId = useSelectedStudentId(studentIdProp);
 
   const [activities, setActivities] = useState([]);
@@ -237,7 +303,7 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
     } catch (requestError) {
       setError(
         requestError.message ||
-        "Unable to load Co-Curricular activities."
+          "Unable to load Co-Curricular activities."
       );
     } finally {
       setIsLoading(false);
@@ -245,7 +311,17 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
   }, [studentId]);
 
   useEffect(() => {
-    loadActivities();
+    let active = true;
+
+    Promise.resolve().then(() => {
+      if (active) {
+        loadActivities();
+      }
+    });
+
+    return () => {
+      active = false;
+    };
   }, [loadActivities]);
 
   // --------------------------------------------------------
@@ -292,7 +368,10 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
       {
         id: "pending",
         title: "Under Review",
-        value: dashboardStats?.underReview ?? dashboardStats?.pendingReview ?? pending,
+        value:
+          dashboardStats?.underReview ??
+          dashboardStats?.pendingReview ??
+          pending,
         subtitle: "Awaiting mentor review",
         icon: Clock3,
         iconBg: "bg-orange-100",
@@ -405,19 +484,21 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
+      <MentorSidebar />
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
+        <MentorHeader />
 
         <main className="space-y-5 p-4 md:p-6">
           {/* PAGE ACTIONS */}
+
           <div className="flex flex-wrap items-center justify-between gap-3">
-            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
+            <BackButton />
             <ActionButtons />
           </div>
 
           {/* ERROR MESSAGE */}
+
           {error && (
             <div
               role="alert"
@@ -448,6 +529,7 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
           )}
 
           {/* SUCCESS MESSAGE */}
+
           {notice && (
             <div
               role="status"
@@ -471,6 +553,7 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
           )}
 
           {/* STUDENT PROFILE AND DASHBOARD */}
+
           <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
             <StudentCoCurricularProfile
               student={student}
@@ -478,9 +561,10 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
+              <StudentTabs />
 
               {/* PAGE TITLE */}
+
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <h1 className="text-xl font-bold text-slate-900">
@@ -507,6 +591,7 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
               </div>
 
               {/* STATISTICS */}
+
               <section
                 aria-label="Co-Curricular statistics"
                 className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
@@ -520,6 +605,7 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
               </section>
 
               {/* ACTIVITIES LIST */}
+
               {isLoading ? (
                 <div className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white p-8">
                   <LoaderCircle
@@ -548,12 +634,17 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
       </div>
 
       {/* ACTIVITY PREVIEW MODAL */}
-      <ActivityPreviewModal
-        activity={selectedActivity}
-        onClose={() => setSelectedActivity(null)}
-      />
 
-      {/* SEPARATE VERIFICATION MODAL */}
+      {selectedActivity && (
+        <ActivityPreviewModal
+          key={selectedActivity.id}
+          activity={selectedActivity}
+          onClose={() => setSelectedActivity(null)}
+        />
+      )}
+
+      {/* VERIFICATION MODAL */}
+
       <CoCurricularVerificationModal
         activity={reviewActivity}
         onClose={() => setReviewActivity(null)}
@@ -569,18 +660,125 @@ const CoCurricular = ({ studentId: studentIdProp }) => {
 // ==========================================================
 
 function ActivityPreviewModal({ activity, onClose }) {
-  if (!activity) return null;
+  const fileUrl = activity?.fileUrl || "";
+  const fileType = (activity?.fileType || "").toLowerCase();
 
-  const fileType = (activity.fileType || "").toLowerCase();
+  const fileName =
+    activity?.fileName ||
+    activity?.title ||
+    "activity-document";
 
-  const fileUrl = activity.fileUrl || "";
+  // State is initialized when the keyed modal mounts.
+  // No synchronous state updates are made inside the effect.
+  const [blobUrl, setBlobUrl] = useState("");
+  const [isLoadingFile, setIsLoadingFile] = useState(
+    Boolean(fileUrl)
+  );
+  const [fileError, setFileError] = useState("");
+
+  // --------------------------------------------------------
+  // LOAD PRIVATE DOCUMENT
+  // --------------------------------------------------------
+
+  useEffect(() => {
+    if (!fileUrl) {
+      return undefined;
+    }
+
+    let active = true;
+    let temporaryUrl = "";
+
+    const loadFile = async () => {
+      try {
+        const blob = await fetchPrivateFile(fileUrl);
+
+        if (!active) return;
+
+        temporaryUrl = window.URL.createObjectURL(blob);
+        setBlobUrl(temporaryUrl);
+      } catch (error) {
+        if (active) {
+          setFileError(
+            error.message || "Unable to preview this document."
+          );
+        }
+      } finally {
+        if (active) {
+          setIsLoadingFile(false);
+        }
+      }
+    };
+
+    // Defer the request outside the synchronous effect body.
+    Promise.resolve().then(() => {
+      if (active) {
+        loadFile();
+      }
+    });
+
+    return () => {
+      active = false;
+
+      if (temporaryUrl) {
+        window.URL.revokeObjectURL(temporaryUrl);
+      }
+    };
+  }, [fileUrl]);
+
+  // --------------------------------------------------------
+  // FILE TYPE DETECTION
+  // --------------------------------------------------------
+
+  const cleanFileUrl = fileUrl.split("?")[0];
 
   const isPdf =
     fileType.includes("pdf") ||
-    fileUrl.toLowerCase().split("?")[0].endsWith(".pdf");
+    /\.pdf$/i.test(fileName) ||
+    /\.pdf$/i.test(cleanFileUrl);
 
   const isImage =
-    /\.(png|jpe?g|gif|webp)(\?.*)?$/i.test(fileUrl);
+    fileType.startsWith("image/") ||
+    /\.(png|jpe?g|gif|webp|bmp)$/i.test(fileName) ||
+    /\.(png|jpe?g|gif|webp|bmp)$/i.test(cleanFileUrl);
+
+  // --------------------------------------------------------
+  // DOWNLOAD DOCUMENT
+  // --------------------------------------------------------
+
+  const handleDownload = () => {
+    if (!blobUrl) return;
+
+    const link = document.createElement("a");
+
+    link.href = blobUrl;
+    link.download = fileName;
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
+  // --------------------------------------------------------
+  // OPEN DOCUMENT
+  // --------------------------------------------------------
+
+  const handleOpen = () => {
+    if (!blobUrl) return;
+
+    const link = document.createElement("a");
+
+    link.href = blobUrl;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
+  // --------------------------------------------------------
+  // RENDER
+  // --------------------------------------------------------
 
   return (
     <div
@@ -597,6 +795,8 @@ function ActivityPreviewModal({ activity, onClose }) {
         aria-label="Activity document preview"
         className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
       >
+        {/* HEADER */}
+
         <header className="flex items-start justify-between border-b p-5">
           <div className="min-w-0">
             <h2 className="break-words font-bold text-slate-900">
@@ -611,51 +811,129 @@ function ActivityPreviewModal({ activity, onClose }) {
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close preview"
-            className="ml-3 rounded-lg p-2 text-slate-500 hover:bg-slate-100"
-          >
-            <X size={20} />
-          </button>
+          <div className="ml-3 flex shrink-0 items-center gap-2">
+            {blobUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleOpen}
+                  title="Open document in new tab"
+                  className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-100"
+                >
+                  <ExternalLink size={18} />
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  title="Download document"
+                  className="rounded-lg border border-slate-200 p-2 text-slate-600 hover:bg-slate-100"
+                >
+                  <Download size={18} />
+                </button>
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close preview"
+              className="rounded-lg p-2 text-slate-500 hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </header>
 
+        {/* PREVIEW CONTENT */}
+
         <div className="flex-1 overflow-auto bg-slate-100 p-4">
-          {fileUrl ? (
-            isImage ? (
-              <img
-                src={fileUrl}
-                alt={activity.title}
-                className="mx-auto max-h-[65vh] max-w-full object-contain"
+          {!fileUrl ? (
+            <div className="flex flex-col items-center justify-center gap-3 p-10 text-center">
+              <FileText
+                size={40}
+                className="text-slate-400"
               />
-            ) : isPdf ? (
-              <iframe
-                title={activity.title}
-                src={fileUrl}
-                className="h-[65vh] w-full bg-white"
+
+              <p className="text-sm text-slate-500">
+                No document URL is available.
+              </p>
+            </div>
+          ) : isLoadingFile ? (
+            <div className="flex min-h-[300px] flex-col items-center justify-center gap-3">
+              <LoaderCircle
+                size={32}
+                className="animate-spin text-blue-600"
               />
-            ) : (
-              <div className="p-8 text-center">
-                <p className="mb-4 text-sm text-slate-600">
-                  Preview is unavailable for this file type.
+
+              <p className="text-sm font-medium text-slate-600">
+                Loading private document...
+              </p>
+            </div>
+          ) : fileError ? (
+            <div
+              role="alert"
+              className="flex min-h-[300px] flex-col items-center justify-center gap-3 text-center"
+            >
+              <AlertCircle
+                size={36}
+                className="text-red-500"
+              />
+
+              <p className="max-w-md text-sm text-red-600">
+                {fileError}
+              </p>
+            </div>
+          ) : blobUrl && isImage ? (
+            <img
+              src={blobUrl}
+              alt={activity.title}
+              className="mx-auto max-h-[65vh] max-w-full object-contain"
+            />
+          ) : blobUrl && isPdf ? (
+            <iframe
+              title={activity.title}
+              src={blobUrl}
+              className="h-[65vh] w-full bg-white"
+            />
+          ) : blobUrl ? (
+            <div className="flex min-h-[300px] flex-col items-center justify-center gap-4 p-8 text-center">
+              <FileText
+                size={48}
+                className="text-blue-500"
+              />
+
+              <div>
+                <p className="font-semibold text-slate-800">
+                  {fileName}
                 </p>
 
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="text-sm font-medium text-blue-600 underline"
-                >
-                  Open document
-                </a>
+                <p className="mt-1 text-sm text-slate-500">
+                  Preview is unavailable for this file type.
+                </p>
               </div>
-            )
-          ) : (
-            <p className="p-10 text-center text-sm text-slate-500">
-              No document URL is available.
-            </p>
-          )}
+
+              <div className="flex flex-wrap justify-center gap-3">
+                <button
+                  type="button"
+                  onClick={handleOpen}
+                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                >
+                  <ExternalLink size={16} />
+                  Open document
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  <Download size={16} />
+                  Download
+                </button>
+              </div>
+            </div>
+          ) : null}
         </div>
       </section>
     </div>

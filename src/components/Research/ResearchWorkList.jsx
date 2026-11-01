@@ -1,6 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Plus, FileSearch } from "lucide-react";
+
+import api from "../../api/axios";
 
 import ResearchWorkCard from "./ResearchWorkCard";
 import UploadResearchModal from "./UploadResearchModal";
@@ -11,6 +13,36 @@ import {
   deleteDocument,
 } from "../../api/document.api";
 
+const resolveFileUrl = (fileUrl) => {
+  if (!fileUrl) return "";
+
+  if (/^https?:\/\//i.test(fileUrl)) {
+    return fileUrl;
+  }
+
+  if (fileUrl.startsWith("/api/")) {
+    return fileUrl.replace(/^\/api/, "");
+  }
+
+  return fileUrl.startsWith("/") ? fileUrl : `/${fileUrl}`;
+};
+
+const normalizeResearchDocuments = (data) => {
+  if (Array.isArray(data?.documents)) {
+    return data.documents;
+  }
+
+  if (Array.isArray(data)) {
+    return data;
+  }
+
+  return [];
+};
+
+// ==========================================================
+// RESEARCH WORK LIST
+// ==========================================================
+
 const ResearchWorkList = ({ onEditResearch }) => {
   const [researchDocuments, setResearchDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -19,22 +51,50 @@ const ResearchWorkList = ({ onEditResearch }) => {
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   // ==========================================================
-  // FETCH RESEARCH DOCUMENTS
+  // INITIAL FETCH
+  // ==========================================================
+
+  useEffect(() => {
+    let isActive = true;
+
+    getResearchDocuments()
+      .then((data) => {
+        if (!isActive) return;
+
+        setResearchDocuments(normalizeResearchDocuments(data));
+      })
+      .catch((error) => {
+        if (!isActive) return;
+
+        console.error(
+          "ResearchWorkList.fetchResearchDocuments error:",
+          error
+        );
+
+        console.error("Backend response:", error?.response?.data);
+
+        setResearchDocuments([]);
+      })
+      .finally(() => {
+        if (isActive) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  // ==========================================================
+  // REFRESH RESEARCH DOCUMENTS
   // ==========================================================
 
   const fetchResearchDocuments = useCallback(async () => {
     try {
-      setLoading(true);
-
       const data = await getResearchDocuments();
 
-      const documents = Array.isArray(data?.documents)
-        ? data.documents
-        : Array.isArray(data)
-          ? data
-          : [];
-
-      setResearchDocuments(documents);
+      setResearchDocuments(normalizeResearchDocuments(data));
     } catch (error) {
       console.error(
         "ResearchWorkList.fetchResearchDocuments error:",
@@ -49,10 +109,6 @@ const ResearchWorkList = ({ onEditResearch }) => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchResearchDocuments();
-  }, [fetchResearchDocuments]);
-
   // ==========================================================
   // VIEW DOCUMENT
   // ==========================================================
@@ -65,23 +121,48 @@ const ResearchWorkList = ({ onEditResearch }) => {
   // DOWNLOAD DOCUMENT
   // ==========================================================
 
-  const handleDownload = (researchDocument) => {
+  const handleDownload = async (researchDocument) => {
     if (!researchDocument?.fileUrl) {
       alert("File URL is not available.");
       return;
     }
 
-    const link = window.document.createElement("a");
+    try {
+      const response = await api.get(
+        resolveFileUrl(researchDocument.fileUrl),
+        {
+          responseType: "blob",
+        }
+      );
 
-    link.href = researchDocument.fileUrl;
-    link.target = "_blank";
-    link.rel = "noopener noreferrer";
-    link.download =
-      researchDocument.documentName || "research-document";
+      const downloadUrl = window.URL.createObjectURL(response.data);
+      const link = window.document.createElement("a");
 
-    window.document.body.appendChild(link);
-    link.click();
-    window.document.body.removeChild(link);
+      link.href = downloadUrl;
+      link.download =
+        researchDocument.documentName || "research-document";
+
+      window.document.body.appendChild(link);
+      link.click();
+      link.remove();
+
+      window.setTimeout(() => {
+        window.URL.revokeObjectURL(downloadUrl);
+      }, 60000);
+    } catch (error) {
+      console.error("Research document download error:", error);
+      console.error("Backend response:", error?.response?.data);
+
+      if (error.response?.status === 401) {
+        alert("Your session has expired. Please log in again.");
+      } else if (error.response?.status === 403) {
+        alert("You do not have permission to download this document.");
+      } else if (error.response?.status === 404) {
+        alert("The research document could not be found.");
+      } else {
+        alert("Failed to download the research document. Please try again.");
+      }
+    }
   };
 
   // ==========================================================
@@ -157,6 +238,8 @@ const ResearchWorkList = ({ onEditResearch }) => {
 
   const handleUploadSuccess = async () => {
     setIsUploadModalOpen(false);
+    setLoading(true);
+
     await fetchResearchDocuments();
   };
 

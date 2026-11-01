@@ -1,5 +1,4 @@
-
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import {
@@ -20,17 +19,14 @@ import {
   ExternalLink,
   Star,
   Check,
+  Download,
 } from "lucide-react";
 
 import MentorSidebar from "../../../components/layouts/MentorSidebar";
-import AdminSidebar from "../../../components/layouts/AdminSidebar";
 import MentorHeader from "../../../components/layouts/MentorHeader";
-import AdminHeader from "../../../components/layouts/AdminHeader";
 import BackButton from "../../../components/Mentors/Students/Header/BackButton";
-import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
-import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentInternshipProfile from "../../../components/Mentors/Students/Internships/StudentInternshipProfile";
 import InternshipStatCard from "../../../components/Mentors/Students/Internships/InternshipStatCard";
@@ -52,7 +48,111 @@ const getError = (error) =>
   "Something went wrong. Please try again.";
 
 /* =========================================================
-   DOCUMENT ERROR HELPERS
+   PRIVATE DOCUMENT HELPERS
+========================================================= */
+
+const resolveFileUrl = (fileUrl) => {
+  if (!fileUrl || typeof fileUrl !== "string") {
+    throw new Error("Document URL is missing.");
+  }
+
+  const trimmedUrl = fileUrl.trim();
+
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  if (trimmedUrl.startsWith("/api/")) {
+    return trimmedUrl.slice(4);
+  }
+
+  if (trimmedUrl.startsWith("/")) {
+    return trimmedUrl;
+  }
+
+  return `/${trimmedUrl}`;
+};
+
+const openPrivateDocument = async (fileUrl) => {
+  let objectUrl;
+
+  try {
+    const response = await api.get(resolveFileUrl(fileUrl), {
+      responseType: "blob",
+    });
+
+    objectUrl = window.URL.createObjectURL(response.data);
+
+    const openedWindow = window.open(objectUrl, "_blank");
+
+    if (!openedWindow) {
+      const link = document.createElement("a");
+      link.href = objectUrl;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      link.click();
+    }
+
+    // Keep the Blob URL alive long enough for the browser to load it.
+    window.setTimeout(() => {
+      if (objectUrl) {
+        window.URL.revokeObjectURL(objectUrl);
+      }
+    }, 60000);
+  } catch (error) {
+    console.error("Unable to open internship document:", error);
+throw new Error(
+  error?.response?.status === 401
+    ? "Your session has expired. Please sign in again."
+    : error?.response?.status === 403
+      ? "You do not have permission to view this document."
+      : error?.response?.status === 404
+        ? "The requested document could not be found."
+        : getError(error),
+  { cause: error }
+);
+  }
+};
+
+const downloadPrivateDocument = async (fileUrl, fileName) => {
+  let objectUrl;
+
+  try {
+    const response = await api.get(resolveFileUrl(fileUrl), {
+      responseType: "blob",
+    });
+
+    objectUrl = window.URL.createObjectURL(response.data);
+
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = fileName || "internship-document";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    window.setTimeout(() => {
+      if (objectUrl) {
+        window.URL.revokeObjectURL(objectUrl);
+      }
+    }, 1000);
+  } catch (error) {
+    console.error("Unable to download internship document:", error);
+    throw new Error(
+  error?.response?.status === 401
+    ? "Your session has expired. Please sign in again."
+    : error?.response?.status === 403
+      ? "You do not have permission to download this document."
+      : error?.response?.status === 404
+        ? "The requested document could not be found."
+        : getError(error),
+  { cause: error }
+);
+  }
+};
+
+/* =========================================================
+   DOCUMENT LABELS AND VALIDATION
 ========================================================= */
 
 const DOCUMENT_LABELS = {
@@ -67,9 +167,7 @@ const DOCUMENT_LABELS = {
 
 const getMissingDocuments = (message = "") => {
   const prefix = "Required documents are missing:";
-  const start = message
-    .toLowerCase()
-    .indexOf(prefix.toLowerCase());
+  const start = message.toLowerCase().indexOf(prefix.toLowerCase());
 
   if (start === -1) return [];
 
@@ -79,8 +177,7 @@ const getMissingDocuments = (message = "") => {
     .map((item) => item.trim().replace(/[.\s]+$/, ""))
     .filter(Boolean)
     .map(
-      (type) =>
-        DOCUMENT_LABELS[type] || type.replaceAll("_", " ")
+      (type) => DOCUMENT_LABELS[type] || type.replaceAll("_", " ")
     );
 };
 
@@ -114,17 +211,21 @@ const statusLabel = (status) =>
   "Unknown";
 
 const statusClass = (status) => {
-  if (status === "COMPLETED")
+  if (status === "COMPLETED") {
     return "bg-emerald-50 text-emerald-700";
+  }
 
-  if (status === "ONGOING")
+  if (status === "ONGOING") {
     return "bg-blue-50 text-blue-700";
+  }
 
-  if (status?.startsWith("PENDING"))
+  if (status?.startsWith("PENDING")) {
     return "bg-amber-50 text-amber-700";
+  }
 
-  if (status === "CANCELLED")
+  if (status === "CANCELLED") {
     return "bg-red-50 text-red-700";
+  }
 
   return "bg-slate-100 text-slate-600";
 };
@@ -135,24 +236,9 @@ const getStudentIdFromInternship = (item) =>
   item?.student?.studentId ||
   null;
 
-/* =========================================================
-   STUDENT PROFILE NORMALIZATION
-
-   Supports:
-   - API response: { student: {...}, internships: [...] }
-   - API response: { data: { student: {...} } }
-     (handled by unwrap)
-   - Navigation state containing a partial student object
-
-   The API student data takes precedence over navigation
-   state, especially for profileImage.
-========================================================= */
-
 const normalizeStudentProfile = (apiStudent, navigationStudent) => {
   const apiProfile =
-    apiStudent && typeof apiStudent === "object"
-      ? apiStudent
-      : {};
+    apiStudent && typeof apiStudent === "object" ? apiStudent : {};
 
   const navigationProfile =
     navigationStudent && typeof navigationStudent === "object"
@@ -162,9 +248,6 @@ const normalizeStudentProfile = (apiStudent, navigationStudent) => {
   return {
     ...navigationProfile,
     ...apiProfile,
-
-    // If the API does not supply an image, preserve an image
-    // already present in the navigation object.
     profileImage:
       apiProfile.profileImage ||
       apiProfile.profile?.profileImage ||
@@ -181,7 +264,6 @@ const normalizeStudentProfile = (apiStudent, navigationStudent) => {
 const Internships = () => {
   const { id, studentId: routeStudentId } = useParams();
   const location = useLocation();
-  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
 
   const selectedStudent =
     location.state?.student ||
@@ -220,17 +302,6 @@ const Internships = () => {
   const [reviewError, setReviewError] = useState("");
 
   /* =======================================================
-     SYNC NAVIGATION STUDENT
-
-     Initialize the profile when the selected student changes.
-     The API response below will supply the latest data.
-  ======================================================= */
-
-  useEffect(() => {
-    setStudentProfile(selectedStudent || null);
-  }, [studentId, selectedStudent]);
-
-  /* =======================================================
      LOAD INTERNSHIP DATA AND STUDENT PROFILE
   ======================================================= */
 
@@ -240,7 +311,6 @@ const Internships = () => {
         setError(
           "Student ID is missing. Open this page from the selected student's profile."
         );
-
         setLoading(false);
         setRefreshing(false);
         return;
@@ -256,13 +326,11 @@ const Internships = () => {
           completionResponse,
         ] = await Promise.all([
           api.get(
-            `${isAdminRoute ? "/admin/student-profile/internships/student" : "/mentor/internships/student"}/${encodeURIComponent(studentId)}`,
+            `/mentor/internships/student/${encodeURIComponent(studentId)}`,
             { signal }
           ),
-
-          api.get(isAdminRoute ? `/admin/student-profile/internships/initial?studentId=${encodeURIComponent(studentId)}` : "/mentor/internships/initial", { signal }),
-
-          api.get(isAdminRoute ? `/admin/student-profile/internships/completion?studentId=${encodeURIComponent(studentId)}` : "/mentor/internships/completion", { signal }),
+          api.get("/mentor/internships/initial", { signal }),
+          api.get("/mentor/internships/completion", { signal }),
         ]);
 
         if (signal?.aborted) return;
@@ -271,31 +339,11 @@ const Internships = () => {
         const initialItems = unwrap(initialResponse);
         const completionItems = unwrap(completionResponse);
 
-        /* ---------------------------------------------------
-           IMPORTANT FIX: EXTRACT STUDENT PROFILE FROM API
-
-           getStudentInternships returns:
-           {
-             student: {
-               id,
-               fullName,
-               registerNumber,
-               profileImage
-             },
-             internships: [],
-             current: [],
-             history: [],
-             pendingVerifications: []
-           }
-        --------------------------------------------------- */
-
         const studentFromApi =
           allItems &&
           !Array.isArray(allItems) &&
           typeof allItems === "object"
-            ? allItems.student ||
-              allItems.data?.student ||
-              null
+            ? allItems.student || allItems.data?.student || null
             : null;
 
         const normalizedStudent = normalizeStudentProfile(
@@ -304,10 +352,6 @@ const Internships = () => {
         );
 
         setStudentProfile(normalizedStudent);
-
-        /* ---------------------------------------------------
-           EXTRACT INTERNSHIP RECORDS
-        --------------------------------------------------- */
 
         const all = Array.isArray(allItems)
           ? allItems
@@ -318,9 +362,7 @@ const Internships = () => {
 
         const initial = Array.isArray(initialItems)
           ? initialItems
-          : initialItems?.internships ||
-            initialItems?.items ||
-            [];
+          : initialItems?.internships || initialItems?.items || [];
 
         const completion = Array.isArray(completionItems)
           ? completionItems
@@ -353,11 +395,7 @@ const Internships = () => {
           return;
         }
 
-        console.error(
-          "Unable to load student internships:",
-          err
-        );
-
+        console.error("Unable to load student internships:", err);
         setError(getError(err));
       } finally {
         if (!signal?.aborted) {
@@ -372,7 +410,13 @@ const Internships = () => {
   useEffect(() => {
     const controller = new AbortController();
 
-    loadPage(controller.signal);
+    // Defer the async loader so state updates do not occur
+    // synchronously inside the effect.
+    Promise.resolve().then(() => {
+      if (!controller.signal.aborted) {
+        loadPage(controller.signal);
+      }
+    });
 
     return () => controller.abort();
   }, [loadPage, refreshKey]);
@@ -410,21 +454,6 @@ const Internships = () => {
     [internships]
   );
 
-  const ratedInternships = completedInternships.filter(
-    (item) =>
-      item.rating != null &&
-      Number.isFinite(Number(item.rating))
-  );
-
-  const averageRating = ratedInternships.length
-    ? (
-        ratedInternships.reduce(
-          (sum, item) => sum + Number(item.rating),
-          0
-        ) / ratedInternships.length
-      ).toFixed(1)
-    : "—";
-
   const stats = [
     {
       id: "total",
@@ -441,9 +470,8 @@ const Internships = () => {
       iconBg: "bg-emerald-100",
       iconColor: "text-emerald-600",
       title: "Ongoing",
-      value: internships.filter(
-        (item) => item.status === "ONGOING"
-      ).length,
+      value: internships.filter((item) => item.status === "ONGOING")
+        .length,
       subtitle: "Currently active",
     },
     {
@@ -476,7 +504,7 @@ const Internships = () => {
 
     try {
       const response = await api.get(
-        `${isAdminRoute ? "/admin/student-profile/internships" : "/mentor/internships"}/${encodeURIComponent(internship.id)}`
+        `/mentor/internships/${encodeURIComponent(internship.id)}`
       );
 
       setReviewDetails(unwrap(response));
@@ -515,17 +543,16 @@ const Internships = () => {
 
     const path =
       stage === "completion"
-        ? `${isAdminRoute ? "/admin/student-profile/internships" : "/mentor/internships"}/${encodeURIComponent(
+        ? `/mentor/internships/${encodeURIComponent(
             selectedInternship.id
           )}/completion-review`
-        : `${isAdminRoute ? "/admin/student-profile/internships" : "/mentor/internships"}/${encodeURIComponent(
+        : `/mentor/internships/${encodeURIComponent(
             selectedInternship.id
           )}/initial-review`;
 
     const payload = {
       decision,
       remarks: remarks.trim(),
-
       ...(stage === "completion" && decision === "APPROVED"
         ? { rating: Number(rating) }
         : {}),
@@ -557,25 +584,20 @@ const Internships = () => {
     }
   };
 
-  const mentorName =
-    location.state?.mentor ||
-    location.state?.assignedMentor ||
-    null;
-
   /* =======================================================
      PAGE UI
   ======================================================= */
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
+      <MentorSidebar />
 
       <div className="ml-[290px] min-h-screen min-w-0 max-lg:ml-0">
-        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
+        <MentorHeader />
 
         <main className="space-y-4 p-4 md:p-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
+            <BackButton />
 
             <div className="flex flex-wrap items-center gap-2">
               <button
@@ -590,7 +612,6 @@ const Internships = () => {
                     loading || refreshing ? "animate-spin" : ""
                   }
                 />
-
                 Refresh
               </button>
 
@@ -612,7 +633,6 @@ const Internships = () => {
                 <p className="font-semibold">
                   Could not load internships
                 </p>
-
                 <p className="mt-1">{error}</p>
               </div>
 
@@ -642,10 +662,6 @@ const Internships = () => {
 
           <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[280px_minmax(0,1fr)]">
             <aside className="min-w-0">
-              {/* IMPORTANT FIX:
-                  Pass the student object from the API,
-                  including profileImage. */}
-
               <StudentInternshipProfile
                 student={studentProfile}
                 internships={internships}
@@ -654,7 +670,7 @@ const Internships = () => {
 
             <div className="min-w-0 space-y-4">
               <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-                {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
+                <StudentTabs />
               </div>
 
               <div>
@@ -731,6 +747,103 @@ const Internships = () => {
     </div>
   );
 };
+
+/* =========================================================
+   PRIVATE DOCUMENT LINK
+========================================================= */
+
+function InternshipDocumentLink({ document: file }) {
+  const [documentError, setDocumentError] = useState("");
+  const [opening, setOpening] = useState(false);
+  const [downloading, setDownloading] = useState(false);
+
+  const fileName =
+    file.documentName ||
+    file.documentType ||
+    "Internship document";
+
+  const handleOpen = async () => {
+    try {
+      setOpening(true);
+      setDocumentError("");
+      await openPrivateDocument(file.fileUrl);
+    } catch (err) {
+      setDocumentError(err.message);
+    } finally {
+      setOpening(false);
+    }
+  };
+
+  const handleDownload = async () => {
+    try {
+      setDownloading(true);
+      setDocumentError("");
+      await downloadPrivateDocument(file.fileUrl, fileName);
+    } catch (err) {
+      setDocumentError(err.message);
+    } finally {
+      setDownloading(false);
+    }
+  };
+
+  return (
+    <div className="rounded-lg border border-slate-200 p-3">
+      <div className="flex items-center gap-3">
+        <FileText
+          size={17}
+          className="shrink-0 text-blue-600"
+        />
+
+        <div className="min-w-0 flex-1">
+          <p className="truncate text-sm font-medium text-slate-800">
+            {fileName}
+          </p>
+
+          <p className="text-xs text-slate-500">
+            {file.submissionStage || file.documentType || "Document"}
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleOpen}
+          disabled={opening || downloading}
+          title="Open document"
+          className="rounded-lg p-2 text-slate-500 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50"
+        >
+          {opening ? (
+            <RefreshCw size={16} className="animate-spin" />
+          ) : (
+            <ExternalLink size={16} />
+          )}
+        </button>
+
+        <button
+          type="button"
+          onClick={handleDownload}
+          disabled={opening || downloading}
+          title="Download document"
+          className="rounded-lg p-2 text-slate-500 hover:bg-blue-50 hover:text-blue-700 disabled:opacity-50"
+        >
+          {downloading ? (
+            <RefreshCw size={16} className="animate-spin" />
+          ) : (
+            <Download size={16} />
+          )}
+        </button>
+      </div>
+
+      {documentError && (
+        <p
+          role="alert"
+          className="mt-2 text-xs text-red-600"
+        >
+          {documentError}
+        </p>
+      )}
+    </div>
+  );
+}
 
 /* =========================================================
    CURRENT INTERNSHIP PANEL
@@ -817,35 +930,11 @@ function CurrentInternshipPanel({ internship, onReview }) {
 
           {documents.length ? (
             <div className="mt-3 space-y-2">
-              {documents.map((document) => (
-                <a
-                  key={document.id}
-                  href={document.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-3 rounded-lg border border-slate-200 p-3 text-sm hover:border-blue-300 hover:bg-blue-50"
-                >
-                  <FileText
-                    size={17}
-                    className="shrink-0 text-blue-600"
-                  />
-
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate font-medium text-slate-800">
-                      {document.documentName ||
-                        document.documentType}
-                    </span>
-
-                    <span className="text-xs text-slate-500">
-                      {document.submissionStage || "Document"}
-                    </span>
-                  </span>
-
-                  <ExternalLink
-                    size={15}
-                    className="text-slate-400"
-                  />
-                </a>
+              {documents.map((file) => (
+                <InternshipDocumentLink
+                  key={file.id}
+                  document={file}
+                />
               ))}
             </div>
           ) : (
@@ -1187,8 +1276,7 @@ function ReviewModal({
             </h2>
 
             <p className="mt-1 text-sm text-slate-500">
-              {internship?.companyName ||
-                "Loading submission details"}
+              {internship?.companyName || "Loading submission details"}
             </p>
           </div>
 
@@ -1272,36 +1360,11 @@ function ReviewModal({
 
                 {documents.length ? (
                   <div className="mt-3 space-y-2">
-                    {documents.map((document) => (
-                      <a
-                        key={document.id}
-                        href={document.fileUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-3 rounded-xl border border-slate-200 p-3 hover:border-blue-300 hover:bg-blue-50"
-                      >
-                        <FileText
-                          size={18}
-                          className="shrink-0 text-blue-600"
-                        />
-
-                        <span className="min-w-0 flex-1">
-                          <span className="block break-words text-sm font-medium text-slate-800">
-                            {document.documentName ||
-                              document.documentType}
-                          </span>
-
-                          <span className="mt-1 block text-xs text-slate-500">
-                            {document.documentType} ·{" "}
-                            {document.submissionStage}
-                          </span>
-                        </span>
-
-                        <ExternalLink
-                          size={15}
-                          className="shrink-0 text-slate-400"
-                        />
-                      </a>
+                    {documents.map((file) => (
+                      <InternshipDocumentLink
+                        key={file.id}
+                        document={file}
+                      />
                     ))}
                   </div>
                 ) : (
@@ -1457,8 +1520,8 @@ function ReviewModal({
                     </p>
 
                     <ul className="mt-2 list-inside list-disc space-y-1">
-                      {missingDocuments.map((document) => (
-                        <li key={document}>{document}</li>
+                      {missingDocuments.map((fileName) => (
+                        <li key={fileName}>{fileName}</li>
                       ))}
                     </ul>
                   </>
@@ -1493,10 +1556,7 @@ function ReviewModal({
             }`}
           >
             {submitting && (
-              <RefreshCw
-                size={15}
-                className="animate-spin"
-              />
+              <RefreshCw size={15} className="animate-spin" />
             )}
 
             {submitting
@@ -1536,9 +1596,7 @@ function InfoLine({ icon: Icon, label, children }) {
       />
 
       <div className="min-w-0">
-        <span className="text-xs text-slate-500">
-          {label}:{" "}
-        </span>
+        <span className="text-xs text-slate-500">{label}: </span>
 
         <span className="break-words text-sm font-medium text-slate-700">
           {children}

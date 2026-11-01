@@ -1,4 +1,4 @@
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -24,14 +24,15 @@ import {
   CheckCircle2,
   FileText,
   MessageSquare,
+  Download,
 } from "lucide-react";
 
-import MentorSidebar from "../../../components/layouts/MentorSidebar";
-import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
-import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
-import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
 
 import StudentResearchProfile from "../../../components/Mentors/Students/Research/StudentResearchProfile";
 import ResearchStatCard from "../../../components/Mentors/Students/Research/ResearchStatCard";
@@ -43,9 +44,32 @@ import api from "../../../api/axios";
 // API CONFIGURATION
 // ==========================================================
 
-// Your shared Axios client is used by Students.jsx with
-// api.get("/mentor/students"). Reuse that configured base URL.
-const RESEARCH_API = "/mentor/students";
+const RESEARCH_API = "/admin/student-profile";
+
+// ==========================================================
+// FILE URL HELPER
+// ==========================================================
+
+function resolveFileUrl(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== "string") {
+    return "";
+  }
+
+  const trimmedUrl = fileUrl.trim();
+
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  // Axios baseURL already contains /api.
+  if (trimmedUrl.startsWith("/api/")) {
+    return trimmedUrl.slice(4);
+  }
+
+  return trimmedUrl.startsWith("/")
+    ? trimmedUrl
+    : `/${trimmedUrl}`;
+}
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -210,6 +234,10 @@ function formatFileSize(bytes) {
   return `${(size / (1024 * 1024)).toFixed(2)} MB`;
 }
 
+function getFileExtension(fileName = "") {
+  return fileName.split(".").pop()?.toLowerCase() || "";
+}
+
 // ==========================================================
 // STATUS BADGE
 // ==========================================================
@@ -247,18 +275,117 @@ function ResearchStatusBadge({ status }) {
 }
 
 // ==========================================================
-// DOCUMENT PREVIEW
+// DOCUMENT PREVIEW CONTENT
 // ==========================================================
 
-function ResearchDocumentPreview({ research, onClose }) {
-  if (!research) return null;
+function ResearchDocumentPreviewContent({
+  research,
+  onClose,
+}) {
+  const [blobUrl, setBlobUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
 
-  const isPdf = research.fileType?.toLowerCase() === "pdf";
+  useEffect(() => {
+    let isActive = true;
+    let objectUrl = "";
+
+    const fetchDocument = async () => {
+      if (!research?.fileUrl) {
+        setError("No document URL is available.");
+        setIsLoading(false);
+        return;
+      }
+
+      try {
+        setIsLoading(true);
+        setError("");
+
+        const response = await api.get(
+          resolveFileUrl(research.fileUrl),
+          {
+            responseType: "blob",
+            withCredentials: true,
+          }
+        );
+
+        if (!isActive) return;
+
+        objectUrl = window.URL.createObjectURL(response.data);
+
+        setBlobUrl(objectUrl);
+      } catch (requestError) {
+        if (!isActive) return;
+
+        const status = requestError.response?.status;
+
+        if (status === 401 || status === 403) {
+          setError(
+            "You are not authorized to access this document. Please sign in again or check your access."
+          );
+        } else if (status === 404) {
+          setError(
+            "This document could not be found. It may have been moved or deleted."
+          );
+        } else {
+          setError(
+            requestError.response?.data?.message ||
+              "Unable to load this document. Please try again."
+          );
+        }
+      } finally {
+        if (isActive) {
+          setIsLoading(false);
+        }
+      }
+    };
+
+    fetchDocument();
+
+    return () => {
+      isActive = false;
+
+      if (objectUrl) {
+        window.URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [research?.id, research?.fileUrl]);
+
+  const extension = getFileExtension(
+    research?.fileName || research?.title || ""
+  );
+
+  const isPdf =
+    research?.fileType?.toLowerCase() === "pdf" ||
+    extension === "pdf";
 
   const isImage =
-    /\.(png|jpe?g|gif|webp)(\?.*)?$/i.test(
-      research.fileUrl || ""
-    );
+    research?.fileType?.toLowerCase()?.startsWith("image/") ||
+    ["png", "jpg", "jpeg", "gif", "webp"].includes(extension);
+
+  const handleOpenDocument = () => {
+    if (!blobUrl) return;
+
+    window.open(blobUrl, "_blank", "noopener,noreferrer");
+  };
+
+  const handleDownload = () => {
+    if (!blobUrl) return;
+
+    const link = document.createElement("a");
+
+    link.href = blobUrl;
+    link.download =
+      research?.fileName ||
+      research?.title ||
+      "research-document";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
+
+  if (!research) return null;
 
   return (
     <div
@@ -300,43 +427,74 @@ function ResearchDocumentPreview({ research, onClose }) {
         </header>
 
         <div className="flex-1 overflow-auto bg-slate-100 p-4 sm:p-6">
-          {research.fileUrl ? (
+          {isLoading ? (
+            <div className="flex min-h-64 flex-col items-center justify-center gap-3 rounded-xl bg-white">
+              <LoaderCircle
+                size={32}
+                className="animate-spin text-blue-600"
+              />
+
+              <p className="text-sm font-medium text-slate-600">
+                Loading document...
+              </p>
+            </div>
+          ) : error ? (
+            <div
+              role="alert"
+              className="flex min-h-64 flex-col items-center justify-center gap-3 rounded-xl bg-white p-8 text-center"
+            >
+              <AlertCircle
+                size={42}
+                className="text-red-500"
+              />
+
+              <p className="max-w-md text-sm text-red-700">
+                {error}
+              </p>
+            </div>
+          ) : blobUrl ? (
             isImage ? (
               <img
-                src={research.fileUrl}
+                src={blobUrl}
                 alt={research.title}
                 className="mx-auto max-h-[60vh] max-w-full rounded-lg object-contain"
               />
             ) : isPdf ? (
               <iframe
                 title={research.title}
-                src={research.fileUrl}
+                src={blobUrl}
                 className="h-[60vh] w-full rounded-lg border border-slate-200 bg-white"
               />
             ) : (
               <div className="flex min-h-64 flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 text-center">
-                <FileText size={48} className="text-blue-600" />
+                <FileText
+                  size={48}
+                  className="text-blue-600"
+                />
 
                 <p className="font-medium text-slate-800">
                   Preview is unavailable for this file type.
                 </p>
 
-                <a
-                  href={research.fileUrl}
-                  target="_blank"
-                  rel="noreferrer"
+                <button
+                  type="button"
+                  onClick={handleOpenDocument}
                   className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
                 >
-                  Open document <ExternalLink size={16} />
-                </a>
+                  Open document
+                  <ExternalLink size={16} />
+                </button>
               </div>
             )
           ) : (
             <div className="flex min-h-64 flex-col items-center justify-center gap-3 rounded-xl bg-white p-8 text-center">
-              <FileText size={44} className="text-slate-400" />
+              <FileText
+                size={44}
+                className="text-slate-400"
+              />
 
               <p className="font-semibold text-slate-800">
-                No document URL available
+                No document available
               </p>
             </div>
           )}
@@ -347,16 +505,29 @@ function ResearchDocumentPreview({ research, onClose }) {
             {formatFileSize(research.fileSize)}
           </span>
 
-          {research.fileUrl && (
-            <a
-              href={research.fileUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-            >
-              Open in new tab <ExternalLink size={16} />
-            </a>
-          )}
+          <div className="flex flex-wrap gap-2">
+            {blobUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                >
+                  <Download size={16} />
+                  Download
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleOpenDocument}
+                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                >
+                  Open in new tab
+                  <ExternalLink size={16} />
+                </button>
+              </>
+            )}
+          </div>
         </footer>
       </section>
     </div>
@@ -364,28 +535,36 @@ function ResearchDocumentPreview({ research, onClose }) {
 }
 
 // ==========================================================
-// REVIEW MODAL
+// DOCUMENT PREVIEW WRAPPER
 // ==========================================================
 
-function ResearchVerificationModal({
+function ResearchDocumentPreview({ research, onClose }) {
+  if (!research) return null;
+
+  return (
+    <ResearchDocumentPreviewContent
+      key={`${research.id}-${research.fileUrl}`}
+      research={research}
+      onClose={onClose}
+    />
+  );
+}
+
+// ==========================================================
+// REVIEW MODAL CONTENT
+// ==========================================================
+
+function ResearchVerificationModalContent({
   research,
   onClose,
   onSubmit,
   isSubmitting,
 }) {
   const [status, setStatus] = useState("VERIFIED");
-  const [remark, setRemark] = useState("");
+  const [remark, setRemark] = useState(
+    research.mentorRemark || ""
+  );
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    if (!research) return;
-
-    setStatus("VERIFIED");
-    setRemark(research.mentorRemark || "");
-    setError("");
-  }, [research]);
-
-  if (!research) return null;
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -409,7 +588,8 @@ function ResearchVerificationModal({
       });
     } catch (submitError) {
       setError(
-        submitError.message || "Unable to submit the review."
+        submitError.message ||
+          "Unable to submit the review."
       );
     }
   };
@@ -461,7 +641,10 @@ function ResearchVerificationModal({
           </button>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-5 p-5">
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5 p-5"
+        >
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <h3 className="font-semibold text-slate-900">
               {research.title}
@@ -502,7 +685,10 @@ function ResearchVerificationModal({
                 </span>
               </span>
 
-              <CheckCircle2 size={20} className="text-green-600" />
+              <CheckCircle2
+                size={20}
+                className="text-green-600"
+              />
             </label>
 
             <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-4 hover:bg-slate-50">
@@ -511,7 +697,9 @@ function ResearchVerificationModal({
                 name="researchReviewStatus"
                 value="CORRECTIONS_REQUESTED"
                 checked={status === "CORRECTIONS_REQUESTED"}
-                onChange={() => setStatus("CORRECTIONS_REQUESTED")}
+                onChange={() =>
+                  setStatus("CORRECTIONS_REQUESTED")
+                }
                 className="mt-1 accent-orange-600"
                 disabled={isSubmitting}
               />
@@ -526,25 +714,31 @@ function ResearchVerificationModal({
                 </span>
               </span>
 
-              <RotateCcw size={20} className="text-orange-600" />
+              <RotateCcw
+                size={20}
+                className="text-orange-600"
+              />
             </label>
           </fieldset>
 
           <div className="space-y-2">
             <label
-              htmlFor="mentor-research-remark"
+              htmlFor="admin-research-remark"
               className="block text-sm font-semibold text-slate-800"
             >
-              Mentor remarks
+              Review remarks
+
               {status === "CORRECTIONS_REQUESTED" && (
                 <span className="ml-1 text-red-600">*</span>
               )}
             </label>
 
             <textarea
-              id="mentor-research-remark"
+              id="admin-research-remark"
               value={remark}
-              onChange={(event) => setRemark(event.target.value)}
+              onChange={(event) =>
+                setRemark(event.target.value)
+              }
               placeholder={
                 status === "CORRECTIONS_REQUESTED"
                   ? "Explain what needs to be corrected..."
@@ -566,7 +760,10 @@ function ResearchVerificationModal({
               role="alert"
               className="flex items-start gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700"
             >
-              <AlertCircle size={18} className="mt-0.5 shrink-0" />
+              <AlertCircle
+                size={18}
+                className="mt-0.5 shrink-0"
+              />
               {error}
             </div>
           )}
@@ -591,7 +788,10 @@ function ResearchVerificationModal({
               }`}
             >
               {isSubmitting && (
-                <LoaderCircle size={16} className="animate-spin" />
+                <LoaderCircle
+                  size={16}
+                  className="animate-spin"
+                />
               )}
 
               {isSubmitting
@@ -608,7 +808,30 @@ function ResearchVerificationModal({
 }
 
 // ==========================================================
-// MAIN RESEARCH PAGE
+// REVIEW MODAL WRAPPER
+// ==========================================================
+
+function ResearchVerificationModal({
+  research,
+  onClose,
+  onSubmit,
+  isSubmitting,
+}) {
+  if (!research) return null;
+
+  return (
+    <ResearchVerificationModalContent
+      key={research.id}
+      research={research}
+      onClose={onClose}
+      onSubmit={onSubmit}
+      isSubmitting={isSubmitting}
+    />
+  );
+}
+
+// ==========================================================
+// MAIN ADMIN RESEARCH PAGE
 // ==========================================================
 
 const Research = ({ studentId: studentIdProp }) => {
@@ -683,7 +906,17 @@ const Research = ({ studentId: studentIdProp }) => {
   }, [studentId]);
 
   useEffect(() => {
-    loadResearch();
+    let isActive = true;
+
+    Promise.resolve().then(() => {
+      if (isActive) {
+        loadResearch();
+      }
+    });
+
+    return () => {
+      isActive = false;
+    };
   }, [loadResearch]);
 
   // --------------------------------------------------------
@@ -737,7 +970,7 @@ const Research = ({ studentId: studentIdProp }) => {
         id: "pending",
         title: "Pending Review",
         value: pending,
-        subtitle: "Awaiting mentor review",
+        subtitle: "Awaiting review",
         icon: Clock3,
         iconBg: "bg-amber-50",
         iconColor: "text-amber-600",
@@ -775,10 +1008,18 @@ const Research = ({ studentId: studentIdProp }) => {
     return researchWorks.filter((work) => {
       const matchesSearch =
         !normalizedSearch ||
-        (work.title || "").toLowerCase().includes(normalizedSearch) ||
-        (work.fileName || "").toLowerCase().includes(normalizedSearch) ||
-        (work.type || "").toLowerCase().includes(normalizedSearch) ||
-        (work.description || "").toLowerCase().includes(normalizedSearch);
+        (work.title || "")
+          .toLowerCase()
+          .includes(normalizedSearch) ||
+        (work.fileName || "")
+          .toLowerCase()
+          .includes(normalizedSearch) ||
+        (work.type || "")
+          .toLowerCase()
+          .includes(normalizedSearch) ||
+        (work.description || "")
+          .toLowerCase()
+          .includes(normalizedSearch);
 
       const matchesStatus =
         statusFilter === "ALL" ||
@@ -794,7 +1035,11 @@ const Research = ({ studentId: studentIdProp }) => {
   // REVIEW DOCUMENT
   // --------------------------------------------------------
 
-  const handleReviewSubmit = async ({ id, status, remark }) => {
+  const handleReviewSubmit = async ({
+    id,
+    status,
+    remark,
+  }) => {
     if (!studentId) {
       throw new Error("Student ID is missing.");
     }
@@ -843,14 +1088,14 @@ const Research = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      <AdminSidebar />
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        <MentorHeader />
+        <AdminHeader />
 
         <main className="space-y-5 p-4 md:p-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            <AdminBackButton />
             <ActionButtons />
           </div>
 
@@ -859,7 +1104,10 @@ const Research = ({ studentId: studentIdProp }) => {
               role="alert"
               className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
             >
-              <AlertCircle size={20} className="mt-0.5 shrink-0" />
+              <AlertCircle
+                size={20}
+                className="mt-0.5 shrink-0"
+              />
 
               <div>
                 <p className="font-semibold">
@@ -867,9 +1115,10 @@ const Research = ({ studentId: studentIdProp }) => {
                 </p>
 
                 <p className="mt-1">
-                  The page could not find a student ID in its props,
-                  route parameters, navigation state, or query string.
-                  Open this page from a selected student's profile.
+                  The page could not find a student ID in its
+                  props, route parameters, navigation state, or
+                  query string. Open this page from a selected
+                  student's profile.
                 </p>
               </div>
             </div>
@@ -880,7 +1129,10 @@ const Research = ({ studentId: studentIdProp }) => {
               role="alert"
               className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
             >
-              <AlertCircle size={20} className="mt-0.5 shrink-0" />
+              <AlertCircle
+                size={20}
+                className="mt-0.5 shrink-0"
+              />
 
               <div className="flex-1">
                 <p className="font-semibold">
@@ -906,7 +1158,10 @@ const Research = ({ studentId: studentIdProp }) => {
               role="status"
               className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
             >
-              <CheckCircle2 size={20} className="mt-0.5 shrink-0" />
+              <CheckCircle2
+                size={20}
+                className="mt-0.5 shrink-0"
+              />
 
               <p className="flex-1">{notice}</p>
 
@@ -928,7 +1183,7 @@ const Research = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              <StudentTabs />
+              <AdminStudentTabs />
 
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
@@ -937,7 +1192,8 @@ const Research = ({ studentId: studentIdProp }) => {
                   </h1>
 
                   <p className="mt-1 text-sm text-slate-500">
-                    Review research documents and track mentor feedback.
+                    Review research documents and track submission
+                    feedback.
                   </p>
                 </div>
 

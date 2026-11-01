@@ -1,5 +1,5 @@
 
-import React, {
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -24,12 +24,13 @@ import {
   LoaderCircle,
 } from "lucide-react";
 
-import MentorSidebar from "../../../components/layouts/MentorSidebar";
-import MentorHeader from "../../../components/layouts/MentorHeader";
+import AdminSidebar from "../../../components/layouts/AdminSidebar";
+import AdminHeader from "../../../components/layouts/AdminHeader";
 
-import BackButton from "../../../components/Mentors/Students/Header/BackButton";
+import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
+import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
+
 import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
-import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
 
 import StudentExtraCurricularProfile from "../../../components/Mentors/Students/ExtraCurricular/StudentExtraCurricularProfile";
 import ExtraCurricularStatCard from "../../../components/Mentors/Students/ExtraCurricular/ExtraCurricularStatCard";
@@ -38,7 +39,7 @@ import ExtraCurricularVerificationModal from "../../../components/Mentors/Studen
 
 import api from "../../../api/axios";
 
-const API = "/mentor/students";
+const API = "/admin/student-profile";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -93,6 +94,7 @@ function useSelectedStudentId(studentIdProp) {
 
     for (const candidate of candidates) {
       const id = getStudentIdFromValue(candidate);
+
       if (id) return id;
     }
 
@@ -120,9 +122,42 @@ async function apiRequest(url, options = {}) {
       error.response?.data?.message ||
         error.response?.data?.error ||
         error.message ||
-        "The request failed."
+        "The request failed.",
+      { cause: error }
     );
   }
+}
+
+// ==========================================================
+// PRIVATE FILE URL RESOLVER
+// ==========================================================
+
+function resolveFileUrl(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== "string") {
+    return "";
+  }
+
+  const trimmedUrl = fileUrl.trim();
+
+  if (!trimmedUrl) {
+    return "";
+  }
+
+  // Preserve absolute URLs.
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  // Axios baseURL already contains /api.
+  if (trimmedUrl.startsWith("/api/")) {
+    return trimmedUrl.replace(/^\/api/, "");
+  }
+
+  if (trimmedUrl.startsWith("/")) {
+    return trimmedUrl;
+  }
+
+  return `/${trimmedUrl}`;
 }
 
 // ==========================================================
@@ -151,22 +186,115 @@ function mapActivity(document) {
 
 // ==========================================================
 // ACTIVITY PREVIEW MODAL
+// AUTHENTICATED PRIVATE FILE FETCHING
 // ==========================================================
 
 function ActivityPreviewModal({ activity, onClose }) {
+  const [previewUrl, setPreviewUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [previewError, setPreviewError] = useState("");
+
+  useEffect(() => {
+    if (!activity?.fileUrl) {
+      return undefined;
+    }
+
+    let cancelled = false;
+    let objectUrl = null;
+
+    Promise.resolve().then(async () => {
+      if (cancelled) return;
+
+      setIsLoading(true);
+      setPreviewError("");
+      setPreviewUrl("");
+
+      try {
+        const resolvedUrl = resolveFileUrl(activity.fileUrl);
+
+        const response = await api.get(resolvedUrl, {
+          responseType: "blob",
+          withCredentials: true,
+        });
+
+        if (cancelled) return;
+
+        objectUrl = window.URL.createObjectURL(response.data);
+
+        setPreviewUrl(objectUrl);
+      } catch (error) {
+        if (cancelled) return;
+
+        const status = error.response?.status;
+
+        let message = "Unable to load this document.";
+
+        if (status === 401 || status === 403) {
+          message =
+            "You are not authorized to access this document. Please refresh your session and try again.";
+        } else if (status === 404) {
+          message = "The requested document could not be found.";
+        } else if (!error.response) {
+          message =
+            "Unable to connect to the server. Please check your connection.";
+        } else {
+          message =
+            error.response?.data?.message ||
+            error.response?.data?.error ||
+            message;
+        }
+
+        setPreviewError(message);
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    });
+
+    return () => {
+      cancelled = true;
+
+      if (objectUrl) {
+        window.URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [activity?.id, activity?.fileUrl]);
+
   if (!activity) return null;
 
   const fileType = (activity.fileType || "").toLowerCase();
-  const fileUrl = activity.fileUrl || "";
-
-  const cleanUrl = fileUrl.split("?")[0].toLowerCase();
+  const fileName = (activity.fileName || "").toLowerCase();
+  const cleanUrl = (activity.fileUrl || "").split("?")[0].toLowerCase();
 
   const isPdf =
-    fileType.includes("pdf") || cleanUrl.endsWith(".pdf");
+    fileType.includes("pdf") ||
+    fileName.endsWith(".pdf") ||
+    cleanUrl.endsWith(".pdf");
 
   const isImage =
     fileType.startsWith("image/") ||
+    /\.(png|jpe?g|gif|webp|svg|bmp)$/i.test(fileName) ||
     /\.(png|jpe?g|gif|webp|svg|bmp)$/i.test(cleanUrl);
+
+  const handleDownload = () => {
+    if (!previewUrl) return;
+
+    const link = document.createElement("a");
+
+    link.href = previewUrl;
+    link.download = activity.fileName || activity.title || "document";
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleOpenDocument = () => {
+    if (!previewUrl) return;
+
+    window.open(previewUrl, "_blank", "noopener,noreferrer");
+  };
 
   return (
     <div
@@ -192,51 +320,108 @@ function ActivityPreviewModal({ activity, onClose }) {
             <p className="mt-1 text-xs text-slate-500">
               Uploaded{" "}
               {activity.uploadedAt
-                ? new Date(activity.uploadedAt).toLocaleDateString(
-                    "en-IN"
-                  )
+                ? new Date(activity.uploadedAt).toLocaleDateString("en-IN")
                 : "date unavailable"}
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close preview"
-            className="ml-3 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            {previewUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleOpenDocument}
+                  className="rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-700 transition hover:bg-slate-50"
+                >
+                  Open
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700"
+                >
+                  Download
+                </button>
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close preview"
+              className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 overflow-auto bg-slate-100 p-4">
-          {fileUrl ? (
+          {isLoading ? (
+            <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
+              <LoaderCircle
+                size={32}
+                className="animate-spin text-blue-600"
+              />
+
+              <p className="text-sm font-medium text-slate-600">
+                Loading document securely...
+              </p>
+            </div>
+          ) : previewError ? (
+            <div
+              role="alert"
+              className="flex min-h-[40vh] flex-col items-center justify-center gap-3 p-8 text-center"
+            >
+              <AlertCircle size={32} className="text-red-500" />
+
+              <p className="max-w-md text-sm text-red-600">
+                {previewError}
+              </p>
+            </div>
+          ) : previewUrl ? (
             isImage ? (
               <img
-                src={fileUrl}
+                src={previewUrl}
                 alt={activity.title}
                 className="mx-auto max-h-[65vh] max-w-full object-contain"
               />
             ) : isPdf ? (
               <iframe
                 title={activity.title}
-                src={fileUrl}
+                src={previewUrl}
                 className="h-[65vh] w-full bg-white"
               />
             ) : (
-              <div className="p-8 text-center">
-                <p className="mb-4 text-sm text-slate-600">
+              <div className="flex min-h-[40vh] flex-col items-center justify-center p-8 text-center">
+                <Files size={40} className="mb-3 text-slate-400" />
+
+                <p className="mb-2 text-sm font-semibold text-slate-700">
                   Preview is unavailable for this file type.
                 </p>
 
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-blue-600 underline"
-                >
-                  Open document
-                </a>
+                <p className="mb-4 text-xs text-slate-500">
+                  You can open or download the document instead.
+                </p>
+
+                <div className="flex flex-wrap justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={handleOpenDocument}
+                    className="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50"
+                  >
+                    Open document
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleDownload}
+                    className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
+                  >
+                    Download document
+                  </button>
+                </div>
               </div>
             )
           ) : (
@@ -329,7 +514,9 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
   }, [studentId]);
 
   useEffect(() => {
-    loadActivities();
+    Promise.resolve().then(() => {
+      loadActivities();
+    });
   }, [loadActivities]);
 
   // --------------------------------------------------------
@@ -399,8 +586,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
       {
         id: "documents",
         title: "Documents",
-        value: activities.filter((item) => Boolean(item.fileUrl))
-          .length,
+        value: activities.filter((item) => Boolean(item.fileUrl)).length,
         subtitle: "Attached files",
         icon: Files,
         iconBg: "bg-cyan-100",
@@ -487,19 +673,21 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      <MentorSidebar />
+      <AdminSidebar />
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        <MentorHeader />
+        <AdminHeader />
 
         <main className="space-y-5 p-4 md:p-6">
           {/* Page actions */}
+
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <BackButton />
+            <AdminBackButton />
             <ActionButtons />
           </div>
 
           {/* Error message */}
+
           {error && (
             <div
               role="alert"
@@ -511,6 +699,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
                 <p className="font-semibold">
                   Something went wrong
                 </p>
+
                 <p className="mt-1">{error}</p>
               </div>
 
@@ -526,6 +715,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
           )}
 
           {/* Success message */}
+
           {notice && (
             <div
               role="status"
@@ -546,6 +736,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
           )}
 
           {/* Student profile and dashboard */}
+
           <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
             <StudentExtraCurricularProfile
               student={student}
@@ -553,9 +744,10 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              <StudentTabs />
+              <AdminStudentTabs />
 
               {/* Page title */}
+
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
                   <h1 className="text-xl font-bold text-slate-900">
@@ -578,11 +770,13 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
                     size={16}
                     className={isLoading ? "animate-spin" : ""}
                   />
+
                   Refresh
                 </button>
               </div>
 
               {/* Statistics */}
+
               <section
                 aria-label="Extra Curricular statistics"
                 className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
@@ -601,6 +795,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
               </section>
 
               {/* Activities list */}
+
               {isLoading ? (
                 <div className="flex min-h-56 flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white p-8">
                   <LoaderCircle
@@ -630,12 +825,14 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
       </div>
 
       {/* Activity preview */}
+
       <ActivityPreviewModal
         activity={selectedActivity}
         onClose={() => setSelectedActivity(null)}
       />
 
       {/* Verification modal */}
+
       <ExtraCurricularVerificationModal
         activity={reviewActivity}
         onClose={() => {

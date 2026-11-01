@@ -1,32 +1,144 @@
+import { useState } from "react";
 
-import React, { useEffect, useState } from "react";
 import {
   X,
   ShieldCheck,
   RotateCcw,
   FileText,
   ExternalLink,
+  LoaderCircle,
 } from "lucide-react";
 
-const ExtraCurricularVerificationModal = ({
+import api from "../../../../api/axios";
+
+// ==========================================================
+// RESOLVE FILE URL
+// ==========================================================
+
+const resolveFileUrl = (fileUrl) => {
+  if (!fileUrl) return null;
+
+  if (/^https?:\/\//i.test(fileUrl)) {
+    return fileUrl;
+  }
+
+  if (fileUrl.startsWith("/api/")) {
+    return fileUrl.replace(/^\/api/, "");
+  }
+
+  return fileUrl.startsWith("/")
+    ? fileUrl
+    : `/${fileUrl}`;
+};
+
+// ==========================================================
+// EXTRA CURRICULAR VERIFICATION MODAL
+// ==========================================================
+
+const ExtraCurricularVerificationModal = (props) => {
+  const { activity } = props;
+
+  if (!activity) return null;
+
+  const activityKey =
+    activity.id ??
+    activity.fileUrl ??
+    activity.documentName ??
+    activity.title ??
+    "activity";
+
+  return (
+    <ExtraCurricularVerificationModalContent
+      key={activityKey}
+      {...props}
+    />
+  );
+};
+
+// ==========================================================
+// MODAL CONTENT
+// ==========================================================
+
+const ExtraCurricularVerificationModalContent = ({
   activity,
   onClose,
   onSubmit,
   isSubmitting = false,
 }) => {
-  const [remark, setRemark] = useState("");
+  const [remark, setRemark] = useState(
+    activity.mentorRemark || ""
+  );
+
   const [error, setError] = useState("");
   const [submittingStatus, setSubmittingStatus] = useState(null);
-
-  useEffect(() => {
-    setRemark(activity?.mentorRemark || "");
-    setError("");
-    setSubmittingStatus(null);
-  }, [activity]);
-
-  if (!activity) return null;
+  const [isOpening, setIsOpening] = useState(false);
 
   const isBusy = isSubmitting || submittingStatus !== null;
+
+  const fileUrl = activity.fileUrl || activity.fileURL || "";
+
+  // ==========================================================
+  // OPEN SUPPORTING EVIDENCE - AUTHENTICATED
+  // ==========================================================
+
+  const handleOpenDocument = async () => {
+    if (!fileUrl || isOpening) return;
+
+    const newWindow = window.open("about:blank", "_blank");
+
+    if (!newWindow) {
+      setError(
+        "Your browser blocked the new tab. Please allow pop-ups and try again."
+      );
+      return;
+    }
+
+    newWindow.opener = null;
+
+    try {
+      setIsOpening(true);
+      setError("");
+
+      const response = await api.get(resolveFileUrl(fileUrl), {
+        responseType: "blob",
+      });
+
+      const objectUrl = window.URL.createObjectURL(response.data);
+
+      newWindow.location.href = objectUrl;
+
+      window.setTimeout(() => {
+        window.URL.revokeObjectURL(objectUrl);
+      }, 60000);
+
+    } catch (openError) {
+      console.error(
+        "Failed to open Extra-Curricular evidence:",
+        openError
+      );
+
+      newWindow.close();
+
+      const status = openError.response?.status;
+
+      if (status === 401 || status === 403) {
+        setError(
+          "You are not authorized to access this document. Please log in again if your session has expired."
+        );
+      } else if (status === 404) {
+        setError("The requested document could not be found.");
+      } else {
+        setError("Unable to open the document. Please try again.");
+      }
+
+    } finally {
+      setIsOpening(false);
+    }
+  };
+
+  // ==========================================================
+  // SUBMIT REVIEW
+  // ==========================================================
 
   const handleSubmit = async (status) => {
     if (isBusy) return;
@@ -48,20 +160,30 @@ const ExtraCurricularVerificationModal = ({
         status,
         remark: remark.trim(),
       });
+
     } catch (submitError) {
       setError(
         submitError?.message || "Unable to submit the review."
       );
+
     } finally {
       setSubmittingStatus(null);
     }
   };
+
+  // ==========================================================
+  // CLOSE MODAL
+  // ==========================================================
 
   const handleClose = () => {
     if (!isBusy) {
       onClose();
     }
   };
+
+  // ==========================================================
+  // ACTIVITY INFORMATION
+  // ==========================================================
 
   const currentStatus = (
     activity.status ||
@@ -79,7 +201,9 @@ const ExtraCurricularVerificationModal = ({
     activity.documentName ||
     "Activity document";
 
-  const fileUrl = activity.fileUrl || activity.fileURL || "";
+  // ==========================================================
+  // RENDER
+  // ==========================================================
 
   return (
     <div
@@ -97,6 +221,7 @@ const ExtraCurricularVerificationModal = ({
         className="max-h-[90vh] w-full max-w-xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
       >
         {/* HEADER */}
+
         <div className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
           <div>
             <h2
@@ -123,6 +248,7 @@ const ExtraCurricularVerificationModal = ({
         </div>
 
         {/* ACTIVITY DETAILS AND REMARK */}
+
         <div className="space-y-5 p-5">
           <div className="flex items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
             <FileText
@@ -158,20 +284,31 @@ const ExtraCurricularVerificationModal = ({
               </p>
 
               {fileUrl && (
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 hover:text-blue-700"
+                <button
+                  type="button"
+                  onClick={handleOpenDocument}
+                  disabled={isOpening}
+                  className="mt-3 inline-flex items-center gap-1.5 text-xs font-semibold text-blue-600 transition hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  <ExternalLink size={14} />
-                  Open supporting evidence
-                </a>
+                  {isOpening ? (
+                    <LoaderCircle
+                      size={14}
+                      className="animate-spin"
+                    />
+                  ) : (
+                    <ExternalLink size={14} />
+                  )}
+
+                  {isOpening
+                    ? "Opening evidence..."
+                    : "Open supporting evidence"}
+                </button>
               )}
             </div>
           </div>
 
           {/* MENTOR REMARKS */}
+
           <div>
             <label
               htmlFor="extra-curricular-mentor-remark"
@@ -216,6 +353,7 @@ const ExtraCurricularVerificationModal = ({
         </div>
 
         {/* ACTIONS */}
+
         <div className="flex flex-col-reverse gap-2 border-t border-slate-100 p-4 sm:flex-row sm:justify-end">
           <button
             type="button"

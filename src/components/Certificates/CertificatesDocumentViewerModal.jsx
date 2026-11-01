@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
   X,
@@ -11,25 +11,127 @@ import {
   Loader2,
 } from "lucide-react";
 
+import api from "../../api/axios";
+
 const CertificatesDocumentViewerModal = ({
   isOpen,
   onClose,
   document,
 }) => {
-  const [loading, setLoading] =
-    useState(true);
+  const [previewState, setPreviewState] = useState({
+    requestKey: "",
+    previewUrl: "",
+    error: "",
+  });
+
+  const [downloading, setDownloading] = useState(false);
+
+  const currentFileUrl = document?.fileUrl || "";
+  const requestKey = `${isOpen}:${currentFileUrl}`;
+
+  const isLoading =
+    isOpen &&
+    Boolean(currentFileUrl) &&
+    previewState.requestKey !== requestKey;
+
+  const previewUrl =
+    previewState.requestKey === requestKey
+      ? previewState.previewUrl
+      : "";
+
+  const fileError =
+    previewState.requestKey === requestKey
+      ? previewState.error
+      : "";
 
   // ==========================================================
-  // RESET LOADING WHEN DOCUMENT CHANGES
+  // RESOLVE PRIVATE FILE URL
+  // ==========================================================
+
+  const resolveFileUrl = (fileUrl) => {
+    if (!fileUrl) return "";
+
+    if (/^https?:\/\//i.test(fileUrl)) {
+      return fileUrl;
+    }
+
+    // Axios baseURL already contains /api.
+    if (fileUrl.startsWith("/api/")) {
+      return fileUrl.replace(/^\/api/, "");
+    }
+
+    return fileUrl;
+  };
+
+  // ==========================================================
+  // FETCH PRIVATE FILE
   // ==========================================================
 
   useEffect(() => {
-    if (!isOpen) {
-      return;
+    if (!isOpen || !currentFileUrl) {
+      return undefined;
     }
 
-    setLoading(true);
-  }, [isOpen, document]);
+    let isCancelled = false;
+    let objectUrl = "";
+
+    const fetchDocument = async () => {
+      try {
+        const response = await api.get(
+          resolveFileUrl(currentFileUrl),
+          {
+            responseType: "blob",
+          }
+        );
+
+        if (isCancelled) return;
+
+        objectUrl = URL.createObjectURL(response.data);
+
+        setPreviewState({
+          requestKey,
+          previewUrl: objectUrl,
+          error: "",
+        });
+      } catch (error) {
+        if (isCancelled) return;
+
+        console.error(
+          "Certificate file fetch failed:",
+          error
+        );
+
+        const status = error.response?.status;
+
+        let message =
+          "Unable to load the certificate. Please try again.";
+
+        if (status === 401 || status === 403) {
+          message =
+            "You are not authorized to access this certificate. Please refresh and try again.";
+        } else if (status === 404) {
+          message =
+            "The certificate file could not be found.";
+        }
+
+        setPreviewState({
+          requestKey,
+          previewUrl: "",
+          error: message,
+        });
+      }
+    };
+
+    fetchDocument();
+
+    return () => {
+      isCancelled = true;
+
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
+  }, [isOpen, currentFileUrl, requestKey]);
 
   // ==========================================================
   // CLOSE
@@ -53,8 +155,7 @@ const CertificatesDocumentViewerModal = ({
     }
 
     if (document?.documentName) {
-      const parts =
-        document.documentName.split(".");
+      const parts = document.documentName.split(".");
 
       if (parts.length > 1) {
         return parts.pop().toLowerCase();
@@ -64,42 +165,36 @@ const CertificatesDocumentViewerModal = ({
     return "";
   };
 
-  const fileExtension =
-    getFileExtension();
+  const fileExtension = getFileExtension();
 
   // ==========================================================
   // FILE TYPE
   // ==========================================================
 
-  const isPdf =
-    fileExtension === "pdf";
+  const isPdf = fileExtension === "pdf";
 
-  const isImage =
-    [
-      "jpg",
-      "jpeg",
-      "png",
-      "webp",
-      "gif",
-    ].includes(fileExtension);
+  const isImage = [
+    "jpg",
+    "jpeg",
+    "png",
+    "webp",
+    "gif",
+  ].includes(fileExtension);
 
-  const isWord =
-    [
-      "doc",
-      "docx",
-    ].includes(fileExtension);
+  const isWord = [
+    "doc",
+    "docx",
+  ].includes(fileExtension);
 
-  const isPowerPoint =
-    [
-      "ppt",
-      "pptx",
-    ].includes(fileExtension);
+  const isPowerPoint = [
+    "ppt",
+    "pptx",
+  ].includes(fileExtension);
 
-  const isExcel =
-    [
-      "xls",
-      "xlsx",
-    ].includes(fileExtension);
+  const isExcel = [
+    "xls",
+    "xlsx",
+  ].includes(fileExtension);
 
   // ==========================================================
   // FILE ICON
@@ -169,14 +264,9 @@ const CertificatesDocumentViewerModal = ({
     }
 
     try {
-      const parsedDate =
-        new Date(date);
+      const parsedDate = new Date(date);
 
-      if (
-        Number.isNaN(
-          parsedDate.getTime()
-        )
-      ) {
+      if (Number.isNaN(parsedDate.getTime())) {
         return "Unknown date";
       }
 
@@ -206,72 +296,124 @@ const CertificatesDocumentViewerModal = ({
       return `${bytes} B`;
     }
 
-    if (
-      bytes <
-      1024 * 1024
-    ) {
-      return `${(
-        bytes / 1024
-      ).toFixed(1)} KB`;
+    if (bytes < 1024 * 1024) {
+      return `${(bytes / 1024).toFixed(1)} KB`;
     }
 
-    return `${(
-      bytes /
-      (1024 * 1024)
-    ).toFixed(2)} MB`;
+    return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
+  };
+
+  // ==========================================================
+  // FETCH FILE FOR DOWNLOAD / OPEN
+  // ==========================================================
+
+  const fetchFileBlob = async () => {
+    if (!document?.fileUrl) {
+      throw new Error(
+        "Certificate file URL is unavailable."
+      );
+    }
+
+    const response = await api.get(
+      resolveFileUrl(document.fileUrl),
+      {
+        responseType: "blob",
+      }
+    );
+
+    return response.data;
   };
 
   // ==========================================================
   // DOWNLOAD
   // ==========================================================
 
-  const handleDownload = () => {
-    if (!document?.fileUrl) {
+  const handleDownload = async () => {
+    if (!document?.fileUrl || downloading) {
       return;
     }
 
-    const link =
-      window.document.createElement(
-        "a"
+    let downloadUrl = "";
+
+    try {
+      setDownloading(true);
+
+      const blob = await fetchFileBlob();
+
+      downloadUrl = URL.createObjectURL(blob);
+
+      const link = window.document.createElement("a");
+
+      link.href = downloadUrl;
+      link.download =
+        document.documentName || "certificate";
+
+      window.document.body.appendChild(link);
+      link.click();
+      window.document.body.removeChild(link);
+    } catch (error) {
+      console.error(
+        "Certificate download failed:",
+        error
       );
 
-    link.href =
-      document.fileUrl;
+      alert(
+        error.response?.status === 401 ||
+        error.response?.status === 403
+          ? "You are not authorized to download this certificate."
+          : "Unable to download the certificate. Please try again."
+      );
+    } finally {
+      if (downloadUrl) {
+        URL.revokeObjectURL(downloadUrl);
+      }
 
-    link.target = "_blank";
-
-    link.rel =
-      "noopener noreferrer";
-
-    link.download =
-      document.documentName ||
-      "certificate";
-
-    window.document.body.appendChild(
-      link
-    );
-
-    link.click();
-
-    window.document.body.removeChild(
-      link
-    );
+      setDownloading(false);
+    }
   };
 
   // ==========================================================
   // OPEN IN NEW TAB
   // ==========================================================
 
-  const handleOpenNewTab = () => {
+  const handleOpenNewTab = async () => {
     if (!document?.fileUrl) {
       return;
     }
 
-    window.open(
-      document.fileUrl,
-      "_blank",
-      "noopener,noreferrer"
-    );
+    const newTab = window.open("about:blank", "_blank");
+
+    try {
+      const blob = await fetchFileBlob();
+      const objectUrl = URL.createObjectURL(blob);
+
+      if (newTab) {
+        newTab.opener = null;
+        newTab.location.href = objectUrl;
+      } else {
+        window.open(
+          objectUrl,
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+    } catch (error) {
+      if (newTab) {
+        newTab.close();
+      }
+
+      console.error(
+        "Certificate open failed:",
+        error
+      );
+
+      alert(
+        error.response?.status === 401 ||
+        error.response?.status === 403
+          ? "You are not authorized to access this certificate."
+          : "Unable to open the certificate. Please try again."
+      );
+    }
   };
 
   // ==========================================================
@@ -298,148 +440,102 @@ const CertificatesDocumentViewerModal = ({
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4 py-6"
       onMouseDown={(event) => {
-        if (
-          event.target ===
-          event.currentTarget
-        ) {
+        if (event.target === event.currentTarget) {
           handleClose();
         }
       }}
     >
-
       <div className="w-full max-w-5xl h-[90vh] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
 
-        {/* ==================================================
-            HEADER
-        ================================================== */}
+        {/* HEADER */}
 
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 shrink-0">
-
           <div className="flex items-center gap-3 min-w-0">
-
             <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
               {getFileIcon()}
             </div>
 
             <div className="min-w-0">
-
               <h2
                 className="text-sm font-semibold text-slate-800 truncate max-w-[600px]"
-                title={
-                  document.documentName
-                }
+                title={document.documentName}
               >
-                {document.documentName ||
-                  "Certificate"}
+                {document.documentName || "Certificate"}
               </h2>
 
               <p className="text-xs text-slate-500 mt-0.5">
                 Certificate
-                <span className="mx-1.5">
-                  •
-                </span>
-                {formatDate(
-                  document.uploadedAt
-                )}
+                <span className="mx-1.5">•</span>
+                {formatDate(document.uploadedAt)}
 
                 {document.fileSize ? (
                   <>
-                    <span className="mx-1.5">
-                      •
-                    </span>
-
-                    {formatFileSize(
-                      document.fileSize
-                    )}
+                    <span className="mx-1.5">•</span>
+                    {formatFileSize(document.fileSize)}
                   </>
                 ) : null}
               </p>
-
             </div>
-
           </div>
 
           {/* ACTIONS */}
 
           <div className="flex items-center gap-1">
-
-            {/* OPEN */}
-
             {document.fileUrl && (
               <button
                 type="button"
-                onClick={
-                  handleOpenNewTab
-                }
+                onClick={handleOpenNewTab}
                 title="Open in new tab"
                 className="p-2 rounded-md hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition"
               >
-                <ExternalLink
-                  size={17}
-                />
+                <ExternalLink size={17} />
               </button>
             )}
-
-            {/* DOWNLOAD */}
 
             {document.fileUrl && (
               <button
                 type="button"
-                onClick={
-                  handleDownload
-                }
+                onClick={handleDownload}
+                disabled={downloading}
                 title="Download"
-                className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition"
+                className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition disabled:opacity-50"
               >
-                <Download
-                  size={17}
-                />
+                {downloading ? (
+                  <Loader2
+                    size={17}
+                    className="animate-spin"
+                  />
+                ) : (
+                  <Download size={17} />
+                )}
               </button>
             )}
 
-            {/* CLOSE */}
-
             <button
               type="button"
-              onClick={
-                handleClose
-              }
+              onClick={handleClose}
               className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition ml-1"
             >
               <X size={18} />
             </button>
-
           </div>
-
         </div>
 
-        {/* ==================================================
-            DOCUMENT INFORMATION
-        ================================================== */}
+        {/* DOCUMENT INFORMATION */}
 
         <div className="px-5 py-3 border-b border-slate-200 bg-slate-50 shrink-0">
-
           <div className="flex items-center gap-4 flex-wrap">
-
-            {/* TYPE */}
-
             <div className="flex items-center gap-2">
-
               <span className="text-[11px] font-medium text-slate-400 uppercase">
                 Type
               </span>
 
               <span className="px-2 py-1 rounded-md bg-white border border-slate-200 text-[11px] font-medium text-slate-600 uppercase">
-                {fileExtension ||
-                  "FILE"}
+                {fileExtension || "FILE"}
               </span>
-
             </div>
 
-            {/* CATEGORY */}
-
             <div className="flex items-center gap-2">
-
               <span className="text-[11px] font-medium text-slate-400 uppercase">
                 Category
               </span>
@@ -447,41 +543,26 @@ const CertificatesDocumentViewerModal = ({
               <span className="px-2 py-1 rounded-md bg-blue-50 text-blue-600 text-[11px] font-medium">
                 Certificates
               </span>
-
             </div>
 
-            {/* DATE */}
-
             <div className="flex items-center gap-2">
-
               <span className="text-[11px] font-medium text-slate-400 uppercase">
                 Uploaded
               </span>
 
               <span className="text-xs text-slate-600">
-                {formatDate(
-                  document.uploadedAt
-                )}
+                {formatDate(document.uploadedAt)}
               </span>
-
             </div>
-
           </div>
-
         </div>
 
-        {/* ==================================================
-            VIEWER
-        ================================================== */}
+        {/* VIEWER */}
 
         <div className="flex-1 min-h-0 bg-slate-100 p-4 overflow-hidden">
-
           {!document.fileUrl ? (
-
             <div className="h-full flex items-center justify-center">
-
               <div className="text-center">
-
                 <div className="w-14 h-14 mx-auto rounded-full bg-white border border-slate-200 flex items-center justify-center mb-3">
                   <FileText
                     size={24}
@@ -494,113 +575,63 @@ const CertificatesDocumentViewerModal = ({
                 </h3>
 
                 <p className="text-xs text-slate-400 mt-1">
-                  No file URL was returned
-                  by the server.
+                  No file URL was returned by the server.
                 </p>
-
               </div>
-
             </div>
+          ) : isLoading ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="flex flex-col items-center">
+                <Loader2
+                  size={24}
+                  className="text-blue-600 animate-spin"
+                />
 
+                <p className="text-xs text-slate-500 mt-2">
+                  Loading certificate...
+                </p>
+              </div>
+            </div>
+          ) : fileError ? (
+            <div className="h-full flex items-center justify-center">
+              <div className="bg-white rounded-xl border border-slate-200 p-8 text-center max-w-md">
+                <FileText
+                  size={28}
+                  className="text-red-400 mx-auto mb-3"
+                />
+
+                <h3 className="text-sm font-semibold text-slate-700">
+                  Unable to load certificate
+                </h3>
+
+                <p className="text-xs text-slate-500 mt-2">
+                  {fileError}
+                </p>
+              </div>
+            </div>
           ) : isPdf ? (
-
-            /* ==================================================
-               PDF VIEWER
-            ================================================== */
-
             <div className="relative h-full bg-white rounded-lg border border-slate-200 overflow-hidden">
-
-              {loading && (
-                <div className="absolute inset-0 z-10 flex items-center justify-center bg-white">
-
-                  <div className="flex flex-col items-center">
-
-                    <Loader2
-                      size={24}
-                      className="text-blue-600 animate-spin"
-                    />
-
-                    <p className="text-xs text-slate-500 mt-2">
-                      Loading certificate...
-                    </p>
-
-                  </div>
-
-                </div>
-              )}
-
               <iframe
-                src={
-                  document.fileUrl
-                }
+                src={previewUrl}
                 title={
-                  document.documentName ||
-                  "Certificate"
+                  document.documentName || "Certificate"
                 }
                 className="w-full h-full border-0"
-                onLoad={() =>
-                  setLoading(false)
-                }
               />
-
             </div>
-
           ) : isImage ? (
-
-            /* ==================================================
-               IMAGE VIEWER
-            ================================================== */
-
             <div className="h-full bg-white rounded-lg border border-slate-200 overflow-auto flex items-center justify-center p-6">
-
-              {loading && (
-                <div className="absolute flex flex-col items-center">
-
-                  <Loader2
-                    size={24}
-                    className="text-blue-600 animate-spin"
-                  />
-
-                  <p className="text-xs text-slate-500 mt-2">
-                    Loading certificate...
-                  </p>
-
-                </div>
-              )}
-
               <img
-                src={
-                  document.fileUrl
-                }
+                src={previewUrl}
                 alt={
-                  document.documentName ||
-                  "Certificate"
+                  document.documentName || "Certificate"
                 }
-                className={`max-w-full max-h-full object-contain ${
-                  loading
-                    ? "opacity-0"
-                    : "opacity-100"
-                } transition-opacity`}
-                onLoad={() =>
-                  setLoading(false)
-                }
-                onError={() =>
-                  setLoading(false)
-                }
+                className="max-w-full max-h-full object-contain"
               />
-
             </div>
-
           ) : (
-
-            /* ==================================================
-               OTHER FILE TYPES
-            ================================================== */
-
             <div className="h-full flex items-center justify-center">
-
               <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center max-w-md">
-
                 <div className="w-14 h-14 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-4">
                   {getFileIcon()}
                 </div>
@@ -610,39 +641,26 @@ const CertificatesDocumentViewerModal = ({
                 </h3>
 
                 <p className="text-xs text-slate-500 mt-2 leading-5">
-                  This file type cannot be
-                  previewed directly in the
-                  browser.
+                  This file type cannot be previewed directly in the browser.
                 </p>
 
                 <button
                   type="button"
-                  onClick={
-                    handleOpenNewTab
-                  }
+                  onClick={handleDownload}
                   className="mt-5 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium inline-flex items-center gap-2 transition"
                 >
-                  <ExternalLink
-                    size={14}
-                  />
-                  Open Certificate
+                  <Download size={14} />
+                  Download Certificate
                 </button>
-
               </div>
-
             </div>
-
           )}
-
         </div>
 
-        {/* ==================================================
-            DESCRIPTION
-        ================================================== */}
+        {/* DESCRIPTION */}
 
         {document.description && (
           <div className="px-5 py-3 border-t border-slate-200 bg-white shrink-0">
-
             <p className="text-[11px] font-medium text-slate-400 uppercase mb-1">
               Description
             </p>
@@ -650,12 +668,9 @@ const CertificatesDocumentViewerModal = ({
             <p className="text-xs text-slate-600 leading-5">
               {document.description}
             </p>
-
           </div>
         )}
-
       </div>
-
     </div>
   );
 };

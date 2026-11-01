@@ -1,4 +1,5 @@
-import React, {
+
+import {
   useCallback,
   useEffect,
   useMemo,
@@ -21,18 +22,17 @@ import {
   CheckCircle2,
   X,
   LoaderCircle,
+  Download,
+  ExternalLink,
 } from "lucide-react";
 
-import MentorSidebar from "../../../components/layouts/MentorSidebar";
 import AdminSidebar from "../../../components/layouts/AdminSidebar";
-import MentorHeader from "../../../components/layouts/MentorHeader";
 import AdminHeader from "../../../components/layouts/AdminHeader";
 
-import BackButton from "../../../components/Mentors/Students/Header/BackButton";
 import AdminBackButton from "../../../components/Admin/Students/Header/AdminBackButton";
-import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
-import StudentTabs from "../../../components/Mentors/Students/Header/StudentTabs";
 import AdminStudentTabs from "../../../components/Admin/Students/Header/AdminStudentTabs";
+
+import ActionButtons from "../../../components/Mentors/Students/Header/ActionButtons";
 
 import StudentAwardsAchievementsProfile from "../../../components/Mentors/Students/AwardsAchievements/StudentAwardsAchievementsProfile";
 import AwardsAchievementsStatCard from "../../../components/Mentors/Students/AwardsAchievements/AwardsAchievementsStatCard";
@@ -41,7 +41,11 @@ import AwardsAchievementsVerificationModal from "../../../components/Mentors/Stu
 
 import api from "../../../api/axios";
 
-const getProfileApiRoot = (isAdminRoute) => isAdminRoute ? "/admin/student-profile" : "/mentor/students";
+// ==========================================================
+// API CONFIGURATION
+// ==========================================================
+
+const API = "/admin/student-profile";
 
 // ==========================================================
 // STUDENT ID RESOLUTION
@@ -123,13 +127,71 @@ async function apiRequest(url, options = {}) {
       error.response?.data?.message ||
         error.response?.data?.error ||
         error.message ||
-        "The request failed."
+        "The request failed.",
+      { cause: error }
     );
   }
 }
 
 // ==========================================================
-// MAP DATABASE DOCUMENT TO AWARD / ACHIEVEMENT
+// PRIVATE DOCUMENT HELPERS
+// ==========================================================
+
+function resolvePrivateFileUrl(fileUrl) {
+  if (!fileUrl || typeof fileUrl !== "string") {
+    throw new Error("The document URL is unavailable.");
+  }
+
+  const trimmedUrl = fileUrl.trim();
+
+  if (/^https?:\/\//i.test(trimmedUrl)) {
+    return trimmedUrl;
+  }
+
+  const normalizedUrl = trimmedUrl.startsWith("/")
+    ? trimmedUrl
+    : `/${trimmedUrl}`;
+
+  // Axios baseURL already contains /api.
+  if (normalizedUrl.startsWith("/api/")) {
+    return normalizedUrl.slice(4);
+  }
+
+  return normalizedUrl;
+}
+
+async function fetchPrivateDocument(fileUrl) {
+  const resolvedUrl = resolvePrivateFileUrl(fileUrl);
+
+  try {
+    const response = await api.get(resolvedUrl, {
+      responseType: "blob",
+      withCredentials: true,
+    });
+
+    return response.data;
+  } catch (error) {
+    const status = error.response?.status;
+
+    let message = "Unable to load the document.";
+
+    if (status === 401) {
+      message = "Your session has expired. Please log in again.";
+    } else if (status === 403) {
+      message = "You are not authorized to access this document.";
+    } else if (status === 404) {
+      message = "The requested document could not be found.";
+    } else {
+      message =
+        error.response?.data?.message || message;
+    }
+
+    throw new Error(message, { cause: error });
+  }
+}
+
+// ==========================================================
+// MAP DATABASE DOCUMENT TO ACHIEVEMENT
 // ==========================================================
 
 function mapAchievement(document) {
@@ -157,10 +219,11 @@ function mapAchievement(document) {
 // ==========================================================
 
 function AchievementPreviewModal({ achievement, onClose }) {
-  if (!achievement) return null;
+  const [blobUrl, setBlobUrl] = useState("");
+  const [loadingError, setLoadingError] = useState("");
 
-  const fileType = (achievement.fileType || "").toLowerCase();
-  const fileUrl = achievement.fileUrl || "";
+  const fileUrl = achievement?.fileUrl || "";
+  const fileType = (achievement?.fileType || "").toLowerCase();
   const cleanUrl = fileUrl.split("?")[0].toLowerCase();
 
   const isPdf =
@@ -169,6 +232,63 @@ function AchievementPreviewModal({ achievement, onClose }) {
   const isImage =
     fileType.startsWith("image/") ||
     /\.(png|jpe?g|gif|webp|svg|bmp)$/i.test(cleanUrl);
+
+  useEffect(() => {
+    if (!achievement?.fileUrl) return undefined;
+
+    let active = true;
+    let createdUrl = "";
+
+    const loadDocument = async () => {
+      try {
+        const blob = await fetchPrivateDocument(
+          achievement.fileUrl
+        );
+
+        if (!active) return;
+
+        const typedBlob = blob.type
+          ? blob
+          : new Blob([blob], {
+              type: fileType || "application/octet-stream",
+            });
+
+        createdUrl = window.URL.createObjectURL(typedBlob);
+        setBlobUrl(createdUrl);
+      } catch (error) {
+        if (active) {
+          setLoadingError(
+            error.message || "Unable to preview this document."
+          );
+        }
+      }
+    };
+
+    Promise.resolve().then(loadDocument);
+
+    return () => {
+      active = false;
+
+      if (createdUrl) {
+        window.URL.revokeObjectURL(createdUrl);
+      }
+    };
+  }, [achievement?.id, achievement?.fileUrl, fileType]);
+
+  if (!achievement) return null;
+
+  const handleDownload = () => {
+    if (!blobUrl) return;
+
+    const link = document.createElement("a");
+    link.href = blobUrl;
+    link.download =
+      achievement.fileName || "achievement-document";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  };
 
   return (
     <div
@@ -194,57 +314,100 @@ function AchievementPreviewModal({ achievement, onClose }) {
             <p className="mt-1 text-xs text-slate-500">
               Uploaded{" "}
               {achievement.uploadedAt
-                ? new Date(achievement.uploadedAt).toLocaleDateString(
-                    "en-IN"
-                  )
+                ? new Date(
+                    achievement.uploadedAt
+                  ).toLocaleDateString("en-IN")
                 : "date unavailable"}
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={onClose}
-            aria-label="Close preview"
-            className="ml-3 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
-          >
-            <X size={20} />
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            {blobUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={handleDownload}
+                  className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+                  aria-label="Download document"
+                  title="Download document"
+                >
+                  <Download size={19} />
+                </button>
+
+                <a
+                  href={blobUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+                  aria-label="Open document in new tab"
+                  title="Open document in new tab"
+                >
+                  <ExternalLink size={19} />
+                </a>
+              </>
+            )}
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close preview"
+              className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+            >
+              <X size={20} />
+            </button>
+          </div>
         </header>
 
         <div className="flex-1 overflow-auto bg-slate-100 p-4">
-          {fileUrl ? (
-            isImage ? (
-              <img
-                src={fileUrl}
-                alt={achievement.title}
-                className="mx-auto max-h-[65vh] max-w-full object-contain"
-              />
-            ) : isPdf ? (
-              <iframe
-                title={achievement.title}
-                src={fileUrl}
-                className="h-[65vh] w-full bg-white"
-              />
-            ) : (
-              <div className="p-8 text-center">
-                <p className="mb-4 text-sm text-slate-600">
-                  Preview is unavailable for this file type.
-                </p>
-
-                <a
-                  href={fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-blue-600 underline"
-                >
-                  Open document
-                </a>
-              </div>
-            )
-          ) : (
+          {!fileUrl ? (
             <p className="p-10 text-center text-sm text-slate-500">
               No document URL is available.
             </p>
+          ) : loadingError ? (
+            <div
+              role="alert"
+              className="p-10 text-center text-sm text-red-600"
+            >
+              {loadingError}
+            </div>
+          ) : !blobUrl ? (
+            <div className="flex min-h-64 flex-col items-center justify-center gap-3">
+              <LoaderCircle
+                size={32}
+                className="animate-spin text-violet-600"
+              />
+
+              <p className="text-sm text-slate-600">
+                Loading document securely...
+              </p>
+            </div>
+          ) : isImage ? (
+            <img
+              src={blobUrl}
+              alt={achievement.title}
+              className="mx-auto max-h-[65vh] max-w-full object-contain"
+            />
+          ) : isPdf ? (
+            <iframe
+              title={achievement.title}
+              src={blobUrl}
+              className="h-[65vh] w-full bg-white"
+            />
+          ) : (
+            <div className="p-8 text-center">
+              <p className="mb-4 text-sm text-slate-600">
+                Preview is unavailable for this file type.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleDownload}
+                className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-4 py-2 text-sm font-semibold text-white hover:bg-violet-700"
+              >
+                <Download size={16} />
+                Download document
+              </button>
+            </div>
           )}
         </div>
       </section>
@@ -256,10 +419,9 @@ function AchievementPreviewModal({ achievement, onClose }) {
 // MAIN PAGE
 // ==========================================================
 
-const AwardsAchievements = ({ studentId: studentIdProp }) => {
-  const location = useLocation();
-  const isAdminRoute = (location.pathname.startsWith("/admin/overview/students/") || location.pathname.startsWith("/admin/mentor/"));
-  const API = getProfileApiRoot(isAdminRoute);
+const AwardsAchievements = ({
+  studentId: studentIdProp,
+}) => {
   const studentId = useSelectedStudentId(studentIdProp);
 
   const [achievements, setAchievements] = useState([]);
@@ -270,8 +432,11 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("ALL");
 
-  const [selectedAchievement, setSelectedAchievement] = useState(null);
-  const [reviewAchievement, setReviewAchievement] = useState(null);
+  const [selectedAchievement, setSelectedAchievement] =
+    useState(null);
+
+  const [reviewAchievement, setReviewAchievement] =
+    useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -280,7 +445,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
   const [notice, setNotice] = useState("");
 
   // --------------------------------------------------------
-  // LOAD AWARDS & ACHIEVEMENTS DASHBOARD
+  // LOAD DASHBOARD
   // --------------------------------------------------------
 
   const loadAchievements = useCallback(async () => {
@@ -303,7 +468,9 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
 
     try {
       const response = await apiRequest(
-        `${API}/${encodeURIComponent(studentId)}/awards-achievements/dashboard`
+        `${API}/${encodeURIComponent(
+          studentId
+        )}/awards-achievements/dashboard`
       );
 
       const data = response?.data;
@@ -319,9 +486,10 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
       setDashboardStats(data.stats || null);
 
       setAchievements(
-        (Array.isArray(data.documents) ? data.documents : []).map(
-          mapAchievement
-        )
+        (Array.isArray(data.documents)
+          ? data.documents
+          : []
+        ).map(mapAchievement)
       );
     } catch (requestError) {
       setError(
@@ -334,7 +502,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
   }, [studentId]);
 
   useEffect(() => {
-    loadAchievements();
+    Promise.resolve().then(loadAchievements);
   }, [loadAchievements]);
 
   // --------------------------------------------------------
@@ -385,7 +553,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
           dashboardStats?.underReview ??
           dashboardStats?.pendingReview ??
           pending,
-        subtitle: "Awaiting mentor review",
+        subtitle: "Awaiting review",
         icon: Clock3,
         iconBg: "bg-orange-100",
         iconColor: "text-orange-600",
@@ -404,8 +572,9 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
       {
         id: "documents",
         title: "Documents",
-        value: achievements.filter((item) => Boolean(item.fileUrl))
-          .length,
+        value: achievements.filter(
+          (item) => Boolean(item.fileUrl)
+        ).length,
         subtitle: "Attached certificates and files",
         icon: Files,
         iconBg: "bg-cyan-100",
@@ -443,7 +612,11 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
   // REVIEW ACHIEVEMENT
   // --------------------------------------------------------
 
-  const handleReviewSubmit = async ({ id, status, remark }) => {
+  const handleReviewSubmit = async ({
+    id,
+    status,
+    remark,
+  }) => {
     if (!studentId) {
       throw new Error("Student ID is missing.");
     }
@@ -454,7 +627,11 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
 
     try {
       const response = await apiRequest(
-        `${API}/${encodeURIComponent(studentId)}/awards-achievements/${encodeURIComponent(id)}/review`,
+        `${API}/${encodeURIComponent(
+          studentId
+        )}/awards-achievements/${encodeURIComponent(
+          id
+        )}/review`,
         {
           method: "PATCH",
           body: {
@@ -492,16 +669,16 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
+      <AdminSidebar />
 
       <div className="ml-[290px] min-h-screen max-lg:ml-0">
-        {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
+        <AdminHeader />
 
         <main className="space-y-5 p-4 md:p-6">
           {/* PAGE ACTIONS */}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
-            {isAdminRoute ? <AdminBackButton /> : <BackButton />}
+            <AdminBackButton />
             <ActionButtons />
           </div>
 
@@ -512,10 +689,15 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
               role="alert"
               className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
             >
-              <AlertCircle size={20} className="mt-0.5 shrink-0" />
+              <AlertCircle
+                size={20}
+                className="mt-0.5 shrink-0"
+              />
 
               <div className="flex-1">
-                <p className="font-semibold">Something went wrong</p>
+                <p className="font-semibold">
+                  Something went wrong
+                </p>
                 <p className="mt-1">{error}</p>
               </div>
 
@@ -537,7 +719,10 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
               role="status"
               className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
             >
-              <CheckCircle2 size={20} className="shrink-0" />
+              <CheckCircle2
+                size={20}
+                className="shrink-0"
+              />
 
               <p className="flex-1">{notice}</p>
 
@@ -561,7 +746,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
             />
 
             <div className="flex min-w-0 flex-col gap-4">
-              {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
+              <AdminStudentTabs />
 
               {/* PAGE TITLE */}
 
@@ -572,8 +757,9 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
                   </h1>
 
                   <p className="mt-1 text-sm text-slate-500">
-                    Review student awards, certificates, achievements,
-                    supporting documents, and mentor feedback.
+                    Review student awards, certificates,
+                    achievements, supporting documents, and
+                    verification records.
                   </p>
                 </div>
 
@@ -585,7 +771,9 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
                 >
                   <RotateCcw
                     size={16}
-                    className={isLoading ? "animate-spin" : ""}
+                    className={
+                      isLoading ? "animate-spin" : ""
+                    }
                   />
                   Refresh
                 </button>
@@ -643,6 +831,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
       {/* DOCUMENT PREVIEW */}
 
       <AchievementPreviewModal
+        key={selectedAchievement?.id || "no-achievement"}
         achievement={selectedAchievement}
         onClose={() => setSelectedAchievement(null)}
       />
