@@ -1,4 +1,6 @@
+
 import prisma from "../../../config/prisma.hod.js";
+import { createFileAccessToken } from "../../../utils/fileAccessToken.js";
 
 const DOCUMENT_CATEGORIES = [
   "ACADEMICS",
@@ -14,6 +16,42 @@ const DOCUMENT_CATEGORIES = [
 ];
 
 class MentorDocumentsService {
+  // ==========================================================
+  // CHECK LOCAL STORAGE
+  // ==========================================================
+
+  isLocalFile(storageKey) {
+    return (
+      typeof storageKey === "string" &&
+      storageKey.startsWith("private/documents/")
+    );
+  }
+
+  // ==========================================================
+  // GENERATE SECURE DOCUMENT URL
+  // Legacy Cloudinary URLs remain unchanged.
+  // ==========================================================
+
+  decorateDocument(document, userId) {
+    if (!document) return document;
+
+    if (!this.isLocalFile(document.cloudinaryPublicId)) {
+      return document;
+    }
+
+    const token = createFileAccessToken({
+      storageKey: document.cloudinaryPublicId,
+      recordType: "student_document",
+      recordId: document.id,
+      userId,
+    });
+
+    return {
+      ...document,
+      fileUrl: `/api/files/private?token=${encodeURIComponent(token)}`,
+    };
+  }
+
   // ==========================================================
   // GET ACTIVE MENTOR
   // ==========================================================
@@ -96,7 +134,6 @@ class MentorDocumentsService {
 
   // ==========================================================
   // BUILD DOCUMENT FILTER
-  // All categories are included unless a filter is provided.
   // ==========================================================
 
   buildDocumentWhere(studentId, filters = {}) {
@@ -156,6 +193,7 @@ class MentorDocumentsService {
     const student = await this.getStudent(studentId);
 
     const page = Math.max(1, Number(filters.page) || 1);
+
     const limit = Math.min(
       100,
       Math.max(1, Number(filters.limit) || 10)
@@ -182,17 +220,23 @@ class MentorDocumentsService {
       success: true,
       data: {
         student,
+
         mentor: {
           id: mentor.id,
           fullName: mentor.fullName,
         },
-        documents,
+
+        documents: documents.map((document) =>
+          this.decorateDocument(document, userId)
+        ),
+
         pagination: {
           page,
           limit,
           total,
           totalPages: Math.ceil(total / limit),
         },
+
         filters: {
           category: filters.category || null,
           fileType: filters.fileType || null,
@@ -214,7 +258,6 @@ class MentorDocumentsService {
 
     const student = await this.getStudent(studentId);
 
-    // Fetch all documents, irrespective of category.
     const where = {
       studentId,
     };
@@ -274,13 +317,19 @@ class MentorDocumentsService {
       success: true,
       data: {
         student,
+
         mentor: {
           id: mentor.id,
           fullName: mentor.fullName,
         },
+
         stats,
         categories,
-        documents: latestDocuments,
+
+        documents: latestDocuments.map((document) =>
+          this.decorateDocument(document, userId)
+        ),
+
         availableCategories: DOCUMENT_CATEGORIES,
       },
     };
@@ -311,7 +360,7 @@ class MentorDocumentsService {
 
     return {
       success: true,
-      data: document,
+      data: this.decorateDocument(document, userId),
     };
   }
 }

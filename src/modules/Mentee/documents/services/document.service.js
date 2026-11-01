@@ -1,11 +1,17 @@
+import { randomUUID } from "node:crypto";
+
 import prisma from "../../../../config/prisma.hod.js";
 
-import uploadToCloudinary from "../../../../utils/cloudinaryUpload.js";
-import deleteFromCloudinary from "../../../../utils/cloudinaryDelete.js";
+import {
+  uploadLocalFile,
+  deleteLocalFile,
+} from "../../../../utils/localStorage.js";
+
+import { createFileAccessToken } from "../../../../utils/fileAccessToken.js";
 
 class DocumentService {
   // ==========================================================
-  // FOLDER MAP
+  // CATEGORY FOLDER MAP
   // ==========================================================
 
   getFolder(category) {
@@ -22,9 +28,88 @@ class DocumentService {
       OTHER: "other",
     };
 
-    return `mentor-mentee/mentee/documents/${
-      folderMap[category] ?? "other"
-    }`;
+    return folderMap[category] ?? "other";
+  }
+
+  // ==========================================================
+  // STORAGE IDENTIFICATION
+  // ==========================================================
+
+  isLocalFile(storageKey) {
+    if (typeof storageKey !== "string") {
+      return false;
+    }
+
+    if (!storageKey.startsWith("private/documents/")) {
+      return false;
+    }
+
+    if (
+      storageKey.includes("\\") ||
+      storageKey.includes("\0")
+    ) {
+      return false;
+    }
+
+    const segments = storageKey.split("/");
+
+    return (
+      segments.length >= 3 &&
+      segments.every(
+        (segment) =>
+          segment !== "" &&
+          segment !== "." &&
+          segment !== ".."
+      )
+    );
+  }
+
+  // ==========================================================
+  // CLEANUP LOCAL FILE
+  // ==========================================================
+
+  async cleanupStoredFile(storageKey) {
+    if (!storageKey) return;
+
+    if (!this.isLocalFile(storageKey)) {
+      console.warn(
+        "Skipped cleanup: invalid local document storage key."
+      );
+      return;
+    }
+
+    await deleteLocalFile(storageKey);
+  }
+
+  // ==========================================================
+  // GENERATE PRIVATE FILE URL
+  // ==========================================================
+
+  decorateDocument(document, userId) {
+    if (!document) return document;
+
+    const storageKey = document.cloudinaryPublicId;
+
+    // Only local VPS storage keys are supported.
+    // Do not expose legacy or unsupported external URLs.
+    if (!this.isLocalFile(storageKey)) {
+      return {
+        ...document,
+        fileUrl: null,
+      };
+    }
+
+    const token = createFileAccessToken({
+      storageKey,
+      recordType: "student_document",
+      recordId: document.id,
+      userId,
+    });
+
+    return {
+      ...document,
+      fileUrl: `/api/files/private?token=${encodeURIComponent(token)}`,
+    };
   }
 
   // ==========================================================
@@ -54,7 +139,11 @@ class DocumentService {
   // ==========================================================
 
   async uploadDocument(userId, body, file) {
-    const { documentName, category, description } = body;
+    const {
+      documentName,
+      category,
+      description,
+    } = body;
 
     if (!file) {
       throw new Error("Please upload a document.");
@@ -67,13 +156,18 @@ class DocumentService {
     const student = await this.getStudent(userId);
     const folder = this.getFolder(category);
 
-    const uploadedFile = await uploadToCloudinary(file, folder);
+    const uploadedFile = await uploadLocalFile(
+      file,
+      "documents",
+      [student.id, folder]
+    );
+
     const now = new Date();
 
     try {
       const document = await prisma.student_documents.create({
         data: {
-          id: crypto.randomUUID(),
+          id: randomUUID(),
           studentId: student.id,
           documentName,
           category,
@@ -81,8 +175,11 @@ class DocumentService {
           fileType: uploadedFile.fileType,
           fileSize: uploadedFile.fileSize,
           resourceType: uploadedFile.resourceType,
-          cloudinaryPublicId: uploadedFile.publicId,
-          fileUrl: uploadedFile.url,
+
+          // Existing database column stores the VPS storage key.
+          cloudinaryPublicId: uploadedFile.storageKey,
+
+          fileUrl: null,
           uploadedAt: now,
           updatedAt: now,
         },
@@ -91,19 +188,17 @@ class DocumentService {
       return {
         success: true,
         message: "Document uploaded successfully.",
-        data: document,
+        data: this.decorateDocument(document, userId),
       };
     } catch (error) {
-      // Clean up Cloudinary if database creation fails.
-      if (uploadedFile?.publicId) {
+      if (uploadedFile?.storageKey) {
         try {
-          await deleteFromCloudinary(
-            uploadedFile.publicId,
-            uploadedFile.resourceType
+          await this.cleanupStoredFile(
+            uploadedFile.storageKey
           );
         } catch (cleanupError) {
           console.error(
-            "Failed to clean up uploaded file after database creation failure:",
+            "Failed to clean up local file after database creation failure:",
             cleanupError
           );
         }
@@ -161,11 +256,15 @@ class DocumentService {
       success: true,
       data: {
         stats,
+
         categories: categoryCounts.map((item) => ({
           category: item.category,
           count: item._count.category,
         })),
-        documents,
+
+        documents: documents.map((document) =>
+          this.decorateDocument(document, userId)
+        ),
       },
     };
   }
@@ -188,28 +287,32 @@ class DocumentService {
       throw new Error("Document not found.");
     }
 
+    const responseDocument = {
+      id: document.id,
+      studentId: document.studentId,
+      documentName: document.documentName,
+      category: document.category,
+      description: document.description,
+      fileType: document.fileType,
+      fileSize: document.fileSize,
+      resourceType: document.resourceType,
+      cloudinaryPublicId: document.cloudinaryPublicId,
+      fileUrl: document.fileUrl,
+      uploadedAt: document.uploadedAt,
+      updatedAt: document.updatedAt,
+
+      researchReviewStatus: document.researchReviewStatus,
+      reviewedByTeacherId: document.reviewedByTeacherId,
+      reviewedAt: document.reviewedAt,
+      mentorRemark: document.mentorRemark,
+    };
+
     return {
       success: true,
-      data: {
-        id: document.id,
-        studentId: document.studentId,
-        documentName: document.documentName,
-        category: document.category,
-        description: document.description,
-        fileType: document.fileType,
-        fileSize: document.fileSize,
-        resourceType: document.resourceType,
-        cloudinaryPublicId: document.cloudinaryPublicId,
-        fileUrl: document.fileUrl,
-        uploadedAt: document.uploadedAt,
-        updatedAt: document.updatedAt,
-
-        // Review information shared with student and mentor.
-        researchReviewStatus: document.researchReviewStatus,
-        reviewedByTeacherId: document.reviewedByTeacherId,
-        reviewedAt: document.reviewedAt,
-        mentorRemark: document.mentorRemark,
-      },
+      data: this.decorateDocument(
+        responseDocument,
+        userId
+      ),
     };
   }
 
@@ -218,7 +321,11 @@ class DocumentService {
   // ==========================================================
 
   async updateDocument(userId, documentId, body, file) {
-    const { documentName, category, description } = body;
+    const {
+      documentName,
+      category,
+      description,
+    } = body;
 
     const student = await this.getStudent(userId);
 
@@ -238,7 +345,6 @@ class DocumentService {
 
     // ========================================================
     // DETECT RESUBMISSIONS
-    // A replacement file is required to trigger a review reset.
     // ========================================================
 
     const isCertificateResubmission =
@@ -294,7 +400,7 @@ class DocumentService {
     }
 
     // ========================================================
-    // UPLOAD REPLACEMENT FILE
+    // UPLOAD REPLACEMENT FILE TO LOCAL STORAGE
     // ========================================================
 
     let uploadedFile = null;
@@ -302,13 +408,20 @@ class DocumentService {
     if (file) {
       const folder = this.getFolder(newCategory);
 
-      uploadedFile = await uploadToCloudinary(file, folder);
+      uploadedFile = await uploadLocalFile(
+        file,
+        "documents",
+        [student.id, folder]
+      );
 
       updateData.fileType = uploadedFile.fileType;
       updateData.fileSize = uploadedFile.fileSize;
       updateData.resourceType = uploadedFile.resourceType;
-      updateData.cloudinaryPublicId = uploadedFile.publicId;
-      updateData.fileUrl = uploadedFile.url;
+
+      // Existing database column stores the VPS storage key.
+      updateData.cloudinaryPublicId = uploadedFile.storageKey;
+
+      updateData.fileUrl = null;
     }
 
     // ========================================================
@@ -321,7 +434,6 @@ class DocumentService {
       updateData.reviewedAt = null;
       updateData.mentorRemark = null;
 
-      // Record the latest submission time.
       updateData.uploadedAt = new Date();
     }
 
@@ -339,12 +451,10 @@ class DocumentService {
         data: updateData,
       });
     } catch (error) {
-      // Remove the replacement asset if the database update fails.
-      if (uploadedFile?.publicId) {
+      if (uploadedFile?.storageKey) {
         try {
-          await deleteFromCloudinary(
-            uploadedFile.publicId,
-            uploadedFile.resourceType
+          await this.cleanupStoredFile(
+            uploadedFile.storageKey
           );
         } catch (cleanupError) {
           console.error(
@@ -358,24 +468,21 @@ class DocumentService {
     }
 
     // ========================================================
-    // DELETE OLD CLOUDINARY ASSET AFTER DATABASE SUCCESS
+    // DELETE OLD LOCAL FILE AFTER DATABASE SUCCESS
     // ========================================================
 
     if (
       uploadedFile &&
-      existingDocument.cloudinaryPublicId &&
-      existingDocument.cloudinaryPublicId !== uploadedFile.publicId
+      existingDocument.cloudinaryPublicId
     ) {
       try {
-        await deleteFromCloudinary(
-          existingDocument.cloudinaryPublicId,
-          existingDocument.resourceType
+        await this.cleanupStoredFile(
+          existingDocument.cloudinaryPublicId
         );
-      } catch (cloudinaryError) {
-        // The database already references the replacement file.
+      } catch (cleanupError) {
         console.error(
-          "Failed to delete old Cloudinary document:",
-          cloudinaryError
+          "Failed to delete old document after replacement:",
+          cleanupError
         );
       }
     }
@@ -406,7 +513,10 @@ class DocumentService {
     return {
       success: true,
       message,
-      data: updatedDocument,
+      data: this.decorateDocument(
+        updatedDocument,
+        userId
+      ),
     };
   }
 
@@ -428,18 +538,24 @@ class DocumentService {
       throw new Error("Document not found.");
     }
 
-    if (existingDocument.cloudinaryPublicId) {
-      await deleteFromCloudinary(
-        existingDocument.cloudinaryPublicId,
-        existingDocument.resourceType
-      );
-    }
-
     await prisma.student_documents.delete({
       where: {
         id: documentId,
       },
     });
+
+    if (existingDocument.cloudinaryPublicId) {
+      try {
+        await this.cleanupStoredFile(
+          existingDocument.cloudinaryPublicId
+        );
+      } catch (cleanupError) {
+        console.error(
+          "Failed to clean up deleted document storage:",
+          cleanupError
+        );
+      }
+    }
 
     return {
       success: true,

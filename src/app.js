@@ -4,10 +4,11 @@ import helmet from "helmet";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import multer from "multer";
+import path from "node:path";
 
-/* ==========================================================
-   ROUTES
-========================================================== */
+// ==========================================================
+// ROUTES
+// ==========================================================
 
 import authRoutes from "./modules/auth/routes/auth.routes.js";
 import menteeRoutes from "./modules/Mentee/routes/mentee.routes.js";
@@ -33,21 +34,21 @@ import studentReportRoutes from "./modules/mentor/routes/studentReport.routes.js
 
 import messagesRoutes from "./modules/chat/messages.routes.js";
 
-/* ==========================================================
-   AUTHENTICATION
-========================================================== */
+// Private local file delivery
+import fileRoutes from "./modules/files/files.routes.js";
 
+// Authentication
 import { authenticate } from "./middleware/auth.middleware.js";
 
-/* ==========================================================
-   APP
-========================================================== */
+// ==========================================================
+// APP
+// ==========================================================
 
 const app = express();
 
-/* ==========================================================
-   CORS CONFIGURATION
-========================================================== */
+// ==========================================================
+// CORS CONFIGURATION
+// ==========================================================
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -63,7 +64,7 @@ const allowedOrigins = [
 
 const corsOptions = {
   origin(origin, callback) {
-    // Allow requests from tools without an Origin header.
+    // Allow requests without an Origin header.
     if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
@@ -99,15 +100,42 @@ const corsOptions = {
 app.use(cors(corsOptions));
 app.options(/.*/, cors(corsOptions));
 
-/* ==========================================================
-   SECURITY
-========================================================== */
+// ==========================================================
+// SECURITY
+// ==========================================================
 
 app.use(helmet());
 
-/* ==========================================================
-   BODY PARSERS
-========================================================== */
+// ==========================================================
+// PUBLIC LOCAL STORAGE
+//
+// Only /data/uploads/public is exposed.
+// Private documents are NEVER served statically.
+// ==========================================================
+
+const PUBLIC_UPLOAD_ROOT = path.resolve(
+  process.env.UPLOAD_ROOT || "/data/uploads",
+  "public"
+);
+
+app.use(
+  "/uploads",
+  express.static(PUBLIC_UPLOAD_ROOT, {
+    dotfiles: "deny",
+    index: false,
+    fallthrough: true,
+    maxAge: "1d",
+    immutable: true,
+
+    setHeaders(res) {
+      res.setHeader("X-Content-Type-Options", "nosniff");
+    },
+  })
+);
+
+// ==========================================================
+// BODY PARSERS
+// ==========================================================
 
 app.use(express.json());
 
@@ -119,15 +147,29 @@ app.use(
 
 app.use(cookieParser());
 
-/* ==========================================================
-   LOGGER
-========================================================== */
+// ==========================================================
+// LOGGER
+//
+// Do not log query strings because private file URLs
+// contain signed access tokens.
+// ==========================================================
 
-app.use(morgan("dev"));
+app.use(
+  morgan((tokens, req, res) => {
+    const safeUrl = req.originalUrl.split("?")[0];
 
-/* ==========================================================
-   HEALTH CHECK
-========================================================== */
+    return [
+      tokens.method(req, res),
+      safeUrl,
+      tokens.status(req, res),
+      `${tokens["response-time"](req, res)} ms`,
+    ].join(" ");
+  })
+);
+
+// ==========================================================
+// HEALTH CHECK
+// ==========================================================
 
 app.get("/", (req, res) => {
   return res.status(200).json({
@@ -136,117 +178,134 @@ app.get("/", (req, res) => {
   });
 });
 
-/* ==========================================================
-   AUTHENTICATION
-========================================================== */
+// ==========================================================
+// AUTHENTICATION
+// ==========================================================
 
 app.use("/api/auth", authRoutes);
 
-/* Authenticated announcements feed for student and mentor dashboards */
+// ==========================================================
+// PRIVATE FILE DELIVERY
+//
+// Authentication and record-level authorization are handled
+// by the file routes and files service.
+// ==========================================================
+
+app.use("/api/files", fileRoutes);
+
+// ==========================================================
+// ANNOUNCEMENTS
+// ==========================================================
+
 app.use("/api/announcements", announcementFeedRoutes);
 
-/* ==========================================================
-   MENTEE / STUDENT
-========================================================== */
+// ==========================================================
+// MENTEE / STUDENT
+// ==========================================================
 
 app.use("/api/mentee", menteeRoutes);
 
-/* ==========================================================
-   ADMIN MENTOR DETAILS
-========================================================== */
+// ==========================================================
+// ADMIN MENTOR DETAILS
+// ==========================================================
 
 app.use("/api/admin", mentorDetailsRoutes);
 
-/* ==========================================================
-   ADMIN
-========================================================== */
+// ==========================================================
+// ADMIN
+// ==========================================================
 
 app.use("/api/admin", adminRoutes);
 app.use("/api/admin/student-profile", adminStudentProfileRoutes);
 
-/* ==========================================================
-   MENTOR
-========================================================== */
+// ==========================================================
+// MENTOR
+// ==========================================================
 
 app.use("/api/mentor", mentorRoutes);
 
-/* ==========================================================
-   MENTOR STUDENTS
-========================================================== */
+// ==========================================================
+// MENTOR STUDENTS
+// ==========================================================
 
 app.use("/api/mentor/students", mentorStudentsRoutes);
 
-/* ==========================================================
-   MENTOR STUDENT ACADEMICS
-========================================================== */
+// ==========================================================
+// MENTOR STUDENT ACADEMICS
+// ==========================================================
 
 app.use("/api/mentor/students", mentorAcademicsRoutes);
 
-/* ==========================================================
-   MENTOR STUDENT ATTENDANCE
-========================================================== */
+// ==========================================================
+// MENTOR STUDENT ATTENDANCE
+// ==========================================================
 
 app.use("/api/mentor/students", attendanceRoutes);
 
-/* ==========================================================
-   MENTOR RESEARCH
-========================================================== */
+// ==========================================================
+// MENTOR RESEARCH
+// ==========================================================
 
 app.use("/api/mentor/students", mentorResearchRoutes);
 
-/* ==========================================================
-   MENTOR CO-CURRICULAR
-========================================================== */
+// ==========================================================
+// MENTOR CO-CURRICULAR
+// ==========================================================
 
 app.use("/api/mentor/students", mentorCoCurricularRoutes);
 
-/* ==========================================================
-   MENTOR EXTRA-CURRICULAR
-========================================================== */
+// ==========================================================
+// MENTOR EXTRA-CURRICULAR
+// ==========================================================
 
 app.use("/api/mentor/students", mentorExtraCurricularRoutes);
 
-/* ==========================================================
-   MENTOR AWARDS & ACHIEVEMENTS
-========================================================== */
+// ==========================================================
+// MENTOR AWARDS & ACHIEVEMENTS
+// ==========================================================
 
 app.use("/api/mentor/students", mentorAwardsAchievementsRoutes);
 
-/* ==========================================================
-   MENTOR DOCUMENTS
-========================================================== */
+// ==========================================================
+// MENTOR DOCUMENTS
+// ==========================================================
 
 app.use("/api/mentor/students", mentorDocumentsRoutes);
 
-/* ==========================================================
-   MENTOR CERTIFICATES
-========================================================== */
+// ==========================================================
+// MENTOR CERTIFICATES
+// ==========================================================
 
 app.use("/api/mentor/students", mentorCertificatesRoutes);
 
-/* ==========================================================
-   MENTOR OVERVIEW & REPORTS
-========================================================== */
+// ==========================================================
+// MENTOR OVERVIEW & REPORTS
+// ==========================================================
 
 app.use("/api/mentor/students", mentorOverviewRoutes);
 app.use("/api/mentor/students", studentReportRoutes);
 
-/* ==========================================================
-   CHAT / MESSAGES
-   REST endpoints remain authenticated.
-========================================================== */
+// ==========================================================
+// MENTOR MEETINGS
+// ==========================================================
+
+app.use("/api/mentor/students", mentorMeetingsRoutes);
+
+// ==========================================================
+// CHAT / MESSAGES
+// ==========================================================
 
 app.use("/api/chat", authenticate, messagesRoutes);
 
-/* ==========================================================
-   UPLOAD ERROR HANDLER
-========================================================== */
+// ==========================================================
+// UPLOAD ERROR HANDLER
+// ==========================================================
 
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     const message =
       err.code === "LIMIT_FILE_SIZE"
-        ? "Profile picture must be 5 MB or smaller."
+        ? "File exceeds the allowed upload size."
         : "Invalid file upload.";
 
     return res.status(400).json({
@@ -259,9 +318,9 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
-/* ==========================================================
-   404 HANDLER
-========================================================== */
+// ==========================================================
+// 404 HANDLER
+// ==========================================================
 
 app.use((req, res) => {
   return res.status(404).json({
@@ -270,21 +329,30 @@ app.use((req, res) => {
   });
 });
 
-/* ==========================================================
-   GLOBAL ERROR HANDLER
-========================================================== */
+// ==========================================================
+// GLOBAL ERROR HANDLER
+// ==========================================================
 
 app.use((err, req, res, next) => {
-  console.error("❌ Error:", err);
-
   if (res.headersSent) {
     return next(err);
   }
 
-  return res.status(err.statusCode || 500).json({
+  // Do not expose internal error details to clients.
+  console.error("Request failed:", {
+    method: req.method,
+    path: req.path,
+    status: err.statusCode || err.status || 500,
+    message: err.message,
+  });
+
+  return res.status(err.statusCode || err.status || 500).json({
     success: false,
-    statusCode: err.statusCode || 500,
-    message: err.message || "Internal Server Error",
+    statusCode: err.statusCode || err.status || 500,
+    message:
+      err.statusCode || err.status
+        ? err.message
+        : "Internal Server Error",
   });
 });
 

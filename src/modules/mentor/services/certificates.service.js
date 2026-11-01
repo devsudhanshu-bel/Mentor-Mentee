@@ -1,6 +1,69 @@
 import prisma from "../../../config/prisma.hod.js";
+import { createFileAccessToken } from "../../../utils/fileAccessToken.js";
 
 class MentorCertificatesService {
+  // ==========================================================
+  // VALIDATE LOCAL DOCUMENT STORAGE KEY
+  // ==========================================================
+
+  isLocalFile(storageKey) {
+    if (typeof storageKey !== "string") {
+      return false;
+    }
+
+    if (!storageKey.startsWith("private/documents/")) {
+      return false;
+    }
+
+    if (
+      storageKey.includes("\\") ||
+      storageKey.includes("\0")
+    ) {
+      return false;
+    }
+
+    const segments = storageKey.split("/");
+
+    return (
+      segments.length >= 3 &&
+      segments.every(
+        (segment) =>
+          segment !== "" &&
+          segment !== "." &&
+          segment !== ".."
+      )
+    );
+  }
+
+  // ==========================================================
+  // GENERATE SECURE DOCUMENT URL
+  // ==========================================================
+
+  decorateDocument(document, userId) {
+    if (!document) return document;
+
+    const storageKey = document.cloudinaryPublicId;
+
+    if (!this.isLocalFile(storageKey)) {
+      return {
+        ...document,
+        fileUrl: null,
+      };
+    }
+
+    const token = createFileAccessToken({
+      storageKey,
+      recordType: "student_document",
+      recordId: document.id,
+      userId,
+    });
+
+    return {
+      ...document,
+      fileUrl: `/api/files/private?token=${encodeURIComponent(token)}`,
+    };
+  }
+
   // ==========================================================
   // GET ACTIVE MENTOR
   // ==========================================================
@@ -83,7 +146,6 @@ class MentorCertificatesService {
 
   // ==========================================================
   // GET ALL CERTIFICATE DOCUMENTS
-  // GET /api/mentor/students/:studentId/certificates
   // ==========================================================
 
   async getCertificateDocuments(userId, studentId) {
@@ -111,7 +173,9 @@ class MentorCertificatesService {
           id: mentor.id,
           fullName: mentor.fullName,
         },
-        documents,
+        documents: documents.map((document) =>
+          this.decorateDocument(document, userId)
+        ),
       },
     };
   }
@@ -162,7 +226,6 @@ class MentorCertificatesService {
 
   // ==========================================================
   // GET SINGLE CERTIFICATE
-  // GET /api/mentor/students/:studentId/certificates/:documentId
   // ==========================================================
 
   async getDocumentById(userId, studentId, documentId) {
@@ -186,7 +249,7 @@ class MentorCertificatesService {
 
     return {
       success: true,
-      data: document,
+      data: this.decorateDocument(document, userId),
     };
   }
 
@@ -229,7 +292,10 @@ class MentorCertificatesService {
       throw error;
     }
 
-    const normalizedRemark = mentorRemark?.trim() || null;
+    const normalizedRemark =
+      typeof mentorRemark === "string"
+        ? mentorRemark.trim() || null
+        : null;
 
     if (
       status === "CORRECTIONS_REQUESTED" &&
@@ -262,7 +328,7 @@ class MentorCertificatesService {
         status === "VERIFIED"
           ? "Certificate verified successfully."
           : "Corrections requested successfully.",
-      data: updatedDocument,
+      data: this.decorateDocument(updatedDocument, userId),
     };
   }
 }

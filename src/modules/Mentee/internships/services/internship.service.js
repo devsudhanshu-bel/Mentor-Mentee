@@ -2,8 +2,13 @@ import { randomUUID } from "node:crypto";
 
 import prisma from "../../../../config/prisma.hod.js";
 import ApiError from "../../../../utils/ApiError.js";
-import uploadToCloudinary from "../../../../utils/cloudinaryUpload.js";
-import deleteFromCloudinary from "../../../../utils/cloudinaryDelete.js";
+
+import {
+  uploadLocalFile,
+  deleteLocalFile,
+} from "../../../../utils/localStorage.js";
+
+import { createFileAccessToken } from "../../../../utils/fileAccessToken.js";
 
 const INITIAL_DOCUMENT_TYPES = ["OFFER_LETTER"];
 
@@ -24,6 +29,74 @@ const CURRENT_STATUSES = [
   "ONGOING",
   "PENDING_COMPLETION_VERIFICATION",
 ];
+
+// ============================================================
+// PRIVATE FILE HELPERS
+// ============================================================
+
+const isLocalInternshipFile = (storageKey) =>
+  typeof storageKey === "string" &&
+  storageKey.startsWith("private/internships/");
+
+const decorateInternshipDocument = (document, userAccountId) => {
+  if (!document?.cloudinaryPublicId) {
+    return document;
+  }
+
+  if (!isLocalInternshipFile(document.cloudinaryPublicId)) {
+    return document;
+  }
+
+  const token = createFileAccessToken({
+    storageKey: document.cloudinaryPublicId,
+    recordType: "internship_document",
+    recordId: document.id,
+    userId: userAccountId,
+  });
+
+  return {
+    ...document,
+    fileUrl: `/api/files/private?token=${encodeURIComponent(token)}`,
+  };
+};
+
+const decorateInternship = (internship, userAccountId) => {
+  if (!internship) return internship;
+
+  return {
+    ...internship,
+    internship_documents: (
+      internship.internship_documents || []
+    ).map((document) =>
+      decorateInternshipDocument(document, userAccountId),
+    ),
+  };
+};
+
+const decorateInternships = (internships, userAccountId) =>
+  internships.map((internship) =>
+    decorateInternship(internship, userAccountId),
+  );
+
+const cleanupStoredFile = async (storageKey) => {
+  if (!storageKey) return;
+
+  if (!isLocalInternshipFile(storageKey)) {
+    console.warn(
+      "Skipped cleanup: invalid local internship storage key."
+    );
+    return;
+  }
+
+  try {
+    await deleteLocalFile(storageKey);
+  } catch (error) {
+    console.error(
+      "Failed to clean up local internship document:",
+      error
+    );
+  }
+};
 
 // ============================================================
 // STUDENT HELPERS
@@ -90,20 +163,14 @@ const validateDate = (value, fieldName, required = false) => {
   return date;
 };
 
-const getMissingDocuments = (
-  documents,
-  requiredTypes,
-  stage,
-) => {
+const getMissingDocuments = (documents, requiredTypes, stage) => {
   const uploadedTypes = new Set(
     documents
       .filter((document) => document.submissionStage === stage)
       .map((document) => document.documentType),
   );
 
-  return requiredTypes.filter(
-    (type) => !uploadedTypes.has(type),
-  );
+  return requiredTypes.filter((type) => !uploadedTypes.has(type));
 };
 
 // ============================================================
@@ -126,9 +193,7 @@ const createInternship = async (userAccountId, payload) => {
     description,
   } = payload;
 
-  if (
-    !["ONGOING", "ALREADY_COMPLETED"].includes(internshipType)
-  ) {
+  if (!["ONGOING", "ALREADY_COMPLETED"].includes(internshipType)) {
     throw new ApiError(
       400,
       "internshipType must be ONGOING or ALREADY_COMPLETED",
@@ -143,19 +208,11 @@ const createInternship = async (userAccountId, payload) => {
     throw new ApiError(400, "Internship title is required");
   }
 
-  const parsedStartDate = validateDate(
-    startDate,
-    "Start date",
-    true,
-  );
-
+  const parsedStartDate = validateDate(startDate, "Start date", true);
   const parsedEndDate = validateDate(endDate, "End date");
 
   if (parsedEndDate && parsedEndDate < parsedStartDate) {
-    throw new ApiError(
-      400,
-      "End date cannot be before start date",
-    );
+    throw new ApiError(400, "End date cannot be before start date");
   }
 
   if (
@@ -214,21 +271,23 @@ const getMyInternships = async (userAccountId) => {
     },
   });
 
-  return {
-    internships,
+  const decorated = decorateInternships(internships, userAccountId);
 
-    current: internships.filter((item) =>
+  return {
+    internships: decorated,
+
+    current: decorated.filter((item) =>
       CURRENT_STATUSES.includes(item.status),
     ),
 
-    history: internships.filter(
+    history: decorated.filter(
       (item) =>
         item.status === "COMPLETED" &&
         item.verificationStatus === "APPROVED" &&
         item.completionVerificationStatus === "APPROVED",
     ),
 
-    pendingVerifications: internships.filter(
+    pendingVerifications: decorated.filter(
       (item) =>
         item.verificationStatus === "PENDING" ||
         item.completionVerificationStatus === "PENDING",
@@ -240,22 +299,16 @@ const getMyInternships = async (userAccountId) => {
 // GET ONE INTERNSHIP
 // ============================================================
 
-const getInternshipById = async (
-  userAccountId,
-  internshipId,
-) => {
+const getInternshipById = async (userAccountId, internshipId) => {
   const student = await getStudent(userAccountId);
 
-  return getOwnedInternship(student.id, internshipId);
+  const internship = await getOwnedInternship(student.id, internshipId);
+
+  return decorateInternship(internship, userAccountId);
 };
 
 // ============================================================
 // UPLOAD OR REPLACE INTERNSHIP DOCUMENT
-//
-// FIX:
-// A rejected offer letter can now be replaced.
-// Successful replacement resets initial verification to PENDING.
-// Existing internship review history is preserved.
 // ============================================================
 
 const uploadInternshipDocument = async (
@@ -265,10 +318,7 @@ const uploadInternshipDocument = async (
   file,
 ) => {
   if (!file) {
-    throw new ApiError(
-      400,
-      "Please select a document to upload",
-    );
+    throw new ApiError(400, "Please select a document to upload");
   }
 
   const student = await getStudent(userAccountId);
@@ -281,10 +331,7 @@ const uploadInternshipDocument = async (
   const { documentType } = payload;
 
   if (!ALLOWED_DOCUMENT_TYPES.includes(documentType)) {
-    throw new ApiError(
-      400,
-      "Invalid internship document type",
-    );
+    throw new ApiError(400, "Invalid internship document type");
   }
 
   if (
@@ -300,19 +347,12 @@ const uploadInternshipDocument = async (
   let submissionStage;
   let isRejectedOfferReplacement = false;
 
-  // ----------------------------------------------------------
-  // OFFER LETTER
-  // ----------------------------------------------------------
-
   if (documentType === "OFFER_LETTER") {
     const isInitialStage =
       internship.status === "PENDING_INITIAL_VERIFICATION";
 
-    const isPending =
-      internship.verificationStatus === "PENDING";
-
-    const isRejected =
-      internship.verificationStatus === "REJECTED";
+    const isPending = internship.verificationStatus === "PENDING";
+    const isRejected = internship.verificationStatus === "REJECTED";
 
     if (!isInitialStage || (!isPending && !isRejected)) {
       throw new ApiError(
@@ -322,17 +362,8 @@ const uploadInternshipDocument = async (
     }
 
     submissionStage = "INITIAL";
-
     isRejectedOfferReplacement = isRejected;
-  }
-
-  // ----------------------------------------------------------
-  // COMPLETION DOCUMENTS
-  // ----------------------------------------------------------
-
-  else if (
-    COMPLETION_DOCUMENT_TYPES.includes(documentType)
-  ) {
+  } else if (COMPLETION_DOCUMENT_TYPES.includes(documentType)) {
     if (internship.internshipType === "ALREADY_COMPLETED") {
       if (
         internship.status !== "PENDING_INITIAL_VERIFICATION" ||
@@ -355,18 +386,10 @@ const uploadInternshipDocument = async (
 
       submissionStage = "COMPLETION";
     }
-  }
-
-  // ----------------------------------------------------------
-  // OTHER DOCUMENTS
-  // ----------------------------------------------------------
-
-  else {
+  } else {
     if (
       internship.status === "PENDING_INITIAL_VERIFICATION" &&
-      ["PENDING", "REJECTED"].includes(
-        internship.verificationStatus,
-      )
+      ["PENDING", "REJECTED"].includes(internship.verificationStatus)
     ) {
       submissionStage = "INITIAL";
     } else if (internship.status === "ONGOING") {
@@ -379,7 +402,6 @@ const uploadInternshipDocument = async (
     }
   }
 
-  // Find the existing document of the same type and stage.
   const existingDocument =
     await prisma.internship_documents.findFirst({
       where: {
@@ -392,10 +414,10 @@ const uploadInternshipDocument = async (
       },
     });
 
-  // Upload the new asset first.
-  const uploadedFile = await uploadToCloudinary(
+  const uploadedFile = await uploadLocalFile(
     file,
-    `mentor-mentee/mentees/internships/${internship.id}`,
+    "internships",
+    [internship.id],
   );
 
   let document;
@@ -409,37 +431,33 @@ const uploadInternshipDocument = async (
       documentName: file.originalname,
       fileType: file.mimetype,
       fileSize: file.size,
-      cloudinaryPublicId: uploadedFile.publicId,
-      fileUrl: uploadedFile.url,
-      resourceType: uploadedFile.resourceType,
+      cloudinaryPublicId: uploadedFile.storageKey,
+      fileUrl: null,
+      resourceType: uploadedFile.resourceType || "raw",
       uploadedAt: now,
       updatedAt: now,
     };
 
-    // Save the replacement and reset the review state atomically.
     document = await prisma.$transaction(async (tx) => {
       let savedDocument;
 
       if (existingDocument) {
-        savedDocument =
-          await tx.internship_documents.update({
-            where: {
-              id: existingDocument.id,
-            },
-            data: documentData,
-          });
+        savedDocument = await tx.internship_documents.update({
+          where: {
+            id: existingDocument.id,
+          },
+          data: documentData,
+        });
       } else {
-        savedDocument =
-          await tx.internship_documents.create({
-            data: {
-              id: randomUUID(),
-              internshipId: internship.id,
-              ...documentData,
-            },
-          });
+        savedDocument = await tx.internship_documents.create({
+          data: {
+            id: randomUUID(),
+            internshipId: internship.id,
+            ...documentData,
+          },
+        });
       }
 
-      // Only reopen verification when replacing a rejected offer letter.
       if (
         documentType === "OFFER_LETTER" &&
         isRejectedOfferReplacement
@@ -458,43 +476,18 @@ const uploadInternshipDocument = async (
       return savedDocument;
     });
   } catch (error) {
-    // The DB transaction failed; remove the newly uploaded asset.
-    try {
-      await deleteFromCloudinary(
-        uploadedFile.publicId,
-        uploadedFile.resourceType || "raw",
-      );
-    } catch (cleanupError) {
-      console.error(
-        "Cloudinary cleanup failed after document upload error:",
-        cleanupError,
-      );
-    }
-
+    await cleanupStoredFile(uploadedFile.storageKey);
     throw error;
   }
 
-  // Delete the old Cloudinary asset only after the database
-  // transaction succeeds.
   if (
     existingDocument?.cloudinaryPublicId &&
-    existingDocument.cloudinaryPublicId !==
-      uploadedFile.publicId
+    existingDocument.cloudinaryPublicId !== uploadedFile.storageKey
   ) {
-    try {
-      await deleteFromCloudinary(
-        existingDocument.cloudinaryPublicId,
-        existingDocument.resourceType || "raw",
-      );
-    } catch (error) {
-      console.error(
-        "Failed to delete replaced internship document:",
-        error,
-      );
-    }
+    await cleanupStoredFile(existingDocument.cloudinaryPublicId);
   }
 
-  return document;
+  return decorateInternshipDocument(document, userAccountId);
 };
 
 // ============================================================
@@ -513,19 +506,15 @@ const deleteInternshipDocument = async (
     internshipId,
   );
 
-  const document =
-    await prisma.internship_documents.findFirst({
-      where: {
-        id: documentId,
-        internshipId: internship.id,
-      },
-    });
+  const document = await prisma.internship_documents.findFirst({
+    where: {
+      id: documentId,
+      internshipId: internship.id,
+    },
+  });
 
   if (!document) {
-    throw new ApiError(
-      404,
-      "Internship document not found",
-    );
+    throw new ApiError(404, "Internship document not found");
   }
 
   const canDeleteInitial =
@@ -553,26 +542,13 @@ const deleteInternshipDocument = async (
     );
   }
 
-  // Keep the rejected submission's documents replaceable.
-  // Do not reset verification status just because a document
-  // was deleted; only a successful replacement resets it.
   await prisma.internship_documents.delete({
     where: {
       id: document.id,
     },
   });
 
-  try {
-    await deleteFromCloudinary(
-      document.cloudinaryPublicId,
-      document.resourceType || "raw",
-    );
-  } catch (error) {
-    console.error(
-      "Failed to delete internship document from Cloudinary:",
-      error,
-    );
-  }
+  await cleanupStoredFile(document.cloudinaryPublicId);
 
   return {
     documentId: document.id,
@@ -629,7 +605,7 @@ const requestCompletion = async (
     );
   }
 
-  return prisma.student_internships.update({
+  const updated = await prisma.student_internships.update({
     where: {
       id: internship.id,
     },
@@ -644,6 +620,8 @@ const requestCompletion = async (
       internship_documents: true,
     },
   });
+
+  return decorateInternship(updated, userAccountId);
 };
 
 // ============================================================
@@ -651,15 +629,14 @@ const requestCompletion = async (
 // ============================================================
 
 const getInitialSubmissionStatus = async (internshipId) => {
-  const internship =
-    await prisma.student_internships.findUnique({
-      where: {
-        id: internshipId,
-      },
-      include: {
-        internship_documents: true,
-      },
-    });
+  const internship = await prisma.student_internships.findUnique({
+    where: {
+      id: internshipId,
+    },
+    include: {
+      internship_documents: true,
+    },
+  });
 
   if (!internship) {
     throw new ApiError(404, "Internship not found");
@@ -686,11 +663,8 @@ const getInitialSubmissionStatus = async (internshipId) => {
       internship.status === "PENDING_INITIAL_VERIFICATION",
 
     missingDocuments,
-
     verificationStatus: internship.verificationStatus,
-
     status: internship.status,
-
     mentorRemark: internship.mentorRemark,
 
     canReplaceOfferLetter:

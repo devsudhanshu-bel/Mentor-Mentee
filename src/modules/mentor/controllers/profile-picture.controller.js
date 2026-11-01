@@ -1,12 +1,15 @@
 import multer from "multer";
+import { randomUUID } from "node:crypto";
 
 import hodPrisma from "../../../config/prisma.hod.js";
 import ApiError from "../../../utils/ApiError.js";
 import ApiResponse from "../../../utils/ApiResponse.js";
 import asyncHandler from "../../../utils/asyncHandler.js";
 
-import uploadToCloudinary from "../../../utils/cloudinaryUpload.js";
-import deleteFromCloudinary from "../../../utils/cloudinaryDelete.js";
+import {
+  uploadLocalFile,
+  deleteLocalFile,
+} from "../../../utils/localStorage.js";
 
 // ==========================================================
 // CONFIGURATION
@@ -19,6 +22,75 @@ const ALLOWED_MIME_TYPES = new Set([
   "image/png",
   "image/webp",
 ]);
+
+const PUBLIC_AVATAR_URL_PREFIX = "/uploads/avatars/mentors/";
+
+// ==========================================================
+// IMAGE SIGNATURE VALIDATION
+// ==========================================================
+
+const validateImageSignature = (file) => {
+  if (!Buffer.isBuffer(file.buffer) || file.buffer.length < 12) {
+    return false;
+  }
+
+  const buffer = file.buffer;
+
+  switch (file.mimetype) {
+    case "image/jpeg":
+      return (
+        buffer[0] === 0xff &&
+        buffer[1] === 0xd8 &&
+        buffer[2] === 0xff
+      );
+
+    case "image/png":
+      return (
+        buffer.subarray(0, 8).toString("hex") ===
+        "89504e470d0a1a0a"
+      );
+
+    case "image/webp":
+      return (
+        buffer.subarray(0, 4).toString() === "RIFF" &&
+        buffer.subarray(8, 12).toString() === "WEBP"
+      );
+
+    default:
+      return false;
+  }
+};
+
+// ==========================================================
+// AVATAR STORAGE HELPERS
+// ==========================================================
+
+const getLocalAvatarStorageKey = (profileImage) => {
+  if (
+    typeof profileImage !== "string" ||
+    !profileImage.startsWith(PUBLIC_AVATAR_URL_PREFIX)
+  ) {
+    return null;
+  }
+
+  return `public/${profileImage.slice("/uploads/".length)}`;
+};
+
+const cleanupOldAvatar = async (profileImage) => {
+  const storageKey = getLocalAvatarStorageKey(profileImage);
+
+  // Preserve legacy Cloudinary images.
+  if (!storageKey) return;
+
+  try {
+    await deleteLocalFile(storageKey);
+  } catch (error) {
+    console.error(
+      "Failed to delete old mentor avatar:",
+      error
+    );
+  }
+};
 
 // ==========================================================
 // MULTER UPLOAD
@@ -53,7 +125,6 @@ export const mentorAvatarUpload = multer({
 class MentorProfilePictureController {
   // ========================================================
   // UPLOAD / REPLACE PROFILE PICTURE
-  // POST /api/mentor/profile/picture
   // ========================================================
 
   upload = asyncHandler(async (req, res) => {
@@ -64,15 +135,25 @@ class MentorProfilePictureController {
     }
 
     if (!req.file) {
-      throw new ApiError(400, "Please select a profile picture.");
+      throw new ApiError(
+        400,
+        "Please select a profile picture."
+      );
     }
 
-    // Resolve the authenticated user to their teacher record.
+    if (!validateImageSignature(req.file)) {
+      req.file.buffer = null;
+
+      throw new ApiError(
+        400,
+        "Invalid image content. Upload a valid JPEG, PNG or WebP image."
+      );
+    }
+
     const teacher = await hodPrisma.teachers.findUnique({
       where: {
         userAccountId: userId,
       },
-
       select: {
         id: true,
         teacher_profiles: {
@@ -88,32 +169,30 @@ class MentorProfilePictureController {
       throw new ApiError(404, "Mentor profile not found.");
     }
 
-    // Upload the new image to the dedicated mentor folder.
-    const uploaded = await uploadToCloudinary(
+    // Upload new image to persistent VPS storage.
+    const uploaded = await uploadLocalFile(
       req.file,
-      "avatars/mentors"
+      "avatars/mentors",
+      [teacher.id]
     );
 
-    if (!uploaded?.url || !uploaded?.publicId) {
-      throw new ApiError(
-        502,
-        "Cloudinary did not return the expected image details."
-      );
-    }
+    const profileImage = `/uploads/${uploaded.storageKey.replace(
+      /^public\//,
+      ""
+    )}`;
+
+    let profile;
 
     try {
-      // Update an existing profile or create one if necessary.
-      const profile = teacher.teacher_profiles
+      profile = teacher.teacher_profiles
         ? await hodPrisma.teacher_profiles.update({
             where: {
               teacherId: teacher.id,
             },
-
             data: {
-              profileImage: uploaded.url,
+              profileImage,
               updatedAt: new Date(),
             },
-
             select: {
               id: true,
               profileImage: true,
@@ -121,46 +200,48 @@ class MentorProfilePictureController {
           })
         : await hodPrisma.teacher_profiles.create({
             data: {
-              id: crypto.randomUUID(),
+              id: randomUUID(),
               teacherId: teacher.id,
-              profileImage: uploaded.url,
+              profileImage,
               updatedAt: new Date(),
             },
-
             select: {
               id: true,
               profileImage: true,
             },
           });
-
-      return res.status(200).json(
-        new ApiResponse(
-          200,
-          "Mentor profile picture updated successfully.",
-          {
-            profileImage: profile.profileImage,
-            publicId: uploaded.publicId,
-          }
-        )
-      );
     } catch (error) {
-      // Avoid leaving an orphaned image if the database write fails.
+      // Database failure: remove the newly uploaded image.
       try {
-        await deleteFromCloudinary(uploaded.publicId, "image");
+        await deleteLocalFile(uploaded.storageKey);
       } catch (cleanupError) {
         console.error(
           "Failed to clean up uploaded mentor avatar:",
-          cleanupError.message
+          cleanupError
         );
       }
 
       throw error;
     }
+
+    // Clean up old local image after successful DB update.
+    await cleanupOldAvatar(
+      teacher.teacher_profiles?.profileImage
+    );
+
+    return res.status(200).json(
+      new ApiResponse(
+        200,
+        "Mentor profile picture updated successfully.",
+        {
+          profileImage: profile.profileImage,
+        }
+      )
+    );
   });
 
   // ========================================================
   // REMOVE PROFILE PICTURE
-  // DELETE /api/mentor/profile/picture
   // ========================================================
 
   remove = asyncHandler(async (req, res) => {
@@ -174,7 +255,6 @@ class MentorProfilePictureController {
       where: {
         userAccountId: userId,
       },
-
       select: {
         id: true,
         teacher_profiles: {
@@ -206,12 +286,15 @@ class MentorProfilePictureController {
       where: {
         teacherId: teacher.id,
       },
-
       data: {
         profileImage: null,
         updatedAt: new Date(),
       },
     });
+
+    await cleanupOldAvatar(
+      teacher.teacher_profiles.profileImage
+    );
 
     return res.status(200).json(
       new ApiResponse(

@@ -340,7 +340,7 @@ model internship_documents {
   fileType           String
   fileSize           Int
   cloudinaryPublicId String
-  fileUrl            String
+  fileUrl            String?
   resourceType       String
   uploadedAt         DateTime                @default(now())
   updatedAt          DateTime                @updatedAt
@@ -411,7 +411,7 @@ model student_documents {
   fileType             String
   fileSize             Int
   cloudinaryPublicId   String
-  fileUrl              String
+  fileUrl              String?
   resourceType         String
   uploadedAt           DateTime         @default(now())
   updatedAt            DateTime

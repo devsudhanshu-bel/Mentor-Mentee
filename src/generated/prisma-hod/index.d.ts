@@ -23120,7 +23120,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl: string | null
     resourceType: string
     uploadedAt: Date
     updatedAt: Date
@@ -23233,7 +23233,7 @@ export namespace Prisma {
       fileType: string
       fileSize: number
       cloudinaryPublicId: string
-      fileUrl: string
+      fileUrl: string | null
       resourceType: string
       uploadedAt: Date
       updatedAt: Date
@@ -26885,7 +26885,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl: string | null
     resourceType: string
     uploadedAt: Date
     updatedAt: Date
@@ -27018,7 +27018,7 @@ export namespace Prisma {
       fileType: string
       fileSize: number
       cloudinaryPublicId: string
-      fileUrl: string
+      fileUrl: string | null
       resourceType: string
       uploadedAt: Date
       updatedAt: Date
@@ -54881,7 +54881,7 @@ export namespace Prisma {
     fileType?: StringFilter<"internship_documents"> | string
     fileSize?: IntFilter<"internship_documents"> | number
     cloudinaryPublicId?: StringFilter<"internship_documents"> | string
-    fileUrl?: StringFilter<"internship_documents"> | string
+    fileUrl?: StringNullableFilter<"internship_documents"> | string | null
     resourceType?: StringFilter<"internship_documents"> | string
     uploadedAt?: DateTimeFilter<"internship_documents"> | Date | string
     updatedAt?: DateTimeFilter<"internship_documents"> | Date | string
@@ -54897,7 +54897,7 @@ export namespace Prisma {
     fileType?: SortOrder
     fileSize?: SortOrder
     cloudinaryPublicId?: SortOrder
-    fileUrl?: SortOrder
+    fileUrl?: SortOrderInput | SortOrder
     resourceType?: SortOrder
     uploadedAt?: SortOrder
     updatedAt?: SortOrder
@@ -54916,7 +54916,7 @@ export namespace Prisma {
     fileType?: StringFilter<"internship_documents"> | string
     fileSize?: IntFilter<"internship_documents"> | number
     cloudinaryPublicId?: StringFilter<"internship_documents"> | string
-    fileUrl?: StringFilter<"internship_documents"> | string
+    fileUrl?: StringNullableFilter<"internship_documents"> | string | null
     resourceType?: StringFilter<"internship_documents"> | string
     uploadedAt?: DateTimeFilter<"internship_documents"> | Date | string
     updatedAt?: DateTimeFilter<"internship_documents"> | Date | string
@@ -54932,7 +54932,7 @@ export namespace Prisma {
     fileType?: SortOrder
     fileSize?: SortOrder
     cloudinaryPublicId?: SortOrder
-    fileUrl?: SortOrder
+    fileUrl?: SortOrderInput | SortOrder
     resourceType?: SortOrder
     uploadedAt?: SortOrder
     updatedAt?: SortOrder
@@ -54955,7 +54955,7 @@ export namespace Prisma {
     fileType?: StringWithAggregatesFilter<"internship_documents"> | string
     fileSize?: IntWithAggregatesFilter<"internship_documents"> | number
     cloudinaryPublicId?: StringWithAggregatesFilter<"internship_documents"> | string
-    fileUrl?: StringWithAggregatesFilter<"internship_documents"> | string
+    fileUrl?: StringNullableWithAggregatesFilter<"internship_documents"> | string | null
     resourceType?: StringWithAggregatesFilter<"internship_documents"> | string
     uploadedAt?: DateTimeWithAggregatesFilter<"internship_documents"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"internship_documents"> | Date | string
@@ -55253,7 +55253,7 @@ export namespace Prisma {
     fileType?: StringFilter<"student_documents"> | string
     fileSize?: IntFilter<"student_documents"> | number
     cloudinaryPublicId?: StringFilter<"student_documents"> | string
-    fileUrl?: StringFilter<"student_documents"> | string
+    fileUrl?: StringNullableFilter<"student_documents"> | string | null
     resourceType?: StringFilter<"student_documents"> | string
     uploadedAt?: DateTimeFilter<"student_documents"> | Date | string
     updatedAt?: DateTimeFilter<"student_documents"> | Date | string
@@ -55273,7 +55273,7 @@ export namespace Prisma {
     fileType?: SortOrder
     fileSize?: SortOrder
     cloudinaryPublicId?: SortOrder
-    fileUrl?: SortOrder
+    fileUrl?: SortOrderInput | SortOrder
     resourceType?: SortOrder
     uploadedAt?: SortOrder
     updatedAt?: SortOrder
@@ -55296,7 +55296,7 @@ export namespace Prisma {
     fileType?: StringFilter<"student_documents"> | string
     fileSize?: IntFilter<"student_documents"> | number
     cloudinaryPublicId?: StringFilter<"student_documents"> | string
-    fileUrl?: StringFilter<"student_documents"> | string
+    fileUrl?: StringNullableFilter<"student_documents"> | string | null
     resourceType?: StringFilter<"student_documents"> | string
     uploadedAt?: DateTimeFilter<"student_documents"> | Date | string
     updatedAt?: DateTimeFilter<"student_documents"> | Date | string
@@ -55316,7 +55316,7 @@ export namespace Prisma {
     fileType?: SortOrder
     fileSize?: SortOrder
     cloudinaryPublicId?: SortOrder
-    fileUrl?: SortOrder
+    fileUrl?: SortOrderInput | SortOrder
     resourceType?: SortOrder
     uploadedAt?: SortOrder
     updatedAt?: SortOrder
@@ -55343,7 +55343,7 @@ export namespace Prisma {
     fileType?: StringWithAggregatesFilter<"student_documents"> | string
     fileSize?: IntWithAggregatesFilter<"student_documents"> | number
     cloudinaryPublicId?: StringWithAggregatesFilter<"student_documents"> | string
-    fileUrl?: StringWithAggregatesFilter<"student_documents"> | string
+    fileUrl?: StringNullableWithAggregatesFilter<"student_documents"> | string | null
     resourceType?: StringWithAggregatesFilter<"student_documents"> | string
     uploadedAt?: DateTimeWithAggregatesFilter<"student_documents"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"student_documents"> | Date | string
@@ -58820,7 +58820,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt?: Date | string
@@ -58836,7 +58836,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt?: Date | string
@@ -58850,7 +58850,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58866,7 +58866,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58881,7 +58881,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt?: Date | string
@@ -58895,7 +58895,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -58910,7 +58910,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59272,7 +59272,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
@@ -59292,7 +59292,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
@@ -59310,7 +59310,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59330,7 +59330,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59349,7 +59349,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
@@ -59367,7 +59367,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -59386,7 +59386,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -73348,7 +73348,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
@@ -73366,7 +73366,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
@@ -73952,7 +73952,7 @@ export namespace Prisma {
     fileType?: StringFilter<"student_documents"> | string
     fileSize?: IntFilter<"student_documents"> | number
     cloudinaryPublicId?: StringFilter<"student_documents"> | string
-    fileUrl?: StringFilter<"student_documents"> | string
+    fileUrl?: StringNullableFilter<"student_documents"> | string | null
     resourceType?: StringFilter<"student_documents"> | string
     uploadedAt?: DateTimeFilter<"student_documents"> | Date | string
     updatedAt?: DateTimeFilter<"student_documents"> | Date | string
@@ -74191,7 +74191,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt?: Date | string
@@ -74205,7 +74205,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt?: Date | string
@@ -74374,7 +74374,7 @@ export namespace Prisma {
     fileType?: StringFilter<"internship_documents"> | string
     fileSize?: IntFilter<"internship_documents"> | number
     cloudinaryPublicId?: StringFilter<"internship_documents"> | string
-    fileUrl?: StringFilter<"internship_documents"> | string
+    fileUrl?: StringNullableFilter<"internship_documents"> | string | null
     resourceType?: StringFilter<"internship_documents"> | string
     uploadedAt?: DateTimeFilter<"internship_documents"> | Date | string
     updatedAt?: DateTimeFilter<"internship_documents"> | Date | string
@@ -82420,7 +82420,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt: Date | string
@@ -82894,7 +82894,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82912,7 +82912,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -82930,7 +82930,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -83063,7 +83063,7 @@ export namespace Prisma {
     fileType: string
     fileSize: number
     cloudinaryPublicId: string
-    fileUrl: string
+    fileUrl?: string | null
     resourceType: string
     uploadedAt?: Date | string
     updatedAt?: Date | string
@@ -83087,7 +83087,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -83101,7 +83101,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -83115,7 +83115,7 @@ export namespace Prisma {
     fileType?: StringFieldUpdateOperationsInput | string
     fileSize?: IntFieldUpdateOperationsInput | number
     cloudinaryPublicId?: StringFieldUpdateOperationsInput | string
-    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileUrl?: NullableStringFieldUpdateOperationsInput | string | null
     resourceType?: StringFieldUpdateOperationsInput | string
     uploadedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

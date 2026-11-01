@@ -1,7 +1,69 @@
-
 import prisma from "../../../config/prisma.hod.js";
+import { createFileAccessToken } from "../../../utils/fileAccessToken.js";
 
 class MentorCoCurricularService {
+  // ==========================================================
+  // VALIDATE LOCAL DOCUMENT STORAGE KEY
+  // ==========================================================
+
+  isLocalFile(storageKey) {
+    if (typeof storageKey !== "string") {
+      return false;
+    }
+
+    if (!storageKey.startsWith("private/documents/")) {
+      return false;
+    }
+
+    if (
+      storageKey.includes("\\") ||
+      storageKey.includes("\0")
+    ) {
+      return false;
+    }
+
+    const segments = storageKey.split("/");
+
+    return (
+      segments.length >= 3 &&
+      segments.every(
+        (segment) =>
+          segment !== "" &&
+          segment !== "." &&
+          segment !== ".."
+      )
+    );
+  }
+
+  // ==========================================================
+  // GENERATE SECURE DOCUMENT URL
+  // ==========================================================
+
+  decorateDocument(document, userId) {
+    if (!document) return document;
+
+    const storageKey = document.cloudinaryPublicId;
+
+    if (!this.isLocalFile(storageKey)) {
+      return {
+        ...document,
+        fileUrl: null,
+      };
+    }
+
+    const token = createFileAccessToken({
+      storageKey,
+      recordType: "student_document",
+      recordId: document.id,
+      userId,
+    });
+
+    return {
+      ...document,
+      fileUrl: `/api/files/private?token=${encodeURIComponent(token)}`,
+    };
+  }
+
   // ==========================================================
   // GET ACTIVE MENTOR
   // ==========================================================
@@ -112,7 +174,9 @@ class MentorCoCurricularService {
           id: mentor.id,
           fullName: mentor.fullName,
         },
-        documents,
+        documents: documents.map((document) =>
+          this.decorateDocument(document, userId)
+        ),
       },
     };
   }
@@ -131,19 +195,24 @@ class MentorCoCurricularService {
 
     const stats = {
       totalActivities: documents.length,
+
       approved: documents.filter(
         (document) =>
           document.researchReviewStatus === "VERIFIED"
       ).length,
+
       underReview: documents.filter(
         (document) =>
           document.researchReviewStatus === "NOT_REVIEWED"
       ).length,
+
       correctionsRequested: documents.filter(
         (document) =>
           document.researchReviewStatus === "CORRECTIONS_REQUESTED"
       ).length,
+
       drafts: 0,
+
       achievements: documents.filter(
         (document) =>
           document.researchReviewStatus === "VERIFIED"
@@ -186,7 +255,7 @@ class MentorCoCurricularService {
 
     return {
       success: true,
-      data: document,
+      data: this.decorateDocument(document, userId),
     };
   }
 
@@ -232,7 +301,10 @@ class MentorCoCurricularService {
       throw error;
     }
 
-    const normalizedRemark = mentorRemark?.trim() || null;
+    const normalizedRemark =
+      typeof mentorRemark === "string"
+        ? mentorRemark.trim() || null
+        : null;
 
     if (
       status === "CORRECTIONS_REQUESTED" &&
@@ -246,6 +318,8 @@ class MentorCoCurricularService {
       throw error;
     }
 
+    const now = new Date();
+
     const updatedDocument = await prisma.student_documents.update({
       where: {
         id: documentId,
@@ -253,9 +327,9 @@ class MentorCoCurricularService {
       data: {
         researchReviewStatus: status,
         reviewedByTeacherId: mentor.id,
-        reviewedAt: new Date(),
+        reviewedAt: now,
         mentorRemark: normalizedRemark,
-        updatedAt: new Date(),
+        updatedAt: now,
       },
     });
 
@@ -265,7 +339,7 @@ class MentorCoCurricularService {
         status === "VERIFIED"
           ? "Co-Curricular activity approved successfully."
           : "Corrections requested successfully.",
-      data: updatedDocument,
+      data: this.decorateDocument(updatedDocument, userId),
     };
   }
 }

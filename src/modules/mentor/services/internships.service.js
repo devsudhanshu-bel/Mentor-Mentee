@@ -2,12 +2,90 @@ import { randomUUID } from "node:crypto";
 
 import prisma from "../../../config/prisma.hod.js";
 import ApiError from "../../../utils/ApiError.js";
+import { createFileAccessToken } from "../../../utils/fileAccessToken.js";
 
 const COMPLETION_DOCUMENT_TYPES = [
   "COMPLETION_CERTIFICATE",
   "COMPLETION_LETTER",
   "FINAL_REPORT",
 ];
+
+// ============================================================
+// LOCAL STORAGE DOCUMENT URL HELPERS
+// ============================================================
+
+const isLocalInternshipFile = (storageKey) => {
+  if (typeof storageKey !== "string") {
+    return false;
+  }
+
+  if (!storageKey.startsWith("private/internships/")) {
+    return false;
+  }
+
+  if (
+    storageKey.includes("\\") ||
+    storageKey.includes("\0")
+  ) {
+    return false;
+  }
+
+  const segments = storageKey.split("/");
+
+  return (
+    segments.length >= 3 &&
+    segments.every(
+      (segment) =>
+        segment !== "" &&
+        segment !== "." &&
+        segment !== ".."
+    )
+  );
+};
+
+const decorateInternshipDocument = (document, userId) => {
+  if (!document) return document;
+
+  const storageKey = document.cloudinaryPublicId;
+
+  if (!isLocalInternshipFile(storageKey)) {
+    return {
+      ...document,
+      fileUrl: null,
+    };
+  }
+
+  const token = createFileAccessToken({
+    storageKey,
+    recordType: "internship_document",
+    recordId: document.id,
+    userId,
+  });
+
+  return {
+    ...document,
+    fileUrl: `/api/files/private?token=${encodeURIComponent(token)}`,
+  };
+};
+
+const decorateInternship = (internship, userId) => {
+  if (!internship) return internship;
+
+  return {
+    ...internship,
+    internship_documents: (
+      internship.internship_documents ?? []
+    ).map((document) =>
+      decorateInternshipDocument(document, userId)
+    ),
+  };
+};
+
+const decorateInternships = (internships, userId) => {
+  return internships.map((internship) =>
+    decorateInternship(internship, userId)
+  );
+};
 
 // ============================================================
 // MENTOR HELPERS
@@ -114,7 +192,10 @@ const validateDecision = (decision, remarks) => {
     );
   }
 
-  if (decision === "REJECTED" && !remarks?.trim()) {
+  if (
+    decision === "REJECTED" &&
+    (typeof remarks !== "string" || !remarks.trim())
+  ) {
     throw new ApiError(
       400,
       "Remarks are required when rejecting"
@@ -195,9 +276,6 @@ const getStudentInternships = async (userAccountId, studentId) => {
 
   await assertAssignedMentor(teacher.id, studentId);
 
-  // IMPORTANT:
-  // Include profileImage so the Mentor frontend can display
-  // the student's uploaded profile picture.
   const student = await prisma.students.findUnique({
     where: {
       id: studentId,
@@ -264,10 +342,13 @@ const getStudentInternships = async (userAccountId, studentId) => {
 
   return {
     student,
-    internships,
-    current,
-    history,
-    pendingVerifications,
+    internships: decorateInternships(internships, userAccountId),
+    current: decorateInternships(current, userAccountId),
+    history: decorateInternships(history, userAccountId),
+    pendingVerifications: decorateInternships(
+      pendingVerifications,
+      userAccountId
+    ),
   };
 };
 
@@ -319,9 +400,6 @@ const getInitialQueue = async (userAccountId) => {
     },
   });
 
-  // Keep incomplete submissions visible so the mentor
-  // can identify missing documents.
-
   return internships.map((internship) => {
     const requiredDocuments =
       getRequiredInitialDocuments(internship);
@@ -333,7 +411,7 @@ const getInitialQueue = async (userAccountId) => {
     );
 
     return {
-      ...internship,
+      ...decorateInternship(internship, userAccountId),
       requiredDocuments,
       missingDocuments,
       isReadyForReview: missingDocuments.length === 0,
@@ -394,9 +472,6 @@ const getCompletionQueue = async (userAccountId) => {
     ],
   });
 
-  // ALREADY_COMPLETED internships submit their completion
-  // documents during the INITIAL submission stage.
-
   return internships.map((internship) => {
     const documentStage =
       internship.internshipType === "ALREADY_COMPLETED"
@@ -410,7 +485,7 @@ const getCompletionQueue = async (userAccountId) => {
     );
 
     return {
-      ...internship,
+      ...decorateInternship(internship, userAccountId),
       documentStage,
       requiredDocuments: COMPLETION_DOCUMENT_TYPES,
       missingDocuments,
@@ -453,7 +528,7 @@ const getInternshipDetails = async (
   );
 
   return {
-    ...internship,
+    ...decorateInternship(internship, userAccountId),
     initialMissingDocuments,
     completionMissingDocuments,
     initialReadyForReview:
@@ -525,8 +600,8 @@ const reviewInitial = async (
         mentorRemark: remarks.trim(),
       };
 
-  return prisma.$transaction(async (tx) => {
-    const updated = await tx.student_internships.update({
+  const updated = await prisma.$transaction(async (tx) => {
+    const result = await tx.student_internships.update({
       where: {
         id: internship.id,
       },
@@ -556,8 +631,10 @@ const reviewInitial = async (
       },
     });
 
-    return updated;
+    return result;
   });
+
+  return decorateInternship(updated, userAccountId);
 };
 
 // ============================================================
@@ -610,8 +687,8 @@ const reviewCompletion = async (
   const now = new Date();
   const approved = decision === "APPROVED";
 
-  return prisma.$transaction(async (tx) => {
-    const updated = await tx.student_internships.update({
+  const updated = await prisma.$transaction(async (tx) => {
+    const result = await tx.student_internships.update({
       where: {
         id: internship.id,
       },
@@ -654,8 +731,10 @@ const reviewCompletion = async (
       },
     });
 
-    return updated;
+    return result;
   });
+
+  return decorateInternship(updated, userAccountId);
 };
 
 // ============================================================
@@ -668,7 +747,6 @@ const getReviewHistory = async (
 ) => {
   const teacher = await getTeacher(userAccountId);
 
-  // Confirm the mentor is currently assigned to the student.
   await getInternshipForReview(
     internshipId,
     teacher.id
