@@ -1,3 +1,4 @@
+
 import React, { useEffect, useRef, useState } from "react";
 
 import {
@@ -271,7 +272,7 @@ const EditCoCurricularModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/40 p-2 backdrop-blur-sm sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           handleClose();
@@ -282,20 +283,20 @@ const EditCoCurricularModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-cocurricular-title"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white shadow-2xl"
+        className="my-auto flex max-h-[96dvh] w-full max-w-lg min-w-0 flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[90vh]"
       >
         {/* HEADER */}
 
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-          <div>
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+          <div className="min-w-0">
             <h2
               id="edit-cocurricular-title"
-              className="text-base font-semibold text-slate-800"
+              className="break-words text-sm font-semibold text-slate-800 sm:text-base"
             >
               Edit / Replace Co-Curricular
             </h2>
 
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 break-words text-xs leading-relaxed text-slate-400">
               Update your document and resubmit it for review.
             </p>
           </div>
@@ -305,14 +306,19 @@ const EditCoCurricularModal = ({
             onClick={handleClose}
             disabled={isSaving}
             aria-label="Close edit Co-Curricular modal"
-            className="rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
+            className="shrink-0 rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={19} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4 px-5 py-5">
+        {/* FORM */}
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+        >
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
             {/* MENTOR FEEDBACK */}
 
             {mentorFeedback && (
@@ -321,7 +327,7 @@ const EditCoCurricularModal = ({
                   Mentor&apos;s Feedback
                 </p>
 
-                <p className="mt-1 whitespace-pre-wrap text-sm leading-5 text-orange-900">
+                <p className="mt-1 break-words whitespace-pre-wrap text-sm leading-5 text-orange-900">
                   {mentorFeedback}
                 </p>
               </div>
@@ -332,14 +338,14 @@ const EditCoCurricularModal = ({
             {errorMessage && (
               <div
                 role="alert"
-                className="flex items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3"
+                className="flex min-w-0 items-start gap-2 rounded-md border border-red-200 bg-red-50 p-3"
               >
                 <AlertCircle
                   size={17}
                   className="mt-0.5 shrink-0 text-red-600"
                 />
 
-                <p className="text-xs leading-5 text-red-600">
+                <p className="min-w-0 break-words text-xs leading-5 text-red-600">
                   {errorMessage}
                 </p>
               </div>
@@ -347,7 +353,7 @@ const EditCoCurricularModal = ({
 
             {/* ACTIVITY NAME */}
 
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="cocurricular-document-name"
                 className="mb-1.5 block text-xs font-medium text-slate-700"
@@ -364,7 +370,7 @@ const EditCoCurricularModal = ({
                 maxLength={100}
                 required
                 placeholder="Enter activity name"
-                className="h-10 w-full rounded-md border border-slate-300 px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+                className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
 
               <p className="mt-1 text-right text-xs text-slate-400">
@@ -374,7 +380,7 @@ const EditCoCurricularModal = ({
 
             {/* DESCRIPTION */}
 
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="cocurricular-description"
                 className="mb-1.5 block text-xs font-medium text-slate-700"
@@ -390,7 +396,7 @@ const EditCoCurricularModal = ({
                 rows={3}
                 maxLength={500}
                 placeholder="Describe your activity and any changes made..."
-                className="w-full resize-none rounded-md border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+                className="w-full min-w-0 resize-none rounded-md border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
 
               <p className="mt-1 text-right text-xs text-slate-400">
@@ -400,7 +406,7 @@ const EditCoCurricularModal = ({
 
             {/* REVISED FILE */}
 
-            <div>
+            <div className="min-w-0">
               <label className="mb-1.5 block text-xs font-medium text-slate-700">
                 Revised Activity File{" "}
                 <span className="text-red-500">*</span>
@@ -426,13 +432,21 @@ const EditCoCurricularModal = ({
                     fileInputRef.current?.click();
                   }
                 }}
-                className="cursor-pointer rounded-lg border-2 border-dashed border-blue-200 px-5 py-6 text-center transition hover:border-blue-400 hover:bg-blue-50/30"
+                className={`cursor-pointer rounded-lg border-2 border-dashed border-blue-200 px-3 py-5 text-center transition hover:border-blue-400 hover:bg-blue-50/30 sm:px-5 sm:py-6 ${
+                  isSaving ? "pointer-events-none opacity-60" : ""
+                }`}
               >
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 sm:h-11 sm:w-11">
                   {selectedFile ? (
-                    <FileCheck2 size={22} className="text-green-600" />
+                    <FileCheck2
+                      size={22}
+                      className="text-green-600"
+                    />
                   ) : (
-                    <UploadCloud size={22} className="text-blue-600" />
+                    <UploadCloud
+                      size={22}
+                      className="text-blue-600"
+                    />
                   )}
                 </div>
 
@@ -452,7 +466,7 @@ const EditCoCurricularModal = ({
                   </>
                 ) : (
                   <>
-                    <p className="text-sm font-medium text-slate-700">
+                    <p className="break-words text-sm font-medium text-slate-700">
                       Select your revised document
                     </p>
 
@@ -460,14 +474,14 @@ const EditCoCurricularModal = ({
                       Click to browse or drag and drop
                     </p>
 
-                    <p className="mt-3 text-[11px] text-slate-400">
+                    <p className="mt-3 break-words text-[11px] text-slate-400">
                       PDF, DOC, DOCX, PPT, PPTX · Maximum 20 MB
                     </p>
                   </>
                 )}
               </div>
 
-              <p className="mt-2 text-xs leading-5 text-slate-500">
+              <p className="mt-2 break-words text-xs leading-5 text-slate-500">
                 Your revised file will replace the existing file on the
                 activity record once the update succeeds.
               </p>
@@ -476,12 +490,12 @@ const EditCoCurricularModal = ({
 
           {/* FOOTER */}
 
-          <div className="flex justify-end gap-2 border-t border-slate-200 bg-slate-50 px-5 py-4">
+          <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:justify-end sm:px-5 sm:py-4">
             <button
               type="button"
               onClick={handleClose}
               disabled={isSaving}
-              className="h-9 rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+              className="h-10 w-full rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50 sm:w-auto"
             >
               Cancel
             </button>
@@ -489,7 +503,7 @@ const EditCoCurricularModal = ({
             <button
               type="submit"
               disabled={isSaving}
-              className="flex h-9 items-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
               {isSaving ? (
                 <>

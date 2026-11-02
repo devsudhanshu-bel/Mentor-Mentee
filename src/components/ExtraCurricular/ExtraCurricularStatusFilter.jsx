@@ -1,12 +1,16 @@
+
 import React from "react";
 import { ChevronDown } from "lucide-react";
 
 const ExtraCurricularStatusFilter = () => {
   return (
-    <button className="h-9 border border-slate-200 rounded-md px-3 flex items-center gap-2 text-xs font-medium text-slate-600 bg-white hover:bg-slate-50 transition">
+    <button
+      type="button"
+      className="flex h-9 w-full items-center justify-center gap-2 rounded-md border border-slate-200 bg-white px-3 text-xs font-medium text-slate-600 transition hover:bg-slate-50 sm:w-auto"
+    >
       All Status
 
-      <ChevronDown size={16} />
+      <ChevronDown size={16} className="shrink-0" />
     </button>
   );
 };

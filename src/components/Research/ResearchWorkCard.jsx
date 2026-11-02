@@ -1,5 +1,5 @@
-import React from "react";
 
+import React from "react";
 import {
   FileText,
   FileSpreadsheet,
@@ -68,7 +68,6 @@ const normalizeStatusValue = (value) =>
     .replace(/[\s-]+/g, "_");
 
 const getResearchStatus = (research) => {
-  // Use the actual review field stored in student_documents first.
   const rawStatus =
     research?.researchReviewStatus ??
     research?.reviewStatus ??
@@ -109,7 +108,6 @@ const ResearchWorkCard = ({
   onResubmit,
   deleting = false,
 }) => {
-  const reviewStatus = getResearchStatus(research);
   const status = getStatusConfig(research);
   const StatusIcon = status.icon;
 
@@ -283,9 +281,10 @@ const ResearchWorkCard = ({
   // ========================================================
 
   return (
-    <article className="rounded-xl border border-slate-200 bg-white px-4 py-4 transition hover:border-blue-200 hover:shadow-sm">
-      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-        {/* Document details */}
+    <article className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition hover:border-blue-200 hover:shadow-sm sm:p-4">
+      <div className="flex min-w-0 flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+
+        {/* Document Details */}
 
         <div className="flex min-w-0 flex-1 items-start gap-3">
           {renderFileIcon()}
@@ -303,30 +302,34 @@ const ResearchWorkCard = ({
             </p>
 
             {description && (
-              <p className="mt-2 whitespace-pre-wrap break-words text-sm text-slate-600">
+              <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-5 text-slate-600">
                 {description}
               </p>
             )}
 
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
-              <span className="inline-flex items-center gap-1.5">
-                <CalendarDays size={13} />
-                Submitted {formatDate(submittedDate)}
+              <span className="inline-flex min-w-0 items-center gap-1.5">
+                <CalendarDays size={13} className="shrink-0" />
+                <span className="break-words">
+                  Submitted {formatDate(submittedDate)}
+                </span>
               </span>
 
-              {fileSize && <span>{fileSize}</span>}
+              {fileSize && (
+                <span className="shrink-0">{fileSize}</span>
+              )}
             </div>
           </div>
         </div>
 
-        {/* Status and actions */}
+        {/* Status and Actions */}
 
-        <div className="flex shrink-0 flex-wrap items-center gap-2 xl:justify-end">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 xl:max-w-[480px] xl:justify-end">
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${status.className}`}
+            className={`inline-flex max-w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${status.className}`}
           >
-            <StatusIcon size={14} />
-            {status.label}
+            <StatusIcon size={14} className="shrink-0" />
+            <span className="break-words">{status.label}</span>
           </span>
 
           <button
@@ -334,7 +337,7 @@ const ResearchWorkCard = ({
             onClick={() => onView?.(research)}
             title="View document"
             aria-label={`View ${documentName}`}
-            className="rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+            className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
           >
             <Eye size={17} />
           </button>
@@ -344,7 +347,7 @@ const ResearchWorkCard = ({
             onClick={() => onDownload?.(research)}
             title="Download document"
             aria-label={`Download ${documentName}`}
-            className="rounded-md p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+            className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
           >
             <Download size={17} />
           </button>
@@ -356,18 +359,18 @@ const ResearchWorkCard = ({
               <button
                 type="button"
                 onClick={() => onEdit?.(research)}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-medium text-orange-700 transition hover:bg-orange-100"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-medium text-orange-700 transition hover:bg-orange-100 sm:text-sm"
               >
-                <Pencil size={15} />
+                <Pencil size={15} className="shrink-0" />
                 Edit / Replace
               </button>
 
               <button
                 type="button"
                 onClick={() => onResubmit?.(research)}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 sm:text-sm"
               >
-                <RotateCcw size={15} />
+                <RotateCcw size={15} className="shrink-0" />
                 Resubmit
               </button>
             </>
@@ -380,7 +383,7 @@ const ResearchWorkCard = ({
               onClick={handleDeleteClick}
               title="Delete document"
               aria-label={`Delete ${documentName}`}
-              className="rounded-md p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Trash2 size={17} />
             </button>
@@ -388,12 +391,12 @@ const ResearchWorkCard = ({
         </div>
       </div>
 
-      {/* Mentor feedback: display it, but never infer status from it */}
+      {/* Mentor Feedback */}
 
       {(mentorRemark || reviewedDate) && (
-        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3">
+        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 sm:px-4">
           <p className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-            <MessageSquare size={14} />
+            <MessageSquare size={14} className="shrink-0" />
             Mentor Feedback
           </p>
 
@@ -411,11 +414,11 @@ const ResearchWorkCard = ({
         </div>
       )}
 
-      {/* Correction instructions only for explicit correction statuses */}
+      {/* Correction Instructions */}
 
       {editable && (
-        <div className="mt-3 rounded-lg border border-orange-100 bg-orange-50/70 px-3 py-2">
-          <p className="text-xs leading-5 text-orange-800">
+        <div className="mt-3 rounded-lg border border-orange-100 bg-orange-50/70 px-3 py-2 sm:px-4">
+          <p className="break-words text-xs leading-5 text-orange-800">
             Please review your mentor&apos;s feedback, update your document,
             and resubmit it for review.
           </p>

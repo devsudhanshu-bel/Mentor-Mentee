@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Send,
@@ -58,11 +59,10 @@ const getErrorMessage = (error) =>
   error.message ||
   "Unable to send the message.";
 
-/**
- * Add an incoming message only once.
- * If the server's socket event arrives before the REST response,
- * reconcile the event with the optimistic message.
- */
+/* ==========================================================
+   MERGE MESSAGES
+========================================================== */
+
 const mergeMessage = (previous, incoming) => {
   if (!incoming?.id) return previous;
 
@@ -126,13 +126,10 @@ const mergeMessage = (previous, incoming) => {
   return [...previous, incoming];
 };
 
-/**
- * Show sender information when:
- * - This is the first message.
- * - The sender changes.
- * - More than 15 minutes have elapsed.
- * - A timestamp cannot be compared reliably.
- */
+/* ==========================================================
+   MESSAGE GROUPING
+========================================================== */
+
 const shouldShowSender = (messages, index, isOwnMessage) => {
   if (index === 0) return true;
 
@@ -169,6 +166,10 @@ const shouldShowSender = (messages, index, isOwnMessage) => {
   return elapsed < 0 || elapsed >= GROUPING_WINDOW_MS;
 };
 
+/* ==========================================================
+   DISCUSSION
+========================================================== */
+
 const Discussion = () => {
   const currentUserId = getCurrentUserId();
 
@@ -188,6 +189,10 @@ const Discussion = () => {
   const socketRef = useRef(null);
   const joinedConversationRef = useRef(null);
 
+  /* ========================================================
+     SCROLL HELPERS
+  ======================================================== */
+
   const scrollMessagesToBottom = useCallback(() => {
     const container = messagesContainerRef.current;
     if (!container) return;
@@ -203,9 +208,10 @@ const Discussion = () => {
     });
   }, []);
 
-  /**
-   * Load the mentee's assigned conversation and its latest messages.
-   */
+  /* ========================================================
+     LOAD CONVERSATION
+  ======================================================== */
+
   const loadConversation = useCallback(async () => {
     const requestId = ++requestIdRef.current;
 
@@ -268,7 +274,6 @@ const Discussion = () => {
 
       setMessages(Array.isArray(items) ? items : []);
 
-      // Read tracking must not block the visible chat.
       api
         .patch(`/chat/conversations/${selectedConversation.id}/read`)
         .catch(() => {});
@@ -295,9 +300,10 @@ const Discussion = () => {
     scrollMessagesToBottom();
   }, [messages, scrollMessagesToBottom]);
 
-  /**
-   * Determine whether the message was sent by the current mentee.
-   */
+  /* ========================================================
+     CHECK OWN MESSAGE
+  ======================================================== */
+
   const isOwnMessage = useCallback(
     (message) => {
       if (message.isOwnMessage) return true;
@@ -326,10 +332,10 @@ const Discussion = () => {
     [currentUserId]
   );
 
-  /**
-   * Send a message through REST.
-   * Socket.IO delivers the message to the other participant.
-   */
+  /* ========================================================
+     SEND MESSAGE
+  ======================================================== */
+
   const transmitMessage = useCallback(
     async (message, targetConversation) => {
       const tempId = message.id;
@@ -371,7 +377,6 @@ const Discussion = () => {
           });
         });
 
-        // Read tracking must not block the send UI.
         api
           .patch(`/chat/conversations/${targetConversation.id}/read`)
           .catch(() => {});
@@ -394,14 +399,10 @@ const Discussion = () => {
     [restorePageScroll]
   );
 
-  /**
-   * Connect Socket.IO using the existing access token.
-   *
-   * Backend requirements:
-   * - Authenticate socket.handshake.auth.token.
-   * - Authorize chat:join before joining a conversation room.
-   * - Emit chat:message to conversation:<conversationId>.
-   */
+  /* ========================================================
+     SOCKET.IO CONNECTION
+  ======================================================== */
+
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
 
@@ -419,9 +420,8 @@ const Discussion = () => {
 
     socketRef.current = socket;
 
-    /**
-     * Handle messages received in real time.
-     */
+    /* INCOMING MESSAGE */
+
     const handleIncomingMessage = (incoming) => {
       const activeConversation = conversationRef.current;
 
@@ -437,7 +437,6 @@ const Discussion = () => {
         mergeMessage(previous, incoming)
       );
 
-      // Mark incoming messages as read without blocking rendering.
       if (
         currentUserId == null ||
         String(incoming?.senderId) !== String(currentUserId)
@@ -448,9 +447,8 @@ const Discussion = () => {
       }
     };
 
-    /**
-     * Join the active room and catch up on messages missed while disconnected.
-     */
+    /* JOIN CONVERSATION */
+
     const joinCurrentConversation = () => {
       const activeConversation = conversationRef.current;
 
@@ -461,6 +459,8 @@ const Discussion = () => {
       });
 
       joinedConversationRef.current = activeConversation.id;
+
+      /* CATCH UP ON MISSED MESSAGES */
 
       api
         .get(
@@ -487,7 +487,6 @@ const Discussion = () => {
           setMessages((previous) => {
             const merged = [...items];
 
-            // Keep unsaved optimistic messages when catching up.
             for (const item of previous) {
               const isTemporary =
                 String(item.id).startsWith("temp-");
@@ -537,9 +536,10 @@ const Discussion = () => {
     };
   }, [currentUserId]);
 
-  /**
-   * Join the selected conversation once it has loaded.
-   */
+  /* ========================================================
+     JOIN SELECTED CONVERSATION
+  ======================================================== */
+
   useEffect(() => {
     const socket = socketRef.current;
 
@@ -565,9 +565,10 @@ const Discussion = () => {
     joinedConversationRef.current = conversation.id;
   }, [conversation?.id]);
 
-  /**
-   * Submit a message immediately in the UI, then persist it.
-   */
+  /* ========================================================
+     HANDLE SEND
+  ======================================================== */
+
   const handleSend = (event) => {
     event.preventDefault();
 
@@ -620,9 +621,10 @@ const Discussion = () => {
     );
   };
 
-  /**
-   * Retry failed messages.
-   */
+  /* ========================================================
+     RETRY FAILED MESSAGE
+  ======================================================== */
+
   const retryMessage = (message) => {
     const activeConversation = conversationRef.current;
 
@@ -644,6 +646,10 @@ const Discussion = () => {
     );
   };
 
+  /* ========================================================
+     KEYBOARD HANDLING
+  ======================================================== */
+
   const handleKeyDown = (event) => {
     if (event.key === "Enter" && !event.shiftKey) {
       event.preventDefault();
@@ -651,17 +657,42 @@ const Discussion = () => {
     }
   };
 
+  /* ========================================================
+     RENDER
+  ======================================================== */
+
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full hover:shadow-md transition-all duration-300 flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4 shrink-0">
-        <div className="flex items-center gap-2">
+    <div
+      className="
+        w-full
+        min-w-0
+        min-h-[300px]
+        h-full
+        bg-white
+        border
+        border-slate-200
+        rounded-xl
+        shadow-sm
+        p-3
+        sm:p-4
+        hover:shadow-md
+        transition-all
+        duration-300
+        flex
+        flex-col
+        overflow-hidden
+      "
+    >
+      {/* HEADER */}
+
+      <div className="flex items-center justify-between gap-2 mb-4 shrink-0">
+        <div className="flex items-center gap-2 min-w-0">
           <MessageCircle
             size={19}
-            className="text-blue-600"
+            className="text-blue-600 shrink-0"
           />
 
-          <h3 className="text-[14px] font-semibold text-blue-600">
+          <h3 className="text-[13px] sm:text-[14px] font-semibold text-blue-600 truncate">
             Discussion
           </h3>
         </div>
@@ -670,7 +701,16 @@ const Discussion = () => {
           type="button"
           onClick={loadConversation}
           disabled={loading}
-          className="text-blue-600 hover:text-blue-700 disabled:opacity-50"
+          className="
+            p-1.5
+            rounded-lg
+            text-blue-600
+            hover:bg-blue-50
+            hover:text-blue-700
+            disabled:opacity-50
+            transition
+            shrink-0
+          "
           aria-label="Refresh discussion"
           title="Refresh discussion"
         >
@@ -681,17 +721,28 @@ const Discussion = () => {
         </button>
       </div>
 
-      {/* Message history */}
+      {/* MESSAGE HISTORY */}
+
       <div
         ref={messagesContainerRef}
-        className="flex-1 min-h-[130px] max-h-[300px] overflow-y-auto overscroll-contain pr-1"
+        className="
+          flex-1
+          min-h-[130px]
+          max-h-[300px]
+          sm:max-h-[350px]
+          overflow-y-auto
+          overflow-x-hidden
+          overscroll-contain
+          pr-1
+          scrollbar-thin
+        "
       >
         {loading ? (
           <p className="text-center text-xs text-slate-500 py-8">
             Loading conversation...
           </p>
         ) : !conversation ? (
-          <div className="text-center py-8">
+          <div className="text-center py-8 px-2">
             <MessageCircle
               size={28}
               className="mx-auto text-slate-300 mb-2"
@@ -701,7 +752,7 @@ const Discussion = () => {
               No conversation available
             </p>
 
-            <p className="text-[11px] text-slate-400 mt-1 leading-5">
+            <p className="text-[11px] text-slate-400 mt-1 leading-5 break-words">
               {conversationNotice ||
                 error ||
                 "Your assigned mentor conversation will appear here."}
@@ -740,42 +791,77 @@ const Discussion = () => {
               return (
                 <div
                   key={message.id}
-                  className={`flex items-start gap-3 ${
-                    isMine ? "flex-row-reverse" : ""
-                  } ${showSender ? "mt-5" : "mt-1"}`}
+                  className={`
+                    flex
+                    items-start
+                    gap-2
+                    sm:gap-3
+                    min-w-0
+                    ${isMine ? "flex-row-reverse" : ""}
+                    ${showSender ? "mt-5" : "mt-1"}
+                  `}
                 >
+                  {/* AVATAR */}
+
                   {showSender ? (
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-semibold flex-shrink-0 ${
-                        isMine
-                          ? "bg-blue-600 text-white"
-                          : "bg-blue-100 text-blue-600"
-                      }`}
+                      className={`
+                        w-7
+                        h-7
+                        sm:w-8
+                        sm:h-8
+                        rounded-full
+                        flex
+                        items-center
+                        justify-center
+                        text-[9px]
+                        sm:text-[10px]
+                        font-semibold
+                        flex-shrink-0
+                        ${
+                          isMine
+                            ? "bg-blue-600 text-white"
+                            : "bg-blue-100 text-blue-600"
+                        }
+                      `}
                     >
                       {isMine ? "You" : "M"}
                     </div>
                   ) : (
-                    <div className="w-8 flex-shrink-0" />
+                    <div className="w-7 sm:w-8 flex-shrink-0" />
                   )}
 
+                  {/* MESSAGE CONTENT */}
+
                   <div
-                    className={`flex-1 min-w-0 ${
-                      isMine ? "text-right" : ""
-                    }`}
+                    className={`
+                      flex-1
+                      min-w-0
+                      ${isMine ? "text-right" : ""}
+                    `}
                   >
+                    {/* SENDER AND DATE */}
+
                     {showSender && (
                       <div
-                        className={`flex flex-wrap items-center gap-2 ${
-                          isMine
-                            ? "justify-end"
-                            : "justify-between"
-                        }`}
+                        className={`
+                          flex
+                          flex-wrap
+                          items-center
+                          gap-x-2
+                          gap-y-1
+                          ${
+                            isMine
+                              ? "justify-end"
+                              : "justify-between"
+                          }
+                        `}
                       >
-                        <h4 className="text-[12px] font-semibold text-[#142970]">
+                        <h4 className="text-[11px] sm:text-[12px] font-semibold text-[#142970]">
                           {isMine ? "You" : "Mentor"}
                         </h4>
 
-                        <span className="text-[10px] text-slate-500">
+                        <span className="text-[9px] sm:text-[10px] text-slate-500">
                           {formatDate(message.createdAt)}{" "}
                           {formatTime(message.createdAt)}
                         </span>
@@ -783,19 +869,37 @@ const Discussion = () => {
                     )}
 
                     {!showSender && (
-                      <div className="text-[10px] text-slate-400 mb-1">
+                      <div className="text-[9px] sm:text-[10px] text-slate-400 mb-1">
                         {formatTime(message.createdAt)}
                       </div>
                     )}
 
+                    {/* MESSAGE BUBBLE */}
+
                     <div
-                      className={`mt-1 inline-block max-w-full rounded-lg px-3 py-2 text-left text-[11px] leading-5 whitespace-pre-wrap break-words ${
-                        isMine
-                          ? "bg-blue-50 text-slate-700"
-                          : "bg-slate-50 text-slate-600"
-                      }`}
+                      className={`
+                        mt-1
+                        inline-block
+                        max-w-[95%]
+                        sm:max-w-[90%]
+                        rounded-lg
+                        px-3
+                        py-2
+                        text-left
+                        text-[11px]
+                        leading-5
+                        whitespace-pre-wrap
+                        break-words
+                        ${
+                          isMine
+                            ? "bg-blue-50 text-slate-700"
+                            : "bg-slate-50 text-slate-600"
+                        }
+                      `}
                     >
                       <p>{message.content}</p>
+
+                      {/* SENDING STATUS */}
 
                       {isMine &&
                         message.sendStatus === "sending" && (
@@ -804,6 +908,8 @@ const Discussion = () => {
                             Sending
                           </span>
                         )}
+
+                      {/* FAILED STATUS */}
 
                       {isMine &&
                         message.sendStatus === "failed" && (
@@ -817,7 +923,15 @@ const Discussion = () => {
                               onClick={() =>
                                 retryMessage(message)
                               }
-                              className="inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 hover:underline"
+                              className="
+                                inline-flex
+                                items-center
+                                gap-1
+                                text-[10px]
+                                font-semibold
+                                text-blue-600
+                                hover:underline
+                              "
                             >
                               <RotateCw size={10} />
                               Retry
@@ -833,19 +947,31 @@ const Discussion = () => {
         )}
       </div>
 
+      {/* ERROR MESSAGE */}
+
       {error && conversation && (
         <p
           role="alert"
-          className="mt-2 text-[11px] text-red-500"
+          className="mt-2 text-[10px] sm:text-[11px] text-red-500 break-words"
         >
           {error}
         </p>
       )}
 
-      {/* Message input */}
+      {/* MESSAGE INPUT */}
+
       <form
         onSubmit={handleSend}
-        className="flex gap-2 mt-4 shrink-0"
+        className="
+          flex
+          items-center
+          gap-2
+          mt-3
+          sm:mt-4
+          shrink-0
+          w-full
+          min-w-0
+        "
       >
         <input
           ref={inputRef}
@@ -859,7 +985,24 @@ const Discussion = () => {
           maxLength={10000}
           disabled={loading || !conversation}
           aria-label="Write a message"
-          className="flex-1 min-w-0 border border-slate-200 rounded-lg px-3 py-2.5 text-[12px] outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+          className="
+            flex-1
+            min-w-0
+            w-full
+            border
+            border-slate-200
+            rounded-lg
+            px-3
+            py-2.5
+            text-[11px]
+            sm:text-[12px]
+            outline-none
+            focus:border-blue-500
+            focus:ring-2
+            focus:ring-blue-100
+            disabled:bg-slate-50
+            disabled:cursor-not-allowed
+          "
         />
 
         <button
@@ -869,10 +1012,29 @@ const Discussion = () => {
             !messageText.trim() ||
             loading
           }
-          className="flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-300 text-white px-4 rounded-lg text-[12px] font-medium transition"
+          className="
+            shrink-0
+            flex
+            items-center
+            justify-center
+            gap-1.5
+            sm:gap-2
+            bg-blue-600
+            hover:bg-blue-700
+            disabled:bg-slate-300
+            text-white
+            px-3
+            sm:px-4
+            py-2.5
+            rounded-lg
+            text-[11px]
+            sm:text-[12px]
+            font-medium
+            transition
+          "
         >
           <Send size={14} />
-          Send
+          <span>Send</span>
         </button>
       </form>
     </div>

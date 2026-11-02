@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,15 +11,7 @@ import {
 } from "lucide-react";
 
 const RegisterCard = ({ onRegister }) => {
-  //--------------------------------------------------
-  // React Router
-  //--------------------------------------------------
-
   const navigate = useNavigate();
-
-  //--------------------------------------------------
-  // State
-  //--------------------------------------------------
 
   const [formData, setFormData] = useState({
     registrationNumber: "",
@@ -27,9 +20,7 @@ const RegisterCard = ({ onRegister }) => {
 
   const [errors, setErrors] = useState({});
 
-  //--------------------------------------------------
   // Handle Input
-  //--------------------------------------------------
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -45,9 +36,7 @@ const RegisterCard = ({ onRegister }) => {
     }));
   };
 
-  //--------------------------------------------------
   // Validation
-  //--------------------------------------------------
 
   const validate = () => {
     const newErrors = {};
@@ -60,10 +49,9 @@ const RegisterCard = ({ onRegister }) => {
     if (!formData.email.trim()) {
       newErrors.email = "Email Address is required.";
     } else {
-      const emailRegex =
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-      if (!emailRegex.test(formData.email)) {
+      if (!emailRegex.test(formData.email.trim())) {
         newErrors.email =
           "Please enter a valid email address.";
       }
@@ -74,9 +62,7 @@ const RegisterCard = ({ onRegister }) => {
     return Object.keys(newErrors).length === 0;
   };
 
-  //--------------------------------------------------
   // Submit
-  //--------------------------------------------------
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -84,44 +70,65 @@ const RegisterCard = ({ onRegister }) => {
     if (!validate()) return;
 
     if (onRegister) {
-      onRegister(formData);
+      onRegister({
+        ...formData,
+        email: formData.email.trim(),
+      });
     }
-
-    // Temporary navigation
-    // Later this will happen after backend success.
-    // navigate("/verify-email");
   };
 
-  //--------------------------------------------------
   // Navigation
-  //--------------------------------------------------
 
   const handleBackToLogin = () => {
     navigate("/login");
   };
 
-  //--------------------------------------------------
-  // UI
-  //--------------------------------------------------
-
   return (
-    <div className="relative flex h-full w-full items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50 px-10">
+    <div className="
+      relative flex min-h-full w-full
+      items-center justify-center
+      overflow-hidden
+      bg-gradient-to-br from-slate-50 via-white to-blue-50
+      px-4 py-8
+      sm:px-8 sm:py-10
+      lg:px-10
+    ">
 
       {/* Background */}
 
-      <div className="absolute top-0 right-0 h-72 w-72 rounded-full bg-blue-100/40 blur-3xl" />
+      <div className="
+        pointer-events-none absolute right-0 top-0
+        h-48 w-48 rounded-full
+        bg-blue-100/40 blur-3xl
+        sm:h-72 sm:w-72
+      " />
 
-      <div className="absolute bottom-0 left-0 h-56 w-56 rounded-full bg-indigo-100/30 blur-3xl" />
+      <div className="
+        pointer-events-none absolute bottom-0 left-0
+        h-40 w-40 rounded-full
+        bg-indigo-100/30 blur-3xl
+        sm:h-56 sm:w-56
+      " />
 
       {/* Card */}
 
-      <div className="relative z-10 w-full max-w-md rounded-3xl border border-slate-200 bg-white p-8 shadow-2xl">
+      <div className="
+        relative z-10 w-full max-w-md
+        rounded-2xl border border-slate-200
+        bg-white p-5 shadow-2xl
+        sm:rounded-3xl sm:p-8
+      ">
 
         {/* Header */}
 
-        <div className="mb-8 flex flex-col items-center">
+        <div className="mb-7 flex flex-col items-center sm:mb-8">
 
-          <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full border-2 border-blue-600">
+          <div className="
+            mb-4 flex h-14 w-14 items-center
+            justify-center rounded-full
+            border-2 border-blue-600
+            sm:mb-5 sm:h-16 sm:w-16
+          ">
 
             <UserPlus2
               size={34}
@@ -131,31 +138,48 @@ const RegisterCard = ({ onRegister }) => {
 
           </div>
 
-          <h1 className="text-3xl font-bold text-slate-900">
+          <h1 className="
+            text-center text-2xl font-bold
+            text-slate-900 sm:text-3xl
+          ">
             Create Your Account
           </h1>
 
-          <p className="mt-2 text-center text-sm text-slate-500">
+          <p className="
+            mt-2 text-center text-xs
+            text-slate-500 sm:text-sm
+          ">
             Please provide your details to register
           </p>
 
         </div>
 
         <form onSubmit={handleSubmit}>
-                      {/* Registration Number */}
+
+          {/* Registration Number */}
 
           <div className="mb-5">
 
-            <label className="mb-2 block text-sm font-semibold text-slate-700">
+            <label className="
+              mb-2 block text-sm font-semibold
+              text-slate-700
+            ">
               Registration Number
               <span className="ml-1 text-red-500">*</span>
             </label>
 
-            <div className="flex h-12 items-center rounded-xl border border-slate-300 px-4 transition-all duration-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+            <div className="
+              flex h-12 items-center rounded-xl
+              border border-slate-300 px-4
+              transition-all duration-200
+              focus-within:border-blue-500
+              focus-within:ring-2
+              focus-within:ring-blue-100
+            ">
 
               <BadgeCheck
                 size={18}
-                className="mr-3 text-slate-400"
+                className="mr-3 shrink-0 text-slate-400"
               />
 
               <input
@@ -164,7 +188,12 @@ const RegisterCard = ({ onRegister }) => {
                 value={formData.registrationNumber}
                 onChange={handleChange}
                 placeholder="Enter your registration number"
-                className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+                required
+                className="
+                  w-full min-w-0 bg-transparent
+                  text-sm outline-none
+                  placeholder:text-slate-400
+                "
               />
 
             </div>
@@ -181,16 +210,26 @@ const RegisterCard = ({ onRegister }) => {
 
           <div className="mb-5">
 
-            <label className="mb-2 block text-sm font-semibold text-slate-700">
+            <label className="
+              mb-2 block text-sm font-semibold
+              text-slate-700
+            ">
               University Email Address
               <span className="ml-1 text-red-500">*</span>
             </label>
 
-            <div className="flex h-12 items-center rounded-xl border border-slate-300 px-4 transition-all duration-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
+            <div className="
+              flex h-12 items-center rounded-xl
+              border border-slate-300 px-4
+              transition-all duration-200
+              focus-within:border-blue-500
+              focus-within:ring-2
+              focus-within:ring-blue-100
+            ">
 
               <Mail
                 size={18}
-                className="mr-3 text-slate-400"
+                className="mr-3 shrink-0 text-slate-400"
               />
 
               <input
@@ -199,7 +238,12 @@ const RegisterCard = ({ onRegister }) => {
                 value={formData.email}
                 onChange={handleChange}
                 placeholder="Enter your CHRIST email"
-                className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
+                required
+                className="
+                  w-full min-w-0 bg-transparent
+                  text-sm outline-none
+                  placeholder:text-slate-400
+                "
               />
 
             </div>
@@ -214,14 +258,21 @@ const RegisterCard = ({ onRegister }) => {
 
           {/* Information Box */}
 
-          <div className="mb-6 flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+          <div className="
+            mb-6 flex items-start gap-3
+            rounded-xl border border-blue-100
+            bg-blue-50 px-3 py-3
+            sm:px-4
+          ">
 
             <Info
               size={18}
               className="mt-0.5 shrink-0 text-blue-600"
             />
 
-            <p className="text-xs leading-6 text-slate-600">
+            <p className="
+              text-xs leading-6 text-slate-600
+            ">
               A verification link will be sent to your
               university email address. Please verify
               your email before you can access the
@@ -235,40 +286,37 @@ const RegisterCard = ({ onRegister }) => {
           <button
             type="submit"
             className="
-              flex
-              h-12
-              w-full
-              items-center
-              justify-center
-              gap-2
-              rounded-xl
-              bg-gradient-to-r
-              from-blue-600
-              to-blue-700
-              text-sm
-              font-semibold
-              text-white
-              shadow-lg
-              transition-all
-              duration-300
+              flex h-12 w-full items-center
+              justify-center gap-2 rounded-xl
+              bg-gradient-to-r from-blue-600
+              to-blue-700 text-sm font-semibold
+              text-white shadow-lg
+              transition-all duration-300
               hover:-translate-y-0.5
               hover:shadow-xl
               active:scale-[0.98]
             "
           >
+
             <Send size={18} />
 
             Register
+
           </button>
 
         </form>
-                {/* Divider */}
+
+        {/* Divider */}
 
         <div className="my-6 flex items-center">
 
           <div className="h-px flex-1 bg-slate-200" />
 
-          <span className="mx-4 text-xs font-medium uppercase tracking-wider text-slate-400">
+          <span className="
+            mx-4 text-xs font-medium
+            uppercase tracking-wider
+            text-slate-400
+          ">
             OR
           </span>
 
@@ -280,7 +328,7 @@ const RegisterCard = ({ onRegister }) => {
 
         <div className="text-center">
 
-          <span className="text-sm text-slate-500">
+          <span className="text-xs text-slate-500 sm:text-sm">
             Already have an account?
           </span>
 
@@ -288,15 +336,10 @@ const RegisterCard = ({ onRegister }) => {
             type="button"
             onClick={handleBackToLogin}
             className="
-              ml-2
-              text-sm
-              font-semibold
-              text-blue-600
-              transition-all
-              duration-200
-              hover:text-blue-700
-              hover:underline
-              cursor-pointer
+              ml-2 text-xs font-semibold
+              text-blue-600 transition-all
+              duration-200 hover:text-blue-700
+              hover:underline sm:text-sm
             "
           >
             Sign In
@@ -308,30 +351,26 @@ const RegisterCard = ({ onRegister }) => {
 
         <div className="mt-6 border-t border-slate-100 pt-5">
 
-          <div className="flex items-center justify-center gap-2 text-xs text-slate-500">
+          <div className="
+            flex flex-wrap items-center
+            justify-center gap-2
+            text-xs text-slate-500
+          ">
 
-            <Mail
-              size={16}
-              className="text-slate-500"
-            />
+            <Mail size={16} />
 
-            <span>
-              Need Help?
-            </span>
+            <span>Need Help?</span>
 
             <button
               type="button"
-              onClick={() =>
+              onClick={() => {
                 window.location.href =
-                  "mailto:support@christuniversity.in"
-              }
+                  "mailto:support@christuniversity.in";
+              }}
               className="
-                font-semibold
-                text-blue-600
-                transition-all
-                duration-200
-                hover:text-blue-700
-                hover:underline
+                font-semibold text-blue-600
+                transition-all duration-200
+                hover:text-blue-700 hover:underline
               "
             >
               Contact Support

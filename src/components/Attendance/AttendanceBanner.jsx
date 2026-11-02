@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import {
@@ -92,15 +93,12 @@ const AttendanceBanner = ({
   if (classesHeld > 0) {
     if (attendancePercentage < 75) {
       standing = "Needs Attention";
-
       standingClass = "bg-red-100 text-red-700";
     } else if (attendancePercentage < 85) {
       standing = "Good";
-
       standingClass = "bg-orange-100 text-orange-700";
     } else {
       standing = "Excellent";
-
       standingClass = "bg-green-100 text-green-700";
     }
   }
@@ -152,114 +150,74 @@ const AttendanceBanner = ({
   ========================================================== */
 
   return (
-    <div
-      className="
-        bg-white
-        border
-        border-slate-200
-        rounded-2xl
-        shadow-sm
-        px-7
-        py-5
-      "
-    >
-      <div
-        className="
-          flex
-          justify-between
-          items-center
-          gap-6
-        "
-      >
-        {/* ====================================================
-            STUDENT INFORMATION
-        ==================================================== */}
+    <div className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white px-4 py-5 shadow-sm sm:px-5 sm:py-6 lg:px-6">
 
-        <div
-          className="
-            flex
-            items-center
-            gap-6
-            min-w-0
-          "
-        >
+      {/* ====================================================
+          MAIN CONTENT
+      ==================================================== */}
+
+      <div className="flex min-w-0 flex-col gap-5 xl:flex-row xl:items-center xl:justify-between xl:gap-6">
+
+        {/* ==================================================
+            STUDENT INFORMATION
+        ================================================== */}
+
+        <div className="flex min-w-0 flex-1 flex-col gap-4 sm:flex-row sm:items-start sm:gap-5">
+
           {/* ==================================================
               PROFILE IMAGE
           ================================================== */}
 
-          <img
-            src={profileImage}
-            alt={studentName}
-            onError={(event) => {
-              event.currentTarget.src = profile;
-            }}
-            className="
-              w-[88px]
-              h-[88px]
-              rounded-full
-              border-4
-              border-slate-100
-              object-cover
-              flex-shrink-0
-            "
-          />
+          <div className="flex shrink-0 items-center sm:items-start">
+            <img
+              src={profileImage}
+              alt={studentName}
+              onError={(event) => {
+                event.currentTarget.src = profile;
+              }}
+              className="h-[68px] w-[68px] rounded-full border-4 border-slate-100 object-cover sm:h-[78px] sm:w-[78px] lg:h-[88px] lg:w-[88px]"
+            />
+          </div>
 
-          <div className="min-w-0">
-            {/* ==================================================
-                STUDENT NAME
-            ================================================== */}
+          {/* ==================================================
+              STUDENT DETAILS
+          ================================================== */}
 
-            <h2
-              className="
-                text-[16px]
-                font-semibold
-                text-[#142970]
-              "
-            >
+          <div className="min-w-0 flex-1">
+
+            {/* Student Name */}
+
+            <h2 className="break-words text-base font-semibold text-[#142970] sm:text-lg">
               {studentName}
             </h2>
 
-            {/* ==================================================
-                STUDENT DETAILS
-            ================================================== */}
+            {/* Student Information */}
 
-            <div
-              className="
-                flex
-                items-center
-                gap-3
-                mt-1
-                text-[12px]
-                text-slate-500
-                whitespace-nowrap
-              "
-            >
-              <span>{registerNumber}</span>
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 sm:gap-x-3">
+              <span className="break-all">
+                {registerNumber}
+              </span>
 
-              <span>•</span>
+              <span className="hidden text-slate-300 sm:inline">•</span>
 
-              <span>{programme}</span>
+              <span className="break-words">
+                {programme}
+              </span>
 
-              <span>•</span>
+              <span className="hidden text-slate-300 sm:inline">•</span>
 
-              <span>Semester {ROMAN[activeSemester] || activeSemester}</span>
+              <span className="whitespace-nowrap">
+                Semester {ROMAN[activeSemester] || activeSemester}
+              </span>
             </div>
 
             {/* ==================================================
                 ATTENDANCE INFORMATION
             ================================================== */}
 
-            <div
-              className="
-                flex
-                items-center
-                gap-10
-                mt-5
-              "
-            >
-              {/* =================================================
-                  OVERALL ATTENDANCE
-              ================================================= */}
+            <div className="mt-5 grid grid-cols-2 gap-x-4 gap-y-5 sm:grid-cols-3 sm:gap-x-5 lg:grid-cols-3 xl:grid-cols-5 xl:gap-x-6">
+
+              {/* Overall Attendance */}
 
               <Info
                 icon={<ShieldCheck size={16} />}
@@ -267,9 +225,7 @@ const AttendanceBanner = ({
                 value={`${attendancePercentage.toFixed(2)}%`}
               />
 
-              {/* =================================================
-                  CLASSES ATTENDED
-              ================================================= */}
+              {/* Classes Attended */}
 
               <Info
                 icon={<CalendarCheck2 size={16} />}
@@ -277,9 +233,7 @@ const AttendanceBanner = ({
                 value={classesAttended}
               />
 
-              {/* =================================================
-                  CLASSES HELD
-              ================================================= */}
+              {/* Classes Held */}
 
               <Info
                 icon={<CalendarDays size={16} />}
@@ -287,9 +241,7 @@ const AttendanceBanner = ({
                 value={classesHeld}
               />
 
-              {/* =================================================
-                  MENTOR
-              ================================================= */}
+              {/* Mentor */}
 
               <Info
                 icon={<UserRound size={16} />}
@@ -298,32 +250,26 @@ const AttendanceBanner = ({
                 blue
               />
 
-              {/* =================================================
-                  ACADEMIC STANDING
-              ================================================= */}
+              {/* Academic Standing */}
 
-              <div>
-                <div
-                  className="
-                    flex
-                    items-center
-                    gap-2
-                    text-[12px]
-                    text-slate-500
-                  "
-                >
-                  <BadgeCheck size={16} className="text-blue-600" />
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 text-xs text-slate-500">
+                  <BadgeCheck
+                    size={16}
+                    className="shrink-0 text-blue-600"
+                  />
 
                   <span>Academic Standing</span>
                 </div>
 
                 <span
                   className={`
-                    inline-block
                     mt-2
-                    px-2
-                    py-1
+                    inline-block
+                    max-w-full
                     rounded-full
+                    px-2.5
+                    py-1
                     text-[10px]
                     font-medium
                     ${standingClass}
@@ -340,57 +286,39 @@ const AttendanceBanner = ({
             SEMESTER SELECTOR
         ==================================================== */}
 
-        <div
-          className="
-            border
-            border-slate-200
-            rounded-xl
-            px-4
-            py-3
-            w-[240px]
-            flex-shrink-0
-          "
-        >
-          {/* ==================================================
-              LABEL
-          ================================================== */}
+        <div className="w-full shrink-0 rounded-xl border border-slate-200 px-4 py-3 sm:px-5 xl:w-[240px]">
 
-          <p
-            className="
-              text-[12px]
-              text-slate-500
-              mb-3
-            "
-          >
+          {/* Label */}
+
+          <p className="mb-3 text-xs font-medium text-slate-500">
             Attendance for
           </p>
 
-          {/* ==================================================
-              SELECT
-          ================================================== */}
+          {/* Select */}
 
           <div className="relative">
             <select
               value={activeSemester}
               onChange={handleSemesterChange}
               className="
-                appearance-none
                 w-full
+                appearance-none
+                rounded-lg
                 border
                 border-slate-300
-                rounded-lg
+                bg-white
                 px-3
-                py-2
+                py-2.5
                 pr-9
-                text-[13px]
+                text-xs
                 font-medium
                 text-slate-700
-                bg-white
                 outline-none
-                cursor-pointer
+                transition
                 focus:border-blue-500
-                focus:ring-1
+                focus:ring-2
                 focus:ring-blue-100
+                sm:text-sm
               "
             >
               {semesterNumbers.map((semester) => {
@@ -401,7 +329,11 @@ const AttendanceBanner = ({
                 const isLocked = semester >= currentSemester;
 
                 return (
-                  <option key={semester} value={semester} disabled={isLocked}>
+                  <option
+                    key={semester}
+                    value={semester}
+                    disabled={isLocked}
+                  >
                     Semester {ROMAN[semester] || semester}
                     {isCurrent
                       ? " • Current • Locked"
@@ -415,37 +347,19 @@ const AttendanceBanner = ({
 
             <ChevronDown
               size={16}
-              className="
-                absolute
-                right-3
-                top-1/2
-                -translate-y-1/2
-                text-slate-500
-                pointer-events-none
-              "
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-500"
             />
           </div>
 
-          {/* ==================================================
-              LOCK MESSAGE
-          ================================================== */}
+          {/* Lock Message */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-1.5
-              mt-2
-            "
-          >
-            <LockKeyhole size={11} className="text-slate-400" />
+          <div className="mt-2 flex items-start gap-1.5">
+            <LockKeyhole
+              size={11}
+              className="mt-0.5 shrink-0 text-slate-400"
+            />
 
-            <span
-              className="
-                text-[10px]
-                text-slate-400
-              "
-            >
+            <span className="text-[10px] leading-relaxed text-slate-400">
               Current and future semesters are locked
             </span>
           </div>
@@ -461,26 +375,24 @@ const AttendanceBanner = ({
 
 const Info = ({ icon, title, value, blue = false }) => {
   return (
-    <div className="min-w-[105px]">
-      <div
-        className="
-          flex
-          items-center
-          gap-2
-          text-[12px]
-          text-slate-500
-        "
-      >
-        <div className="text-blue-600">{icon}</div>
+    <div className="min-w-0">
+      <div className="flex min-w-0 items-center gap-2 text-xs text-slate-500">
+        <div className="shrink-0 text-blue-600">
+          {icon}
+        </div>
 
-        <span>{title}</span>
+        <span className="min-w-0 break-words leading-4">
+          {title}
+        </span>
       </div>
 
       <p
         className={`
           mt-2
-          text-[14px]
+          break-words
+          text-sm
           font-semibold
+          leading-snug
           ${blue ? "text-blue-600" : "text-[#142970]"}
         `}
       >

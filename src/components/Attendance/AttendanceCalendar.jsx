@@ -1,3 +1,4 @@
+
 import React from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -43,48 +44,91 @@ const legend = [
 
 const AttendanceCalendar = () => {
   return (
-    <div className="w-full bg-white border border-slate-200 rounded-2xl shadow-sm p-4 h-full flex flex-col">
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-[15px] font-semibold text-blue-600">
+    <div className="flex h-full w-full min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
+
+      {/* =====================================================
+          HEADER
+      ===================================================== */}
+
+      <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+
+        <h3 className="text-sm font-semibold text-blue-600 sm:text-[15px]">
           Attendance Calendar (May 2025)
         </h3>
 
-        <div className="flex items-center gap-2">
-          <button className="w-7 h-7 rounded-md border border-slate-200 flex items-center justify-center">
-            <ChevronLeft size={15} />
+        <div className="flex items-center justify-between gap-2 sm:justify-end">
+          <button
+            type="button"
+            aria-label="Previous month"
+            className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+          >
+            <ChevronLeft size={16} />
           </button>
 
-          <button className="px-3 h-7 rounded-md border border-blue-200 text-blue-600 text-[11px] font-medium">
+          <button
+            type="button"
+            className="h-8 rounded-md border border-blue-200 px-4 text-xs font-medium text-blue-600 transition hover:bg-blue-50"
+          >
             Today
           </button>
 
-          <button className="w-7 h-7 rounded-md border border-slate-200 flex items-center justify-center">
-            <ChevronRight size={15} />
+          <button
+            type="button"
+            aria-label="Next month"
+            className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+          >
+            <ChevronRight size={16} />
           </button>
         </div>
       </div>
 
-      {/* Week Days */}
-      <div className="grid grid-cols-7 text-center text-[11px] font-semibold text-slate-600 mb-2">
+      {/* =====================================================
+          WEEK DAYS
+      ===================================================== */}
+
+      <div className="mb-3 grid grid-cols-7 gap-1 text-center sm:gap-2">
         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
-          <div key={day}>{day}</div>
+          <div
+            key={day}
+            className="py-1 text-[10px] font-semibold text-slate-500 sm:text-xs"
+          >
+            {day}
+          </div>
         ))}
       </div>
 
-      {/* Calendar */}
-      <div className="space-y-2">
+      {/* =====================================================
+          CALENDAR
+      ===================================================== */}
+
+      <div className="space-y-2 sm:space-y-3">
         {weeks.map((week, i) => (
-          <div key={i} className="grid grid-cols-7 gap-2">
-            {week.map((day) => (
+          <div
+            key={i}
+            className="grid grid-cols-7 gap-1 sm:gap-2"
+          >
+            {week.map((day, index) => (
               <div
-                key={day}
-                className={`h-9 rounded-lg flex items-center justify-center text-[12px] font-medium
-                ${
-                  colors[day]
-                    ? colors[day]
-                    : "text-slate-400"
-                }`}
+                key={`${i}-${index}`}
+                className={`
+                  flex
+                  aspect-square
+                  min-h-0
+                  items-center
+                  justify-center
+                  rounded-md
+                  text-[11px]
+                  font-medium
+                  transition
+                  sm:rounded-lg
+                  sm:text-xs
+                  md:text-sm
+                  ${
+                    colors[day]
+                      ? colors[day]
+                      : "text-slate-400"
+                  }
+                `}
               >
                 {day}
               </div>
@@ -93,18 +137,31 @@ const AttendanceCalendar = () => {
         ))}
       </div>
 
-      {/* Legend */}
-      <div className="flex justify-center gap-8 mt-12 flex-wrap">
+      {/* =====================================================
+          LEGEND
+      ===================================================== */}
+
+      <div className="mt-auto flex flex-wrap items-center justify-center gap-x-4 gap-y-3 pt-8 sm:gap-x-6 sm:pt-10 lg:gap-x-8">
+
         {legend.map((item) => (
           <div
             key={item.name}
-            className="flex items-center gap-2 text-[11px] text-slate-600"
+            className="flex items-center gap-2 text-[10px] text-slate-600 sm:text-xs"
           >
             <span
-              className={`w-4 h-4 rounded border ${item.color}`}
-            ></span>
+              className={`
+                h-3.5
+                w-3.5
+                shrink-0
+                rounded
+                border
+                sm:h-4
+                sm:w-4
+                ${item.color}
+              `}
+            />
 
-            {item.name}
+            <span>{item.name}</span>
           </div>
         ))}
       </div>

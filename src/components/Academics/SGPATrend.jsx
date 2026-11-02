@@ -1,3 +1,4 @@
+
 import React, { useMemo } from "react";
 import {
   ResponsiveContainer,
@@ -23,7 +24,10 @@ const semesterNames = [
 const getSemesterNumber = (semester) => {
   return (
     Number(
-      semester?.semesterNumber ?? semester?.semester ?? semester?.number ?? 0,
+      semester?.semesterNumber ??
+        semester?.semester ??
+        semester?.number ??
+        0,
     ) || 0
   );
 };
@@ -33,23 +37,20 @@ const getSubjects = (semester) => {
 };
 
 const calculateSGPA = (semester) => {
-  // ---------------------------------------------------------
-  // If backend already provides SGPA, use it.
-  // ---------------------------------------------------------
-  const backendSGPA = semester?.sgpa ?? semester?.SGPA ?? semester?.gpa;
+  // Use backend SGPA when available
+  const backendSGPA =
+    semester?.sgpa ?? semester?.SGPA ?? semester?.gpa;
 
-  if (backendSGPA !== null && backendSGPA !== undefined && backendSGPA !== "") {
-    return Number(backendSGPA);
+  if (
+    backendSGPA !== null &&
+    backendSGPA !== undefined &&
+    backendSGPA !== ""
+  ) {
+    const value = Number(backendSGPA);
+    return Number.isFinite(value) ? value : null;
   }
 
-  // ---------------------------------------------------------
-  // Otherwise calculate:
-  //
-  // SGPA =
-  // Σ(Credits × Grade Point)
-  // ------------------------
-  //       Σ Credits
-  // ---------------------------------------------------------
+  // Calculate weighted SGPA
   const subjects = getSubjects(semester);
 
   if (!Array.isArray(subjects) || !subjects.length) {
@@ -61,12 +62,10 @@ const calculateSGPA = (semester) => {
 
   subjects.forEach((subject) => {
     const credits = Number(subject?.credits || 0);
-
     const gradePoint = Number(subject?.gradePoint || 0);
 
     if (credits > 0) {
       totalCredits += credits;
-
       weightedPoints += credits * gradePoint;
     }
   });
@@ -79,15 +78,13 @@ const calculateSGPA = (semester) => {
 };
 
 const SGPATrend = ({ academicData = null }) => {
-  // =========================================================
   // Extract semester records
-  // =========================================================
   const semesters =
-    academicData?.semesters || academicData?.data?.semesters || [];
+    academicData?.semesters ||
+    academicData?.data?.semesters ||
+    [];
 
-  // =========================================================
   // Build chart data
-  // =========================================================
   const data = useMemo(() => {
     if (!Array.isArray(semesters)) {
       return [];
@@ -101,22 +98,19 @@ const SGPATrend = ({ academicData = null }) => {
           return null;
         }
 
-        // Only show semesters that have records.
         if (semester?.hasRecord === false) {
           return null;
         }
 
         const sgpa = calculateSGPA(semester);
 
-        if (sgpa === null) {
+        if (sgpa === null || !Number.isFinite(sgpa)) {
           return null;
         }
 
         return {
           semester: semesterNames[semesterNumber - 1],
-
           semesterNumber,
-
           sgpa: Number(Number(sgpa).toFixed(2)),
         };
       })
@@ -124,63 +118,87 @@ const SGPATrend = ({ academicData = null }) => {
       .sort((a, b) => a.semesterNumber - b.semesterNumber);
   }, [semesters]);
 
-  // =========================================================
   // Empty state
-  // =========================================================
   if (!data.length) {
     return (
-      <div className="h-[215px] rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-2 text-[15px] font-semibold text-[#0B63F6]">
+      <div className="flex h-full min-h-[220px] min-w-0 flex-col rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <h3 className="text-sm font-semibold text-[#0B63F6] sm:text-[15px]">
           SGPA Trend
         </h3>
 
-        <div className="flex h-[165px] items-center justify-center">
-          <p className="text-[11px] text-slate-400">
+        <div className="flex flex-1 flex-col items-center justify-center text-center">
+          <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50">
+            <span className="text-lg font-bold text-blue-300">∿</span>
+          </div>
+
+          <p className="text-xs font-medium text-slate-500">
             No SGPA data available yet.
+          </p>
+
+          <p className="mt-1 text-[10px] text-slate-400">
+            Your semester performance trend will appear here.
           </p>
         </div>
       </div>
     );
   }
 
-  // =========================================================
   // Chart
-  // =========================================================
   return (
-    <div className="h-[215px] rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      {/* Header */}
-      <h3 className="mb-2 text-[15px] font-semibold text-[#0B63F6]">
-        SGPA Trend
-      </h3>
+    <div className="h-full min-h-[220px] min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      {/* HEADER */}
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div>
+          <h3 className="text-sm font-semibold text-[#0B63F6] sm:text-[15px]">
+            SGPA Trend
+          </h3>
 
-      <div className="h-[165px]">
+          <p className="mt-0.5 text-[10px] text-slate-400 sm:text-[11px]">
+            Semester-wise academic performance
+          </p>
+        </div>
+
+        <span className="rounded-lg bg-blue-50 px-2.5 py-1 text-[10px] font-semibold text-blue-600">
+          4.0 Scale
+        </span>
+      </div>
+
+      {/* CHART */}
+      <div className="h-[165px] w-full min-w-0 sm:h-[180px]">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
             data={data}
             margin={{
-              top: 20,
-              right: 15,
-              left: -20,
-              bottom: -5,
+              top: 22,
+              right: 12,
+              left: -18,
+              bottom: 0,
             }}
           >
-            <CartesianGrid vertical={false} stroke="#EEF2F7" />
+            <CartesianGrid
+              vertical={false}
+              stroke="#EEF2F7"
+              strokeDasharray="3 3"
+            />
 
-            {/* X Axis */}
+            {/* X AXIS */}
             <XAxis
               dataKey="semester"
+              interval={0}
               tick={{
-                fontSize: 11,
+                fontSize: 10,
                 fill: "#64748B",
               }}
               tickLine={false}
               axisLine={false}
+              tickMargin={8}
             />
 
-            {/* Y Axis - 4 Point Scale */}
+            {/* Y AXIS */}
             <YAxis
               domain={[0, 4]}
               ticks={[0, 1, 2, 3, 4]}
+              width={32}
               tick={{
                 fontSize: 10,
                 fill: "#94A3B8",
@@ -189,28 +207,35 @@ const SGPATrend = ({ academicData = null }) => {
               axisLine={false}
             />
 
-            {/* SGPA Line */}
+            {/* SGPA LINE */}
             <Line
               type="monotone"
               dataKey="sgpa"
               stroke="#0B63F6"
-              strokeWidth={2}
+              strokeWidth={2.5}
+              connectNulls={false}
               dot={{
                 r: 4,
                 fill: "#0B63F6",
-                strokeWidth: 0,
+                stroke: "#FFFFFF",
+                strokeWidth: 2,
               }}
               activeDot={{
-                r: 5,
+                r: 6,
+                fill: "#0B63F6",
+                stroke: "#DBEAFE",
+                strokeWidth: 3,
               }}
+              isAnimationActive={true}
+              animationDuration={700}
             >
               <LabelList
                 dataKey="sgpa"
                 position="top"
-                offset={10}
+                offset={9}
                 formatter={(value) => Number(value).toFixed(2)}
                 style={{
-                  fontSize: 11,
+                  fontSize: 10,
                   fill: "#0F172A",
                   fontWeight: 600,
                 }}

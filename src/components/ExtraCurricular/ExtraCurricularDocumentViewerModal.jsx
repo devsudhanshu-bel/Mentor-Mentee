@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 import {
@@ -267,21 +268,19 @@ const ExtraCurricularDocumentViewerModal = ({
   // ==========================================================
 
   const renderError = () => (
-    <div className="h-full flex flex-col items-center justify-center text-center px-6">
-
+    <div className="flex h-full flex-col items-center justify-center px-4 text-center sm:px-6">
       <FileText
         size={48}
-        className="text-slate-300 mb-3"
+        className="mb-3 text-slate-300"
       />
 
       <p className="text-sm font-semibold text-slate-700">
         Document unavailable
       </p>
 
-      <p className="text-xs text-slate-500 mt-2 max-w-md">
+      <p className="mt-2 max-w-md break-words text-xs leading-5 text-slate-500">
         {previewError}
       </p>
-
     </div>
   );
 
@@ -290,17 +289,15 @@ const ExtraCurricularDocumentViewerModal = ({
   // ==========================================================
 
   const renderLoading = () => (
-    <div className="h-full flex flex-col items-center justify-center">
-
+    <div className="flex h-full flex-col items-center justify-center">
       <Loader2
         size={28}
-        className="animate-spin text-blue-600 mb-3"
+        className="mb-3 animate-spin text-blue-600"
       />
 
-      <p className="text-sm text-slate-500">
+      <p className="text-center text-xs text-slate-500 sm:text-sm">
         Loading document...
       </p>
-
     </div>
   );
 
@@ -311,21 +308,19 @@ const ExtraCurricularDocumentViewerModal = ({
   const renderDocument = () => {
     if (!fileUrl) {
       return (
-        <div className="h-full flex flex-col items-center justify-center text-center px-6">
-
+        <div className="flex h-full flex-col items-center justify-center px-4 text-center sm:px-6">
           <FileText
             size={48}
-            className="text-slate-300 mb-3"
+            className="mb-3 text-slate-300"
           />
 
           <p className="text-sm font-medium text-slate-600">
             Document preview unavailable
           </p>
 
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="mt-1 text-xs text-slate-400">
             The uploaded document URL is not available.
           </p>
-
         </div>
       );
     }
@@ -348,15 +343,13 @@ const ExtraCurricularDocumentViewerModal = ({
 
     if (isPdf) {
       return (
-        <div className="w-full h-full bg-slate-100">
-
+        <div className="h-full w-full bg-slate-100">
           <iframe
             src={previewUrl}
             title={documentName}
-            className="w-full h-full border-0"
+            className="h-full w-full border-0"
             loading="eager"
           />
-
         </div>
       );
     }
@@ -367,14 +360,12 @@ const ExtraCurricularDocumentViewerModal = ({
 
     if (isImage) {
       return (
-        <div className="w-full h-full overflow-auto flex items-center justify-center p-6 bg-slate-100">
-
+        <div className="flex h-full w-full items-center justify-center overflow-auto bg-slate-100 p-3 sm:p-6">
           <img
             src={previewUrl}
             alt={documentName}
-            className="max-w-full max-h-full object-contain rounded-lg shadow-sm"
+            className="max-h-full max-w-full rounded-lg object-contain shadow-sm"
           />
-
         </div>
       );
     }
@@ -385,18 +376,15 @@ const ExtraCurricularDocumentViewerModal = ({
 
     if (isVideo) {
       return (
-        <div className="w-full h-full flex items-center justify-center bg-black p-6">
-
+        <div className="flex h-full w-full items-center justify-center bg-black p-3 sm:p-6">
           <video
             src={previewUrl}
             controls
             playsInline
-            className="max-w-full max-h-full"
+            className="max-h-full max-w-full"
           >
-            Your browser does not support
-            video playback.
+            Your browser does not support video playback.
           </video>
-
         </div>
       );
     }
@@ -407,20 +395,16 @@ const ExtraCurricularDocumentViewerModal = ({
 
     if (isAudio) {
       return (
-        <div className="w-full h-full flex items-center justify-center">
-
-          <div className="w-full max-w-xl p-8 text-center">
-
-            <div className="w-16 h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-5">
-
+        <div className="flex h-full w-full items-center justify-center overflow-auto px-3 sm:px-6">
+          <div className="w-full max-w-xl p-4 text-center sm:p-8">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50">
               <FileText
                 size={30}
                 className="text-blue-600"
               />
-
             </div>
 
-            <p className="text-sm font-medium text-slate-700 mb-5">
+            <p className="mb-5 break-words text-sm font-medium text-slate-700">
               {documentName}
             </p>
 
@@ -429,9 +413,7 @@ const ExtraCurricularDocumentViewerModal = ({
               controls
               className="w-full"
             />
-
           </div>
-
         </div>
       );
     }
@@ -441,32 +423,27 @@ const ExtraCurricularDocumentViewerModal = ({
     // ========================================================
 
     return (
-      <div className="h-full flex flex-col items-center justify-center text-center px-6">
-
-        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
-
+      <div className="flex h-full flex-col items-center justify-center px-4 text-center sm:px-6">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
           <FileText
             size={30}
             className="text-slate-400"
           />
-
         </div>
 
         <p className="text-sm font-semibold text-slate-700">
           Preview not supported
         </p>
 
-        <p className="text-xs text-slate-400 mt-1 max-w-sm">
-          This file type cannot be displayed
-          directly inside the viewer.
+        <p className="mt-1 max-w-sm break-words text-xs leading-5 text-slate-400">
+          This file type cannot be displayed directly inside the viewer.
         </p>
 
-        <div className="flex items-center gap-2 mt-5">
-
+        <div className="mt-5 flex w-full max-w-sm flex-col gap-2 sm:w-auto sm:flex-row sm:items-center">
           <button
             type="button"
             onClick={handleOpenExternal}
-            className="h-9 px-4 rounded-md border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition"
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-md border border-slate-300 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50 sm:w-auto"
           >
             <ExternalLink size={16} />
             Open File
@@ -475,14 +452,12 @@ const ExtraCurricularDocumentViewerModal = ({
           <button
             type="button"
             onClick={handleDownload}
-            className="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-2 transition"
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700 sm:w-auto"
           >
             <Download size={16} />
             Download
           </button>
-
         </div>
-
       </div>
     );
   };
@@ -501,65 +476,51 @@ const ExtraCurricularDocumentViewerModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 p-2 sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           handleClose();
         }
       }}
     >
-
-      {/* ====================================================
-          MODAL
-      ==================================================== */}
+      {/* MODAL */}
 
       <div
-        className="w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col"
+        className="my-auto flex h-[96dvh] w-full max-w-6xl flex-col overflow-hidden rounded-lg bg-white shadow-2xl sm:h-[90vh] sm:rounded-xl"
         onMouseDown={(event) => {
           event.stopPropagation();
         }}
       >
+        {/* HEADER */}
 
-        {/* ==================================================
-            HEADER
-        ================================================== */}
-
-        <div className="h-16 px-5 border-b border-slate-200 flex items-center justify-between shrink-0">
-
+        <div className="flex min-h-[64px] shrink-0 items-center justify-between gap-2 border-b border-slate-200 px-3 py-2 sm:px-5">
           {/* LEFT */}
 
-          <div className="flex items-center gap-3 min-w-0">
-
-            <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 sm:h-9 sm:w-9">
               <FileText
                 size={19}
                 className="text-blue-600"
               />
-
             </div>
 
-            <div className="min-w-0">
-
+            <div className="min-w-0 flex-1">
               <h2
-                className="text-sm font-semibold text-slate-800 truncate max-w-[500px]"
+                className="truncate text-xs font-semibold text-slate-800 sm:max-w-[500px] sm:text-sm"
                 title={documentName}
               >
                 {documentName}
               </h2>
 
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="mt-0.5 text-[10px] text-slate-400 sm:text-xs">
                 Extra-Curricular
               </p>
-
             </div>
-
           </div>
 
           {/* RIGHT */}
 
-          <div className="flex items-center gap-1 shrink-0">
-
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
             {/* DOWNLOAD */}
 
             <button
@@ -567,9 +528,10 @@ const ExtraCurricularDocumentViewerModal = ({
               onClick={handleDownload}
               disabled={!previewUrl}
               title="Download"
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition disabled:opacity-40"
+              aria-label="Download document"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:opacity-40 sm:h-9 sm:w-9"
             >
-              <Download size={18} />
+              <Download size={17} />
             </button>
 
             {/* OPEN EXTERNAL */}
@@ -579,9 +541,10 @@ const ExtraCurricularDocumentViewerModal = ({
               onClick={handleOpenExternal}
               disabled={!previewUrl}
               title="Open in new tab"
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition disabled:opacity-40"
+              aria-label="Open document in new tab"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:opacity-40 sm:h-9 sm:w-9"
             >
-              <ExternalLink size={18} />
+              <ExternalLink size={17} />
             </button>
 
             {/* CLOSE */}
@@ -590,23 +553,19 @@ const ExtraCurricularDocumentViewerModal = ({
               type="button"
               onClick={handleClose}
               title="Close"
-              className="w-9 h-9 ml-1 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition"
+              aria-label="Close document viewer"
+              className="ml-0.5 flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 sm:ml-1 sm:h-9 sm:w-9"
             >
               <X size={20} />
             </button>
-
           </div>
-
         </div>
 
-        {/* ==================================================
-            DOCUMENT
-        ================================================== */}
+        {/* DOCUMENT */}
 
-        <div className="flex-1 min-h-0 overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-hidden">
           {renderDocument()}
         </div>
-
       </div>
     </div>
   );

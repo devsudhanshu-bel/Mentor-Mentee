@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 import {
@@ -238,27 +239,26 @@ const ResearchDocumentPreviewContent = ({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-black/60 p-2 backdrop-blur-sm sm:p-4">
+      <div className="my-auto flex h-[96dvh] max-h-[96dvh] w-full min-w-0 max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-[90vh] sm:max-h-[90vh] sm:rounded-2xl">
         {/* HEADER */}
-
-        <div className="h-16 flex items-center justify-between px-5 border-b border-slate-200 flex-shrink-0">
-          <div className="min-w-0">
-            <h2 className="text-base font-semibold text-slate-800 truncate">
+        <div className="flex shrink-0 flex-col gap-3 border-b border-slate-200 px-3 py-3 sm:h-16 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5 sm:py-0">
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-sm font-semibold text-slate-800 sm:text-base">
               {documentName}
             </h2>
 
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="mt-0.5 text-xs text-slate-500">
               {extension ? extension.toUpperCase() : "DOCUMENT"}
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex w-full shrink-0 items-center gap-2 sm:w-auto">
             <button
               type="button"
               onClick={handleDownload}
               disabled={!fileUrl || isDownloading}
-              className="h-9 px-3 rounded-md border border-slate-300 hover:bg-slate-50 text-sm flex items-center gap-2 transition disabled:opacity-50"
+              className="inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-md border border-slate-300 px-3 text-xs font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:text-sm"
             >
               {isDownloading ? (
                 <Loader2 size={15} className="animate-spin" />
@@ -266,15 +266,18 @@ const ResearchDocumentPreviewContent = ({
                 <Download size={15} />
               )}
 
-              {isDownloading ? "Downloading..." : "Download"}
+              <span className="truncate">
+                {isDownloading ? "Downloading..." : "Download"}
+              </span>
             </button>
 
             <button
               type="button"
               onClick={handleOpen}
               disabled={!previewUrl}
-              className="p-2 rounded-md hover:bg-slate-100 text-slate-500 transition disabled:opacity-50"
+              className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
               title="Open in new tab"
+              aria-label="Open document in new tab"
             >
               <ExternalLink size={18} />
             </button>
@@ -282,8 +285,9 @@ const ResearchDocumentPreviewContent = ({
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-md hover:bg-slate-100 text-slate-500 transition"
+              className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-slate-100"
               title="Close"
+              aria-label="Close document preview"
             >
               <X size={20} />
             </button>
@@ -291,34 +295,33 @@ const ResearchDocumentPreviewContent = ({
         </div>
 
         {/* PREVIEW */}
-
-        <div className="flex-1 bg-slate-100 overflow-hidden">
+        <div className="min-h-0 flex-1 overflow-hidden bg-slate-100">
           {!fileUrl && (
-            <div className="h-full flex items-center justify-center text-sm text-slate-500">
+            <div className="flex h-full items-center justify-center p-4 text-center text-sm text-slate-500">
               No document file is available.
             </div>
           )}
 
           {fileUrl && isLoading && !isOffice && (
-            <div className="h-full flex flex-col items-center justify-center gap-3 text-slate-500">
+            <div className="flex h-full flex-col items-center justify-center gap-3 p-4 text-slate-500">
               <Loader2 size={30} className="animate-spin text-blue-600" />
               <p className="text-sm">Loading document...</p>
             </div>
           )}
 
           {fileUrl && error && (
-            <div className="h-full flex items-center justify-center p-6">
-              <div className="text-center max-w-md">
+            <div className="flex h-full items-center justify-center overflow-y-auto p-4 sm:p-6">
+              <div className="w-full max-w-md text-center">
                 <AlertCircle
                   size={32}
-                  className="text-red-500 mx-auto mb-3"
+                  className="mx-auto mb-3 text-red-500"
                 />
 
-                <h3 className="text-lg font-semibold text-slate-800">
+                <h3 className="break-words text-base font-semibold text-slate-800 sm:text-lg">
                   Unable to display document
                 </h3>
 
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="mt-2 break-words text-sm leading-6 text-slate-500">
                   {error}
                 </p>
 
@@ -326,45 +329,52 @@ const ResearchDocumentPreviewContent = ({
                   type="button"
                   onClick={handleDownload}
                   disabled={isDownloading}
-                  className="mt-5 h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium inline-flex items-center gap-2 disabled:opacity-50"
+                  className="mt-5 inline-flex h-10 max-w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5"
                 >
-                  <Download size={16} />
+                  {isDownloading ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <Download size={16} />
+                  )}
                   Download Document
                 </button>
               </div>
             </div>
           )}
 
+          {/* PDF PREVIEW */}
           {fileUrl && !isLoading && !error && isPdf && previewUrl && (
             <iframe
               src={previewUrl}
               title={documentName}
-              className="w-full h-full border-0"
+              className="h-full w-full border-0"
             />
           )}
 
+          {/* IMAGE PREVIEW */}
           {fileUrl && !isLoading && !error && isImage && previewUrl && (
-            <div className="w-full h-full flex items-center justify-center p-6 overflow-auto">
+            <div className="flex h-full w-full items-center justify-center overflow-auto p-3 sm:p-6">
               <img
                 src={previewUrl}
                 alt={documentName}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-sm"
+                className="max-h-full max-w-full rounded-lg object-contain shadow-sm"
               />
             </div>
           )}
 
+          {/* OFFICE FILE */}
           {fileUrl && !isLoading && !error && isOffice && (
-            <div className="h-full flex items-center justify-center p-6">
-              <div className="text-center max-w-md">
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4 shadow-sm">
+            <div className="flex h-full items-center justify-center overflow-y-auto p-4 sm:p-6">
+              <div className="w-full max-w-md text-center">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm sm:h-16 sm:w-16">
                   <ExternalLink size={28} className="text-blue-600" />
                 </div>
 
-                <h3 className="text-lg font-semibold text-slate-800">
+                <h3 className="break-words text-base font-semibold text-slate-800 sm:text-lg">
                   Secure preview unavailable
                 </h3>
 
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="mt-2 text-sm leading-6 text-slate-500">
                   This Office document is stored privately. Download it to
                   view it using Microsoft Office or a compatible application.
                 </p>
@@ -373,32 +383,37 @@ const ResearchDocumentPreviewContent = ({
                   type="button"
                   onClick={handleDownload}
                   disabled={isDownloading}
-                  className="mt-5 h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium inline-flex items-center gap-2 disabled:opacity-50"
+                  className="mt-5 inline-flex h-10 max-w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5"
                 >
-                  <Download size={16} />
+                  {isDownloading ? (
+                    <Loader2 size={16} className="animate-spin" />
+                  ) : (
+                    <Download size={16} />
+                  )}
                   Download Document
                 </button>
               </div>
             </div>
           )}
 
+          {/* OTHER FILE FORMATS */}
           {fileUrl &&
             !isLoading &&
             !error &&
             !isPdf &&
             !isImage &&
             !isOffice && (
-              <div className="h-full flex items-center justify-center p-6">
-                <div className="text-center max-w-md">
-                  <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4 shadow-sm">
+              <div className="flex h-full items-center justify-center overflow-y-auto p-4 sm:p-6">
+                <div className="w-full max-w-md text-center">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm sm:h-16 sm:w-16">
                     <ExternalLink size={28} className="text-blue-600" />
                   </div>
 
-                  <h3 className="text-lg font-semibold text-slate-800">
+                  <h3 className="break-words text-base font-semibold text-slate-800 sm:text-lg">
                     Preview not available
                   </h3>
 
-                  <p className="text-sm text-slate-500 mt-2">
+                  <p className="mt-2 text-sm leading-6 text-slate-500">
                     This research file format cannot be displayed directly
                     in the browser. You can download the original document.
                   </p>
@@ -407,9 +422,13 @@ const ResearchDocumentPreviewContent = ({
                     type="button"
                     onClick={handleDownload}
                     disabled={isDownloading}
-                    className="mt-5 h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium inline-flex items-center gap-2 disabled:opacity-50"
+                    className="mt-5 inline-flex h-10 max-w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5"
                   >
-                    <Download size={16} />
+                    {isDownloading ? (
+                      <Loader2 size={16} className="animate-spin" />
+                    ) : (
+                      <Download size={16} />
+                    )}
                     Download Document
                   </button>
                 </div>

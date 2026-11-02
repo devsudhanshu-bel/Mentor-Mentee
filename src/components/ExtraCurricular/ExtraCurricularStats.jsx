@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -165,31 +166,31 @@ const ExtraCurricularStats = ({ refreshKey = 0 }) => {
   // ==========================================================
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
       {statItems.map((item) => {
         const Icon = item.icon;
 
         return (
           <div
             key={item.title}
-            className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm transition-all hover:shadow-md"
+            className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-3 shadow-sm transition-all hover:shadow-md sm:gap-3 sm:px-4 sm:py-4"
           >
             <div
-              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${item.bg}`}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full sm:h-11 sm:w-11 ${item.bg}`}
             >
-              <Icon className={`h-5 w-5 ${item.color}`} />
+              <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`} />
             </div>
 
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-slate-500">
+            <div className="min-w-0 flex-1">
+              <p className="break-words text-[10px] font-medium leading-4 text-slate-500 sm:text-xs">
                 {item.title}
               </p>
 
-              <h2 className="mt-0.5 text-2xl font-bold leading-none text-slate-800">
+              <h2 className="mt-1 text-xl font-bold leading-none text-slate-800 sm:text-2xl">
                 {loading ? "—" : item.value}
               </h2>
 
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 break-words text-[10px] leading-4 text-slate-400 sm:text-xs">
                 {item.subtitle}
               </p>
             </div>

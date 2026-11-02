@@ -11,12 +11,18 @@ import {
   BriefcaseBusiness,
 } from "lucide-react";
 
+// --------------------------------------------------
+// FORMAT MEETING DATE
+// --------------------------------------------------
+
 const formatMeetingDate = (value) => {
   if (!value) return "Not scheduled";
 
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) return "Not scheduled";
+  if (Number.isNaN(date.getTime())) {
+    return "Not scheduled";
+  }
 
   return date.toLocaleDateString("en-IN", {
     day: "2-digit",
@@ -25,15 +31,28 @@ const formatMeetingDate = (value) => {
   });
 };
 
-const KPICards = ({ dashboardData = null, loading = false }) => {
+// --------------------------------------------------
+// KPI CARDS
+// --------------------------------------------------
+
+const KPICards = ({
+  dashboardData = null,
+  loading = false,
+}) => {
   const kpis = dashboardData?.kpis ?? {};
   const student = dashboardData?.student ?? {};
 
   const semester =
     kpis.currentSemester ?? student.currentSemester;
 
-  const cgpa = kpis.cgpa ?? student.currentCGPA;
+  const cgpa =
+    kpis.cgpa ?? student.currentCGPA;
+
   const attendance = kpis.attendancePercentage;
+
+  // --------------------------------------------------
+  // KPI DATA
+  // --------------------------------------------------
 
   const cards = [
     {
@@ -46,7 +65,9 @@ const KPICards = ({ dashboardData = null, loading = false }) => {
     {
       title: "CGPA",
       value:
-        cgpa !== null && cgpa !== undefined && cgpa !== ""
+        cgpa !== null &&
+        cgpa !== undefined &&
+        cgpa !== ""
           ? Number(cgpa).toFixed(2)
           : "—",
       icon: BarChart3,
@@ -96,11 +117,39 @@ const KPICards = ({ dashboardData = null, loading = false }) => {
     },
   ];
 
+  // --------------------------------------------------
+  // UI
+  // --------------------------------------------------
+
   return (
-    <section className="w-full" aria-busy={loading}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+    <section
+      className="w-full min-w-0"
+      aria-busy={loading}
+    >
+      <div
+        className="
+          grid
+          w-full
+          min-w-0
+
+          grid-cols-2
+          gap-3
+
+          sm:grid-cols-3
+          sm:gap-4
+
+          lg:grid-cols-3
+          lg:gap-4
+
+          2xl:grid-cols-6
+          2xl:gap-4
+        "
+      >
         {cards.map((card) => (
-          <div key={card.title} className="min-w-0">
+          <div
+            key={card.title}
+            className="min-w-0 w-full"
+          >
             <KPICard {...card} />
           </div>
         ))}

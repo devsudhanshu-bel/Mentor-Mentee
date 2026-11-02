@@ -60,13 +60,13 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
   };
 
   const inputClass =
-    "mt-1.5 w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
+    "mt-1.5 w-full min-w-0 rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-3.5";
 
   const labelClass = "text-sm font-medium text-slate-700";
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-3 sm:p-6"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-950/50 p-2 sm:p-4 md:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !saving) onClose?.();
       }}
@@ -75,21 +75,24 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="new-internship-title"
-        className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
+        className="my-auto flex max-h-[96dvh] w-full min-w-0 max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[92dvh]"
       >
-        <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white px-5 py-4 sm:px-7">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-blue-50 p-3 text-blue-600">
+        {/* Header */}
+        <header className="sticky top-0 z-10 flex shrink-0 items-center justify-between gap-3 border-b border-slate-100 bg-white px-4 py-4 sm:px-6 md:px-7">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="shrink-0 rounded-xl bg-blue-50 p-2.5 text-blue-600 sm:p-3">
               <BriefcaseBusiness size={22} />
             </div>
-            <div>
+
+            <div className="min-w-0">
               <h2
                 id="new-internship-title"
-                className="text-lg font-bold text-slate-900"
+                className="text-base font-bold text-slate-900 sm:text-lg"
               >
                 New Internship
               </h2>
-              <p className="mt-1 text-xs text-slate-500">
+
+              <p className="mt-1 text-xs leading-5 text-slate-500">
                 Enter your internship details to get started.
               </p>
             </div>
@@ -100,26 +103,32 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
             onClick={onClose}
             disabled={saving}
             aria-label="Close modal"
-            className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
+            className="shrink-0 rounded-lg p-2 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X size={20} />
           </button>
         </header>
 
-        <form onSubmit={submit} className="space-y-6 p-5 sm:p-7">
+        {/* Form */}
+        <form
+          onSubmit={submit}
+          className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4 sm:space-y-6 sm:p-6 md:p-7"
+        >
           {error && (
             <div
               role="alert"
-              className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="break-words rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-5 text-red-700"
             >
               {error}
             </div>
           )}
 
-          <div>
+          {/* Internship Type */}
+          <div className="min-w-0">
             <label className={labelClass} htmlFor="internshipType">
               Internship Type *
             </label>
+
             <select
               id="internshipType"
               name="internshipType"
@@ -141,11 +150,13 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
+          {/* Internship Details */}
+          <div className="grid min-w-0 grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 sm:gap-y-5">
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="companyName">
                 Company Name *
               </label>
+
               <input
                 id="companyName"
                 name="companyName"
@@ -158,10 +169,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="internshipTitle">
                 Internship Title *
               </label>
+
               <input
                 id="internshipTitle"
                 name="internshipTitle"
@@ -174,10 +186,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="role">
                 Role
               </label>
+
               <input
                 id="role"
                 name="role"
@@ -189,10 +202,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="projectName">
                 Project Name
               </label>
+
               <input
                 id="projectName"
                 name="projectName"
@@ -204,10 +218,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="startDate">
                 Start Date *
               </label>
+
               <input
                 id="startDate"
                 name="startDate"
@@ -219,10 +234,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="endDate">
                 End Date {isAlreadyCompleted ? "*" : ""}
               </label>
+
               <input
                 id="endDate"
                 name="endDate"
@@ -235,10 +251,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="location">
                 Location
               </label>
+
               <input
                 id="location"
                 name="location"
@@ -250,10 +267,11 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <label className={labelClass} htmlFor="mode">
                 Work Mode
               </label>
+
               <select
                 id="mode"
                 name="mode"
@@ -268,10 +286,12 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
             </div>
           </div>
 
-          <div>
+          {/* Description */}
+          <div className="min-w-0">
             <label className={labelClass} htmlFor="description">
               Description
             </label>
+
             <textarea
               id="description"
               name="description"
@@ -279,17 +299,18 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
               onChange={update}
               rows={4}
               maxLength={3000}
-              className={inputClass}
+              className={`${inputClass} resize-y`}
               placeholder="Describe your responsibilities or internship work."
             />
           </div>
 
+          {/* Actions */}
           <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={onClose}
               disabled={saving}
-              className="rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+              className="w-full rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               Cancel
             </button>
@@ -297,9 +318,12 @@ const NewInternshipModal = ({ onClose, onCreated }) => {
             <button
               type="submit"
               disabled={saving}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
-              {saving && <LoaderCircle size={17} className="animate-spin" />}
+              {saving && (
+                <LoaderCircle size={17} className="animate-spin" />
+              )}
+
               {saving ? "Creating..." : "Create Internship"}
             </button>
           </div>

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
@@ -51,15 +52,15 @@ const AttendanceOverview = ({ attendanceData }) => {
   }
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 h-[200px]">
-      <h3 className="text-[14px] font-semibold text-blue-600 mb-4">
+    <div className="w-full min-h-[200px] bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
+      <h3 className="text-[14px] font-semibold text-blue-600 mb-3 sm:mb-4">
         Overall Attendance
       </h3>
 
-      <div className="flex items-center justify-between h-[145px]">
+      <div className="flex flex-col min-[400px]:flex-row items-center justify-between gap-4 min-[400px]:gap-3 min-h-[145px]">
         {/* Donut Chart */}
 
-        <div className="relative w-[120px] h-[120px]">
+        <div className="relative w-[120px] h-[120px] shrink-0">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -88,7 +89,9 @@ const AttendanceOverview = ({ attendanceData }) => {
               {safePercentage.toFixed(2)}%
             </h2>
 
-            <p className={`text-[11px] font-medium ${standingColor}`}>
+            <p
+              className={`text-[10px] sm:text-[11px] font-medium text-center px-1 ${standingColor}`}
+            >
               {standing}
             </p>
           </div>
@@ -96,41 +99,53 @@ const AttendanceOverview = ({ attendanceData }) => {
 
         {/* Stats */}
 
-        <div className="space-y-4 text-[12px]">
+        <div className="w-full min-[400px]:w-auto flex-1 space-y-3 sm:space-y-4 text-[11px] sm:text-[12px]">
           {/* Attended */}
 
-          <div className="flex items-center justify-between gap-8">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-blue-600"></span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-3 h-3 rounded bg-blue-600 shrink-0"></span>
 
-              <span className="text-slate-600">Classes Attended</span>
+              <span className="text-slate-600 whitespace-nowrap">
+                Classes Attended
+              </span>
             </div>
 
-            <span className="font-semibold text-[#142970]">{attended}</span>
+            <span className="font-semibold text-[#142970] tabular-nums">
+              {attended}
+            </span>
           </div>
 
           {/* Held */}
 
-          <div className="flex items-center justify-between gap-8">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-blue-200"></span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-3 h-3 rounded bg-blue-200 shrink-0"></span>
 
-              <span className="text-slate-600">Classes Held</span>
+              <span className="text-slate-600 whitespace-nowrap">
+                Classes Held
+              </span>
             </div>
 
-            <span className="font-semibold text-[#142970]">{held}</span>
+            <span className="font-semibold text-[#142970] tabular-nums">
+              {held}
+            </span>
           </div>
 
           {/* Missed */}
 
-          <div className="flex items-center justify-between gap-8">
-            <div className="flex items-center gap-2">
-              <span className="w-3 h-3 rounded bg-red-500"></span>
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="w-3 h-3 rounded bg-red-500 shrink-0"></span>
 
-              <span className="text-slate-600">Classes Missed</span>
+              <span className="text-slate-600 whitespace-nowrap">
+                Classes Missed
+              </span>
             </div>
 
-            <span className="font-semibold text-[#142970]">{missed}</span>
+            <span className="font-semibold text-[#142970] tabular-nums">
+              {missed}
+            </span>
           </div>
         </div>
       </div>

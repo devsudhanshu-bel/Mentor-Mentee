@@ -39,20 +39,23 @@ const DOCUMENTS = [
 const RequiredDocuments = ({ internship }) => {
   if (!internship) {
     return (
-      <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center gap-3">
-          <div className="rounded-xl bg-blue-50 p-3 text-blue-600">
+      <section className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="shrink-0 rounded-xl bg-blue-50 p-3 text-blue-600">
             <Files size={21} />
           </div>
-          <div>
+
+          <div className="min-w-0">
             <h2 className="font-semibold text-slate-900">
               Required Documents
             </h2>
-            <p className="text-xs text-slate-500">Document checklist</p>
+            <p className="text-xs text-slate-500">
+              Document checklist
+            </p>
           </div>
         </div>
 
-        <p className="mt-5 text-sm leading-6 text-slate-500">
+        <p className="mt-5 break-words text-sm leading-6 text-slate-500">
           Create an internship record to view its document requirements.
         </p>
       </section>
@@ -130,27 +133,33 @@ const RequiredDocuments = ({ internship }) => {
   ).length;
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <header className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
-        <div>
-          <h2 className="font-semibold text-slate-900">
+    <section className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {/* Header */}
+      <header className="flex min-w-0 items-center justify-between gap-3 border-b border-slate-100 px-4 py-4 sm:px-5">
+        <div className="min-w-0">
+          <h2 className="break-words font-semibold text-slate-900">
             Required Documents
           </h2>
+
           <p className="mt-1 text-xs text-slate-500">
             Track your submitted files
           </p>
         </div>
 
-        <div className="rounded-xl bg-blue-50 p-3 text-blue-600">
+        <div className="shrink-0 rounded-xl bg-blue-50 p-2.5 text-blue-600 sm:p-3">
           <FileCheck2 size={20} />
         </div>
       </header>
 
-      <div className="p-4">
+      <div className="min-w-0 p-3 sm:p-4">
+        {/* Upload progress */}
         <div className="mb-4">
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-slate-500">Documents uploaded</span>
-            <span className="font-semibold text-slate-700">
+          <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
+            <span className="text-slate-500">
+              Documents uploaded
+            </span>
+
+            <span className="font-semibold tabular-nums text-slate-700">
               {uploadedCount} / {documents.length}
             </span>
           </div>
@@ -169,6 +178,7 @@ const RequiredDocuments = ({ internship }) => {
           </div>
         </div>
 
+        {/* Document list */}
         <div className="space-y-3">
           {documents.map((documentType) => {
             const document = getDocument(documentType.type);
@@ -178,28 +188,31 @@ const RequiredDocuments = ({ internship }) => {
             return (
               <div
                 key={documentType.type}
-                className="flex items-start gap-3 rounded-xl border border-slate-100 p-3"
+                className="flex min-w-0 items-start gap-3 rounded-xl border border-slate-100 p-3"
               >
-                <div className="rounded-lg bg-slate-50 p-2 text-slate-500">
+                <div className="shrink-0 rounded-lg bg-slate-50 p-2 text-slate-500">
                   <FileText size={18} />
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="break-words text-sm font-medium text-slate-800">
+                  <p className="break-words text-sm font-medium leading-5 text-slate-800">
                     {documentType.label}
                   </p>
 
                   {document?.documentName && (
-                    <p className="mt-1 truncate text-xs text-slate-400">
+                    <p
+                      className="mt-1 break-all text-xs leading-5 text-slate-400"
+                      title={document.documentName}
+                    >
                       {document.documentName}
                     </p>
                   )}
 
                   <span
-                    className={`mt-2 inline-flex items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium ${status.color}`}
+                    className={`mt-2 inline-flex max-w-full items-center gap-1 rounded-full px-2 py-1 text-[11px] font-medium ${status.color}`}
                   >
-                    <StatusIcon size={12} />
-                    {status.label}
+                    <StatusIcon size={12} className="shrink-0" />
+                    <span>{status.label}</span>
                   </span>
                 </div>
               </div>
@@ -207,7 +220,8 @@ const RequiredDocuments = ({ internship }) => {
           })}
         </div>
 
-        <p className="mt-4 text-xs leading-5 text-slate-400">
+        {/* Helper text */}
+        <p className="mt-4 break-words text-xs leading-5 text-slate-400">
           Upload and replace documents from your internship details. Uploaded
           does not necessarily mean verified.
         </p>

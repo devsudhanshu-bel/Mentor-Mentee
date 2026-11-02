@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   PieChart,
@@ -15,15 +16,14 @@ const data = [
 
 const AchievementChart = () => {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-
-      <h2 className="text-base font-semibold text-slate-800 mb-4">
+    <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+      <h2 className="mb-4 text-base font-semibold text-slate-800">
         Achievement by Level
       </h2>
 
-      <div className="flex items-center">
-
-        <div className="w-40 h-32">
+      <div className="flex min-w-0 flex-col items-center gap-4 sm:flex-row sm:items-center sm:gap-3">
+        {/* PIE CHART */}
+        <div className="h-36 w-full min-w-0 max-w-[180px] shrink-0 sm:h-32 sm:w-40">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
@@ -34,49 +34,40 @@ const AchievementChart = () => {
                 paddingAngle={2}
               >
                 {data.map((entry, index) => (
-                  <Cell
-                    key={index}
-                    fill={entry.color}
-                  />
+                  <Cell key={index} fill={entry.color} />
                 ))}
               </Pie>
             </PieChart>
           </ResponsiveContainer>
         </div>
 
-        <div className="flex-1 space-y-3">
-
+        {/* LEGEND */}
+        <div className="w-full min-w-0 flex-1 space-y-3">
           {data.map((item) => (
             <div
               key={item.name}
-              className="flex items-center justify-between text-xs"
+              className="flex min-w-0 items-center justify-between gap-3 text-xs"
             >
-              <div className="flex items-center gap-2">
-
+              <div className="flex min-w-0 items-center gap-2">
                 <div
-                  className="w-2.5 h-2.5 rounded-full"
+                  className="h-2.5 w-2.5 shrink-0 rounded-full"
                   style={{
                     backgroundColor: item.color,
                   }}
                 />
 
-                <span className="text-slate-600">
+                <span className="min-w-0 break-words text-slate-600">
                   {item.name}
                 </span>
-
               </div>
 
-              <span className="font-semibold text-slate-800">
+              <span className="shrink-0 font-semibold text-slate-800">
                 {item.value}
               </span>
-
             </div>
           ))}
-
         </div>
-
       </div>
-
     </div>
   );
 };

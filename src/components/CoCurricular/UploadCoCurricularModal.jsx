@@ -1,7 +1,5 @@
-import React, {
-  useRef,
-  useState,
-} from "react";
+
+import React, { useRef, useState } from "react";
 
 import {
   X,
@@ -10,32 +8,20 @@ import {
   FileText,
 } from "lucide-react";
 
-import {
-  uploadDocument,
-} from "../../api/document.api";
+import { uploadDocument } from "../../api/document.api";
 
 const UploadCoCurricularModal = ({
   isOpen,
   onClose,
   onSuccess,
 }) => {
-  const fileInputRef =
-    useRef(null);
+  const fileInputRef = useRef(null);
 
-  const [documentName, setDocumentName] =
-    useState("");
-
-  const [description, setDescription] =
-    useState("");
-
-  const [file, setFile] =
-    useState(null);
-
-  const [loading, setLoading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
+  const [documentName, setDocumentName] = useState("");
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   // ==========================================================
   // RESET
@@ -69,11 +55,8 @@ const UploadCoCurricularModal = ({
   // FILE SELECT
   // ==========================================================
 
-  const handleFileChange = (
-    event
-  ) => {
-    const selectedFile =
-      event.target.files?.[0];
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files?.[0];
 
     if (!selectedFile) {
       return;
@@ -83,19 +66,11 @@ const UploadCoCurricularModal = ({
 
     // 20 MB
 
-    const maxSize =
-      20 * 1024 * 1024;
+    const maxSize = 20 * 1024 * 1024;
 
-    if (
-      selectedFile.size >
-      maxSize
-    ) {
-      setError(
-        "File size must be less than 20MB."
-      );
-
+    if (selectedFile.size > maxSize) {
+      setError("File size must be less than 20MB.");
       event.target.value = "";
-
       return;
     }
 
@@ -104,15 +79,12 @@ const UploadCoCurricularModal = ({
     // Automatically use filename if name empty
 
     if (!documentName) {
-      const nameWithoutExtension =
-        selectedFile.name.replace(
-          /\.[^/.]+$/,
-          ""
-        );
-
-      setDocumentName(
-        nameWithoutExtension
+      const nameWithoutExtension = selectedFile.name.replace(
+        /\.[^/.]+$/,
+        ""
       );
+
+      setDocumentName(nameWithoutExtension);
     }
   };
 
@@ -120,37 +92,27 @@ const UploadCoCurricularModal = ({
   // DRAG & DROP
   // ==========================================================
 
-  const handleDragOver = (
-    event
-  ) => {
+  const handleDragOver = (event) => {
     event.preventDefault();
     event.stopPropagation();
   };
 
-  const handleDrop = (
-    event
-  ) => {
+  const handleDrop = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
-    const droppedFile =
-      event.dataTransfer.files?.[0];
+    if (loading) return;
+
+    const droppedFile = event.dataTransfer.files?.[0];
 
     if (!droppedFile) {
       return;
     }
 
-    const maxSize =
-      20 * 1024 * 1024;
+    const maxSize = 20 * 1024 * 1024;
 
-    if (
-      droppedFile.size >
-      maxSize
-    ) {
-      setError(
-        "File size must be less than 20MB."
-      );
-
+    if (droppedFile.size > maxSize) {
+      setError("File size must be less than 20MB.");
       return;
     }
 
@@ -158,15 +120,22 @@ const UploadCoCurricularModal = ({
     setFile(droppedFile);
 
     if (!documentName) {
-      const nameWithoutExtension =
-        droppedFile.name.replace(
-          /\.[^/.]+$/,
-          ""
-        );
-
-      setDocumentName(
-        nameWithoutExtension
+      const nameWithoutExtension = droppedFile.name.replace(
+        /\.[^/.]+$/,
+        ""
       );
+
+      setDocumentName(nameWithoutExtension);
+    }
+
+    if (fileInputRef.current) {
+      try {
+        const transfer = new DataTransfer();
+        transfer.items.add(droppedFile);
+        fileInputRef.current.files = transfer.files;
+      } catch {
+        // File remains available in component state.
+      }
     }
   };
 
@@ -178,10 +147,7 @@ const UploadCoCurricularModal = ({
     setError("");
 
     if (!documentName.trim()) {
-      setError(
-        "Please enter an activity name."
-      );
-
+      setError("Please enter an activity name.");
       return;
     }
 
@@ -189,7 +155,6 @@ const UploadCoCurricularModal = ({
       setError(
         "Please select a certificate or activity document."
       );
-
       return;
     }
 
@@ -197,15 +162,9 @@ const UploadCoCurricularModal = ({
       setLoading(true);
 
       await uploadDocument({
-        documentName:
-          documentName.trim(),
-
-        category:
-          "CO_CURRICULAR",
-
-        description:
-          description.trim(),
-
+        documentName: documentName.trim(),
+        category: "CO_CURRICULAR",
+        description: description.trim(),
         file,
       });
 
@@ -243,59 +202,64 @@ const UploadCoCurricularModal = ({
   // ==========================================================
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4">
-
-      <div className="w-full max-w-2xl bg-white rounded-xl shadow-xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+    <div
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/40 px-2 py-3 backdrop-blur-sm sm:px-4 sm:py-5"
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          handleClose();
+        }
+      }}
+    >
+      <div className="my-auto flex max-h-[96dvh] w-full max-w-2xl min-w-0 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl sm:max-h-[90vh]">
 
         {/* ==================================================
             HEADER
         ================================================== */}
 
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200">
-
-          <div>
-
-            <h2 className="text-lg font-semibold text-slate-800">
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-6 sm:py-4">
+          <div className="min-w-0">
+            <h2 className="break-words text-base font-semibold text-slate-800 sm:text-lg">
               Upload Co-Curricular Activity
             </h2>
 
-            <p className="text-xs text-slate-500 mt-1">
-              Upload certificates, event
-              participation or activity records.
+            <p className="mt-1 break-words text-xs leading-relaxed text-slate-500 sm:text-sm">
+              Upload certificates, event participation or activity
+              records.
             </p>
-
           </div>
 
           <button
             type="button"
             onClick={handleClose}
             disabled={loading}
-            className="p-2 rounded-md hover:bg-slate-100 transition disabled:opacity-50"
+            aria-label="Close upload modal"
+            className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={18} />
           </button>
-
         </div>
 
         {/* ==================================================
             BODY
         ================================================== */}
 
-        <div className="p-6 space-y-5">
+        <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4 sm:p-6">
 
-          {/* Error */}
+          {/* ERROR */}
 
           {error && (
-            <div className="rounded-md border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-600">
+            <div
+              role="alert"
+              className="break-words rounded-md border border-red-200 bg-red-50 px-3 py-3 text-xs leading-5 text-red-600 sm:px-4"
+            >
               {error}
             </div>
           )}
 
-          {/* Activity Name */}
+          {/* ACTIVITY NAME */}
 
-          <div>
-
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+          <div className="min-w-0">
+            <label className="mb-1.5 block text-xs font-medium text-slate-700">
               Activity Name
             </label>
 
@@ -303,117 +267,87 @@ const UploadCoCurricularModal = ({
               type="text"
               value={documentName}
               onChange={(event) =>
-                setDocumentName(
-                  event.target.value
-                )
+                setDocumentName(event.target.value)
               }
               placeholder="Enter activity name"
               disabled={loading}
-              className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50"
+              className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
             />
-
           </div>
 
-          {/* Category */}
+          {/* CATEGORY */}
 
-          <div>
-
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+          <div className="min-w-0">
+            <label className="mb-1.5 block text-xs font-medium text-slate-700">
               Activity Category
             </label>
 
             <select
               disabled={loading}
-              className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50"
+              className="h-10 w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
             >
-              <option>
-                Event Participation
-              </option>
-
-              <option>
-                Workshop
-              </option>
-
-              <option>
-                Seminar
-              </option>
-
-              <option>
-                Conference
-              </option>
-
-              <option>
-                Competition
-              </option>
-
-              <option>
-                Hackathon
-              </option>
-
-              <option>
-                Volunteer Service
-              </option>
-
-              <option>
-                Community Service
-              </option>
-
-              <option>
-                Sports
-              </option>
-
-              <option>
-                Cultural Activity
-              </option>
-
-              <option>
-                Club Activity
-              </option>
-
-              <option>
-                Other
-              </option>
+              <option>Event Participation</option>
+              <option>Workshop</option>
+              <option>Seminar</option>
+              <option>Conference</option>
+              <option>Competition</option>
+              <option>Hackathon</option>
+              <option>Volunteer Service</option>
+              <option>Community Service</option>
+              <option>Sports</option>
+              <option>Cultural Activity</option>
+              <option>Club Activity</option>
+              <option>Other</option>
             </select>
 
-            <p className="text-[11px] text-slate-400 mt-1">
-              This is for display purposes.
-              The backend document category is
-              CO_CURRICULAR.
+            <p className="mt-1 break-words text-[11px] leading-relaxed text-slate-400">
+              This is for display purposes. The backend document
+              category is CO_CURRICULAR.
             </p>
-
           </div>
 
-          {/* Upload */}
+          {/* UPLOAD */}
 
-          <div>
-
-            <label className="block text-xs font-medium text-slate-700 mb-2">
+          <div className="min-w-0">
+            <label className="mb-2 block text-xs font-medium text-slate-700">
               Upload Certificate / Document
             </label>
+
+            <input
+              ref={fileInputRef}
+              type="file"
+              hidden
+              accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
+              onChange={handleFileChange}
+              disabled={loading}
+            />
 
             <div
               onDragOver={handleDragOver}
               onDrop={handleDrop}
-              onClick={() =>
-                fileInputRef.current?.click()
-              }
-              className="border-2 border-dashed border-slate-300 rounded-lg p-6 flex flex-col items-center justify-center text-center hover:border-blue-500 hover:bg-slate-50 transition cursor-pointer"
+              onClick={() => {
+                if (!loading) {
+                  fileInputRef.current?.click();
+                }
+              }}
+              className={`flex min-w-0 flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-300 px-3 py-6 text-center transition hover:border-blue-500 hover:bg-slate-50 sm:px-6 sm:py-8 ${
+                loading
+                  ? "cursor-not-allowed opacity-60"
+                  : "cursor-pointer"
+              }`}
             >
-
-              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
-
+              <div className="mb-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 sm:h-12 sm:w-12">
                 <UploadCloud
                   size={24}
                   className="text-blue-600"
                 />
-
               </div>
 
-              <p className="text-sm font-medium text-slate-700">
-                Drag & Drop your file here
+              <p className="break-words text-sm font-medium text-slate-700">
+                Drag &amp; Drop your file here
               </p>
 
-              <p className="text-xs text-slate-500 mt-1">
+              <p className="mt-1 text-xs text-slate-500">
                 or click to browse
               </p>
 
@@ -422,67 +356,47 @@ const UploadCoCurricularModal = ({
                 onClick={(event) => {
                   event.stopPropagation();
 
-                  fileInputRef.current?.click();
+                  if (!loading) {
+                    fileInputRef.current?.click();
+                  }
                 }}
                 disabled={loading}
-                className="mt-3 h-9 px-4 rounded-md border border-slate-300 text-xs font-medium hover:bg-slate-50 disabled:opacity-50"
+                className="mt-3 flex h-9 w-full items-center justify-center rounded-md border border-slate-300 bg-white px-4 text-xs font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
                 Browse Files
               </button>
 
-              <input
-                ref={fileInputRef}
-                type="file"
-                hidden
-                accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png"
-                onChange={
-                  handleFileChange
-                }
-              />
-
-              <p className="text-[11px] text-slate-400 mt-3">
-                PDF, DOC, DOCX, PPT, PPTX,
-                JPG, PNG • Max 20MB
+              <p className="mt-3 break-words text-[11px] leading-relaxed text-slate-400">
+                PDF, DOC, DOCX, PPT, PPTX, JPG, PNG • Max 20MB
               </p>
-
             </div>
 
-            {/* Selected file */}
+            {/* SELECTED FILE */}
 
             {file && (
-              <div className="mt-3 flex items-center gap-3 rounded-md bg-slate-50 border border-slate-200 px-3 py-2">
-
+              <div className="mt-3 flex min-w-0 items-center gap-3 rounded-md border border-slate-200 bg-slate-50 px-3 py-3">
                 <FileText
                   size={18}
-                  className="text-blue-600 shrink-0"
+                  className="shrink-0 text-blue-600"
                 />
 
-                <div className="min-w-0">
-
-                  <p className="text-xs font-medium text-slate-700 truncate">
+                <div className="min-w-0 flex-1">
+                  <p className="break-all text-xs font-medium text-slate-700">
                     {file.name}
                   </p>
 
-                  <p className="text-[11px] text-slate-400">
-                    {(
-                      file.size /
-                      (1024 * 1024)
-                    ).toFixed(2)}{" "}
-                    MB
+                  <p className="mt-1 text-[11px] text-slate-400">
+                    {(file.size / (1024 * 1024)).toFixed(2)} MB
                   </p>
-
                 </div>
-
               </div>
             )}
-
           </div>
 
-          {/* Description */}
+          {/* DESCRIPTION */}
 
-          <div>
-
-            <label className="block text-xs font-medium text-slate-700 mb-1">
+          <div className="min-w-0">
+            <label className="mb-1.5 block text-xs font-medium text-slate-700">
               Description
             </label>
 
@@ -490,30 +404,25 @@ const UploadCoCurricularModal = ({
               rows={4}
               value={description}
               onChange={(event) =>
-                setDescription(
-                  event.target.value
-                )
+                setDescription(event.target.value)
               }
               disabled={loading}
               placeholder="Briefly describe your participation or role..."
-              className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm resize-none outline-none focus:border-blue-500 disabled:bg-slate-50"
+              className="w-full min-w-0 resize-none rounded-md border border-slate-300 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
             />
-
           </div>
-
         </div>
 
         {/* ==================================================
             FOOTER
         ================================================== */}
 
-        <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200">
-
+        <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-slate-200 px-4 py-3 sm:flex-row sm:justify-end sm:gap-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={handleClose}
             disabled={loading}
-            className="h-10 px-4 rounded-md border border-slate-300 text-sm font-medium hover:bg-slate-50 disabled:opacity-50"
+            className="h-10 w-full rounded-md border border-slate-300 px-4 text-sm font-medium transition hover:bg-slate-50 disabled:opacity-50 sm:w-auto"
           >
             Cancel
           </button>
@@ -522,21 +431,14 @@ const UploadCoCurricularModal = ({
             type="button"
             onClick={handleUpload}
             disabled={loading}
-            className="h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
           >
-
             <Award size={16} />
 
-            {loading
-              ? "Uploading..."
-              : "Upload Activity"}
-
+            {loading ? "Uploading..." : "Upload Activity"}
           </button>
-
         </div>
-
       </div>
-
     </div>
   );
 };

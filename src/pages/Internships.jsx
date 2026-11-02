@@ -108,31 +108,31 @@ const Internships = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
       <Sidebar />
 
-      <div className="ml-[290px] flex min-h-screen flex-col">
+      <div className="flex min-h-screen min-w-0 w-full flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <Header />
 
-        <main className="flex-1 space-y-5 px-4 py-5 lg:px-6">
+        <main className="w-full min-w-0 flex-1 space-y-5 px-3 py-4 sm:px-5 sm:py-5 lg:px-6">
           {/* Page header */}
-          <section className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight text-[#142970]">
+          <section className="flex min-w-0 flex-col justify-between gap-4 sm:flex-row sm:items-center">
+            <div className="min-w-0">
+              <h1 className="break-words text-2xl font-bold tracking-tight text-[#142970] sm:text-3xl">
                 Internships
               </h1>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 break-words text-sm text-slate-500">
                 Manage your internship experience and track your journey.
               </p>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex w-full flex-col gap-2 xs:flex-row sm:w-auto sm:shrink-0">
               <button
                 type="button"
                 onClick={loadInternships}
                 disabled={loading}
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 hover:bg-slate-50 disabled:opacity-50"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
               >
                 <RefreshCw
                   size={16}
@@ -144,7 +144,7 @@ const Internships = () => {
               <button
                 type="button"
                 onClick={() => setShowNewModal(true)}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm hover:bg-blue-700"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 sm:w-auto"
               >
                 <Plus size={18} />
                 New Internship
@@ -156,14 +156,14 @@ const Internships = () => {
           {error && (
             <section
               role="alert"
-              className="flex flex-col justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4 sm:flex-row sm:items-center"
+              className="flex min-w-0 flex-col justify-between gap-3 rounded-xl border border-red-200 bg-red-50 p-4 sm:flex-row sm:items-center"
             >
-              <div>
+              <div className="min-w-0">
                 <h2 className="font-semibold text-red-800">
                   Could not load internships
                 </h2>
 
-                <p className="mt-1 text-sm text-red-700">
+                <p className="mt-1 break-words text-sm text-red-700">
                   {error}
                 </p>
               </div>
@@ -171,7 +171,7 @@ const Internships = () => {
               <button
                 type="button"
                 onClick={loadInternships}
-                className="rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 hover:bg-red-100"
+                className="w-full shrink-0 rounded-lg border border-red-200 bg-white px-4 py-2 text-sm font-medium text-red-700 transition hover:bg-red-100 sm:w-auto"
               >
                 Try again
               </button>
@@ -183,27 +183,31 @@ const Internships = () => {
           ) : (
             <>
               {/* Internship statistics */}
-              <InternshipStats
-                internships={dashboard.internships}
-              />
+              <section className="min-w-0 w-full">
+                <InternshipStats
+                  internships={dashboard.internships}
+                />
+              </section>
 
               {/* Items requiring student action */}
-              <ActionRequired
-                internships={dashboard.internships}
-                onUpload={openInternship}
-                onRefresh={loadInternships}
-              />
+              <section className="min-w-0 w-full">
+                <ActionRequired
+                  internships={dashboard.internships}
+                  onUpload={openInternship}
+                  onRefresh={loadInternships}
+                />
+              </section>
 
               {/* Current internship and required documents */}
-              <section className="grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
-                <div className="min-w-0">
+              <section className="grid min-w-0 grid-cols-1 items-start gap-4 sm:gap-5 lg:grid-cols-2">
+                <div className="min-w-0 w-full">
                   <CurrentInternship
                     internship={currentInternship}
                     onView={openInternship}
                   />
                 </div>
 
-                <div className="min-w-0">
+                <div className="min-w-0 w-full">
                   <RequiredDocuments
                     internship={currentInternship}
                   />
@@ -211,11 +215,13 @@ const Internships = () => {
               </section>
 
               {/* Internship history */}
-              <InternshipHistory
-                internships={dashboard.history}
-                allInternships={dashboard.internships}
-                onView={openInternship}
-              />
+              <section className="min-w-0 w-full">
+                <InternshipHistory
+                  internships={dashboard.history}
+                  allInternships={dashboard.internships}
+                  onView={openInternship}
+                />
+              </section>
             </>
           )}
         </main>
@@ -244,24 +250,27 @@ const Internships = () => {
 function DashboardSkeleton() {
   return (
     <div
-      className="space-y-5"
+      className="min-w-0 space-y-5"
       aria-label="Loading internships"
     >
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      {/* Statistics skeleton */}
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
         {Array.from({ length: 5 }).map((_, index) => (
           <div
             key={index}
-            className="h-24 animate-pulse rounded-2xl border border-slate-200 bg-white"
+            className="h-24 min-w-0 animate-pulse rounded-2xl border border-slate-200 bg-white"
           />
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-        <div className="h-80 animate-pulse rounded-2xl bg-white" />
-        <div className="h-80 animate-pulse rounded-2xl bg-white" />
+      {/* Main content skeleton */}
+      <div className="grid min-w-0 grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="h-64 animate-pulse rounded-2xl bg-white sm:h-80" />
+        <div className="h-64 animate-pulse rounded-2xl bg-white sm:h-80" />
       </div>
 
-      <div className="h-64 animate-pulse rounded-2xl bg-white" />
+      {/* History skeleton */}
+      <div className="h-52 animate-pulse rounded-2xl bg-white sm:h-64" />
     </div>
   );
 }

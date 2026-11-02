@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from "react";
 
 import { Plus, FileSearch } from "lucide-react";
@@ -295,20 +296,20 @@ const ExtraCurricularActivityList = ({ onUploadClick }) => {
     <>
       {/* MAIN ACTIVITY SECTION */}
 
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
         {/* HEADER */}
 
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-slate-800">
+        <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="min-w-0 break-words text-base font-semibold text-slate-800 sm:text-lg">
             My Extra-Curricular Activities
           </h2>
 
           <button
             type="button"
             onClick={onUploadClick}
-            className="flex h-9 shrink-0 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700"
+            className="flex h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto"
           >
-            <Plus size={15} />
+            <Plus size={15} className="shrink-0" />
             Upload Activity
           </button>
         </div>
@@ -316,17 +317,17 @@ const ExtraCurricularActivityList = ({ onUploadClick }) => {
         {/* LOADING */}
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12">
+          <div className="flex min-h-[180px] flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-10 sm:min-h-[220px] sm:py-12">
             <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
 
-            <p className="text-sm text-slate-500">
+            <p className="text-center text-xs text-slate-500 sm:text-sm">
               Loading extra-curricular activities...
             </p>
           </div>
         ) : activities.length === 0 ? (
           /* EMPTY STATE */
 
-          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-6 py-12 text-center">
+          <div className="flex min-h-[220px] flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center sm:min-h-[260px] sm:px-6 sm:py-12">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
               <FileSearch
                 size={23}
@@ -334,11 +335,11 @@ const ExtraCurricularActivityList = ({ onUploadClick }) => {
               />
             </div>
 
-            <h3 className="text-sm font-semibold text-slate-700">
+            <h3 className="break-words text-sm font-semibold text-slate-700">
               No extra-curricular activities yet
             </h3>
 
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 max-w-md text-xs leading-5 text-slate-400 sm:text-sm">
               Upload your first certificate, activity record, or
               participation document.
             </p>
@@ -346,7 +347,7 @@ const ExtraCurricularActivityList = ({ onUploadClick }) => {
             <button
               type="button"
               onClick={onUploadClick}
-              className="mt-4 h-9 rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700"
+              className="mt-4 flex h-9 w-full max-w-[180px] items-center justify-center rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700"
             >
               Upload Activity
             </button>
@@ -354,7 +355,7 @@ const ExtraCurricularActivityList = ({ onUploadClick }) => {
         ) : (
           /* ACTIVITY LIST */
 
-          <div className="space-y-2.5">
+          <div className="min-w-0 space-y-3">
             {activities.map((activity) => (
               <ExtraCurricularActivityCard
                 key={activity.id}

@@ -47,7 +47,7 @@ const StatusBadge = ({ status }) => {
 
   return (
     <span
-      className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold ${style}`}
+      className={`inline-flex max-w-full rounded-full px-3 py-1 text-xs font-semibold ${style}`}
     >
       {label}
     </span>
@@ -57,7 +57,7 @@ const StatusBadge = ({ status }) => {
 const CurrentInternship = ({ internship, onView }) => {
   if (!internship) {
     return (
-      <section className="flex min-h-72 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-8 text-center">
+      <section className="flex min-h-64 w-full min-w-0 flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white p-5 text-center sm:min-h-72 sm:p-8">
         <div className="rounded-2xl bg-blue-50 p-4 text-blue-600">
           <Building2 size={28} />
         </div>
@@ -79,7 +79,8 @@ const CurrentInternship = ({ internship, onView }) => {
       ? Math.max(
           1,
           Math.ceil(
-            (new Date(internship.endDate) - new Date(internship.startDate)) /
+            (new Date(internship.endDate) -
+              new Date(internship.startDate)) /
               (1000 * 60 * 60 * 24 * 30.4375)
           )
         )
@@ -119,48 +120,61 @@ const CurrentInternship = ({ internship, onView }) => {
       : internship.mentorRemark;
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <header className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
-        <div>
+    <section className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {/* Header */}
+      <header className="flex min-w-0 flex-col gap-3 border-b border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-5">
+        <div className="min-w-0">
           <h2 className="font-semibold text-slate-900">
             Current Internship
           </h2>
-          <p className="mt-1 text-xs text-slate-500">
+
+          <p className="mt-1 text-xs leading-5 text-slate-500">
             Your internship details and verification progress
           </p>
         </div>
 
-        <StatusBadge status={internship.status} />
+        <div className="self-start sm:self-center">
+          <StatusBadge status={internship.status} />
+        </div>
       </header>
 
-      <div className="space-y-5 p-5">
-        <div className="flex items-start gap-3">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-700">
-            <Building2 size={23} />
+      <div className="min-w-0 space-y-5 p-3 sm:p-5">
+        {/* Company information */}
+        <div className="flex min-w-0 items-start gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-700 sm:h-12 sm:w-12">
+            <Building2 size={22} className="sm:hidden" />
+            <Building2 size={23} className="hidden sm:block" />
           </div>
 
           <div className="min-w-0 flex-1">
-            <h3 className="text-lg font-bold text-[#142970]">
+            <h3 className="break-words text-base font-bold text-[#142970] sm:text-lg">
               {internship.companyName}
             </h3>
-            <p className="mt-1 text-sm text-slate-500">
+
+            <p className="mt-1 break-words text-sm text-slate-500">
               {internship.internshipTitle}
             </p>
+
             {internship.role && (
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 break-words text-xs text-slate-400">
                 {internship.role}
               </p>
             )}
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+        {/* Internship details */}
+        <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {details.map(({ label, value, Icon }) => (
-            <div key={label} className="rounded-xl bg-slate-50 p-3">
+            <div
+              key={label}
+              className="min-w-0 rounded-xl bg-slate-50 p-3"
+            >
               <div className="flex items-center gap-2 text-slate-400">
-                <Icon size={15} />
+                <Icon size={15} className="shrink-0" />
                 <span className="text-xs">{label}</span>
               </div>
+
               <p className="mt-2 break-words text-sm font-semibold text-slate-700">
                 {value}
               </p>
@@ -168,22 +182,28 @@ const CurrentInternship = ({ internship, onView }) => {
           ))}
         </div>
 
-        <InternshipJourney internship={internship} />
+        {/* Verification journey */}
+        <div className="min-w-0">
+          <InternshipJourney internship={internship} />
+        </div>
 
+        {/* Description */}
         {internship.description && (
-          <div>
+          <div className="min-w-0">
             <h4 className="text-sm font-semibold text-slate-800">
               Internship Description
             </h4>
-            <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-500">
+
+            <p className="mt-2 whitespace-pre-line break-words text-sm leading-6 text-slate-500">
               {internship.description}
             </p>
           </div>
         )}
 
+        {/* Mentor feedback */}
         {mentorRemark && (
           <div
-            className={`rounded-xl border p-4 ${
+            className={`min-w-0 rounded-xl border p-3 sm:p-4 ${
               internship.verificationStatus === "REJECTED" ||
               internship.completionVerificationStatus === "REJECTED"
                 ? "border-red-200 bg-red-50"
@@ -193,17 +213,19 @@ const CurrentInternship = ({ internship, onView }) => {
             <h4 className="text-sm font-semibold text-slate-800">
               Mentor Feedback
             </h4>
-            <p className="mt-2 whitespace-pre-line text-sm leading-6 text-slate-600">
+
+            <p className="mt-2 whitespace-pre-line break-words text-sm leading-6 text-slate-600">
               {mentorRemark}
             </p>
           </div>
         )}
 
+        {/* View details */}
         <div className="flex justify-end border-t border-slate-100 pt-4">
           <button
             type="button"
             onClick={() => onView?.(internship)}
-            className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50 sm:w-auto"
           >
             <Eye size={16} />
             View Details

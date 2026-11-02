@@ -16,6 +16,10 @@ const Profile = () => {
   const [activeTab, setActiveTab] = useState("personal");
   const [profileImageVersion, setProfileImageVersion] = useState(0);
 
+  // --------------------------------------------------
+  // PROFILE IMAGE UPDATE LISTENER
+  // --------------------------------------------------
+
   useEffect(() => {
     const handleProfileUpdate = () => {
       setProfileImageVersion((version) => version + 1);
@@ -33,6 +37,10 @@ const Profile = () => {
       );
     };
   }, []);
+
+  // --------------------------------------------------
+  // PROFILE CONTENT
+  // --------------------------------------------------
 
   const renderContent = () => {
     switch (activeTab) {
@@ -53,32 +61,88 @@ const Profile = () => {
     }
   };
 
+  // --------------------------------------------------
+  // UI
+  // --------------------------------------------------
+
   return (
     <div
-      className="min-h-screen bg-slate-100"
+      className="
+        min-h-screen
+        w-full
+        overflow-x-hidden
+        bg-slate-100
+      "
       data-profile-image-version={profileImageVersion}
     >
-      {/* Sidebar */}
+      {/* SIDEBAR */}
+
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="ml-[290px] min-h-screen flex flex-col">
-        {/* Header */}
-        <Header />
+      {/* MAIN CONTENT */}
 
-        {/* Profile Content */}
-        <main className="flex-1 px-4 py-4 space-y-4">
-          {/* Profile Header */}
-          <ProfileHeader />
+      <div
+        className="
+          flex
+          min-h-screen
+          min-w-0
+          w-full
+          flex-col
+          ml-0
+          lg:ml-[290px]
+          lg:w-[calc(100%-290px)]
+        "
+      >
+        {/* HEADER */}
 
-          {/* Profile Navigation Tabs */}
-          <ProfileTabs
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+        <div className="sticky top-0 z-40 w-full min-w-0">
+          <Header />
+        </div>
 
-          {/* Selected Profile Section */}
-          {renderContent()}
+        {/* PROFILE CONTENT */}
+
+        <main
+          className="
+            w-full
+            min-w-0
+            flex-1
+            px-3
+            py-4
+            space-y-5
+            sm:px-5
+            sm:py-5
+            sm:space-y-6
+            lg:px-6
+            lg:py-6
+            2xl:px-8
+          "
+        >
+          {/* PROFILE HEADER */}
+
+          <section className="w-full min-w-0">
+            <ProfileHeader />
+          </section>
+
+          {/* PROFILE TABS */}
+
+          <section className="w-full min-w-0">
+            <ProfileTabs
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          </section>
+
+          {/* PROFILE INFORMATION */}
+
+          <section
+            className="
+              w-full
+              min-w-0
+              rounded-2xl
+            "
+          >
+            {renderContent()}
+          </section>
         </main>
       </div>
     </div>

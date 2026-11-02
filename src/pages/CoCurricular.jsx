@@ -1,3 +1,4 @@
+
 import React, { useCallback, useState } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
@@ -96,31 +97,35 @@ const CoCurricular = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
       <Sidebar />
 
-      <div className="ml-[290px] flex min-h-screen flex-col">
+      {/* PAGE CONTENT */}
+
+      <div className="flex min-h-screen min-w-0 flex-col lg:ml-[290px]">
         <Header />
 
-        <main className="flex-1 p-6">
+        <main className="w-full min-w-0 flex-1 p-3 sm:p-4 md:p-5 lg:p-6">
+
           {/* BANNER */}
 
-          <div className="mb-3">
+          <div className="mb-3 min-w-0">
             <CoCurricularBanner />
           </div>
 
           {/* STATS */}
 
-          <div className="mb-3">
+          <div className="mb-3 min-w-0">
             <CoCurricularStats refreshKey={refreshKey} />
           </div>
 
           {/* MAIN CONTENT */}
 
-          <div className="grid grid-cols-12 items-start gap-3">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-3 xl:grid-cols-12">
+
             {/* ACTIVITY LIST */}
 
-            <div className="col-span-8">
+            <div className="min-w-0 xl:col-span-8">
               <CoCurricularActivityList
                 key={`activities-${refreshKey}`}
                 onUploadClick={handleOpenUploadModal}
@@ -130,7 +135,7 @@ const CoCurricular = () => {
 
             {/* RIGHT SIDEBAR */}
 
-            <div className="col-span-4 flex flex-col gap-3">
+            <div className="flex min-w-0 flex-col gap-3 xl:col-span-4">
               <UploadCoCurricularCard
                 onUploadClick={handleOpenUploadModal}
               />

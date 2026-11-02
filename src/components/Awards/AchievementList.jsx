@@ -1,3 +1,4 @@
+
 import React, {
   useCallback,
   useEffect,
@@ -320,27 +321,30 @@ const AchievementList = ({
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+
         {/* HEADER */}
 
-        <div className="flex items-center justify-between mb-5 gap-3">
-          <h2 className="text-lg font-semibold text-slate-800">
+        <div className="mb-5 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="min-w-0 text-base font-semibold text-slate-800 sm:text-lg">
             Your Achievements
           </h2>
 
-          <div className="flex items-center gap-2">
-            <AchievementFilter
-              value={filter}
-              onChange={setFilter}
-            />
+          <div className="flex w-full min-w-0 flex-col gap-2 xs:flex-row sm:w-auto sm:items-center">
+            <div className="w-full min-w-0 sm:w-auto">
+              <AchievementFilter
+                value={filter}
+                onChange={setFilter}
+              />
+            </div>
 
             <button
               type="button"
               onClick={onUploadClick}
-              className="h-9 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium flex items-center gap-2 transition"
+              className="flex h-9 w-full shrink-0 items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto"
             >
               <Plus size={15} />
-              Add Achievement
+              <span>Add Achievement</span>
             </button>
           </div>
         </div>
@@ -348,18 +352,18 @@ const AchievementList = ({
         {/* LOADING */}
 
         {loading ? (
-          <div className="border border-slate-200 rounded-lg px-4 py-12 flex flex-col items-center justify-center">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
+          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12">
+            <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
 
-            <p className="text-sm text-slate-500">
+            <p className="text-center text-sm text-slate-500">
               Loading achievements...
             </p>
           </div>
         ) : filteredAchievements.length === 0 ? (
           /* EMPTY STATE */
 
-          <div className="border-2 border-dashed border-slate-200 rounded-lg px-6 py-12 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center sm:px-6 sm:py-12">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
               <FileSearch
                 size={23}
                 className="text-blue-600"
@@ -372,7 +376,7 @@ const AchievementList = ({
                 : "No achievements found"}
             </h3>
 
-            <p className="text-xs text-slate-400 mt-1 max-w-md">
+            <p className="mt-1 max-w-md text-xs leading-5 text-slate-400">
               {filter === "ALL"
                 ? "Upload your first award, certificate, recognition, or achievement."
                 : "Try selecting a different achievement level."}
@@ -382,7 +386,7 @@ const AchievementList = ({
               <button
                 type="button"
                 onClick={onUploadClick}
-                className="mt-4 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
+                className="mt-4 flex h-9 w-full items-center justify-center rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto"
               >
                 Upload Achievement
               </button>
@@ -391,7 +395,7 @@ const AchievementList = ({
         ) : (
           /* ACHIEVEMENT LIST */
 
-          <div className="space-y-2.5">
+          <div className="min-w-0 space-y-2.5">
             {filteredAchievements.map((achievement) => (
               <AchievementCard
                 key={achievement.id}

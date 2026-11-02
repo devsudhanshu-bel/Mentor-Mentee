@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
@@ -18,6 +19,10 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // --------------------------------------------------
+  // FETCH DASHBOARD DATA
+  // --------------------------------------------------
+
   const fetchDashboard = useCallback(async () => {
     setLoading(true);
     setError("");
@@ -26,13 +31,18 @@ const Dashboard = () => {
       const response = await dashboardApi.getOverview();
 
       if (!response || typeof response !== "object") {
-        throw new Error("The server returned an invalid dashboard response.");
+        throw new Error(
+          "The server returned an invalid dashboard response."
+        );
       }
 
       setDashboardData(response);
     } catch (err) {
       console.error("Failed to load student dashboard:", err);
-      setError(err.message || "Unable to load dashboard data.");
+
+      setError(
+        err.message || "Unable to load dashboard data."
+      );
     } finally {
       setLoading(false);
     }
@@ -42,24 +52,85 @@ const Dashboard = () => {
     fetchDashboard();
   }, [fetchDashboard]);
 
+  // --------------------------------------------------
+  // STUDENT DETAILS
+  // --------------------------------------------------
+
   const studentName =
     dashboardData?.student?.fullName ??
     dashboardData?.student?.name ??
     "";
 
+  // --------------------------------------------------
+  // UI
+  // --------------------------------------------------
+
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
+
+      {/* SIDEBAR */}
+
       <Sidebar />
 
-      <div className="ml-[290px] min-h-screen flex flex-col">
-        <Header />
+      {/* MAIN CONTENT */}
 
-        <main className="flex-1 px-4 py-4 space-y-4">
-          {/* Dashboard loading/error feedback */}
+      <div
+        className="
+          flex
+          min-h-screen
+          min-w-0
+          w-full
+          flex-col
+          ml-0
+          lg:ml-[290px]
+          lg:w-[calc(100%-290px)]
+        "
+      >
+
+        {/* HEADER */}
+
+        <div className="sticky top-0 z-40 w-full min-w-0">
+          <Header />
+        </div>
+
+        {/* DASHBOARD CONTENT */}
+
+        <main
+          className="
+            min-w-0
+            w-full
+            flex-1
+            space-y-4
+            px-3
+            py-4
+            sm:px-5
+            sm:py-5
+            lg:px-6
+            lg:py-6
+            2xl:px-8
+          "
+        >
+
+          {/* ERROR MESSAGE */}
+
           {error && (
             <div
               role="alert"
-              className="flex flex-col gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 sm:flex-row sm:items-center sm:justify-between"
+              className="
+                flex
+                flex-col
+                gap-3
+                rounded-xl
+                border
+                border-red-200
+                bg-red-50
+                p-4
+                text-sm
+                text-red-700
+                sm:flex-row
+                sm:items-center
+                sm:justify-between
+              "
             >
               <p>{error}</p>
 
@@ -67,54 +138,89 @@ const Dashboard = () => {
                 type="button"
                 onClick={fetchDashboard}
                 disabled={loading}
-                className="w-fit rounded-lg bg-red-100 px-4 py-2 font-semibold hover:bg-red-200 disabled:opacity-50"
+                className="
+                  w-fit
+                  rounded-lg
+                  bg-red-100
+                  px-4
+                  py-2
+                  font-semibold
+                  transition
+                  hover:bg-red-200
+                  disabled:opacity-50
+                "
               >
                 {loading ? "Retrying..." : "Retry"}
               </button>
             </div>
           )}
 
-          {/* Welcome Banner */}
+          {/* WELCOME BANNER */}
+
           <DashboardBanner studentName={studentName} />
 
-          {/* KPI Cards */}
+          {/* KPI CARDS */}
+
           <KPICards
             dashboardData={dashboardData}
             loading={loading}
           />
 
-          {/* Row 2 */}
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 xl:col-span-5">
+          {/* ANALYTICS + ANNOUNCEMENTS */}
+
+          <div
+            className="
+              grid
+              min-w-0
+              grid-cols-1
+              gap-4
+              md:grid-cols-2
+              md:gap-4
+              xl:grid-cols-12
+              xl:gap-5
+            "
+          >
+
+            {/* CGPA TREND */}
+
+            <div className="col-span-1 min-w-0 xl:col-span-5">
               <CGPATrend
                 dashboardData={dashboardData}
                 loading={loading}
               />
             </div>
 
-            <div className="col-span-12 xl:col-span-4">
+            {/* ATTENDANCE */}
+
+            <div className="col-span-1 min-w-0 xl:col-span-4">
               <AttendanceOverview
                 attendanceData={dashboardData?.attendance}
                 loading={loading}
               />
             </div>
 
-            <div className="col-span-12 xl:col-span-3">
+            {/* UPCOMING MEETINGS */}
+
+            <div className="col-span-1 min-w-0 xl:col-span-3">
               <UpcomingMeetings />
             </div>
-          </div>
 
-          {/* Row 3 */}
-          <div className="grid grid-cols-12 gap-4">
-            <div className="col-span-12 lg:col-span-6 xl:col-span-4">
+            {/* ANNOUNCEMENTS */}
+
+            <div className="col-span-1 min-w-0 xl:col-span-12">
               <AnnouncementCards compact />
             </div>
 
-            <div className="col-span-12 xl:col-span-8">
-              <QuickLinks />
-            </div>
           </div>
+
+          {/* QUICK LINKS - STANDALONE */}
+
+          <section className="w-full min-w-0">
+            <QuickLinks />
+          </section>
+
         </main>
+
       </div>
     </div>
   );

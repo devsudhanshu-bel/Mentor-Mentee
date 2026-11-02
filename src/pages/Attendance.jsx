@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
@@ -26,17 +27,11 @@ const Attendance = () => {
   ======================================================== */
 
   const [selectedSemester, setSelectedSemester] = useState(null);
-
   const [attendanceData, setAttendanceData] = useState(null);
-
   const [loading, setLoading] = useState(true);
-
   const [initializing, setInitializing] = useState(true);
-
   const [error, setError] = useState("");
-
   const [showEntryModal, setShowEntryModal] = useState(false);
-
   const [clearingSubjects, setClearingSubjects] = useState(false);
 
   /* ========================================================
@@ -120,7 +115,6 @@ const Attendance = () => {
   const loadAttendance = async (semester, shouldOpenModal = true) => {
     try {
       setLoading(true);
-
       setError("");
 
       const response = await getSemesterAttendance(semester);
@@ -157,7 +151,6 @@ const Attendance = () => {
       );
 
       setAttendanceData(null);
-
       setShowEntryModal(false);
 
       throw err;
@@ -224,6 +217,10 @@ const Attendance = () => {
       mounted = false;
     };
   }, []);
+
+  /* ========================================================
+     CLEAR SUBJECTS
+  ======================================================== */
 
   const handleClearSubjects = async () => {
     console.log("[Clear Subjects] Clicked", {
@@ -305,7 +302,6 @@ const Attendance = () => {
      */
 
     setAttendanceData(null);
-
     setSelectedSemester(number);
 
     await loadAttendance(number, true);
@@ -319,14 +315,16 @@ const Attendance = () => {
     try {
       setError("");
 
-      const response = await saveSemesterAttendance(selectedSemester, subjects);
+      const response = await saveSemesterAttendance(
+        selectedSemester,
+        subjects,
+      );
 
       /*
        * Show returned data immediately.
        */
 
       setAttendanceData(response?.data || null);
-
       setShowEntryModal(false);
 
       /*
@@ -356,21 +354,25 @@ const Attendance = () => {
 
   if (initializing || selectedSemester === null) {
     return (
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen overflow-x-hidden bg-slate-100">
         <Sidebar />
 
-        <div className="ml-[290px] min-h-screen">
+        <div className="min-h-screen w-full lg:ml-[290px] lg:w-[calc(100%-290px)]">
           <Header />
 
-          <div className="flex min-h-[70vh] items-center justify-center">
+          <main className="flex min-h-[70vh] items-center justify-center px-4 py-8">
             <div className="text-center">
+              <div className="mx-auto mb-4 h-9 w-9 animate-spin rounded-full border-4 border-blue-100 border-t-[#0B63F6]" />
+
               <div className="mb-2 text-sm font-medium text-slate-600">
                 Loading attendance...
               </div>
 
-              <div className="text-xs text-slate-400">Please wait</div>
+              <div className="text-xs text-slate-400">
+                Please wait
+              </div>
             </div>
-          </div>
+          </main>
         </div>
       </div>
     );
@@ -381,13 +383,23 @@ const Attendance = () => {
   ======================================================== */
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen overflow-x-hidden bg-slate-100">
       <Sidebar />
 
-      <div className="ml-[290px] flex min-h-screen flex-col">
+      <div className="flex min-h-screen w-full flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
+
+        {/* ==================================================
+            HEADER
+        ================================================== */}
+
         <Header />
 
-        <main className="flex-1 space-y-4 px-4 py-4">
+        {/* ==================================================
+            MAIN CONTENT
+        ================================================== */}
+
+        <main className="w-full min-w-0 flex-1 space-y-4 px-3 py-4 sm:space-y-5 sm:px-5 sm:py-5 lg:px-6 xl:px-7">
+
           {/* ==================================================
               ERROR
           ================================================== */}
@@ -395,17 +407,26 @@ const Attendance = () => {
           {error && (
             <div
               className="
+                flex
+                items-start
+                gap-2
                 rounded-xl
                 border
                 border-red-200
                 bg-red-50
-                px-4
+                px-3
                 py-3
-                text-[12px]
+                text-xs
+                leading-relaxed
                 text-red-600
+                sm:px-4
               "
             >
-              {error}
+              <span className="mt-0.5 shrink-0">!</span>
+
+              <p className="min-w-0 break-words">
+                {error}
+              </p>
             </div>
           )}
 
@@ -413,22 +434,27 @@ const Attendance = () => {
               BANNER
           ================================================== */}
 
-          <AttendanceBanner
-            selectedSemester={selectedSemester}
-            onSemesterChange={handleSemesterChange}
-            attendanceData={attendanceData}
-          />
+          <div className="w-full min-w-0">
+            <AttendanceBanner
+              selectedSemester={selectedSemester}
+              onSemesterChange={handleSemesterChange}
+              attendanceData={attendanceData}
+            />
+          </div>
 
           {/* ==================================================
               PAGE TITLE
           ================================================== */}
 
-          <div>
+          <div className="min-w-0">
             <h1
               className="
-                text-[28px]
+                text-xl
                 font-bold
+                leading-tight
                 text-[#142970]
+                sm:text-2xl
+                lg:text-[28px]
               "
             >
               Attendance Overview
@@ -436,8 +462,11 @@ const Attendance = () => {
 
             <p
               className="
-                text-[13px]
+                mt-1
+                text-xs
+                leading-relaxed
                 text-slate-500
+                sm:text-sm
               "
             >
               Track your overall and subject-wise attendance
@@ -448,10 +477,11 @@ const Attendance = () => {
               OVERVIEW CARDS
           ================================================== */}
 
-          <div className="grid grid-cols-12 gap-2">
+          <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+
             {/* Overall */}
 
-            <div className="col-span-12 lg:col-span-4">
+            <div className="min-w-0">
               <AttendanceOverview
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
@@ -460,7 +490,7 @@ const Attendance = () => {
 
             {/* Statistics */}
 
-            <div className="col-span-12 lg:col-span-4">
+            <div className="min-w-0">
               <AttendanceStatistics
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
@@ -469,7 +499,7 @@ const Attendance = () => {
 
             {/* Category */}
 
-            <div className="col-span-12 lg:col-span-4">
+            <div className="min-w-0 md:col-span-2 xl:col-span-1">
               <AttendanceCategory
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
@@ -481,8 +511,8 @@ const Attendance = () => {
               SUBJECT ATTENDANCE
           ================================================== */}
 
-          <div className="grid grid-cols-12 gap-2">
-            <div className="col-span-12 w-full">
+          <div className="grid min-w-0 grid-cols-1 gap-3">
+            <div className="w-full min-w-0">
               <SubjectAttendance
                 selectedSemester={selectedSemester}
                 attendanceData={attendanceData}
@@ -516,20 +546,23 @@ const Attendance = () => {
       {loading && !initializing && (
         <div
           className="
-              fixed
-              bottom-5
-              right-5
-              z-[90]
-              rounded-xl
-              border
-              border-slate-200
-              bg-white
-              px-4
-              py-3
-              text-[12px]
-              text-slate-500
-              shadow-lg
-            "
+            fixed
+            bottom-4
+            right-3
+            z-[90]
+            max-w-[calc(100%-24px)]
+            rounded-xl
+            border
+            border-slate-200
+            bg-white
+            px-4
+            py-3
+            text-xs
+            text-slate-500
+            shadow-lg
+            sm:bottom-5
+            sm:right-5
+          "
         >
           Loading Semester {selectedSemester}...
         </div>

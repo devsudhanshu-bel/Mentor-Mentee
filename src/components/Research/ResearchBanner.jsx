@@ -1,3 +1,4 @@
+
 import React from "react";
 import researchBanner from "../../assets/research.png";
 
@@ -6,7 +7,7 @@ const ResearchBanner = () => {
     <img
       src={researchBanner}
       alt="Research Banner"
-      className="w-full h-45 object-cover rounded-xl"
+      className="hidden h-auto max-h-[220px] w-full rounded-xl object-cover sm:block lg:max-h-[260px] lg:rounded-2xl"
     />
   );
 };

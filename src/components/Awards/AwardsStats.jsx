@@ -1,3 +1,4 @@
+
 import React, {
   useCallback,
   useEffect,
@@ -82,15 +83,11 @@ const AwardsStats = ({ refreshKey = 0 }) => {
         (document) => document?.category === "AWARDS"
       );
 
-      // ======================================================
       // TOTAL ACHIEVEMENTS
-      // ======================================================
 
       const totalAchievements = awardsDocuments.length;
 
-      // ======================================================
       // CERTIFICATES
-      // ======================================================
 
       const certificates = awardsDocuments.filter(
         (document) => {
@@ -109,9 +106,7 @@ const AwardsStats = ({ refreshKey = 0 }) => {
         }
       ).length;
 
-      // ======================================================
       // NATIONAL LEVEL
-      // ======================================================
 
       const nationalLevel = awardsDocuments.filter(
         (document) => {
@@ -129,9 +124,7 @@ const AwardsStats = ({ refreshKey = 0 }) => {
         }
       ).length;
 
-      // ======================================================
       // INTERNATIONAL LEVEL
-      // ======================================================
 
       const internationalLevel = awardsDocuments.filter(
         (document) => {
@@ -149,9 +142,7 @@ const AwardsStats = ({ refreshKey = 0 }) => {
         }
       ).length;
 
-      // ======================================================
       // UPDATE CARDS
-      // ======================================================
 
       setStats([
         {
@@ -212,35 +203,35 @@ const AwardsStats = ({ refreshKey = 0 }) => {
   // ==========================================================
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+    <div className="grid w-full min-w-0 grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
       {stats.map((item) => {
         const Icon = item.icon;
 
         return (
           <div
             key={item.title}
-            className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3 hover:shadow-md transition"
+            className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-3 shadow-sm transition hover:shadow-md sm:gap-3 sm:px-4"
           >
             {/* ICON */}
 
             <div
-              className={`w-12 h-12 rounded-full ${item.bg} flex items-center justify-center flex-shrink-0`}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full sm:h-12 sm:w-12 ${item.bg}`}
             >
-              <Icon className={`w-5 h-5 ${item.color}`} />
+              <Icon className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`} />
             </div>
 
             {/* CONTENT */}
 
-            <div className="min-w-0">
-              <p className="text-[12px] font-medium text-slate-600">
+            <div className="min-w-0 flex-1">
+              <p className="break-words text-[10px] font-medium leading-4 text-slate-600 sm:text-xs">
                 {item.title}
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-900 leading-none mt-1">
+              <h2 className="mt-1 text-xl font-bold leading-none text-slate-900 sm:text-2xl">
                 {loading ? "—" : item.value}
               </h2>
 
-              <p className="text-[12px] text-slate-400 mt-1">
+              <p className="mt-1 break-words text-[9px] leading-4 text-slate-400 sm:text-xs">
                 {item.subtitle}
               </p>
             </div>

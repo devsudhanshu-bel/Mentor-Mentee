@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import {
   CalendarDays,
@@ -201,23 +202,28 @@ const UpcomingMeeting = ({
 
     const now = Date.now();
 
-    return meetings
-      .filter((meeting) => {
-        const dateValue = getMeetingDate(meeting);
-        const date = dateValue ? new Date(dateValue).getTime() : NaN;
-        const status = getMeetingStatus(meeting);
+    return (
+      meetings
+        .filter((meeting) => {
+          const dateValue = getMeetingDate(meeting);
+          const date = dateValue
+            ? new Date(dateValue).getTime()
+            : NaN;
 
-        return (
-          Number.isFinite(date) &&
-          date >= now &&
-          !isTerminalStatus(status)
-        );
-      })
-      .sort(
-        (a, b) =>
-          new Date(getMeetingDate(a)).getTime() -
-          new Date(getMeetingDate(b)).getTime()
-      )[0] ?? null;
+          const status = getMeetingStatus(meeting);
+
+          return (
+            Number.isFinite(date) &&
+            date >= now &&
+            !isTerminalStatus(status)
+          );
+        })
+        .sort(
+          (a, b) =>
+            new Date(getMeetingDate(a)).getTime() -
+            new Date(getMeetingDate(b)).getTime()
+        )[0] ?? null
+    );
   }, [meetings]);
 
   // --------------------------------------------------------
@@ -263,11 +269,49 @@ const UpcomingMeeting = ({
       setRefreshing(true);
       await onRefresh();
     } catch (refreshError) {
-      console.error("Unable to refresh upcoming meeting:", refreshError);
+      console.error(
+        "Unable to refresh upcoming meeting:",
+        refreshError
+      );
     } finally {
       setRefreshing(false);
     }
   };
+
+  // --------------------------------------------------------
+  // SHARED HEADER
+  // --------------------------------------------------------
+
+  const renderHeader = () => (
+    <div className="mb-4 flex min-w-0 items-center justify-between gap-2">
+      <div className="flex min-w-0 items-center gap-2">
+        <CalendarDays
+          size={16}
+          className="shrink-0 text-blue-600"
+        />
+
+        <h3 className="text-[13px] font-semibold text-blue-600 sm:text-[14px]">
+          Upcoming Meeting
+        </h3>
+      </div>
+
+      {onRefresh && (
+        <button
+          type="button"
+          onClick={handleRefresh}
+          disabled={refreshing || loading}
+          aria-label="Refresh upcoming meetings"
+          title="Refresh"
+          className="shrink-0 rounded-lg p-2 text-slate-400 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+        >
+          <RefreshCw
+            size={14}
+            className={refreshing ? "animate-spin" : ""}
+          />
+        </button>
+      )}
+    </div>
+  );
 
   // --------------------------------------------------------
   // LOADING STATE
@@ -275,22 +319,17 @@ const UpcomingMeeting = ({
 
   if (loading) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
-        <div className="flex items-center gap-2 mb-5">
-          <CalendarDays size={16} className="text-blue-600" />
-          <h3 className="text-[14px] font-semibold text-blue-600">
-            Upcoming Meeting
-          </h3>
-        </div>
+      <div className="h-full w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+        {renderHeader()}
 
-        <div className="animate-pulse flex gap-4">
-          <div className="w-20 h-24 rounded-xl bg-slate-100 flex-shrink-0" />
+        <div className="flex animate-pulse flex-col gap-3 min-[420px]:flex-row min-[420px]:gap-4">
+          <div className="h-20 w-20 shrink-0 rounded-xl bg-slate-100 min-[420px]:h-24" />
 
-          <div className="flex-1 space-y-3">
-            <div className="h-3 bg-slate-100 rounded w-2/3" />
-            <div className="h-5 bg-slate-100 rounded w-4/5" />
-            <div className="h-3 bg-slate-100 rounded w-1/2" />
-            <div className="h-3 bg-slate-100 rounded w-3/4" />
+          <div className="min-w-0 flex-1 space-y-3">
+            <div className="h-3 w-2/3 rounded bg-slate-100" />
+            <div className="h-5 w-4/5 rounded bg-slate-100" />
+            <div className="h-3 w-1/2 rounded bg-slate-100" />
+            <div className="h-3 w-3/4 rounded bg-slate-100" />
           </div>
         </div>
       </div>
@@ -303,29 +342,29 @@ const UpcomingMeeting = ({
 
   if (error) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
-        <div className="flex items-center gap-2 mb-4">
-          <CalendarDays size={16} className="text-blue-600" />
-          <h3 className="text-[14px] font-semibold text-blue-600">
-            Upcoming Meeting
-          </h3>
-        </div>
+      <div className="h-full w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+        {renderHeader()}
 
-        <div className="flex flex-col items-center justify-center text-center py-6">
-          <AlertCircle size={28} className="text-red-500 mb-2" />
+        <div className="flex flex-col items-center justify-center py-6 text-center">
+          <AlertCircle
+            size={28}
+            className="mb-2 text-red-500"
+          />
 
-          <p className="text-sm text-slate-700">
+          <p className="text-xs text-slate-700 sm:text-sm">
             Unable to load your upcoming meeting.
           </p>
 
-          <p className="text-xs text-slate-500 mt-1">{error}</p>
+          <p className="mt-1 max-w-full break-words text-[11px] text-slate-500 sm:text-xs">
+            {error}
+          </p>
 
           {onRefresh && (
             <button
               type="button"
               onClick={handleRefresh}
               disabled={refreshing}
-              className="mt-4 inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-blue-600 hover:bg-blue-50 disabled:opacity-50"
+              className="mt-4 inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-blue-600 transition hover:bg-blue-50 disabled:opacity-50"
             >
               <RefreshCw
                 size={13}
@@ -345,43 +384,22 @@ const UpcomingMeeting = ({
 
   if (!upcomingMeeting) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full hover:shadow-md transition-all duration-300">
-        <div className="flex items-center justify-between gap-2 mb-4">
-          <div className="flex items-center gap-2">
-            <CalendarDays size={16} className="text-blue-600" />
+      <div className="h-full w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-md sm:p-4">
+        {renderHeader()}
 
-            <h3 className="text-[14px] font-semibold text-blue-600">
-              Upcoming Meeting
-            </h3>
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
+            <CalendarDays
+              size={24}
+              className="text-blue-500"
+            />
           </div>
 
-          {onRefresh && (
-            <button
-              type="button"
-              onClick={handleRefresh}
-              disabled={refreshing}
-              aria-label="Refresh upcoming meetings"
-              title="Refresh"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 disabled:opacity-50"
-            >
-              <RefreshCw
-                size={14}
-                className={refreshing ? "animate-spin" : ""}
-              />
-            </button>
-          )}
-        </div>
-
-        <div className="flex flex-col items-center justify-center text-center py-8">
-          <div className="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center mb-3">
-            <CalendarDays size={24} className="text-blue-500" />
-          </div>
-
-          <h4 className="text-sm font-semibold text-slate-700">
+          <h4 className="text-xs font-semibold text-slate-700 sm:text-sm">
             No upcoming meetings
           </h4>
 
-          <p className="text-xs text-slate-500 mt-1 max-w-[240px]">
+          <p className="mt-1 max-w-[240px] text-[11px] leading-5 text-slate-500 sm:text-xs">
             Your next mentor meeting will appear here once it has been scheduled.
           </p>
         </div>
@@ -394,62 +412,43 @@ const UpcomingMeeting = ({
   // --------------------------------------------------------
 
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full hover:shadow-md transition-all duration-300">
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2 mb-4">
-        <div className="flex items-center gap-2">
-          <CalendarDays size={16} className="text-blue-600" />
+    <div className="h-full w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-md sm:p-4">
+      {renderHeader()}
 
-          <h3 className="text-[14px] font-semibold text-blue-600">
-            Upcoming Meeting
-          </h3>
-        </div>
+      {/* MEETING DETAILS */}
 
-        {onRefresh && (
-          <button
-            type="button"
-            onClick={handleRefresh}
-            disabled={refreshing}
-            aria-label="Refresh upcoming meetings"
-            title="Refresh"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-blue-600 hover:bg-blue-50 disabled:opacity-50"
-          >
-            <RefreshCw
-              size={14}
-              className={refreshing ? "animate-spin" : ""}
-            />
-          </button>
-        )}
-      </div>
+      <div className="flex min-w-0 flex-col gap-3 min-[420px]:flex-row min-[420px]:gap-4">
+        {/* CALENDAR */}
 
-      {/* Meeting Details */}
-      <div className="flex gap-4">
-        {/* Calendar */}
-        <div className="w-20 h-24 rounded-xl bg-slate-50 border border-slate-200 flex flex-col items-center justify-center flex-shrink-0">
-          <span className="text-[11px] font-semibold text-blue-600 uppercase">
+        <div className="flex h-20 w-full shrink-0 flex-row items-center justify-center gap-3 rounded-xl border border-slate-200 bg-slate-50 min-[420px]:h-24 min-[420px]:w-20 min-[420px]:flex-col min-[420px]:gap-0">
+          <span className="text-[11px] font-semibold uppercase text-blue-600">
             {dateParts?.month ?? "TBD"}
           </span>
 
-          <span className="text-[18px] font-bold text-[#142970] mt-1">
+          <span className="text-[20px] font-bold text-[#142970] min-[420px]:mt-1 min-[420px]:text-[18px]">
             {dateParts?.day ?? "--"}
           </span>
 
-          <span className="text-[11px] text-slate-500 mt-1 uppercase">
+          <span className="text-[11px] uppercase text-slate-500 min-[420px]:mt-1">
             {dateParts?.weekday ?? "---"}
           </span>
         </div>
 
-        {/* Right Side */}
-        <div className="flex-1 min-w-0">
-          {/* Time + Meeting Mode */}
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="inline-flex items-center gap-1 text-[12px] font-medium text-blue-600">
-              <Clock3 size={13} />
-              {formatMeetingTime(upcomingMeeting)}
+        {/* MEETING INFORMATION */}
+
+        <div className="min-w-0 flex-1">
+          {/* TIME AND MODE */}
+
+          <div className="flex min-w-0 flex-wrap items-center justify-between gap-2">
+            <span className="inline-flex min-w-0 items-center gap-1 text-[11px] font-medium text-blue-600 sm:text-[12px]">
+              <Clock3 size={13} className="shrink-0" />
+              <span className="break-words">
+                {formatMeetingTime(upcomingMeeting)}
+              </span>
             </span>
 
             {mode && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-100 text-green-700 text-[10px] font-medium">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-[10px] font-medium text-green-700">
                 {mode === "Online" ? (
                   <Video size={11} />
                 ) : (
@@ -460,31 +459,40 @@ const UpcomingMeeting = ({
             )}
           </div>
 
-          {/* Meeting Title */}
-          <h2 className="text-[16px] font-semibold text-[#142970] mt-2 break-words">
+          {/* TITLE */}
+
+          <h2 className="mt-2 break-words text-[14px] font-semibold leading-5 text-[#142970] sm:text-[16px]">
             {title}
           </h2>
 
           {mentorName && (
-            <p className="text-[12px] text-slate-500 mt-1">
+            <p className="mt-1 break-words text-[11px] text-slate-500 sm:text-[12px]">
               With {mentorName}
             </p>
           )}
 
-          {/* Date */}
+          {/* DATE */}
+
           {dateParts && (
-            <p className="text-[11px] text-slate-500 mt-2">
+            <p className="mt-2 text-[10px] text-slate-500 sm:text-[11px]">
               {dateParts.fullDate}
             </p>
           )}
 
-          {/* Location */}
+          {/* LOCATION */}
+
           {location && (
-            <div className="flex items-start gap-2 mt-2 text-[12px] text-slate-500">
+            <div className="mt-2 flex min-w-0 items-start gap-2 text-[11px] text-slate-500 sm:text-[12px]">
               {mode === "Online" ? (
-                <Video size={14} className="flex-shrink-0 mt-0.5" />
+                <Video
+                  size={14}
+                  className="mt-0.5 shrink-0"
+                />
               ) : (
-                <MapPin size={14} className="flex-shrink-0 mt-0.5" />
+                <MapPin
+                  size={14}
+                  className="mt-0.5 shrink-0"
+                />
               )}
 
               {String(location).startsWith("http") ? (
@@ -492,38 +500,44 @@ const UpcomingMeeting = ({
                   href={location}
                   target="_blank"
                   rel="noreferrer"
-                  className="text-blue-600 hover:underline break-all"
+                  className="min-w-0 break-all text-blue-600 hover:underline"
                 >
                   Join meeting
                 </a>
               ) : (
-                <span className="break-words">{location}</span>
+                <span className="min-w-0 break-words">
+                  {location}
+                </span>
               )}
             </div>
           )}
 
-          {/* Status */}
+          {/* STATUS */}
+
           <div className="mt-3">
-            <span className="inline-flex px-2 py-1 rounded-full bg-blue-50 text-blue-700 text-[10px] font-medium">
+            <span className="inline-flex max-w-full rounded-full bg-blue-50 px-2 py-1 text-[10px] font-medium text-blue-700">
               {status.replaceAll("_", " ")}
             </span>
           </div>
 
-          {/* Agenda */}
-          <div className="mt-5">
-            <p className="inline-flex items-center gap-1.5 text-[12px] font-semibold text-slate-700 mb-2">
+          {/* AGENDA */}
+
+          <div className="mt-4 sm:mt-5">
+            <p className="mb-2 inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 sm:text-[12px]">
               <ClipboardList size={13} />
               Agenda
             </p>
 
             {agendaItems.length > 0 ? (
-              <ul className="list-disc pl-5 space-y-2 text-[12px] text-slate-600">
+              <ul className="list-disc space-y-2 break-words pl-5 text-[11px] leading-5 text-slate-600 sm:text-[12px]">
                 {agendaItems.map((item, index) => (
-                  <li key={`${index}-${item}`}>{item}</li>
+                  <li key={`${index}-${item}`}>
+                    {item}
+                  </li>
                 ))}
               </ul>
             ) : (
-              <p className="text-[12px] text-slate-400">
+              <p className="text-[11px] text-slate-400 sm:text-[12px]">
                 No agenda has been added yet.
               </p>
             )}

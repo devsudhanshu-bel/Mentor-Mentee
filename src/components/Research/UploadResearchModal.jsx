@@ -1,3 +1,4 @@
+
 import React, { useRef, useState } from "react";
 
 import {
@@ -132,7 +133,6 @@ const UploadResearchModal = ({
 
     setSelectedFile(file);
 
-    // Use the file name automatically when the name is empty.
     if (!documentName.trim()) {
       const extension = getFileExtension(file.name);
 
@@ -151,6 +151,8 @@ const UploadResearchModal = ({
   const handleDrop = (event) => {
     event.preventDefault();
     event.stopPropagation();
+
+    if (isUploading) return;
 
     const file = event.dataTransfer.files?.[0];
 
@@ -264,7 +266,7 @@ const UploadResearchModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/40 p-3 backdrop-blur-sm sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget && !isUploading) {
           handleClose();
@@ -275,12 +277,12 @@ const UploadResearchModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="upload-research-title"
-        className="w-full max-w-lg overflow-hidden rounded-xl bg-white shadow-2xl"
+        className="my-auto flex max-h-[96dvh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[90vh]"
       >
         {/* HEADER */}
 
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-          <div>
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200 px-4 py-4 sm:px-5">
+          <div className="min-w-0">
             <h2
               id="upload-research-title"
               className="text-base font-semibold text-slate-800"
@@ -288,7 +290,7 @@ const UploadResearchModal = ({
               Upload Research
             </h2>
 
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 break-words text-xs leading-5 text-slate-400">
               Add a research paper, presentation, or report.
             </p>
           </div>
@@ -298,7 +300,7 @@ const UploadResearchModal = ({
             onClick={handleClose}
             disabled={isUploading}
             aria-label="Close upload modal"
-            className="rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
+            className="shrink-0 rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={19} />
           </button>
@@ -306,8 +308,12 @@ const UploadResearchModal = ({
 
         {/* FORM */}
 
-        <form onSubmit={handleUpload}>
-          <div className="space-y-4 px-5 py-5">
+        <form
+          onSubmit={handleUpload}
+          className="flex min-h-0 flex-1 flex-col overflow-hidden"
+        >
+          <div className="min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 sm:px-5 sm:py-5">
+
             {/* ERROR */}
 
             {errorMessage && (
@@ -320,7 +326,7 @@ const UploadResearchModal = ({
                   className="mt-0.5 shrink-0 text-red-600"
                 />
 
-                <p className="text-xs leading-5 text-red-600">
+                <p className="min-w-0 break-words text-xs leading-5 text-red-600">
                   {errorMessage}
                 </p>
               </div>
@@ -328,7 +334,7 @@ const UploadResearchModal = ({
 
             {/* RESEARCH NAME */}
 
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="upload-research-name"
                 className="mb-1.5 block text-xs font-medium text-slate-700"
@@ -345,13 +351,13 @@ const UploadResearchModal = ({
                 disabled={isUploading}
                 maxLength={200}
                 required
-                className="h-10 w-full rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+                className="h-10 w-full min-w-0 rounded-md border border-slate-300 bg-white px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
             </div>
 
             {/* DESCRIPTION */}
 
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="upload-research-description"
                 className="mb-1.5 block text-xs font-medium text-slate-700"
@@ -367,13 +373,13 @@ const UploadResearchModal = ({
                 rows={3}
                 maxLength={5000}
                 disabled={isUploading}
-                className="w-full resize-none rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+                className="w-full min-w-0 resize-none rounded-md border border-slate-300 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
             </div>
 
             {/* RESEARCH FILE */}
 
-            <div>
+            <div className="min-w-0">
               <label className="mb-1.5 block text-xs font-medium text-slate-700">
                 Research File <span className="text-red-500">*</span>
               </label>
@@ -398,7 +404,11 @@ const UploadResearchModal = ({
                     fileInputRef.current?.click();
                   }
                 }}
-                className="cursor-pointer rounded-lg border-2 border-dashed border-blue-200 px-5 py-7 text-center transition hover:border-blue-400 hover:bg-blue-50/30"
+                className={`rounded-lg border-2 border-dashed border-blue-200 px-3 py-6 text-center transition sm:px-5 sm:py-7 ${
+                  isUploading
+                    ? "cursor-not-allowed opacity-60"
+                    : "cursor-pointer hover:border-blue-400 hover:bg-blue-50/30"
+                }`}
               >
                 <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50">
                   <UploadCloud size={22} className="text-blue-600" />
@@ -406,10 +416,13 @@ const UploadResearchModal = ({
 
                 {selectedFile ? (
                   <>
-                    <div className="flex items-center justify-center gap-2">
-                      <FileText size={17} className="shrink-0 text-blue-600" />
+                    <div className="flex min-w-0 items-center justify-center gap-2">
+                      <FileText
+                        size={17}
+                        className="shrink-0 text-blue-600"
+                      />
 
-                      <p className="max-w-[300px] truncate text-sm font-medium text-slate-700">
+                      <p className="max-w-[220px] truncate text-sm font-medium text-slate-700 sm:max-w-[300px]">
                         {selectedFile.name}
                       </p>
                     </div>
@@ -432,7 +445,7 @@ const UploadResearchModal = ({
                       or click to browse
                     </p>
 
-                    <p className="mt-3 text-[11px] text-slate-400">
+                    <p className="mt-3 break-words text-[11px] leading-5 text-slate-400">
                       PDF, DOC, DOCX, PPT, PPTX · Maximum 20MB
                     </p>
                   </>
@@ -443,12 +456,12 @@ const UploadResearchModal = ({
 
           {/* FOOTER */}
 
-          <div className="flex justify-end gap-2 border-t border-slate-200 bg-slate-50 px-5 py-4">
+          <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3 sm:flex-row sm:justify-end sm:px-5 sm:py-4">
             <button
               type="button"
               onClick={handleClose}
               disabled={isUploading}
-              className="h-9 rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-50"
+              className="h-10 w-full rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 sm:w-auto"
             >
               Cancel
             </button>
@@ -456,7 +469,7 @@ const UploadResearchModal = ({
             <button
               type="submit"
               disabled={isUploading}
-              className="flex h-9 items-center gap-2 rounded-md bg-blue-600 px-5 text-xs font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 text-xs font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
               {isUploading ? (
                 <>

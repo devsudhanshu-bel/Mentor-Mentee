@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import {
@@ -199,6 +200,7 @@ const ExtraCurricularActivityCard = ({
       "";
 
     const parts = fileName.split(".");
+
     return parts.length > 1 ? parts.pop().toLowerCase() : "";
   };
 
@@ -209,9 +211,12 @@ const ExtraCurricularActivityCard = ({
   // ========================================================
 
   const renderFileIcon = () => {
+    const iconWrapper =
+      "flex h-10 w-10 shrink-0 items-center justify-center rounded-lg";
+
     if (fileExtension === "pdf") {
       return (
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50">
+        <div className={`${iconWrapper} bg-red-50`}>
           <FileText size={18} className="text-red-500" />
         </div>
       );
@@ -219,7 +224,7 @@ const ExtraCurricularActivityCard = ({
 
     if (["doc", "docx"].includes(fileExtension)) {
       return (
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+        <div className={`${iconWrapper} bg-blue-50`}>
           <FileText size={18} className="text-blue-500" />
         </div>
       );
@@ -227,7 +232,7 @@ const ExtraCurricularActivityCard = ({
 
     if (["ppt", "pptx"].includes(fileExtension)) {
       return (
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-orange-50">
+        <div className={`${iconWrapper} bg-orange-50`}>
           <Presentation size={18} className="text-orange-500" />
         </div>
       );
@@ -235,14 +240,14 @@ const ExtraCurricularActivityCard = ({
 
     if (["xls", "xlsx"].includes(fileExtension)) {
       return (
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-green-50">
+        <div className={`${iconWrapper} bg-green-50`}>
           <FileSpreadsheet size={18} className="text-green-500" />
         </div>
       );
     }
 
     return (
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-slate-100">
+      <div className={`${iconWrapper} bg-slate-100`}>
         <FileText size={18} className="text-slate-500" />
       </div>
     );
@@ -346,8 +351,9 @@ const ExtraCurricularActivityCard = ({
   // ========================================================
 
   return (
-    <article className="rounded-xl border border-slate-200 bg-white px-4 py-4 transition hover:border-blue-200 hover:shadow-sm">
-      <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+    <article className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-200 hover:shadow-sm sm:p-4">
+      <div className="flex min-w-0 flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+
         {/* DOCUMENT DETAILS */}
 
         <div className="flex min-w-0 flex-1 items-start gap-3">
@@ -355,7 +361,7 @@ const ExtraCurricularActivityCard = ({
 
           <div className="min-w-0 flex-1">
             <h3
-              className="break-words text-sm font-semibold text-slate-800"
+              className="break-words text-sm font-semibold leading-5 text-slate-800"
               title={documentName}
             >
               {documentName}
@@ -366,30 +372,34 @@ const ExtraCurricularActivityCard = ({
             </p>
 
             {description && (
-              <p className="mt-2 whitespace-pre-wrap break-words text-sm text-slate-600">
+              <p className="mt-2 whitespace-pre-wrap break-words text-sm leading-5 text-slate-600">
                 {description}
               </p>
             )}
 
             <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
-              <span className="inline-flex items-center gap-1.5">
-                <CalendarDays size={13} />
-                Submitted {formatDate(submittedDate)}
+              <span className="inline-flex min-w-0 items-center gap-1.5">
+                <CalendarDays size={13} className="shrink-0" />
+                <span className="break-words">
+                  Submitted {formatDate(submittedDate)}
+                </span>
               </span>
 
-              {fileSize && <span>{fileSize}</span>}
+              {fileSize && (
+                <span className="shrink-0">{fileSize}</span>
+              )}
             </div>
           </div>
         </div>
 
         {/* STATUS AND ACTIONS */}
 
-        <div className="flex shrink-0 flex-wrap items-center gap-2 xl:justify-end">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 xl:shrink-0 xl:justify-end">
           <span
-            className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${status.className}`}
+            className={`inline-flex max-w-full items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold ${status.className}`}
           >
-            <StatusIcon size={14} />
-            {status.label}
+            <StatusIcon size={14} className="shrink-0" />
+            <span className="break-words">{status.label}</span>
           </span>
 
           <button
@@ -397,7 +407,7 @@ const ExtraCurricularActivityCard = ({
             onClick={handleView}
             title="View document"
             aria-label={`View ${documentName}`}
-            className="rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
+            className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
           >
             <Eye size={17} />
           </button>
@@ -407,7 +417,7 @@ const ExtraCurricularActivityCard = ({
             onClick={handleDownload}
             title="Download document"
             aria-label={`Download ${documentName}`}
-            className="rounded-md p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+            className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
           >
             <Download size={17} />
           </button>
@@ -419,19 +429,19 @@ const ExtraCurricularActivityCard = ({
               <button
                 type="button"
                 onClick={handleEdit}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-sm font-medium text-orange-700 transition hover:bg-orange-100"
+                className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 px-3 py-2 text-xs font-medium text-orange-700 transition hover:bg-orange-100 sm:text-sm"
               >
-                <Pencil size={15} />
-                Edit / Replace
+                <Pencil size={15} className="shrink-0" />
+                <span>Edit / Replace</span>
               </button>
 
               <button
                 type="button"
                 onClick={handleResubmit}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white transition hover:bg-blue-700"
+                className="inline-flex min-w-0 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 sm:text-sm"
               >
-                <RotateCcw size={15} />
-                Resubmit
+                <RotateCcw size={15} className="shrink-0" />
+                <span>Resubmit</span>
               </button>
             </>
           )}
@@ -445,7 +455,7 @@ const ExtraCurricularActivityCard = ({
               onClick={handleDelete}
               title="Delete activity"
               aria-label={`Delete ${documentName}`}
-              className="rounded-md p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+              className="shrink-0 rounded-md p-2 text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Trash2 size={17} />
             </button>
@@ -456,9 +466,9 @@ const ExtraCurricularActivityCard = ({
       {/* MENTOR FEEDBACK */}
 
       {(mentorRemark || reviewedDate) && (
-        <div className="mt-4 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3">
+        <div className="mt-4 min-w-0 rounded-lg border border-slate-200 bg-slate-50 px-3 py-3 sm:px-4">
           <p className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-            <MessageSquare size={14} />
+            <MessageSquare size={14} className="shrink-0" />
             Mentor Feedback
           </p>
 
@@ -479,8 +489,8 @@ const ExtraCurricularActivityCard = ({
       {/* CORRECTION INSTRUCTIONS */}
 
       {editable && (
-        <div className="mt-3 rounded-lg border border-orange-100 bg-orange-50/70 px-3 py-2">
-          <p className="text-xs leading-5 text-orange-800">
+        <div className="mt-3 min-w-0 rounded-lg border border-orange-100 bg-orange-50/70 px-3 py-2">
+          <p className="break-words text-xs leading-5 text-orange-800">
             Please review your mentor&apos;s feedback, update your document,
             and resubmit it for review.
           </p>

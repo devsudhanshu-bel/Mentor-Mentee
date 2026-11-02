@@ -1,3 +1,4 @@
+
 import {
   useRef,
   useState,
@@ -24,33 +25,19 @@ const UploadAchievementModal = ({
   // FORM STATE
   // ==========================================================
 
-  const [achievementTitle, setAchievementTitle] =
-    useState("");
-
-  const [achievementLevel, setAchievementLevel] =
-    useState("University Level");
-
-  const [achievementDate, setAchievementDate] =
-    useState("");
-
-  const [organization, setOrganization] =
-    useState("");
-
-  const [description, setDescription] =
-    useState("");
-
-  const [selectedFile, setSelectedFile] =
-    useState(null);
+  const [achievementTitle, setAchievementTitle] = useState("");
+  const [achievementLevel, setAchievementLevel] = useState("University Level");
+  const [achievementDate, setAchievementDate] = useState("");
+  const [organization, setOrganization] = useState("");
+  const [description, setDescription] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
   // ==========================================================
   // UI STATE
   // ==========================================================
 
-  const [isUploading, setIsUploading] =
-    useState(false);
-
-  const [error, setError] =
-    useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [error, setError] = useState("");
 
   const fileInputRef = useRef(null);
 
@@ -216,35 +203,25 @@ const UploadAchievementModal = ({
 
     setError("");
 
-    // ========================================================
     // VALIDATION
-    // ========================================================
 
     if (!achievementTitle.trim()) {
-      setError(
-        "Please enter an achievement title."
-      );
+      setError("Please enter an achievement title.");
       return;
     }
 
     if (!achievementDate) {
-      setError(
-        "Please select the achievement date."
-      );
+      setError("Please select the achievement date.");
       return;
     }
 
     if (!organization.trim()) {
-      setError(
-        "Please enter the organization or event name."
-      );
+      setError("Please enter the organization or event name.");
       return;
     }
 
     if (!selectedFile) {
-      setError(
-        "Please upload a certificate or proof file."
-      );
+      setError("Please upload a certificate or proof file.");
       return;
     }
 
@@ -255,9 +232,7 @@ const UploadAchievementModal = ({
       return;
     }
 
-    // ========================================================
     // UPLOAD
-    // ========================================================
 
     try {
       setIsUploading(true);
@@ -269,32 +244,22 @@ const UploadAchievementModal = ({
         file: selectedFile,
       };
 
-      console.log(
-        "Uploading achievement document:",
-        {
-          documentName: selectedFile.name,
-          category: "AWARDS",
-          achievementTitle: achievementTitle.trim(),
-          achievementLevel,
-          achievementDate,
-          organization: organization.trim(),
-          description: description.trim(),
-          file: selectedFile.name,
-        }
-      );
+      console.log("Uploading achievement document:", {
+        documentName: selectedFile.name,
+        category: "AWARDS",
+        achievementTitle: achievementTitle.trim(),
+        achievementLevel,
+        achievementDate,
+        organization: organization.trim(),
+        description: description.trim(),
+        file: selectedFile.name,
+      });
 
-      const response = await uploadDocument(
-        uploadPayload
-      );
+      const response = await uploadDocument(uploadPayload);
 
-      console.log(
-        "Achievement upload response:",
-        response
-      );
+      console.log("Achievement upload response:", response);
 
-      // ======================================================
       // SUCCESS
-      // ======================================================
 
       onUploadSuccess?.(response);
 
@@ -364,7 +329,7 @@ const UploadAchievementModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm px-4 py-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-2 py-3 backdrop-blur-sm sm:px-4 sm:py-6"
       onMouseDown={(event) => {
         if (
           event.target === event.currentTarget &&
@@ -374,18 +339,18 @@ const UploadAchievementModal = ({
         }
       }}
     >
-      <div className="w-full max-w-2xl max-h-[95vh] bg-white rounded-xl shadow-xl border border-slate-200 overflow-hidden flex flex-col">
+      <div className="flex max-h-[calc(100dvh-1.5rem)] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl sm:max-h-[95vh]">
 
         {/* HEADER */}
 
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 shrink-0">
+        <div className="flex shrink-0 items-start justify-between gap-3 border-b border-slate-200 px-4 py-4 sm:px-6">
 
-          <div>
-            <h2 className="text-lg font-semibold text-slate-800">
+          <div className="min-w-0">
+            <h2 className="text-base font-semibold text-slate-800 sm:text-lg">
               Add Achievement
             </h2>
 
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="mt-1 break-words text-xs leading-5 text-slate-500">
               Upload your awards, recognitions and supporting certificates.
             </p>
           </div>
@@ -394,7 +359,8 @@ const UploadAchievementModal = ({
             type="button"
             onClick={handleClose}
             disabled={isUploading}
-            className="p-2 rounded-md hover:bg-slate-100 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Close upload achievement modal"
+            className="shrink-0 rounded-md p-2 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
           >
             <X size={18} />
           </button>
@@ -405,23 +371,28 @@ const UploadAchievementModal = ({
 
         <form
           onSubmit={handleSubmit}
-          className="flex-1 overflow-y-auto"
+          className="flex min-h-0 flex-1 flex-col"
         >
 
-          <div className="p-6 space-y-5">
+          {/* SCROLLABLE CONTENT */}
+
+          <div className="min-h-0 flex-1 space-y-5 overflow-y-auto p-4 sm:p-6">
 
             {/* ERROR */}
 
             {error && (
-              <div className="px-4 py-3 rounded-lg border border-red-200 bg-red-50 text-sm text-red-600">
+              <div
+                role="alert"
+                className="break-words rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm leading-5 text-red-600"
+              >
                 {error}
               </div>
             )}
 
             {/* ACHIEVEMENT TITLE */}
 
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+            <div className="min-w-0">
+              <label className="mb-1 block text-xs font-medium text-slate-700">
                 Achievement Title
               </label>
 
@@ -433,16 +404,16 @@ const UploadAchievementModal = ({
                 }
                 placeholder="Enter achievement title"
                 disabled={isUploading}
-                className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+                className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50"
               />
             </div>
 
             {/* LEVEL & DATE */}
 
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+              <div className="min-w-0">
+                <label className="mb-1 block text-xs font-medium text-slate-700">
                   Achievement Level
                 </label>
 
@@ -452,7 +423,7 @@ const UploadAchievementModal = ({
                     setAchievementLevel(event.target.value)
                   }
                   disabled={isUploading}
-                  className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+                  className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50"
                 >
                   <option value="University Level">
                     University Level
@@ -472,8 +443,8 @@ const UploadAchievementModal = ({
                 </select>
               </div>
 
-              <div>
-                <label className="block text-xs font-medium text-slate-700 mb-1">
+              <div className="min-w-0">
+                <label className="mb-1 block text-xs font-medium text-slate-700">
                   Achievement Date
                 </label>
 
@@ -484,7 +455,7 @@ const UploadAchievementModal = ({
                     setAchievementDate(event.target.value)
                   }
                   disabled={isUploading}
-                  className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+                  className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50"
                 />
               </div>
 
@@ -492,8 +463,8 @@ const UploadAchievementModal = ({
 
             {/* ORGANIZATION */}
 
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+            <div className="min-w-0">
+              <label className="mb-1 block text-xs font-medium text-slate-700">
                 Organization / Event
               </label>
 
@@ -505,15 +476,15 @@ const UploadAchievementModal = ({
                 }
                 placeholder="Enter organization or event name"
                 disabled={isUploading}
-                className="w-full h-10 rounded-md border border-slate-300 px-3 text-sm outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+                className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50"
               />
             </div>
 
             {/* FILE UPLOAD */}
 
-            <div>
+            <div className="min-w-0">
 
-              <label className="block text-xs font-medium text-slate-700 mb-2">
+              <label className="mb-2 block text-xs font-medium text-slate-700">
                 Upload Certificate / Proof
               </label>
 
@@ -522,6 +493,7 @@ const UploadAchievementModal = ({
                 type="file"
                 accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
                 onChange={handleFileChange}
+                disabled={isUploading}
                 className="hidden"
               />
 
@@ -529,14 +501,14 @@ const UploadAchievementModal = ({
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
                 onClick={handleBrowse}
-                className={`border-2 border-dashed rounded-lg p-6 flex flex-col items-center justify-center text-center transition ${
+                className={`flex min-w-0 flex-col items-center justify-center rounded-lg border-2 border-dashed px-3 py-5 text-center transition sm:px-5 sm:py-6 ${
                   isUploading
-                    ? "border-slate-200 bg-slate-50 cursor-not-allowed"
-                    : "border-slate-300 hover:border-blue-500 cursor-pointer"
+                    ? "cursor-not-allowed border-slate-200 bg-slate-50"
+                    : "cursor-pointer border-slate-300 hover:border-blue-500 hover:bg-blue-50/30"
                 }`}
               >
 
-                <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+                <div className="mb-3 flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-blue-50 sm:h-12 sm:w-12">
                   <UploadCloud
                     size={24}
                     className="text-blue-600"
@@ -545,15 +517,15 @@ const UploadAchievementModal = ({
 
                 {selectedFile ? (
                   <>
-                    <div className="flex items-center gap-2 max-w-full px-3">
+                    <div className="flex w-full min-w-0 items-center justify-center gap-2 px-2">
 
                       <FileText
                         size={18}
-                        className="text-blue-600 shrink-0"
+                        className="shrink-0 text-blue-600"
                       />
 
                       <p
-                        className="text-sm font-medium text-slate-700 truncate"
+                        className="min-w-0 truncate text-sm font-medium text-slate-700"
                         title={selectedFile.name}
                       >
                         {selectedFile.name}
@@ -561,21 +533,21 @@ const UploadAchievementModal = ({
 
                     </div>
 
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="mt-1 text-xs text-slate-500">
                       {formatFileSize(selectedFile.size)}
                     </p>
 
-                    <p className="text-[11px] text-blue-500 mt-2">
+                    <p className="mt-2 text-[11px] text-blue-500">
                       Click to replace file
                     </p>
                   </>
                 ) : (
                   <>
-                    <p className="text-sm font-medium text-slate-700">
+                    <p className="break-words text-sm font-medium text-slate-700">
                       Drag & Drop your file here
                     </p>
 
-                    <p className="text-xs text-slate-500 mt-1">
+                    <p className="mt-1 text-xs text-slate-500">
                       or click below to browse
                     </p>
 
@@ -586,12 +558,12 @@ const UploadAchievementModal = ({
                         handleBrowse();
                       }}
                       disabled={isUploading}
-                      className="mt-3 h-9 px-4 rounded-md border border-slate-300 text-xs font-medium hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="mt-3 h-9 w-full max-w-[180px] rounded-md border border-slate-300 px-4 text-xs font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Browse Files
                     </button>
 
-                    <p className="text-[11px] text-slate-400 mt-3">
+                    <p className="mt-3 break-words text-[11px] leading-5 text-slate-400">
                       PDF, JPG, PNG • Max 5MB
                     </p>
                   </>
@@ -603,8 +575,8 @@ const UploadAchievementModal = ({
 
             {/* DESCRIPTION */}
 
-            <div>
-              <label className="block text-xs font-medium text-slate-700 mb-1">
+            <div className="min-w-0">
+              <label className="mb-1 block text-xs font-medium text-slate-700">
                 Description
               </label>
 
@@ -616,7 +588,7 @@ const UploadAchievementModal = ({
                 }
                 placeholder="Describe your achievement..."
                 disabled={isUploading}
-                className="w-full rounded-md border border-slate-300 px-3 py-2 text-sm resize-none outline-none focus:border-blue-500 disabled:bg-slate-50 disabled:cursor-not-allowed"
+                className="w-full min-w-0 resize-none rounded-md border border-slate-300 px-3 py-2 text-sm outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-50"
               />
             </div>
 
@@ -624,13 +596,13 @@ const UploadAchievementModal = ({
 
           {/* FOOTER */}
 
-          <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200 bg-white sticky bottom-0">
+          <div className="flex shrink-0 flex-col-reverse gap-2 border-t border-slate-200 bg-white px-4 py-3 sm:flex-row sm:justify-end sm:gap-3 sm:px-6 sm:py-4">
 
             <button
               type="button"
               onClick={handleClose}
               disabled={isUploading}
-              className="h-10 px-4 rounded-md border border-slate-300 text-sm font-medium hover:bg-slate-50 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="h-10 w-full rounded-md border border-slate-300 px-4 text-sm font-medium transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
             >
               Cancel
             </button>
@@ -638,7 +610,7 @@ const UploadAchievementModal = ({
             <button
               type="submit"
               disabled={isUploading}
-              className="h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-2 transition disabled:opacity-60 disabled:cursor-not-allowed"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 text-sm font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
 
               {isUploading ? (

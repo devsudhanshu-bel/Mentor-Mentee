@@ -1,3 +1,4 @@
+
 import React, { useMemo } from "react";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
@@ -21,9 +22,6 @@ const normalizeCategory = (subject) => {
     .toUpperCase()
     .replace(/[-\s]+/g, "_");
 
-  // =========================================================
-  // Ability Enhancement Course
-  // =========================================================
   if (
     category.includes("ABILITY_ENHANCEMENT") ||
     category.includes("ABILITY_ENHANCEMENT_COURSE") ||
@@ -32,30 +30,18 @@ const normalizeCategory = (subject) => {
     return "Ability Enhancement Courses";
   }
 
-  // =========================================================
-  // Open Elective
-  // =========================================================
   if (category.includes("OPEN") && category.includes("ELECT")) {
     return "Open Electives";
   }
 
-  // =========================================================
-  // Elective
-  // =========================================================
   if (category.includes("ELECTIVE")) {
     return "Elective Subjects";
   }
 
-  // =========================================================
-  // Core
-  // =========================================================
   if (category.includes("CORE") || category === "") {
     return "Core Subjects";
   }
 
-  // =========================================================
-  // Fallback
-  // =========================================================
   return "Core Subjects";
 };
 
@@ -99,7 +85,6 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
 
     subjects.forEach((subject) => {
       const category = normalizeCategory(subject);
-
       counts[category] += 1;
     });
 
@@ -126,13 +111,13 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
 
   if (!totalSubjects) {
     return (
-      <div className="h-[215px] w-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-        <h3 className="mb-3 text-[15px] font-semibold text-[#0B63F6]">
+      <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+        <h3 className="mb-3 text-sm font-semibold text-[#0B63F6] sm:text-[15px]">
           Subjects
         </h3>
 
-        <div className="flex h-[165px] items-center justify-center">
-          <p className="text-[11px] text-slate-400">
+        <div className="flex min-h-[150px] items-center justify-center">
+          <p className="text-center text-xs text-slate-400">
             No subject data available yet.
           </p>
         </div>
@@ -145,45 +130,43 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
   // =========================================================
 
   return (
-    <div className="h-[215px] w-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       {/* =====================================================
           HEADER
          ===================================================== */}
 
-      <h3 className="mb-2 text-[15px] font-semibold text-[#0B63F6]">
+      <h3 className="mb-3 text-sm font-semibold text-[#0B63F6] sm:text-[15px]">
         Subjects
       </h3>
 
-      <div className="flex h-[165px] items-center justify-between">
+      {/* =====================================================
+          CHART CONTENT
+         ===================================================== */}
+
+      <div className="flex min-h-[150px] flex-col items-center justify-center gap-4 sm:flex-row sm:justify-between sm:gap-3">
+
         {/* ===================================================
             DONUT
            =================================================== */}
 
-        <div className="relative h-[130px] w-[130px] shrink-0">
+        <div className="relative h-[135px] w-[135px] shrink-0 sm:h-[140px] sm:w-[140px]">
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
               <Pie
                 data={data}
                 dataKey="value"
-
-                /*
-                 * Reduced from:
-                 * innerRadius={48}
-                 * outerRadius={72}
-                 *
-                 * This gives the donut more breathing
-                 * room inside the card.
-                 */
                 innerRadius={42}
                 outerRadius={60}
-
                 paddingAngle={2}
                 stroke="none"
                 cx="50%"
                 cy="50%"
               >
                 {data.map((entry, index) => (
-                  <Cell key={`${entry.name}-${index}`} fill={entry.color} />
+                  <Cell
+                    key={`${entry.name}-${index}`}
+                    fill={entry.color}
+                  />
                 ))}
               </Pie>
             </PieChart>
@@ -193,8 +176,8 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
               CENTER VALUE
              ================================================= */}
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-[27px] font-bold leading-none text-[#0B3B8F]">
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
+            <span className="text-[26px] font-bold leading-none text-[#0B3B8F] sm:text-[27px]">
               {totalSubjects}
             </span>
 
@@ -208,11 +191,11 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
             LEGEND
            =================================================== */}
 
-        <div className="w-[165px] space-y-3 text-[11px]">
+        <div className="grid w-full grid-cols-1 gap-x-3 gap-y-3 text-[11px] sm:w-auto sm:min-w-[150px] sm:max-w-[180px] sm:flex-1 sm:gap-y-3">
           {data.map((item) => (
             <div
               key={item.name}
-              className="flex items-center justify-between gap-2"
+              className="flex min-w-0 items-center justify-between gap-2"
             >
               <div className="flex min-w-0 items-center gap-2">
                 <span
@@ -222,7 +205,9 @@ const SubjectsChart = ({ semesterData = null, academicData = null }) => {
                   }}
                 />
 
-                <span className="leading-4 text-slate-700">{item.name}</span>
+                <span className="min-w-0 break-words leading-4 text-slate-700">
+                  {item.name}
+                </span>
               </div>
 
               <span className="shrink-0 font-semibold text-[#0B3B8F]">

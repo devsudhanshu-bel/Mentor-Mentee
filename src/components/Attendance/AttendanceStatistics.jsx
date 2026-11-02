@@ -1,3 +1,4 @@
+
 import React from "react";
 import { TrendingUp } from "lucide-react";
 
@@ -19,22 +20,27 @@ const StatCard = ({
         border
         ${borderColor}
         rounded-xl
-        px-3
+        px-2.5
+        sm:px-3
         py-3
-        h-[130px]
+        min-h-[120px]
+        sm:h-[130px]
         flex
         items-center
         justify-between
+        gap-1
         min-w-0
       `}
     >
       <div className="min-w-0 flex-1">
         <p
           className="
-            text-[10px]
+            text-[9px]
+            sm:text-[10px]
             font-medium
             text-slate-500
             leading-tight
+            break-words
           "
         >
           {title}
@@ -42,9 +48,11 @@ const StatCard = ({
 
         <h3
           className={`
-            text-[15px]
+            text-[13px]
+            sm:text-[15px]
             font-bold
             mt-2
+            break-words
             ${valueColor}
           `}
         >
@@ -54,7 +62,8 @@ const StatCard = ({
         {subtitle && (
           <p
             className="
-              text-[10px]
+              text-[9px]
+              sm:text-[10px]
               text-slate-500
               leading-[13px]
               mt-1
@@ -69,12 +78,14 @@ const StatCard = ({
       </div>
 
       <TrendingUp
-        size={21}
+        size={18}
         strokeWidth={2}
         className={`
           ${iconColor}
-          flex-shrink-0
+          shrink-0
           ml-1
+          sm:w-[21px]
+          sm:h-[21px]
         `}
       />
     </div>
@@ -114,20 +125,20 @@ const AttendanceStatistics = ({ attendanceData }) => {
   return (
     <div
       className="
+        w-full
         bg-white
         border
         border-slate-200
         rounded-2xl
         shadow-sm
-        p-4
-        h-[200px]
+        p-3
+        sm:p-4
+        min-h-[200px]
         flex
         flex-col
       "
     >
-      {/* ======================================================
-          TITLE
-      ====================================================== */}
+      {/* TITLE */}
 
       <h3
         className="
@@ -140,22 +151,20 @@ const AttendanceStatistics = ({ attendanceData }) => {
         Attendance Statistics
       </h3>
 
-      {/* ======================================================
-          THREE STAT CARDS
-      ====================================================== */}
+      {/* THREE STAT CARDS */}
 
       <div
         className="
           grid
-          grid-cols-3
-          gap-3
+          grid-cols-1
+          min-[400px]:grid-cols-3
+          gap-2
+          sm:gap-3
           flex-1
-          items-center
+          items-stretch
         "
       >
-        {/* ====================================================
-            THIS SEMESTER
-        ==================================================== */}
+        {/* THIS SEMESTER */}
 
         <StatCard
           title="This Semester"
@@ -165,9 +174,7 @@ const AttendanceStatistics = ({ attendanceData }) => {
           iconColor="text-blue-600"
         />
 
-        {/* ====================================================
-            HIGHEST SUBJECT
-        ==================================================== */}
+        {/* HIGHEST SUBJECT */}
 
         <StatCard
           title="Highest (Subject)"
@@ -180,9 +187,7 @@ const AttendanceStatistics = ({ attendanceData }) => {
           iconColor="text-emerald-500"
         />
 
-        {/* ====================================================
-            LOWEST SUBJECT
-        ==================================================== */}
+        {/* LOWEST SUBJECT */}
 
         <StatCard
           title="Lowest (Subject)"

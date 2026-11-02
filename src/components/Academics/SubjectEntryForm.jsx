@@ -1,27 +1,25 @@
+
 import React, { useState } from "react";
-import { ArrowLeft, ArrowRight, BookOpen, CheckCircle2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  CheckCircle2,
+} from "lucide-react";
 
 const EMPTY_SUBJECT = {
   courseCode: "",
   courseName: "",
   credits: "",
-
-  // Subject classification
   subjectType: "",
-
-  // Marks
   cia1: "",
   mse: "",
   cia3: "",
   ese: "",
   maxMarks: "",
   totalMarks: "",
-
-  // Grade
   grade: "",
   gradePoint: "",
-
-  // Attendance
   attendance: "",
 };
 
@@ -41,9 +39,6 @@ const SubjectEntryForm = ({
 
   const subject = subjects[currentSubject];
 
-  // =========================================================
-  // Update current subject field
-  // =========================================================
   const updateField = (field, value) => {
     setSubjects((previous) =>
       previous.map((item, index) =>
@@ -58,6 +53,10 @@ const SubjectEntryForm = ({
   };
 
   const isLastSubject = currentSubject === subjectCount - 1;
+
+  const progress = subjectCount > 0
+    ? Math.round(((currentSubject + 1) / subjectCount) * 100)
+    : 0;
 
   // =========================================================
   // Validate current subject
@@ -107,9 +106,6 @@ const SubjectEntryForm = ({
       return false;
     }
 
-    // =======================================================
-    // Grade point uses 4-point scale
-    // =======================================================
     if (Number(subject.gradePoint) < 0 || Number(subject.gradePoint) > 4) {
       alert("Grade point must be between 0 and 4.");
       return false;
@@ -152,27 +148,29 @@ const SubjectEntryForm = ({
   // Styles
   // =========================================================
   const inputClass =
-    "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
+    "w-full min-w-0 rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100";
 
-  const labelClass = "mb-1.5 block text-xs font-medium text-slate-600";
+  const labelClass =
+    "mb-1.5 block text-xs font-semibold text-slate-600";
 
   return (
-    <div className="rounded-2xl bg-white shadow-xl">
+    <div className="w-full min-w-0 overflow-hidden rounded-2xl bg-white shadow-xl">
+
       {/* =====================================================
           Header
          ===================================================== */}
-      <div className="flex items-start justify-between border-b border-slate-100 px-6 py-5">
+      <div className="border-b border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
         <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50">
             <BookOpen size={21} className="text-[#0B63F6]" />
           </div>
 
-          <div>
-            <h2 className="text-lg font-bold text-[#082B73]">
+          <div className="min-w-0">
+            <h2 className="text-base font-bold leading-snug text-[#082B73] sm:text-lg">
               Semester {semesterNumber} Academic Details
             </h2>
 
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 text-xs leading-relaxed text-slate-500 sm:text-sm">
               Enter the marks and academic details for each subject.
             </p>
           </div>
@@ -182,23 +180,21 @@ const SubjectEntryForm = ({
       {/* =====================================================
           Progress
          ===================================================== */}
-      <div className="px-6 pt-5">
-        <div className="mb-2 flex items-center justify-between">
-          <span className="text-xs font-semibold text-slate-600">
+      <div className="px-4 pt-5 sm:px-6 sm:pt-6">
+        <div className="mb-2 flex items-center justify-between gap-3">
+          <span className="text-xs font-semibold text-slate-600 sm:text-sm">
             Subject {currentSubject + 1} of {subjectCount}
           </span>
 
-          <span className="text-xs text-slate-400">
-            {Math.round(((currentSubject + 1) / subjectCount) * 100)}%
+          <span className="shrink-0 text-xs font-medium text-slate-400">
+            {progress}%
           </span>
         </div>
 
         <div className="h-2 overflow-hidden rounded-full bg-slate-100">
           <div
             className="h-full rounded-full bg-[#0B63F6] transition-all duration-300"
-            style={{
-              width: `${((currentSubject + 1) / subjectCount) * 100}%`,
-            }}
+            style={{ width: `${progress}%` }}
           />
         </div>
       </div>
@@ -206,11 +202,10 @@ const SubjectEntryForm = ({
       {/* =====================================================
           Form
          ===================================================== */}
-      <div className="grid grid-cols-1 gap-5 px-6 py-6 md:grid-cols-2">
-        {/* ===================================================
-            Course Code
-           =================================================== */}
-        <div>
+      <div className="grid grid-cols-1 gap-x-5 gap-y-4 px-4 py-5 sm:grid-cols-2 sm:gap-y-5 sm:px-6 sm:py-6">
+
+        {/* Course Code */}
+        <div className="min-w-0">
           <label className={labelClass}>Course Code *</label>
 
           <input
@@ -224,10 +219,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Course Name
-           =================================================== */}
-        <div>
+        {/* Course Name */}
+        <div className="min-w-0">
           <label className={labelClass}>Course Name *</label>
 
           <input
@@ -239,10 +232,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Credits
-           =================================================== */}
-        <div>
+        {/* Credits */}
+        <div className="min-w-0">
           <label className={labelClass}>Credits *</label>
 
           <input
@@ -256,10 +247,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Subject Type
-           =================================================== */}
-        <div>
+        {/* Subject Type */}
+        <div className="min-w-0">
           <label className={labelClass}>Subject Type *</label>
 
           <select
@@ -268,23 +257,17 @@ const SubjectEntryForm = ({
             className={inputClass}
           >
             <option value="">Select subject type</option>
-
             <option value="CORE">Core Subject</option>
-
             <option value="ELECTIVE">Elective Subject</option>
-
             <option value="OPEN_ELECTIVE">Open Elective</option>
-
             <option value="ABILITY_ENHANCEMENT">
               Ability Enhancement Course
             </option>
           </select>
         </div>
 
-        {/* ===================================================
-            CIA 1
-           =================================================== */}
-        <div>
+        {/* CIA 1 */}
+        <div className="min-w-0">
           <label className={labelClass}>CIA 1</label>
 
           <input
@@ -297,10 +280,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            MSE
-           =================================================== */}
-        <div>
+        {/* MSE */}
+        <div className="min-w-0">
           <label className={labelClass}>MSE</label>
 
           <input
@@ -313,10 +294,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            CIA 3
-           =================================================== */}
-        <div>
+        {/* CIA 3 */}
+        <div className="min-w-0">
           <label className={labelClass}>CIA 3</label>
 
           <input
@@ -329,10 +308,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            ESE
-           =================================================== */}
-        <div>
+        {/* ESE */}
+        <div className="min-w-0">
           <label className={labelClass}>ESE</label>
 
           <input
@@ -345,10 +322,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Maximum Marks
-           =================================================== */}
-        <div>
+        {/* Maximum Marks */}
+        <div className="min-w-0">
           <label className={labelClass}>Maximum Marks *</label>
 
           <input
@@ -361,10 +336,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Total Marks
-           =================================================== */}
-        <div>
+        {/* Total Marks */}
+        <div className="min-w-0">
           <label className={labelClass}>Total Marks Obtained *</label>
 
           <input
@@ -377,10 +350,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Grade
-           =================================================== */}
-        <div>
+        {/* Grade */}
+        <div className="min-w-0">
           <label className={labelClass}>Grade *</label>
 
           <select
@@ -389,7 +360,6 @@ const SubjectEntryForm = ({
             className={inputClass}
           >
             <option value="">Select grade</option>
-
             <option value="O">O</option>
             <option value="A+">A+</option>
             <option value="A">A</option>
@@ -401,10 +371,8 @@ const SubjectEntryForm = ({
           </select>
         </div>
 
-        {/* ===================================================
-            Grade Point
-           =================================================== */}
-        <div>
+        {/* Grade Point */}
+        <div className="min-w-0">
           <label className={labelClass}>Grade Point *</label>
 
           <input
@@ -419,10 +387,8 @@ const SubjectEntryForm = ({
           />
         </div>
 
-        {/* ===================================================
-            Attendance
-           =================================================== */}
-        <div>
+        {/* Attendance */}
+        <div className="min-w-0 sm:col-span-2">
           <label className={labelClass}>Attendance (%)</label>
 
           <input
@@ -440,11 +406,12 @@ const SubjectEntryForm = ({
       {/* =====================================================
           Footer
          ===================================================== */}
-      <div className="flex items-center justify-between border-t border-slate-100 px-6 py-4">
+      <div className="flex flex-col-reverse gap-3 border-t border-slate-100 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+
         <button
           type="button"
           onClick={handleBack}
-          className="flex items-center gap-2 rounded-lg border border-slate-200 px-4 py-2.5 text-xs font-semibold text-slate-600 transition hover:bg-slate-50"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-4 py-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 sm:w-auto sm:py-2.5"
         >
           <ArrowLeft size={15} />
           Back
@@ -453,7 +420,7 @@ const SubjectEntryForm = ({
         <button
           type="button"
           onClick={handleNext}
-          className="flex items-center gap-2 rounded-lg bg-[#0B63F6] px-5 py-2.5 text-xs font-semibold text-white transition hover:bg-blue-700"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#0B63F6] px-5 py-3 text-xs font-semibold text-white transition hover:bg-blue-700 sm:w-auto sm:py-2.5"
         >
           {isLastSubject ? (
             <>

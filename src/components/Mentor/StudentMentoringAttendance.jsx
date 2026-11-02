@@ -1,5 +1,12 @@
+
 import React, { useCallback, useEffect, useState } from "react";
-import { CalendarDays, CheckCircle2, XCircle, ClipboardList, RefreshCw } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  XCircle,
+  ClipboardList,
+  RefreshCw,
+} from "lucide-react";
 
 const API_BASE_URL = (
   import.meta.env.VITE_API_URL || "http://localhost:5000/api"
@@ -12,20 +19,43 @@ const getToken = () =>
 
 const unwrap = (payload) => {
   let value = payload;
+
   for (let i = 0; i < 4; i += 1) {
-    if (value && !Array.isArray(value) && typeof value === "object" && value.data !== undefined) {
+    if (
+      value &&
+      !Array.isArray(value) &&
+      typeof value === "object" &&
+      value.data !== undefined
+    ) {
       value = value.data;
-    } else break;
+    } else {
+      break;
+    }
   }
+
   return value;
 };
 
 const formatDate = (value) => {
   if (!value) return "—";
+
   const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return String(value);
-  return date.toLocaleDateString(undefined, { day: "2-digit", month: "short", year: "numeric", timeZone: "UTC" });
+
+  if (Number.isNaN(date.getTime())) {
+    return String(value);
+  }
+
+  return date.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  });
 };
+
+/* =========================================================
+   STAT CARD
+========================================================= */
 
 const StatCard = ({ icon: Icon, label, value, tone }) => {
   const tones = {
@@ -34,16 +64,31 @@ const StatCard = ({ icon: Icon, label, value, tone }) => {
     red: "border-rose-100 bg-rose-50 text-rose-700",
     slate: "border-slate-200 bg-slate-50 text-slate-700",
   };
+
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      <div className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${tones[tone]}`}>
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4">
+      <div
+        className={`mb-3 flex h-9 w-9 items-center justify-center rounded-lg ${
+          tones[tone] || tones.slate
+        }`}
+      >
         <Icon size={18} />
       </div>
-      <p className="text-xs font-medium text-slate-500">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-slate-900">{value}</p>
+
+      <p className="break-words text-[11px] font-medium text-slate-500 sm:text-xs">
+        {label}
+      </p>
+
+      <p className="mt-1 break-words text-xl font-bold text-slate-900 sm:text-2xl">
+        {value}
+      </p>
     </div>
   );
 };
+
+/* =========================================================
+   STUDENT MENTORING ATTENDANCE
+========================================================= */
 
 export default function StudentMentoringAttendance() {
   const [summary, setSummary] = useState(null);
@@ -54,26 +99,58 @@ export default function StudentMentoringAttendance() {
   const loadAttendance = useCallback(async () => {
     setLoading(true);
     setError("");
+
     try {
       const token = getToken();
-      const response = await fetch(`${API_BASE_URL}/mentee/mentoring-attendance`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          Accept: "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
+
+      const response = await fetch(
+        `${API_BASE_URL}/mentee/mentoring-attendance`,
+        {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }
+      );
+
       const contentType = response.headers.get("content-type") || "";
-      const body = response.status === 204 ? null : contentType.includes("application/json") ? await response.json() : await response.text();
+
+      const body =
+        response.status === 204
+          ? null
+          : contentType.includes("application/json")
+            ? await response.json()
+            : await response.text();
+
       if (!response.ok) {
-        throw new Error(body?.message || body?.error || (typeof body === "string" ? body : "Unable to load mentoring attendance."));
+        throw new Error(
+          body?.message ||
+            body?.error ||
+            (typeof body === "string"
+              ? body
+              : "Unable to load mentoring attendance.")
+        );
       }
+
       const data = unwrap(body) || {};
-      setSummary(data.summary || { total: 0, present: 0, absent: 0, percentage: 0 });
+
+      setSummary(
+        data.summary || {
+          total: 0,
+          present: 0,
+          absent: 0,
+          percentage: 0,
+        }
+      );
+
       setHistory(Array.isArray(data.history) ? data.history : []);
     } catch (e) {
-      setError(e?.message || "Unable to load mentoring attendance.");
+      setError(
+        e?.message || "Unable to load mentoring attendance."
+      );
+
       setSummary(null);
       setHistory([]);
     } finally {
@@ -81,61 +158,175 @@ export default function StudentMentoringAttendance() {
     }
   }, []);
 
-  useEffect(() => { loadAttendance(); }, [loadAttendance]);
+  useEffect(() => {
+    loadAttendance();
+  }, [loadAttendance]);
 
   return (
-    <section className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-base font-bold text-[#142970]">Mentoring Attendance</h2>
-          <p className="mt-1 text-xs text-slate-500">Your recorded attendance for mentor meetings.</p>
+    <section className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 md:p-5">
+      {/* HEADER */}
+
+      <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="text-sm font-bold text-[#142970] sm:text-base">
+            Mentoring Attendance
+          </h2>
+
+          <p className="mt-1 text-[11px] text-slate-500 sm:text-xs">
+            Your recorded attendance for mentor meetings.
+          </p>
         </div>
-        <button type="button" onClick={loadAttendance} disabled={loading} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60">
-          <RefreshCw size={14} className={loading ? "animate-spin" : ""} /> Refresh
+
+        <button
+          type="button"
+          onClick={loadAttendance}
+          disabled={loading}
+          className="
+            inline-flex w-full shrink-0 items-center justify-center gap-2
+            rounded-lg border border-slate-200 px-3 py-2
+            text-xs font-semibold text-slate-600
+            transition hover:bg-slate-50
+            disabled:cursor-not-allowed disabled:opacity-60
+            sm:w-auto
+          "
+        >
+          <RefreshCw
+            size={14}
+            className={loading ? "animate-spin" : ""}
+          />
+          Refresh
         </button>
       </div>
 
+      {/* LOADING STATE */}
+
       {loading ? (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          {[1, 2, 3, 4].map((n) => <div key={n} className="h-28 animate-pulse rounded-xl bg-slate-100" />)}
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          {[1, 2, 3, 4].map((n) => (
+            <div
+              key={n}
+              className="h-28 animate-pulse rounded-xl bg-slate-100"
+            />
+          ))}
         </div>
       ) : error ? (
-        <div role="alert" className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800">
-          <p>{error}</p>
-          <button type="button" onClick={loadAttendance} className="mt-2 font-semibold underline">Try again</button>
+        /* ERROR STATE */
+
+        <div
+          role="alert"
+          className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 sm:p-4 sm:text-sm"
+        >
+          <p className="break-words">{error}</p>
+
+          <button
+            type="button"
+            onClick={loadAttendance}
+            className="mt-2 font-semibold underline"
+          >
+            Try again
+          </button>
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <StatCard icon={ClipboardList} label="Total Recorded Meetings" value={summary?.total ?? 0} tone="blue" />
-            <StatCard icon={CheckCircle2} label="Present" value={summary?.present ?? 0} tone="green" />
-            <StatCard icon={XCircle} label="Absent" value={summary?.absent ?? 0} tone="red" />
-            <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700"><CalendarDays size={18} /></div>
-              <p className="text-xs font-medium text-slate-500">Attendance Rate</p>
-              <p className="mt-1 text-2xl font-bold text-slate-900">{Number(summary?.percentage ?? 0).toFixed(1)}%</p>
+          {/* ATTENDANCE STATISTICS */}
+
+          <div className="grid grid-cols-1 gap-3 min-[400px]:grid-cols-2 xl:grid-cols-4">
+            <StatCard
+              icon={ClipboardList}
+              label="Total Recorded Meetings"
+              value={summary?.total ?? 0}
+              tone="blue"
+            />
+
+            <StatCard
+              icon={CheckCircle2}
+              label="Present"
+              value={summary?.present ?? 0}
+              tone="green"
+            />
+
+            <StatCard
+              icon={XCircle}
+              label="Absent"
+              value={summary?.absent ?? 0}
+              tone="red"
+            />
+
+            <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-shadow hover:shadow-md sm:p-4">
+              <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 bg-slate-50 text-slate-700">
+                <CalendarDays size={18} />
+              </div>
+
+              <p className="text-[11px] font-medium text-slate-500 sm:text-xs">
+                Attendance Rate
+              </p>
+
+              <p className="mt-1 text-xl font-bold text-slate-900 sm:text-2xl">
+                {Number(summary?.percentage ?? 0).toFixed(1)}%
+              </p>
             </div>
           </div>
 
-          <div className="mt-5 overflow-hidden rounded-xl border border-slate-200">
-            <div className="border-b border-slate-200 bg-slate-50 px-4 py-3">
-              <h3 className="text-sm font-semibold text-slate-800">Attendance History</h3>
+          {/* ATTENDANCE HISTORY */}
+
+          <div className="mt-5 min-w-0 overflow-hidden rounded-xl border border-slate-200">
+            <div className="border-b border-slate-200 bg-slate-50 px-3 py-3 sm:px-4">
+              <h3 className="text-xs font-semibold text-slate-800 sm:text-sm">
+                Attendance History
+              </h3>
             </div>
+
             {history.length === 0 ? (
-              <div className="px-4 py-8 text-center text-sm text-slate-500">No mentoring attendance has been recorded for you yet.</div>
+              <div className="px-3 py-8 text-center text-xs text-slate-500 sm:px-4 sm:text-sm">
+                No mentoring attendance has been recorded for you yet.
+              </div>
             ) : (
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-slate-200 text-sm">
-                  <thead className="bg-white text-left text-xs uppercase tracking-wide text-slate-500">
-                    <tr><th className="px-4 py-3 font-semibold">Meeting date</th><th className="px-4 py-3 font-semibold">Status</th></tr>
+              <div className="w-full overflow-x-auto">
+                <table className="w-full min-w-[320px] divide-y divide-slate-200 text-xs sm:text-sm">
+                  <thead className="bg-white text-left text-[10px] uppercase tracking-wide text-slate-500 sm:text-xs">
+                    <tr>
+                      <th className="px-3 py-3 font-semibold sm:px-4">
+                        Meeting Date
+                      </th>
+
+                      <th className="px-3 py-3 font-semibold sm:px-4">
+                        Status
+                      </th>
+                    </tr>
                   </thead>
+
                   <tbody className="divide-y divide-slate-100">
                     {history.map((item, index) => {
-                      const present = String(item.status || "").toUpperCase() === "PRESENT";
-                      return <tr key={`${item.sessionDate || item.date || index}-${index}`} className="hover:bg-slate-50">
-                        <td className="whitespace-nowrap px-4 py-3 text-slate-700">{formatDate(item.sessionDate || item.date)}</td>
-                        <td className="px-4 py-3"><span className={`inline-flex rounded-full px-2.5 py-1 text-xs font-semibold ${present ? "bg-emerald-50 text-emerald-700" : "bg-rose-50 text-rose-700"}`}>{present ? "Present" : "Absent"}</span></td>
-                      </tr>;
+                      const present =
+                        String(item.status || "").toUpperCase() ===
+                        "PRESENT";
+
+                      return (
+                        <tr
+                          key={`${
+                            item.sessionDate || item.date || index
+                          }-${index}`}
+                          className="transition hover:bg-slate-50"
+                        >
+                          <td className="whitespace-nowrap px-3 py-3 text-slate-700 sm:px-4">
+                            {formatDate(
+                              item.sessionDate || item.date
+                            )}
+                          </td>
+
+                          <td className="px-3 py-3 sm:px-4">
+                            <span
+                              className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-[10px] font-semibold sm:text-xs ${
+                                present
+                                  ? "bg-emerald-50 text-emerald-700"
+                                  : "bg-rose-50 text-rose-700"
+                              }`}
+                            >
+                              {present ? "Present" : "Absent"}
+                            </span>
+                          </td>
+                        </tr>
+                      );
                     })}
                   </tbody>
                 </table>

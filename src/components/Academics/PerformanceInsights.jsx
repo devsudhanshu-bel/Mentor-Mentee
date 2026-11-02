@@ -1,38 +1,33 @@
+
 import React, { useMemo } from "react";
 import { Lightbulb, CheckCircle2 } from "lucide-react";
 
 const PerformanceInsights = ({ semesterData = null }) => {
-  // =========================================================
   // Extract semester data
-  // =========================================================
   const semester =
     semesterData?.semester ||
     semesterData?.data?.semester ||
     semesterData?.data ||
     semesterData;
 
-  // =========================================================
   // Extract subjects
-  // =========================================================
   const subjects =
     semester?.subjects ||
     semesterData?.subjects ||
     semesterData?.data?.subjects ||
     [];
 
-  // =========================================================
   // Generate dynamic insights
-  // =========================================================
   const insights = useMemo(() => {
     if (!Array.isArray(subjects) || subjects.length === 0) {
-      return ["No academic performance data is available for this semester."];
+      return [
+        "No academic performance data is available for this semester.",
+      ];
     }
 
     const result = [];
 
-    // =======================================================
     // Calculate weighted average grade point
-    // =======================================================
     const subjectsWithGradePoint = subjects.filter(
       (subject) =>
         subject?.gradePoint !== null &&
@@ -46,7 +41,6 @@ const PerformanceInsights = ({ semesterData = null }) => {
       const totalWeightedPoints = subjectsWithGradePoint.reduce(
         (sum, subject) => {
           const credits = Number(subject?.credits || 0);
-
           const gradePoint = Number(subject?.gradePoint || 0);
 
           return sum + credits * gradePoint;
@@ -63,15 +57,7 @@ const PerformanceInsights = ({ semesterData = null }) => {
         totalCredits > 0 ? totalWeightedPoints / totalCredits : null;
     }
 
-    // =======================================================
     // Academic Performance
-    //
-    // 4-point scale:
-    // 3.50 - 4.00 = Excellent
-    // 3.00 - 3.49 = Strong
-    // 2.00 - 2.99 = Satisfactory
-    // Below 2.00  = Needs improvement
-    // =======================================================
     if (averageGradePoint !== null) {
       if (averageGradePoint >= 3.5) {
         result.push("Excellent academic performance this semester.");
@@ -88,9 +74,7 @@ const PerformanceInsights = ({ semesterData = null }) => {
       }
     }
 
-    // =======================================================
     // Grade Distribution
-    // =======================================================
     const gradeCounts = {};
 
     subjects.forEach((subject) => {
@@ -103,9 +87,7 @@ const PerformanceInsights = ({ semesterData = null }) => {
       }
     });
 
-    // =======================================================
     // A-range grades
-    // =======================================================
     const aGradeCount =
       (gradeCounts["O"] || 0) +
       (gradeCounts["A+"] || 0) +
@@ -120,9 +102,7 @@ const PerformanceInsights = ({ semesterData = null }) => {
       );
     }
 
-    // =======================================================
     // Attendance
-    // =======================================================
     const attendanceSubjects = subjects.filter(
       (subject) =>
         subject?.attendance !== null &&
@@ -146,9 +126,7 @@ const PerformanceInsights = ({ semesterData = null }) => {
       }
     }
 
-    // =======================================================
     // Backlogs
-    // =======================================================
     const backlogCount = subjects.filter(
       (subject) =>
         String(subject?.grade || "")
@@ -166,40 +144,51 @@ const PerformanceInsights = ({ semesterData = null }) => {
       );
     }
 
-    // -------------------------------------------------------
     // Maximum four insights
-    // -------------------------------------------------------
     return result.slice(0, 4);
   }, [subjects]);
 
-  // =========================================================
-  // Render
-  // =========================================================
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-      {/* =====================================================
-          Header
-         ===================================================== */}
-      <div className="mb-4 flex items-center gap-2">
-        <Lightbulb size={16} className="text-[#0B63F6]" strokeWidth={2} />
+    <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      {/* HEADER */}
+      <div className="mb-4 flex items-center gap-3">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+          <Lightbulb
+            size={17}
+            className="text-[#0B63F6]"
+            strokeWidth={2}
+          />
+        </div>
 
-        <h3 className="text-[15px] font-semibold text-[#0B3B8F]">
-          Performance Insights
-        </h3>
+        <div className="min-w-0">
+          <h3 className="text-sm font-semibold text-[#0B3B8F] sm:text-[15px]">
+            Performance Insights
+          </h3>
+
+          <p className="mt-0.5 text-[10px] text-slate-400 sm:text-[11px]">
+            Highlights from your academic performance
+          </p>
+        </div>
       </div>
 
-      {/* =====================================================
-          Insights
-         ===================================================== */}
-      <div className="space-y-2.5">
+      {/* INSIGHTS */}
+      <div className="space-y-3">
         {insights.map((insight, index) => (
-          <div key={`${insight}-${index}`} className="flex items-start gap-2">
-            <CheckCircle2
-              size={13}
-              className="mt-[2px] shrink-0 text-green-500"
-            />
+          <div
+            key={`${insight}-${index}`}
+            className="flex items-start gap-2.5 rounded-xl border border-slate-100 bg-slate-50/70 px-3 py-3 transition hover:border-blue-100 hover:bg-blue-50/40 sm:px-4"
+          >
+            <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50">
+              <CheckCircle2
+                size={13}
+                className="text-green-600"
+                strokeWidth={2.5}
+              />
+            </div>
 
-            <p className="text-[11px] leading-5 text-slate-600">{insight}</p>
+            <p className="min-w-0 text-[11px] leading-relaxed text-slate-600 sm:text-xs sm:leading-5">
+              {insight}
+            </p>
           </div>
         ))}
       </div>

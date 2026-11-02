@@ -69,22 +69,35 @@ const InternshipStats = ({ internships = [] }) => {
   };
 
   return (
-    <section className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5">
-      {stats.map(({ label, value, hint, Icon, color }) => (
+    <section className="grid w-full min-w-0 grid-cols-2 gap-3 xl:grid-cols-5">
+      {stats.map(({ label, value, hint, Icon, color }, index) => (
         <article
           key={label}
-          className="flex min-w-0 items-center gap-3 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+          className={`flex min-w-0 items-center gap-2 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-md sm:gap-3 sm:p-4 ${
+            index === 4
+              ? "col-span-2 mx-auto w-1/2 xl:col-span-1 xl:mx-0 xl:w-full"
+              : ""
+          }`}
         >
           <div
-            className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl ${styles[color]}`}
+            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12 sm:rounded-2xl ${styles[color]}`}
           >
-            <Icon size={22} />
+            <Icon size={20} className="sm:hidden" />
+            <Icon size={22} className="hidden sm:block" />
           </div>
 
-          <div className="min-w-0">
-            <p className="text-xs font-medium text-slate-500">{label}</p>
-            <p className="mt-1 text-2xl font-bold text-slate-900">{value}</p>
-            <p className="mt-1 truncate text-xs text-slate-400">{hint}</p>
+          <div className="min-w-0 flex-1">
+            <p className="break-words text-xs font-medium leading-snug text-slate-500 sm:text-sm">
+              {label}
+            </p>
+
+            <p className="mt-1 text-xl font-bold leading-tight text-slate-900 sm:text-2xl">
+              {value}
+            </p>
+
+            <p className="mt-1 truncate text-[11px] text-slate-400 sm:text-xs">
+              {hint}
+            </p>
           </div>
         </article>
       ))}

@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from "react";
 
 import { Plus, FileSearch } from "lucide-react";
@@ -13,6 +14,10 @@ import {
   deleteDocument,
 } from "../../api/document.api";
 
+// ==========================================================
+// FILE URL HELPER
+// ==========================================================
+
 const resolveFileUrl = (fileUrl) => {
   if (!fileUrl) return "";
 
@@ -26,6 +31,10 @@ const resolveFileUrl = (fileUrl) => {
 
   return fileUrl.startsWith("/") ? fileUrl : `/${fileUrl}`;
 };
+
+// ==========================================================
+// RESPONSE NORMALIZER
+// ==========================================================
 
 const normalizeResearchDocuments = (data) => {
   if (Array.isArray(data?.documents)) {
@@ -249,20 +258,21 @@ const ResearchWorkList = ({ onEditResearch }) => {
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+      <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
+
         {/* HEADER */}
 
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-semibold text-slate-800">
+        <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="min-w-0 break-words text-base font-semibold text-slate-800 sm:text-lg">
             My Research Works
           </h2>
 
           <button
             type="button"
             onClick={() => setIsUploadModalOpen(true)}
-            className="h-9 px-3 flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-md text-xs font-medium transition"
+            className="inline-flex min-h-9 w-full shrink-0 items-center justify-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto"
           >
-            <Plus size={15} />
+            <Plus size={15} className="shrink-0" />
             Upload Research
           </button>
         </div>
@@ -270,18 +280,19 @@ const ResearchWorkList = ({ onEditResearch }) => {
         {/* LOADING */}
 
         {loading ? (
-          <div className="border border-slate-200 rounded-lg px-4 py-12 flex flex-col items-center justify-center">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
+          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12">
+            <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
 
-            <p className="text-sm text-slate-500">
+            <p className="text-center text-sm text-slate-500">
               Loading research works...
             </p>
           </div>
         ) : researchDocuments.length === 0 ? (
+
           /* EMPTY STATE */
 
-          <div className="border-2 border-dashed border-slate-200 rounded-lg px-6 py-12 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center sm:px-6 sm:py-12">
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
               <FileSearch size={23} className="text-blue-600" />
             </div>
 
@@ -289,22 +300,23 @@ const ResearchWorkList = ({ onEditResearch }) => {
               No research works yet
             </h3>
 
-            <p className="text-xs text-slate-400 mt-1">
+            <p className="mt-1 max-w-sm break-words text-xs leading-5 text-slate-400">
               Upload your first research paper, presentation, or report.
             </p>
 
             <button
               type="button"
               onClick={() => setIsUploadModalOpen(true)}
-              className="mt-4 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
+              className="mt-4 inline-flex min-h-9 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-blue-700"
             >
               Upload Research
             </button>
           </div>
         ) : (
+
           /* RESEARCH DOCUMENT LIST */
 
-          <div className="space-y-2.5">
+          <div className="min-w-0 space-y-3">
             {researchDocuments.map((researchDocument) => (
               <ResearchWorkCard
                 key={researchDocument.id}

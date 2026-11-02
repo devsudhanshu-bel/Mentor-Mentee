@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
@@ -24,9 +25,7 @@ import StudentMentoringAttendance from "../components/Mentor/StudentMentoringAtt
 const normalizeMeetingsResponse = (response) => {
   let payload = response?.data ?? response;
 
-  // Unwrap common API envelopes, such as:
-  // { success, message, data: [...] }
-  // { data: { meetings: [...] } }
+  // Unwrap common API envelopes.
   for (let i = 0; i < 5; i += 1) {
     if (
       payload &&
@@ -62,8 +61,7 @@ const normalizeMeetingsResponse = (response) => {
   return meetingList.map((meeting) => {
     const rawMeeting = meeting?.rawMeeting ?? meeting;
 
-    // Preserve the feedback relation regardless of whether the
-    // backend uses snake_case or camelCase naming.
+    // Preserve feedback regardless of backend naming convention.
     const mentorFeedback =
       meeting?.mentor_meeting_feedback ??
       meeting?.mentorMeetingFeedback ??
@@ -78,11 +76,9 @@ const normalizeMeetingsResponse = (response) => {
     return {
       ...meeting,
 
-      // Explicit aliases for frontend components.
       mentor_meeting_feedback: mentorFeedback,
       mentorMeetingFeedback: mentorFeedback,
 
-      // Retain the original backend response.
       rawMeeting,
     };
   });
@@ -152,8 +148,7 @@ const Mentor = () => {
       const meetingList =
         normalizeMeetingsResponse(response);
 
-      // Diagnostic logging: verify the actual feedback returned
-      // by the student meetings endpoint.
+      // Diagnostic logging.
       console.log(
         "[Student Mentor Page] Meetings received:",
         meetingList
@@ -203,7 +198,7 @@ const Mentor = () => {
     fetchMyMentor();
 
     fetchMeetings().catch(() => {
-      // The error is displayed through meetingsError.
+      // Error is displayed through meetingsError.
     });
   }, [fetchMyMentor, fetchMeetings]);
 
@@ -212,33 +207,82 @@ const Mentor = () => {
   ======================================================== */
 
   return (
-    <div className="min-h-screen bg-slate-100">
-      {/* Sidebar */}
+    <div className="min-h-screen w-full bg-slate-100 overflow-x-hidden">
+      {/* SIDEBAR */}
+
       <Sidebar />
 
-      {/* Main Content */}
-      <div className="ml-[290px] flex min-h-screen flex-col">
-        {/* Header */}
+      {/* MAIN CONTENT */}
+
+      <div
+        className="
+          ml-0
+          w-full
+          lg:ml-[290px]
+          lg:w-[calc(100%-290px)]
+          min-h-screen
+          flex
+          flex-col
+          min-w-0
+        "
+      >
+        {/* HEADER */}
+
         <Header />
 
-        {/* Mentor Page Content */}
-        <main className="flex-1 space-y-4 px-4 py-4">
-          {/* Page Heading */}
-          <div>
-            <h1 className="text-[22px] font-bold text-[#142970]">
+        {/* MENTOR PAGE CONTENT */}
+
+        <main
+          className="
+            flex-1
+            w-full
+            min-w-0
+            space-y-4
+            px-3
+            py-3
+            sm:px-4
+            sm:py-4
+            lg:px-5
+            lg:py-5
+          "
+        >
+          {/* PAGE HEADING */}
+
+          <div className="min-w-0">
+            <h1
+              className="
+                text-[20px]
+                sm:text-[22px]
+                font-bold
+                text-[#142970]
+              "
+            >
               Mentor &amp; Mentee
             </h1>
 
-            <p className="text-[12px] text-slate-500">
+            <p className="text-[11px] sm:text-[12px] text-slate-500 mt-1">
               Connect, collaborate and grow together.
             </p>
           </div>
 
-          {/* Mentor API Error */}
+          {/* MENTOR API ERROR */}
+
           {mentorError && (
             <div
               role="alert"
-              className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="
+                rounded-lg
+                border
+                border-red-200
+                bg-red-50
+                px-3
+                sm:px-4
+                py-3
+                text-xs
+                sm:text-sm
+                text-red-700
+                break-words
+              "
             >
               <p>{mentorError}</p>
 
@@ -246,33 +290,52 @@ const Mentor = () => {
                 type="button"
                 onClick={fetchMyMentor}
                 disabled={loadingMentor}
-                className="mt-2 font-semibold underline disabled:opacity-50"
+                className="
+                  mt-2
+                  font-semibold
+                  underline
+                  disabled:opacity-50
+                "
               >
                 {loadingMentor ? "Retrying..." : "Try again"}
               </button>
             </div>
           )}
 
-          {/* Student's mentoring attendance summary. This is additive; existing page sections are unchanged. */}
-          <StudentMentoringAttendance />
+          {/* STUDENT MENTORING ATTENDANCE */}
 
-          {/* Mentor, Mentee and Relationship Summary */}
-          <div className="grid grid-cols-12 gap-3">
-            <div className="col-span-12 lg:col-span-4">
+          <div className="w-full min-w-0">
+            <StudentMentoringAttendance />
+          </div>
+
+          {/* MENTOR, MENTEE AND RELATIONSHIP SUMMARY */}
+
+          <div
+            className="
+              grid
+              grid-cols-1
+              md:grid-cols-2
+              xl:grid-cols-3
+              gap-3
+              w-full
+              min-w-0
+            "
+          >
+            <div className="min-w-0 w-full">
               <MentorCard
                 mentorData={mentorData}
                 loading={loadingMentor}
               />
             </div>
 
-            <div className="col-span-12 lg:col-span-4">
+            <div className="min-w-0 w-full">
               <MenteeCard
                 mentorData={mentorData}
                 loading={loadingMentor}
               />
             </div>
 
-            <div className="col-span-12 lg:col-span-4">
+            <div className="min-w-0 w-full md:col-span-2 xl:col-span-1">
               <RelationshipSummary
                 mentorData={mentorData}
                 loading={loadingMentor}
@@ -280,23 +343,57 @@ const Mentor = () => {
             </div>
           </div>
 
-          {/* Meetings and Discussion */}
-          <div className="grid grid-cols-12 items-stretch gap-3">
-            {/* Left Column */}
-            <div className="col-span-12 flex flex-col gap-4 lg:col-span-4">
-              <UpcomingMeeting
-                meetings={meetings}
-                loading={loadingMeetings}
-                error={meetingsError}
-                onRefresh={fetchMeetings}
-              />
+          {/* MEETINGS AND DISCUSSION */}
 
-              <Discussion />
+          <div
+            className="
+              grid
+              grid-cols-1
+              xl:grid-cols-12
+              items-stretch
+              gap-3
+              w-full
+              min-w-0
+            "
+          >
+            {/* LEFT COLUMN */}
+
+            <div
+              className="
+                col-span-1
+                xl:col-span-4
+                flex
+                flex-col
+                gap-4
+                min-w-0
+              "
+            >
+              <div className="w-full min-w-0">
+                <UpcomingMeeting
+                  meetings={meetings}
+                  loading={loadingMeetings}
+                  error={meetingsError}
+                  onRefresh={fetchMeetings}
+                />
+              </div>
+
+              <div className="w-full min-w-0">
+                <Discussion />
+              </div>
             </div>
 
-            {/* Right Column: Recent Meetings */}
-            <div className="col-span-12 flex lg:col-span-8">
-              <div className="w-full [&>*]:h-full">
+            {/* RIGHT COLUMN: RECENT MEETINGS */}
+
+            <div
+              className="
+                col-span-1
+                xl:col-span-8
+                flex
+                min-w-0
+                w-full
+              "
+            >
+              <div className="w-full min-w-0 [&>*]:h-full">
                 <RecentMeetings
                   meetings={meetings}
                   loading={loadingMeetings}

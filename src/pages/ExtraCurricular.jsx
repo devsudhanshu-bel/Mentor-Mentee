@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
@@ -38,9 +39,7 @@ const ExtraCurricular = () => {
   const handleUploadSuccess = () => {
     setIsUploadModalOpen(false);
 
-    setRefreshKey(
-      (previous) => previous + 1
-    );
+    setRefreshKey((previous) => previous + 1);
   };
 
   // ==========================================================
@@ -65,8 +64,12 @@ const ExtraCurricular = () => {
     setSelectedDocument(null);
   };
 
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
 
       {/* ==================================================
           SIDEBAR
@@ -78,7 +81,7 @@ const ExtraCurricular = () => {
           MAIN CONTENT
       ================================================== */}
 
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="flex min-h-screen min-w-0 flex-col lg:ml-[290px]">
 
         {/* ==================================================
             HEADER
@@ -90,13 +93,13 @@ const ExtraCurricular = () => {
             PAGE CONTENT
         ================================================== */}
 
-        <main className="flex-1 p-6">
+        <main className="min-w-0 flex-1 p-3 sm:p-4 md:p-5 lg:p-6">
 
           {/* ==================================================
               BANNER
           ================================================== */}
 
-          <div className="mb-3">
+          <div className="mb-3 min-w-0">
             <ExtraCurricularBanner />
           </div>
 
@@ -104,50 +107,38 @@ const ExtraCurricular = () => {
               STATS
           ================================================== */}
 
-          <div className="mb-3">
-
+          <div className="mb-3 min-w-0">
             <ExtraCurricularStats
               key={`stats-${refreshKey}`}
             />
-
           </div>
 
           {/* ==================================================
               MAIN GRID
           ================================================== */}
 
-          <div className="grid grid-cols-12 gap-3 items-start">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-3 xl:grid-cols-12">
 
             {/* ==================================================
                 LEFT SECTION
             ================================================== */}
 
-            <div className="col-span-8">
-
+            <div className="min-w-0 xl:col-span-8">
               <ExtraCurricularActivityList
                 key={`list-${refreshKey}`}
-                onUploadClick={
-                  handleUploadClick
-                }
-                onView={
-                  handleViewDocument
-                }
+                onUploadClick={handleUploadClick}
+                onView={handleViewDocument}
               />
-
             </div>
 
             {/* ==================================================
                 RIGHT SECTION
             ================================================== */}
 
-            <div className="col-span-4">
-
+            <div className="min-w-0 xl:col-span-4">
               <UploadExtraCurricularCard
-                onUploadClick={
-                  handleUploadClick
-                }
+                onUploadClick={handleUploadClick}
               />
-
             </div>
 
           </div>
@@ -162,14 +153,8 @@ const ExtraCurricular = () => {
 
       <UploadExtraCurricularModal
         isOpen={isUploadModalOpen}
-
-        onClose={() =>
-          setIsUploadModalOpen(false)
-        }
-
-        onSuccess={
-          handleUploadSuccess
-        }
+        onClose={() => setIsUploadModalOpen(false)}
+        onSuccess={handleUploadSuccess}
       />
 
       {/* ======================================================
@@ -179,9 +164,7 @@ const ExtraCurricular = () => {
       <ExtraCurricularDocumentViewerModal
         isOpen={isViewerOpen}
         document={selectedDocument}
-        onClose={
-          handleCloseViewer
-        }
+        onClose={handleCloseViewer}
       />
 
     </div>

@@ -1,3 +1,4 @@
+
 import React, { useCallback, useEffect, useState } from "react";
 
 import {
@@ -49,6 +50,10 @@ const ResearchStats = ({ refreshKey = 0 }) => {
   const [loading, setLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
+  // ==========================================================
+  // FETCH RESEARCH STATISTICS
+  // ==========================================================
+
   const fetchResearchStats = useCallback(async () => {
     try {
       setLoading(true);
@@ -56,8 +61,6 @@ const ResearchStats = ({ refreshKey = 0 }) => {
 
       const response = await getDocumentsDashboard("RESEARCH");
 
-      // Support both the API helper's unwrapped response and
-      // the nested shape returned by the backend service.
       const documents = Array.isArray(response?.documents)
         ? response.documents
         : Array.isArray(response?.data?.documents)
@@ -85,8 +88,6 @@ const ResearchStats = ({ refreshKey = 0 }) => {
           status === "REJECTED" ||
           !status
         ) {
-          // Corrections and rejected submissions are not published.
-          // They remain outstanding submissions needing action.
           underReview += 1;
         }
       }
@@ -98,7 +99,10 @@ const ResearchStats = ({ refreshKey = 0 }) => {
         drafts,
       });
     } catch (error) {
-      console.error("ResearchStats: Failed to fetch research documents:", error);
+      console.error(
+        "ResearchStats: Failed to fetch research documents:",
+        error
+      );
 
       setErrorMessage(
         error?.response?.data?.message ||
@@ -111,9 +115,17 @@ const ResearchStats = ({ refreshKey = 0 }) => {
     }
   }, []);
 
+  // ==========================================================
+  // REFRESH ON KEY CHANGE
+  // ==========================================================
+
   useEffect(() => {
     fetchResearchStats();
   }, [fetchResearchStats, refreshKey]);
+
+  // ==========================================================
+  // STATISTICS DATA
+  // ==========================================================
 
   const statItems = [
     {
@@ -150,19 +162,30 @@ const ResearchStats = ({ refreshKey = 0 }) => {
     },
   ];
 
+  // ==========================================================
+  // RENDER
+  // ==========================================================
+
   return (
-    <section aria-label="Research statistics">
+    <section
+      className="w-full min-w-0"
+      aria-label="Research statistics"
+    >
+      {/* ERROR MESSAGE */}
+
       {errorMessage && (
         <div
           role="alert"
-          className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700"
+          className="mb-3 flex min-w-0 flex-col gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-700 sm:flex-row sm:items-center sm:justify-between"
         >
-          <span>{errorMessage}</span>
+          <span className="min-w-0 break-words">
+            {errorMessage}
+          </span>
 
           <button
             type="button"
             onClick={fetchResearchStats}
-            className="inline-flex shrink-0 items-center gap-1 rounded-md px-2 py-1 font-medium hover:bg-red-100"
+            className="inline-flex w-fit shrink-0 items-center gap-1 rounded-md px-2 py-1 font-medium transition hover:bg-red-100"
           >
             <RotateCcw size={14} />
             Retry
@@ -170,34 +193,42 @@ const ResearchStats = ({ refreshKey = 0 }) => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      {/* STATISTICS GRID */}
+
+      <div className="grid w-full min-w-0 grid-cols-2 gap-2.5 sm:gap-3 xl:grid-cols-4">
         {statItems.map((item) => {
           const Icon = item.icon;
 
           return (
             <div
               key={item.title}
-              className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-4 py-4 shadow-sm transition hover:shadow-md"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-slate-200 bg-white px-2.5 py-3 shadow-sm transition hover:shadow-md sm:items-center sm:gap-3 sm:px-4 sm:py-4"
             >
+              {/* ICON */}
+
               <div
-                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${item.bg}`}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full sm:h-11 sm:w-11 ${item.bg}`}
               >
-                <Icon className={`h-5 w-5 ${item.color}`} />
+                <Icon
+                  className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`}
+                />
               </div>
 
-              <div className="min-w-0">
-                <p className="text-xs font-medium text-slate-500">
+              {/* DETAILS */}
+
+              <div className="min-w-0 flex-1">
+                <p className="break-words text-[10px] font-medium leading-4 text-slate-500 sm:text-xs">
                   {item.title}
                 </p>
 
                 <h2
-                  className="mt-0.5 text-2xl font-bold leading-none text-slate-800"
+                  className="mt-1 text-xl font-bold leading-none text-slate-800 sm:text-2xl"
                   aria-live="polite"
                 >
                   {loading ? "—" : item.value}
                 </h2>
 
-                <p className="mt-1 text-xs text-slate-400">
+                <p className="mt-1 break-words text-[10px] leading-4 text-slate-400 sm:text-xs sm:leading-5">
                   {item.subtitle}
                 </p>
               </div>

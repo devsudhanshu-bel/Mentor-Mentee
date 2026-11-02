@@ -1,3 +1,4 @@
+
 import React, {
   useCallback,
   useEffect,
@@ -198,22 +199,6 @@ const getDocumentRoute = (document) => {
   return categoryRoutes[category] || "/student/documents";
 };
 
-const getInitials = (name) => {
-  if (!name || name === "Student") return "S";
-
-  return name
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((part) => part[0].toUpperCase())
-    .join("");
-};
-
-// ==========================================================
-// RESPONSE NORMALIZATION
-// ==========================================================
-
 const unwrapResponse = (response) =>
   response?.data?.data ?? response?.data ?? response ?? null;
 
@@ -228,6 +213,7 @@ const Header = () => {
   const searchContainerRef = useRef(null);
 
   const [user, setUser] = useState(null);
+
   const [profileOpen, setProfileOpen] = useState(false);
   const [profileLoading, setProfileLoading] = useState(true);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -258,13 +244,11 @@ const Header = () => {
         console.error("Unable to read stored user:", error);
       }
 
-      // Display cached information immediately.
       setUser((previous) => ({
         ...storedUser,
         ...(previous || {}),
       }));
 
-      // Fetch the authoritative personal profile.
       try {
         const response = await api.get(
           "/mentee/profile/personal/"
@@ -312,8 +296,6 @@ const Header = () => {
         }
       }
 
-      // Fallback endpoints for deployments where profile details
-      // are provided by a dashboard endpoint.
       const endpoints = [
         "/mentee/profile",
         "/mentee/dashboard",
@@ -384,7 +366,6 @@ const Header = () => {
     const handleProfileUpdated = (event) => {
       const updatedImage = event?.detail?.profileImage;
 
-      // Reflect the new avatar immediately without waiting for a request.
       if (updatedImage !== undefined) {
         setUser((previous) => {
           const nextUser = {
@@ -415,9 +396,11 @@ const Header = () => {
         });
       }
 
-      // Refresh from the backend so the saved profile remains authoritative.
       loadStudentProfile(false).catch((error) => {
-        console.error("Unable to refresh student profile:", error);
+        console.error(
+          "Unable to refresh student profile:",
+          error
+        );
       });
     };
 
@@ -514,7 +497,8 @@ const Header = () => {
 
   const displayRole = formatRole(user?.role);
 
-  const profileImage = getProfileImage(user) || defaultProfile;
+  const profileImage =
+    getProfileImage(user) || defaultProfile;
 
   // ========================================================
   // SEARCH RESULTS
@@ -629,28 +613,251 @@ const Header = () => {
   };
 
   // ========================================================
+  // SEARCH DROPDOWN
+  // ========================================================
+
+  const renderSearchResults = () => (
+    <>
+      {searchOpen && normalizedQuery && (
+        <div
+          id="student-header-search-results"
+          className="
+            fixed left-3 right-3 top-[4.25rem]
+            z-[55]
+            max-h-[min(72vh,560px)]
+            overflow-y-auto
+            rounded-2xl
+            border border-slate-200
+            bg-white
+            shadow-xl shadow-slate-200/70
+
+            sm:absolute sm:left-0 sm:right-auto
+            sm:top-full sm:mt-3
+            sm:w-full sm:min-w-[320px]
+            sm:max-w-xl
+          "
+        >
+          <div className="border-b border-slate-100 bg-slate-50/80 px-4 py-3">
+            <p className="text-xs font-semibold text-slate-700">
+              Search results
+            </p>
+            <p className="mt-0.5 text-[11px] text-slate-400">
+              Pages and your uploaded documents
+            </p>
+          </div>
+
+          {searchLoading ? (
+            <div className="flex items-center justify-center gap-2 px-4 py-10 text-sm text-slate-500">
+              <LoaderCircle
+                size={17}
+                className="animate-spin text-blue-600"
+              />
+              Loading your documents...
+            </div>
+          ) : (
+            <>
+              {filteredPages.length > 0 && (
+                <section className="p-2">
+                  <div className="flex items-center gap-2 px-3 py-2">
+                    <LayoutDashboard
+                      size={15}
+                      className="text-blue-600"
+                    />
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Pages
+                    </p>
+                  </div>
+
+                  {filteredPages.map((item) => {
+                    const Icon = item.icon;
+
+                    return (
+                      <button
+                        key={item.path}
+                        type="button"
+                        onClick={() =>
+                          handlePageSelect(item.path)
+                        }
+                        className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-blue-50"
+                      >
+                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-blue-100">
+                          <Icon size={18} />
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-semibold text-slate-800 group-hover:text-blue-700">
+                            {item.title}
+                          </p>
+                          <p className="mt-0.5 truncate text-xs text-slate-500">
+                            Open page
+                          </p>
+                        </div>
+
+                        <ArrowUpRight
+                          size={16}
+                          className="shrink-0 text-slate-300 transition group-hover:text-blue-600"
+                        />
+                      </button>
+                    );
+                  })}
+                </section>
+              )}
+
+              {filteredDocuments.length > 0 && (
+                <section
+                  className={
+                    filteredPages.length > 0
+                      ? "border-t border-slate-100 p-2"
+                      : "p-2"
+                  }
+                >
+                  <div className="flex items-center gap-2 px-3 py-2">
+                    <FolderOpen
+                      size={15}
+                      className="text-violet-600"
+                    />
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                      Documents
+                    </p>
+                  </div>
+
+                  {filteredDocuments.map((document, index) => (
+                    <button
+                      key={
+                        document.id ||
+                        `${document.documentName}-${index}`
+                      }
+                      type="button"
+                      onClick={() =>
+                        handleDocumentSelect(document)
+                      }
+                      className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-violet-50"
+                    >
+                      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 ring-1 ring-violet-100">
+                        <FileText size={18} />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-semibold text-slate-800 group-hover:text-violet-700">
+                          {document.documentName ||
+                            document.fileName ||
+                            "Untitled document"}
+                        </p>
+
+                        <p className="mt-0.5 truncate text-xs text-slate-500">
+                          {String(
+                            getDocumentCategory(document) ||
+                              "Document"
+                          ).replace(/[_-]+/g, " ")}
+                          {document.description
+                            ? ` · ${document.description}`
+                            : ""}
+                        </p>
+                      </div>
+
+                      <ArrowUpRight
+                        size={16}
+                        className="shrink-0 text-slate-300 transition group-hover:text-violet-600"
+                      />
+                    </button>
+                  ))}
+                </section>
+              )}
+
+              {searchError && (
+                <div className="border-t border-slate-100 px-4 py-3">
+                  <p className="text-xs text-amber-700">
+                    {searchError}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={loadDocuments}
+                    className="mt-2 text-xs font-semibold text-blue-600 hover:text-blue-700"
+                  >
+                    Retry document search
+                  </button>
+                </div>
+              )}
+
+              {!hasResults && (
+                <div className="px-5 py-9 text-center">
+                  <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+                    <Search size={19} />
+                  </div>
+                  <p className="mt-3 text-sm font-semibold text-slate-700">
+                    No results found
+                  </p>
+                  <p className="mt-1 text-xs leading-5 text-slate-400">
+                    Try a page name, certificate name, or document
+                    description.
+                  </p>
+                </div>
+              )}
+            </>
+          )}
+
+          {!searchLoading && hasResults && (
+            <div className="border-t border-slate-100 bg-slate-50/70 px-4 py-2">
+              <p className="text-[10px] text-slate-400">
+                Select a result to open its page.
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+    </>
+  );
+
+  // ========================================================
   // RENDER
   // ========================================================
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 sm:px-5 lg:px-8">
-      {/* SEARCH */}
+    <header
+      className="
+        sticky top-0 z-40
+        flex
+        h-16 sm:h-[72px] lg:h-20
+        w-full
+        items-center
+        justify-between
+        gap-2
+        border-b border-slate-200
+        bg-white
+        px-3
+        pl-[4.5rem]
+        sm:gap-3
+        sm:pl-[4.75rem]
+        sm:pr-5
+        lg:gap-4
+        lg:px-8
+      "
+    >
+      {/* ==================================================
+          SEARCH
+      ================================================== */}
 
       <div
         ref={searchContainerRef}
         className="relative min-w-0 flex-1"
       >
-        <div className="relative max-w-xl">
+        <div className="relative w-full max-w-xl">
           <Search
-            size={18}
-            className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
+            size={17}
+            className="
+              pointer-events-none
+              absolute left-3.5 top-1/2
+              -translate-y-1/2
+              text-slate-400
+              sm:left-4
+            "
           />
 
           <input
             ref={searchRef}
             type="search"
             value={searchTerm}
-            placeholder="Search pages, certificates, documents..."
+            placeholder="Search pages & documents..."
             aria-label="Search student pages and documents"
             aria-expanded={searchOpen}
             aria-controls="student-header-search-results"
@@ -670,7 +877,26 @@ const Header = () => {
                 }
               }
             }}
-            className="h-11 w-full rounded-full border border-slate-200 bg-slate-50 pl-11 pr-11 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-100"
+            className="
+              h-10 sm:h-11
+              w-full
+              rounded-full
+              border border-slate-200
+              bg-slate-50
+              pl-10 sm:pl-11
+              pr-9
+              text-[12px] sm:text-sm
+              text-slate-700
+              outline-none
+              transition
+              placeholder:text-slate-400
+              placeholder:text-ellipsis
+              hover:border-slate-300
+              focus:border-blue-500
+              focus:bg-white
+              focus:ring-4
+              focus:ring-blue-100
+            "
           />
 
           {searchTerm && (
@@ -678,194 +904,47 @@ const Header = () => {
               type="button"
               onClick={clearSearch}
               aria-label="Clear search"
-              className="absolute right-3 top-1/2 flex h-7 w-7 -translate-y-1/2 items-center justify-center rounded-full text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+              className="
+                absolute right-2.5 top-1/2
+                flex h-7 w-7
+                -translate-y-1/2
+                items-center justify-center
+                rounded-full
+                text-slate-400
+                transition
+                hover:bg-slate-100
+                hover:text-slate-700
+              "
             >
               <X size={15} />
             </button>
           )}
         </div>
 
-        {/* SEARCH DROPDOWN */}
-
-        {searchOpen && normalizedQuery && (
-          <div
-            id="student-header-search-results"
-            className="absolute left-0 top-full z-50 mt-3 max-h-[min(72vh,560px)] w-full min-w-[300px] max-w-xl overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-xl shadow-slate-200/70"
-          >
-            <div className="border-b border-slate-100 bg-slate-50/80 px-4 py-3">
-              <p className="text-xs font-semibold text-slate-700">
-                Search results
-              </p>
-              <p className="mt-0.5 text-[11px] text-slate-400">
-                Pages and your uploaded documents
-              </p>
-            </div>
-
-            {searchLoading ? (
-              <div className="flex items-center justify-center gap-2 px-4 py-10 text-sm text-slate-500">
-                <LoaderCircle
-                  size={17}
-                  className="animate-spin text-blue-600"
-                />
-                Loading your documents...
-              </div>
-            ) : (
-              <>
-                {filteredPages.length > 0 && (
-                  <section className="p-2">
-                    <div className="flex items-center gap-2 px-3 py-2">
-                      <LayoutDashboard
-                        size={15}
-                        className="text-blue-600"
-                      />
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        Pages
-                      </p>
-                    </div>
-
-                    {filteredPages.map((item) => {
-                      const Icon = item.icon;
-
-                      return (
-                        <button
-                          key={item.path}
-                          type="button"
-                          onClick={() =>
-                            handlePageSelect(item.path)
-                          }
-                          className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-blue-50"
-                        >
-                          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 ring-1 ring-blue-100">
-                            <Icon size={18} />
-                          </div>
-
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-sm font-semibold text-slate-800 group-hover:text-blue-700">
-                              {item.title}
-                            </p>
-                            <p className="mt-0.5 truncate text-xs text-slate-500">
-                              Open page
-                            </p>
-                          </div>
-
-                          <ArrowUpRight
-                            size={16}
-                            className="shrink-0 text-slate-300 transition group-hover:text-blue-600"
-                          />
-                        </button>
-                      );
-                    })}
-                  </section>
-                )}
-
-                {filteredDocuments.length > 0 && (
-                  <section
-                    className={
-                      filteredPages.length > 0
-                        ? "border-t border-slate-100 p-2"
-                        : "p-2"
-                    }
-                  >
-                    <div className="flex items-center gap-2 px-3 py-2">
-                      <FolderOpen
-                        size={15}
-                        className="text-violet-600"
-                      />
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                        Documents
-                      </p>
-                    </div>
-
-                    {filteredDocuments.map((document, index) => (
-                      <button
-                        key={
-                          document.id ||
-                          `${document.documentName}-${index}`
-                        }
-                        type="button"
-                        onClick={() =>
-                          handleDocumentSelect(document)
-                        }
-                        className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition hover:bg-violet-50"
-                      >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-violet-50 text-violet-600 ring-1 ring-violet-100">
-                          <FileText size={18} />
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-sm font-semibold text-slate-800 group-hover:text-violet-700">
-                            {document.documentName ||
-                              document.fileName ||
-                              "Untitled document"}
-                          </p>
-
-                          <p className="mt-0.5 truncate text-xs text-slate-500">
-                            {String(
-                              getDocumentCategory(document) ||
-                                "Document"
-                            ).replace(/[_-]+/g, " ")}
-                            {document.description
-                              ? ` · ${document.description}`
-                              : ""}
-                          </p>
-                        </div>
-
-                        <ArrowUpRight
-                          size={16}
-                          className="shrink-0 text-slate-300 transition group-hover:text-violet-600"
-                        />
-                      </button>
-                    ))}
-                  </section>
-                )}
-
-                {searchError && (
-                  <div className="border-t border-slate-100 px-4 py-3">
-                    <p className="text-xs text-amber-700">
-                      {searchError}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={loadDocuments}
-                      className="mt-2 text-xs font-semibold text-blue-600 hover:text-blue-700"
-                    >
-                      Retry document search
-                    </button>
-                  </div>
-                )}
-
-                {!hasResults && (
-                  <div className="px-5 py-9 text-center">
-                    <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full bg-slate-100 text-slate-400">
-                      <Search size={19} />
-                    </div>
-                    <p className="mt-3 text-sm font-semibold text-slate-700">
-                      No results found
-                    </p>
-                    <p className="mt-1 text-xs leading-5 text-slate-400">
-                      Try a page name, certificate name, or document
-                      description.
-                    </p>
-                  </div>
-                )}
-              </>
-            )}
-
-            {!searchLoading && hasResults && (
-              <div className="border-t border-slate-100 bg-slate-50/70 px-4 py-2">
-                <p className="text-[10px] text-slate-400">
-                  Select a result to open its page.
-                </p>
-              </div>
-            )}
-          </div>
-        )}
+        {renderSearchResults()}
       </div>
 
-      {/* FONT SIZE, NOTIFICATIONS AND PROFILE */}
+      {/* ==================================================
+          HEADER ACTIONS
+      ================================================== */}
 
-      <div className="ml-1 flex shrink-0 items-center gap-2 sm:ml-4 sm:gap-4">
-        <FontSizeSettings compact />
+      <div className="
+        flex
+        shrink-0
+        items-center
+        gap-1
+        sm:gap-2
+        lg:gap-4
+      ">
+
+        {/* FONT SIZE */}
+
+        <div className="flex shrink-0 items-center">
+          <FontSizeSettings compact />
+        </div>
+
+        {/* NOTIFICATIONS */}
+
         <button
           type="button"
           aria-label="Notifications"
@@ -873,16 +952,35 @@ const Header = () => {
           onClick={() => {
             // Notification integration can be added later.
           }}
-          className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-700 transition hover:bg-slate-100 hover:text-blue-600 sm:h-11 sm:w-11"
+          className="
+            relative
+            flex
+            h-9 w-9
+            sm:h-10 sm:w-10
+            lg:h-11 lg:w-11
+            shrink-0
+            items-center
+            justify-center
+            rounded-xl
+            text-slate-700
+            transition
+            hover:bg-slate-100
+            hover:text-blue-600
+          "
         >
-          <Bell size={20} />
+          <Bell size={19} className="sm:h-5 sm:w-5" />
         </button>
 
-        <div className="hidden h-10 w-px bg-slate-200 sm:block" />
+        {/* DIVIDER */}
 
-        {/* PROFILE MENU */}
+        <div className="hidden h-8 w-px bg-slate-200 sm:block" />
 
-        <div className="relative">
+        {/* ==================================================
+            PROFILE MENU
+        ================================================== */}
+
+        <div className="relative shrink-0">
+
           <button
             type="button"
             aria-label="Open student profile menu"
@@ -890,8 +988,20 @@ const Header = () => {
             onClick={() =>
               setProfileOpen((previous) => !previous)
             }
-            className="flex items-center gap-2 rounded-xl px-1.5 py-2 transition hover:bg-slate-100 sm:gap-3 sm:px-2"
+            className="
+              flex
+              items-center
+              gap-1.5
+              rounded-xl
+              px-1
+              py-1.5
+              transition
+              hover:bg-slate-100
+              sm:gap-2
+              sm:px-2
+            "
           >
+
             <img
               src={profileImage}
               alt={displayName}
@@ -899,25 +1009,44 @@ const Header = () => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = defaultProfile;
               }}
-              className="h-10 w-10 rounded-full border-2 border-white object-cover shadow-sm sm:h-11 sm:w-11"
+              className="
+                h-9 w-9
+                sm:h-10 sm:w-10
+                lg:h-11 lg:w-11
+                rounded-full
+                border-2 border-white
+                object-cover
+                shadow-sm
+              "
             />
 
-            <div className="hidden min-w-0 text-left sm:block">
+            {/* Hide profile text on small screens */}
+
+            <div className="hidden min-w-0 text-left lg:block">
               <h3 className="max-w-44 truncate text-sm font-semibold text-slate-800">
                 {displayName}
               </h3>
+
               <p className="max-w-44 truncate text-xs text-slate-500">
                 {displayRole}
               </p>
             </div>
 
             <ChevronDown
-              size={17}
-              className={`hidden text-slate-500 transition-transform sm:block ${
-                profileOpen ? "rotate-180" : ""
-              }`}
+              size={16}
+              className={`
+                hidden
+                text-slate-500
+                transition-transform
+                sm:block
+
+                ${profileOpen ? "rotate-180" : ""}
+              `}
             />
+
           </button>
+
+          {/* PROFILE DROPDOWN */}
 
           {profileOpen && (
             <>
@@ -928,11 +1057,27 @@ const Header = () => {
                 onClick={() => setProfileOpen(false)}
               />
 
-              <div className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white py-2 shadow-xl">
+              <div className="
+                absolute
+                right-0
+                top-full
+                z-50
+                mt-2
+                w-[min(240px,calc(100vw-24px))]
+                overflow-hidden
+                rounded-xl
+                border border-slate-200
+                bg-white
+                py-2
+                shadow-xl
+              ">
+
                 <div className="border-b border-slate-100 px-4 py-3">
+
                   <p className="truncate text-sm font-semibold text-slate-800">
                     {displayName}
                   </p>
+
                   <p className="mt-1 truncate text-xs text-slate-500">
                     {displayRole}
                   </p>
@@ -942,12 +1087,21 @@ const Header = () => {
                       {user.email}
                     </p>
                   )}
+
                 </div>
 
                 <button
                   type="button"
                   onClick={handleProfile}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-slate-600 transition hover:bg-slate-50 hover:text-blue-600"
+                  className="
+                    flex w-full
+                    items-center gap-3
+                    px-4 py-3
+                    text-sm text-slate-600
+                    transition
+                    hover:bg-slate-50
+                    hover:text-blue-600
+                  "
                 >
                   <UserRound size={17} />
                   My Profile
@@ -959,8 +1113,18 @@ const Header = () => {
                   type="button"
                   disabled={loggingOut}
                   onClick={handleLogout}
-                  className="flex w-full items-center gap-3 px-4 py-3 text-sm text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="
+                    flex w-full
+                    items-center gap-3
+                    px-4 py-3
+                    text-sm text-red-600
+                    transition
+                    hover:bg-red-50
+                    disabled:cursor-not-allowed
+                    disabled:opacity-60
+                  "
                 >
+
                   {loggingOut ? (
                     <LoaderCircle
                       size={17}
@@ -971,12 +1135,17 @@ const Header = () => {
                   )}
 
                   {loggingOut ? "Signing out..." : "Sign Out"}
+
                 </button>
+
               </div>
             </>
           )}
+
         </div>
+
       </div>
+
     </header>
   );
 };

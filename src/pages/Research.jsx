@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from "react";
 
 import Sidebar from "../components/layouts/Sidebar";
@@ -65,30 +66,35 @@ const Research = () => {
   }, [handleCloseEditModal]);
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
       <Sidebar />
 
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="flex min-h-screen min-w-0 flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <Header />
 
-        <main className="flex-1 p-6">
-          <div className="mb-6">
+        <main className="w-full min-w-0 flex-1 p-3 sm:p-5 lg:p-6">
+          {/* Research Banner */}
+          <div className="mb-4 min-w-0 sm:mb-6">
             <ResearchBanner />
           </div>
 
-          <div className="mb-6">
+          {/* Research Statistics */}
+          <div className="mb-4 min-w-0 sm:mb-6">
             <ResearchStats key={refreshKey} />
           </div>
 
-          <div className="grid grid-cols-12 gap-6 items-start">
-            <div className="col-span-8">
+          {/* Main Content */}
+          <div className="grid min-w-0 grid-cols-1 items-start gap-4 sm:gap-5 lg:grid-cols-12 lg:gap-6">
+            {/* Research Work List */}
+            <div className="min-w-0 lg:col-span-8">
               <ResearchWorkList
                 key={refreshKey}
                 onEditResearch={handleEditResearch}
               />
             </div>
 
-            <div className="col-span-4 flex flex-col gap-6">
+            {/* Sidebar Cards */}
+            <div className="flex min-w-0 flex-col gap-4 sm:gap-5 lg:col-span-4 lg:gap-6">
               <UploadResearchCard />
               <ResearchTips />
             </div>
@@ -96,6 +102,7 @@ const Research = () => {
         </main>
       </div>
 
+      {/* Edit Research Modal */}
       <EditResearchModal
         isOpen={isEditModalOpen}
         research={selectedResearch}

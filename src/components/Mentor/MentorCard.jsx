@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -18,13 +19,14 @@ const MentorCard = ({ mentorData, loading = false }) => {
   // ==========================================================
   // LOADING STATE
   // ==========================================================
+
   if (loading) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
+      <div className="w-full min-w-0 bg-white border border-slate-200 rounded-xl shadow-sm p-3 sm:p-4 h-full">
         <div className="flex items-center gap-2 mb-3">
-          <UserRound size={15} className="text-blue-600" />
+          <UserRound size={15} className="text-blue-600 shrink-0" />
 
-          <h3 className="text-[14px] font-semibold text-blue-600">
+          <h3 className="text-[13px] sm:text-[14px] font-semibold text-blue-600">
             Your Mentor
           </h3>
         </div>
@@ -42,21 +44,22 @@ const MentorCard = ({ mentorData, loading = false }) => {
   // ==========================================================
   // NO MENTOR ASSIGNED
   // ==========================================================
+
   if (!mentorData?.assigned || !mentor) {
     return (
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 h-full">
+      <div className="w-full min-w-0 bg-white border border-slate-200 rounded-xl shadow-sm p-3 sm:p-4 h-full">
         <div className="flex items-center gap-2 mb-3">
-          <UserRound size={15} className="text-blue-600" />
+          <UserRound size={15} className="text-blue-600 shrink-0" />
 
-          <h3 className="text-[14px] font-semibold text-blue-600">
+          <h3 className="text-[13px] sm:text-[14px] font-semibold text-blue-600">
             Your Mentor
           </h3>
         </div>
 
-        <div className="min-h-[180px] flex flex-col items-center justify-center text-center">
+        <div className="min-h-[180px] flex flex-col items-center justify-center text-center px-2">
           <UserRound size={38} className="text-slate-300 mb-3" />
 
-          <h4 className="text-[14px] font-semibold text-[#142970]">
+          <h4 className="text-[13px] sm:text-[14px] font-semibold text-[#142970]">
             No Mentor Assigned
           </h4>
 
@@ -71,6 +74,7 @@ const MentorCard = ({ mentorData, loading = false }) => {
   // ==========================================================
   // MENTOR DETAILS
   // ==========================================================
+
   const mentorImage = mentor.profile?.profileImage || profile;
 
   const department =
@@ -85,20 +89,40 @@ const MentorCard = ({ mentorData, loading = false }) => {
   // ==========================================================
   // RENDER
   // ==========================================================
-  return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-sm p-4 hover:shadow-md transition-all duration-300 h-full">
-      {/* Header */}
-      <div className="flex items-center gap-2 mb-3">
-        <UserRound size={15} className="text-blue-600" />
 
-        <h3 className="text-[14px] font-semibold text-blue-600">
+  return (
+    <div
+      className="
+        w-full
+        min-w-0
+        bg-white
+        border
+        border-slate-200
+        rounded-xl
+        shadow-sm
+        p-3
+        sm:p-4
+        hover:shadow-md
+        transition-all
+        duration-300
+        h-full
+      "
+    >
+      {/* HEADER */}
+
+      <div className="flex items-center gap-2 mb-3">
+        <UserRound size={15} className="text-blue-600 shrink-0" />
+
+        <h3 className="text-[13px] sm:text-[14px] font-semibold text-blue-600">
           Your Mentor
         </h3>
       </div>
 
-      {/* Body */}
-      <div className="flex gap-4 items-start min-h-[180px]">
-        {/* Profile Image */}
+      {/* BODY */}
+
+      <div className="flex flex-col min-[420px]:flex-row gap-3 sm:gap-4 items-start min-h-[180px]">
+        {/* PROFILE IMAGE */}
+
         <img
           src={mentorImage}
           alt={mentor.fullName || "Mentor"}
@@ -106,48 +130,76 @@ const MentorCard = ({ mentorData, loading = false }) => {
             event.currentTarget.onerror = null;
             event.currentTarget.src = profile;
           }}
-          className="w-16 h-16 rounded-full object-cover border border-slate-200 flex-shrink-0"
+          className="
+            w-14
+            h-14
+            sm:w-16
+            sm:h-16
+            rounded-full
+            object-cover
+            border
+            border-slate-200
+            shrink-0
+          "
         />
 
-        {/* Details */}
-        <div className="flex-1 min-w-0 flex flex-col">
-          {/* Name */}
-          <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="text-[16px] font-bold text-[#142970] leading-tight break-words">
+        {/* MENTOR DETAILS */}
+
+        <div className="flex-1 min-w-0 w-full flex flex-col">
+          {/* NAME */}
+
+          <div className="flex items-center gap-2 flex-wrap min-w-0">
+            <h2 className="text-[15px] sm:text-[16px] font-bold text-[#142970] leading-tight break-words">
               {mentor.fullName || "Name unavailable"}
             </h2>
 
-            <span className="px-2 py-[2px] rounded-full bg-green-100 text-green-700 text-[9px] font-medium">
+            <span className="px-2 py-[2px] rounded-full bg-green-100 text-green-700 text-[9px] font-medium shrink-0">
               Mentor
             </span>
           </div>
 
-          {/* Designation */}
+          {/* DESIGNATION */}
+
           {mentor.designation && (
-            <div className="flex items-center gap-1.5 text-[11px] text-slate-500 mt-1">
+            <div className="flex items-start gap-1.5 text-[11px] text-slate-500 mt-2 min-w-0">
               <BriefcaseBusiness
                 size={12}
-                className="flex-shrink-0"
+                className="shrink-0 mt-0.5"
               />
 
-              <span>{mentor.designation}</span>
+              <span className="break-words min-w-0">
+                {mentor.designation}
+              </span>
             </div>
           )}
 
-          {/* Department */}
-          <div className="flex items-center gap-1.5 text-[11px] text-slate-500 leading-5">
-            <Building2 size={12} className="flex-shrink-0" />
+          {/* DEPARTMENT */}
 
-            <span>{department}</span>
+          <div className="flex items-start gap-1.5 text-[11px] text-slate-500 leading-5 min-w-0">
+            <Building2
+              size={12}
+              className="shrink-0 mt-1"
+            />
+
+            <span className="break-words min-w-0">
+              {department}
+            </span>
           </div>
 
-          {/* Contact Details */}
-          <div className="mt-3 space-y-2">
+          {/* CONTACT DETAILS */}
+
+          <div className="mt-3 space-y-2 min-w-0">
             {mentor.email && (
               <div className="flex items-center gap-2 text-[11px] text-slate-600 min-w-0">
-                <Mail size={13} className="flex-shrink-0" />
+                <Mail
+                  size={13}
+                  className="shrink-0"
+                />
 
-                <span className="truncate" title={mentor.email}>
+                <span
+                  className="truncate min-w-0"
+                  title={mentor.email}
+                >
                   {mentor.email}
                 </span>
               </div>
@@ -155,9 +207,15 @@ const MentorCard = ({ mentorData, loading = false }) => {
 
             {mentor.phone && (
               <div className="flex items-center gap-2 text-[11px] text-slate-600 min-w-0">
-                <Phone size={13} className="flex-shrink-0" />
+                <Phone
+                  size={13}
+                  className="shrink-0"
+                />
 
-                <span className="truncate" title={mentor.phone}>
+                <span
+                  className="truncate min-w-0"
+                  title={mentor.phone}
+                >
                   {mentor.phone}
                 </span>
               </div>

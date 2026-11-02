@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import {
   Clock3,
@@ -180,8 +181,6 @@ const getStatus = (status) => {
    MENTOR FEEDBACK HELPERS
 ========================================================= */
 
-// Supports Prisma relation names and common API aliases.
-// Also handles a wrapped meeting or an array of feedback records.
 const getMeetingFeedback = (meeting) => {
   if (!meeting || typeof meeting !== "object") return null;
 
@@ -229,8 +228,6 @@ const getMeetingFeedback = (meeting) => {
     }
   }
 
-  // Handle a response that places rating fields directly on
-  // the meeting rather than inside a feedback relation.
   const directRating =
     meeting.rating ??
     meeting.mentorRating ??
@@ -309,17 +306,13 @@ const getFeedbackComments = (meeting, feedback) => {
 
 const MentorRating = ({ meeting }) => {
   const feedback = getMeetingFeedback(meeting);
-
   const rating = getValidRating(feedback);
-
   const comments = getFeedbackComments(meeting, feedback);
 
-  // Don't show an empty rating block if the meeting has no feedback.
   if (!feedback) return null;
 
   return (
     <div className="mt-3 border-t border-slate-100 pt-3">
-      {/* Saved star rating */}
       <div
         className="flex flex-wrap items-center gap-1"
         role="img"
@@ -348,7 +341,6 @@ const MentorRating = ({ meeting }) => {
         </span>
       </div>
 
-      {/* Saved mentor comments */}
       {comments && (
         <p className="mt-2 flex items-start gap-1.5 text-[11px] leading-5 text-slate-500">
           <MessageSquare
@@ -357,7 +349,7 @@ const MentorRating = ({ meeting }) => {
             aria-hidden="true"
           />
 
-          <span className="whitespace-pre-wrap break-words">
+          <span className="whitespace-pre-wrap break-words min-w-0">
             {comments}
           </span>
         </p>
@@ -389,7 +381,6 @@ const RecentMeetings = ({
         const rawMeeting = meeting?.rawMeeting ?? meeting;
         const date = getMeetingDate(meeting);
 
-        // Preserve feedback from the original meeting object.
         const feedback =
           meeting?.mentor_meeting_feedback ??
           meeting?.mentorMeetingFeedback ??
@@ -424,10 +415,8 @@ const RecentMeetings = ({
           .toUpperCase()
           .replace(/[\s-]+/g, "_");
 
-        // Future meetings belong in Upcoming Meetings.
         if (meeting._date.getTime() > now) return false;
 
-        // Cancelled meetings are excluded.
         if (["CANCELLED", "CANCELED"].includes(status)) {
           return false;
         }
@@ -473,11 +462,14 @@ const RecentMeetings = ({
     return (
       <div
         key={meeting._key}
-        className="rounded-lg border border-slate-200 p-3 transition hover:bg-slate-50"
+        className="min-w-0 rounded-lg border border-slate-200 p-3 sm:p-4 transition hover:bg-slate-50"
       >
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          {/* Date and meeting information */}
-          <div className="flex min-w-0 items-center gap-3">
+        {/* Meeting header */}
+
+        <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="flex min-w-0 items-start gap-3">
+            {/* Date */}
+
             <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-lg border border-slate-200 bg-slate-50">
               <span className="text-[9px] font-semibold text-slate-500">
                 {month}
@@ -488,29 +480,32 @@ const RecentMeetings = ({
               </span>
             </div>
 
-            <div className="min-w-0">
-              <h4 className="break-words text-[13px] font-semibold text-[#142970]">
+            {/* Meeting information */}
+
+            <div className="min-w-0 flex-1">
+              <h4 className="break-words text-[12px] sm:text-[13px] font-semibold text-[#142970]">
                 {meeting.title || "Mentoring Meeting"}
               </h4>
 
-              <div className="mt-1 flex items-center gap-1 text-[11px] text-slate-500">
-                <Clock3 size={12} />
+              <div className="mt-1 flex flex-wrap items-center gap-1 text-[11px] text-slate-500">
+                <Clock3 size={12} className="shrink-0" />
                 <span>{getTimeRange(meeting, date)}</span>
               </div>
 
               {mentorName && (
-                <p className="mt-1 text-[11px] text-slate-500">
+                <p className="mt-1 break-words text-[11px] text-slate-500">
                   Mentor: {mentorName}
                 </p>
               )}
 
-              <span className="mt-2 inline-flex rounded-full bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600">
+              <span className="mt-2 inline-flex max-w-full rounded-full bg-slate-100 px-2 py-1 text-[10px] font-medium text-slate-600">
                 {getStatus(meeting.status)}
               </span>
             </div>
           </div>
 
-          {/* Expandable notes action */}
+          {/* Notes button */}
+
           <button
             type="button"
             disabled={!notes}
@@ -524,7 +519,15 @@ const RecentMeetings = ({
                 ? "View meeting notes"
                 : "No meeting notes available"
             }
-            className="flex shrink-0 items-center justify-center gap-2 rounded-lg border border-blue-500 px-3 py-2 text-[12px] font-medium text-blue-600 transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:bg-slate-50 disabled:text-slate-400"
+            className="
+              flex w-full shrink-0 items-center justify-center gap-2
+              rounded-lg border border-blue-500 px-3 py-2
+              text-[12px] font-medium text-blue-600
+              transition hover:bg-blue-50
+              disabled:cursor-not-allowed disabled:border-slate-200
+              disabled:bg-slate-50 disabled:text-slate-400
+              sm:w-auto
+            "
           >
             <FileText size={14} />
             View Notes
@@ -539,30 +542,33 @@ const RecentMeetings = ({
         </div>
 
         {/* Discussion topic */}
+
         <div className="mt-3 border-t border-slate-100 pt-3">
           <p className="text-[11px] font-semibold text-slate-600">
             Discussed about
           </p>
 
-          <p className="mt-1 break-words text-[11px] text-slate-500">
+          <p className="mt-1 break-words text-[11px] leading-5 text-slate-500">
             {getTopic(meeting)}
           </p>
         </div>
 
         {/* Expanded notes */}
+
         {isExpanded && notes && (
           <div className="mt-3 rounded-lg border border-blue-100 bg-blue-50/50 p-3">
             <p className="mb-2 text-xs font-semibold text-[#142970]">
               Meeting Notes
             </p>
 
-            <p className="whitespace-pre-wrap break-words text-xs text-slate-600">
+            <p className="whitespace-pre-wrap break-words text-xs leading-5 text-slate-600">
               {notes}
             </p>
           </div>
         )}
 
-        {/* Saved mentor rating and feedback */}
+        {/* Mentor rating and feedback */}
+
         <MentorRating meeting={meeting} />
       </div>
     );
@@ -574,25 +580,26 @@ const RecentMeetings = ({
 
   return (
     <>
-      <div className="h-full rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 hover:shadow-md">
+      <div className="h-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm transition-all duration-300 hover:shadow-md sm:p-4">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between">
-          <div>
-            <h3 className="text-[14px] font-semibold text-blue-600">
+
+        <div className="mb-4 flex min-w-0 items-start justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="text-[13px] sm:text-[14px] font-semibold text-blue-600">
               Recent Meetings
             </h3>
 
-            <p className="mt-1 text-[11px] text-slate-500">
+            <p className="mt-1 text-[10px] sm:text-[11px] text-slate-500">
               Your previous mentoring sessions
             </p>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {hasMoreMeetings && !loading && !error && (
               <button
                 type="button"
                 onClick={() => setIsViewAllOpen(true)}
-                className="px-2 py-1 text-[11px] font-semibold text-blue-600 hover:text-blue-800 hover:underline sm:text-[12px]"
+                className="rounded-md px-2 py-1 text-[10px] sm:text-[11px] font-semibold text-blue-600 hover:bg-blue-50 hover:text-blue-800 sm:text-[12px]"
               >
                 View All ({recentMeetings.length})
               </button>
@@ -604,6 +611,7 @@ const RecentMeetings = ({
                 onClick={onRefresh}
                 disabled={loading}
                 title="Refresh meetings"
+                aria-label="Refresh meetings"
                 className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50 disabled:opacity-50"
               >
                 <RefreshCw
@@ -616,23 +624,29 @@ const RecentMeetings = ({
         </div>
 
         {/* Loading */}
+
         {loading && (
           <div className="flex flex-col items-center py-8 text-slate-500">
             <RefreshCw size={22} className="mb-2 animate-spin" />
-            <p className="text-sm">Loading recent meetings...</p>
+            <p className="text-xs sm:text-sm">
+              Loading recent meetings...
+            </p>
           </div>
         )}
 
         {/* Error */}
+
         {!loading && error && (
-          <div className="rounded-lg border border-red-200 bg-red-50 p-4">
-            <p className="text-sm text-red-700">{error}</p>
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 sm:p-4">
+            <p className="break-words text-xs sm:text-sm text-red-700">
+              {error}
+            </p>
 
             {onRefresh && (
               <button
                 type="button"
                 onClick={onRefresh}
-                className="mt-3 text-sm font-semibold text-red-700 hover:underline"
+                className="mt-3 text-xs sm:text-sm font-semibold text-red-700 hover:underline"
               >
                 Try again
               </button>
@@ -641,23 +655,25 @@ const RecentMeetings = ({
         )}
 
         {/* Empty state */}
+
         {!loading && !error && recentMeetings.length === 0 && (
           <div className="flex flex-col items-center py-8 text-center">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full border border-slate-200 bg-slate-50">
               <CalendarDays size={22} className="text-slate-400" />
             </div>
 
-            <p className="text-sm font-semibold text-slate-700">
+            <p className="text-xs sm:text-sm font-semibold text-slate-700">
               No recent meetings
             </p>
 
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 max-w-xs text-[11px] sm:text-xs text-slate-500">
               Your previous mentoring sessions will appear here.
             </p>
           </div>
         )}
 
         {/* Latest three meetings */}
+
         {!loading && !error && recentMeetings.length > 0 && (
           <div className="space-y-2">
             {visibleMeetings.map(renderMeeting)}
@@ -665,12 +681,13 @@ const RecentMeetings = ({
         )}
 
         {/* Bottom View All */}
+
         {!loading && !error && hasMoreMeetings && (
           <div className="mt-3 flex justify-center border-t border-slate-100 pt-3">
             <button
               type="button"
               onClick={() => setIsViewAllOpen(true)}
-              className="text-[12px] font-semibold text-blue-600 hover:text-blue-800 hover:underline"
+              className="text-[11px] sm:text-[12px] font-semibold text-blue-600 hover:text-blue-800 hover:underline"
             >
               View all recent meetings
 
@@ -682,10 +699,11 @@ const RecentMeetings = ({
         )}
       </div>
 
-      {/* View All modal */}
+      {/* VIEW ALL MODAL */}
+
       {isViewAllOpen && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-3 sm:p-6"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/50 p-2 sm:p-4 md:p-6"
           onMouseDown={(event) => {
             if (event.target === event.currentTarget) {
               setIsViewAllOpen(false);
@@ -696,19 +714,33 @@ const RecentMeetings = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="recent-meetings-modal-title"
-            className="flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+            className="
+              flex
+              max-h-[92dvh]
+              sm:max-h-[85vh]
+              w-full
+              max-w-3xl
+              min-w-0
+              flex-col
+              overflow-hidden
+              rounded-xl
+              sm:rounded-2xl
+              bg-white
+              shadow-2xl
+            "
           >
             {/* Modal header */}
-            <div className="flex items-center justify-between gap-4 border-b border-slate-200 p-5">
-              <div>
+
+            <div className="flex shrink-0 items-center justify-between gap-3 border-b border-slate-200 p-3 sm:p-5">
+              <div className="min-w-0">
                 <h2
                   id="recent-meetings-modal-title"
-                  className="text-base font-bold text-[#142970] sm:text-lg"
+                  className="break-words text-sm sm:text-base font-bold text-[#142970] md:text-lg"
                 >
                   All Recent Meetings
                 </h2>
 
-                <p className="mt-1 text-xs text-slate-500">
+                <p className="mt-1 text-[10px] sm:text-xs text-slate-500">
                   {recentMeetings.length} previous{" "}
                   {recentMeetings.length === 1 ? "meeting" : "meetings"}
                 </p>
@@ -718,27 +750,29 @@ const RecentMeetings = ({
                 type="button"
                 onClick={() => setIsViewAllOpen(false)}
                 aria-label="Close recent meetings"
-                className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
+                className="shrink-0 rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-800"
               >
                 <X size={20} />
               </button>
             </div>
 
             {/* All meetings */}
-            <div className="space-y-3 overflow-y-auto p-4 sm:p-5">
+
+            <div className="min-h-0 space-y-3 overflow-y-auto p-3 sm:p-5">
               {recentMeetings.map(renderMeeting)}
             </div>
 
             {/* Modal footer */}
-            <div className="flex items-center justify-between gap-3 border-t border-slate-200 bg-slate-50 p-4">
-              <p className="text-[11px] text-slate-500">
+
+            <div className="flex shrink-0 flex-col-reverse items-stretch justify-between gap-2 border-t border-slate-200 bg-slate-50 p-3 sm:flex-row sm:items-center sm:gap-3 sm:p-4">
+              <p className="text-center text-[10px] sm:text-left sm:text-[11px] text-slate-500">
                 Showing all available recent meetings
               </p>
 
               <button
                 type="button"
                 onClick={() => setIsViewAllOpen(false)}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700"
+                className="w-full rounded-lg bg-blue-600 px-4 py-2 text-xs font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
               >
                 Close
               </button>

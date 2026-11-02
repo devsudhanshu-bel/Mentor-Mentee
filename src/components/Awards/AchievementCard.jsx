@@ -1,3 +1,4 @@
+
 import React from "react";
 
 import {
@@ -198,7 +199,7 @@ const AchievementCard = ({
 
   const getIcon = () => {
     const baseClass =
-      "flex h-11 w-11 shrink-0 items-center justify-center rounded-lg";
+      "flex h-10 w-10 sm:h-11 sm:w-11 shrink-0 items-center justify-center rounded-lg";
 
     if (fileExtension === "pdf") {
       return (
@@ -309,22 +310,23 @@ const AchievementCard = ({
   // ========================================================
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white px-4 py-3 transition hover:shadow-sm">
-      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+    <div className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-3 py-3 transition hover:shadow-sm sm:px-4">
+      <div className="flex min-w-0 flex-col justify-between gap-3 sm:flex-row sm:items-start sm:gap-4 lg:items-center">
+
         {/* LEFT: FILE + DETAILS */}
 
-        <div className="flex min-w-0 items-start gap-4">
+        <div className="flex min-w-0 flex-1 items-start gap-3 sm:gap-4">
           {getIcon()}
 
           <div className="min-w-0 flex-1">
             <h3
-              className="max-w-[520px] truncate text-sm font-semibold text-slate-800"
+              className="break-words text-sm font-semibold leading-5 text-slate-800 sm:max-w-[520px]"
               title={getDocumentName(achievement)}
             >
               {getDocumentName(achievement)}
             </h3>
 
-            <p className="mt-1 max-w-[520px] truncate text-xs text-slate-500">
+            <p className="mt-1 break-words text-xs leading-5 text-slate-500">
               {achievementType}
 
               {achievementDate && (
@@ -344,7 +346,7 @@ const AchievementCard = ({
 
             {description && (
               <p
-                className="mt-1 max-w-[520px] truncate text-xs text-slate-400"
+                className="mt-1 break-words text-xs leading-5 text-slate-400"
                 title={description}
               >
                 {description}
@@ -355,10 +357,12 @@ const AchievementCard = ({
 
             {statusConfig ? (
               <span
-                className={`mt-2 inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[10px] font-medium ${statusConfig.className}`}
+                className={`mt-2 inline-flex max-w-full items-center gap-1 rounded-full border px-2 py-1 text-[10px] font-medium ${statusConfig.className}`}
               >
-                <statusConfig.icon size={12} />
-                {statusConfig.label}
+                <statusConfig.icon size={12} className="shrink-0" />
+                <span className="break-words">
+                  {statusConfig.label}
+                </span>
               </span>
             ) : (
               <span className="mt-2 inline-flex rounded-full border border-slate-200 bg-slate-50 px-2 py-1 text-[10px] font-medium text-slate-500">
@@ -369,12 +373,12 @@ const AchievementCard = ({
             {/* MENTOR FEEDBACK */}
 
             {mentorFeedback && canResubmit && (
-              <div className="mt-2 max-w-xl rounded-md border border-orange-200 bg-orange-50 px-3 py-2">
+              <div className="mt-2 w-full max-w-xl rounded-md border border-orange-200 bg-orange-50 px-3 py-2">
                 <p className="text-[10px] font-semibold text-orange-800">
                   Mentor&apos;s Feedback
                 </p>
 
-                <p className="mt-1 whitespace-pre-wrap text-xs leading-5 text-orange-900">
+                <p className="mt-1 whitespace-pre-wrap break-words text-xs leading-5 text-orange-900">
                   {mentorFeedback}
                 </p>
               </div>
@@ -384,9 +388,9 @@ const AchievementCard = ({
 
         {/* RIGHT: LEVEL + ACTIONS */}
 
-        <div className="ml-0 flex shrink-0 flex-wrap items-center gap-2 sm:ml-4 sm:justify-end">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5 border-t border-slate-100 pt-3 sm:shrink-0 sm:justify-end sm:border-0 sm:pt-0 sm:pl-2">
           <span
-            className={`rounded-full px-2.5 py-1 text-[11px] font-medium ${levelClass}`}
+            className={`mr-1 rounded-full px-2.5 py-1 text-[10px] font-medium sm:text-[11px] ${levelClass}`}
           >
             {achievementLevel.replace(" Level", "")}
           </span>

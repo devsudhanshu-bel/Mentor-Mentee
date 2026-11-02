@@ -1,746 +1,258 @@
-import { useState } from "react";
 
+import React, { useMemo, useState } from "react";
 import {
-  X,
-  Building2,
+  Search,
+  Eye,
+  ChevronDown,
+  History,
   CalendarDays,
-  MapPin,
-  Monitor,
-  FileText,
-  UploadCloud,
-  ExternalLink,
-  CheckCircle2,
-  Clock3,
-  Send,
-  LoaderCircle,
 } from "lucide-react";
-
-import internshipService from "../../services/internshipService";
-import api from "../../api/axios";
-
-import DocumentUploadModal from "./DocumentUploadModal";
-
-// ==========================================================
-// FORMAT DATE
-// ==========================================================
 
 const formatDate = (value) => {
   if (!value) return "—";
 
   const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
 
-  return Number.isNaN(date.getTime())
-    ? "—"
-    : date.toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      });
+  return date.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 };
 
-// ==========================================================
-// RESOLVE FILE URL
-// ==========================================================
-
-const resolveFileUrl = (fileUrl) => {
-  if (!fileUrl) {
-    return null;
-  }
-
-  if (/^https?:\/\//i.test(fileUrl)) {
-    return fileUrl;
-  }
-
-  if (fileUrl.startsWith("/api/")) {
-    return fileUrl.replace(/^\/api/, "");
-  }
-
-  return fileUrl.startsWith("/")
-    ? fileUrl
-    : `/${fileUrl}`;
-};
-
-// ==========================================================
-// MAIN COMPONENT
-// ==========================================================
-
-const InternshipDetailsModal = ({
-  internship,
-  onClose,
-  onRefresh,
+const InternshipHistory = ({
+  internships = [],
+  allInternships = [],
+  onView,
 }) => {
-  const [uploadStage, setUploadStage] = useState(null);
+  const [search, setSearch] = useState("");
+  const [filter, setFilter] = useState("COMPLETED");
 
-  const [requestingCompletion, setRequestingCompletion] =
-    useState(false);
+  const rows = useMemo(() => {
+    const source =
+      filter === "COMPLETED" ? internships : allInternships;
 
-  const [openingDocumentId, setOpeningDocumentId] =
-    useState(null);
+    const query = search.trim().toLowerCase();
 
-  const [error, setError] = useState("");
-  const [message, setMessage] = useState("");
+    return source.filter((item) => {
+      const matchesSearch =
+        !query ||
+        [item.companyName, item.internshipTitle, item.role]
+          .filter(Boolean)
+          .some((value) => value.toLowerCase().includes(query));
 
-  if (!internship) return null;
+      const matchesStatus =
+        filter === "ALL" ||
+        (filter === "COMPLETED" &&
+          item.status === "COMPLETED" &&
+          item.verificationStatus === "APPROVED" &&
+          item.completionVerificationStatus === "APPROVED") ||
+        (filter === "PENDING" &&
+          (item.verificationStatus === "PENDING" ||
+            item.completionVerificationStatus === "PENDING")) ||
+        (filter === "REJECTED" &&
+          (item.verificationStatus === "REJECTED" ||
+            item.completionVerificationStatus === "REJECTED"));
 
-  // ==========================================================
-  // DOCUMENT DATA
-  // ==========================================================
+      return matchesSearch && matchesStatus;
+    });
+  }, [internships, allInternships, search, filter]);
 
-  const documents = internship.internship_documents || [];
+  return (
+    <section className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      {/* Header */}
+      <header className="flex min-w-0 flex-col gap-4 border-b border-slate-100 px-3 py-4 sm:px-5 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex min-w-0 items-center gap-3">
+          <div className="shrink-0 rounded-xl bg-blue-50 p-2.5 text-blue-600 sm:p-3">
+            <History size={21} />
+          </div>
 
-  const isAlreadyCompleted =
-    internship.internshipType === "ALREADY_COMPLETED";
+          <div className="min-w-0">
+            <h2 className="font-semibold text-slate-900">
+              Internship History
+            </h2>
 
-  const canRequestCompletion =
-    internship.status === "ONGOING" &&
-    internship.verificationStatus === "APPROVED" &&
-    internship.completionVerificationStatus !== "APPROVED";
+            <p className="mt-1 text-xs leading-5 text-slate-500">
+              Review your internship records and verification status.
+            </p>
+          </div>
+        </div>
 
-  const completionDocuments = [
-    "COMPLETION_CERTIFICATE",
-    "COMPLETION_LETTER",
-    "FINAL_REPORT",
-  ];
+        {/* Search and filter */}
+        <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-2 lg:flex lg:shrink-0">
+          <div className="relative min-w-0">
+            <Search
+              size={16}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+            />
 
-  const uploadedCompletionTypes = new Set(
-    documents
-      .filter((doc) => doc.submissionStage === "COMPLETION")
-      .map((doc) => doc.documentType)
+            <input
+              value={search}
+              onChange={(event) => setSearch(event.target.value)}
+              placeholder="Search internships..."
+              aria-label="Search internships"
+              className="w-full rounded-lg border border-slate-200 py-2.5 pl-9 pr-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 lg:w-56"
+            />
+          </div>
+
+          <div className="relative min-w-0">
+            <select
+              value={filter}
+              onChange={(event) => setFilter(event.target.value)}
+              aria-label="Filter internships"
+              className="w-full appearance-none rounded-lg border border-slate-200 bg-white py-2.5 pl-3 pr-9 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            >
+              <option value="COMPLETED">Completed</option>
+              <option value="PENDING">Pending verification</option>
+              <option value="REJECTED">Needs attention</option>
+              <option value="ALL">All records</option>
+            </select>
+
+            <ChevronDown
+              size={15}
+              className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+            />
+          </div>
+        </div>
+      </header>
+
+      {/* Empty state or table */}
+      {rows.length === 0 ? (
+        <div className="flex flex-col items-center px-4 py-10 text-center sm:px-5 sm:py-12">
+          <div className="rounded-2xl bg-slate-100 p-4 text-slate-400">
+            <CalendarDays size={25} />
+          </div>
+
+          <h3 className="mt-4 font-semibold text-slate-800">
+            No matching internships
+          </h3>
+
+          <p className="mt-1 max-w-sm text-sm leading-6 text-slate-500">
+            Your records will appear here when they match the selected filter.
+          </p>
+        </div>
+      ) : (
+        <div className="w-full min-w-0 overflow-x-auto">
+          <table className="w-full min-w-[760px] text-left">
+            <thead className="bg-slate-50">
+              <tr className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                <th className="whitespace-nowrap px-5 py-4">
+                  Company / Role
+                </th>
+
+                <th className="whitespace-nowrap px-5 py-4">
+                  Duration
+                </th>
+
+                <th className="whitespace-nowrap px-5 py-4">
+                  Verification
+                </th>
+
+                <th className="whitespace-nowrap px-5 py-4">
+                  Completion
+                </th>
+
+                <th className="whitespace-nowrap px-5 py-4 text-right">
+                  Details
+                </th>
+              </tr>
+            </thead>
+
+            <tbody className="divide-y divide-slate-100">
+              {rows.map((item) => (
+                <tr
+                  key={item.id}
+                  className="transition hover:bg-slate-50"
+                >
+                  <td className="max-w-[240px] px-5 py-4">
+                    <p className="break-words font-semibold text-slate-800">
+                      {item.companyName || "Unnamed company"}
+                    </p>
+
+                    <p className="mt-1 break-words text-xs text-slate-500">
+                      {item.internshipTitle || item.role || "Internship"}
+                    </p>
+                  </td>
+
+                  <td className="whitespace-nowrap px-5 py-4 text-sm text-slate-600">
+                    {formatDate(item.startDate)}
+                    <span className="mx-1 text-slate-300">–</span>
+                    {formatDate(item.endDate)}
+                  </td>
+
+                  <td className="px-5 py-4">
+                    <StatusPill status={item.verificationStatus} />
+                  </td>
+
+                  <td className="px-5 py-4">
+                    <StatusPill
+                      status={item.completionVerificationStatus}
+                    />
+                  </td>
+
+                  <td className="px-5 py-4 text-right">
+                    <button
+                      type="button"
+                      onClick={() => onView?.(item)}
+                      aria-label={`View ${item.companyName || "internship"}`}
+                      className="inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-slate-200 px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-white"
+                    >
+                      <Eye size={15} />
+                      View
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Footer */}
+      <footer className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 px-3 py-3 text-xs text-slate-400 sm:px-5">
+        <span>
+          Showing {rows.length} record{rows.length === 1 ? "" : "s"}
+        </span>
+
+        <span className="text-slate-400">
+          {filter === "ALL"
+            ? "All records"
+            : filter === "COMPLETED"
+              ? "Completed internships"
+              : filter === "PENDING"
+                ? "Pending verification"
+                : "Needs attention"}
+        </span>
+      </footer>
+    </section>
   );
+};
 
-  const missingCompletionDocuments =
-    completionDocuments.filter(
-      (type) => !uploadedCompletionTypes.has(type)
-    );
-
-  // ==========================================================
-  // REQUEST COMPLETION
-  // ==========================================================
-
-  const requestCompletion = async () => {
-    setError("");
-    setMessage("");
-
-    if (missingCompletionDocuments.length > 0) {
-      setError(
-        "Upload the completion certificate, completion letter, and final report before requesting completion verification."
-      );
-
-      return;
-    }
-
-    setRequestingCompletion(true);
-
-    try {
-      await internshipService.requestCompletion(internship.id);
-
-      setMessage(
-        "Completion verification requested successfully."
-      );
-
-      await onRefresh?.();
-      onClose?.();
-    } catch (err) {
-      setError(
-        err.message ||
-        "Unable to request completion verification."
-      );
-    } finally {
-      setRequestingCompletion(false);
-    }
+const StatusPill = ({ status }) => {
+  const styles = {
+    APPROVED: "bg-green-50 text-green-700",
+    PENDING: "bg-amber-50 text-amber-700",
+    REJECTED: "bg-red-50 text-red-700",
+    NOT_SUBMITTED: "bg-slate-100 text-slate-600",
   };
 
-  // ==========================================================
-  // OPEN DOCUMENT - AUTHENTICATED
-  // ==========================================================
-
-  const handleOpenDocument = async (doc) => {
-    if (!doc?.fileUrl || openingDocumentId) {
-      return;
-    }
-
-    // Open a blank tab immediately to avoid popup blocking.
-    const newWindow = window.open(
-      "about:blank",
-      "_blank"
-    );
-
-    if (!newWindow) {
-      setError(
-        "Your browser blocked the new tab. Please allow pop-ups and try again."
-      );
-
-      return;
-    }
-
-    newWindow.opener = null;
-
-    setOpeningDocumentId(doc.id);
-    setError("");
-
-    let objectUrl = null;
-
-    try {
-      const fileUrl = resolveFileUrl(doc.fileUrl);
-
-      const response = await api.get(fileUrl, {
-        responseType: "blob",
-      });
-
-      objectUrl = window.URL.createObjectURL(
-        response.data
-      );
-
-      newWindow.location.href = objectUrl;
-
-      // Give the new tab time to load the Blob URL.
-      window.setTimeout(() => {
-        window.URL.revokeObjectURL(objectUrl);
-      }, 60000);
-
-    } catch (err) {
-      console.error(
-        "Failed to open internship document:",
-        err
-      );
-
-      newWindow.close();
-
-      const status = err.response?.status;
-
-      if (status === 401) {
-        setError(
-          "Your session has expired. Please log in again."
-        );
-      } else if (status === 403) {
-        setError(
-          "You are not authorized to access this document."
-        );
-      } else if (status === 404) {
-        setError(
-          "The requested document could not be found."
-        );
-      } else {
-        setError(
-          "Unable to open the document. Please try again."
-        );
-      }
-
-    } finally {
-      setOpeningDocumentId(null);
-    }
-  };
-
-  // ==========================================================
-  // VERIFICATION LABELS
-  // ==========================================================
-
-  const verificationLabel = {
+  const labels = {
     APPROVED: "Approved",
     PENDING: "Pending",
     REJECTED: "Needs attention",
     NOT_SUBMITTED: "Not submitted",
   };
 
-  const completionLabel =
-    verificationLabel[
-      internship.completionVerificationStatus
-    ] || "Not submitted";
-
-  // ==========================================================
-  // RENDER
-  // ==========================================================
-
   return (
-    <>
-      <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 p-3 sm:p-6">
-
-        <section
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="internship-details-title"
-          className="max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
-        >
-
-          {/* ==================================================
-              HEADER
-          ================================================== */}
-
-          <header className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white px-5 py-4 sm:px-7">
-
-            <div className="flex items-center gap-3">
-
-              <div className="rounded-xl bg-blue-50 p-3 text-blue-600">
-                <Building2 size={22} />
-              </div>
-
-              <div>
-                <h2
-                  id="internship-details-title"
-                  className="font-bold text-slate-900"
-                >
-                  Internship Details
-                </h2>
-
-                <p className="mt-1 text-xs text-slate-500">
-                  {internship.companyName}
-                </p>
-              </div>
-
-            </div>
-
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label="Close details"
-              className="rounded-lg p-2 text-slate-400 hover:bg-slate-100"
-            >
-              <X size={20} />
-            </button>
-
-          </header>
-
-          {/* ==================================================
-              CONTENT
-          ================================================== */}
-
-          <div className="space-y-6 p-5 sm:p-7">
-
-            {/* ERROR */}
-
-            {error && (
-              <div
-                role="alert"
-                className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700"
-              >
-                {error}
-              </div>
-            )}
-
-            {/* MESSAGE */}
-
-            {message && (
-              <div className="rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-700">
-                {message}
-              </div>
-            )}
-
-            {/* ==================================================
-                INTERNSHIP INFORMATION
-            ================================================== */}
-
-            <section>
-
-              <div className="flex flex-wrap items-start justify-between gap-3">
-
-                <div>
-                  <h3 className="text-xl font-bold text-[#142970]">
-                    {internship.internshipTitle}
-                  </h3>
-
-                  <p className="mt-1 text-sm text-slate-500">
-                    {internship.role || internship.companyName}
-                  </p>
-                </div>
-
-                <span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
-                  {(internship.status || "UNKNOWN")
-                    .replaceAll("_", " ")
-                    .toLowerCase()
-                    .replace(/\b\w/g, (char) =>
-                      char.toUpperCase()
-                    )}
-                </span>
-
-              </div>
-
-              <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-
-                <Info
-                  Icon={CalendarDays}
-                  label="Start Date"
-                  value={formatDate(internship.startDate)}
-                />
-
-                <Info
-                  Icon={CalendarDays}
-                  label="End Date"
-                  value={formatDate(internship.endDate)}
-                />
-
-                <Info
-                  Icon={MapPin}
-                  label="Location"
-                  value={internship.location || "Not specified"}
-                />
-
-                <Info
-                  Icon={Monitor}
-                  label="Work Mode"
-                  value={internship.mode || "Not specified"}
-                />
-
-              </div>
-
-              {internship.description && (
-                <p className="mt-4 whitespace-pre-line text-sm leading-6 text-slate-600">
-                  {internship.description}
-                </p>
-              )}
-
-            </section>
-
-            {/* ==================================================
-                VERIFICATION STATUS
-            ================================================== */}
-
-            <section className="rounded-xl border border-slate-200 p-4">
-
-              <h3 className="font-semibold text-slate-900">
-                Verification Status
-              </h3>
-
-              <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-
-                <VerificationCard
-                  title="Initial Verification"
-                  status={
-                    verificationLabel[
-                      internship.verificationStatus
-                    ] || "Unknown"
-                  }
-                  approved={
-                    internship.verificationStatus === "APPROVED"
-                  }
-                  rejected={
-                    internship.verificationStatus === "REJECTED"
-                  }
-                />
-
-                <VerificationCard
-                  title="Completion Verification"
-                  status={completionLabel}
-                  approved={
-                    internship.completionVerificationStatus ===
-                    "APPROVED"
-                  }
-                  rejected={
-                    internship.completionVerificationStatus ===
-                    "REJECTED"
-                  }
-                />
-
-              </div>
-
-              {internship.mentorRemark && (
-                <div className="mt-4 rounded-lg bg-slate-50 p-3">
-
-                  <p className="text-xs font-semibold text-slate-600">
-                    Initial Mentor Feedback
-                  </p>
-
-                  <p className="mt-1 whitespace-pre-line text-sm text-slate-700">
-                    {internship.mentorRemark}
-                  </p>
-
-                </div>
-              )}
-
-              {internship.completionMentorRemark && (
-                <div className="mt-3 rounded-lg bg-slate-50 p-3">
-
-                  <p className="text-xs font-semibold text-slate-600">
-                    Completion Mentor Feedback
-                  </p>
-
-                  <p className="mt-1 whitespace-pre-line text-sm text-slate-700">
-                    {internship.completionMentorRemark}
-                  </p>
-
-                </div>
-              )}
-
-            </section>
-
-            {/* ==================================================
-                SUBMITTED DOCUMENTS
-            ================================================== */}
-
-            <section>
-
-              <div className="flex flex-wrap items-center justify-between gap-3">
-
-                <div>
-                  <h3 className="font-semibold text-slate-900">
-                    Submitted Documents
-                  </h3>
-
-                  <p className="mt-1 text-xs text-slate-500">
-                    Uploaded files associated with this internship.
-                  </p>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    setUploadStage(
-                      isAlreadyCompleted
-                        ? "INITIAL"
-                        : internship.status === "ONGOING"
-                          ? "COMPLETION"
-                          : "INITIAL"
-                    )
-                  }
-                  disabled={
-                    internship.status === "COMPLETED" ||
-                    internship.status === "CANCELLED"
-                  }
-                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  <UploadCloud size={16} />
-                  Upload Document
-                </button>
-
-              </div>
-
-              {documents.length === 0 ? (
-
-                <div className="mt-4 rounded-xl border border-dashed border-slate-300 p-6 text-center">
-
-                  <FileText
-                    className="mx-auto text-slate-400"
-                    size={25}
-                  />
-
-                  <p className="mt-2 text-sm text-slate-600">
-                    No documents uploaded yet.
-                  </p>
-
-                </div>
-
-              ) : (
-
-                <div className="mt-4 space-y-2">
-
-                  {documents.map((doc) => (
-
-                    <div
-                      key={doc.id}
-                      className="flex items-center gap-3 rounded-xl border border-slate-200 p-3"
-                    >
-
-                      <div className="rounded-lg bg-slate-50 p-2 text-slate-500">
-                        <FileText size={18} />
-                      </div>
-
-                      <div className="min-w-0 flex-1">
-
-                        <p className="break-words text-sm font-medium text-slate-800">
-                          {doc.documentName}
-                        </p>
-
-                        <p className="mt-1 text-xs text-slate-400">
-                          {doc.documentType?.replaceAll("_", " ")} ·{" "}
-                          {doc.submissionStage}
-                        </p>
-
-                      </div>
-
-                      {doc.fileUrl && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            handleOpenDocument(doc)
-                          }
-                          disabled={
-                            openingDocumentId !== null
-                          }
-                          className="rounded-lg p-2 text-blue-600 hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
-                          aria-label={`Open ${doc.documentName}`}
-                          title="Open document"
-                        >
-
-                          {openingDocumentId === doc.id ? (
-                            <LoaderCircle
-                              size={17}
-                              className="animate-spin"
-                            />
-                          ) : (
-                            <ExternalLink size={17} />
-                          )}
-
-                        </button>
-                      )}
-
-                    </div>
-
-                  ))}
-
-                </div>
-
-              )}
-
-            </section>
-
-            {/* ==================================================
-                COMPLETION REQUEST
-            ================================================== */}
-
-            {canRequestCompletion && (
-              <section className="rounded-xl border border-blue-200 bg-blue-50 p-4">
-
-                <h3 className="font-semibold text-blue-900">
-                  Ready to complete your internship?
-                </h3>
-
-                <p className="mt-1 text-sm leading-6 text-blue-800">
-                  Upload your completion certificate, completion letter,
-                  and final report, then request mentor verification.
-                </p>
-
-                {missingCompletionDocuments.length > 0 && (
-                  <p className="mt-2 text-xs text-blue-700">
-                    Still needed:{" "}
-                    {missingCompletionDocuments
-                      .map((item) =>
-                        item
-                          .replaceAll("_", " ")
-                          .toLowerCase()
-                      )
-                      .join(", ")}
-                  </p>
-                )}
-
-                <button
-                  type="button"
-                  onClick={requestCompletion}
-                  disabled={
-                    requestingCompletion ||
-                    missingCompletionDocuments.length > 0
-                  }
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
-                >
-
-                  {requestingCompletion ? (
-                    <LoaderCircle
-                      size={16}
-                      className="animate-spin"
-                    />
-                  ) : (
-                    <Send size={16} />
-                  )}
-
-                  {requestingCompletion
-                    ? "Submitting..."
-                    : "Request Completion Verification"}
-
-                </button>
-
-              </section>
-            )}
-
-            {/* ==================================================
-                FOOTER
-            ================================================== */}
-
-            <div className="flex justify-end border-t border-slate-100 pt-4">
-
-              <button
-                type="button"
-                onClick={onClose}
-                className="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-              >
-                Close
-              </button>
-
-            </div>
-
-          </div>
-
-        </section>
-
-      </div>
-
-      {/* ======================================================
-          UPLOAD MODAL
-      ====================================================== */}
-
-      {uploadStage && (
-        <DocumentUploadModal
-          internship={internship}
-          initialStage={uploadStage}
-          onClose={() => setUploadStage(null)}
-          onUploaded={onRefresh}
-        />
-      )}
-
-    </>
+    <span
+      className={`inline-flex whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-medium ${
+        styles[status] || "bg-slate-100 text-slate-600"
+      }`}
+    >
+      {labels[status] || status || "Unknown"}
+    </span>
   );
 };
 
-// ==========================================================
-// INFO CARD
-// ==========================================================
-
-const Info = ({ Icon, label, value }) => (
-  <div className="flex items-start gap-3 rounded-xl bg-slate-50 p-3">
-
-    <Icon
-      size={17}
-      className="mt-0.5 shrink-0 text-slate-500"
-    />
-
-    <div className="min-w-0">
-
-      <p className="text-xs text-slate-500">
-        {label}
-      </p>
-
-      <p className="mt-1 break-words text-sm font-medium text-slate-800">
-        {value}
-      </p>
-
-    </div>
-
-  </div>
-);
-
-// ==========================================================
-// VERIFICATION CARD
-// ==========================================================
-
-const VerificationCard = ({
-  title,
-  status,
-  approved,
-  rejected,
-}) => {
-  const color = approved
-    ? "text-green-700 bg-green-50"
-    : rejected
-      ? "text-red-700 bg-red-50"
-      : "text-amber-700 bg-amber-50";
-
-  const Icon = approved
-    ? CheckCircle2
-    : Clock3;
-
-  return (
-    <div className="rounded-xl border border-slate-100 p-3">
-
-      <p className="text-xs text-slate-500">
-        {title}
-      </p>
-
-      <span
-        className={`mt-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${color}`}
-      >
-        <Icon size={13} />
-        {status}
-      </span>
-
-    </div>
-  );
-};
-
-export default InternshipDetailsModal;
+export default InternshipHistory;

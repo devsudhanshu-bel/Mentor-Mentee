@@ -1,3 +1,4 @@
+
 import { useCallback, useEffect, useState } from "react";
 
 import {
@@ -346,18 +347,18 @@ const CoCurricularActivityList = ({
 
   return (
     <>
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 md:p-5">
         {/* HEADER */}
 
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <h2 className="text-lg font-semibold text-slate-800">
+        <div className="mb-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="min-w-0 break-words text-base font-semibold text-slate-800 sm:text-lg">
             My Co-Curricular Activities
           </h2>
 
           <button
             type="button"
             onClick={openUploadModal}
-            className="flex h-9 shrink-0 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700"
+            className="flex h-10 w-full shrink-0 items-center justify-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto sm:text-sm"
           >
             <Plus size={15} />
             Upload Activity
@@ -367,7 +368,7 @@ const CoCurricularActivityList = ({
         {/* LOADING */}
 
         {loading ? (
-          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12">
+          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12 text-center">
             <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
 
             <p className="text-sm text-slate-500">
@@ -377,17 +378,20 @@ const CoCurricularActivityList = ({
         ) : loadError ? (
           /* ERROR STATE */
 
-          <div className="flex flex-col items-center justify-center rounded-lg border border-red-200 bg-red-50 px-5 py-10 text-center">
-            <AlertCircle size={25} className="mb-3 text-red-500" />
+          <div className="flex flex-col items-center justify-center rounded-lg border border-red-200 bg-red-50 px-4 py-8 text-center sm:px-5 sm:py-10">
+            <AlertCircle
+              size={25}
+              className="mb-3 shrink-0 text-red-500"
+            />
 
-            <p className="text-sm font-medium text-red-700">
+            <p className="max-w-full break-words text-sm font-medium text-red-700">
               {loadError}
             </p>
 
             <button
               type="button"
               onClick={handleRetry}
-              className="mt-4 flex h-9 items-center gap-2 rounded-md border border-red-200 bg-white px-4 text-xs font-medium text-red-700 transition hover:bg-red-100"
+              className="mt-4 flex h-10 items-center justify-center gap-2 rounded-md border border-red-200 bg-white px-4 text-xs font-medium text-red-700 transition hover:bg-red-100 sm:text-sm"
             >
               <RotateCcw size={14} />
               Try Again
@@ -396,16 +400,16 @@ const CoCurricularActivityList = ({
         ) : activities.length === 0 ? (
           /* EMPTY STATE */
 
-          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-6 py-12 text-center">
-            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center sm:px-6 sm:py-12">
+            <div className="mb-3 flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-50">
               <FileSearch size={23} className="text-blue-600" />
             </div>
 
-            <h3 className="text-sm font-semibold text-slate-700">
+            <h3 className="break-words text-sm font-semibold text-slate-700">
               No co-curricular activities yet
             </h3>
 
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 max-w-md break-words text-xs leading-relaxed text-slate-400 sm:text-sm">
               Upload your first certificate, activity record, or
               participation document.
             </p>
@@ -413,7 +417,7 @@ const CoCurricularActivityList = ({
             <button
               type="button"
               onClick={openUploadModal}
-              className="mt-4 flex h-9 items-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700"
+              className="mt-4 flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto sm:text-sm"
             >
               <Plus size={15} />
               Upload Activity
@@ -422,7 +426,7 @@ const CoCurricularActivityList = ({
         ) : (
           /* ACTIVITY LIST */
 
-          <div className="space-y-2.5">
+          <div className="min-w-0 space-y-2.5">
             {activities.map((activity) => (
               <CoCurricularActivityCard
                 key={activity.id}

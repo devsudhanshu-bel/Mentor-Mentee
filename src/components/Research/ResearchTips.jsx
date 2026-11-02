@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Lightbulb, Check } from "lucide-react";
 
@@ -10,12 +11,12 @@ const tips = [
 
 const ResearchTips = () => {
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+    <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
+      <div className="mb-4 flex items-center gap-2">
         <Lightbulb
-          size={16}
-          className="text-slate-600"
+          size={17}
+          className="shrink-0 text-slate-600"
           strokeWidth={2}
         />
 
@@ -29,15 +30,15 @@ const ResearchTips = () => {
         {tips.map((tip, index) => (
           <div
             key={index}
-            className="flex items-start gap-2"
+            className="flex min-w-0 items-start gap-2.5"
           >
             <Check
               size={14}
-              className="text-emerald-500 mt-0.5 flex-shrink-0"
+              className="mt-1 shrink-0 text-emerald-500"
               strokeWidth={3}
             />
 
-            <p className="text-xs text-slate-600 leading-5">
+            <p className="min-w-0 break-words text-xs leading-5 text-slate-600 sm:text-sm">
               {tip}
             </p>
           </div>

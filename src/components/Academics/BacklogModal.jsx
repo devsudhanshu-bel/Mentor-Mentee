@@ -1,6 +1,13 @@
-import React, { useEffect, useState } from "react";
 
-import { X, Plus, Pencil, Trash2, AlertCircle, Loader2 } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import {
+  X,
+  Plus,
+  Pencil,
+  Trash2,
+  AlertCircle,
+  Loader2,
+} from "lucide-react";
 
 import {
   getBacklogs,
@@ -22,36 +29,24 @@ const SEMESTERS = [
 
 const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
   const [backlogs, setBacklogs] = useState([]);
-
   const [loading, setLoading] = useState(false);
-
   const [saving, setSaving] = useState(false);
-
   const [error, setError] = useState("");
-
   const [success, setSuccess] = useState("");
 
   const [subjectCode, setSubjectCode] = useState("");
-
   const [subjectName, setSubjectName] = useState("");
-
   const [semesterNumber, setSemesterNumber] = useState("");
-
   const [editingId, setEditingId] = useState(null);
 
-  // =========================================================
-  // LOAD
-  // =========================================================
-
+  // LOAD BACKLOGS
   const loadBacklogs = async () => {
     try {
       setLoading(true);
       setError("");
 
       const response = await getBacklogs();
-
       const data = response?.data ?? response;
-
       const records = data?.backlogs ?? [];
 
       setBacklogs(
@@ -83,10 +78,7 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
     loadBacklogs();
   }, [isOpen]);
 
-  // =========================================================
-  // RESET
-  // =========================================================
-
+  // RESET FORM
   const resetForm = () => {
     setEditingId(null);
     setSubjectCode("");
@@ -95,10 +87,7 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
     setError("");
   };
 
-  // =========================================================
-  // SAVE
-  // =========================================================
-
+  // SAVE BACKLOG
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -106,9 +95,7 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
     setSuccess("");
 
     const cleanSubjectCode = subjectCode.trim().toUpperCase();
-
     const cleanSubjectName = subjectName.trim();
-
     const semester = Number(semesterNumber);
 
     if (!cleanSubjectCode) {
@@ -148,9 +135,7 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
       }
 
       resetForm();
-
       await loadBacklogs();
-
       onBacklogChange?.();
 
       setTimeout(() => {
@@ -165,27 +150,17 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
     }
   };
 
-  // =========================================================
-  // EDIT
-  // =========================================================
-
+  // EDIT BACKLOG
   const handleEdit = (backlog) => {
     setEditingId(backlog.id);
-
     setSubjectCode(backlog.subjectCode || "");
-
     setSubjectName(backlog.subjectName || "");
-
     setSemesterNumber(String(backlog.semesterNumber || ""));
-
     setError("");
     setSuccess("");
   };
 
-  // =========================================================
-  // DELETE
-  // =========================================================
-
+  // DELETE BACKLOG
   const handleDelete = async (backlogId) => {
     if (
       !window.confirm("Are you sure you want to remove this backlog record?")
@@ -203,7 +178,6 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
       setSuccess("Backlog removed successfully.");
 
       await loadBacklogs();
-
       onBacklogChange?.();
 
       setTimeout(() => {
@@ -218,30 +192,33 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
     }
   };
 
-  if (!isOpen) {
-    return null;
-  }
+  if (!isOpen) return null;
 
   const getSemesterLabel = (number) => {
-    const semester = SEMESTERS.find((item) => item.value === Number(number));
+    const semester = SEMESTERS.find(
+      (item) => item.value === Number(number),
+    );
 
     return semester?.label || `Semester ${number}`;
   };
 
   return (
-    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 px-4 py-6 backdrop-blur-sm">
-      <div className="w-full max-w-2xl overflow-hidden rounded-2xl bg-white shadow-2xl">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center overflow-y-auto bg-black/40 px-3 py-4 backdrop-blur-sm sm:px-5 sm:py-6">
+      <div className="my-auto flex max-h-[calc(100dvh-2rem)] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[90dvh] sm:rounded-3xl">
+
         {/* HEADER */}
-        <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
-              <AlertCircle size={20} className="text-blue-600" />
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-slate-100 px-4 py-4 sm:px-6 sm:py-5">
+          <div className="flex min-w-0 items-center gap-3">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 sm:h-11 sm:w-11">
+              <AlertCircle size={21} className="text-blue-600" />
             </div>
 
-            <div>
-              <h2 className="text-lg font-bold text-[#082B73]">Backlogs</h2>
+            <div className="min-w-0">
+              <h2 className="text-base font-bold text-[#082B73] sm:text-lg">
+                Backlogs
+              </h2>
 
-              <p className="mt-0.5 text-xs text-slate-500">
+              <p className="mt-0.5 text-[11px] leading-relaxed text-slate-500 sm:text-xs">
                 Manage your pending academic backlogs.
               </p>
             </div>
@@ -250,29 +227,38 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
           <button
             type="button"
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-100"
+            aria-label="Close backlog modal"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
           >
             <X size={19} />
           </button>
         </div>
 
         {/* BODY */}
-        <div className="max-h-[70vh] overflow-y-auto px-6 py-5">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6 sm:py-5">
+
+          {/* ERROR MESSAGE */}
           {error && (
-            <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs font-medium text-red-700">
-              {error}
+            <div className="mb-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-3 sm:px-4">
+              <AlertCircle size={16} className="mt-0.5 shrink-0 text-red-600" />
+              <p className="text-xs leading-relaxed text-red-700">
+                {error}
+              </p>
             </div>
           )}
 
+          {/* SUCCESS MESSAGE */}
           {success && (
-            <div className="mb-4 rounded-lg border border-green-200 bg-green-50 px-4 py-3 text-xs font-medium text-green-700">
-              {success}
+            <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-3 py-3 sm:px-4">
+              <p className="text-xs font-medium leading-relaxed text-green-700">
+                {success}
+              </p>
             </div>
           )}
 
           {/* FORM */}
-          <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="mb-4 flex items-center justify-between">
+          <div className="rounded-xl border border-slate-200 bg-slate-50 p-3 sm:rounded-2xl sm:p-5">
+            <div className="mb-4 flex items-center justify-between gap-2">
               <h3 className="text-sm font-semibold text-[#082B73]">
                 {editingId ? "Edit Backlog" : "Add Backlog"}
               </h3>
@@ -281,7 +267,7 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
                 <button
                   type="button"
                   onClick={resetForm}
-                  className="text-xs font-medium text-slate-500 hover:text-blue-600"
+                  className="shrink-0 text-[11px] font-semibold text-slate-500 transition hover:text-blue-600 sm:text-xs"
                 >
                   Cancel Edit
                 </button>
@@ -290,10 +276,10 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
 
             <form
               onSubmit={handleSubmit}
-              className="grid grid-cols-1 gap-4 md:grid-cols-2"
+              className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
             >
-              {/* CODE */}
-              <div>
+              {/* SUBJECT CODE */}
+              <div className="min-w-0">
                 <label className="mb-1.5 block text-xs font-medium text-slate-600">
                   Subject Code *
                 </label>
@@ -305,12 +291,12 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
                     setSubjectCode(event.target.value.toUpperCase())
                   }
                   placeholder="e.g. CSEAM731"
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:py-2.5"
                 />
               </div>
 
-              {/* NAME */}
-              <div>
+              {/* SUBJECT NAME */}
+              <div className="min-w-0">
                 <label className="mb-1.5 block text-xs font-medium text-slate-600">
                   Subject Name *
                 </label>
@@ -320,12 +306,12 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
                   value={subjectName}
                   onChange={(event) => setSubjectName(event.target.value)}
                   placeholder="e.g. Mathematics"
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:py-2.5"
                 />
               </div>
 
               {/* SEMESTER */}
-              <div className="md:col-span-2">
+              <div className="sm:col-span-2">
                 <label className="mb-1.5 block text-xs font-medium text-slate-600">
                   Semester *
                 </label>
@@ -333,7 +319,7 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
                 <select
                   value={semesterNumber}
                   onChange={(event) => setSemesterNumber(event.target.value)}
-                  className="w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-700 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3 py-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:py-2.5"
                 >
                   <option value="">Select semester</option>
 
@@ -345,12 +331,12 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
                 </select>
               </div>
 
-              {/* BUTTON */}
-              <div className="md:col-span-2">
+              {/* SUBMIT */}
+              <div className="sm:col-span-2">
                 <button
                   type="submit"
                   disabled={saving}
-                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#0B63F6] px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-60"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#0B63F6] px-4 py-3 text-xs font-semibold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 sm:py-2.5"
                 >
                   {saving ? (
                     <>
@@ -373,32 +359,34 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
             </form>
           </div>
 
-          {/* ACTIVE */}
+          {/* ACTIVE BACKLOGS */}
           <div className="mt-6">
-            <div className="mb-3 flex items-center justify-between">
+            <div className="mb-3 flex items-center justify-between gap-3">
               <h3 className="text-sm font-semibold text-[#082B73]">
                 Active Backlogs
               </h3>
 
-              <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-semibold text-blue-600">
+              <span className="rounded-full bg-blue-50 px-3 py-1 text-[11px] font-semibold text-blue-600">
                 {backlogs.length}
               </span>
             </div>
 
+            {/* LOADING */}
             {loading && (
-              <div className="flex items-center justify-center rounded-xl border border-slate-200 py-8">
-                <Loader2 size={20} className="animate-spin text-blue-600" />
+              <div className="flex items-center justify-center rounded-xl border border-slate-200 py-9">
+                <Loader2 size={22} className="animate-spin text-blue-600" />
               </div>
             )}
 
+            {/* EMPTY STATE */}
             {!loading && backlogs.length === 0 && (
-              <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-5 py-8 text-center">
+              <div className="rounded-xl border border-dashed border-slate-300 bg-slate-50 px-4 py-8 text-center sm:py-10">
                 <AlertCircle
-                  size={24}
+                  size={26}
                   className="mx-auto mb-2 text-slate-400"
                 />
 
-                <p className="text-sm font-medium text-slate-600">
+                <p className="text-sm font-semibold text-slate-600">
                   No active backlogs
                 </p>
 
@@ -408,34 +396,38 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
               </div>
             )}
 
+            {/* BACKLOG LIST */}
             {!loading && backlogs.length > 0 && (
               <div className="space-y-3">
                 {backlogs.map((backlog) => (
                   <div
                     key={backlog.id}
-                    className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3"
+                    className="rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-200 sm:flex sm:items-center sm:justify-between sm:gap-4 sm:px-4 sm:py-3"
                   >
+                    {/* DETAILS */}
                     <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="rounded-md bg-blue-50 px-2 py-1 text-[11px] font-bold text-blue-600">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="shrink-0 rounded-md bg-blue-50 px-2 py-1 text-[10px] font-bold text-blue-600 sm:text-[11px]">
                           {backlog.subjectCode || "N/A"}
                         </span>
 
-                        <p className="truncate text-sm font-semibold text-slate-700">
+                        <p className="min-w-0 break-words text-sm font-semibold text-slate-700">
                           {backlog.subjectName}
                         </p>
                       </div>
 
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-2 text-[11px] text-slate-500 sm:mt-1">
                         {getSemesterLabel(backlog.semesterNumber)}
                       </p>
                     </div>
 
-                    <div className="ml-4 flex shrink-0 gap-2">
+                    {/* ACTIONS */}
+                    <div className="mt-3 flex gap-2 border-t border-slate-100 pt-3 sm:mt-0 sm:shrink-0 sm:border-0 sm:pt-0">
                       <button
                         type="button"
                         onClick={() => handleEdit(backlog)}
-                        className="flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-600"
+                        disabled={saving}
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2 text-xs font-semibold text-blue-600 transition hover:bg-blue-100 disabled:opacity-50 sm:flex-none"
                       >
                         <Pencil size={13} />
                         Edit
@@ -444,7 +436,8 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
                       <button
                         type="button"
                         onClick={() => handleDelete(backlog.id)}
-                        className="flex items-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600"
+                        disabled={saving}
+                        className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-100 disabled:opacity-50 sm:flex-none"
                       >
                         <Trash2 size={13} />
                         Remove
@@ -458,11 +451,11 @@ const BacklogModal = ({ isOpen, onClose, onBacklogChange }) => {
         </div>
 
         {/* FOOTER */}
-        <div className="flex justify-end border-t border-slate-100 px-6 py-4">
+        <div className="flex shrink-0 justify-end border-t border-slate-100 bg-white px-4 py-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-slate-200 px-5 py-2.5 text-xs font-semibold text-slate-600"
+            className="w-full rounded-xl border border-slate-200 px-5 py-3 text-xs font-semibold text-slate-600 transition hover:bg-slate-50 sm:w-auto sm:py-2.5"
           >
             Close
           </button>

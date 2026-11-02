@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import {
   Mail,
@@ -6,1044 +7,608 @@ import {
   Save,
   Users,
   Pencil,
+  CheckCircle2,
+  LockKeyhole,
+  MessageCircle,
+  Globe,
+  Info,
 } from "lucide-react";
 
 import api from "../../api/axios";
 
 const ContactDetailsCard = () => {
-
-  //--------------------------------------------------
   // Contact Details State
-  //--------------------------------------------------
-
   const [contactData, setContactData] = useState({
-
-    // Address
-
     permanentAddress: "",
     currentAddress: "",
     addressType: "",
     durationAtCurrentAddress: "",
-
-    // Contact
 
     personalMobile: "",
     alternateMobile: "",
     personalEmail: "",
     alternateEmail: "",
 
-    // Social
-
     whatsappNumber: "",
     telegramUsername: "",
     linkedInProfile: "",
     githubProfile: "",
 
-    // Preferences
-
     preferredContactMethod: "",
     preferredContactTime: "",
     communicationEmailPreference: "",
     allowWhatsappCommunication: false,
-
   });
 
-  //--------------------------------------------------
   // UI State
-  //--------------------------------------------------
+  const [loading, setLoading] = useState(true);
+  const [profileExists, setProfileExists] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
 
-  const [loading, setLoading] =
-    useState(true);
-
-  const [profileExists, setProfileExists] =
-    useState(false);
-
-  const [isEditing, setIsEditing] =
-    useState(false);
-
-  //--------------------------------------------------
   // Initial Load
-  //--------------------------------------------------
-
   useEffect(() => {
     fetchContactDetails();
   }, []);
 
-  //--------------------------------------------------
   // Fetch Contact Details
-  //--------------------------------------------------
-
   const fetchContactDetails = async () => {
-
     try {
-
-      const response =
-        await api.get(
-          "/mentee/profile/contact"
-        );
+      const response = await api.get("/mentee/profile/contact");
 
       if (response.data.data) {
-
-        setContactData(response.data.data);
+        setContactData((prev) => ({
+          ...prev,
+          ...response.data.data,
+        }));
 
         setProfileExists(true);
-
         setIsEditing(false);
-
       }
-
     } catch (error) {
-
       console.error(error);
-
       setProfileExists(false);
-
       setIsEditing(true);
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
-  //--------------------------------------------------
-  // Handle Change
-  //--------------------------------------------------
-
+  // Handle Input Change
   const handleChange = (e) => {
-
-    const {
-      name,
-      value,
-      type,
-      checked,
-    } = e.target;
+    const { name, value, type, checked } = e.target;
 
     setContactData((prev) => ({
       ...prev,
-      [name]:
-        type === "checkbox"
-          ? checked
-          : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
-
   };
 
-  //--------------------------------------------------
-  // Save
-  //--------------------------------------------------
-
+  // Save Contact Details
   const handleSave = async () => {
-
     try {
+      setSaving(true);
 
       if (profileExists) {
-
-        await api.put(
-          "/mentee/profile/contact",
-          contactData
-        );
-
+        await api.put("/mentee/profile/contact", contactData);
       } else {
-
-        await api.post(
-          "/mentee/profile/contact",
-          contactData
-        );
-
+        await api.post("/mentee/profile/contact", contactData);
         setProfileExists(true);
-
       }
 
       setIsEditing(false);
-
-      fetchContactDetails();
-
+      await fetchContactDetails();
     } catch (error) {
-
       console.error(error);
-
+    } finally {
+      setSaving(false);
     }
-
   };
 
-  //--------------------------------------------------
-  // Edit
-  //--------------------------------------------------
-
+  // Edit Details
   const handleEdit = () => {
-
     setIsEditing(true);
-
   };
 
-  //--------------------------------------------------
-  // Loading
-  //--------------------------------------------------
+  const isDisabled = profileExists && !isEditing;
 
+  // Common Styling
+  const fieldClass = `
+    h-11 w-full rounded-xl border border-slate-200
+    bg-white px-3.5 text-sm text-slate-800
+    outline-none transition-all duration-200
+    placeholder:text-slate-400
+    focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+    disabled:cursor-not-allowed disabled:bg-slate-50
+    disabled:text-slate-600 disabled:opacity-100
+  `;
+
+  const labelClass =
+    "mb-1.5 block text-xs font-semibold tracking-wide text-slate-600";
+
+  // Reusable Input
+  const renderInput = (label, name, type = "text", placeholder = "") => (
+    <div className="min-w-0">
+      <label htmlFor={name} className={labelClass}>
+        {label}
+      </label>
+
+      <input
+        id={name}
+        type={type}
+        name={name}
+        value={contactData[name] || ""}
+        onChange={handleChange}
+        disabled={isDisabled}
+        placeholder={placeholder || `Enter ${label.toLowerCase()}`}
+        className={fieldClass}
+      />
+    </div>
+  );
+
+  // Reusable Select
+  const renderSelect = (label, name, options, placeholder) => (
+    <div className="min-w-0">
+      <label htmlFor={name} className={labelClass}>
+        {label}
+      </label>
+
+      <select
+        id={name}
+        name={name}
+        value={contactData[name] || ""}
+        onChange={handleChange}
+        disabled={isDisabled}
+        className={fieldClass}
+      >
+        <option value="">{placeholder}</option>
+
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  // Reusable Textarea
+  const renderTextarea = (label, name) => (
+    <div className="min-w-0">
+      <label htmlFor={name} className={labelClass}>
+        {label}
+      </label>
+
+      <textarea
+        id={name}
+        rows={3}
+        name={name}
+        value={contactData[name] || ""}
+        onChange={handleChange}
+        disabled={isDisabled}
+        placeholder={`Enter ${label.toLowerCase()}`}
+        className="
+          min-h-[88px] w-full resize-y rounded-xl
+          border border-slate-200 bg-white px-3.5 py-3
+          text-sm text-slate-800 outline-none
+          transition-all duration-200
+          placeholder:text-slate-400
+          focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+          disabled:resize-none disabled:cursor-not-allowed
+          disabled:bg-slate-50 disabled:text-slate-600
+        "
+      />
+    </div>
+  );
+
+  // Loading Skeleton
   if (loading) {
-
     return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <div className="mb-6 h-6 w-48 animate-pulse rounded-lg bg-slate-100" />
 
-      <div className="bg-white rounded-2xl p-10 text-center">
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+          {[1, 2].map((card) => (
+            <div
+              key={card}
+              className="space-y-4 rounded-2xl border border-slate-100 p-5"
+            >
+              <div className="h-5 w-36 animate-pulse rounded bg-slate-100" />
 
-        Loading...
-
+              {Array.from({ length: 5 }).map((_, index) => (
+                <div key={index}>
+                  <div className="mb-2 h-3 w-24 animate-pulse rounded bg-slate-100" />
+                  <div className="h-11 animate-pulse rounded-xl bg-slate-100" />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
-
     );
-
   }
 
   return (
+    <div className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
 
-    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm p-4">
+      {/* Header */}
+      <div className="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+        <div className="flex items-center gap-3">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+            <Mail size={21} strokeWidth={2} />
+          </div>
 
-      {/* ================= Header ================= */}
+          <div>
+            <h2 className="text-base font-bold text-slate-800 sm:text-lg">
+              Contact Details
+            </h2>
 
-      <div className="mb-4">
-
-        <div className="flex items-center gap-2">
-
-          <Mail
-            size={18}
-            className="text-blue-600"
-          />
-
-          <h2 className="text-lg font-semibold text-blue-600">
-
-            Contact Details
-
-          </h2>
-
+            <p className="mt-0.5 text-xs text-slate-500">
+              Manage your addresses, contact information and communication preferences
+            </p>
+          </div>
         </div>
 
-        <p className="text-[13px] text-slate-500 mt-1">
+        <div className="flex items-center gap-2 self-start">
+          {profileExists && !isEditing && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700">
+              <CheckCircle2 size={14} />
+              Details saved
+            </span>
+          )}
 
-          Manage your contact information
-
-        </p>
-
+          {isEditing && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-3 py-1.5 text-xs font-semibold text-amber-700">
+              <Pencil size={13} />
+              Editing
+            </span>
+          )}
+        </div>
       </div>
 
-      {/* ================= Top Cards ================= */}
+      <div className="space-y-7 px-5 py-6 sm:px-7">
 
-      <div className="grid grid-cols-2 gap-4">
-
-        {/* ================= Address ================= */}
-
-        <div className="border border-slate-200 rounded-2xl p-4">
-
-          <div className="flex items-center gap-2 mb-4">
-
-            <MapPin
-              size={17}
-              className="text-blue-600"
-            />
-
-            <h3 className="text-base font-semibold text-blue-600">
-
-              Address Details
-
+        {/* Address and Contact Information */}
+        <section>
+          <div className="mb-4">
+            <h3 className="text-sm font-bold text-slate-800">
+              Address & Contact Information
             </h3>
 
-          </div>
-                    {/* ================= Permanent Address ================= */}
-
-          <div>
-
-            <label className="block text-[11px] font-medium text-slate-600 mb-1">
-              Permanent Address
-            </label>
-
-            <textarea
-              rows={2}
-              name="permanentAddress"
-              value={contactData.permanentAddress || ""}
-              onChange={handleChange}
-              disabled={profileExists && !isEditing}
-              className="
-                w-full
-                rounded-lg
-                border
-                border-slate-200
-                px-3
-                py-2
-                text-[13px]
-                resize-none
-                outline-none
-                focus:border-blue-500
-                disabled:bg-slate-50
-              "
-            />
-
+            <p className="mt-1 text-xs text-slate-400">
+              Your residential address and primary communication details
+            </p>
           </div>
 
-          {/* ================= Same as Permanent ================= */}
+          <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
 
-          <div className="mt-3">
+            {/* Address Details */}
+            <div className="min-w-0 rounded-2xl border border-slate-200 p-4 sm:p-5">
+              <div className="mb-5 flex items-center gap-3 border-b border-slate-100 pb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+                  <MapPin size={19} />
+                </div>
 
-            <label className="flex items-center gap-2 text-[12px] text-slate-600">
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">
+                    Address Details
+                  </h4>
 
-              <input
-                type="checkbox"
-                disabled={profileExists && !isEditing}
-                checked={
-                  contactData.permanentAddress !== "" &&
-                  contactData.permanentAddress ===
-                    contactData.currentAddress
-                }
-                onChange={(e) => {
+                  <p className="mt-0.5 text-xs text-slate-400">
+                    Your current and permanent residence
+                  </p>
+                </div>
+              </div>
 
-                  if (e.target.checked) {
+              <div className="space-y-4">
+                {renderTextarea("Permanent Address", "permanentAddress")}
 
-                    setContactData((prev) => ({
-                      ...prev,
-                      currentAddress:
-                        prev.permanentAddress,
-                    }));
+                <label className="flex w-fit cursor-pointer items-center gap-2.5 text-xs font-medium text-slate-600">
+                  <input
+                    type="checkbox"
+                    checked={
+                      contactData.permanentAddress !== "" &&
+                      contactData.permanentAddress === contactData.currentAddress
+                    }
+                    disabled={isDisabled}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setContactData((prev) => ({
+                          ...prev,
+                          currentAddress: prev.permanentAddress,
+                        }));
+                      } else {
+                        setContactData((prev) => ({
+                          ...prev,
+                          currentAddress: "",
+                        }));
+                      }
+                    }}
+                    className="h-4 w-4 rounded border-slate-300 accent-blue-600"
+                  />
 
-                  } else {
+                  Same as Permanent Address
+                </label>
 
-                    setContactData((prev) => ({
-                      ...prev,
-                      currentAddress: "",
-                    }));
+                {renderTextarea("Current Address", "currentAddress")}
 
-                  }
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {renderSelect(
+                    "Address Type",
+                    "addressType",
+                    [
+                      { value: "HOME", label: "Home" },
+                      { value: "HOSTEL", label: "Hostel" },
+                      { value: "RENTED", label: "Rented" },
+                      { value: "OTHER", label: "Other" },
+                    ],
+                    "Select Address Type"
+                  )}
 
-                }}
-                className="w-4 h-4 accent-blue-600"
-              />
-
-              Same as Permanent Address
-
-            </label>
-
-          </div>
-
-          {/* ================= Current Address ================= */}
-
-          <div className="mt-4">
-
-            <label className="block text-[11px] font-medium text-slate-600 mb-1">
-              Current Address
-            </label>
-
-            <textarea
-              rows={2}
-              name="currentAddress"
-              value={contactData.currentAddress || ""}
-              onChange={handleChange}
-              disabled={profileExists && !isEditing}
-              className="
-                w-full
-                rounded-lg
-                border
-                border-slate-200
-                px-3
-                py-2
-                text-[13px]
-                resize-none
-                outline-none
-                focus:border-blue-500
-                disabled:bg-slate-50
-              "
-            />
-
-          </div>
-
-          {/* ================= Bottom ================= */}
-
-          <div className="grid grid-cols-2 gap-4 mt-4">
-
-            {/* Address Type */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Address Type
-              </label>
-
-              <select
-                name="addressType"
-                value={contactData.addressType || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              >
-                <option value="">
-                  Select Address Type
-                </option>
-
-                <option value="HOME">
-                  Home
-                </option>
-
-                <option value="HOSTEL">
-                  Hostel
-                </option>
-
-                <option value="RENTED">
-                  Rented
-                </option>
-
-                <option value="OTHER">
-                  Other
-                </option>
-
-              </select>
-
+                  {renderInput(
+                    "Duration at Current Address",
+                    "durationAtCurrentAddress",
+                    "text",
+                    "Eg. Since July 2023"
+                  )}
+                </div>
+              </div>
             </div>
 
-            {/* Duration */}
+            {/* Contact Information */}
+            <div className="min-w-0 rounded-2xl border border-slate-200 p-4 sm:p-5">
+              <div className="mb-5 flex items-center gap-3 border-b border-slate-100 pb-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600">
+                  <Phone size={19} />
+                </div>
 
-            <div>
+                <div>
+                  <h4 className="text-sm font-bold text-slate-800">
+                    Contact Information
+                  </h4>
 
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Duration at Current Address
-              </label>
+                  <p className="mt-0.5 text-xs text-slate-400">
+                    Your phone numbers and email addresses
+                  </p>
+                </div>
+              </div>
 
-              <input
-                type="text"
-                name="durationAtCurrentAddress"
-                value={
-                  contactData.durationAtCurrentAddress || ""
-                }
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                placeholder="Eg. Since July 2023"
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
+              <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2">
+                {renderInput("Personal Mobile Number", "personalMobile", "tel")}
+                {renderInput("Alternate Mobile Number", "alternateMobile", "tel")}
+                {renderInput("Personal Email", "personalEmail", "email")}
+                {renderInput("Alternate Email", "alternateEmail", "email")}
+                {renderInput("WhatsApp Number", "whatsappNumber", "tel")}
+              </div>
             </div>
-
           </div>
+        </section>
 
-        </div>
-                {/* ================= Contact Information ================= */}
+        <div className="border-t border-slate-100" />
 
-        <div className="border border-slate-200 rounded-2xl p-4">
-
-          <div className="flex items-center gap-2 mb-4">
-
-            <Phone
-              size={17}
-              className="text-blue-600"
-            />
-
-            <h3 className="text-base font-semibold text-blue-600">
-              Contact Information
+        {/* Social & Online Profiles */}
+        <section>
+          <div className="mb-4">
+            <h3 className="text-sm font-bold text-slate-800">
+              Social & Online Profiles
             </h3>
 
+            <p className="mt-1 text-xs text-slate-400">
+              Add your online profiles to make professional communication easier
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-slate-200 p-4 sm:p-5">
+            <div className="mb-5 flex items-center gap-3 border-b border-slate-100 pb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+                <Globe size={19} />
+              </div>
 
-            {/* Personal Mobile */}
+              <div>
+                <h4 className="text-sm font-bold text-slate-800">
+                  Online Presence
+                </h4>
 
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Personal Mobile Number
-              </label>
-
-              <input
-                type="text"
-                name="personalMobile"
-                value={contactData.personalMobile || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
+                <p className="mt-0.5 text-xs text-slate-400">
+                  Your social and professional profiles
+                </p>
+              </div>
             </div>
 
-            {/* Alternate Mobile */}
+            <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 xl:grid-cols-3">
+              {renderInput(
+                "Telegram Username",
+                "telegramUsername",
+                "text",
+                "@username"
+              )}
 
-            <div>
+              {renderInput(
+                "LinkedIn Profile",
+                "linkedInProfile",
+                "url",
+                "https://linkedin.com/in/..."
+              )}
 
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Alternate Mobile Number
-              </label>
-
-              <input
-                type="text"
-                name="alternateMobile"
-                value={contactData.alternateMobile || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
+              {renderInput(
+                "GitHub Profile",
+                "githubProfile",
+                "url",
+                "https://github.com/username"
+              )}
             </div>
+          </div>
+        </section>
 
-            {/* Personal Email */}
+        <div className="border-t border-slate-100" />
 
-            <div>
+        {/* Communication Preferences */}
+        <section>
+          <div className="mb-4">
+            <h3 className="text-sm font-bold text-slate-800">
+              Communication Preferences
+            </h3>
 
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Personal Email
-              </label>
-
-              <input
-                type="email"
-                name="personalEmail"
-                value={contactData.personalEmail || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
-            </div>
-
-            {/* Alternate Email */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Alternate Email
-              </label>
-
-              <input
-                type="email"
-                name="alternateEmail"
-                value={contactData.alternateEmail || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
-            </div>
-
-            {/* WhatsApp */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                WhatsApp Number
-              </label>
-
-              <input
-                type="text"
-                name="whatsappNumber"
-                value={contactData.whatsappNumber || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
-            </div>
-
-            {/* Telegram */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                Telegram Username
-              </label>
-
-              <input
-                type="text"
-                name="telegramUsername"
-                value={contactData.telegramUsername || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                placeholder="@username"
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
-            </div>
-
-            {/* LinkedIn */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                LinkedIn Profile
-              </label>
-
-              <input
-                type="text"
-                name="linkedInProfile"
-                value={contactData.linkedInProfile || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                placeholder="https://linkedin.com/in/..."
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
-            </div>
-
-            {/* GitHub */}
-
-            <div>
-
-              <label className="block text-[11px] font-medium text-slate-600 mb-1">
-                GitHub Profile
-              </label>
-
-              <input
-                type="text"
-                name="githubProfile"
-                value={contactData.githubProfile || ""}
-                onChange={handleChange}
-                disabled={profileExists && !isEditing}
-                placeholder="https://github.com/username"
-                className="
-                  w-full
-                  h-9
-                  rounded-lg
-                  border
-                  border-slate-200
-                  px-3
-                  text-[13px]
-                  outline-none
-                  focus:border-blue-500
-                  disabled:bg-slate-50
-                "
-              />
-
-            </div>
-
+            <p className="mt-1 text-xs text-slate-400">
+              Choose how and when you prefer to receive communications
+            </p>
           </div>
 
-        </div>
+          <div className="rounded-2xl border border-slate-200 p-4 sm:p-5">
+            <div className="mb-5 flex items-center gap-3 border-b border-slate-100 pb-4">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
+                <MessageCircle size={19} />
+              </div>
 
-      </div>
-            {/* ================= Additional Contact ================= */}
+              <div>
+                <h4 className="text-sm font-bold text-slate-800">
+                  Contact Preferences
+                </h4>
 
-      <div className="mt-4 border border-slate-200 rounded-2xl p-4">
+                <p className="mt-0.5 text-xs text-slate-400">
+                  Set your preferred communication channels
+                </p>
+              </div>
+            </div>
 
-        <div className="flex items-center gap-2 mb-4">
+            <div className="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 xl:grid-cols-3">
+              {renderSelect(
+                "Preferred Contact Method",
+                "preferredContactMethod",
+                [
+                  { value: "MOBILE", label: "Mobile" },
+                  { value: "EMAIL", label: "Email" },
+                  { value: "WHATSAPP", label: "WhatsApp" },
+                ],
+                "Select Method"
+              )}
 
-          <Users
-            size={17}
-            className="text-blue-600"
-          />
+              {renderInput(
+                "Preferred Contact Time",
+                "preferredContactTime",
+                "text",
+                "Eg. 6 PM - 9 PM"
+              )}
 
-          <h3 className="text-base font-semibold text-blue-600">
+              {renderSelect(
+                "Communication Email Preference",
+                "communicationEmailPreference",
+                [
+                  { value: "PERSONAL_EMAIL", label: "Personal Email" },
+                  { value: "UNIVERSITY_EMAIL", label: "University Email" },
+                ],
+                "Select Email"
+              )}
+            </div>
 
-            Additional Contact
+            {/* WhatsApp Toggle */}
+            <div className="mt-5 flex flex-col gap-3 rounded-xl border border-slate-100 bg-slate-50/70 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-start gap-3">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600">
+                  <MessageCircle size={17} />
+                </div>
 
-          </h3>
+                <div>
+                  <p className="text-sm font-semibold text-slate-800">
+                    WhatsApp Communication
+                  </p>
 
-        </div>
+                  <p className="mt-1 text-xs leading-relaxed text-slate-500">
+                    Allow the university to contact you through WhatsApp.
+                  </p>
+                </div>
+              </div>
 
-        <div className="grid grid-cols-4 gap-4">
-
-          {/* Preferred Contact Method */}
-
-          <div>
-
-            <label className="block text-[11px] font-medium text-slate-600 mb-1">
-              Preferred Contact Method
-            </label>
-
-            <select
-              name="preferredContactMethod"
-              value={contactData.preferredContactMethod || ""}
-              onChange={handleChange}
-              disabled={profileExists && !isEditing}
-              className="
-                w-full
-                h-9
-                rounded-lg
-                border
-                border-slate-200
-                px-3
-                text-[13px]
-                outline-none
-                focus:border-blue-500
-                disabled:bg-slate-50
-              "
-            >
-              <option value="">
-                Select Method
-              </option>
-
-              <option value="MOBILE">
-                Mobile
-              </option>
-
-              <option value="EMAIL">
-                Email
-              </option>
-
-              <option value="WHATSAPP">
-                WhatsApp
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* Preferred Contact Time */}
-
-          <div>
-
-            <label className="block text-[11px] font-medium text-slate-600 mb-1">
-              Preferred Contact Time
-            </label>
-
-            <input
-              type="text"
-              name="preferredContactTime"
-              value={contactData.preferredContactTime || ""}
-              onChange={handleChange}
-              disabled={profileExists && !isEditing}
-              placeholder="Eg. 6 PM - 9 PM"
-              className="
-                w-full
-                h-9
-                rounded-lg
-                border
-                border-slate-200
-                px-3
-                text-[13px]
-                outline-none
-                focus:border-blue-500
-                disabled:bg-slate-50
-              "
-            />
-
-          </div>
-
-          {/* Communication Email Preference */}
-
-          <div>
-
-            <label className="block text-[11px] font-medium text-slate-600 mb-1">
-              Communication Email Preference
-            </label>
-
-            <select
-              name="communicationEmailPreference"
-              value={
-                contactData.communicationEmailPreference || ""
-              }
-              onChange={handleChange}
-              disabled={profileExists && !isEditing}
-              className="
-                w-full
-                h-9
-                rounded-lg
-                border
-                border-slate-200
-                px-3
-                text-[13px]
-                outline-none
-                focus:border-blue-500
-                disabled:bg-slate-50
-              "
-            >
-              <option value="">
-                Select Email
-              </option>
-
-              <option value="PERSONAL_EMAIL">
-                Personal Email
-              </option>
-
-              <option value="UNIVERSITY_EMAIL">
-                University Email
-              </option>
-
-            </select>
-
-          </div>
-
-          {/* Allow WhatsApp Communication */}
-
-          <div>
-
-            <label className="block text-[11px] font-medium text-slate-600 mb-2">
-              Allow Communication on WhatsApp
-            </label>
-
-            <div className="flex items-center h-9">
-
-              <label className="flex items-center cursor-pointer">
+              <label className="inline-flex cursor-pointer items-center gap-3 self-start sm:self-auto">
+                <span className="text-xs font-semibold text-slate-600">
+                  {contactData.allowWhatsappCommunication ? "Enabled" : "Disabled"}
+                </span>
 
                 <input
                   type="checkbox"
                   name="allowWhatsappCommunication"
-                  checked={
-                    contactData.allowWhatsappCommunication
-                  }
+                  checked={Boolean(contactData.allowWhatsappCommunication)}
                   onChange={handleChange}
-                  disabled={profileExists && !isEditing}
+                  disabled={isDisabled}
                   className="sr-only"
                 />
 
-                <div
+                <span
                   className={`
-                    relative
-                    w-11
-                    h-6
-                    rounded-full
-                    transition-colors
-                    ${
-                      contactData.allowWhatsappCommunication
-                        ? "bg-blue-600"
-                        : "bg-slate-300"
-                    }
-                    ${
-                      profileExists && !isEditing
-                        ? "opacity-70"
-                        : ""
-                    }
+                    relative h-6 w-11 rounded-full transition-colors duration-200
+                    ${contactData.allowWhatsappCommunication ? "bg-blue-600" : "bg-slate-300"}
+                    ${isDisabled ? "cursor-not-allowed opacity-70" : ""}
                   `}
                 >
-
                   <span
                     className={`
-                      absolute
-                      top-0.5
-                      h-5
-                      w-5
-                      rounded-full
-                      bg-white
-                      shadow
-                      transition-all
-                      ${
-                        contactData.allowWhatsappCommunication
-                          ? "right-0.5"
-                          : "left-0.5"
-                      }
+                      absolute top-0.5 h-5 w-5 rounded-full bg-white shadow-sm
+                      transition-all duration-200
+                      ${contactData.allowWhatsappCommunication ? "left-[22px]" : "left-0.5"}
                     `}
                   />
-
-                </div>
-
+                </span>
               </label>
-
             </div>
-
           </div>
+        </section>
 
+        {/* Information Notice */}
+        <div className="flex items-start gap-3 rounded-xl border border-blue-100 bg-blue-50/70 px-4 py-3.5">
+          <Info size={17} className="mt-0.5 shrink-0 text-blue-600" />
+
+          <p className="text-xs leading-relaxed text-blue-800">
+            Please ensure that your contact information is accurate and up to
+            date. Your preferences will help the university communicate with
+            you through your chosen channels.
+          </p>
         </div>
-                {/* ================= Footer ================= */}
+      </div>
 
-        <div className="flex justify-end mt-5">
+      {/* Footer */}
+      <div className="flex flex-col-reverse gap-3 border-t border-slate-100 bg-slate-50/70 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+        <div className="flex items-center gap-2 text-xs text-slate-400">
+          <LockKeyhole size={14} />
+          Your contact information is kept private.
+        </div>
 
+        <div className="flex w-full gap-3 sm:w-auto">
           {profileExists ? (
-
             isEditing ? (
-
               <button
                 type="button"
                 onClick={handleSave}
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  h-9
-                  px-5
-                  rounded-lg
-                  bg-gradient-to-r
-                  from-blue-600
-                  to-blue-500
-                  text-white
-                  text-[13px]
-                  font-medium
-                  shadow-md
-                  hover:shadow-lg
-                  transition
-                "
+                disabled={saving}
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               >
-
-                <Save size={15} />
-
-                <span>
-
-                  Save Changes
-
-                </span>
-
+                <Save size={16} />
+                {saving ? "Saving..." : "Save Changes"}
               </button>
-
             ) : (
-
               <button
                 type="button"
                 onClick={handleEdit}
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  h-9
-                  px-5
-                  rounded-lg
-                  bg-gradient-to-r
-                  from-amber-500
-                  to-amber-400
-                  text-white
-                  text-[13px]
-                  font-medium
-                  shadow-md
-                  hover:shadow-lg
-                  transition
-                "
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-semibold text-white shadow-sm transition-all hover:bg-blue-700 hover:shadow-md sm:w-auto"
               >
-
-                <Pencil size={15} />
-
-                <span>
-
-                  Edit Details
-
-                </span>
-
+                <Pencil size={16} />
+                Edit Details
               </button>
-
             )
-
           ) : (
-
             <button
               type="button"
               onClick={handleSave}
-              className="
-                flex
-                items-center
-                gap-2
-                h-9
-                px-5
-                rounded-lg
-                bg-gradient-to-r
-                from-green-600
-                to-green-500
-                text-white
-                text-[13px]
-                font-medium
-                shadow-md
-                hover:shadow-lg
-                transition
-              "
+              disabled={saving}
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-6 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
-
-              <Save size={15} />
-
-              <span>
-
-                Create Details
-
-              </span>
-
+              <Save size={16} />
+              {saving ? "Creating..." : "Create Details"}
             </button>
-
           )}
-
         </div>
-
       </div>
-
     </div>
-
   );
-
 };
 
 export default ContactDetailsCard;

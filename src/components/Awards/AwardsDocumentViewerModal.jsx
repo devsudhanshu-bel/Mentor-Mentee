@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 import {
@@ -255,17 +256,17 @@ const AwardsDocumentViewerModal = ({
   const renderDocument = () => {
     if (!document?.fileUrl) {
       return (
-        <div className="h-full flex flex-col items-center justify-center text-slate-500">
+        <div className="flex h-full flex-col items-center justify-center px-4 text-center text-slate-500">
           <FileText
             size={48}
-            className="text-slate-300 mb-3"
+            className="mb-3 text-slate-300"
           />
 
           <p className="text-sm font-medium">
             Document preview unavailable
           </p>
 
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="mt-1 text-xs text-slate-400">
             The document URL is not available.
           </p>
         </div>
@@ -278,10 +279,10 @@ const AwardsDocumentViewerModal = ({
 
     if (isLoading) {
       return (
-        <div className="h-full flex flex-col items-center justify-center text-slate-500">
+        <div className="flex h-full flex-col items-center justify-center px-4 text-center text-slate-500">
           <Loader2
             size={28}
-            className="animate-spin text-blue-600 mb-3"
+            className="mb-3 animate-spin text-blue-600"
           />
 
           <p className="text-sm">
@@ -297,17 +298,17 @@ const AwardsDocumentViewerModal = ({
 
     if (previewError) {
       return (
-        <div className="h-full flex flex-col items-center justify-center text-center p-6">
+        <div className="flex h-full flex-col items-center justify-center px-4 py-6 text-center">
           <FileText
             size={48}
-            className="text-red-400 mb-3"
+            className="mb-3 text-red-400"
           />
 
           <p className="text-sm font-medium text-slate-700">
             Document unavailable
           </p>
 
-          <p className="text-xs text-slate-400 mt-2 max-w-md">
+          <p className="mt-2 max-w-md break-words text-xs leading-5 text-slate-400">
             {previewError}
           </p>
         </div>
@@ -327,7 +328,7 @@ const AwardsDocumentViewerModal = ({
         <iframe
           src={previewState.url}
           title={document.documentName}
-          className="w-full h-full border-0"
+          className="h-full w-full border-0"
         />
       );
     }
@@ -338,11 +339,11 @@ const AwardsDocumentViewerModal = ({
 
     if (isImage) {
       return (
-        <div className="relative w-full h-full overflow-auto flex items-center justify-center p-6 bg-slate-100">
+        <div className="flex h-full w-full items-center justify-center overflow-auto bg-slate-100 p-3 sm:p-6">
           <img
             src={previewState.url}
             alt={document.documentName}
-            className="max-w-full max-h-full object-contain rounded-lg shadow-sm"
+            className="max-h-full max-w-full rounded-lg object-contain shadow-sm"
           />
         </div>
       );
@@ -354,11 +355,12 @@ const AwardsDocumentViewerModal = ({
 
     if (isVideo) {
       return (
-        <div className="w-full h-full flex items-center justify-center bg-black p-6">
+        <div className="flex h-full w-full items-center justify-center bg-black p-3 sm:p-6">
           <video
             src={previewState.url}
             controls
-            className="max-w-full max-h-full"
+            playsInline
+            className="max-h-full max-w-full"
           >
             Your browser does not support video playback.
           </video>
@@ -372,16 +374,16 @@ const AwardsDocumentViewerModal = ({
 
     if (isAudio) {
       return (
-        <div className="w-full h-full flex items-center justify-center">
-          <div className="w-full max-w-xl p-8 text-center">
-            <div className="w-16 h-16 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-5">
+        <div className="flex h-full w-full items-center justify-center px-4">
+          <div className="w-full max-w-xl p-4 text-center sm:p-8">
+            <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-blue-50">
               <FileText
                 size={30}
                 className="text-blue-600"
               />
             </div>
 
-            <p className="text-sm font-medium text-slate-700 mb-5">
+            <p className="mb-5 break-words text-sm font-medium text-slate-700">
               {document.documentName}
             </p>
 
@@ -400,8 +402,8 @@ const AwardsDocumentViewerModal = ({
     // ======================================================
 
     return (
-      <div className="h-full flex flex-col items-center justify-center text-center p-6">
-        <div className="w-16 h-16 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+      <div className="flex h-full flex-col items-center justify-center px-4 py-6 text-center">
+        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-slate-100">
           <FileText
             size={30}
             className="text-slate-400"
@@ -412,16 +414,16 @@ const AwardsDocumentViewerModal = ({
           Preview not supported
         </p>
 
-        <p className="text-xs text-slate-400 mt-1 max-w-sm">
+        <p className="mt-1 max-w-sm text-xs leading-5 text-slate-400">
           This file type cannot be displayed directly inside
           the viewer. You can open it in a new tab or download it.
         </p>
 
-        <div className="flex items-center gap-2 mt-5">
+        <div className="mt-5 flex w-full max-w-sm flex-col gap-2 sm:w-auto sm:flex-row">
           <button
             type="button"
             onClick={handleOpenExternal}
-            className="h-9 px-4 rounded-md border border-slate-300 text-sm font-medium text-slate-700 hover:bg-slate-50 flex items-center gap-2 transition"
+            className="flex h-9 items-center justify-center gap-2 rounded-md border border-slate-300 px-4 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
           >
             <ExternalLink size={16} />
             Open File
@@ -430,7 +432,7 @@ const AwardsDocumentViewerModal = ({
           <button
             type="button"
             onClick={handleDownload}
-            className="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium flex items-center gap-2 transition"
+            className="flex h-9 items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Download size={16} />
             Download
@@ -450,35 +452,35 @@ const AwardsDocumentViewerModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[60] bg-black/60 flex items-center justify-center p-4"
+      className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-black/60 p-2 sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           handleClose();
         }
       }}
     >
-      <div className="w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="my-auto flex h-[94dvh] max-h-[94dvh] w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-[90vh] sm:max-h-[90vh]">
 
         {/* HEADER */}
 
-        <div className="min-h-16 px-5 py-3 border-b border-slate-200 flex items-center justify-between shrink-0 gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-9 h-9 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+        <div className="flex min-h-14 shrink-0 items-center justify-between gap-2 border-b border-slate-200 px-3 py-2.5 sm:min-h-16 sm:gap-3 sm:px-5 sm:py-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 sm:h-9 sm:w-9">
               <FileText
                 size={19}
                 className="text-blue-600"
               />
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
               <h2
-                className="text-sm font-semibold text-slate-800 truncate max-w-[500px]"
+                className="truncate text-xs font-semibold text-slate-800 sm:max-w-[500px] sm:text-sm"
                 title={document.documentName}
               >
                 {document.documentName}
               </h2>
 
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="mt-0.5 text-[10px] text-slate-400 sm:text-xs">
                 Awards &amp; Achievements
               </p>
             </div>
@@ -486,15 +488,16 @@ const AwardsDocumentViewerModal = ({
 
           {/* HEADER ACTIONS */}
 
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
             <button
               type="button"
               onClick={handleDownload}
               disabled={!hasLoaded}
               title="Download"
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition disabled:opacity-40"
+              aria-label="Download document"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:opacity-40 sm:h-9 sm:w-9"
             >
-              <Download size={18} />
+              <Download size={17} />
             </button>
 
             <button
@@ -502,16 +505,18 @@ const AwardsDocumentViewerModal = ({
               onClick={handleOpenExternal}
               disabled={!hasLoaded}
               title="Open in new tab"
-              className="w-9 h-9 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-blue-600 transition disabled:opacity-40"
+              aria-label="Open document in new tab"
+              className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:opacity-40 sm:h-9 sm:w-9"
             >
-              <ExternalLink size={18} />
+              <ExternalLink size={17} />
             </button>
 
             <button
               type="button"
               onClick={handleClose}
               title="Close"
-              className="w-9 h-9 ml-1 rounded-lg flex items-center justify-center text-slate-500 hover:bg-slate-100 hover:text-slate-700 transition"
+              aria-label="Close document viewer"
+              className="ml-0.5 flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-700 sm:ml-1 sm:h-9 sm:w-9"
             >
               <X size={20} />
             </button>
@@ -520,7 +525,7 @@ const AwardsDocumentViewerModal = ({
 
         {/* DOCUMENT CONTENT */}
 
-        <div className="flex-1 min-h-0">
+        <div className="min-h-0 flex-1 overflow-hidden">
           {renderDocument()}
         </div>
       </div>
