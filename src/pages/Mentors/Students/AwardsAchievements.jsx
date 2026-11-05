@@ -292,7 +292,7 @@ function AchievementPreviewModal({ achievement, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4 md:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -303,9 +303,9 @@ function AchievementPreviewModal({ achievement, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label="Achievement document preview"
-        className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="flex max-h-[94dvh] w-full min-w-0 max-w-5xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:rounded-2xl"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
+        <header className="flex items-start justify-between gap-2 border-b border-slate-100 p-3 sm:gap-4 sm:p-5">
           <div className="min-w-0">
             <h2 className="break-words text-base font-semibold text-slate-900">
               {achievement.title}
@@ -321,7 +321,7 @@ function AchievementPreviewModal({ achievement, onClose }) {
             </p>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {blobUrl && (
               <>
                 <button
@@ -358,7 +358,7 @@ function AchievementPreviewModal({ achievement, onClose }) {
           </div>
         </header>
 
-        <div className="flex-1 overflow-auto bg-slate-100 p-4">
+        <div className="min-h-0 flex-1 overflow-auto bg-slate-100 p-2 sm:p-4">
           {!fileUrl ? (
             <p className="p-10 text-center text-sm text-slate-500">
               No document URL is available.
@@ -385,13 +385,13 @@ function AchievementPreviewModal({ achievement, onClose }) {
             <img
               src={blobUrl}
               alt={achievement.title}
-              className="mx-auto max-h-[65vh] max-w-full object-contain"
+              className="mx-auto max-h-[70dvh] max-w-full object-contain"
             />
           ) : isPdf ? (
             <iframe
               title={achievement.title}
               src={blobUrl}
-              className="h-[65vh] w-full bg-white"
+              className="h-[70dvh] min-h-[280px] w-full bg-white"
             />
           ) : (
             <div className="p-8 text-center">
@@ -668,16 +668,16 @@ const AwardsAchievements = ({
   // --------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <AdminSidebar />
 
-      <div className="ml-[290px] min-h-screen max-lg:ml-0">
+      <div className="min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <AdminHeader />
 
-        <main className="space-y-5 p-4 md:p-6">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:space-y-5 sm:p-4 md:p-6 lg:p-6">
           {/* PAGE ACTIONS */}
 
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-col items-stretch justify-between gap-2 min-[420px]:flex-row min-[420px]:items-center sm:gap-3">
             <AdminBackButton />
             <ActionButtons />
           </div>
@@ -687,14 +687,14 @@ const AwardsAchievements = ({
           {error && (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 sm:gap-3 sm:p-4"
             >
               <AlertCircle
                 size={20}
                 className="mt-0.5 shrink-0"
               />
 
-              <div className="flex-1">
+              <div className="min-w-0 flex-1 break-words">
                 <p className="font-semibold">
                   Something went wrong
                 </p>
@@ -717,14 +717,14 @@ const AwardsAchievements = ({
           {notice && (
             <div
               role="status"
-              className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-800 sm:gap-3 sm:p-4"
             >
               <CheckCircle2
                 size={20}
                 className="shrink-0"
               />
 
-              <p className="flex-1">{notice}</p>
+              <p className="min-w-0 flex-1 break-words">{notice}</p>
 
               <button
                 type="button"
@@ -738,25 +738,25 @@ const AwardsAchievements = ({
 
           {/* STUDENT PROFILE AND DASHBOARD */}
 
-          <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
+          <section className="grid w-full min-w-0 grid-cols-1 items-start gap-3 sm:gap-4 xl:grid-cols-[240px_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1fr)]">
             <StudentAwardsAchievementsProfile
               student={student}
               mentor={mentor}
               stats={dashboardStats}
             />
 
-            <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
               <AdminStudentTabs />
 
               {/* PAGE TITLE */}
 
-              <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex min-w-0 flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
                 <div>
-                  <h1 className="text-xl font-bold text-slate-900">
+                  <h1 className="text-lg font-bold text-slate-900 sm:text-xl">
                     Awards & Achievements
                   </h1>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
                     Review student awards, certificates,
                     achievements, supporting documents, and
                     verification records.
@@ -767,7 +767,7 @@ const AwardsAchievements = ({
                   type="button"
                   onClick={loadAchievements}
                   disabled={isLoading || !studentId}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+                  className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50 sm:w-auto"
                 >
                   <RotateCcw
                     size={16}
@@ -783,7 +783,7 @@ const AwardsAchievements = ({
 
               <section
                 aria-label="Awards and achievements statistics"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
+                className="grid min-w-0 grid-cols-2 gap-2 min-[420px]:gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
               >
                 {stats.map((stat) => (
                   <AwardsAchievementsStatCard

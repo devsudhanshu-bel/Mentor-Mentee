@@ -57,7 +57,7 @@ const MentorStats = ({ stats = {} }) => {
 
   return (
     <div className="h-full rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <div className="grid h-full grid-cols-1 sm:grid-cols-3">
+      <div className="grid h-full grid-cols-2 gap-2 sm:grid-cols-3">
         {cards.map((stat, index) => (
           <MentorStatCard
             key={stat.subtitle}

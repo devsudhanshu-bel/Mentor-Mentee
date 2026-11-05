@@ -98,20 +98,20 @@ const MentoringOverview = () => {
   ========================================================== */
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
 
       {/* ======================================================
           HEADER
       ====================================================== */}
 
-      <div className="mb-4 flex items-center gap-2">
+      <div className="mb-3 flex items-center gap-2 sm:mb-4">
 
         <Users
           size={17}
-          className="text-blue-600"
+          className="shrink-0 text-blue-600"
         />
 
-        <h2 className="text-[16px] font-semibold text-slate-900">
+        <h2 className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">
           Mentoring Overview
         </h2>
 
@@ -121,7 +121,7 @@ const MentoringOverview = () => {
           CARDS
       ====================================================== */}
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid min-w-0 grid-cols-1 gap-3 min-[420px]:grid-cols-2">
 
         {stats.map((item, index) => {
           const Icon = item.icon;
@@ -129,17 +129,17 @@ const MentoringOverview = () => {
           return (
             <div
               key={index}
-              className="rounded-xl border border-slate-200 bg-white p-4 transition hover:border-blue-200 hover:shadow-sm"
+              className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 transition hover:border-blue-200 hover:shadow-sm sm:p-4"
             >
 
               {/* =================================================
                   TOP
               ================================================= */}
 
-              <div className="flex items-center gap-2">
+              <div className="flex min-w-0 items-center gap-2">
 
                 <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${item.bg}`}
+                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 ${item.bg}`}
                 >
                   <Icon
                     size={18}
@@ -147,7 +147,7 @@ const MentoringOverview = () => {
                   />
                 </div>
 
-                <p className="text-[12px] font-medium leading-5 text-slate-600">
+                <p className="min-w-0 break-words text-[11px] font-medium leading-5 text-slate-600 sm:text-[12px]">
                   {item.title}
                 </p>
 
@@ -157,12 +157,12 @@ const MentoringOverview = () => {
                   NUMBER
               ================================================= */}
 
-              <div className="mt-5">
+              <div className="mt-4 sm:mt-5">
 
                 {item.value === null ? (
                   <div className="h-7 w-12 animate-pulse rounded-md bg-slate-100" />
                 ) : (
-                  <h3 className="text-[28px] font-bold leading-none text-slate-900">
+                  <h3 className="break-words text-[25px] font-bold leading-none text-slate-900 sm:text-[28px]">
                     {item.value}
                   </h3>
                 )}
@@ -173,7 +173,7 @@ const MentoringOverview = () => {
                   SUBTITLE
               ================================================= */}
 
-              <p className="mt-2 text-[11px] text-slate-500">
+              <p className="mt-2 break-words text-[10px] text-slate-500 sm:text-[11px]">
                 {item.subtitle}
               </p>
 
@@ -188,7 +188,7 @@ const MentoringOverview = () => {
       ====================================================== */}
 
       {error && (
-        <p className="mt-3 text-[11px] text-red-500">
+        <p className="mt-3 break-words text-[11px] text-red-500">
           {error}
         </p>
       )}

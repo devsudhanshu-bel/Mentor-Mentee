@@ -7,7 +7,7 @@ const InputField = ({
   onChange,
   placeholder = "",
 }) => (
-  <div className="space-y-2">
+  <div className="min-w-0 space-y-2">
     <label className="text-sm font-semibold text-slate-700">
       {label}
     </label>
@@ -20,10 +20,11 @@ const InputField = ({
       placeholder={placeholder}
       className="
         w-full
+        min-w-0
         rounded-xl
         border
         border-slate-300
-        px-4
+        px-3
         py-3
         text-sm
         outline-none
@@ -31,6 +32,7 @@ const InputField = ({
         focus:border-blue-500
         focus:ring-4
         focus:ring-blue-100
+        sm:px-4
       "
     />
   </div>
@@ -50,22 +52,22 @@ const ProfessionalTab = ({
   };
 
   return (
-    <div className="space-y-8">
+    <div className="min-w-0 space-y-6 sm:space-y-8">
       {/* Section Heading */}
 
       <div>
-        <h2 className="text-lg font-bold text-slate-900">
+        <h2 className="text-base font-bold text-slate-900 sm:text-lg">
           Professional Information
         </h2>
 
-        <p className="mt-1 text-sm text-slate-500">
+        <p className="mt-1 text-xs text-slate-500 sm:text-sm">
           Update your academic and professional details.
         </p>
       </div>
 
       {/* Form */}
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
         <InputField
           label="Employee ID"
           name="employeeId"

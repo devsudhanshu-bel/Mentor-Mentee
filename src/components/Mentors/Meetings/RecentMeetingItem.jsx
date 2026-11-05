@@ -402,9 +402,9 @@ const RecentMeetingItem = ({
   };
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 transition-all duration-300 hover:border-slate-300 hover:shadow-sm">
+    <div className="flex min-w-0 flex-col items-stretch gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 transition-all duration-300 hover:border-slate-300 hover:shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-4">
       {/* LEFT: DATE AND MEETING DETAILS */}
-      <div className="flex min-w-0 flex-1 items-start gap-3">
+      <div className="flex min-w-0 flex-1 items-start gap-2.5 sm:gap-3">
         <MeetingDateBadge
           month={meeting.month}
           date={meeting.date}
@@ -474,7 +474,7 @@ const RecentMeetingItem = ({
         </div>
 
         {/* MEETING NOTES */}
-        <div className="hidden w-[180px] shrink-0 xl:block">
+        <div className="hidden w-[180px] min-w-0 shrink-0 xl:block">
           <p className="flex items-center gap-1.5 text-[12px] font-semibold text-slate-700">
             <FileText
               size={13}
@@ -496,11 +496,11 @@ const RecentMeetingItem = ({
       </div>
 
       {/* VIEW NOTES BUTTON */}
-      <div className="ml-1 shrink-0">
+      <div className="ml-0 w-full shrink-0 sm:ml-1 sm:w-auto">
         <button
           type="button"
           onClick={handleView}
-          className="inline-flex cursor-pointer items-center gap-1.5 rounded-lg border border-blue-300 px-3 py-1.5 text-[12px] font-medium text-blue-600 transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200"
+          className="inline-flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-blue-300 px-3 py-2 text-[12px] font-medium text-blue-600 transition-colors hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-200 sm:w-auto sm:py-1.5"
           aria-label={`View notes for ${title}`}
         >
           <FileText size={13} aria-hidden="true" />

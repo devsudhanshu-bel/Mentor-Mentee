@@ -389,7 +389,7 @@ function ResearchDocumentPreviewContent({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4 md:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -400,9 +400,9 @@ function ResearchDocumentPreviewContent({
         role="dialog"
         aria-modal="true"
         aria-labelledby="research-preview-title"
-        className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="flex max-h-[calc(100dvh-1rem)] min-h-0 w-full max-w-5xl min-w-0 flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[92dvh]"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-slate-200 p-5">
+        <header className="flex items-start justify-between gap-2 border-b border-slate-200 p-3 sm:gap-4 sm:p-5">
           <div className="min-w-0">
             <h2
               id="research-preview-title"
@@ -426,7 +426,7 @@ function ResearchDocumentPreviewContent({
           </button>
         </header>
 
-        <div className="flex-1 overflow-auto bg-slate-100 p-4 sm:p-6">
+        <div className="min-h-0 flex-1 overflow-auto bg-slate-100 p-2 sm:p-4 md:p-6">
           {isLoading ? (
             <div className="flex min-h-64 flex-col items-center justify-center gap-3 rounded-xl bg-white">
               <LoaderCircle
@@ -463,7 +463,7 @@ function ResearchDocumentPreviewContent({
               <iframe
                 title={research.title}
                 src={blobUrl}
-                className="h-[60vh] w-full rounded-lg border border-slate-200 bg-white"
+                className="h-[55dvh] min-h-[280px] w-full rounded-lg border border-slate-200 bg-white sm:h-[60vh]"
               />
             ) : (
               <div className="flex min-h-64 flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 text-center">
@@ -500,12 +500,12 @@ function ResearchDocumentPreviewContent({
           )}
         </div>
 
-        <footer className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200 p-4">
+        <footer className="flex flex-col items-start justify-between gap-3 border-t border-slate-200 p-3 sm:flex-row sm:items-center sm:p-4">
           <span className="text-sm text-slate-500">
             {formatFileSize(research.fileSize)}
           </span>
 
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row">
             {blobUrl && (
               <>
                 <button
@@ -596,7 +596,7 @@ function ResearchVerificationModalContent({
 
   return (
     <div
-      className="fixed inset-0 z-[110] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-[110] flex items-center justify-center overflow-y-auto bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4 md:p-6"
       onMouseDown={(event) => {
         if (
           event.target === event.currentTarget &&
@@ -610,7 +610,7 @@ function ResearchVerificationModalContent({
         role="dialog"
         aria-modal="true"
         aria-labelledby="research-review-title"
-        className="w-full max-w-xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="max-h-[calc(100dvh-1rem)] w-full max-w-xl min-w-0 overflow-y-auto overscroll-contain rounded-2xl bg-white shadow-2xl sm:max-h-[92dvh]"
       >
         <header className="flex items-start justify-between gap-4 border-b border-slate-200 p-5">
           <div>
@@ -643,7 +643,7 @@ function ResearchVerificationModalContent({
 
         <form
           onSubmit={handleSubmit}
-          className="space-y-5 p-5"
+          className="space-y-4 p-4 sm:space-y-5 sm:p-5"
         >
           <div className="rounded-xl border border-slate-200 bg-slate-50 p-4">
             <h3 className="font-semibold text-slate-900">
@@ -768,7 +768,7 @@ function ResearchVerificationModalContent({
             </div>
           )}
 
-          <footer className="flex flex-wrap justify-end gap-3 border-t border-slate-100 pt-4">
+          <footer className="flex flex-col-reverse justify-end gap-2 border-t border-slate-100 pt-4 sm:flex-row sm:gap-3">
             <button
               type="button"
               onClick={onClose}
@@ -1087,22 +1087,24 @@ const Research = ({ studentId: studentIdProp }) => {
   // --------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <MentorSidebar />
 
-      <div className="ml-[290px] min-h-screen max-lg:ml-0">
+      <div className="ml-0 min-h-screen w-full min-w-0 overflow-x-hidden lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <MentorHeader />
 
-        <main className="space-y-5 p-4 md:p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:space-y-5 sm:p-4 md:p-5 lg:p-6">
+          <div className="flex min-w-0 flex-col items-stretch justify-between gap-3 min-[420px]:flex-row min-[420px]:items-center">
             <BackButton />
-            <ActionButtons />
+            <div className="min-w-0">
+              <ActionButtons />
+            </div>
           </div>
 
           {!studentId && (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800 sm:gap-3 sm:p-4 sm:text-sm"
             >
               <AlertCircle
                 size={20}
@@ -1127,19 +1129,19 @@ const Research = ({ studentId: studentIdProp }) => {
           {error && (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 sm:gap-3 sm:p-4 sm:text-sm"
             >
               <AlertCircle
                 size={20}
                 className="mt-0.5 shrink-0"
               />
 
-              <div className="flex-1">
+              <div className="min-w-0 flex-1 break-words">
                 <p className="font-semibold">
                   Something went wrong
                 </p>
 
-                <p className="mt-1">{error}</p>
+                <p className="mt-1 break-words">{error}</p>
               </div>
 
               <button
@@ -1156,14 +1158,14 @@ const Research = ({ studentId: studentIdProp }) => {
           {notice && (
             <div
               role="status"
-              className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-green-200 bg-green-50 p-3 text-xs text-green-800 sm:gap-3 sm:p-4 sm:text-sm"
             >
               <CheckCircle2
                 size={20}
                 className="mt-0.5 shrink-0"
               />
 
-              <p className="flex-1">{notice}</p>
+              <p className="min-w-0 flex-1 break-words">{notice}</p>
 
               <button
                 type="button"
@@ -1176,18 +1178,22 @@ const Research = ({ studentId: studentIdProp }) => {
             </div>
           )}
 
-          <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
-            <StudentResearchProfile
-              student={student}
-              mentor={mentor}
-            />
+          <section className="grid min-w-0 grid-cols-1 items-start gap-3 sm:gap-4 xl:grid-cols-[230px_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1fr)]">
+            <div className="min-w-0">
+              <StudentResearchProfile
+                student={student}
+                mentor={mentor}
+              />
+            </div>
 
             <div className="flex min-w-0 flex-col gap-4">
-              <StudentTabs />
+              <div className="min-w-0 overflow-x-auto rounded-xl">
+                <StudentTabs />
+              </div>
 
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-xl font-bold text-slate-900">
+                  <h1 className="break-words text-lg font-bold text-slate-900 sm:text-xl">
                     Research Submissions
                   </h1>
 
@@ -1201,7 +1207,7 @@ const Research = ({ studentId: studentIdProp }) => {
                   type="button"
                   onClick={loadResearch}
                   disabled={isLoading || !studentId}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                 >
                   <RotateCcw
                     size={16}
@@ -1213,7 +1219,7 @@ const Research = ({ studentId: studentIdProp }) => {
 
               <section
                 aria-label="Research statistics"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
+                className="grid min-w-0 grid-cols-2 gap-2 min-[420px]:gap-3 lg:grid-cols-3 2xl:grid-cols-5"
               >
                 {stats.map((stat) => (
                   <ResearchStatCard

@@ -18,7 +18,7 @@ const Settings = () => {
       <Sidebar />
 
       {/* Main Content */}
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="ml-0 lg:ml-[290px] min-h-screen flex flex-col">
         {/* Header */}
         <Header />
 

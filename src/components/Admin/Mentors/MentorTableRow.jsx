@@ -38,14 +38,15 @@ const MentorTableRow = ({ mentor }) => {
           MENTOR
       ================================================== */}
 
-      <td className="px-5 py-3">
-        <div className="flex items-center gap-3">
+      <td className="min-w-[190px] px-2.5 py-3 sm:px-5">
+        <div className="flex items-center gap-2 sm:gap-3">
           {/* Avatar */}
           <div
             className="
               flex
-              h-9
-              w-9
+              h-8
+              w-8
+              shrink-0
               items-center
               justify-center
               rounded-full
@@ -55,16 +56,18 @@ const MentorTableRow = ({ mentor }) => {
               text-xs
               font-bold
               text-blue-600
+              sm:h-9
+              sm:w-9
             "
           >
             {name.charAt(0).toUpperCase()}
           </div>
 
           {/* Info */}
-          <div>
-            <h3 className="text-[13px] font-semibold text-slate-800">{name}</h3>
+          <div className="min-w-0">
+            <h3 className="break-words text-[12px] font-semibold text-slate-800 sm:text-[13px]">{name}</h3>
 
-            <p className="text-[10px] text-slate-500">{email}</p>
+            <p className="break-all text-[9px] text-slate-500 sm:text-[10px]">{email}</p>
           </div>
         </div>
       </td>
@@ -73,36 +76,36 @@ const MentorTableRow = ({ mentor }) => {
           DEPARTMENT
       ================================================== */}
 
-      <td className="px-5 py-3">
-        <span className="text-[12px] text-slate-700">{department}</span>
+      <td className="min-w-[130px] px-2.5 py-3 sm:px-5">
+        <span className="break-words text-[11px] text-slate-700 sm:text-[12px]">{department}</span>
       </td>
 
       {/* ==================================================
           DESIGNATION
       ================================================== */}
 
-      <td className="px-5 py-3">
-        <span className="text-[12px] text-slate-700">{designation}</span>
+      <td className="min-w-[120px] px-2.5 py-3 sm:px-5">
+        <span className="break-words text-[11px] text-slate-700 sm:text-[12px]">{designation}</span>
       </td>
 
       {/* ==================================================
           STUDENTS
       ================================================== */}
 
-      <td className="px-5 py-3">
-        <span className="text-[12px] font-semibold text-slate-800">
+      <td className="whitespace-nowrap px-2.5 py-3 sm:px-5">
+        <span className="text-[11px] font-semibold text-slate-800 sm:text-[12px]">
           {studentsAssigned}
         </span>
 
-        <span className="text-[11px] text-slate-400"> / {totalStudents}</span>
+        <span className="text-[10px] text-slate-400 sm:text-[11px]"> / {totalStudents}</span>
       </td>
 
       {/* ==================================================
           MEETINGS
       ================================================== */}
 
-      <td className="px-5 py-3">
-        <span className="text-[12px] font-semibold text-slate-700">
+      <td className="whitespace-nowrap px-2.5 py-3 sm:px-5">
+        <span className="text-[11px] font-semibold text-slate-700 sm:text-[12px]">
           {mentor?.meetings ?? "—"}
         </span>
       </td>
@@ -111,12 +114,12 @@ const MentorTableRow = ({ mentor }) => {
           ATTENDANCE
       ================================================== */}
 
-      <td className="w-[180px] px-5 py-3">
+      <td className="w-[140px] min-w-[120px] px-2.5 py-3 sm:w-[180px] sm:px-5">
         {attendance === null ? (
-          <span className="text-[11px] text-slate-400">—</span>
+          <span className="text-[10px] text-slate-400 sm:text-[11px]">—</span>
         ) : (
-          <div className="flex items-center gap-3">
-            <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-200">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="h-1.5 min-w-8 flex-1 overflow-hidden rounded-full bg-slate-200">
               <div
                 className="h-full rounded-full bg-blue-600"
                 style={{
@@ -125,7 +128,7 @@ const MentorTableRow = ({ mentor }) => {
               />
             </div>
 
-            <span className="w-9 text-right text-[11px] font-semibold text-slate-600">
+            <span className="w-8 shrink-0 text-right text-[10px] font-semibold text-slate-600 sm:w-9 sm:text-[11px]">
               {attendance}%
             </span>
           </div>
@@ -136,18 +139,20 @@ const MentorTableRow = ({ mentor }) => {
           STATUS
       ================================================== */}
 
-      <td className="px-5 py-3">
+      <td className="min-w-[95px] px-2.5 py-3 sm:px-5">
         <div className="flex flex-col items-start gap-1">
           <span
             className={`
               inline-flex
               items-center
-              rounded-full
-              px-2.5
-              py-1
-              text-[10px]
-              font-semibold
               whitespace-nowrap
+              rounded-full
+              px-2
+              py-1
+              text-[9px]
+              font-semibold
+              sm:px-2.5
+              sm:text-[10px]
 
               ${
                 status === "Active"
@@ -171,8 +176,8 @@ const MentorTableRow = ({ mentor }) => {
           ACTIONS
       ================================================== */}
 
-      <td className="px-5 py-3">
-        <div className="flex items-center gap-2">
+      <td className="min-w-[115px] px-2.5 py-3 sm:px-5">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           {/* View */}
           <button
             type="button"
@@ -185,13 +190,15 @@ const MentorTableRow = ({ mentor }) => {
               border
               border-blue-200
               bg-blue-50
-              px-3
+              px-2
               py-1.5
-              text-[11px]
+              text-[10px]
               font-medium
               text-blue-700
               transition
               hover:bg-blue-100
+              sm:px-3
+              sm:text-[11px]
             "
           >
             <Eye size={13} />
@@ -205,6 +212,7 @@ const MentorTableRow = ({ mentor }) => {
               flex
               h-8
               w-8
+              shrink-0
               items-center
               justify-center
               rounded-lg

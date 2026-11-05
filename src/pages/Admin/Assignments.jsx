@@ -334,7 +334,7 @@ const Assignments = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* ======================================================
           SIDEBAR
       ====================================================== */}
@@ -345,7 +345,7 @@ const Assignments = () => {
           MAIN CONTENT
       ====================================================== */}
 
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         {/* ====================================================
             HEADER
         ==================================================== */}
@@ -356,19 +356,19 @@ const Assignments = () => {
             PAGE CONTENT
         ==================================================== */}
 
-        <main className="p-6">
-          <div className="mx-auto flex max-w-[1700px] flex-col gap-6">
+        <main className="w-full min-w-0 p-3 sm:p-4 lg:p-6">
+          <div className="mx-auto flex w-full min-w-0 max-w-[1700px] flex-col gap-4 sm:gap-6">
             {/* ==================================================
                 PAGE ACTION BAR
             ================================================== */}
 
-            <div className="flex items-center justify-between">
+            <div className="flex min-w-0 flex-col items-stretch justify-between gap-3 min-[480px]:flex-row min-[480px]:items-center">
               <div>
-                <h1 className="text-2xl font-bold text-slate-900">
+                <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
                   Mentor Assignments
                 </h1>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-xs text-slate-500 sm:text-sm">
                   Manage student-to-mentor assignments.
                 </p>
               </div>
@@ -380,7 +380,7 @@ const Assignments = () => {
               <button
                 type="button"
                 onClick={() => setShowAddStudentsModal(true)}
-                className="flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 hover:shadow-md"
+                className="flex w-full shrink-0 items-center justify-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 hover:shadow-md min-[480px]:w-auto sm:px-5"
               >
                 <Plus size={18} />
                 Add Students
@@ -426,7 +426,7 @@ const Assignments = () => {
             ================================================== */}
 
             {error && (
-              <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              <div className="min-w-0 break-words rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-xs text-red-700 sm:px-4 sm:py-3 sm:text-sm">
                 {error}
               </div>
             )}

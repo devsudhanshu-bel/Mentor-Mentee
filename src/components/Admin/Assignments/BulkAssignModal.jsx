@@ -45,7 +45,7 @@ const BulkAssignModal = ({ termId, onClose, onComplete }) => {
   };
 
   return <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/45 p-4" role="dialog" aria-modal="true" aria-labelledby="bulk-assign-title">
-    <div className="flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+    <div className="flex max-h-[calc(100dvh-1rem)] w-full min-w-0 max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl sm:max-h-[88vh]">
       <div className="flex items-start justify-between border-b border-slate-200 px-5 py-4">
         <div><h2 id="bulk-assign-title" className="text-base font-semibold text-slate-800">Bulk Assign Students</h2><p className="mt-1 text-xs text-slate-500">Upload a PDF for each mentor. Use a table with Register Number and Name columns.</p></div>
         <button type="button" onClick={onClose} className="rounded-lg p-2 text-slate-500 hover:bg-slate-100" aria-label="Close"><X size={18}/></button>

@@ -261,14 +261,15 @@ const MeetingScheduledSuccessModal = ({
         aria-labelledby="meeting-success-title"
         className="
           fixed left-1/2 top-1/2 z-[9999]
-          flex max-h-[90vh] w-[calc(100%-2rem)]
+          flex max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)]
           max-w-lg -translate-x-1/2 -translate-y-1/2
-          flex-col overflow-hidden rounded-2xl
+          flex-col overflow-hidden rounded-xl
           border border-slate-200 bg-white shadow-2xl
+          sm:max-h-[90vh] sm:w-[calc(100%-2rem)] sm:rounded-2xl
         "
       >
         {/* Header */}
-        <div className="flex items-center justify-end px-5 pt-3">
+        <div className="flex items-center justify-end px-3 pt-2 sm:px-5 sm:pt-3">
           <button
             type="button"
             onClick={onClose}
@@ -279,31 +280,31 @@ const MeetingScheduledSuccessModal = ({
           </button>
         </div>
 
-        <div className="overflow-y-auto px-6 pb-6">
+        <div className="min-h-0 min-w-0 overflow-x-hidden overflow-y-auto px-4 pb-4 sm:px-6 sm:pb-6">
           {/* Success message */}
           <div className="flex flex-col items-center">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-50 sm:h-20 sm:w-20">
               <CheckCircle2
-                size={42}
+                size={36}
                 className="text-emerald-600"
               />
             </div>
 
             <h2
               id="meeting-success-title"
-              className="mt-4 text-center text-[22px] font-semibold text-slate-800"
+              className="mt-4 break-words text-center text-xl font-semibold text-slate-800 sm:text-[22px]"
             >
               {successTitle}
             </h2>
 
-            <p className="mt-2 text-center text-[13px] text-slate-500">
+            <p className="mt-2 break-words text-center text-[12px] leading-5 text-slate-500 sm:text-[13px]">
               {successDescription}
             </p>
           </div>
 
           {/* Bulk mentee information */}
           {isBulk && (
-            <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50 p-4">
+            <div className="mt-5 rounded-xl border border-blue-100 bg-blue-50 p-3 sm:p-4">
               <div className="flex items-center gap-2">
                 <Users
                   size={18}
@@ -332,7 +333,7 @@ const MeetingScheduledSuccessModal = ({
           )}
 
           {/* Meeting details */}
-          <div className="mt-6 space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
+          <div className="mt-5 space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:mt-6 sm:p-4">
             {/* Title */}
             <div className="flex items-start gap-3">
               <ClipboardList
@@ -444,11 +445,11 @@ const MeetingScheduledSuccessModal = ({
         </div>
 
         {/* Footer */}
-        <footer className="flex shrink-0 justify-end border-t border-slate-200 px-6 py-4">
+        <footer className="flex shrink-0 justify-end border-t border-slate-200 px-4 py-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg bg-blue-600 px-6 py-2 text-[13px] font-medium text-white transition hover:bg-blue-700 active:scale-95"
+            className="w-full rounded-lg bg-blue-600 px-6 py-2.5 text-[13px] font-medium text-white transition hover:bg-blue-700 active:scale-95 sm:w-auto sm:py-2"
           >
             Close
           </button>

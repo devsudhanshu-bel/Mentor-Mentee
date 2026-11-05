@@ -54,14 +54,14 @@ const SocialLinksTab = ({
   };
 
   return (
-    <div className="space-y-5">
+    <div className="min-w-0 space-y-5 sm:space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-[15px] font-semibold text-slate-900">
+        <h2 className="text-[15px] font-semibold text-slate-900 sm:text-base">
           Social Links
         </h2>
 
-        <p className="mt-1 text-[12px] text-slate-500">
+        <p className="mt-1 text-xs text-slate-500 sm:text-[13px]">
           Add your professional profiles and research links.
         </p>
       </div>
@@ -74,12 +74,12 @@ const SocialLinksTab = ({
           return (
             <div
               key={field.name}
-              className="space-y-2"
+              className="min-w-0 space-y-2"
             >
-              <label className="flex items-center gap-2 text-[12px] font-medium text-slate-700">
+              <label className="flex items-center gap-2 text-xs font-medium text-slate-700 sm:text-[13px]">
                 <Icon
                   size={14}
-                  className="text-slate-500"
+                  className="shrink-0 text-slate-500"
                 />
 
                 {field.label}
@@ -93,17 +93,20 @@ const SocialLinksTab = ({
                 placeholder={field.placeholder}
                 className="
                   w-full
+                  min-w-0
                   rounded-xl
                   border
                   border-slate-300
-                  px-4
+                  px-3
                   py-3
-                  text-[13px]
+                  text-xs
                   outline-none
                   transition
                   focus:border-blue-500
                   focus:ring-4
                   focus:ring-blue-100
+                  sm:px-4
+                  sm:text-[13px]
                 "
               />
             </div>

@@ -30,27 +30,37 @@ const AssignmentFooter = ({
   return (
     <div
       className="
-        mx-5
-        mb-5
+        mx-3
+        mb-3
         flex
-        min-h-[84px]
-        items-center
+        min-w-0
+        flex-col
+        items-stretch
         justify-between
-        gap-6
+        gap-3
         rounded-xl
         border
         border-slate-200
         bg-white
-        px-4
+        px-3
         py-3
         shadow-sm
+        sm:mx-4
+        sm:mb-4
+        sm:px-4
+        lg:mx-5
+        lg:mb-5
+        lg:min-h-[84px]
+        lg:flex-row
+        lg:items-center
+        lg:gap-6
       "
     >
       {/* ============================================================
           LEFT SECTION
           ============================================================ */}
 
-      <div className="min-w-[180px]">
+      <div className="min-w-0 lg:min-w-[180px]">
         <p className="text-[13px] font-semibold text-slate-800">
           {studentCount} Student
           {studentCount !== 1 && "s"} Selected
@@ -65,7 +75,7 @@ const AssignmentFooter = ({
           SELECTED STUDENTS
           ============================================================ */}
 
-      <div className="flex flex-1 items-center gap-3 overflow-x-auto">
+      <div className="flex w-full min-w-0 flex-1 items-center gap-3 overflow-x-auto pb-1 lg:w-auto">
         {selectedStudents.map((student, index) => {
           const studentId =
             typeof student === "object"
@@ -196,8 +206,11 @@ const AssignmentFooter = ({
         className={`
           flex
           h-11
-          min-w-[190px]
+          w-full
+          min-w-0
           shrink-0
+          lg:min-w-[190px]
+          lg:w-auto
           items-center
           justify-center
           gap-3

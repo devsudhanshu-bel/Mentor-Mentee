@@ -375,7 +375,7 @@ const Documents = () => {
   // ========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
 
       {/* ====================================================
           SIDEBAR
@@ -387,17 +387,17 @@ const Documents = () => {
           MAIN CONTENT
       ==================================================== */}
 
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="flex min-h-screen min-w-0 flex-col md:ml-0 lg:ml-[290px]">
 
         <Header />
 
-        <main className="flex-1 p-6">
+        <main className="min-w-0 flex-1 p-3 sm:p-4 md:p-5 lg:p-6">
 
           {/* =================================================
               BANNER
           ================================================= */}
 
-          <div className="mb-3">
+          <div className="mb-3 w-full min-w-0">
             <DocumentsBanner />
           </div>
 
@@ -406,16 +406,16 @@ const Documents = () => {
           ================================================= */}
 
           {error && (
-            <div className="mb-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 flex items-center justify-between">
+            <div className="mb-3 flex min-w-0 flex-col gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
 
-              <p className="text-sm text-red-600">
+              <p className="min-w-0 break-words text-xs leading-5 text-red-600 sm:text-sm">
                 {error}
               </p>
 
               <button
                 type="button"
                 onClick={loadDocumentsDashboard}
-                className="text-sm font-medium text-red-700 hover:text-red-800 underline"
+                className="w-fit shrink-0 text-xs font-medium text-red-700 underline transition hover:text-red-800 sm:text-sm"
               >
                 Try Again
               </button>
@@ -427,7 +427,7 @@ const Documents = () => {
               STATS
           ================================================= */}
 
-          <div className="mb-3">
+          <div className="mb-3 w-full min-w-0">
             <DocumentsStats
               stats={stats}
               loading={loading}
@@ -438,13 +438,13 @@ const Documents = () => {
               MAIN CONTENT
           ================================================= */}
 
-          <div className="grid grid-cols-12 gap-3 items-start">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-3 xl:grid-cols-12">
 
             {/* =================================================
                 LEFT
             ================================================= */}
 
-            <div className="col-span-8">
+            <div className="min-w-0 xl:col-span-8">
 
               <DocumentTable
                 documents={documents}
@@ -473,7 +473,7 @@ const Documents = () => {
                 RIGHT
             ================================================= */}
 
-            <div className="col-span-4 flex flex-col gap-3">
+            <div className="flex min-w-0 flex-col gap-3 xl:col-span-4">
 
               <UploadDocumentCard
                 onUploadClick={

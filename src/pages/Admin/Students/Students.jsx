@@ -190,17 +190,17 @@ const Students = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* Sidebar */}
 
       <MentorSidebar />
 
       {/* Main Content */}
 
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <MentorHeader />
 
-        <main className="space-y-4 p-6">
+        <main className="space-y-4 p-3 sm:p-4 lg:p-6">
           {/* Dashboard Welcome Banner */}
 
           <WelcomeBanner />

@@ -182,23 +182,23 @@ const ContentSection = ({
     : Boolean(getText(content));
 
   return (
-    <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-      <div className="mb-3 flex items-center gap-2">
+    <section className="min-w-0 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
+      <div className="mb-3 flex min-w-0 items-center gap-2">
         <Icon
           size={17}
           className="shrink-0 text-blue-600"
           aria-hidden="true"
         />
 
-        <h3 className="text-sm font-semibold text-slate-800">
+        <h3 className="min-w-0 break-words text-sm font-semibold text-slate-800">
           {title}
         </h3>
       </div>
 
-      <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <div className="min-w-0 rounded-lg border border-slate-200 bg-white p-3 sm:p-4">
         {hasContent ? (
           isList ? (
-            <ul className="list-disc space-y-2 pl-5 text-[13px] leading-6 text-slate-600">
+            <ul className="list-disc space-y-2 pl-5 text-[12px] leading-5 text-slate-600 sm:text-[13px] sm:leading-6">
               {content.map((point, index) => (
                 <li
                   key={`${index}-${point}`}
@@ -209,12 +209,12 @@ const ContentSection = ({
               ))}
             </ul>
           ) : (
-            <p className="whitespace-pre-wrap break-words text-[13px] leading-6 text-slate-600">
+            <p className="whitespace-pre-wrap break-words text-[12px] leading-5 text-slate-600 sm:text-[13px] sm:leading-6">
               {getText(content)}
             </p>
           )
         ) : (
-          <p className="text-[13px] leading-6 text-slate-400">
+          <p className="break-words text-[12px] leading-5 text-slate-400 sm:text-[13px] sm:leading-6">
             {emptyMessage}
           </p>
         )}
@@ -258,11 +258,11 @@ const MentorRatingSection = ({
         </h3>
       </div>
 
-      <div className="space-y-4 rounded-lg border border-slate-200 bg-white p-4">
+      <div className="min-w-0 space-y-4 rounded-lg border border-slate-200 bg-white p-3 sm:p-4">
         {/* Star Rating */}
         <div>
           <div
-            className="flex flex-wrap items-center gap-1"
+            className="flex min-w-0 flex-wrap items-center gap-1"
             role="img"
             aria-label={
               validRating !== null
@@ -278,7 +278,7 @@ const MentorRatingSection = ({
               return (
                 <Star
                   key={star}
-                  size={22}
+                  size={20}
                   strokeWidth={1.8}
                   className={
                     isFilled
@@ -291,7 +291,7 @@ const MentorRatingSection = ({
             })}
 
             <span
-              className={`ml-2 text-sm font-semibold ${
+              className={`ml-1 text-xs font-semibold sm:ml-2 sm:text-sm ${
                 validRating !== null
                   ? "text-slate-800"
                   : "text-slate-400"
@@ -311,8 +311,8 @@ const MentorRatingSection = ({
         </div>
 
         {/* Written Feedback */}
-        <div className="border-t border-slate-100 pt-3">
-          <div className="mb-2 flex items-center gap-2">
+        <div className="min-w-0 border-t border-slate-100 pt-3">
+          <div className="mb-2 flex min-w-0 items-center gap-2">
             <MessageSquare
               size={15}
               className="text-slate-500"
@@ -410,21 +410,21 @@ const MeetingSummaryCard = ({
     getFeedbackText(meetingSummary);
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="border-b border-slate-200 px-5 py-4">
-        <h2 className="text-lg font-bold text-slate-800">
+      <div className="border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+        <h2 className="text-base font-bold text-slate-800 sm:text-lg">
           Meeting Summary
         </h2>
 
-        <p className="mt-0.5 text-xs text-slate-500">
+        <p className="mt-1 break-words text-[11px] leading-5 text-slate-500 sm:mt-0.5 sm:text-xs">
           Meeting notes, discussion points, remarks, and mentor
           feedback from the mentoring session.
         </p>
       </div>
 
       {/* Content */}
-      <div className="space-y-4 p-5">
+      <div className="space-y-3 p-3 sm:space-y-4 sm:p-5">
         <ContentSection
           title="Meeting Notes"
           icon={FileText}

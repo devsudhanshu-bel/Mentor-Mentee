@@ -168,24 +168,29 @@ const DocumentRow = ({
   // ==========================================================
 
   return (
-    <tr className="border-b border-slate-200 last:border-b-0 hover:bg-slate-50 transition">
+    <tr className="border-b border-slate-200 transition last:border-b-0 hover:bg-slate-50">
 
       {/* DOCUMENT NAME */}
 
-      <td className="px-3 py-4">
-        <div className="flex items-center gap-3 min-w-[260px]">
+      <td className="min-w-[220px] px-2 py-3 sm:min-w-[260px] sm:px-3 sm:py-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
 
-          <div className="w-11 h-11 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 sm:h-11 sm:w-11">
+            <FileText
+              size={18}
+              className="text-blue-600 sm:hidden"
+            />
+
             <FileText
               size={21}
-              className="text-blue-600"
+              className="hidden text-blue-600 sm:block"
             />
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
 
             <p
-              className="text-sm font-semibold text-slate-800 truncate max-w-[300px]"
+              className="max-w-[180px] truncate text-xs font-semibold text-slate-800 sm:max-w-[300px] sm:text-sm"
               title={document.documentName}
             >
               {document.documentName}
@@ -193,13 +198,13 @@ const DocumentRow = ({
 
             {document.description ? (
               <p
-                className="text-xs text-slate-400 mt-1 truncate max-w-[300px]"
+                className="mt-1 max-w-[180px] truncate text-[10px] text-slate-400 sm:max-w-[300px] sm:text-xs"
                 title={document.description}
               >
                 {document.description}
               </p>
             ) : (
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="mt-1 text-[10px] text-slate-400 sm:text-xs">
                 No description
               </p>
             )}
@@ -210,33 +215,33 @@ const DocumentRow = ({
 
       {/* CATEGORY */}
 
-      <td className="px-3 py-4">
-        <span className="text-sm text-slate-600">
+      <td className="whitespace-nowrap px-2 py-3 sm:px-3 sm:py-4">
+        <span className="text-xs text-slate-600 sm:text-sm">
           {formattedCategory}
         </span>
       </td>
 
       {/* TYPE */}
 
-      <td className="px-3 py-4">
-        <span className="text-sm text-slate-600">
+      <td className="whitespace-nowrap px-2 py-3 sm:px-3 sm:py-4">
+        <span className="text-xs text-slate-600 sm:text-sm">
           {fileType}
         </span>
       </td>
 
       {/* DATE */}
 
-      <td className="px-3 py-4 whitespace-nowrap">
-        <span className="text-sm text-slate-600">
+      <td className="whitespace-nowrap px-2 py-3 sm:px-3 sm:py-4">
+        <span className="text-xs text-slate-600 sm:text-sm">
           {uploadedDate}
         </span>
       </td>
 
       {/* ACTIONS */}
 
-      <td className="px-3 py-4">
+      <td className="whitespace-nowrap px-2 py-3 sm:px-3 sm:py-4">
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-1 sm:gap-2">
 
           {/* VIEW */}
 
@@ -245,9 +250,10 @@ const DocumentRow = ({
             onClick={handleView}
             disabled={isDownloading || !document.fileUrl}
             title="View document"
-            className="text-slate-500 hover:text-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="View document"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9"
           >
-            <Eye size={19} />
+            <Eye size={17} />
           </button>
 
           {/* DOWNLOAD */}
@@ -260,15 +266,16 @@ const DocumentRow = ({
               !document.fileUrl
             }
             title="Download document"
-            className="text-slate-500 hover:text-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Download document"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9"
           >
             {isDownloading ? (
               <Loader2
-                size={19}
+                size={17}
                 className="animate-spin"
               />
             ) : (
-              <Download size={19} />
+              <Download size={17} />
             )}
           </button>
 
@@ -279,9 +286,10 @@ const DocumentRow = ({
             onClick={handleDelete}
             disabled={isDownloading}
             title="Delete document"
-            className="text-slate-500 hover:text-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            aria-label="Delete document"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 sm:h-9 sm:w-9"
           >
-            <Trash2 size={19} />
+            <Trash2 size={17} />
           </button>
 
         </div>

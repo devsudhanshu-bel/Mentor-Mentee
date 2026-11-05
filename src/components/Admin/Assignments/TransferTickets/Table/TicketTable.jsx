@@ -5,7 +5,7 @@ import TicketRow from "./TicketRow";
 
 const TicketTable = ({ tickets }) => {
   return (
-    <table className="min-w-full table-fixed">
+    <div className="w-full min-w-0 overflow-x-auto"><table className="min-w-full table-fixed">
       <TicketTableHeader />
 
       <tbody className="divide-y divide-slate-100 bg-white">
@@ -16,7 +16,7 @@ const TicketTable = ({ tickets }) => {
           />
         ))}
       </tbody>
-    </table>
+    </table></div>
   );
 };
 

@@ -17,7 +17,7 @@ const MentorTable = ({
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="overflow-x-auto">
-        <table className="min-w-full">
+        <div className="w-full min-w-0 overflow-x-auto"><table className="min-w-full">
           <MentorTableHeader />
 
           <tbody>
@@ -45,7 +45,7 @@ const MentorTable = ({
               ))
             )}
           </tbody>
-        </table>
+        </table></div>
       </div>
 
       <MentorPagination

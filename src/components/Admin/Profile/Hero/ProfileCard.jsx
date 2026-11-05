@@ -225,7 +225,7 @@ const ProfileCard = ({ admin, loading = false, onSave }) => {
       <div className="my-5 border-t border-slate-100" />
 
       {/* Profile Details */}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Contact Information */}
         <div className="min-w-0 space-y-4">
           <div className="flex min-w-0 items-start gap-2.5">

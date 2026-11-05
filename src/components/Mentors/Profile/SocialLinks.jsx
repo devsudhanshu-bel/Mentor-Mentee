@@ -80,11 +80,11 @@ const SocialLinkInput = ({
   placeholder,
 }) => {
   return (
-    <div>
+    <div className="min-w-0">
       <label className="mb-1.5 flex items-center gap-2 text-[11px] font-semibold text-slate-700">
         <Icon
           size={15}
-          className={iconColor}
+          className={`shrink-0 ${iconColor}`}
         />
 
         {label}
@@ -95,7 +95,7 @@ const SocialLinkInput = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[11px] text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        className="w-full min-w-0 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[11px] text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
       />
     </div>
   );
@@ -134,9 +134,9 @@ const SocialLinks = ({ mentor, onSave }) => {
 
   if (!mentor) {
     return (
-      <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex h-64 items-center justify-center">
-          <p className="text-sm text-slate-500">
+      <div className="min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm">
+        <div className="flex h-64 items-center justify-center p-4">
+          <p className="text-center text-sm text-slate-500">
             No social links available.
           </p>
         </div>
@@ -339,22 +339,22 @@ const SocialLinks = ({ mentor, onSave }) => {
   ======================================================== */
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm">
 
       {/* ====================================================
           HEADER
       ==================================================== */}
 
-      <div className="flex items-center justify-between border-b border-slate-100 p-4">
+      <div className="flex flex-col gap-3 border-b border-slate-100 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
 
         <div className="flex items-center gap-2">
 
           <Share2
             size={16}
-            className="text-blue-600"
+            className="shrink-0 text-blue-600"
           />
 
-          <h2 className="text-[16px] font-semibold text-slate-900">
+          <h2 className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">
             Social Links
           </h2>
 
@@ -368,20 +368,20 @@ const SocialLinks = ({ mentor, onSave }) => {
           <button
             type="button"
             onClick={handleEdit}
-            className="flex items-center gap-1.5 rounded-lg border border-blue-600 px-3 py-1.5 text-[11px] font-semibold text-blue-600 transition-all duration-200 hover:bg-blue-600 hover:text-white"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-blue-600 px-3 py-2 text-[11px] font-semibold text-blue-600 transition-all duration-200 hover:bg-blue-600 hover:text-white sm:w-auto sm:py-1.5"
           >
             <Pencil size={12} />
 
             Edit
           </button>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center gap-2 sm:w-auto">
 
             <button
               type="button"
               onClick={handleCancel}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-[11px] font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-1.5"
             >
               <X size={12} />
 
@@ -392,7 +392,7 @@ const SocialLinks = ({ mentor, onSave }) => {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-semibold text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-[11px] font-semibold text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-1.5"
             >
               <Save size={12} />
 
@@ -410,7 +410,7 @@ const SocialLinks = ({ mentor, onSave }) => {
           CONTENT
       ==================================================== */}
 
-      <div className="p-4">
+      <div className="min-w-0 p-3 sm:p-4">
 
         {/* ==================================================
             ERROR
@@ -418,7 +418,7 @@ const SocialLinks = ({ mentor, onSave }) => {
 
         {error && (
           <div className="mb-4 rounded-lg border border-red-100 bg-red-50 px-3 py-2">
-            <p className="text-[11px] leading-5 text-red-600">
+            <p className="break-words text-[11px] leading-5 text-red-600">
               {error}
             </p>
           </div>
@@ -429,7 +429,7 @@ const SocialLinks = ({ mentor, onSave }) => {
         ================================================== */}
 
         {isEditing ? (
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
 
             <SocialLinkInput
               icon={Globe}
@@ -501,7 +501,7 @@ const SocialLinks = ({ mentor, onSave }) => {
               placeholder="https://yourwebsite.com"
             />
 
-            <p className="text-[10px] leading-4 text-slate-400">
+            <p className="break-words text-[10px] leading-4 text-slate-400">
               All links are optional. Use complete
               URLs beginning with https://.
             </p>
@@ -512,7 +512,7 @@ const SocialLinks = ({ mentor, onSave }) => {
              VIEW MODE
           ================================================== */
 
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-4">
 
             {links.length > 0 ? (
               links.map((item, index) => {
@@ -521,10 +521,10 @@ const SocialLinks = ({ mentor, onSave }) => {
                 return (
                   <div
                     key={`${item.title}-${index}`}
-                    className="flex items-center justify-between"
+                    className="flex min-w-0 items-center justify-between gap-2"
                   >
 
-                    <div className="flex min-w-0 items-center gap-3">
+                    <div className="flex min-w-0 items-center gap-2 sm:gap-3">
 
                       <Icon
                         size={18}
@@ -537,7 +537,7 @@ const SocialLinks = ({ mentor, onSave }) => {
                           {item.title}
                         </p>
 
-                        <p className="max-w-[220px] truncate text-[11px] text-blue-600">
+                        <p className="w-full max-w-[220px] truncate text-[11px] text-blue-600 sm:max-w-[min(220px,calc(100vw-150px))]">
                           {item.url}
                         </p>
 
@@ -563,7 +563,7 @@ const SocialLinks = ({ mentor, onSave }) => {
               })
             ) : (
               <div className="flex h-32 items-center justify-center">
-                <p className="text-sm text-slate-500">
+                <p className="text-center text-sm text-slate-500">
                   No social links available.
                 </p>
               </div>

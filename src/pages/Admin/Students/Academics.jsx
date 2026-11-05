@@ -284,15 +284,15 @@ const Academics = ({
   // --------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-[#EEF4F9]">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-[#EEF4F9]">
       {/* SIDEBAR */}
       <MentorSidebar />
 
       {/* MAIN CONTENT */}
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <MentorHeader />
 
-        <main className="p-5">
+        <main className="w-full min-w-0 p-3 sm:p-4 lg:p-5">
           {/* TOP ACTIONS */}
           <div className="mb-3 flex items-center justify-between gap-3">
             <BackButton />
@@ -334,7 +334,7 @@ const Academics = ({
           )}
 
           {/* STUDENT DASHBOARD LAYOUT */}
-          <div className="grid grid-cols-[270px_minmax(0,1fr)] items-start gap-3">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-3 xl:grid-cols-[270px_minmax(0,1fr)]">
             {/* LEFT: STUDENT PROFILE */}
             <aside className="min-w-0 space-y-3">
               {isLoading && !student ? (

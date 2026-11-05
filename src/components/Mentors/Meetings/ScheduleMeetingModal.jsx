@@ -496,18 +496,18 @@ const ScheduleMeetingModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="schedule-meeting-title"
-        className="fixed left-1/2 top-1/2 z-[9999] max-h-[90vh] w-[calc(100%-2rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl"
+        className="fixed left-1/2 top-1/2 z-[9999] max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-2xl -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl sm:max-h-[90vh] sm:w-[calc(100%-2rem)] sm:rounded-2xl"
       >
-        <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-200 bg-white px-5 py-4">
+        <div className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-slate-200 bg-white px-3 py-3 sm:items-center sm:px-5 sm:py-4">
           <div>
             <h2
               id="schedule-meeting-title"
-              className="text-[18px] font-semibold text-slate-800"
+              className="break-words text-base font-semibold text-slate-800 sm:text-[18px]"
             >
               {modalTitle}
             </h2>
 
-            <p className="mt-1 text-[12px] text-slate-500">
+            <p className="mt-1 text-[11px] leading-4 text-slate-500 sm:text-[12px]">
               {isEditing
                 ? "Update the meeting details and schedule."
                 : isDuplicate
@@ -528,7 +528,7 @@ const ScheduleMeetingModal = ({
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="space-y-4 p-5">
+          <div className="space-y-4 p-3 sm:p-5">
             {error && (
               <div
                 role="alert"
@@ -928,12 +928,12 @@ const ScheduleMeetingModal = ({
           </div>
 
           {/* ACTION BUTTONS */}
-          <div className="sticky bottom-0 flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4">
+          <div className="sticky bottom-0 flex flex-col-reverse gap-2 border-t border-slate-200 bg-white px-3 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-5 sm:py-4">
             <button
               type="button"
               onClick={handleClose}
               disabled={submitting}
-              className="rounded-lg border border-slate-300 px-5 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+              className="w-full rounded-lg border border-slate-300 px-5 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50 sm:w-auto"
             >
               Cancel
             </button>
@@ -945,7 +945,7 @@ const ScheduleMeetingModal = ({
                 loadingStudents ||
                 students.length === 0
               }
-              className="inline-flex items-center gap-2 rounded-lg bg-[#2563EB] px-5 py-2 text-[13px] font-medium text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#2563EB] px-5 py-2 text-[13px] font-medium text-white transition hover:bg-[#1D4ED8] disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
             >
               {submitting && (
                 <LoaderCircle size={15} className="animate-spin" />

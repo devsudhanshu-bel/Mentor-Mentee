@@ -290,20 +290,20 @@ const Academics = ({
   // --------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-[#EEF4F9]">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-[#EEF4F9]">
       {/* SIDEBAR */}
       {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       {/* MAIN CONTENT */}
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen min-w-0 w-full lg:ml-[290px]">
         {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-        <main className="p-5">
+        <main className="w-full min-w-0 p-3 sm:p-4 md:p-5 lg:p-6">
           {/* TOP ACTIONS */}
-          <div className="mb-3 flex items-center justify-between gap-3">
+          <div className="mb-3 flex min-w-0 flex-wrap items-center justify-between gap-3">
             {isAdminRoute ? <AdminBackButton /> : <BackButton />}
 
-            <div className="flex items-center gap-2">
+            <div className="flex min-w-0 flex-wrap items-center justify-end gap-2">
               <ActionButtons />
             </div>
           </div>
@@ -312,7 +312,7 @@ const Academics = ({
           {error && (
             <div
               role="alert"
-              className="mb-4 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+              className="mb-4 flex min-w-0 flex-wrap items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 sm:p-4"
             >
               <AlertCircle
                 size={19}
@@ -331,7 +331,7 @@ const Academics = ({
                 type="button"
                 onClick={loadStudentProfile}
                 disabled={isLoading || !studentId}
-                className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-red-200 px-3 py-1.5 font-medium hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
+                className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg border border-red-200 px-3 py-2 font-medium hover:bg-red-100 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 <RotateCcw size={14} />
                 Retry
@@ -340,9 +340,9 @@ const Academics = ({
           )}
 
           {/* STUDENT DASHBOARD LAYOUT */}
-          <div className="grid grid-cols-[270px_minmax(0,1fr)] items-start gap-3">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-3 lg:grid-cols-[270px_minmax(0,1fr)] lg:gap-4">
             {/* LEFT: STUDENT PROFILE */}
-            <aside className="min-w-0 space-y-3">
+            <aside className="w-full min-w-0 space-y-3">
               {isLoading && !student ? (
                 <div className="flex min-h-48 flex-col items-center justify-center gap-3 rounded-xl border border-slate-200 bg-white p-5">
                   <LoaderCircle
@@ -363,7 +363,7 @@ const Academics = ({
             </aside>
 
             {/* RIGHT: ACADEMIC INFORMATION */}
-            <section className="min-w-0 space-y-3">
+            <section className="w-full min-w-0 space-y-3">
               {/* STUDENT NAVIGATION */}
               {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 

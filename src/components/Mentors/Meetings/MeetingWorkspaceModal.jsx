@@ -822,7 +822,7 @@ const MeetingWorkspaceModal = ({
         className="fixed inset-0 z-[9998] bg-black/40 backdrop-blur-[2px]"
       />
 
-      <div className="fixed inset-3 z-[9999] overflow-hidden rounded-2xl bg-white shadow-2xl md:inset-6">
+      <div className="fixed inset-1 z-[9999] flex min-h-0 flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:inset-3 sm:rounded-2xl md:inset-6">
         <WorkspaceHeader
           meeting={meeting}
           duration={duration}
@@ -833,13 +833,15 @@ const MeetingWorkspaceModal = ({
           ending={ending}
         />
 
-        <div className="grid h-[calc(100%-72px)] grid-cols-1 overflow-hidden md:grid-cols-[190px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,1fr)_280px]">
-          <WorkspaceSidebar
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
+        <div className="grid min-h-0 flex-1 grid-cols-1 grid-rows-[auto_minmax(0,1fr)] overflow-hidden md:grid-rows-1 md:grid-cols-[190px_minmax(0,1fr)] xl:grid-cols-[210px_minmax(0,1fr)_280px]">
+          <div className="min-w-0 max-w-full overflow-x-auto border-b border-gray-100 md:overflow-visible md:border-b-0">
+            <WorkspaceSidebar
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+            />
+          </div>
 
-          <main className="overflow-y-auto bg-white p-4 md:p-6">
+          <main className="min-h-0 min-w-0 overflow-x-hidden overflow-y-auto bg-white p-3 sm:p-4 md:p-6">
             {error && (
               <div
                 role="alert"
@@ -918,7 +920,7 @@ const MeetingWorkspaceModal = ({
             )}
           </main>
 
-          <div className="hidden overflow-y-auto border-l border-gray-100 xl:block">
+          <div className="hidden min-h-0 min-w-0 overflow-y-auto border-l border-gray-100 xl:block">
             <WorkspaceRightPanel
               meeting={meeting}
               duration={duration}

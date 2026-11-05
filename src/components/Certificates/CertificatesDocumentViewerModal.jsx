@@ -55,7 +55,6 @@ const CertificatesDocumentViewerModal = ({
       return fileUrl;
     }
 
-    // Axios baseURL already contains /api.
     if (fileUrl.startsWith("/api/")) {
       return fileUrl.replace(/^\/api/, "");
     }
@@ -181,20 +180,11 @@ const CertificatesDocumentViewerModal = ({
     "gif",
   ].includes(fileExtension);
 
-  const isWord = [
-    "doc",
-    "docx",
-  ].includes(fileExtension);
+  const isWord = ["doc", "docx"].includes(fileExtension);
 
-  const isPowerPoint = [
-    "ppt",
-    "pptx",
-  ].includes(fileExtension);
+  const isPowerPoint = ["ppt", "pptx"].includes(fileExtension);
 
-  const isExcel = [
-    "xls",
-    "xlsx",
-  ].includes(fileExtension);
+  const isExcel = ["xls", "xlsx"].includes(fileExtension);
 
   // ==========================================================
   // FILE ICON
@@ -202,56 +192,26 @@ const CertificatesDocumentViewerModal = ({
 
   const getFileIcon = () => {
     if (isImage) {
-      return (
-        <ImageIcon
-          size={20}
-          className="text-purple-600"
-        />
-      );
+      return <ImageIcon size={20} className="text-purple-600" />;
     }
 
     if (isPdf) {
-      return (
-        <FileText
-          size={20}
-          className="text-red-500"
-        />
-      );
+      return <FileText size={20} className="text-red-500" />;
     }
 
     if (isWord) {
-      return (
-        <FileText
-          size={20}
-          className="text-blue-600"
-        />
-      );
+      return <FileText size={20} className="text-blue-600" />;
     }
 
     if (isPowerPoint) {
-      return (
-        <Presentation
-          size={20}
-          className="text-orange-500"
-        />
-      );
+      return <Presentation size={20} className="text-orange-500" />;
     }
 
     if (isExcel) {
-      return (
-        <FileSpreadsheet
-          size={20}
-          className="text-green-500"
-        />
-      );
+      return <FileSpreadsheet size={20} className="text-green-500" />;
     }
 
-    return (
-      <FileText
-        size={20}
-        className="text-slate-500"
-      />
-    );
+    return <FileText size={20} className="text-slate-500" />;
   };
 
   // ==========================================================
@@ -259,9 +219,7 @@ const CertificatesDocumentViewerModal = ({
   // ==========================================================
 
   const formatDate = (date) => {
-    if (!date) {
-      return "Unknown date";
-    }
+    if (!date) return "Unknown date";
 
     try {
       const parsedDate = new Date(date);
@@ -270,14 +228,11 @@ const CertificatesDocumentViewerModal = ({
         return "Unknown date";
       }
 
-      return parsedDate.toLocaleDateString(
-        "en-US",
-        {
-          day: "numeric",
-          month: "long",
-          year: "numeric",
-        }
-      );
+      return parsedDate.toLocaleDateString("en-US", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
     } catch {
       return "Unknown date";
     }
@@ -288,13 +243,9 @@ const CertificatesDocumentViewerModal = ({
   // ==========================================================
 
   const formatFileSize = (bytes) => {
-    if (!bytes) {
-      return "Unknown size";
-    }
+    if (!bytes) return "Unknown size";
 
-    if (bytes < 1024) {
-      return `${bytes} B`;
-    }
+    if (bytes < 1024) return `${bytes} B`;
 
     if (bytes < 1024 * 1024) {
       return `${(bytes / 1024).toFixed(1)} KB`;
@@ -309,9 +260,7 @@ const CertificatesDocumentViewerModal = ({
 
   const fetchFileBlob = async () => {
     if (!document?.fileUrl) {
-      throw new Error(
-        "Certificate file URL is unavailable."
-      );
+      throw new Error("Certificate file URL is unavailable.");
     }
 
     const response = await api.get(
@@ -329,9 +278,7 @@ const CertificatesDocumentViewerModal = ({
   // ==========================================================
 
   const handleDownload = async () => {
-    if (!document?.fileUrl || downloading) {
-      return;
-    }
+    if (!document?.fileUrl || downloading) return;
 
     let downloadUrl = "";
 
@@ -352,10 +299,7 @@ const CertificatesDocumentViewerModal = ({
       link.click();
       window.document.body.removeChild(link);
     } catch (error) {
-      console.error(
-        "Certificate download failed:",
-        error
-      );
+      console.error("Certificate download failed:", error);
 
       alert(
         error.response?.status === 401 ||
@@ -377,9 +321,7 @@ const CertificatesDocumentViewerModal = ({
   // ==========================================================
 
   const handleOpenNewTab = async () => {
-    if (!document?.fileUrl) {
-      return;
-    }
+    if (!document?.fileUrl) return;
 
     const newTab = window.open("about:blank", "_blank");
 
@@ -402,10 +344,7 @@ const CertificatesDocumentViewerModal = ({
         newTab.close();
       }
 
-      console.error(
-        "Certificate open failed:",
-        error
-      );
+      console.error("Certificate open failed:", error);
 
       alert(
         error.response?.status === 401 ||
@@ -420,15 +359,7 @@ const CertificatesDocumentViewerModal = ({
   // NOT OPEN
   // ==========================================================
 
-  if (!isOpen) {
-    return null;
-  }
-
-  // ==========================================================
-  // NO DOCUMENT
-  // ==========================================================
-
-  if (!document) {
+  if (!isOpen || !document) {
     return null;
   }
 
@@ -438,55 +369,97 @@ const CertificatesDocumentViewerModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm px-4 py-6"
+      className="
+        fixed inset-0 z-[100]
+        flex items-center justify-center
+        overflow-y-auto
+        bg-black/50 backdrop-blur-sm
+        p-2 sm:p-4 md:p-5
+      "
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           handleClose();
         }
       }}
     >
-      <div className="w-full max-w-5xl h-[90vh] bg-white rounded-xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col">
+      {/* ======================================================
+          MODAL
+      ====================================================== */}
 
-        {/* HEADER */}
+      <div
+        className="
+          my-auto flex
+          h-[96dvh] sm:h-[92dvh] md:h-[90vh]
+          w-full max-w-5xl
+          min-h-0 flex-col
+          overflow-hidden rounded-lg sm:rounded-xl
+          border border-slate-200
+          bg-white shadow-2xl
+        "
+      >
 
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-200 shrink-0">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
+        {/* ====================================================
+            HEADER
+        ==================================================== */}
+
+        <div className="
+          flex shrink-0 items-center justify-between gap-2
+          border-b border-slate-200
+          px-3 py-3 sm:px-5 sm:py-4
+        ">
+
+          {/* FILE INFORMATION */}
+
+          <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+
+            <div className="
+              flex h-9 w-9 shrink-0 items-center justify-center
+              rounded-lg bg-blue-50
+              sm:h-10 sm:w-10
+            ">
               {getFileIcon()}
             </div>
 
-            <div className="min-w-0">
+            <div className="min-w-0 flex-1">
+
               <h2
-                className="text-sm font-semibold text-slate-800 truncate max-w-[600px]"
+                className="truncate text-xs font-semibold text-slate-800 sm:text-sm"
                 title={document.documentName}
               >
                 {document.documentName || "Certificate"}
               </h2>
 
-              <p className="text-xs text-slate-500 mt-0.5">
-                Certificate
-                <span className="mx-1.5">•</span>
-                {formatDate(document.uploadedAt)}
+              <p className="mt-0.5 flex flex-wrap items-center gap-x-1 text-[10px] text-slate-500 sm:text-xs">
+                <span>Certificate</span>
+                <span>•</span>
+                <span>{formatDate(document.uploadedAt)}</span>
 
                 {document.fileSize ? (
                   <>
-                    <span className="mx-1.5">•</span>
-                    {formatFileSize(document.fileSize)}
+                    <span>•</span>
+                    <span>{formatFileSize(document.fileSize)}</span>
                   </>
                 ) : null}
               </p>
+
             </div>
           </div>
 
           {/* ACTIONS */}
 
-          <div className="flex items-center gap-1">
+          <div className="flex shrink-0 items-center gap-0.5 sm:gap-1">
+
             {document.fileUrl && (
               <button
                 type="button"
                 onClick={handleOpenNewTab}
                 title="Open in new tab"
-                className="p-2 rounded-md hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition"
+                aria-label="Open in new tab"
+                className="
+                  flex h-9 w-9 items-center justify-center
+                  rounded-md text-slate-500
+                  transition hover:bg-blue-50 hover:text-blue-600
+                "
               >
                 <ExternalLink size={17} />
               </button>
@@ -498,13 +471,16 @@ const CertificatesDocumentViewerModal = ({
                 onClick={handleDownload}
                 disabled={downloading}
                 title="Download"
-                className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition disabled:opacity-50"
+                aria-label="Download certificate"
+                className="
+                  flex h-9 w-9 items-center justify-center
+                  rounded-md text-slate-500
+                  transition hover:bg-slate-100 hover:text-slate-700
+                  disabled:opacity-50
+                "
               >
                 {downloading ? (
-                  <Loader2
-                    size={17}
-                    className="animate-spin"
-                  />
+                  <Loader2 size={17} className="animate-spin" />
                 ) : (
                   <Download size={17} />
                 )}
@@ -514,125 +490,186 @@ const CertificatesDocumentViewerModal = ({
             <button
               type="button"
               onClick={handleClose}
-              className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition ml-1"
+              aria-label="Close viewer"
+              className="
+                ml-0.5 flex h-9 w-9 items-center justify-center
+                rounded-md text-slate-500
+                transition hover:bg-slate-100 hover:text-slate-700
+              "
             >
               <X size={18} />
             </button>
+
           </div>
         </div>
 
-        {/* DOCUMENT INFORMATION */}
+        {/* ====================================================
+            DOCUMENT INFORMATION
+        ==================================================== */}
 
-        <div className="px-5 py-3 border-b border-slate-200 bg-slate-50 shrink-0">
-          <div className="flex items-center gap-4 flex-wrap">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-medium text-slate-400 uppercase">
+        <div className="
+          shrink-0 border-b border-slate-200
+          bg-slate-50
+          px-3 py-2.5 sm:px-5 sm:py-3
+        ">
+
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 sm:gap-x-4">
+
+            {/* TYPE */}
+
+            <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+              <span className="text-[9px] font-medium uppercase text-slate-400 sm:text-[11px]">
                 Type
               </span>
 
-              <span className="px-2 py-1 rounded-md bg-white border border-slate-200 text-[11px] font-medium text-slate-600 uppercase">
+              <span className="max-w-[90px] truncate rounded-md border border-slate-200 bg-white px-2 py-1 text-[10px] font-medium uppercase text-slate-600 sm:max-w-none sm:text-[11px]">
                 {fileExtension || "FILE"}
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-medium text-slate-400 uppercase">
+            {/* CATEGORY */}
+
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-[9px] font-medium uppercase text-slate-400 sm:text-[11px]">
                 Category
               </span>
 
-              <span className="px-2 py-1 rounded-md bg-blue-50 text-blue-600 text-[11px] font-medium">
+              <span className="rounded-md bg-blue-50 px-2 py-1 text-[10px] font-medium text-blue-600 sm:text-[11px]">
                 Certificates
               </span>
             </div>
 
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] font-medium text-slate-400 uppercase">
+            {/* UPLOAD DATE */}
+
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="text-[9px] font-medium uppercase text-slate-400 sm:text-[11px]">
                 Uploaded
               </span>
 
-              <span className="text-xs text-slate-600">
+              <span className="text-[10px] text-slate-600 sm:text-xs">
                 {formatDate(document.uploadedAt)}
               </span>
             </div>
+
           </div>
         </div>
 
-        {/* VIEWER */}
+        {/* ====================================================
+            DOCUMENT VIEWER
+        ==================================================== */}
 
-        <div className="flex-1 min-h-0 bg-slate-100 p-4 overflow-hidden">
+        <div className="
+          min-h-0 flex-1 overflow-hidden
+          bg-slate-100
+          p-2 sm:p-3 md:p-4
+        ">
+
+          {/* NO FILE URL */}
+
           {!document.fileUrl ? (
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center">
-                <div className="w-14 h-14 mx-auto rounded-full bg-white border border-slate-200 flex items-center justify-center mb-3">
-                  <FileText
-                    size={24}
-                    className="text-slate-400"
-                  />
+
+            <div className="flex h-full items-center justify-center">
+              <div className="max-w-xs px-4 text-center">
+
+                <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border border-slate-200 bg-white">
+                  <FileText size={24} className="text-slate-400" />
                 </div>
 
                 <h3 className="text-sm font-semibold text-slate-700">
                   Certificate file unavailable
                 </h3>
 
-                <p className="text-xs text-slate-400 mt-1">
+                <p className="mt-1 text-xs text-slate-400">
                   No file URL was returned by the server.
                 </p>
+
               </div>
             </div>
+
           ) : isLoading ? (
-            <div className="h-full flex items-center justify-center">
+
+            /* LOADING */
+
+            <div className="flex h-full items-center justify-center">
               <div className="flex flex-col items-center">
+
                 <Loader2
-                  size={24}
-                  className="text-blue-600 animate-spin"
+                  size={26}
+                  className="animate-spin text-blue-600"
                 />
 
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="mt-2 text-xs text-slate-500">
                   Loading certificate...
                 </p>
+
               </div>
             </div>
+
           ) : fileError ? (
-            <div className="h-full flex items-center justify-center">
-              <div className="bg-white rounded-xl border border-slate-200 p-8 text-center max-w-md">
+
+            /* ERROR */
+
+            <div className="flex h-full items-center justify-center">
+              <div className="max-w-md rounded-xl border border-slate-200 bg-white p-5 text-center sm:p-8">
+
                 <FileText
                   size={28}
-                  className="text-red-400 mx-auto mb-3"
+                  className="mx-auto mb-3 text-red-400"
                 />
 
                 <h3 className="text-sm font-semibold text-slate-700">
                   Unable to load certificate
                 </h3>
 
-                <p className="text-xs text-slate-500 mt-2">
+                <p className="mt-2 break-words text-xs leading-relaxed text-slate-500">
                   {fileError}
                 </p>
+
               </div>
             </div>
+
           ) : isPdf ? (
-            <div className="relative h-full bg-white rounded-lg border border-slate-200 overflow-hidden">
+
+            /* PDF VIEWER */
+
+            <div className="relative h-full min-h-0 overflow-hidden rounded-lg border border-slate-200 bg-white">
               <iframe
                 src={previewUrl}
-                title={
-                  document.documentName || "Certificate"
-                }
-                className="w-full h-full border-0"
+                title={document.documentName || "Certificate"}
+                className="h-full w-full border-0"
               />
             </div>
+
           ) : isImage ? (
-            <div className="h-full bg-white rounded-lg border border-slate-200 overflow-auto flex items-center justify-center p-6">
+
+            /* IMAGE VIEWER */
+
+            <div className="
+              flex h-full min-h-0
+              items-center justify-center
+              overflow-auto rounded-lg
+              border border-slate-200
+              bg-white p-2 sm:p-4 md:p-6
+            ">
               <img
                 src={previewUrl}
-                alt={
-                  document.documentName || "Certificate"
-                }
-                className="max-w-full max-h-full object-contain"
+                alt={document.documentName || "Certificate"}
+                className="
+                  h-auto max-h-full
+                  w-auto max-w-full
+                  object-contain
+                "
               />
             </div>
+
           ) : (
-            <div className="h-full flex items-center justify-center">
-              <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center max-w-md">
-                <div className="w-14 h-14 mx-auto rounded-full bg-blue-50 flex items-center justify-center mb-4">
+
+            /* OTHER FILE FORMATS */
+
+            <div className="flex h-full items-center justify-center overflow-y-auto">
+              <div className="my-auto max-w-md rounded-xl border border-slate-200 bg-white p-5 text-center shadow-sm sm:p-8">
+
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
                   {getFileIcon()}
                 </div>
 
@@ -640,36 +677,64 @@ const CertificatesDocumentViewerModal = ({
                   Preview unavailable
                 </h3>
 
-                <p className="text-xs text-slate-500 mt-2 leading-5">
+                <p className="mt-2 text-xs leading-relaxed text-slate-500">
                   This file type cannot be previewed directly in the browser.
                 </p>
 
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="mt-5 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium inline-flex items-center gap-2 transition"
+                  disabled={downloading}
+                  className="
+                    mt-5 inline-flex min-h-10
+                    w-full items-center justify-center gap-2
+                    rounded-md bg-blue-600 px-4 py-2
+                    text-xs font-medium text-white
+                    transition hover:bg-blue-700
+                    disabled:cursor-not-allowed disabled:opacity-60
+                    sm:w-auto
+                  "
                 >
-                  <Download size={14} />
+                  {downloading ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : (
+                    <Download size={14} />
+                  )}
+
                   Download Certificate
                 </button>
+
               </div>
             </div>
+
           )}
+
         </div>
 
-        {/* DESCRIPTION */}
+        {/* ====================================================
+            DESCRIPTION
+        ==================================================== */}
 
         {document.description && (
-          <div className="px-5 py-3 border-t border-slate-200 bg-white shrink-0">
-            <p className="text-[11px] font-medium text-slate-400 uppercase mb-1">
+          <div className="
+            max-h-24 shrink-0
+            overflow-y-auto
+            border-t border-slate-200
+            bg-white
+            px-3 py-2.5 sm:px-5 sm:py-3
+          ">
+
+            <p className="mb-1 text-[10px] font-medium uppercase text-slate-400 sm:text-[11px]">
               Description
             </p>
 
-            <p className="text-xs text-slate-600 leading-5">
+            <p className="break-words whitespace-pre-wrap text-xs leading-relaxed text-slate-600">
               {document.description}
             </p>
+
           </div>
         )}
+
       </div>
     </div>
   );

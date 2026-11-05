@@ -174,20 +174,24 @@ const ChatWindow = ({
 
   if (!conversationId) {
     return (
-      <div className="flex h-full flex-col">
-        <div className="flex flex-1 flex-col items-center justify-center bg-slate-50 p-6 text-center">
-          <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-blue-100">
+      <div className="flex h-full min-h-0 min-w-0 flex-col">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center bg-slate-50 px-4 py-5 text-center sm:p-6">
+          <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 sm:mb-5 sm:h-20 sm:w-20">
+            <MessageCircle
+              size={32}
+              className="text-blue-600 sm:hidden"
+            />
             <MessageCircle
               size={38}
-              className="text-blue-600"
+              className="hidden text-blue-600 sm:block"
             />
           </div>
 
-          <h3 className="text-lg font-semibold text-slate-800">
+          <h3 className="text-base font-semibold text-slate-800 sm:text-lg">
             Welcome to Discussions
           </h3>
 
-          <p className="mt-2 max-w-sm text-sm leading-6 text-slate-500">
+          <p className="mt-2 w-full max-w-sm break-words text-xs leading-5 text-slate-500 sm:text-sm sm:leading-6">
             Select a mentee from the sidebar to view messages and
             start a conversation.
           </p>
@@ -197,7 +201,7 @@ const ChatWindow = ({
   }
 
   return (
-    <div className="flex h-full min-h-0 flex-col">
+    <div className="flex h-full min-h-0 min-w-0 w-full flex-col overflow-hidden">
       <ChatHeader conversation={conversation} />
 
       <ChatMessages

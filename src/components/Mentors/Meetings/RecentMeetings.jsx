@@ -455,16 +455,16 @@ const RecentMeetings = ({
 
   return (
     <>
-      <div className="h-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
         {/* Header */}
-        <div className="mb-4 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+        <div className="mb-4 flex min-w-0 items-center justify-between gap-2 sm:gap-3">
+          <div className="flex min-w-0 items-center gap-2">
             <CalendarClock
               size={18}
               className="text-blue-600"
             />
 
-            <h2 className="text-[16px] font-semibold text-slate-800">
+            <h2 className="min-w-0 break-words text-[15px] font-semibold text-slate-800 sm:text-[16px]">
               Recent Meetings
             </h2>
 
@@ -490,7 +490,7 @@ const RecentMeetings = ({
 
         {/* Standalone week and student filters; selections combine */}
         <div className="mb-4 space-y-3">
-          <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-3 py-2">
+          <div className="flex min-w-0 items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-2 py-2 sm:gap-3 sm:px-3">
             <button
               type="button"
               onClick={() => setWeekOffset((offset) => offset - 1)}
@@ -502,10 +502,10 @@ const RecentMeetings = ({
             </button>
 
             <div className="min-w-0 text-center">
-              <p className="text-xs font-semibold text-slate-800">
+              <p className="break-words text-xs font-semibold text-slate-800">
                 {weekOffset === 0 ? "This Week" : weekOffset < 0 ? `${Math.abs(weekOffset)} ${Math.abs(weekOffset) === 1 ? "Week" : "Weeks"} Ago` : weekOffset === 1 ? "Next Week" : `In ${weekOffset} Weeks`}
               </p>
-              <p className="mt-0.5 text-[11px] text-slate-500">{weekRangeLabel}</p>
+              <p className="mt-0.5 break-words text-[10px] text-slate-500 sm:text-[11px]">{weekRangeLabel}</p>
             </div>
 
             <button
@@ -519,7 +519,7 @@ const RecentMeetings = ({
             </button>
           </div>
 
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+          <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
             <label htmlFor="recent-meetings-student-filter" className="shrink-0 text-xs font-medium text-slate-600">
               Filter by student
             </label>
@@ -668,7 +668,7 @@ const RecentMeetings = ({
           <button
             type="button"
             onClick={() => setShowAll((current) => !current)}
-            className="mt-4 flex w-full items-center justify-center gap-1 text-[12px] font-semibold text-blue-600 transition hover:text-blue-700"
+            className="mt-4 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-[12px] font-semibold text-blue-600 transition hover:bg-blue-50 hover:text-blue-700"
           >
             {showAll ? "Show Less" : "View All Recent Meetings"}
 

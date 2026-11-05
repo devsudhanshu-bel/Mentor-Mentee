@@ -42,7 +42,7 @@ const Toggle = ({ value, onChange, disabled, name }) => {
       aria-label={`Attendance for ${name}`}
     >
       <span
-        className={`text-xs font-semibold transition-colors ${
+        className={`text-[11px] font-semibold transition-colors sm:text-xs ${
           isPresent ? "text-emerald-700" : "text-slate-400"
         }`}
       >
@@ -68,7 +68,7 @@ const Toggle = ({ value, onChange, disabled, name }) => {
       </button>
 
       <span
-        className={`text-xs font-semibold transition-colors ${
+        className={`text-[11px] font-semibold transition-colors sm:text-xs ${
           isAbsent ? "text-rose-700" : "text-slate-400"
         }`}
       >
@@ -270,18 +270,18 @@ export default function MentoringAttendancePanel() {
   // ----------------------------------------------------------
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <section className="w-full min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <div className="flex flex-col gap-3 p-5 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex items-center gap-3">
+        <div className="flex min-w-0 items-start gap-3 sm:items-center">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
             <ClipboardCheck size={22} />
           </div>
 
-          <div>
+          <div className="min-w-0">
             <h2 className="text-sm font-semibold text-slate-800">
               Mentoring Attendance
             </h2>
-            <p className="mt-1 text-xs text-slate-500">
+            <p className="mt-1 break-words text-xs leading-5 text-slate-500">
               Record attendance for your assigned mentees by session date.
             </p>
           </div>
@@ -290,7 +290,7 @@ export default function MentoringAttendancePanel() {
         <button
           type="button"
           onClick={() => setExpanded((current) => !current)}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700"
+          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-blue-700 sm:w-auto"
         >
           <ClipboardCheck size={16} />
           {expanded ? "Close Attendance" : "Mark Attendance"}
@@ -299,9 +299,9 @@ export default function MentoringAttendancePanel() {
       </div>
 
       {expanded && (
-        <div className="border-t border-slate-100 p-5">
-          <div className="mb-5 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <label className="block max-w-xs text-xs font-semibold text-slate-600">
+        <div className="min-w-0 border-t border-slate-100 p-3 sm:p-5">
+          <div className="mb-5 flex min-w-0 flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
+            <label className="block w-full max-w-xs text-xs font-semibold text-slate-600">
               Mentoring session date
               <div className="relative mt-2">
                 <CalendarDays
@@ -318,7 +318,7 @@ export default function MentoringAttendancePanel() {
               </div>
             </label>
 
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="grid min-w-0 grid-cols-2 gap-2 sm:grid-cols-4">
               <Metric label="Mentees" value={summary.total} />
               <Metric
                 label="Present"
@@ -341,24 +341,24 @@ export default function MentoringAttendancePanel() {
           {error && (
             <div
               role="alert"
-              className="mb-4 flex items-start gap-2 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-sm text-rose-700"
+              className="mb-4 flex min-w-0 items-start gap-2 rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-sm leading-5 text-rose-700"
             >
               <X size={16} className="mt-0.5 shrink-0" />
-              {error}
+              <span className="min-w-0 break-words">{error}</span>
             </div>
           )}
 
           {notice && (
             <div
               role="status"
-              className={`mb-4 flex items-center gap-2 rounded-lg border px-3 py-2 text-sm ${
+              className={`mb-4 flex min-w-0 items-start gap-2 rounded-lg border px-3 py-2 text-sm leading-5 sm:items-center ${
                 isSubmitted
                   ? "border-amber-200 bg-amber-50 text-amber-800"
                   : "border-emerald-100 bg-emerald-50 text-emerald-700"
               }`}
             >
-              <Check size={16} />
-              {notice}
+              <Check size={16} className="mt-0.5 shrink-0 sm:mt-0" />
+              <span className="min-w-0 break-words">{notice}</span>
             </div>
           )}
 
@@ -384,17 +384,17 @@ export default function MentoringAttendancePanel() {
                 <span className="pr-2">Attendance status</span>
               </div>
 
-              <div className="divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-100">
+              <div className="min-w-0 divide-y divide-slate-100 overflow-hidden rounded-xl border border-slate-100">
                 {students.map((student) => (
                   <div
                     key={student.id}
-                    className="flex flex-col gap-3 px-4 py-4 sm:flex-row sm:items-center sm:justify-between"
+                    className="flex min-w-0 flex-col gap-3 px-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-4"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-semibold text-slate-800">
+                      <p className="break-words text-sm font-semibold text-slate-800">
                         {student.fullName}
                       </p>
-                      <p className="mt-1 text-xs text-slate-500">
+                      <p className="mt-1 break-words text-xs leading-5 text-slate-500">
                         {student.registerNumber}
                         {student.section ? ` · ${student.section}` : ""}
                         {student.semester
@@ -413,8 +413,8 @@ export default function MentoringAttendancePanel() {
                 ))}
               </div>
 
-              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <p className="text-xs text-slate-500">
+              <div className="mt-4 flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                <p className="break-words text-xs leading-5 text-slate-500">
                   {summary.marked} of {summary.total} students marked ·{" "}
                   {summary.percentage}% present among marked students
                 </p>
@@ -425,7 +425,7 @@ export default function MentoringAttendancePanel() {
                   disabled={
                     saving || loading || isSubmitted || !allStudentsMarked
                   }
-                  className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto"
                 >
                   {saving ? (
                     <LoaderCircle size={16} className="animate-spin" />
@@ -456,7 +456,7 @@ export default function MentoringAttendancePanel() {
 
 function Metric({ label, value, color = "text-slate-900" }) {
   return (
-    <div className="min-w-[74px] rounded-xl border border-slate-100 bg-slate-50 px-3 py-2">
+    <div className="min-w-0 rounded-xl border border-slate-100 bg-slate-50 px-2.5 py-2 sm:px-3">
       <p className="text-[10px] font-medium text-slate-500">{label}</p>
       <p className={`mt-1 text-lg font-bold ${color}`}>{value ?? 0}</p>
     </div>

@@ -43,28 +43,28 @@ const expertise = [
 
 const MentoringExpertise = () => {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="flex items-center gap-2 border-b border-slate-100 p-4">
+      <div className="flex items-center gap-2 border-b border-slate-100 p-3 sm:p-4">
         <GraduationCap
           size={16}
-          className="text-blue-600"
+          className="shrink-0 text-blue-600"
         />
 
-        <h2 className="text-[16px] font-semibold text-slate-900">
+        <h2 className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">
           Mentoring Expertise
         </h2>
       </div>
 
       {/* Cards */}
-      <div className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid min-w-0 grid-cols-2 gap-3 p-3 sm:grid-cols-2 sm:p-4 xl:grid-cols-4">
         {expertise.map((item, index) => {
           const Icon = item.icon;
 
           return (
             <div
               key={index}
-              className="rounded-lg border border-slate-200 p-4 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-sm"
+              className="min-w-0 rounded-lg border border-slate-200 p-2.5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-sm sm:p-4"
             >
               <div
                 className={`flex h-9 w-9 items-center justify-center rounded-lg ${item.bg}`}
@@ -75,11 +75,11 @@ const MentoringExpertise = () => {
                 />
               </div>
 
-              <h3 className="mt-3 text-[13px] font-semibold text-slate-900">
+              <h3 className="mt-3 break-words text-[12px] font-semibold text-slate-900 sm:text-[13px]">
                 {item.title}
               </h3>
 
-              <p className="mt-2 text-[11px] leading-5 text-slate-500">
+              <p className="mt-2 break-words text-[10px] leading-5 text-slate-500 sm:text-[11px]">
                 {item.description}
               </p>
             </div>

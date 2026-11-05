@@ -336,13 +336,13 @@ const Documents = () => {
 
   if (!studentId) {
     return (
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
         <MentorSidebar />
 
-        <div className="ml-[290px] min-h-screen">
+        <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
           <MentorHeader />
 
-          <main className="p-6">
+          <main className="p-3 sm:p-4 lg:p-6">
             <div className="rounded-xl border border-amber-200 bg-white p-6">
               <h2 className="text-sm font-semibold text-slate-900">
                 Student not selected
@@ -364,13 +364,13 @@ const Documents = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <MentorSidebar />
 
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <MentorHeader />
 
-        <main className="p-6">
+        <main className="p-3 sm:p-4 lg:p-6">
           {/* HEADER ACTIONS */}
 
           <div className="mb-4 flex items-center justify-between">
@@ -418,7 +418,7 @@ const Documents = () => {
 
           {/* DASHBOARD LAYOUT */}
 
-          <div className="grid grid-cols-[260px_minmax(0,1fr)] gap-2">
+          <div className="grid min-w-0 grid-cols-1 gap-2 xl:grid-cols-[260px_minmax(0,1fr)]">
             {/* STUDENT PROFILE */}
 
             <div className="flex flex-col gap-2">
@@ -435,7 +435,7 @@ const Documents = () => {
 
               {/* STATISTICS */}
 
-              <div className="grid grid-cols-2 gap-2 xl:grid-cols-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 xl:grid-cols-4">
                 <DocumentStatCard
                   icon={FileText}
                   iconBg="bg-blue-100"

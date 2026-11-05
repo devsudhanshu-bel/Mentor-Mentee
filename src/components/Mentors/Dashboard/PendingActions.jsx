@@ -52,31 +52,31 @@ const actions = [
 
 const PendingActions = () => {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-[16px] font-semibold text-slate-800">
+      <div className="mb-4 flex min-w-0 items-center justify-between gap-3 sm:mb-5">
+        <h2 className="text-base font-semibold text-slate-800">
           Pending Actions
         </h2>
 
-        <button className="text-xs font-medium text-blue-600 hover:text-blue-700">
+        <button className="shrink-0 text-xs font-medium text-blue-600 hover:text-blue-700">
           View All
         </button>
       </div>
 
       {/* Actions */}
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-3 sm:space-y-4">
         {actions.map((action, index) => {
           const Icon = action.icon;
 
           return (
             <div
               key={index}
-              className="flex items-center justify-between border-b border-slate-100 pb-4 last:border-none last:pb-0"
+              className="flex min-w-0 items-start justify-between gap-2 border-b border-slate-100 pb-3 last:border-none last:pb-0 sm:items-center sm:gap-3 sm:pb-4"
             >
-              <div className="flex items-center gap-3">
+              <div className="flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3">
                 <div
-                  className={`flex h-10 w-10 items-center justify-center rounded-xl ${action.bg}`}
+                  className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:mt-0 sm:h-10 sm:w-10 ${action.bg}`}
                 >
                   <Icon
                     size={18}
@@ -85,12 +85,12 @@ const PendingActions = () => {
                   />
                 </div>
 
-                <div>
-                  <h3 className="text-[14px] font-semibold text-slate-800">
+                <div className="min-w-0">
+                  <h3 className="break-words text-[13px] font-semibold leading-5 text-slate-800 sm:text-[14px]">
                     {action.title}
                   </h3>
 
-                  <p className="mt-1 text-[12px] text-slate-500">
+                  <p className="mt-1 break-words text-[12px] leading-4 text-slate-500">
                     {action.subtitle}
                   </p>
 
@@ -100,9 +100,9 @@ const PendingActions = () => {
                 </div>
               </div>
 
-              <div className="flex flex-col items-end gap-2">
+              <div className="flex shrink-0 flex-col items-end gap-2">
                 <span
-                  className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${action.badgeStyle}`}
+                  className={`rounded-full px-2 py-1 text-[10px] font-semibold sm:px-2.5 ${action.badgeStyle}`}
                 >
                   {action.badge}
                 </span>

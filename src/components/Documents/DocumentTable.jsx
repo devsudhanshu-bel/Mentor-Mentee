@@ -1,3 +1,4 @@
+
 import React, { useMemo, useState } from "react";
 import {
   Plus,
@@ -38,27 +39,29 @@ const DocumentTable = ({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
+    <div className="w-full min-w-0 bg-white rounded-xl border border-slate-200 shadow-sm p-3 sm:p-4">
 
       {/* HEADER */}
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
 
-        <h2 className="text-xl font-semibold text-slate-800">
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-800">
           My Documents
         </h2>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col xs:flex-row sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
 
-          <DocumentFilter
-            value={selectedCategory}
-            onChange={handleFilterChange}
-          />
+          <div className="w-full sm:w-auto">
+            <DocumentFilter
+              value={selectedCategory}
+              onChange={handleFilterChange}
+            />
+          </div>
 
           <button
             type="button"
             onClick={onUploadClick}
-            className="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-2 text-sm transition"
+            className="h-10 sm:h-9 w-full sm:w-auto shrink-0 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-2 text-sm transition"
           >
             <Plus size={15} />
             Upload Document
@@ -69,31 +72,31 @@ const DocumentTable = ({
 
       {/* TABLE */}
 
-      <div className="overflow-x-auto">
+      <div className="w-full min-w-0 overflow-x-auto rounded-lg">
 
-        <table className="w-full">
+        <table className="w-full min-w-[700px]">
 
           <thead>
 
             <tr className="bg-slate-50 border border-slate-200 text-left text-xs text-slate-500">
 
-              <th className="px-3 py-3 font-medium">
+              <th className="px-3 py-3 font-medium whitespace-nowrap">
                 Document Name
               </th>
 
-              <th className="px-3 py-3 font-medium">
+              <th className="px-3 py-3 font-medium whitespace-nowrap">
                 Category
               </th>
 
-              <th className="px-3 py-3 font-medium">
+              <th className="px-3 py-3 font-medium whitespace-nowrap">
                 Type
               </th>
 
-              <th className="px-3 py-3 font-medium">
+              <th className="px-3 py-3 font-medium whitespace-nowrap">
                 Uploaded On
               </th>
 
-              <th className="px-3 py-3 font-medium">
+              <th className="px-3 py-3 font-medium whitespace-nowrap">
                 Actions
               </th>
 
@@ -137,7 +140,7 @@ const DocumentTable = ({
 
                 <td
                   colSpan="5"
-                  className="py-12 text-center"
+                  className="py-12 px-3 text-center"
                 >
 
                   <div className="flex flex-col items-center justify-center">
@@ -152,19 +155,15 @@ const DocumentTable = ({
                     </div>
 
                     <p className="text-sm font-medium text-slate-700">
-
                       {selectedCategory === "ALL"
                         ? "No documents found"
                         : "No documents found in this category"}
-
                     </p>
 
                     <p className="text-xs text-slate-400 mt-1">
-
                       {selectedCategory === "ALL"
                         ? "Upload your first document to get started."
                         : "Try selecting another category."}
-
                     </p>
 
                   </div>
@@ -196,49 +195,45 @@ const DocumentTable = ({
 
       {/* COUNT */}
 
-      {!loading &&
-        filteredDocuments.length > 0 && (
+      {!loading && filteredDocuments.length > 0 && (
 
-          <div className="flex items-center justify-between mt-4">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mt-4">
 
-            <p className="text-xs text-slate-400">
+          <p className="text-xs text-slate-400">
 
-              Showing{" "}
+            Showing{" "}
 
-              <span className="font-medium text-slate-500">
-                {Math.min(
-                  filteredDocuments.length,
-                  10
-                )}
-              </span>{" "}
+            <span className="font-medium text-slate-500">
+              {Math.min(filteredDocuments.length, 10)}
+            </span>{" "}
 
-              of{" "}
+            of{" "}
 
-              <span className="font-medium text-slate-500">
-                {filteredDocuments.length}
-              </span>{" "}
+            <span className="font-medium text-slate-500">
+              {filteredDocuments.length}
+            </span>{" "}
 
-              {selectedCategory !== "ALL"
-                ? "filtered documents"
-                : "documents"}
+            {selectedCategory !== "ALL"
+              ? "filtered documents"
+              : "documents"}
 
-            </p>
+          </p>
 
-            {filteredDocuments.length > 10 && (
+          {filteredDocuments.length > 10 && (
 
-              <button
-                type="button"
-                onClick={onViewAll}
-                className="text-sm font-medium text-blue-600 hover:text-blue-700 transition"
-              >
-                View All Documents
-              </button>
+            <button
+              type="button"
+              onClick={onViewAll}
+              className="text-sm font-medium text-blue-600 hover:text-blue-700 transition self-start sm:self-auto"
+            >
+              View All Documents
+            </button>
 
-            )}
+          )}
 
-          </div>
+        </div>
 
-        )}
+      )}
 
       {/* VIEW ALL */}
 
@@ -251,7 +246,7 @@ const DocumentTable = ({
             <button
               type="button"
               onClick={onViewAll}
-              className="w-80 h-10 rounded-md border border-slate-300 hover:bg-slate-50 text-sm font-medium text-slate-700 transition"
+              className="w-full sm:w-80 h-10 rounded-md border border-slate-300 hover:bg-slate-50 text-sm font-medium text-slate-700 transition"
             >
               View All Documents
             </button>

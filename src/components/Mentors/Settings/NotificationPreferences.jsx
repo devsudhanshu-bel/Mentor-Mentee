@@ -4,7 +4,7 @@ import { Bell, ChevronRight } from "lucide-react";
 const Toggle = ({ enabled = false }) => {
   return (
     <button
-      className={`relative h-5 w-9 rounded-full transition ${
+      className={`relative h-5 w-9 shrink-0 rounded-full transition ${
         enabled ? "bg-blue-600" : "bg-slate-300"
       }`}
     >
@@ -19,11 +19,11 @@ const Toggle = ({ enabled = false }) => {
 
 const NotificationPreferences = () => {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
       {/* Header */}
-      <div className="mb-4">
+      <div className="mb-4 min-w-0">
         <div className="flex items-center gap-2">
-          <Bell size={17} className="text-blue-600" />
+          <Bell size={17} className="shrink-0 text-blue-600" />
 
           <h2 className="text-[15px] font-semibold text-slate-800">
             Notification Preferences
@@ -35,11 +35,11 @@ const NotificationPreferences = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid min-w-0 grid-cols-1 gap-3 sm:grid-cols-2">
         {/* Security Card */}
-        <div className="rounded-lg border border-slate-200 p-3">
-          <div className="flex items-center justify-between">
-            <div>
+        <div className="min-w-0 rounded-lg border border-slate-200 p-3">
+          <div className="flex min-w-0 items-center justify-between gap-3">
+            <div className="min-w-0">
               <h4 className="text-[12px] font-semibold text-slate-800">
                 Change Password
               </h4>
@@ -49,11 +49,11 @@ const NotificationPreferences = () => {
               </p>
             </div>
 
-            <ChevronRight size={15} className="text-slate-400" />
+            <ChevronRight size={15} className="shrink-0 text-slate-400" />
           </div>
 
-          <div className="mt-4 flex items-center justify-between">
-            <div>
+          <div className="mt-4 flex min-w-0 items-center justify-between gap-3">
+            <div className="min-w-0">
               <h4 className="text-[12px] font-semibold text-slate-800">
                 Two-Factor Authentication
               </h4>
@@ -68,10 +68,10 @@ const NotificationPreferences = () => {
         </div>
 
         {/* Notifications Card */}
-        <div className="rounded-lg border border-slate-200 p-3">
+        <div className="min-w-0 rounded-lg border border-slate-200 p-3">
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex min-w-0 items-center justify-between gap-3">
+              <div className="min-w-0">
                 <h4 className="text-[12px] font-semibold text-slate-800">
                   Meeting Reminders
                 </h4>
@@ -84,8 +84,8 @@ const NotificationPreferences = () => {
               <Toggle enabled />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex min-w-0 items-center justify-between gap-3">
+              <div className="min-w-0">
                 <h4 className="text-[12px] font-semibold text-slate-800">
                   Student Updates
                 </h4>
@@ -98,8 +98,8 @@ const NotificationPreferences = () => {
               <Toggle enabled />
             </div>
 
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex min-w-0 items-center justify-between gap-3">
+              <div className="min-w-0">
                 <h4 className="text-[12px] font-semibold text-slate-800">
                   System Announcements
                 </h4>

@@ -88,6 +88,8 @@ const DashboardBanner = () => {
     <section
       className="
         relative
+        hidden
+        sm:block
         w-full
         h-[170px]
         rounded-3xl

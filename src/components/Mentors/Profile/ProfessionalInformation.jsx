@@ -105,29 +105,29 @@ const EditableField = ({
   blue = false,
 }) => {
   return (
-    <div className="grid grid-cols-[18px_140px_1fr] items-start gap-3">
+    <div className="grid min-w-0 grid-cols-[18px_minmax(0,105px)_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[18px_140px_minmax(0,1fr)] sm:gap-3">
       {/* ====================================================
           ICON
       ==================================================== */}
 
       <Icon
         size={15}
-        className="mt-2 text-slate-500"
+        className="mt-2 shrink-0 text-slate-500"
       />
 
       {/* ====================================================
           LABEL
       ==================================================== */}
 
-      <div className="flex items-center gap-1.5 pt-2">
-        <span className="text-[12px] font-medium text-slate-600">
+      <div className="flex min-w-0 items-center gap-1 pt-2">
+        <span className="break-words text-[11px] font-medium text-slate-600 sm:text-[12px]">
           {label}
         </span>
 
         {readOnly && isEditing && (
           <LockKeyhole
             size={11}
-            className="text-slate-400"
+            className="shrink-0 text-slate-400"
           />
         )}
       </div>
@@ -138,7 +138,7 @@ const EditableField = ({
 
       {!isEditing ? (
         <span
-          className={`break-words pt-2 text-[12px] ${
+          className={`min-w-0 break-words pt-2 text-[11px] sm:text-[12px] ${
             blue
               ? "font-medium text-blue-600"
               : "text-slate-800"
@@ -155,7 +155,7 @@ const EditableField = ({
           }
           disabled={readOnly}
           placeholder={`Enter ${label.toLowerCase()}`}
-          className={`w-full rounded-lg border px-3 py-2 text-[12px] outline-none transition ${
+          className={`w-full min-w-0 rounded-lg border px-2.5 py-2 text-[11px] outline-none transition sm:px-3 sm:text-[12px] ${
             readOnly
               ? "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400"
               : "border-slate-200 bg-white text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
@@ -188,7 +188,7 @@ const ProfessionalInformation = ({
 
   /* ========================================================
      SYNC BACKEND DATA → FORM
-     
+
      Only sync when mentor changes from the parent.
   ======================================================== */
 
@@ -206,9 +206,9 @@ const ProfessionalInformation = ({
 
   if (!mentor) {
     return (
-      <div className="min-h-[600px] rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="flex h-full items-center justify-center p-8">
-          <p className="text-sm text-slate-500">
+      <div className="min-h-[420px] rounded-xl border border-slate-200 bg-white shadow-sm sm:min-h-[600px]">
+        <div className="flex h-full items-center justify-center p-4 sm:p-8">
+          <p className="text-center text-sm text-slate-500">
             No professional information available.
           </p>
         </div>
@@ -318,21 +318,21 @@ const ProfessionalInformation = ({
   ======================================================== */
 
   return (
-    <div className="min-h-[600px] rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-h-[420px] min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm sm:min-h-[600px]">
       {/* ====================================================
           HEADER
       ==================================================== */}
 
-      <div className="flex items-center justify-between border-b border-slate-100 p-4">
+      <div className="flex flex-col gap-3 border-b border-slate-100 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
         {/* TITLE */}
 
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           <BadgeCheck
             size={16}
-            className="text-blue-600"
+            className="shrink-0 text-blue-600"
           />
 
-          <h2 className="text-[16px] font-semibold text-slate-900">
+          <h2 className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">
             Professional Information
           </h2>
         </div>
@@ -345,21 +345,21 @@ const ProfessionalInformation = ({
           <button
             type="button"
             onClick={handleEdit}
-            className="flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-[12px] font-medium text-blue-600 transition hover:bg-blue-100"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-[12px] font-medium text-blue-600 transition hover:bg-blue-100 sm:w-auto sm:py-1.5"
           >
             <Pencil size={13} />
 
             Edit
           </button>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center gap-2 sm:w-auto">
             {/* CANCEL */}
 
             <button
               type="button"
               onClick={handleCancel}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-[12px] font-medium text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-[12px] font-medium text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-1.5"
             >
               <X size={13} />
 
@@ -372,7 +372,7 @@ const ProfessionalInformation = ({
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-[12px] font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-[12px] font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:flex-none sm:py-1.5"
             >
               <Save size={13} />
 
@@ -389,8 +389,8 @@ const ProfessionalInformation = ({
       ==================================================== */}
 
       {isEditing && (
-        <div className="mx-4 mt-4 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2.5">
-          <p className="text-[11px] leading-5 text-blue-700">
+        <div className="mx-3 mt-3 rounded-lg border border-blue-100 bg-blue-50 px-3 py-2.5 sm:mx-4 sm:mt-4">
+          <p className="break-words text-[11px] leading-5 text-blue-700">
             Update your professional information below.
             Employee ID and Department are managed by the
             institution and cannot be changed here.
@@ -403,8 +403,8 @@ const ProfessionalInformation = ({
       ==================================================== */}
 
       <div
-        className={`space-y-4 p-4 ${
-          isEditing ? "pt-5" : ""
+        className={`min-w-0 space-y-4 p-3 sm:p-4 ${
+          isEditing ? "pt-4 sm:pt-5" : ""
         }`}
       >
         {/* ==================================================

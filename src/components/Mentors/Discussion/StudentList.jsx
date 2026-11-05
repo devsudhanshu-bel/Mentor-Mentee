@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from "react";
 import {
   Search,
@@ -123,10 +122,10 @@ const StudentList = ({
   }, [safeConversations, searchTerm]);
 
   return (
-    <div className="flex h-full min-h-0 flex-col bg-white">
+    <div className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden bg-white">
       {/* Search */}
-      <div className="shrink-0 border-b border-slate-200 p-4">
-        <div className="relative">
+      <div className="shrink-0 border-b border-slate-200 p-3 sm:p-4">
+        <div className="relative min-w-0">
           <Search
             size={18}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -140,12 +139,12 @@ const StudentList = ({
             }
             placeholder="Search students..."
             aria-label="Search assigned mentees"
-            className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-3 text-[13px] outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+            className="w-full min-w-0 rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-3 text-[12px] outline-none transition focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100 sm:text-[13px]"
           />
         </div>
 
-        <div className="mt-3 flex items-center justify-between">
-          <p className="text-xs font-medium text-slate-500">
+        <div className="mt-2.5 flex items-center justify-between gap-2 sm:mt-3">
+          <p className="min-w-0 text-[11px] font-medium text-slate-500 sm:text-xs">
             {safeConversations.length}{" "}
             {safeConversations.length === 1
               ? "conversation"
@@ -159,7 +158,7 @@ const StudentList = ({
               disabled={loading}
               aria-label="Refresh conversations"
               title="Refresh conversations"
-              className="rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:opacity-50"
+              className="shrink-0 rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-blue-600 disabled:opacity-50"
             >
               <RefreshCw
                 size={15}
@@ -171,13 +170,13 @@ const StudentList = ({
       </div>
 
       {/* Conversations */}
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto overscroll-contain">
         {loading && safeConversations.length === 0 ? (
-          <div className="flex justify-center py-10">
+          <div className="flex justify-center py-8 sm:py-10">
             <div className="h-6 w-6 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
           </div>
         ) : error && safeConversations.length === 0 ? (
-          <div className="px-4 py-8 text-center">
+          <div className="px-3 py-6 text-center sm:px-4 sm:py-8">
             <MessageCircle
               size={28}
               className="mx-auto mb-2 text-red-300"
@@ -207,14 +206,14 @@ const StudentList = ({
             {error && (
               <div
                 role="alert"
-                className="border-b border-red-100 bg-red-50 px-4 py-2 text-xs text-red-700"
+                className="break-words border-b border-red-100 bg-red-50 px-3 py-2 text-[11px] text-red-700 sm:px-4 sm:text-xs"
               >
                 {error}
               </div>
             )}
 
             {filteredConversations.length === 0 ? (
-              <div className="px-4 py-10 text-center">
+              <div className="px-3 py-8 text-center sm:px-4 sm:py-10">
                 <MessageCircle
                   size={28}
                   className="mx-auto mb-2 text-slate-300"
@@ -226,7 +225,7 @@ const StudentList = ({
                     : "No assigned mentees yet"}
                 </p>
 
-                <p className="mt-1 text-xs leading-5 text-slate-400">
+                <p className="mt-1 break-words text-xs leading-5 text-slate-400">
                   {searchTerm
                     ? "Try another student name or message."
                     : "Your active assigned mentees will appear here when their conversations are available."}

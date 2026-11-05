@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   FileText,
@@ -39,10 +38,10 @@ const WorkspaceSidebar = ({
   setActiveTab,
 }) => {
   return (
-    <aside className="min-h-0 overflow-y-auto border-r border-slate-200 bg-slate-50 p-3 sm:p-4">
+    <aside className="min-h-0 min-w-0 overflow-x-hidden border-b border-slate-200 bg-slate-50 p-3 sm:p-4 lg:overflow-y-auto lg:overflow-x-hidden lg:border-b-0 lg:border-r">
       {/* Heading */}
-      <div className="mb-5">
-        <h3 className="text-base font-semibold text-slate-800">
+      <div className="mb-3 sm:mb-5">
+        <h3 className="text-sm font-semibold text-slate-800 sm:text-base">
           Workspace
         </h3>
 
@@ -54,7 +53,7 @@ const WorkspaceSidebar = ({
       {/* Navigation */}
       <nav
         aria-label="Meeting workspace navigation"
-        className="space-y-1.5"
+        className="-mx-1 flex gap-1.5 overflow-x-auto px-1 pb-1 sm:gap-2 lg:mx-0 lg:flex-col lg:space-y-1.5 lg:overflow-x-visible lg:px-0 lg:pb-0"
       >
         {workspaceTabs.map((item) => {
           const Icon = item.icon;
@@ -67,7 +66,7 @@ const WorkspaceSidebar = ({
               onClick={() => setActiveTab(item.id)}
               aria-current={isActive ? "page" : undefined}
               title={item.description}
-              className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-3 text-left text-[13px] font-medium transition-all duration-200 ${
+              className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2.5 text-left text-[12px] font-medium transition-all duration-200 sm:gap-2.5 sm:py-3 sm:text-[13px] lg:w-full ${
                 isActive
                   ? "bg-blue-600 text-white shadow-sm"
                   : "text-slate-600 hover:bg-white hover:text-slate-900 hover:shadow-sm"
@@ -78,7 +77,7 @@ const WorkspaceSidebar = ({
                 className="shrink-0"
               />
 
-              <span className="min-w-0 break-words">
+              <span className="whitespace-nowrap lg:min-w-0 lg:whitespace-normal lg:break-words">
                 {item.title}
               </span>
             </button>
@@ -87,7 +86,7 @@ const WorkspaceSidebar = ({
       </nav>
 
       {/* Meeting guidance */}
-      <div className="mt-6 rounded-xl border border-blue-100 bg-blue-50 p-3 sm:p-4">
+      <div className="mt-3 rounded-xl border border-blue-100 bg-blue-50 p-3 sm:mt-6 sm:p-4">
         <div className="flex items-center gap-2">
           <MessageCircle
             size={17}
@@ -99,12 +98,12 @@ const WorkspaceSidebar = ({
           </h4>
         </div>
 
-        <p className="mt-3 text-xs leading-5 text-slate-600">
+        <p className="mt-2 text-xs leading-5 text-slate-600 sm:mt-3">
           Record important discussions, provide meaningful feedback,
           and schedule a follow-up when needed.
         </p>
 
-        <p className="mt-3 border-t border-blue-100 pt-3 text-xs leading-5 text-slate-500">
+        <p className="mt-2 border-t border-blue-100 pt-2 text-xs leading-5 text-slate-500 sm:mt-3 sm:pt-3">
           Remember to save your changes before ending the meeting.
         </p>
       </div>

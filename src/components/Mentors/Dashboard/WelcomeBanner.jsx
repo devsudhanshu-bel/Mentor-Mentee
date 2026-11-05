@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 
 import banner from "../../../assets/banner.png";
@@ -104,7 +103,7 @@ const WelcomeBanner = ({ mentorName = "" }) => {
         : "Good Evening";
 
   return (
-    <div className="relative h-[165px] w-full overflow-hidden rounded-3xl border border-slate-200 shadow-sm">
+    <div className="relative hidden h-[165px] w-full overflow-hidden rounded-3xl border border-slate-200 shadow-sm sm:block">
       <img
         src={banner}
         alt=""

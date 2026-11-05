@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef, useState } from "react";
 
 import {
@@ -37,7 +36,7 @@ const normalizeStatus = (status) =>
   String(status ?? "SCHEDULED")
     .trim()
     .toUpperCase()
-    .replace(/[\s-]+/g, "_");
+    .replace(/[\\s-]+/g, "_");
 
 // =========================================================
 // MEETING LIST ITEM
@@ -137,9 +136,9 @@ const MeetingListItem = ({
   // -------------------------------------------------------
 
   return (
-    <div className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 transition-all duration-300 hover:shadow-sm">
+    <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-slate-200 bg-white px-3 py-3 transition-all duration-300 hover:shadow-sm sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-4">
       {/* LEFT SECTION */}
-      <div className="flex min-w-0 flex-1 items-start gap-3">
+      <div className="flex min-w-0 flex-1 items-start gap-2 sm:gap-3">
         <MeetingDateBadge
           month={meeting?.month || "---"}
           date={meeting?.date || "--"}
@@ -147,10 +146,10 @@ const MeetingListItem = ({
         />
 
         {/* MEETING DETAILS */}
-        <div className="min-w-0 flex-1 pr-2">
+        <div className="min-w-0 flex-1 sm:pr-2">
           {/* TIME AND TYPE */}
           <div className="mb-1 flex flex-wrap items-center gap-2">
-            <p className="text-[12px] font-semibold text-blue-600">
+            <p className="break-words text-[11px] font-semibold text-blue-600 sm:text-[12px]">
               {meeting?.time || "Time not specified"}
             </p>
 
@@ -186,22 +185,22 @@ const MeetingListItem = ({
           </div>
 
           {/* TITLE */}
-          <h3 className="break-words text-[14px] font-semibold text-slate-800">
+          <h3 className="break-words text-[13px] font-semibold text-slate-800 sm:text-[14px]">
             {meeting?.title || "Mentorship Meeting"}
           </h3>
 
           {/* LOCATION */}
-          <div className="mt-1 flex min-w-0 items-center gap-1 text-[11px] text-slate-500">
-            <MapPin size={11} className="shrink-0" />
+          <div className="mt-1 flex min-w-0 items-start gap-1 text-[11px] text-slate-500">
+            <MapPin size={11} className="mt-0.5 shrink-0" />
 
-            <span className="break-words">
+            <span className="min-w-0 break-words">
               {meeting?.location || "Location not specified"}
             </span>
           </div>
 
           {/* AGENDA */}
           <p
-            className="mt-1 max-w-[360px] overflow-hidden text-[11px] leading-4 text-slate-500"
+            className="mt-1 max-w-[360px] overflow-hidden break-words text-[11px] leading-4 text-slate-500"
             style={{
               display: "-webkit-box",
               WebkitLineClamp: 2,
@@ -214,13 +213,13 @@ const MeetingListItem = ({
       </div>
 
       {/* RIGHT SECTION */}
-      <div className="relative flex shrink-0 items-center gap-2">
+      <div className="relative flex w-full shrink-0 items-center justify-end gap-2 sm:w-auto">
         {/* START / CONTINUE MEETING */}
         <button
           type="button"
           onClick={() => invokeAction(onStartMeeting)}
           disabled={isTerminal}
-          className="cursor-pointer whitespace-nowrap rounded-lg border border-blue-300 px-3 py-1.5 text-[12px] font-medium text-blue-600 transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50"
+          className="min-w-0 flex-1 cursor-pointer whitespace-normal rounded-lg border border-blue-300 px-3 py-2 text-[11px] font-medium text-blue-600 transition hover:bg-blue-50 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:whitespace-nowrap sm:py-1.5 sm:text-[12px]"
         >
           {isTerminal
             ? isCompleted
@@ -234,7 +233,7 @@ const MeetingListItem = ({
         </button>
 
         {/* THREE-DOT MENU */}
-        <div ref={menuRef} className="relative">
+        <div ref={menuRef} className="relative shrink-0">
           <button
             type="button"
             aria-label={`Actions for ${meeting?.title || "meeting"}`}
@@ -253,7 +252,7 @@ const MeetingListItem = ({
           {menuOpen && (
             <div
               role="menu"
-              className="absolute right-0 top-11 z-50 w-56 rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
+              className="absolute right-0 top-11 z-50 w-[min(14rem,calc(100vw-2rem))] rounded-xl border border-slate-200 bg-white p-2 shadow-xl"
             >
               {/* VIEW DETAILS */}
               <button

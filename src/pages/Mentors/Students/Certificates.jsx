@@ -452,14 +452,14 @@ const Certificates = ({ studentId: studentIdProp }) => {
   // ========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
-      <div className="ml-[290px] min-h-screen max-lg:ml-0">
+      <div className="min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-        <main className="space-y-5 p-4 md:p-6">
-          <div className="flex flex-wrap items-center justify-between gap-3">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:space-y-5 sm:p-4 md:p-6">
+          <div className="flex min-w-0 flex-wrap items-center justify-between gap-2 sm:gap-3">
             {isAdminRoute ? <AdminBackButton /> : <BackButton />}
             <ActionButtons />
           </div>
@@ -467,14 +467,14 @@ const Certificates = ({ studentId: studentIdProp }) => {
           {error && (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700 sm:gap-3 sm:p-4"
             >
               <AlertCircle
                 size={20}
                 className="mt-0.5 shrink-0"
               />
 
-              <div className="flex-1">
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold">
                   Something went wrong
                 </p>
@@ -508,7 +508,7 @@ const Certificates = ({ studentId: studentIdProp }) => {
           {notice && (
             <div
               role="status"
-              className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-green-200 bg-green-50 p-3 text-sm text-green-800 sm:gap-3 sm:p-4"
             >
               <CheckCircle2 size={20} className="shrink-0" />
 
@@ -524,22 +524,22 @@ const Certificates = ({ studentId: studentIdProp }) => {
             </div>
           )}
 
-          <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
+          <section className="grid w-full min-w-0 grid-cols-1 items-start gap-3 sm:gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
             <StudentCertificatesProfile
               student={student}
               mentor={mentor}
             />
 
-            <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
               {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
 
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-xl font-bold text-slate-900">
+                  <h1 className="text-lg font-bold text-slate-900 sm:text-xl">
                     Certificates
                   </h1>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
                     Review submitted certificates and provide mentor feedback.
                   </p>
                 </div>
@@ -548,7 +548,7 @@ const Certificates = ({ studentId: studentIdProp }) => {
                   type="button"
                   onClick={loadCertificates}
                   disabled={isLoading || !studentId}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+                  className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50 sm:w-auto"
                 >
                   <RotateCcw
                     size={16}
@@ -560,7 +560,7 @@ const Certificates = ({ studentId: studentIdProp }) => {
 
               <section
                 aria-label="Certificate statistics"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
+                className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3 2xl:grid-cols-5"
               >
                 {stats.map((stat) => (
                   <CertificateStatCard
@@ -768,7 +768,7 @@ function CertificatePreviewContent({ activity, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4 md:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) onClose();
       }}
@@ -777,15 +777,15 @@ function CertificatePreviewContent({ activity, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label="Certificate document preview"
-        className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="flex max-h-[calc(100dvh-1rem)] w-full min-w-0 max-w-5xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[94dvh] sm:rounded-2xl"
       >
-        <header className="flex items-start justify-between gap-4 border-b p-5">
+        <header className="flex items-start justify-between gap-2 border-b p-3 sm:gap-4 sm:p-5">
           <div className="min-w-0">
-            <h2 className="break-words font-bold text-slate-900">
+            <h2 className="break-words text-sm font-bold text-slate-900 sm:text-base">
               {activity.title}
             </h2>
 
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-xs text-slate-500 sm:text-sm">
               Uploaded{" "}
               {activity.uploadedAt
                 ? new Date(activity.uploadedAt).toLocaleDateString("en-IN")
@@ -793,7 +793,7 @@ function CertificatePreviewContent({ activity, onClose }) {
             </p>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {blobUrl && (
               <>
                 <button
@@ -827,7 +827,7 @@ function CertificatePreviewContent({ activity, onClose }) {
           </div>
         </header>
 
-        <div className="flex-1 overflow-auto bg-slate-100 p-4">
+        <div className="min-h-0 flex-1 overflow-auto bg-slate-100 p-2 sm:p-4">
           {isLoading ? (
             <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
               <LoaderCircle
@@ -857,13 +857,13 @@ function CertificatePreviewContent({ activity, onClose }) {
             <img
               src={blobUrl}
               alt={activity.title}
-              className="mx-auto max-h-[65vh] max-w-full object-contain"
+              className="mx-auto max-h-[70dvh] max-w-full object-contain"
             />
           ) : blobUrl && isPdf ? (
             <iframe
               title={activity.title}
               src={blobUrl}
-              className="h-[65vh] w-full bg-white"
+              className="h-[70dvh] min-h-[280px] w-full bg-white"
             />
           ) : blobUrl ? (
             <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 p-8 text-center">

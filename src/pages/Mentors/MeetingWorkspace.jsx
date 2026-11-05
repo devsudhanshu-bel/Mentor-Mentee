@@ -171,20 +171,20 @@ Encouraged to participate in upcoming hackathon.`);
     );
   };
     return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* ================= Header ================= */}
-      <div className="border-b border-slate-200 bg-white px-6 py-4 shadow-sm">
-        <div className="flex items-center justify-between">
+      <div className="border-b border-slate-200 bg-white px-3 py-4 shadow-sm sm:px-5 lg:px-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           {/* Left */}
           <div>
-            <div className="flex items-center gap-3">
+            <div className="flex min-w-0 items-start gap-3">
               <button className="rounded-lg border border-slate-200 p-2 transition hover:bg-slate-50">
                 <ArrowLeft size={18} />
               </button>
 
               <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-xl font-semibold text-slate-800">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h1 className="break-words text-lg font-semibold text-slate-800 sm:text-xl">
                     Progress Review Meeting
                   </h1>
 
@@ -193,7 +193,7 @@ Encouraged to participate in upcoming hackathon.`);
                   </span>
                 </div>
 
-                <div className="mt-1 flex items-center gap-5 text-sm text-slate-500">
+                <div className="mt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-500 sm:text-sm">
                   <span>
                     Started at 11:02 AM
                   </span>
@@ -211,7 +211,7 @@ Encouraged to participate in upcoming hackathon.`);
           </div>
 
           {/* Right */}
-          <button className="flex items-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50">
+          <button className="flex w-full shrink-0 items-center justify-center gap-2 rounded-lg border border-red-300 px-4 py-2 text-sm font-semibold text-red-600 transition hover:bg-red-50 sm:w-auto">
             <X size={16} />
             End Meeting
           </button>
@@ -219,11 +219,11 @@ Encouraged to participate in upcoming hackathon.`);
       </div>
 
       {/* ================= Main ================= */}
-      <div className="grid grid-cols-[230px_1fr_330px] gap-5 p-6">
+      <div className="grid w-full min-w-0 grid-cols-1 gap-3 p-3 sm:gap-4 sm:p-4 lg:grid-cols-[190px_minmax(0,1fr)] lg:p-5 2xl:grid-cols-[220px_minmax(0,1fr)_300px] 2xl:gap-5 2xl:p-6">
 
         {/* ================= Sidebar ================= */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-          <div className="space-y-1">
+        <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+          <div className="grid grid-cols-2 gap-1 sm:grid-cols-3 lg:grid-cols-1">
             {sidebarItems.map((item) => {
               const Icon = item.icon;
 
@@ -233,7 +233,7 @@ Encouraged to participate in upcoming hackathon.`);
                   onClick={() =>
                     setActiveTab(item.id)
                   }
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
+                  className={`flex min-w-0 items-center gap-2 rounded-xl px-3 py-3 text-left text-xs font-medium transition sm:gap-3 sm:px-4 sm:text-sm ${
                     activeTab === item.id
                       ? "bg-blue-50 text-blue-600"
                       : "text-slate-600 hover:bg-slate-50"
@@ -249,13 +249,13 @@ Encouraged to participate in upcoming hackathon.`);
         </div>
 
         {/* ================= Center ================= */}
-        <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="min-w-0 rounded-2xl border border-slate-200 bg-white shadow-sm">
                       {/* ================= Content ================= */}
 
           {/* ================= NOTES ================= */}
           {activeTab === "notes" && (
-            <div className="p-6">
-              <h2 className="mb-4 text-lg font-semibold text-slate-800">
+            <div className="min-w-0 p-4 sm:p-6">
+              <h2 className="mb-4 text-base font-semibold text-slate-800 sm:text-lg">
                 Meeting Notes
               </h2>
 
@@ -303,17 +303,17 @@ Encouraged to participate in upcoming hackathon.`);
                 onChange={(e) =>
                   setNotes(e.target.value)
                 }
-                className="h-[420px] w-full resize-none rounded-xl border border-slate-200 p-4 text-[15px] leading-7 outline-none focus:border-blue-500"
+                className="h-72 w-full min-w-0 resize-y rounded-xl border border-slate-200 p-3 text-sm leading-7 outline-none focus:border-blue-500 sm:h-[420px] sm:p-4 sm:text-[15px]"
               />
 
-              <div className="mt-4 flex items-center justify-between">
+              <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <span className="text-sm text-emerald-600">
                   Saved at {savedTime}
                 </span>
 
                 <button
                   onClick={saveNotes}
-                  className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700"
+                  className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700 sm:w-auto"
                 >
                   <Save size={16} />
                   Save Notes
@@ -324,8 +324,8 @@ Encouraged to participate in upcoming hackathon.`);
 
           {/* ================= DISCUSSION ================= */}
           {activeTab === "discussion" && (
-            <div className="p-6">
-              <h2 className="mb-5 text-lg font-semibold">
+            <div className="min-w-0 p-4 sm:p-6">
+              <h2 className="mb-5 text-base font-semibold sm:text-lg">
                 Discussion Points
               </h2>
 
@@ -342,7 +342,7 @@ Encouraged to participate in upcoming hackathon.`);
                 )}
               </div>
 
-              <div className="mt-5 flex gap-3">
+              <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                 <input
                   value={newDiscussion}
                   onChange={(e) =>
@@ -351,7 +351,7 @@ Encouraged to participate in upcoming hackathon.`);
                     )
                   }
                   placeholder="Add discussion point..."
-                  className="flex-1 rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full min-w-0 flex-1 rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
 
                 <button
@@ -367,7 +367,7 @@ Encouraged to participate in upcoming hackathon.`);
                       setNewDiscussion("");
                     }
                   }}
-                  className="rounded-xl bg-blue-600 px-5 text-white hover:bg-blue-700"
+                  className="flex min-h-11 w-full shrink-0 items-center justify-center rounded-xl bg-blue-600 px-5 text-white hover:bg-blue-700 sm:w-auto"
                 >
                   <Plus size={18} />
                 </button>
@@ -377,8 +377,8 @@ Encouraged to participate in upcoming hackathon.`);
 
           {/* ================= ACTION ITEMS ================= */}
           {activeTab === "actions" && (
-            <div className="p-6">
-              <h2 className="mb-5 text-lg font-semibold">
+            <div className="min-w-0 p-4 sm:p-6">
+              <h2 className="mb-5 text-base font-semibold sm:text-lg">
                 Action Items
               </h2>
 
@@ -387,7 +387,7 @@ Encouraged to participate in upcoming hackathon.`);
                   (item, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-xl border border-slate-200 p-4"
+                      className="flex min-w-0 items-center justify-between gap-3 rounded-xl border border-slate-200 p-3 sm:p-4"
                     >
                       <button
                         onClick={() => {
@@ -405,7 +405,7 @@ Encouraged to participate in upcoming hackathon.`);
                             updated
                           );
                         }}
-                        className="flex items-center gap-3"
+                        className="flex min-w-0 items-center gap-3 text-left"
                       >
                         {item.completed ? (
                           <CircleCheckBig
@@ -447,7 +447,7 @@ Encouraged to participate in upcoming hackathon.`);
                   )
                 )}
 
-                <div className="mt-5 flex gap-3">
+                <div className="mt-5 flex flex-col gap-3 sm:flex-row">
                   <input
                     value={newTask}
                     onChange={(e) =>
@@ -456,7 +456,7 @@ Encouraged to participate in upcoming hackathon.`);
                       )
                     }
                     placeholder="New Action Item"
-                    className="flex-1 rounded-xl border border-slate-300 px-4 py-3 outline-none"
+                    className="w-full min-w-0 flex-1 rounded-xl border border-slate-300 px-4 py-3 outline-none"
                   />
 
                   <button
@@ -473,7 +473,7 @@ Encouraged to participate in upcoming hackathon.`);
                         setNewTask("");
                       }
                     }}
-                    className="rounded-xl bg-blue-600 px-5 text-white hover:bg-blue-700"
+                    className="flex min-h-11 w-full shrink-0 items-center justify-center rounded-xl bg-blue-600 px-5 text-white hover:bg-blue-700 sm:w-auto"
                   >
                     <Plus size={18} />
                   </button>
@@ -483,8 +483,8 @@ Encouraged to participate in upcoming hackathon.`);
           )}
                     {/* ================= RESOURCES ================= */}
           {activeTab === "resources" && (
-            <div className="p-6">
-              <h2 className="mb-5 text-lg font-semibold text-slate-800">
+            <div className="min-w-0 p-4 sm:p-6">
+              <h2 className="mb-5 text-base font-semibold text-slate-800 sm:text-lg">
                 Learning Resources
               </h2>
 
@@ -494,13 +494,13 @@ Encouraged to participate in upcoming hackathon.`);
                     key={index}
                     className="flex items-center justify-between rounded-xl border border-slate-200 p-4 transition hover:border-blue-300"
                   >
-                    <div className="flex items-center gap-3">
+                    <div className="flex min-w-0 items-start gap-3">
                       <BookOpen
                         size={18}
                         className="text-blue-600"
                       />
 
-                      <span className="text-sm font-medium text-slate-700">
+                      <span className="min-w-0 break-words text-sm font-medium text-slate-700">
                         {resource}
                       </span>
                     </div>
@@ -521,14 +521,14 @@ Encouraged to participate in upcoming hackathon.`);
                 ))}
               </div>
 
-              <div className="mt-6 flex gap-3">
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <input
                   value={resourceName}
                   onChange={(e) =>
                     setResourceName(e.target.value)
                   }
                   placeholder="Add resource name..."
-                  className="flex-1 rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
+                  className="w-full min-w-0 flex-1 rounded-xl border border-slate-300 px-4 py-3 outline-none focus:border-blue-500"
                 />
 
                 <button
@@ -542,7 +542,7 @@ Encouraged to participate in upcoming hackathon.`);
 
                     setResourceName("");
                   }}
-                  className="rounded-xl bg-blue-600 px-5 text-white transition hover:bg-blue-700"
+                  className="flex min-h-11 w-full shrink-0 items-center justify-center rounded-xl bg-blue-600 px-5 text-white transition hover:bg-blue-700 sm:w-auto"
                 >
                   <Plus size={18} />
                 </button>
@@ -552,8 +552,8 @@ Encouraged to participate in upcoming hackathon.`);
 
           {/* ================= FEEDBACK ================= */}
           {activeTab === "feedback" && (
-            <div className="p-6">
-              <h2 className="mb-5 text-lg font-semibold text-slate-800">
+            <div className="min-w-0 p-4 sm:p-6">
+              <h2 className="mb-5 text-base font-semibold text-slate-800 sm:text-lg">
                 Mentor Feedback
               </h2>
 
@@ -596,12 +596,12 @@ Encouraged to participate in upcoming hackathon.`);
 
           {/* ================= FOLLOW UP ================= */}
           {activeTab === "followup" && (
-            <div className="p-6">
-              <h2 className="mb-6 text-lg font-semibold text-slate-800">
+            <div className="min-w-0 p-4 sm:p-6">
+              <h2 className="mb-6 text-base font-semibold text-slate-800 sm:text-lg">
                 Schedule Follow-up
               </h2>
 
-              <div className="space-y-5">
+              <div className="min-w-0 space-y-5">
                 <div>
                   <label className="mb-2 block text-sm font-medium text-slate-700">
                     Next Meeting Date
@@ -665,12 +665,12 @@ Encouraged to participate in upcoming hackathon.`);
         </div>
 
         {/* ================= RIGHT PANEL ================= */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-          <h2 className="mb-5 text-lg font-semibold text-slate-800">
+        <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5 2xl:col-start-3 2xl:row-start-1">
+          <h2 className="mb-5 text-base font-semibold text-slate-800 sm:text-lg">
             Meeting Details
           </h2>
 
-          <div className="space-y-5">
+          <div className="min-w-0 space-y-5">
             <div className="flex items-start gap-3">
               <User className="mt-1 text-blue-600" size={18} />
               <div>
@@ -719,7 +719,7 @@ Encouraged to participate in upcoming hackathon.`);
               </div>
             </div>
 
-            <div className="rounded-xl bg-blue-50 p-4">
+            <div className="min-w-0 rounded-xl bg-blue-50 p-4">
               <p className="text-xs font-semibold uppercase tracking-wide text-blue-700">
                 Current Status
               </p>

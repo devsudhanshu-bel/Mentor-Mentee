@@ -4,7 +4,7 @@ import { Lock, ChevronRight } from "lucide-react";
 const Toggle = ({ enabled = false }) => {
   return (
     <button
-      className={`relative h-5 w-9 rounded-full transition ${
+      className={`relative h-5 w-9 shrink-0 rounded-full transition ${
         enabled ? "bg-blue-600" : "bg-slate-300"
       }`}
     >
@@ -19,11 +19,11 @@ const Toggle = ({ enabled = false }) => {
 
 const DataPrivacy = () => {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
       {/* Header */}
-      <div className="mb-4">
+      <div className="mb-4 min-w-0">
         <div className="flex items-center gap-2">
-          <Lock size={17} className="text-blue-600" />
+          <Lock size={17} className="shrink-0 text-blue-600" />
 
           <h2 className="text-[15px] font-semibold text-slate-800">
             Data & Privacy
@@ -37,8 +37,8 @@ const DataPrivacy = () => {
 
       <div className="space-y-4">
         {/* Profile Visibility */}
-        <div className="flex items-center justify-between rounded-lg border border-slate-200 p-3">
-          <div>
+        <div className="flex min-w-0 flex-col gap-3 rounded-lg border border-slate-200 p-3 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0">
             <h4 className="text-[12px] font-semibold text-slate-800">
               Profile Visibility
             </h4>
@@ -48,15 +48,15 @@ const DataPrivacy = () => {
             </p>
           </div>
 
-          <button className="flex items-center gap-1 text-[11px] font-medium text-slate-600 hover:text-blue-600">
+          <button className="flex w-full items-center justify-between gap-1 self-start text-left text-[11px] font-medium text-slate-600 hover:text-blue-600 sm:w-auto sm:justify-start sm:self-auto">
             Assigned Students
-            <ChevronRight size={14} />
+            <ChevronRight size={14} className="shrink-0" />
           </button>
         </div>
 
         {/* Office Hours */}
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <div className="min-w-0">
             <h4 className="text-[12px] font-semibold text-slate-800">
               Show Office Hours
             </h4>
@@ -70,8 +70,8 @@ const DataPrivacy = () => {
         </div>
 
         {/* Contact Info */}
-        <div className="flex items-center justify-between">
-          <div>
+        <div className="flex min-w-0 items-center justify-between gap-3">
+          <div className="min-w-0">
             <h4 className="text-[12px] font-semibold text-slate-800">
               Show Contact Information
             </h4>

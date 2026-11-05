@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { X, Download, ExternalLink, FileText, Loader2 } from "lucide-react";
+import {
+  X,
+  Download,
+  ExternalLink,
+  FileText,
+  Loader2,
+} from "lucide-react";
 
 import api from "../../api/axios";
 
@@ -250,53 +256,68 @@ const DocumentPreviewModal = ({ document, onClose }) => {
   // ========================================================
 
   return (
-    <div className="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-2 backdrop-blur-sm sm:p-4">
 
-      <div className="w-full max-w-6xl h-[90vh] bg-white rounded-xl shadow-2xl overflow-hidden flex flex-col">
+      <div className="flex h-[96dvh] w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-[92dvh] sm:rounded-2xl md:h-[90vh]">
 
         {/* HEADER */}
 
-        <div className="min-h-16 flex items-center justify-between px-5 py-3 border-b border-slate-200 flex-shrink-0 gap-3">
+        <div className="flex min-h-[60px] shrink-0 items-center justify-between gap-2 border-b border-slate-200 px-3 py-2.5 sm:min-h-16 sm:gap-3 sm:px-5 sm:py-3">
 
-          <div className="min-w-0">
-            <h2 className="text-base font-semibold text-slate-800 truncate">
+          {/* DOCUMENT INFORMATION */}
+
+          <div className="min-w-0 flex-1">
+            <h2 className="truncate text-sm font-semibold text-slate-800 sm:text-base">
               {document.documentName}
             </h2>
 
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="mt-0.5 text-[10px] text-slate-500 sm:text-xs">
               {extension?.toUpperCase() || "DOCUMENT"}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 shrink-0">
+          {/* ACTION BUTTONS */}
+
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+
+            {/* DOWNLOAD */}
 
             <button
               type="button"
               onClick={handleDownload}
               disabled={!hasPreview}
-              className="h-9 px-3 rounded-md border border-slate-300 hover:bg-slate-50 text-sm flex items-center gap-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Download document"
+              className="flex h-9 items-center justify-center gap-1.5 rounded-md border border-slate-300 px-2 text-xs text-slate-700 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50 sm:gap-2 sm:px-3 sm:text-sm"
             >
               <Download size={15} />
-              <span className="hidden sm:inline">Download</span>
+              <span className="hidden sm:inline">
+                Download
+              </span>
             </button>
+
+            {/* OPEN IN NEW TAB */}
 
             <button
               type="button"
               onClick={handleOpenInNewTab}
               disabled={!hasPreview}
-              className="p-2 rounded-md hover:bg-slate-100 text-slate-500 transition disabled:opacity-50"
+              aria-label="Open in new tab"
               title="Open in new tab"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              <ExternalLink size={18} />
+              <ExternalLink size={17} />
             </button>
+
+            {/* CLOSE */}
 
             <button
               type="button"
               onClick={onClose}
-              className="p-2 rounded-md hover:bg-slate-100 text-slate-500 transition"
+              aria-label="Close document preview"
               title="Close"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100"
             >
-              <X size={20} />
+              <X size={19} />
             </button>
 
           </div>
@@ -304,19 +325,19 @@ const DocumentPreviewModal = ({ document, onClose }) => {
 
         {/* PREVIEW */}
 
-        <div className="flex-1 bg-slate-100 overflow-hidden">
+        <div className="relative min-h-0 flex-1 overflow-hidden bg-slate-100">
 
           {/* LOADING */}
 
           {isLoading && (
-            <div className="w-full h-full flex flex-col items-center justify-center gap-3">
+            <div className="flex h-full w-full flex-col items-center justify-center gap-3 px-4">
 
               <Loader2
-                size={32}
-                className="animate-spin text-blue-600"
+                size={30}
+                className="animate-spin text-blue-600 sm:size-8"
               />
 
-              <p className="text-sm text-slate-500">
+              <p className="text-center text-xs text-slate-500 sm:text-sm">
                 Loading secure document preview...
               </p>
 
@@ -326,22 +347,22 @@ const DocumentPreviewModal = ({ document, onClose }) => {
           {/* ERROR */}
 
           {previewError && (
-            <div className="w-full h-full flex items-center justify-center p-6">
+            <div className="flex h-full w-full items-center justify-center overflow-y-auto p-4 sm:p-6">
 
-              <div className="text-center max-w-md">
+              <div className="w-full max-w-md text-center">
 
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm sm:h-16 sm:w-16">
                   <FileText
-                    size={28}
-                    className="text-red-500"
+                    size={25}
+                    className="text-red-500 sm:size-7"
                   />
                 </div>
 
-                <h3 className="text-lg font-semibold text-slate-800">
+                <h3 className="text-base font-semibold text-slate-800 sm:text-lg">
                   Document unavailable
                 </h3>
 
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="mt-2 break-words text-xs leading-5 text-slate-500 sm:text-sm">
                   {previewError}
                 </p>
 
@@ -356,19 +377,19 @@ const DocumentPreviewModal = ({ document, onClose }) => {
             <iframe
               src={previewState.url}
               title={document.documentName}
-              className="w-full h-full border-0"
+              className="h-full w-full border-0"
             />
           )}
 
           {/* IMAGES */}
 
           {hasPreview && isImage && (
-            <div className="w-full h-full flex items-center justify-center p-6 overflow-auto">
+            <div className="flex h-full w-full items-center justify-center overflow-auto p-2 sm:p-6">
 
               <img
                 src={previewState.url}
                 alt={document.documentName}
-                className="max-w-full max-h-full object-contain rounded-lg shadow-sm"
+                className="max-h-full max-w-full rounded-lg object-contain shadow-sm"
               />
 
             </div>
@@ -377,22 +398,22 @@ const DocumentPreviewModal = ({ document, onClose }) => {
           {/* OFFICE DOCUMENTS */}
 
           {hasPreview && isOffice && (
-            <div className="h-full flex items-center justify-center p-6">
+            <div className="flex h-full items-center justify-center overflow-y-auto p-4 sm:p-6">
 
-              <div className="text-center max-w-md">
+              <div className="w-full max-w-md text-center">
 
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm sm:h-16 sm:w-16">
                   <FileText
-                    size={28}
-                    className="text-blue-600"
+                    size={25}
+                    className="text-blue-600 sm:size-7"
                   />
                 </div>
 
-                <h3 className="text-lg font-semibold text-slate-800">
+                <h3 className="text-base font-semibold text-slate-800 sm:text-lg">
                   Office document ready
                 </h3>
 
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="mt-2 text-xs leading-5 text-slate-500 sm:text-sm">
                   This file is securely loaded. Download it to view
                   or edit it using Microsoft Office or a compatible
                   application.
@@ -401,7 +422,7 @@ const DocumentPreviewModal = ({ document, onClose }) => {
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="mt-5 h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium inline-flex items-center gap-2"
+                  className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto sm:text-sm"
                 >
                   <Download size={16} />
                   Download Document
@@ -415,22 +436,22 @@ const DocumentPreviewModal = ({ document, onClose }) => {
           {/* UNSUPPORTED FORMAT */}
 
           {hasPreview && !isPdf && !isImage && !isOffice && (
-            <div className="h-full flex items-center justify-center p-6">
+            <div className="flex h-full items-center justify-center overflow-y-auto p-4 sm:p-6">
 
-              <div className="text-center max-w-md">
+              <div className="w-full max-w-md text-center">
 
-                <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mx-auto mb-4 shadow-sm">
+                <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-white shadow-sm sm:h-16 sm:w-16">
                   <ExternalLink
-                    size={28}
-                    className="text-blue-600"
+                    size={25}
+                    className="text-blue-600 sm:size-7"
                   />
                 </div>
 
-                <h3 className="text-lg font-semibold text-slate-800">
+                <h3 className="text-base font-semibold text-slate-800 sm:text-lg">
                   Preview not available
                 </h3>
 
-                <p className="text-sm text-slate-500 mt-2">
+                <p className="mt-2 text-xs leading-5 text-slate-500 sm:text-sm">
                   This file format cannot be displayed directly in
                   the browser. You can download the original document.
                 </p>
@@ -438,7 +459,7 @@ const DocumentPreviewModal = ({ document, onClose }) => {
                 <button
                   type="button"
                   onClick={handleDownload}
-                  className="mt-5 h-10 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium inline-flex items-center gap-2"
+                  className="mt-5 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-5 text-xs font-medium text-white transition hover:bg-blue-700 sm:w-auto sm:text-sm"
                 >
                   <Download size={16} />
                   Download Document

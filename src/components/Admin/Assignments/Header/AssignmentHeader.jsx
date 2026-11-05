@@ -65,10 +65,10 @@ const AssignmentHeader = ({
   // ============================================================
 
   return (
-    <div className="flex min-h-[58px] flex-wrap items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 py-2">
-      {/* LEFT — TABS */}
+    <div className="flex min-w-0 flex-col gap-3 border-b border-slate-200 bg-white px-3 py-3 sm:px-4 sm:py-3">
+      {/* TABS */}
 
-      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-1">
+      <div className="grid w-full min-w-0 grid-cols-2 gap-1 sm:flex sm:flex-wrap sm:items-center">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -79,8 +79,9 @@ const AssignmentHeader = ({
               type="button"
               onClick={() => setActiveTab?.(tab.id)}
               className={`
-                flex h-9 shrink-0 items-center gap-2 rounded-lg
-                px-3 text-[12px] font-medium transition-all duration-200
+                inline-flex min-w-0 h-9 w-full items-center justify-center gap-1.5
+                rounded-lg px-2 text-[11px] font-medium transition-all duration-200
+                sm:w-auto sm:justify-start sm:gap-2 sm:px-3 sm:text-[12px]
                 ${
                   isActive
                     ? "bg-blue-50 text-blue-600"
@@ -88,14 +89,14 @@ const AssignmentHeader = ({
                 }
               `}
             >
-              <Icon size={15} strokeWidth={1.8} />
+              <Icon className="shrink-0" size={15} strokeWidth={1.8} />
 
-              <span>{tab.label}</span>
+              <span className="min-w-0 truncate sm:whitespace-nowrap">{tab.label}</span>
 
               {typeof tab.count === "number" && (
                 <span
                   className={`
-                    flex min-w-[18px] items-center justify-center
+                    flex min-w-[18px] shrink-0 items-center justify-center
                     rounded-full px-1.5 py-0.5 text-[9px] font-semibold
                     ${
                       isActive
@@ -112,33 +113,33 @@ const AssignmentHeader = ({
         })}
       </div>
 
-      {/* BULK ASSIGN — PRESERVED */}
+      {/* BULK ASSIGN AND SEARCH */}
 
-      <button
-        type="button"
-        onClick={onBulkAssign}
-        className="inline-flex h-9 shrink-0 items-center gap-2 rounded-lg bg-blue-600 px-3 text-[12px] font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200"
-      >
-        <Upload size={14} />
-        Bulk Assign
-      </button>
+      <div className="flex min-w-0 flex-col gap-2 min-[480px]:flex-row min-[480px]:items-center">
+        <button
+          type="button"
+          onClick={onBulkAssign}
+          className="inline-flex h-9 w-full shrink-0 items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 text-[12px] font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-200 min-[480px]:w-auto"
+        >
+          <Upload size={14} />
+          Bulk Assign
+        </button>
 
-      {/* SEARCH — PRESERVED */}
+        <div className="relative w-full min-w-0 flex-1 min-[480px]:ml-auto min-[480px]:max-w-[260px]">
+          <Search
+            size={16}
+            strokeWidth={1.8}
+            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+          />
 
-      <div className="relative w-full shrink-0 sm:w-[220px] lg:w-[260px]">
-        <Search
-          size={16}
-          strokeWidth={1.8}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-        />
-
-        <input
-          type="text"
-          value={search}
-          onChange={handleSearchChange}
-          placeholder="Search students or mentors..."
-          className="h-9 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-[12px] font-medium text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
-        />
+          <input
+            type="text"
+            value={search}
+            onChange={handleSearchChange}
+            placeholder="Search students or mentors..."
+            className="h-9 w-full rounded-lg border border-slate-200 bg-white pl-9 pr-3 text-[12px] font-medium text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 hover:border-slate-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+          />
+        </div>
       </div>
     </div>
   );

@@ -34,8 +34,8 @@ const EditProfileTabs = ({
   setActiveTab,
 }) => {
   return (
-    <div className="border-b border-slate-200 bg-white px-7">
-      <div className="flex gap-2 py-4">
+    <div className="border-b border-slate-200 bg-white px-3 sm:px-5 lg:px-7">
+      <div className="flex gap-2 overflow-x-auto py-3 sm:py-4">
         {tabItems.map((tab) => {
           const Icon = tab.icon;
 
@@ -48,7 +48,8 @@ const EditProfileTabs = ({
                 setActiveTab(tab.key)
               }
               className={`
-                flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-200
+                flex shrink-0 items-center gap-2 rounded-xl px-3 py-2.5 text-xs font-semibold transition-all duration-200
+                sm:px-5 sm:py-3 sm:text-sm
 
                 ${
                   active
@@ -57,7 +58,7 @@ const EditProfileTabs = ({
                 }
               `}
             >
-              <Icon size={17} />
+              <Icon size={17} className="shrink-0" />
 
               {tab.label}
             </button>

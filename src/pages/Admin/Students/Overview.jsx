@@ -166,17 +166,17 @@ const Overview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* ================= Sidebar ================= */}
 
       {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       {/* ================= Main Content ================= */}
 
-      <div className="ml-[290px] min-h-screen max-[900px]:ml-0">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)] max-[900px]:ml-0 max-[900px]:w-full">
         {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-        <main className="space-y-5 p-4 lg:p-6">
+        <main className="space-y-5 p-4 lg:p-3 sm:p-4 lg:p-6">
           {/* ================= Page Actions ================= */}
 
           <section className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">

@@ -548,7 +548,7 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
           BANNER
       ==================================================== */}
 
-      <div className="flex w-full items-start justify-between">
+      <div className="flex w-full min-w-0 flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-start">
         {/* ==================================================
             LEFT
         ================================================== */}
@@ -588,8 +588,10 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
           className="
             flex
             h-[72px]
-            w-[338px]
+            w-full
+            max-w-[338px]
             shrink-0
+            sm:w-[338px]
             items-center
             justify-between
             rounded-xl
@@ -993,7 +995,7 @@ const AssignmentBanner = ({ term, filters, onTermChangeRequested }) => {
                 className="
                   mt-5
                   grid
-                  grid-cols-2
+                  grid-cols-1 sm:grid-cols-2
                   gap-4
                 "
               >

@@ -1,4 +1,3 @@
-
 import React from "react";
 
 const SummaryCard = ({
@@ -24,9 +23,9 @@ const SummaryCard = ({
   return (
     <div
       className="
-        flex min-w-0 items-start gap-3
+        flex min-w-0 items-start gap-2.5
         rounded-xl border border-slate-200 bg-white
-        px-3 py-4
+        px-3 py-3 sm:gap-3 sm:py-4
         transition-all duration-200
         hover:border-blue-200 hover:shadow-sm
       "
@@ -34,8 +33,8 @@ const SummaryCard = ({
       {/* Icon */}
       <div
         className={`
-          flex h-10 w-10 shrink-0 items-center justify-center
-          rounded-full ${iconBg}
+          flex h-9 w-9 shrink-0 items-center justify-center
+          rounded-full sm:h-10 sm:w-10 ${iconBg}
         `}
       >
         {Icon ? (
@@ -56,8 +55,8 @@ const SummaryCard = ({
       <div className="min-w-0 flex-1">
         <p
           className="
-            text-[11px] font-medium leading-4 text-slate-500
-            break-words
+            text-[10px] font-medium leading-4 text-slate-500
+            break-words sm:text-[11px]
           "
           title={title}
         >
@@ -66,9 +65,10 @@ const SummaryCard = ({
 
         <p
           className="
-            mt-1 text-2xl font-bold leading-tight
+            mt-1 text-xl font-bold leading-tight
             tabular-nums text-slate-900
             break-words [overflow-wrap:anywhere]
+            sm:text-2xl
           "
           aria-label={`${title}: ${displayValue}`}
         >

@@ -370,15 +370,15 @@ const InstantMeetingModal = ({
       />
 
       {/* Modal */}
-      <div className="fixed left-1/2 top-1/2 z-[9999] flex max-h-[90vh] w-[calc(100%-2rem)] max-w-xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl">
+      <div className="fixed left-1/2 top-1/2 z-[9999] flex max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-2xl sm:max-h-[90vh] sm:w-[calc(100%-2rem)] sm:rounded-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+        <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:items-center sm:px-5 sm:py-4">
           <div>
-            <h2 className="text-[18px] font-semibold text-slate-800">
+            <h2 className="text-base font-semibold leading-snug text-slate-800 sm:text-[18px]">
               Start Instant Meeting
             </h2>
 
-            <p className="mt-1 text-[12px] text-slate-500">
+            <p className="mt-1 text-[11px] leading-4 text-slate-500 sm:text-[12px]">
               Launch an instant mentoring session.
             </p>
           </div>
@@ -396,9 +396,9 @@ const InstantMeetingModal = ({
 
         <form
           onSubmit={handleSubmit}
-          className="min-h-0 flex-1 overflow-y-auto"
+          className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto"
         >
-          <div className="space-y-4 p-5">
+          <div className="space-y-4 p-4 sm:p-5">
             {/* Errors */}
             {error && (
               <div
@@ -463,8 +463,8 @@ const InstantMeetingModal = ({
 
             {/* Student preview */}
             {selectedStudent && (
-              <div className="flex items-center gap-4 rounded-xl border border-violet-100 bg-violet-50 p-4">
-                <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full border border-white bg-violet-200 text-lg font-semibold text-violet-800 shadow-sm">
+              <div className="flex min-w-0 items-center gap-3 rounded-xl border border-violet-100 bg-violet-50 p-3 sm:gap-4 sm:p-4">
+                <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white bg-violet-200 text-base font-semibold text-violet-800 shadow-sm sm:h-14 sm:w-14 sm:text-lg">
                   {getStudentName(selectedStudent)
                     .split(/\s+/)
                     .slice(0, 2)
@@ -499,7 +499,7 @@ const InstantMeetingModal = ({
                 Meeting Mode
               </label>
 
-              <div className="flex flex-wrap gap-3">
+              <div className="flex flex-wrap gap-2 sm:gap-3">
                 {[
                   {
                     label: "In Person",
@@ -519,7 +519,7 @@ const InstantMeetingModal = ({
                     onClick={() =>
                       handleChange("meetingMode", value)
                     }
-                    className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-[12px] font-medium transition ${
+                    className={`flex min-h-10 flex-1 items-center justify-center gap-2 rounded-lg border px-3 py-2 text-[12px] font-medium transition sm:flex-none sm:px-4 ${
                       form.meetingMode === value
                         ? "border-violet-600 bg-violet-50 text-violet-700"
                         : "border-slate-300 text-slate-600 hover:bg-slate-50"
@@ -594,7 +594,7 @@ const InstantMeetingModal = ({
                   handleChange("agenda", event.target.value)
                 }
                 placeholder="What would you like to discuss?"
-                className="w-full resize-none rounded-lg border border-slate-300 px-3 py-2 text-[13px] outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-100 disabled:bg-slate-100"
+                className="w-full min-w-0 resize-none rounded-lg border border-slate-300 px-3 py-2 text-[13px] outline-none transition focus:border-violet-500 focus:ring-2 focus:ring-violet-100 disabled:bg-slate-100"
               />
             </div>
 
@@ -605,12 +605,12 @@ const InstantMeetingModal = ({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4">
+          <div className="flex flex-col-reverse gap-2 border-t border-slate-200 bg-white px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-5 sm:py-4">
             <button
               type="button"
               onClick={handleClose}
               disabled={submitting}
-              className="rounded-lg border border-slate-300 px-5 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+              className="w-full rounded-lg border border-slate-300 px-5 py-2.5 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50 sm:w-auto sm:py-2"
             >
               Cancel
             </button>
@@ -622,7 +622,7 @@ const InstantMeetingModal = ({
                 loadingStudents ||
                 students.length === 0
               }
-              className="inline-flex items-center justify-center gap-2 rounded-lg bg-violet-600 px-5 py-2 text-[13px] font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-violet-600 px-5 py-2.5 text-[13px] font-semibold text-white transition hover:bg-violet-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:py-2"
             >
               {submitting && (
                 <LoaderCircle size={15} className="animate-spin" />

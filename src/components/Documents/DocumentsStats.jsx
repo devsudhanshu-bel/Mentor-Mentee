@@ -1,3 +1,4 @@
+
 import React from "react";
 import { FileText, FolderOpen, Clock, Files } from "lucide-react";
 
@@ -33,7 +34,7 @@ const DocumentsStats = ({ stats = {}, loading = false }) => {
   ];
 
   return (
-    <div className="grid grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
       {statCards.map((stat) => {
         const Icon = stat.icon;
 

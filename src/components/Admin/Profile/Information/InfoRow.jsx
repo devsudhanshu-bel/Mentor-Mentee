@@ -2,7 +2,7 @@ import React from "react";
 
 const InfoRow = ({ label, value }) => {
   return (
-    <div className="grid grid-cols-2 gap-3 py-1.5">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 py-1.5">
       <p className="text-[12px] font-medium text-slate-500">
         {label}
       </p>

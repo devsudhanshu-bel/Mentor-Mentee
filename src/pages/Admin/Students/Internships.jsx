@@ -629,10 +629,10 @@ const Internships = () => {
   // =======================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <AdminSidebar />
 
-      <div className="ml-[290px] min-h-screen min-w-0 max-lg:ml-0">
+      <div className="ml-0 min-h-screen min-w-0 max-lg:ml-0 lg:ml-[290px] lg:w-[calc(100%-290px)] w-full min-w-0">
         <AdminHeader />
 
         <main className="space-y-4 p-4 md:p-5">
@@ -724,7 +724,7 @@ const Internships = () => {
                 </p>
               </div>
 
-              <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <section className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
                 {stats.map((stat) => (
                   <InternshipStatCard
                     key={stat.id}
@@ -1426,7 +1426,7 @@ function ReviewModal({
                     Decision
                   </label>
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <button
                       type="button"
                       onClick={() => setDecision("APPROVED")}

@@ -157,7 +157,7 @@ const AssignmentWorkspace = ({
       {/* UNASSIGNED STUDENTS — MANUAL ASSIGNMENT */}
       {activeTab === "unassigned" && (
         <>
-          <div className="grid grid-cols-[minmax(0,1fr)_56px_minmax(0,1fr)] items-stretch gap-5 p-5">
+          <div className="grid min-w-0 grid-cols-1 items-stretch gap-3 p-3 md:grid-cols-[minmax(0,1fr)_56px_minmax(0,1fr)] md:gap-5 md:p-5">
             <StudentPanel
               students={students}
               search={search}

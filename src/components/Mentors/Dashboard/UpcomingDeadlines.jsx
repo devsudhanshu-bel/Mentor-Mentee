@@ -109,10 +109,10 @@ const UpcomingDeadlines = () => {
     `${review.type || "review"}-${review.id || index}`;
 
   return (
-    <section className="h-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <section className="h-full min-w-0 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="flex items-center justify-between gap-3 border-b border-slate-100 px-5 py-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-3 py-3 sm:px-5 sm:py-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-50">
             <CalendarClock
               size={21}
@@ -120,8 +120,8 @@ const UpcomingDeadlines = () => {
             />
           </div>
 
-          <div>
-            <h2 className="text-base font-bold text-slate-800">
+          <div className="min-w-0">
+            <h2 className="text-sm font-bold text-slate-800 sm:text-base">
               Upcoming Deadlines
             </h2>
 
@@ -147,8 +147,8 @@ const UpcomingDeadlines = () => {
       </div>
 
       {/* Summary */}
-      <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/70 px-5 py-3">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between gap-3 border-b border-slate-100 bg-slate-50/70 px-3 py-3 sm:px-5">
+        <div className="flex min-w-0 items-center gap-2">
           <ClipboardCheck
             size={16}
             className="text-slate-500"
@@ -165,7 +165,7 @@ const UpcomingDeadlines = () => {
       </div>
 
       {/* Content */}
-      <div className="p-4">
+      <div className="min-w-0 p-3 sm:p-4">
         {loading ? (
           <div className="space-y-3">
             {[1, 2, 3].map((item) => (
@@ -186,7 +186,7 @@ const UpcomingDeadlines = () => {
             ))}
           </div>
         ) : error ? (
-          <div className="flex flex-col items-center justify-center px-4 py-10 text-center">
+          <div className="flex flex-col items-center justify-center px-3 py-8 text-center sm:px-4 sm:py-10">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-50">
               <AlertCircle
                 size={22}
@@ -194,11 +194,11 @@ const UpcomingDeadlines = () => {
               />
             </div>
 
-            <h3 className="text-sm font-semibold text-slate-800">
+            <h3 className="min-w-0 break-words text-sm font-semibold text-slate-800">
               Couldn't load reviews
             </h3>
 
-            <p className="mt-1 max-w-xs text-xs leading-5 text-slate-500">
+            <p className="mt-1 w-full max-w-xs break-words text-xs leading-5 text-slate-500">
               {error}
             </p>
 
@@ -212,7 +212,7 @@ const UpcomingDeadlines = () => {
             </button>
           </div>
         ) : reviews.length === 0 ? (
-          <div className="flex flex-col items-center justify-center px-4 py-10 text-center">
+          <div className="flex flex-col items-center justify-center px-3 py-8 text-center sm:px-4 sm:py-10">
             <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50">
               <CheckCircle2
                 size={23}
@@ -220,17 +220,17 @@ const UpcomingDeadlines = () => {
               />
             </div>
 
-            <h3 className="text-sm font-semibold text-slate-800">
+            <h3 className="min-w-0 break-words text-sm font-semibold text-slate-800">
               You're all caught up!
             </h3>
 
-            <p className="mt-1 max-w-xs text-xs leading-5 text-slate-500">
+            <p className="mt-1 w-full max-w-xs break-words text-xs leading-5 text-slate-500">
               There are no pending internship reviews for your currently
               assigned students.
             </p>
           </div>
         ) : (
-          <div className="max-h-[390px] space-y-3 overflow-y-auto pr-1">
+          <div className="max-h-[390px] min-w-0 space-y-3 overflow-y-auto overscroll-contain pr-1">
             {reviews.map((review, index) => {
               const reviewType = getReviewType(review.type);
               const studentName = getStudentName(review);
@@ -241,11 +241,11 @@ const UpcomingDeadlines = () => {
               return (
                 <article
                   key={getReviewKey(review, index)}
-                  className="group rounded-xl border border-slate-200 p-4 transition hover:border-amber-200 hover:bg-amber-50/30"
+                  className="group min-w-0 rounded-xl border border-slate-200 p-3 transition hover:border-amber-200 hover:bg-amber-50/30 sm:p-4"
                 >
-                  <div className="flex items-start gap-3">
+                  <div className="flex min-w-0 items-start gap-2.5 sm:gap-3">
                     {/* Icon */}
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50">
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-50 sm:h-10 sm:w-10">
                       {review.type ===
                       "INTERNSHIP_COMPLETION_VERIFICATION" ? (
                         <GraduationCap
@@ -263,7 +263,7 @@ const UpcomingDeadlines = () => {
                     {/* Details */}
                     <div className="min-w-0 flex-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-sm font-semibold text-slate-800">
+                        <h3 className="min-w-0 break-words text-sm font-semibold text-slate-800">
                           {reviewType.label}
                         </h3>
 
@@ -272,41 +272,41 @@ const UpcomingDeadlines = () => {
                         </span>
                       </div>
 
-                      <p className="mt-1 text-xs leading-5 text-slate-500">
+                      <p className="mt-1 break-words text-xs leading-5 text-slate-500">
                         {reviewType.description}
                       </p>
 
                       <div className="mt-3 space-y-2">
-                        <div className="flex items-center gap-2 text-xs text-slate-700">
+                        <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-700">
                           <GraduationCap
                             size={14}
                             className="shrink-0 text-slate-400"
                           />
 
-                          <span className="truncate font-medium">
+                          <span className="min-w-0 break-words font-medium">
                             {studentName}
                           </span>
 
                           {studentIdentifier && (
-                            <span className="shrink-0 text-slate-400">
+                            <span className="min-w-0 break-words text-slate-400">
                               · {studentIdentifier}
                             </span>
                           )}
                         </div>
 
-                        <div className="flex items-center gap-2 text-xs text-slate-600">
+                        <div className="flex min-w-0 items-start gap-2 text-xs text-slate-600">
                           <Building2
                             size={14}
                             className="shrink-0 text-slate-400"
                           />
 
-                          <span className="truncate">
+                          <span className="min-w-0 break-words">
                             {getCompanyName(review)}
                           </span>
                         </div>
 
                         {submittedDate && (
-                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500">
                             <Clock
                               size={14}
                               className="shrink-0 text-slate-400"
@@ -329,8 +329,8 @@ const UpcomingDeadlines = () => {
 
       {/* Footer */}
       {!loading && !error && reviews.length > 0 && (
-        <div className="border-t border-slate-100 px-5 py-3">
-          <p className="flex items-center gap-2 text-xs text-slate-500">
+        <div className="border-t border-slate-100 px-3 py-3 sm:px-5">
+          <p className="flex min-w-0 items-start gap-2 text-xs leading-5 text-slate-500">
             <Clock size={14} />
             Reviews are ordered by submission/request date.
           </p>

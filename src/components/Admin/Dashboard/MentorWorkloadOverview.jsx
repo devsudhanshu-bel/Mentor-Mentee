@@ -6,17 +6,17 @@ import profile from "../../../assets/profile.jpg";
 
 const MentorWorkloadOverview = ({ mentors = [] }) => {
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-5 h-full">
+    <div className="h-full rounded-3xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5">
       {/* ================= Header ================= */}
 
-      <div className="flex items-center justify-between mb-5">
-        <h2 className="text-[18px] font-semibold text-slate-800">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2 sm:mb-5">
+        <h2 className="text-[16px] font-semibold text-slate-800 sm:text-[18px]">
           Mentor Workload Overview
         </h2>
 
         <button
           type="button"
-          className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition"
+          className="shrink-0 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
         >
           View All
         </button>
@@ -26,33 +26,33 @@ const MentorWorkloadOverview = ({ mentors = [] }) => {
 
       <div className="divide-y divide-slate-100">
         {mentors.length === 0 ? (
-          <div className="py-12 text-center text-sm text-slate-400">
+          <div className="py-10 text-center text-sm text-slate-400 sm:py-12">
             No mentor workload data available.
           </div>
         ) : (
           mentors.map((mentor) => (
             <div
               key={mentor.id}
-              className="flex items-center justify-between py-3"
+              className="flex min-w-0 flex-col gap-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
             >
               {/* ================= Left ================= */}
 
-              <div className="flex items-center gap-3 min-w-[240px]">
+              <div className="flex min-w-0 items-center gap-3 sm:min-w-[240px]">
                 <img
                   src={mentor.profileImage || profile}
                   alt={mentor.name}
-                  className="w-10 h-10 rounded-full object-cover border border-slate-200"
+                  className="h-10 w-10 shrink-0 rounded-full border border-slate-200 object-cover"
                   onError={(event) => {
                     event.currentTarget.src = profile;
                   }}
                 />
 
-                <div>
-                  <h3 className="text-[13px] font-semibold text-slate-800">
+                <div className="min-w-0">
+                  <h3 className="break-words text-[13px] font-semibold text-slate-800">
                     {mentor.name}
                   </h3>
 
-                  <p className="text-[11px] text-slate-500">
+                  <p className="break-words text-[11px] text-slate-500">
                     {mentor.designation || "Faculty Mentor"}
                   </p>
                 </div>
@@ -60,11 +60,11 @@ const MentorWorkloadOverview = ({ mentors = [] }) => {
 
               {/* ================= Metrics ================= */}
 
-              <div className="flex items-center gap-8 flex-1 justify-center">
+              <div className="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-2 sm:flex-1 sm:justify-center sm:gap-8">
                 {/* Students */}
 
                 <div className="flex items-center gap-2">
-                  <Users size={16} className="text-blue-600" />
+                  <Users size={16} className="shrink-0 text-blue-600" />
 
                   <span className="text-[15px] font-bold text-slate-800">
                     {mentor.students}
@@ -76,7 +76,7 @@ const MentorWorkloadOverview = ({ mentors = [] }) => {
                 {/* Pending transfers */}
 
                 <div className="flex items-center gap-2">
-                  <ClipboardCheck size={16} className="text-orange-500" />
+                  <ClipboardCheck size={16} className="shrink-0 text-orange-500" />
 
                   <span className="text-[15px] font-bold text-slate-800">
                     {mentor.pendingTransfers}
@@ -90,9 +90,9 @@ const MentorWorkloadOverview = ({ mentors = [] }) => {
 
               {/* ================= Status ================= */}
 
-              <div className="min-w-[100px] flex justify-end">
+              <div className="flex justify-start sm:min-w-[100px] sm:justify-end">
                 <span
-                  className={`px-3 py-1 rounded-full text-[11px] font-semibold ${
+                  className={`rounded-full px-3 py-1 text-[11px] font-semibold ${
                     mentor.status === "High"
                       ? "bg-red-100 text-red-700"
                       : mentor.status === "Moderate"

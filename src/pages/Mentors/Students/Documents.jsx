@@ -342,13 +342,13 @@ const Documents = () => {
 
   if (!studentId) {
     return (
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
         {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
-        <div className="ml-[290px] min-h-screen">
+        <div className="min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
           {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-          <main className="p-6">
+          <main className="w-full min-w-0 p-3 sm:p-4 md:p-6">
             <div className="rounded-xl border border-amber-200 bg-white p-6">
               <h2 className="text-sm font-semibold text-slate-900">
                 Student not selected
@@ -370,16 +370,16 @@ const Documents = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-        <main className="p-6">
+        <main className="w-full min-w-0 p-3 sm:p-4 md:p-6">
           {/* HEADER ACTIONS */}
 
-          <div className="mb-4 flex items-center justify-between">
+          <div className="mb-4 flex min-w-0 flex-col items-stretch justify-between gap-2 min-[420px]:flex-row min-[420px]:items-center sm:gap-3">
             {isAdminRoute ? <AdminBackButton /> : <BackButton />}
             <ActionButtons />
           </div>
@@ -389,9 +389,9 @@ const Documents = () => {
           {dashboardError && (
             <div
               role="alert"
-              className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700"
+              className="mb-3 flex min-w-0 flex-col items-start justify-between gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-xs text-red-700 sm:flex-row sm:items-center sm:gap-3 sm:px-4"
             >
-              <span>{dashboardError}</span>
+              <span className="min-w-0 break-words">{dashboardError}</span>
 
               <button
                 type="button"
@@ -407,9 +407,9 @@ const Documents = () => {
           {documentsError && (
             <div
               role="alert"
-              className="mb-3 flex items-center justify-between gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-xs text-red-700"
+              className="mb-3 flex min-w-0 flex-col items-start justify-between gap-2 rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-xs text-red-700 min-[420px]:flex-row min-[420px]:items-center min-[420px]:gap-3 sm:px-4"
             >
-              <span>{documentsError}</span>
+              <span className="min-w-0 break-words">{documentsError}</span>
 
               <button
                 type="button"
@@ -424,10 +424,10 @@ const Documents = () => {
 
           {/* DASHBOARD LAYOUT */}
 
-          <div className="grid grid-cols-[260px_minmax(0,1fr)] gap-2">
+          <div className="grid w-full min-w-0 grid-cols-1 items-start gap-3 sm:gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
             {/* STUDENT PROFILE */}
 
-            <div className="flex flex-col gap-2">
+            <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
               <StudentProfileSidebar
                 student={student}
                 mentor={mentor}
@@ -441,7 +441,7 @@ const Documents = () => {
 
               {/* STATISTICS */}
 
-              <div className="grid grid-cols-2 gap-2 xl:grid-cols-4">
+              <div className="grid min-w-0 grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
                 <DocumentStatCard
                   icon={FileText}
                   iconBg="bg-blue-100"

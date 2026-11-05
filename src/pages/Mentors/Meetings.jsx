@@ -1165,13 +1165,13 @@ const Meetings = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
         <MentorSidebar />
 
-        <div className="ml-[290px] min-h-screen">
+        <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px]">
           <MentorHeader />
 
-          <main className="space-y-3 px-6 py-5">
+          <main className="w-full min-w-0 space-y-3 px-3 py-4 sm:px-4 sm:py-5 md:px-5 lg:px-6">
             <MeetingHeader />
 
             <MeetingActions
@@ -1189,9 +1189,9 @@ const Meetings = () => {
             {error && (
               <div
                 role="alert"
-                className="flex items-center justify-between gap-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                className="flex flex-col items-start justify-between gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-700 sm:flex-row sm:items-center sm:gap-4 sm:px-4"
               >
-                <span>{error}</span>
+                <span className="min-w-0 break-words">{error}</span>
 
                 <button
                   type="button"
@@ -1206,9 +1206,9 @@ const Meetings = () => {
             {notice && (
               <div
                 role="status"
-                className="flex items-center justify-between gap-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800"
+                className="flex flex-col items-start justify-between gap-2 rounded-xl border border-blue-200 bg-blue-50 px-3 py-3 text-sm text-blue-800 sm:flex-row sm:items-center sm:gap-4 sm:px-4"
               >
-                <span>{notice}</span>
+                <span className="min-w-0 break-words">{notice}</span>
 
                 <button
                   type="button"
@@ -1229,7 +1229,7 @@ const Meetings = () => {
               </div>
             ) : (
               <>
-                <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+                <div className="grid min-w-0 grid-cols-1 gap-3 xl:grid-cols-2">
                   <UpcomingMeetings
                     meetings={upcomingMeetings}
                     onStartMeeting={handleOpenStartMeeting}
@@ -1257,7 +1257,7 @@ const Meetings = () => {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+                <div className="grid min-w-0 grid-cols-1 gap-3 xl:grid-cols-2">
                   <MeetingSummary
                     meetings={meetings}
                     summary={summary}

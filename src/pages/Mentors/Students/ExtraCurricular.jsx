@@ -297,7 +297,7 @@ function ActivityPreviewModal({ activity, onClose }) {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:p-6"
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/60 p-2 backdrop-blur-sm sm:p-4 md:p-6"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
@@ -308,9 +308,9 @@ function ActivityPreviewModal({ activity, onClose }) {
         role="dialog"
         aria-modal="true"
         aria-label="Activity document preview"
-        className="flex max-h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl"
+        className="flex max-h-[calc(100dvh-1rem)] w-full min-w-0 max-w-5xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[94dvh] sm:rounded-2xl"
       >
-        <header className="flex items-start justify-between gap-4 border-b border-slate-100 p-5">
+        <header className="flex items-start justify-between gap-2 border-b border-slate-100 p-3 sm:gap-4 sm:p-5">
           <div className="min-w-0">
             <h2 className="break-words text-base font-semibold text-slate-900">
               {activity.title}
@@ -324,7 +324,7 @@ function ActivityPreviewModal({ activity, onClose }) {
             </p>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
             {previewUrl && (
               <>
                 <button
@@ -356,7 +356,7 @@ function ActivityPreviewModal({ activity, onClose }) {
           </div>
         </header>
 
-        <div className="flex-1 overflow-auto bg-slate-100 p-4">
+        <div className="min-h-0 flex-1 overflow-auto bg-slate-100 p-2 sm:p-4">
           {isLoading ? (
             <div className="flex min-h-[50vh] flex-col items-center justify-center gap-3">
               <LoaderCircle
@@ -384,13 +384,13 @@ function ActivityPreviewModal({ activity, onClose }) {
               <img
                 src={previewUrl}
                 alt={activity.title}
-                className="mx-auto max-h-[65vh] max-w-full object-contain"
+                className="mx-auto max-h-[70dvh] max-w-full object-contain"
               />
             ) : isPdf ? (
               <iframe
                 title={activity.title}
                 src={previewUrl}
-                className="h-[65vh] w-full bg-white"
+                className="h-[70dvh] min-h-[280px] w-full bg-white"
               />
             ) : (
               <div className="flex min-h-[40vh] flex-col items-center justify-center p-8 text-center">
@@ -671,18 +671,20 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
   // --------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <MentorSidebar />
 
-      <div className="ml-[290px] min-h-screen max-lg:ml-0">
+      <div className="min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <MentorHeader />
 
-        <main className="space-y-5 p-4 md:p-6">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:space-y-5 sm:p-4 md:p-6">
           {/* Page actions */}
 
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-col items-stretch justify-between gap-3 min-[420px]:flex-row min-[420px]:items-center">
             <BackButton />
-            <ActionButtons />
+            <div className="min-w-0">
+              <ActionButtons />
+            </div>
           </div>
 
           {/* Error message */}
@@ -690,16 +692,16 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
           {error && (
             <div
               role="alert"
-              className="flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-700"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 sm:gap-3 sm:p-4 sm:text-sm"
             >
               <AlertCircle size={20} className="mt-0.5 shrink-0" />
 
-              <div className="flex-1">
+              <div className="min-w-0 flex-1">
                 <p className="font-semibold">
                   Something went wrong
                 </p>
 
-                <p className="mt-1">{error}</p>
+                <p className="mt-1 break-words">{error}</p>
               </div>
 
               <button
@@ -718,11 +720,11 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
           {notice && (
             <div
               role="status"
-              className="flex items-start gap-3 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+              className="flex min-w-0 items-start gap-2 rounded-xl border border-green-200 bg-green-50 p-3 text-xs text-green-800 sm:gap-3 sm:p-4 sm:text-sm"
             >
               <CheckCircle2 size={20} className="shrink-0" />
 
-              <p className="flex-1">{notice}</p>
+              <p className="min-w-0 flex-1 break-words">{notice}</p>
 
               <button
                 type="button"
@@ -736,24 +738,24 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
 
           {/* Student profile and dashboard */}
 
-          <section className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[260px_minmax(0,1fr)]">
+          <section className="grid w-full min-w-0 grid-cols-1 items-start gap-3 sm:gap-4 xl:grid-cols-[230px_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1fr)]">
             <StudentExtraCurricularProfile
               student={student}
               mentor={mentor}
             />
 
-            <div className="flex min-w-0 flex-col gap-4">
+            <div className="flex min-w-0 flex-col gap-3 sm:gap-4">
               <StudentTabs />
 
               {/* Page title */}
 
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <div>
-                  <h1 className="text-xl font-bold text-slate-900">
+                  <h1 className="text-lg font-bold text-slate-900 sm:text-xl">
                     Extra Curricular Activities
                   </h1>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
                     Review extracurricular activities, supporting
                     documents, and mentor feedback.
                   </p>
@@ -763,7 +765,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
                   type="button"
                   onClick={loadActivities}
                   disabled={isLoading || !studentId}
-                  className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50"
+                  className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 disabled:opacity-50 sm:w-auto"
                 >
                   <RotateCcw
                     size={16}
@@ -778,7 +780,7 @@ const ExtraCurricular = ({ studentId: studentIdProp }) => {
 
               <section
                 aria-label="Extra Curricular statistics"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
+                className="grid min-w-0 grid-cols-2 gap-2 min-[420px]:gap-3 lg:grid-cols-3 2xl:grid-cols-5"
               >
                 {stats.map((stat) => (
                   <ExtraCurricularStatCard

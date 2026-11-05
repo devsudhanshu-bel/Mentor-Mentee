@@ -30,3 +30,123 @@ input[type="number"] {
 
 /* Font preference scales typography per element in FontSizeSettings.jsx.
    Do not change root font-size here, as that also changes rem-based layout. */
+
+
+/* =========================================================
+   RESPONSIVE FOUNDATION
+   Layout-only safeguards; application behavior is unchanged.
+   ========================================================= */
+
+:root {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100%;
+  scroll-behavior: smooth;
+}
+
+body,
+#root {
+  width: 100%;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+img,
+svg,
+video,
+canvas {
+  max-width: 100%;
+}
+
+img,
+video {
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+button {
+  touch-action: manipulation;
+}
+
+input,
+select,
+textarea {
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  /* Prevent fixed desktop sidebars and wide children from creating page overflow. */
+  main,
+  section,
+  article,
+  header,
+  footer {
+    min-width: 0;
+  }
+
+  /* Make long user-generated content wrap instead of widening the viewport. */
+  h1,
+  h2,
+  h3,
+  p,
+  a,
+  td,
+  th,
+  label {
+    overflow-wrap: anywhere;
+  }
+
+  /* Keep media inside its available mobile container. */
+  iframe,
+  video {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 639px) {
+  /* Comfortable minimum touch target for small icon-only controls. */
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Avoid iOS automatic zoom when focusing form controls. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

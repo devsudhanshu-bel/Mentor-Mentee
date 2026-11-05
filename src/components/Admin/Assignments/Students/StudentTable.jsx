@@ -12,7 +12,7 @@ const StudentTable = ({
   onDeleteStudent,
 }) => {
   return (
-    <table className="w-full min-w-[760px]">
+    <div className="w-full min-w-0 overflow-x-auto"><table className="w-full min-w-[760px]">
       <StudentTableHeader allSelected={allSelected} onSelectAll={toggleAll} />
 
       <tbody>
@@ -34,7 +34,7 @@ const StudentTable = ({
           </tr>
         )}
       </tbody>
-    </table>
+    </table></div>
   );
 };
 

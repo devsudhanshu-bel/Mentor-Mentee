@@ -11,10 +11,10 @@ const MeetingActionCard = ({
   onClick = () => {},
 }) => {
   return (
-    <div className="flex h-[170px] rounded-2xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg">
+    <div className="flex min-h-[170px] h-auto flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg sm:min-h-[170px] sm:flex-row sm:gap-0 sm:p-5">
       {/* Icon */}
       <div
-        className={`mr-5 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full ${iconBg}`}
+        className={`flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full sm:mr-5 sm:h-14 sm:w-14 ${iconBg}`}
       >
         <Icon
           size={28}
@@ -24,23 +24,23 @@ const MeetingActionCard = ({
       </div>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col">
+      <div className="flex min-w-0 flex-1 flex-col">
         {/* Title */}
-        <h3 className="text-[16px] font-semibold text-[#2563EB]">
+        <h3 className="break-words text-[15px] font-semibold text-[#2563EB] sm:text-[16px]">
           {title}
         </h3>
 
         {/* Description */}
-        <p className="mt-2 text-[13px] leading-5 text-slate-500">
+        <p className="mt-2 break-words text-[13px] leading-5 text-slate-500">
           {description}
         </p>
 
         {/* Action Button */}
-        <div className="mt-auto flex justify-end">
+        <div className="mt-auto flex justify-end pt-3 sm:pt-0">
           <button
             type="button"
             onClick={onClick}
-            className={`cursor-pointer rounded-lg px-5 py-2 text-[13px] font-medium text-white shadow-sm transition-all duration-300 hover:brightness-95 hover:shadow-md active:scale-95 ${buttonColor}`}
+            className={`w-full cursor-pointer rounded-lg px-4 py-2 text-[13px] font-medium text-white shadow-sm transition-all duration-300 hover:brightness-95 hover:shadow-md active:scale-95 sm:w-auto sm:px-5 ${buttonColor}`}
           >
             {buttonText}
           </button>

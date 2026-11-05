@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +9,7 @@ import LoginCard from "../../components/auth/RightPanel/LoginCard";
 
 const Login = () => {
   const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
 
   // ========================================================
@@ -21,29 +21,50 @@ const Login = () => {
       setLoading(true);
 
       const response = await login(data.email, data.password);
+
       const { user } = response.data;
 
+      // ====================================================
+      // REDIRECT BASED ON ROLE
+      // ====================================================
+
       switch (user.role) {
+        // --------------------------------------------------
+        // ADMIN
+        // --------------------------------------------------
+
         case "ADMIN":
         case "SYSTEM_ADMIN":
           navigate("/admin/dashboard");
           break;
 
+        // --------------------------------------------------
+        // MENTOR
+        // --------------------------------------------------
+
         case "MENTOR":
-          navigate(
-            user.mustChangePassword
-              ? "/change-password"
-              : "/mentor/dashboard"
-          );
+          if (user.mustChangePassword) {
+            navigate("/change-password");
+          } else {
+            navigate("/mentor/dashboard");
+          }
           break;
 
+        // --------------------------------------------------
+        // STUDENT
+        // --------------------------------------------------
+
         case "STUDENT":
-          navigate(
-            user.mustChangePassword
-              ? "/change-password"
-              : "/student/dashboard"
-          );
+          if (user.mustChangePassword) {
+            navigate("/change-password");
+          } else {
+            navigate("/student/dashboard");
+          }
           break;
+
+        // --------------------------------------------------
+        // FALLBACK
+        // --------------------------------------------------
 
         default:
           navigate("/");
@@ -53,7 +74,7 @@ const Login = () => {
 
       alert(
         error.response?.data?.message ||
-        "Unable to login. Please check your credentials."
+          "Unable to login. Please check your credentials.",
       );
     } finally {
       setLoading(false);
@@ -61,63 +82,26 @@ const Login = () => {
   };
 
   return (
-    <div className="
-      grid min-h-screen
-      grid-cols-1
-      overflow-x-hidden
-      bg-[#F8FAFC]
-      xl:grid-cols-[56%_44%]
-    ">
-
+    <div className="grid min-h-screen lg:grid-cols-[56%_44%] bg-[#F8FAFC]">
       {/* ==================================================
           LEFT SECTION
           ================================================== */}
 
-      <section className="
-        relative flex
-        h-[110px] flex-col
-        bg-[#F5F9FF]
-        sm:h-[130px]
-        xl:h-auto xl:min-h-screen
-      ">
-
-        {/* LOGO AND DESKTOP ILLUSTRATION */}
-
-        <div className="min-h-0 flex-1">
+      <div className="relative flex flex-col bg-[#EEF5FF]">
+        <div className="flex-1">
           <LeftCard />
         </div>
 
-        {/* DESKTOP FEATURE STRIP */}
-
-        <div className="hidden xl:block">
-          <FeatureStrip />
-        </div>
-
-      </section>
+        <FeatureStrip />
+      </div>
 
       {/* ==================================================
-          RIGHT SECTION - LOGIN
+          RIGHT SECTION
           ================================================== */}
 
-      <section className="
-        relative flex min-h-0 w-full
-        items-start justify-center
-        bg-gradient-to-br
-        from-slate-50 via-white to-blue-50
-        px-4 pt-3 pb-8
-        sm:px-8 sm:pt-5 sm:pb-10
-        xl:min-h-screen
-        xl:items-center
-        xl:px-10 xl:py-10
-      ">
-
-        <LoginCard
-          onLogin={handleLogin}
-          loading={loading}
-        />
-
-      </section>
-
+      <div className="relative flex items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50">
+        <LoginCard onLogin={handleLogin} loading={loading} />
+      </div>
     </div>
   );
 };

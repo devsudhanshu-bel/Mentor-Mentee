@@ -1,4 +1,3 @@
-
 import React from "react";
 import {
   User,
@@ -55,8 +54,8 @@ const formatSemester = (value) => {
 ========================================================= */
 
 const DetailRow = ({ icon: Icon, label, value }) => (
-  <div className="flex items-start gap-2.5 border-b border-slate-100 py-2.5 last:border-0">
-    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+  <div className="flex items-start gap-2.5 border-b border-slate-100 py-2.5 last:border-0 sm:gap-3">
+    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-blue-50 sm:h-9 sm:w-9">
       <Icon size={16} className="text-blue-600" />
     </div>
 
@@ -66,7 +65,7 @@ const DetailRow = ({ icon: Icon, label, value }) => (
       </p>
 
       <p
-        className="mt-0.5 break-words text-[13px] font-semibold text-slate-700"
+        className="mt-0.5 break-words [overflow-wrap:anywhere] text-[12px] font-semibold text-slate-700 sm:text-[13px]"
         title={value}
       >
         {value}
@@ -221,10 +220,10 @@ const StudentDetailsCard = ({ student, meeting }) => {
   ------------------------------------------------------- */
 
   return (
-    <div className="rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="border-b border-slate-200 px-5 py-4">
-        <h2 className="text-lg font-bold text-slate-800">
+      <div className="border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
+        <h2 className="text-base font-bold text-slate-800 sm:text-lg">
           Student Details
         </h2>
 
@@ -234,31 +233,34 @@ const StudentDetailsCard = ({ student, meeting }) => {
       </div>
 
       {/* Avatar and Student Identity */}
-      <div className="flex flex-col items-center px-5 py-5">
-        <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow">
+      <div className="flex flex-col items-center px-4 py-4 sm:px-5 sm:py-5">
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 text-white shadow sm:h-20 sm:w-20">
           {initials === "?" ? (
-            <User size={34} />
+            <User size={30} className="sm:hidden" />
           ) : (
             <span
               aria-label={`Initials for ${studentName}`}
-              className="text-2xl font-bold"
+              className="text-xl font-bold sm:text-2xl"
             >
               {initials}
             </span>
           )}
+          {initials === "?" && (
+            <User size={34} className="hidden sm:block" />
+          )}
         </div>
 
-        <h3 className="mt-3 break-words text-center text-lg font-bold text-slate-800">
+        <h3 className="mt-3 max-w-full break-words text-center text-base font-bold text-slate-800 sm:text-lg">
           {studentName}
         </h3>
 
-        <p className="break-all text-center text-[13px] text-slate-500">
+        <p className="max-w-full break-all text-center text-[12px] text-slate-500 sm:text-[13px]">
           {registrationNumber}
         </p>
       </div>
 
       {/* Student Information */}
-      <div className="px-5 pb-5">
+      <div className="px-4 pb-4 sm:px-5 sm:pb-5">
         <DetailRow
           icon={Hash}
           label="Registration Number"

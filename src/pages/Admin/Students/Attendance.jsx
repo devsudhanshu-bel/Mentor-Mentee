@@ -308,13 +308,13 @@ const Attendance = () => {
     subjects.length === 0;
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <MentorSidebar />
 
-      <div className="ml-[290px] min-h-screen min-w-0">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <MentorHeader />
 
-        <main className="space-y-4 p-5">
+        <main className="min-w-0 space-y-4 p-3 sm:p-4 lg:p-5">
           {/* HEADER ACTIONS */}
           <div className="flex flex-wrap items-center justify-between gap-3">
             <BackButton />
@@ -560,7 +560,7 @@ const Attendance = () => {
                         Attendance Statistics
                       </h2>
 
-                      <div className="mt-4 grid grid-cols-2 gap-3">
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <div className="rounded-xl border border-slate-200 p-3">
                           <p className="text-[11px] text-slate-500">
                             This Semester

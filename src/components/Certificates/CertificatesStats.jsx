@@ -207,43 +207,58 @@ const CertificatesStats = ({
   // ==========================================================
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
+
       {statItems.map((item) => {
         const Icon = item.icon;
 
         return (
           <div
             key={item.title}
-            className="bg-white rounded-xl border border-slate-200 shadow-sm px-4 py-4 flex items-center gap-3 hover:shadow-md transition-all"
+            className="
+              flex min-w-0 items-center gap-2
+              rounded-xl border border-slate-200
+              bg-white px-2.5 py-3 shadow-sm
+              transition-all hover:shadow-md
+              sm:gap-3 sm:px-4 sm:py-4
+            "
           >
             {/* ICON */}
 
             <div
-              className={`w-11 h-11 rounded-full ${item.bg} flex items-center justify-center shrink-0`}
+              className={`
+                flex h-9 w-9 shrink-0 items-center justify-center
+                rounded-full
+                ${item.bg}
+                sm:h-11 sm:w-11
+              `}
             >
               <Icon
-                className={`w-5 h-5 ${item.color}`}
+                className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`}
               />
             </div>
 
             {/* CONTENT */}
 
-            <div className="min-w-0">
-              <p className="text-xs font-medium text-slate-500">
+            <div className="min-w-0 flex-1">
+
+              <p className="text-[10px] font-medium leading-tight text-slate-500 sm:text-xs">
                 {item.title}
               </p>
 
-              <h2 className="text-2xl font-bold text-slate-800 leading-none mt-0.5">
+              <h2 className="mt-1 text-xl font-bold leading-none text-slate-800 sm:text-2xl">
                 {loading ? "—" : item.value}
               </h2>
 
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="mt-1 hidden text-xs text-slate-400 sm:block">
                 {item.subtitle}
               </p>
+
             </div>
           </div>
         );
       })}
+
     </div>
   );
 };

@@ -480,11 +480,11 @@ const DiscussionDrawer = ({
   ======================================================= */
 
   return (
-    <div className="fixed bottom-24 right-6 z-[9998] flex h-[650px] max-h-[calc(100vh-120px)] w-[920px] max-w-[calc(100vw-48px)] flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl">
+    <div className="fixed inset-x-2 bottom-2 top-2 z-[9998] flex min-h-0 w-auto flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:inset-x-auto sm:bottom-24 sm:right-6 sm:top-auto sm:h-[650px] sm:max-h-[calc(100vh-120px)] sm:w-[min(920px,calc(100vw-48px))] sm:rounded-3xl">
       {/* Header */}
-      <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-6">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
+      <div className="flex h-14 shrink-0 items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 sm:h-16 sm:px-6">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:h-10 sm:w-10">
             <MessageCircle
               size={20}
               className="text-blue-600"
@@ -492,17 +492,17 @@ const DiscussionDrawer = ({
           </div>
 
           <div>
-            <h2 className="text-[17px] font-semibold text-slate-800">
+            <h2 className="text-sm font-semibold text-slate-800 sm:text-[17px]">
               Discussions
             </h2>
 
-            <p className="text-[12px] text-slate-500">
+            <p className="text-[11px] text-slate-500 sm:text-[12px]">
               Chat with your mentees
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1 sm:gap-2">
           <button
             type="button"
             onClick={loadConversations}
@@ -531,9 +531,9 @@ const DiscussionDrawer = ({
       </div>
 
       {/* Main Body */}
-      <div className="grid min-h-0 flex-1 grid-cols-[300px_minmax(0,1fr)]">
+      <div className="grid min-h-0 min-w-0 flex-1 grid-cols-1 grid-rows-[minmax(112px,34%)_minmax(0,1fr)] md:grid-cols-[minmax(220px,300px)_minmax(0,1fr)] md:grid-rows-1">
         {/* Sidebar */}
-        <div className="flex min-h-0 flex-col border-r border-slate-200 bg-white">
+        <div className="flex min-h-0 min-w-0 flex-col border-b border-slate-200 bg-white md:border-b-0 md:border-r">
           {conversationError && (
             <div className="border-b border-red-100 bg-red-50 p-3 text-xs text-red-700">
               <p className="break-words">
@@ -550,7 +550,7 @@ const DiscussionDrawer = ({
             </div>
           )}
 
-          <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
             <StudentList
               conversations={conversations}
               selectedConversationId={selectedConversationId}
@@ -563,10 +563,10 @@ const DiscussionDrawer = ({
         </div>
 
         {/* Chat Panel */}
-        <div className="flex min-h-0 min-w-0 flex-col bg-slate-50">
+        <div className="flex min-h-0 min-w-0 flex-col overflow-hidden bg-slate-50">
           {!selectedConversation ? (
-            <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-              <div className="flex h-24 w-24 items-center justify-center rounded-full bg-blue-100">
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col items-center justify-center overflow-y-auto px-3 py-4 text-center sm:px-6">
+              <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-100 sm:h-24 sm:w-24">
                 {loadingConversations ? (
                   <LoaderCircle
                     size={42}
@@ -580,7 +580,7 @@ const DiscussionDrawer = ({
                 )}
               </div>
 
-              <h3 className="mt-6 text-xl font-semibold text-slate-800">
+              <h3 className="mt-4 text-base font-semibold text-slate-800 sm:mt-6 sm:text-xl">
                 {loadingConversations
                   ? "Loading discussions..."
                   : conversationError
@@ -590,7 +590,7 @@ const DiscussionDrawer = ({
                       : "No assigned mentees found"}
               </h3>
 
-              <p className="mt-3 max-w-sm break-words text-sm leading-6 text-slate-500">
+              <p className="mt-2 w-full max-w-sm break-words text-xs leading-5 text-slate-500 sm:mt-3 sm:text-sm sm:leading-6">
                 {loadingConversations
                   ? "Fetching your assigned mentees."
                   : conversationError
@@ -613,7 +613,7 @@ const DiscussionDrawer = ({
           ) : (
             <>
               {/* Selected Mentee Header */}
-              <div className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-4 py-3">
+              <div className="flex min-w-0 shrink-0 items-center gap-2 border-b border-slate-200 bg-white px-3 py-2.5 sm:gap-3 sm:px-4 sm:py-3">
                 <img
                   src={getMenteeImage(selectedConversation)}
                   alt={getMenteeName(selectedConversation)}
@@ -621,7 +621,7 @@ const DiscussionDrawer = ({
                     event.currentTarget.onerror = null;
                     event.currentTarget.src = defaultProfile;
                   }}
-                  className="h-10 w-10 rounded-full border border-slate-100 object-cover"
+                  className="h-9 w-9 shrink-0 rounded-full border border-slate-100 object-cover sm:h-10 sm:w-10"
                 />
 
                 <div className="min-w-0">
@@ -636,7 +636,7 @@ const DiscussionDrawer = ({
               </div>
 
               {/* Messages */}
-              <div className="flex-1 space-y-3 overflow-y-auto p-4">
+              <div className="min-h-0 min-w-0 flex-1 space-y-3 overflow-x-hidden overflow-y-auto p-3 sm:p-4">
                 {loadingMessages ? (
                   <div className="flex justify-center py-10">
                     <LoaderCircle
@@ -699,7 +699,7 @@ const DiscussionDrawer = ({
                               : "rounded-bl-sm border border-slate-200 bg-white text-slate-700"
                           }`}
                         >
-                          <p className="whitespace-pre-wrap">
+                          <p className="whitespace-pre-wrap [overflow-wrap:anywhere]">
                             {getMessageContent(message)}
                           </p>
 
@@ -724,7 +724,7 @@ const DiscussionDrawer = ({
               {/* Message Composer */}
               <form
                 onSubmit={handleSend}
-                className="shrink-0 border-t border-slate-200 bg-white p-3"
+                className="shrink-0 border-t border-slate-200 bg-white p-2.5 sm:p-3"
               >
                 {messageError && (
                   <p className="mb-2 break-words text-xs text-red-600">
@@ -732,7 +732,7 @@ const DiscussionDrawer = ({
                   </p>
                 )}
 
-                <div className="flex items-center gap-2">
+                <div className="flex shrink-0 items-center gap-1 sm:gap-2">
                   <input
                     type="text"
                     value={messageText}
@@ -743,14 +743,14 @@ const DiscussionDrawer = ({
                       selectedConversation
                     )}...`}
                     maxLength={10000}
-                    className="min-w-0 flex-1 rounded-xl border border-slate-200 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    className="h-10 min-w-0 flex-1 rounded-xl border border-slate-200 px-3 py-2 text-xs outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:h-auto sm:px-4 sm:py-3 sm:text-sm"
                   />
 
                   <button
                     type="submit"
                     disabled={!messageText.trim() || sending}
                     aria-label="Send message"
-                    className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 sm:h-11 sm:w-11"
                   >
                     {sending ? (
                       <LoaderCircle

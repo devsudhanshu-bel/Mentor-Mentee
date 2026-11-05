@@ -3,13 +3,13 @@ import { Settings2 } from "lucide-react";
 
 const ApplicationPreferences = () => {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+    <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
       {/* Header */}
-      <div className="mb-4">
-        <div className="flex items-center gap-2">
-          <Settings2 size={17} className="text-blue-600" />
+      <div className="mb-4 min-w-0">
+        <div className="flex min-w-0 items-center gap-2">
+          <Settings2 size={17} className="shrink-0 text-blue-600" />
 
-          <h2 className="text-[15px] font-semibold text-slate-800">
+          <h2 className="break-words text-[15px] font-semibold text-slate-800">
             Application Preferences
           </h2>
         </div>
@@ -19,9 +19,9 @@ const ApplicationPreferences = () => {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid min-w-0 grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {/* Default Dashboard */}
-        <div>
+        <div className="min-w-0">
           <label className="mb-1 block text-[12px] font-semibold text-slate-700">
             Default Dashboard
           </label>
@@ -30,7 +30,7 @@ const ApplicationPreferences = () => {
             Choose your landing page.
           </p>
 
-          <select className="h-10 w-full rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
+          <select className="h-10 w-full min-w-0 rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
             <option>Dashboard</option>
             <option>My Students</option>
             <option>Meetings</option>
@@ -38,7 +38,7 @@ const ApplicationPreferences = () => {
         </div>
 
         {/* Items Per Page */}
-        <div>
+        <div className="min-w-0">
           <label className="mb-1 block text-[12px] font-semibold text-slate-700">
             Items Per Page
           </label>
@@ -47,7 +47,7 @@ const ApplicationPreferences = () => {
             Number of records displayed.
           </p>
 
-          <select className="h-10 w-full rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
+          <select className="h-10 w-full min-w-0 rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
             <option>10</option>
             <option>25</option>
             <option>50</option>
@@ -56,7 +56,7 @@ const ApplicationPreferences = () => {
         </div>
 
         {/* Theme */}
-        <div>
+        <div className="min-w-0">
           <label className="mb-1 block text-[12px] font-semibold text-slate-700">
             Theme
           </label>
@@ -65,7 +65,7 @@ const ApplicationPreferences = () => {
             Select your preferred theme.
           </p>
 
-          <select className="h-10 w-full rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
+          <select className="h-10 w-full min-w-0 rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
             <option>Light</option>
             <option>Dark</option>
             <option>System</option>
@@ -73,7 +73,7 @@ const ApplicationPreferences = () => {
         </div>
 
         {/* Timezone */}
-        <div>
+        <div className="min-w-0">
           <label className="mb-1 block text-[12px] font-semibold text-slate-700">
             Timezone
           </label>
@@ -82,7 +82,7 @@ const ApplicationPreferences = () => {
             Choose your timezone.
           </p>
 
-          <select className="h-10 w-full rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
+          <select className="h-10 w-full min-w-0 rounded-lg border border-slate-300 px-3 text-[13px] outline-none focus:border-blue-600">
             <option>(GMT+05:30) Asia/Kolkata</option>
             <option>(GMT+00:00) UTC</option>
             <option>(GMT-05:00) New York</option>

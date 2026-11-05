@@ -278,7 +278,7 @@ const Academics = () => {
   // =========================================================
 
   const pageLayout = (content) => (
-    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <Sidebar />
 
       <div className="flex min-h-screen w-full min-w-0 flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
@@ -350,7 +350,7 @@ const Academics = () => {
   // =========================================================
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <Sidebar />
 
       <div className="flex min-h-screen w-full min-w-0 flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
@@ -399,8 +399,8 @@ const Academics = () => {
 
             {/* SEMESTER SUMMARY */}
 
-            <div className="h-[215px] min-w-0">
-              <div className="h-full min-w-0 [&>*]:h-full">
+            <div className="h-auto min-h-[215px] min-w-0 sm:h-[215px]">
+              <div className="h-full min-h-[215px] min-w-0 [&>*]:h-full">
                 <SemesterSummary
                   semesterData={selectedSemesterData}
                 />
@@ -409,8 +409,8 @@ const Academics = () => {
 
             {/* GRADE DISTRIBUTION */}
 
-            <div className="h-[215px] min-w-0">
-              <div className="h-full min-w-0 [&>*]:h-full">
+            <div className="h-auto min-h-[215px] min-w-0 sm:h-[215px]">
+              <div className="h-full min-h-[215px] min-w-0 [&>*]:h-full">
                 <GradeDistribution
                   semesterData={selectedSemesterData}
                 />
@@ -419,8 +419,8 @@ const Academics = () => {
 
             {/* SGPA TREND */}
 
-            <div className="h-[215px] min-w-0 md:col-span-2 2xl:col-span-1">
-              <div className="h-full min-w-0 [&>*]:h-full">
+            <div className="h-auto min-h-[215px] min-w-0 sm:h-[215px] md:col-span-2 2xl:col-span-1">
+              <div className="h-full min-h-[215px] min-w-0 [&>*]:h-full">
                 <SGPATrend academicData={academicData} />
               </div>
             </div>

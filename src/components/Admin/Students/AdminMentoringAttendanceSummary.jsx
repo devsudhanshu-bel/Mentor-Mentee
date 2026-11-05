@@ -72,7 +72,7 @@ export default function AdminMentoringAttendanceSummary({ studentId }) {
         <div className="rounded-xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-700" role="alert">{error}</div>
       ) : (
         <>
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:grid-cols-4">
             <Stat label="Total Meetings" value={data?.summary?.total ?? 0} hint="Recorded meetings" icon={Clock3} tone="blue" />
             <Stat label="Present" value={data?.summary?.present ?? 0} hint="Meetings attended" icon={CheckCircle2} tone="green" />
             <Stat label="Absent" value={data?.summary?.absent ?? 0} hint="Meetings missed" icon={XCircle} tone="red" />
@@ -88,7 +88,7 @@ export default function AdminMentoringAttendanceSummary({ studentId }) {
               <p className="p-6 text-center text-sm text-slate-500">No mentoring attendance has been recorded for this student yet.</p>
             ) : (
               <div className="max-h-80 overflow-auto">
-                <table className="w-full text-left text-sm">
+                <div className="w-full min-w-0 overflow-x-auto"><table className="w-full text-left text-sm min-w-[640px]">
                   <thead className="sticky top-0 bg-slate-50 text-xs uppercase tracking-wide text-slate-500">
                     <tr><th className="px-4 py-3 font-semibold">Meeting Date</th><th className="px-4 py-3 font-semibold">Status</th><th className="px-4 py-3 font-semibold">Recorded At</th></tr>
                   </thead>
@@ -101,7 +101,7 @@ export default function AdminMentoringAttendanceSummary({ studentId }) {
                       </tr>
                     ))}
                   </tbody>
-                </table>
+                </table></div>
               </div>
             )}
           </div>

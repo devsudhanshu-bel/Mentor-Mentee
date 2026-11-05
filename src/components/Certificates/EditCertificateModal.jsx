@@ -344,7 +344,7 @@ const EditCertificateModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
+      className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-2 backdrop-blur-sm sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           handleClose();
@@ -355,20 +355,20 @@ const EditCertificateModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="edit-certificate-title"
-        className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white shadow-2xl"
+        className="max-h-[calc(100dvh-1rem)] w-full max-w-lg overflow-y-auto overscroll-contain rounded-xl bg-white shadow-2xl sm:max-h-[90vh] sm:rounded-2xl"
       >
         {/* HEADER */}
 
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
-          <div>
+        <div className="flex items-start justify-between gap-3 border-b border-slate-200 px-4 py-3.5 sm:px-5 sm:py-4">
+          <div className="min-w-0">
             <h2
               id="edit-certificate-title"
-              className="text-base font-semibold text-slate-800"
+              className="text-sm font-semibold leading-5 text-slate-800 sm:text-base"
             >
               Edit / Replace Certificate
             </h2>
 
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-[11px] leading-4 text-slate-400 sm:text-xs">
               Update your certificate and resubmit it for review.
             </p>
           </div>
@@ -378,14 +378,14 @@ const EditCertificateModal = ({
             onClick={handleClose}
             disabled={isSaving}
             aria-label="Close edit certificate modal"
-            className="rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
+            className="shrink-0 rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={19} />
           </button>
         </div>
 
         <form onSubmit={handleSubmit}>
-          <div className="space-y-4 px-5 py-5">
+          <div className="space-y-4 px-4 py-4 sm:px-5 sm:py-5">
             {/* MENTOR FEEDBACK */}
 
             {mentorFeedback && (
@@ -394,7 +394,7 @@ const EditCertificateModal = ({
                   Mentor&apos;s Feedback
                 </p>
 
-                <p className="mt-1 whitespace-pre-wrap break-words text-sm leading-5 text-orange-900">
+                <p className="mt-1 break-words whitespace-pre-wrap text-xs leading-5 text-orange-900 sm:text-sm">
                   {mentorFeedback}
                 </p>
               </div>
@@ -412,7 +412,7 @@ const EditCertificateModal = ({
                   className="mt-0.5 shrink-0 text-red-600"
                 />
 
-                <p className="text-xs leading-5 text-red-600">
+                <p className="min-w-0 break-words text-xs leading-5 text-red-600">
                   {errorMessage}
                 </p>
               </div>
@@ -420,7 +420,7 @@ const EditCertificateModal = ({
 
             {/* CERTIFICATE NAME */}
 
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="certificate-document-name"
                 className="mb-1.5 block text-xs font-medium text-slate-700"
@@ -440,7 +440,7 @@ const EditCertificateModal = ({
                 maxLength={100}
                 required
                 placeholder="Enter certificate name"
-                className="h-10 w-full rounded-md border border-slate-300 px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+                className="h-10 w-full min-w-0 rounded-md border border-slate-300 px-3 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
 
               <p className="mt-1 text-right text-xs text-slate-400">
@@ -450,7 +450,7 @@ const EditCertificateModal = ({
 
             {/* DESCRIPTION */}
 
-            <div>
+            <div className="min-w-0">
               <label
                 htmlFor="certificate-description"
                 className="mb-1.5 block text-xs font-medium text-slate-700"
@@ -468,7 +468,7 @@ const EditCertificateModal = ({
                 rows={3}
                 maxLength={500}
                 placeholder="Describe the certificate, course, or achievement..."
-                className="w-full resize-none rounded-md border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+                className="w-full min-w-0 resize-none rounded-md border border-slate-300 px-3 py-2.5 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
               />
 
               <p className="mt-1 text-right text-xs text-slate-400">
@@ -486,7 +486,7 @@ const EditCertificateModal = ({
                   Certificate Category
                 </label>
 
-                <div className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-600">
+                <div className="break-words rounded-md border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-600">
                   {certificate.certificateType ||
                     certificate.type ||
                     certificate.documentType}
@@ -496,7 +496,7 @@ const EditCertificateModal = ({
 
             {/* REVISED FILE */}
 
-            <div>
+            <div className="min-w-0">
               <label className="mb-1.5 block text-xs font-medium text-slate-700">
                 Revised Certificate File{" "}
                 <span className="text-red-500">*</span>
@@ -522,9 +522,9 @@ const EditCertificateModal = ({
                     fileInputRef.current?.click();
                   }
                 }}
-                className="cursor-pointer rounded-lg border-2 border-dashed border-blue-200 px-5 py-6 text-center transition hover:border-blue-400 hover:bg-blue-50/30"
+                className="cursor-pointer rounded-lg border-2 border-dashed border-blue-200 px-3 py-5 text-center transition hover:border-blue-400 hover:bg-blue-50/30 sm:px-5 sm:py-6"
               >
-                <div className="mx-auto mb-3 flex h-11 w-11 items-center justify-center rounded-full bg-blue-50">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-blue-50 sm:h-11 sm:w-11">
                   {selectedFile ? (
                     <FileCheck2
                       size={22}
@@ -540,7 +540,7 @@ const EditCertificateModal = ({
 
                 {selectedFile ? (
                   <>
-                    <p className="break-all text-sm font-medium text-slate-700">
+                    <p className="break-all text-xs font-medium text-slate-700 sm:text-sm">
                       {selectedFile.name}
                     </p>
 
@@ -554,7 +554,7 @@ const EditCertificateModal = ({
                   </>
                 ) : (
                   <>
-                    <p className="text-sm font-medium text-slate-700">
+                    <p className="text-xs font-medium text-slate-700 sm:text-sm">
                       Select your revised certificate
                     </p>
 
@@ -562,7 +562,7 @@ const EditCertificateModal = ({
                       Click to browse or drag and drop
                     </p>
 
-                    <p className="mt-3 text-[11px] text-slate-400">
+                    <p className="mt-3 text-[10px] leading-4 text-slate-400 sm:text-[11px]">
                       PDF, DOC, DOCX, PPT, PPTX, JPG, PNG, WEBP
                       {" · "}Maximum 20 MB
                     </p>
@@ -570,7 +570,7 @@ const EditCertificateModal = ({
                 )}
               </div>
 
-              <p className="mt-2 text-xs leading-5 text-slate-500">
+              <p className="mt-2 text-[11px] leading-5 text-slate-500 sm:text-xs">
                 The replacement file will replace the existing
                 certificate file after the update succeeds.
               </p>
@@ -579,12 +579,12 @@ const EditCertificateModal = ({
 
           {/* FOOTER */}
 
-          <div className="flex justify-end gap-2 border-t border-slate-200 bg-slate-50 px-5 py-4">
+          <div className="flex flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3.5 sm:flex-row sm:justify-end sm:px-5 sm:py-4">
             <button
               type="button"
               onClick={handleClose}
               disabled={isSaving}
-              className="h-9 rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50"
+              className="h-10 w-full rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-100 disabled:opacity-50 sm:h-9 sm:w-auto"
             >
               Cancel
             </button>
@@ -592,7 +592,7 @@ const EditCertificateModal = ({
             <button
               type="submit"
               disabled={isSaving}
-              className="flex h-9 items-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-blue-600 px-4 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:h-9 sm:w-auto"
             >
               {isSaving ? (
                 <>

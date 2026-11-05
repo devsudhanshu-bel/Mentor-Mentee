@@ -108,33 +108,33 @@ const WorkspaceHeader = ({
     null;
 
   return (
-    <div className="flex flex-col gap-4 border-b border-slate-200 bg-white px-4 py-4 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+    <div className="flex min-w-0 flex-col gap-3 border-b border-slate-200 bg-white px-3 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:flex-row lg:items-center lg:justify-between">
       {/* Meeting details */}
-      <div className="min-w-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <h2 className="max-w-full break-words text-lg font-bold text-slate-800">
+      <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 flex-wrap items-center gap-2">
+          <h2 className="max-w-full break-words text-base font-bold text-slate-800 sm:text-lg">
             {meeting?.title || "Mentorship Meeting"}
           </h2>
 
           <span
-            className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${statusDetails.className}`}
+            className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${statusDetails.className}`}
           >
             {statusDetails.label}
           </span>
         </div>
 
-        <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-[13px] text-slate-500">
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-[12px] text-slate-500 sm:gap-x-5 sm:text-[13px]">
           {meetingTime && (
-            <span className="flex items-center gap-1.5">
+            <span className="flex min-w-0 items-center gap-1.5">
               {startTime ? (
                 <>
-                  <Clock3 size={14} />
-                  Started {formatTime(startTime)}
+                  <Clock3 size={14} className="shrink-0" />
+                  <span className="break-words">Started {formatTime(startTime)}</span>
                 </>
               ) : (
                 <>
-                  <CalendarDays size={14} />
-                  Scheduled {formatTime(meetingTime)}
+                  <CalendarDays size={14} className="shrink-0" />
+                  <span className="break-words">Scheduled {formatTime(meetingTime)}</span>
                 </>
               )}
             </span>
@@ -142,7 +142,7 @@ const WorkspaceHeader = ({
 
           {isInProgress && (
             <span className="flex items-center gap-2">
-              <Clock3 size={14} />
+              <Clock3 size={14} className="shrink-0" />
               <strong className="text-slate-700">
                 {duration}
               </strong>
@@ -150,20 +150,22 @@ const WorkspaceHeader = ({
           )}
 
           {meetingMode && (
-            <span className="flex items-center gap-1.5">
+            <span className="flex min-w-0 items-center gap-1.5">
               {meetingMode.includes("ONLINE") ||
               meetingMode.includes("VIRTUAL") ? (
-                <Video size={14} />
+                <Video size={14} className="shrink-0" />
               ) : (
-                <MapPin size={14} />
+                <MapPin size={14} className="shrink-0" />
               )}
-              {meetingMode.replaceAll("_", " ")}
+              <span className="break-words">
+                {meetingMode.replaceAll("_", " ")}
+              </span>
             </span>
           )}
 
           {meetingLocation &&
             !/^https?:\/\//i.test(String(meetingLocation)) && (
-              <span className="max-w-xs truncate">
+              <span className="max-w-full break-words [overflow-wrap:anywhere] sm:max-w-xs">
                 {meetingLocation}
               </span>
             )}
@@ -171,12 +173,12 @@ const WorkspaceHeader = ({
       </div>
 
       {/* Actions */}
-      <div className="flex shrink-0 flex-wrap items-center gap-2">
+      <div className="flex w-full shrink-0 flex-col gap-2 sm:w-auto sm:flex-row sm:flex-wrap sm:items-center">
         <button
           type="button"
           onClick={onSaveMeeting}
           disabled={saving || ending || isTerminal}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-[13px] font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5"
+          className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-[13px] font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5 sm:py-2"
         >
           {saving ? "Saving..." : "Save Meeting"}
         </button>
@@ -185,7 +187,7 @@ const WorkspaceHeader = ({
           type="button"
           onClick={onEndMeeting}
           disabled={saving || ending || isTerminal}
-          className="rounded-lg border border-red-300 px-4 py-2 text-[13px] font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 sm:px-5"
+          className="w-full rounded-lg border border-red-300 px-4 py-2.5 text-[13px] font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:px-5 sm:py-2"
         >
           {ending
             ? "Ending..."

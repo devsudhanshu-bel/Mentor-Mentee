@@ -589,30 +589,30 @@ const MentorDiscussions = ({ onClose }) => {
     String(message.senderId) === String(currentUserId);
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-900/30 p-3 sm:p-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-hidden bg-slate-900/30 p-1.5 sm:p-4 lg:p-6">
       <section
         role="dialog"
         aria-modal="true"
         aria-label="Mentor discussions"
-        className="flex h-[min(88vh,850px)] w-full max-w-6xl flex-col overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-2xl"
+        className="flex h-[calc(100dvh-0.75rem)] max-h-[850px] min-h-0 w-full max-w-6xl flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-2xl sm:h-[min(92dvh,850px)] sm:rounded-[28px]"
       >
-        <header className="flex h-20 shrink-0 items-center justify-between border-b border-slate-200 px-5 sm:px-7">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-blue-600">
-              <MessageCircle size={25} />
+        <header className="flex min-h-[64px] shrink-0 items-center justify-between gap-2 border-b border-slate-200 px-3 py-2.5 sm:h-20 sm:px-7 sm:py-0">
+          <div className="flex min-w-0 items-center gap-2.5 sm:gap-4">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 sm:h-12 sm:w-12">
+              <MessageCircle size={20} className="sm:h-[25px] sm:w-[25px]" />
             </div>
 
             <div>
-              <h2 className="text-lg font-semibold text-slate-800">
+              <h2 className="truncate text-base font-semibold text-slate-800 sm:text-lg">
                 Discussions
               </h2>
-              <p className="text-sm text-slate-500">
+              <p className="text-xs text-slate-500 sm:text-sm">
                 Chat with your mentees
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-3">
             <button
               type="button"
               onClick={handleRefresh}
@@ -638,8 +638,8 @@ const MentorDiscussions = ({ onClose }) => {
           </div>
         </header>
 
-        <div className="flex min-h-0 flex-1">
-          <aside className="flex w-[280px] shrink-0 flex-col border-r border-slate-200 sm:w-[350px]">
+        <div className="flex min-h-0 flex-1 flex-col md:flex-row">
+          <aside className="flex h-[34%] min-h-[125px] w-full shrink-0 flex-col border-b border-slate-200 md:h-auto md:min-h-0 md:w-[280px] md:border-b-0 md:border-r md:sm:w-[350px]">
             <div className="min-h-0 flex-1">
               <StudentList
                 conversations={conversations}
@@ -674,14 +674,14 @@ const MentorDiscussions = ({ onClose }) => {
             )}
           </aside>
 
-          <main className="flex min-w-0 flex-1 flex-col bg-slate-50">
+          <main className="flex min-h-0 min-w-0 flex-1 flex-col bg-slate-50">
             {!selectedConversation ? (
-              <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
-                <div className="mb-7 flex h-[120px] w-[120px] items-center justify-center rounded-full bg-blue-100 text-blue-600">
-                  <MessageCircle size={56} strokeWidth={1.8} />
+              <div className="flex min-h-0 flex-1 flex-col items-center justify-center overflow-y-auto px-3 py-4 text-center sm:px-6">
+                <div className="mb-4 flex h-16 w-16 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600 sm:mb-7 sm:h-[120px] sm:w-[120px]">
+                  <MessageCircle size={34} strokeWidth={1.8} className="sm:h-14 sm:w-14" />
                 </div>
 
-                <h3 className="text-2xl font-semibold text-slate-800">
+                <h3 className="text-lg font-semibold text-slate-800 sm:text-2xl">
                   {loadingConversations
                     ? "Loading Discussions..."
                     : conversationError
@@ -691,7 +691,7 @@ const MentorDiscussions = ({ onClose }) => {
                         : "Welcome to Discussions"}
                 </h3>
 
-                <p className="mt-4 max-w-md text-sm leading-7 text-slate-500">
+                <p className="mt-2 max-w-md break-words text-xs leading-5 text-slate-500 sm:mt-4 sm:text-sm sm:leading-7">
                   {loadingConversations
                     ? "Fetching your assigned mentees. Please wait."
                     : conversationError
@@ -705,7 +705,7 @@ const MentorDiscussions = ({ onClose }) => {
                   <button
                     type="button"
                     onClick={handleRefresh}
-                    className="mt-5 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700"
+                    className="mt-4 inline-flex max-w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-3 py-2.5 text-xs font-semibold text-white hover:bg-blue-700 sm:mt-5 sm:px-4 sm:text-sm"
                   >
                     <RefreshCw size={15} />
                     Refresh conversations
@@ -714,7 +714,7 @@ const MentorDiscussions = ({ onClose }) => {
               </div>
             ) : (
               <>
-                <div className="flex shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-5 py-3">
+                <div className="flex shrink-0 items-center gap-2 border-b border-slate-200 bg-white px-3 py-2.5 sm:gap-3 sm:px-5 sm:py-3">
                   <img
                     src={
                       getMenteeImage(selectedConversation) ||
@@ -725,7 +725,7 @@ const MentorDiscussions = ({ onClose }) => {
                       event.currentTarget.onerror = null;
                       event.currentTarget.src = defaultProfile;
                     }}
-                    className="h-10 w-10 rounded-full border border-slate-100 object-cover"
+                    className="h-9 w-9 shrink-0 rounded-full border border-slate-100 object-cover sm:h-10 sm:w-10"
                   />
 
                   <div className="min-w-0">
@@ -740,7 +740,7 @@ const MentorDiscussions = ({ onClose }) => {
 
                 <div
                   ref={messageListRef}
-                  className="flex-1 space-y-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-6"
+                  className="min-h-0 flex-1 space-y-1 overflow-x-hidden overflow-y-auto overscroll-contain px-2.5 py-3 sm:px-6 sm:py-4"
                 >
                   {loadingMessages ? (
                     <div className="flex justify-center py-10">
@@ -788,7 +788,7 @@ const MentorDiscussions = ({ onClose }) => {
                       return (
                         <div
                           key={message.id}
-                          className={`flex items-end gap-2 ${
+                          className={`flex min-w-0 items-end gap-1.5 sm:gap-2 ${
                             isMine ? "justify-end" : "justify-start"
                           } ${showSender ? "mt-5" : "mt-1"}`}
                         >
@@ -812,25 +812,25 @@ const MentorDiscussions = ({ onClose }) => {
                           )}
 
                           <div
-                            className={`max-w-[82%] sm:max-w-[75%] ${
+                            className={`min-w-0 max-w-[86%] sm:max-w-[75%] ${
                               isMine ? "text-right" : "text-left"
                             }`}
                           >
                             {showSender && (
                               <div
-                                className={`mb-1 flex items-center gap-2 ${
+                                className={`mb-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 ${
                                   isMine
                                     ? "justify-end"
                                     : "justify-start"
                                 }`}
                               >
-                                <span className="text-[11px] font-semibold text-slate-700">
+                                <span className="break-words text-[10px] font-semibold text-slate-700 sm:text-[11px]">
                                   {isMine
                                     ? "You"
                                     : getMenteeName(selectedConversation)}
                                 </span>
 
-                                <span className="text-[10px] text-slate-400">
+                                <span className="text-[9px] text-slate-400 sm:text-[10px]">
                                   {formatDate(message.createdAt)}{" "}
                                   {formatTime(message.createdAt)}
                                 </span>
@@ -844,7 +844,7 @@ const MentorDiscussions = ({ onClose }) => {
                             )}
 
                             <div
-                              className={`inline-block whitespace-pre-wrap break-words rounded-2xl px-4 py-2.5 text-left text-[13px] leading-5 ${
+                              className={`inline-block max-w-full whitespace-pre-wrap break-words rounded-2xl px-3 py-2 text-left text-xs leading-5 sm:px-4 sm:py-2.5 sm:text-[13px] ${
                                 isMine
                                   ? "rounded-br-md bg-blue-600 text-white"
                                   : "rounded-bl-md border border-slate-200 bg-white text-slate-700"
@@ -904,7 +904,7 @@ const MentorDiscussions = ({ onClose }) => {
 
                 <form
                   onSubmit={handleSend}
-                  className="flex shrink-0 items-end gap-3 border-t border-slate-200 bg-white p-4 sm:p-5"
+                  className="flex shrink-0 items-end gap-2 border-t border-slate-200 bg-white p-2.5 sm:gap-3 sm:p-5"
                 >
                   <input
                     ref={inputRef}
@@ -918,13 +918,13 @@ const MentorDiscussions = ({ onClose }) => {
                     )}...`}
                     maxLength={10000}
                     aria-label="Write a message"
-                    className="min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+                    className="min-h-10 min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 sm:px-4 sm:py-3 sm:text-sm"
                   />
 
                   <button
                     type="submit"
                     disabled={!messageText.trim() || sending}
-                    className="flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 text-sm font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+                    className="flex h-10 shrink-0 items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 text-xs font-semibold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-300 sm:h-11 sm:gap-2 sm:px-4 sm:text-sm"
                   >
                     {sending ? (
                       <LoaderCircle

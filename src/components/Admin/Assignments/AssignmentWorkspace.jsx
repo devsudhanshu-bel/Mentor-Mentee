@@ -329,10 +329,16 @@ const AssignmentWorkspace = ({
           <div
             className="
               grid
-              grid-cols-[minmax(0,1fr)_56px_minmax(0,1fr)]
+              min-w-0
+              grid-cols-1
               items-stretch
-              gap-5
-              p-5
+              gap-3
+              p-3
+              sm:gap-4
+              sm:p-4
+              lg:grid-cols-[minmax(0,1fr)_64px_minmax(0,1fr)]
+              lg:gap-4
+              lg:p-5
             "
           >
             {/* STUDENTS */}

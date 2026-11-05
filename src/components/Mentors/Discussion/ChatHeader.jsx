@@ -61,8 +61,8 @@ const ChatHeader = ({ conversation = null }) => {
   const studentImage = getProfileImage(conversation);
 
   return (
-    <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-4 sm:px-5">
-      <div className="flex min-w-0 items-center gap-3">
+    <div className="flex h-14 w-full min-w-0 shrink-0 items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 sm:h-16 sm:gap-3 sm:px-5">
+      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
         <div className="relative shrink-0">
           {studentImage ? (
             <img
@@ -72,27 +72,28 @@ const ChatHeader = ({ conversation = null }) => {
                 event.currentTarget.onerror = null;
                 event.currentTarget.src = profile;
               }}
-              className="h-11 w-11 rounded-full border border-slate-200 object-cover"
+              className="h-10 w-10 rounded-full border border-slate-200 object-cover sm:h-11 sm:w-11"
             />
           ) : (
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-slate-100">
-              <UserRound size={22} className="text-slate-500" />
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 sm:h-11 sm:w-11">
+              <UserRound size={20} className="text-slate-500 sm:hidden" />
+              <UserRound size={22} className="hidden text-slate-500 sm:block" />
             </div>
           )}
         </div>
 
-        <div className="min-w-0">
-          <h3 className="truncate text-[15px] font-semibold text-slate-800">
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate text-sm font-semibold text-slate-800 sm:text-[15px]">
             {studentName}
           </h3>
 
-          <p className="text-[12px] text-slate-500">
+          <p className="text-[11px] text-slate-500 sm:text-[12px]">
             Mentee
           </p>
         </div>
       </div>
 
-      <div className="flex shrink-0 items-center gap-1">
+      <div className="flex shrink-0 items-center gap-0 sm:gap-1">
         <button
           type="button"
           title="Call"
@@ -100,9 +101,10 @@ const ChatHeader = ({ conversation = null }) => {
           onClick={() =>
             alert("Voice calling is not implemented yet.")
           }
-          className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100"
+          className="rounded-lg p-1.5 text-slate-600 transition hover:bg-slate-100 sm:p-2"
         >
-          <Phone size={18} />
+          <Phone size={16} className="sm:hidden" />
+          <Phone size={18} className="hidden sm:block" />
         </button>
 
         <button
@@ -112,9 +114,10 @@ const ChatHeader = ({ conversation = null }) => {
           onClick={() =>
             alert("Video calling is not implemented yet.")
           }
-          className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100"
+          className="rounded-lg p-1.5 text-slate-600 transition hover:bg-slate-100 sm:p-2"
         >
-          <Video size={18} />
+          <Video size={16} className="sm:hidden" />
+          <Video size={18} className="hidden sm:block" />
         </button>
 
         <button
@@ -124,9 +127,10 @@ const ChatHeader = ({ conversation = null }) => {
           onClick={() =>
             alert("More chat options are not implemented yet.")
           }
-          className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100"
+          className="rounded-lg p-1.5 text-slate-600 transition hover:bg-slate-100 sm:p-2"
         >
-          <MoreVertical size={18} />
+          <MoreVertical size={16} className="sm:hidden" />
+          <MoreVertical size={18} className="hidden sm:block" />
         </button>
       </div>
     </div>

@@ -9,17 +9,17 @@ const StudentsPerMentor = ({ mentors = [] }) => {
   );
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm h-[420px] p-6 flex flex-col">
+    <div className="flex h-[420px] min-w-0 flex-col rounded-3xl border border-slate-200 bg-white p-3 shadow-sm sm:p-6">
       {/* ================= Header ================= */}
 
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-lg font-semibold text-slate-800">
+      <div className="mb-5 flex flex-wrap items-center justify-between gap-2 sm:mb-8">
+        <h2 className="text-[16px] font-semibold text-slate-800 sm:text-lg">
           Students per Mentor
         </h2>
 
         <button
           type="button"
-          className="text-sm font-semibold text-blue-600 hover:text-blue-700 transition"
+          className="shrink-0 text-sm font-semibold text-blue-600 transition hover:text-blue-700"
         >
           View All
         </button>
@@ -27,23 +27,23 @@ const StudentsPerMentor = ({ mentors = [] }) => {
 
       {/* ================= Chart ================= */}
 
-      <div className="flex-1 flex flex-col justify-around">
+      <div className="flex flex-1 min-w-0 flex-col justify-around">
         {visibleMentors.length === 0 ? (
-          <div className="flex flex-1 items-center justify-center text-sm text-slate-400">
+          <div className="flex flex-1 items-center justify-center text-center text-sm text-slate-400">
             No mentor workload data available.
           </div>
         ) : (
           visibleMentors.map((mentor) => (
             <div
               key={mentor.id}
-              className="grid grid-cols-[150px_1fr_38px] items-center gap-5"
+              className="grid min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,2fr)_32px] items-center gap-2 sm:grid-cols-[150px_minmax(0,1fr)_38px] sm:gap-5"
             >
-              <p className="text-[13px] font-medium text-slate-700 truncate">
+              <p className="truncate text-[11px] font-medium text-slate-700 sm:text-[13px]">
                 {mentor.name}
               </p>
 
-              <div className="relative">
-                <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+              <div className="relative min-w-0">
+                <div className="h-2 overflow-hidden rounded-full bg-slate-100">
                   <div
                     className="h-full rounded-full bg-blue-600 transition-all duration-500"
                     style={{
@@ -56,7 +56,7 @@ const StudentsPerMentor = ({ mentors = [] }) => {
                 </div>
               </div>
 
-              <span className="text-sm font-bold text-slate-700 text-right">
+              <span className="text-right text-xs font-bold text-slate-700 sm:text-sm">
                 {mentor.students}
               </span>
             </div>
@@ -66,18 +66,20 @@ const StudentsPerMentor = ({ mentors = [] }) => {
 
       {/* ================= Axis ================= */}
 
-      <div className="mt-8 pl-[170px] pr-[18px]">
-        <div className="flex justify-between text-[11px] text-slate-400">
-          <span>0</span>
-          <span>{Math.round(maxStudents / 3)}</span>
-          <span>{Math.round((maxStudents * 2) / 3)}</span>
-          <span>{maxStudents}</span>
-        </div>
+      <div className="mt-6 grid grid-cols-[minmax(0,1fr)_minmax(0,2fr)_32px] gap-2 sm:mt-8 sm:grid-cols-[150px_minmax(0,1fr)_38px] sm:gap-5">
+        <div className="col-start-2 min-w-0">
+          <div className="flex justify-between text-[10px] text-slate-400 sm:text-[11px]">
+            <span>0</span>
+            <span>{Math.round(maxStudents / 3)}</span>
+            <span>{Math.round((maxStudents * 2) / 3)}</span>
+            <span>{maxStudents}</span>
+          </div>
 
-        <div className="mt-2 flex justify-center">
-          <span className="text-[11px] font-medium text-slate-500">
-            Number of Students
-          </span>
+          <div className="mt-2 flex justify-center">
+            <span className="text-center text-[10px] font-medium text-slate-500 sm:text-[11px]">
+              Number of Students
+            </span>
+          </div>
         </div>
       </div>
     </div>

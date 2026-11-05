@@ -15,22 +15,23 @@ const DocumentErrorModal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-[220] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[220] flex items-center justify-center bg-black/40 p-3 backdrop-blur-sm sm:p-4">
 
-      <div className="w-full max-w-sm bg-white rounded-xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-sm overflow-hidden rounded-xl bg-white shadow-2xl">
 
         {/* HEADER */}
 
-        <div className="px-5 py-4 flex items-center justify-between border-b border-slate-200">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3.5 sm:px-5 sm:py-4">
 
-          <h2 className="text-base font-semibold text-slate-800">
+          <h2 className="min-w-0 break-words text-sm font-semibold text-slate-800 sm:text-base">
             {title}
           </h2>
 
           <button
             type="button"
             onClick={onClose}
-            className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 transition"
+            aria-label="Close error dialog"
+            className="shrink-0 rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100"
           >
             <X size={19} />
           </button>
@@ -39,18 +40,23 @@ const DocumentErrorModal = ({
 
         {/* CONTENT */}
 
-        <div className="px-5 py-7 text-center">
+        <div className="px-4 py-6 text-center sm:px-5 sm:py-7">
 
-          <div className="w-14 h-14 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-red-50 sm:mb-4 sm:h-14 sm:w-14">
+
+            <AlertCircle
+              size={26}
+              className="text-red-600 sm:hidden"
+            />
 
             <AlertCircle
               size={30}
-              className="text-red-600"
+              className="hidden text-red-600 sm:block"
             />
 
           </div>
 
-          <p className="text-sm text-slate-600 leading-5">
+          <p className="break-words text-xs leading-5 text-slate-600 sm:text-sm">
             {message}
           </p>
 
@@ -58,12 +64,12 @@ const DocumentErrorModal = ({
 
         {/* FOOTER */}
 
-        <div className="px-5 py-4 bg-slate-50 border-t border-slate-200 flex justify-end">
+        <div className="flex justify-end border-t border-slate-200 bg-slate-50 px-4 py-3.5 sm:px-5 sm:py-4">
 
           <button
             type="button"
             onClick={onClose}
-            className="h-9 px-5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
+            className="h-10 w-full rounded-md bg-blue-600 px-5 text-xs font-medium text-white transition hover:bg-blue-700 sm:h-9 sm:w-auto"
           >
             Close
           </button>

@@ -15,8 +15,8 @@ const MentorPagination = ({
   const end = Math.min(currentPage * rowsPerPage, totalMentors);
 
   return (
-    <div className="flex flex-col gap-4 border-t border-slate-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-      <p className="text-[12px] text-slate-500">
+    <div className="flex flex-col gap-3 border-t border-slate-200 px-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-5">
+      <p className="text-center text-[12px] text-slate-500 sm:text-left">
         Showing{" "}
         <span className="font-semibold text-slate-700">
           {start}–{end}
@@ -25,7 +25,7 @@ const MentorPagination = ({
         mentors
       </p>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3 sm:justify-end">
         <div className="flex items-center gap-2">
           <span className="text-[12px] text-slate-500">Rows</span>
 
@@ -44,12 +44,12 @@ const MentorPagination = ({
           </select>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex max-w-full items-center gap-1 overflow-x-auto">
           <button
             type="button"
             disabled={currentPage <= 1}
             onClick={() => setCurrentPage((page) => Math.max(page - 1, 1))}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-40"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-40"
           >
             <ChevronLeft size={15} />
           </button>
@@ -64,7 +64,7 @@ const MentorPagination = ({
               type="button"
               key={page}
               onClick={() => setCurrentPage(page)}
-              className={`h-8 min-w-8 rounded-lg px-2 text-[12px] font-semibold ${
+              className={`h-8 min-w-8 shrink-0 rounded-lg px-2 text-[12px] font-semibold ${
                 page === currentPage
                   ? "bg-blue-600 text-white"
                   : "border border-slate-200 text-slate-700 hover:bg-slate-50"
@@ -80,7 +80,7 @@ const MentorPagination = ({
             onClick={() =>
               setCurrentPage((page) => Math.min(page + 1, totalPages))
             }
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-40"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg border border-slate-200 disabled:opacity-40"
           >
             <ChevronRight size={15} />
           </button>

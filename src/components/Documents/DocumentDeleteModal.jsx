@@ -17,15 +17,15 @@ const DocumentDeleteModal = ({
   }
 
   return (
-    <div className="fixed inset-0 z-[200] bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/40 p-3 backdrop-blur-sm sm:p-4">
 
-      <div className="w-full max-w-md bg-white rounded-xl shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md overflow-hidden rounded-xl bg-white shadow-2xl">
 
         {/* HEADER */}
 
-        <div className="px-5 py-4 border-b border-slate-200 flex items-center justify-between">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3.5 sm:px-5 sm:py-4">
 
-          <h2 className="text-base font-semibold text-slate-800">
+          <h2 className="text-sm font-semibold text-slate-800 sm:text-base">
             Delete Document
           </h2>
 
@@ -33,7 +33,8 @@ const DocumentDeleteModal = ({
             type="button"
             onClick={onCancel}
             disabled={isDeleting}
-            className="p-1.5 rounded-md hover:bg-slate-100 text-slate-500 transition disabled:opacity-50"
+            aria-label="Close delete confirmation"
+            className="shrink-0 rounded-md p-1.5 text-slate-500 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={19} />
           </button>
@@ -42,26 +43,31 @@ const DocumentDeleteModal = ({
 
         {/* CONTENT */}
 
-        <div className="px-5 py-6">
+        <div className="px-4 py-5 sm:px-5 sm:py-6">
 
-          <div className="flex items-start gap-4">
+          <div className="flex items-start gap-3 sm:gap-4">
 
-            <div className="w-11 h-11 rounded-full bg-red-50 flex items-center justify-center shrink-0">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-50 sm:h-11 sm:w-11">
+
+              <Trash2
+                size={20}
+                className="text-red-600 sm:hidden"
+              />
 
               <Trash2
                 size={21}
-                className="text-red-600"
+                className="hidden text-red-600 sm:block"
               />
 
             </div>
 
-            <div>
+            <div className="min-w-0 flex-1">
 
               <h3 className="text-sm font-semibold text-slate-800">
                 Are you sure?
               </h3>
 
-              <p className="text-sm text-slate-500 mt-1 leading-5">
+              <p className="mt-1 break-words text-xs leading-5 text-slate-500 sm:text-sm">
                 You are about to delete
                 <span className="font-medium text-slate-700">
                   {" "}
@@ -70,7 +76,7 @@ const DocumentDeleteModal = ({
                 .
               </p>
 
-              <p className="text-xs text-slate-400 mt-2">
+              <p className="mt-2 text-[11px] text-slate-400 sm:text-xs">
                 This action cannot be undone.
               </p>
 
@@ -82,13 +88,13 @@ const DocumentDeleteModal = ({
 
         {/* FOOTER */}
 
-        <div className="px-5 py-4 bg-slate-50 border-t border-slate-200 flex justify-end gap-2">
+        <div className="flex flex-col-reverse gap-2 border-t border-slate-200 bg-slate-50 px-4 py-3.5 sm:flex-row sm:justify-end sm:px-5 sm:py-4">
 
           <button
             type="button"
             onClick={onCancel}
             disabled={isDeleting}
-            className="h-9 px-4 rounded-md border border-slate-300 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium transition disabled:opacity-50"
+            className="h-10 w-full rounded-md border border-slate-300 bg-white px-4 text-xs font-medium text-slate-700 transition hover:bg-slate-50 disabled:opacity-50 sm:h-9 sm:w-auto"
           >
             Cancel
           </button>
@@ -97,7 +103,7 @@ const DocumentDeleteModal = ({
             type="button"
             onClick={onConfirm}
             disabled={isDeleting}
-            className="h-9 px-4 rounded-md bg-red-600 hover:bg-red-700 text-white text-xs font-medium transition flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+            className="flex h-10 w-full items-center justify-center gap-2 rounded-md bg-red-600 px-4 text-xs font-medium text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 sm:h-9 sm:w-auto"
           >
 
             {isDeleting ? (

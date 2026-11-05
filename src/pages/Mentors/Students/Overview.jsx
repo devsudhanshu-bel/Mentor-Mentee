@@ -168,20 +168,20 @@ const Overview = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* ================= Sidebar ================= */}
 
       {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
       {/* ================= Main Content ================= */}
 
-      <div className="ml-[290px] min-h-screen max-[900px]:ml-0">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px]">
         {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-        <main className="space-y-5 p-4 lg:p-6">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:space-y-5 sm:p-4 md:p-5 lg:p-6">
           {/* ================= Page Actions ================= */}
 
-          <section className="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+          <section className="flex min-w-0 flex-col justify-between gap-3 sm:flex-row sm:flex-wrap sm:items-center">
             {isAdminRoute ? (
               <>
                 <AdminBackButton />
@@ -205,7 +205,7 @@ const Overview = () => {
 
           {loading && (
             <div
-              className="rounded-xl border border-slate-200 bg-white p-6"
+              className="min-w-0 rounded-xl border border-slate-200 bg-white p-4 sm:p-6"
               role="status"
             >
               <div className="flex items-center gap-3">
@@ -222,14 +222,14 @@ const Overview = () => {
 
           {!loading && error && (
             <div
-              className="rounded-xl border border-red-200 bg-red-50 p-5"
+              className="min-w-0 rounded-xl border border-red-200 bg-red-50 p-4 sm:p-5"
               role="alert"
             >
               <h2 className="font-semibold text-red-800">
                 Unable to load overview
               </h2>
 
-              <p className="mt-1 text-sm text-red-700">
+              <p className="mt-1 break-words text-sm text-red-700">
                 {error}
               </p>
 
@@ -246,10 +246,10 @@ const Overview = () => {
           {/* ================= Student Overview ================= */}
 
           {!loading && !error && overview && (
-            <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[260px_minmax(0,1fr)]">
+            <div className="grid min-w-0 grid-cols-1 items-start gap-4 sm:gap-5 xl:grid-cols-[260px_minmax(0,1fr)]">
               {/* Left Sidebar */}
 
-              <aside className="flex min-w-0 flex-col gap-5">
+              <aside className="flex min-w-0 flex-col gap-4 sm:gap-5">
                 <StudentProfileSidebar
                   student={overview.student}
                   overview={overview}
@@ -263,14 +263,16 @@ const Overview = () => {
 
               {/* Main Content */}
 
-              <div className="flex min-w-0 flex-col gap-5">
+              <div className="flex min-w-0 flex-col gap-4 sm:gap-5">
                 {/* Tabs */}
 
-                {isAdminRoute ? (
-                  <AdminStudentTabs />
-                ) : (
-                  <StudentTabs />
-                )}
+                <div className="min-w-0 max-w-full overflow-x-auto">
+                  {isAdminRoute ? (
+                    <AdminStudentTabs />
+                  ) : (
+                    <StudentTabs />
+                  )}
+                </div>
 
                 {/* Overview Statistics */}
 
@@ -288,7 +290,7 @@ const Overview = () => {
 
                 {/* Academic Progress */}
 
-                <section className="grid grid-cols-1 gap-5">
+                <section className="grid min-w-0 grid-cols-1 gap-4 sm:gap-5">
                   <AcademicProgress
                     academicProgress={overview.academicProgress}
                     student={overview.student}
@@ -297,7 +299,7 @@ const Overview = () => {
 
                 {/* Student Activities */}
 
-                <section>
+                <section className="min-w-0">
                   <div className="mb-3">
                     <h2 className="text-base font-semibold text-slate-800">
                       Student Activities
@@ -308,7 +310,7 @@ const Overview = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2 2xl:grid-cols-3">
+                  <div className="grid min-w-0 grid-cols-1 items-stretch gap-3 sm:gap-4 lg:grid-cols-2 2xl:grid-cols-3">
                     <InternshipsOverview
                       internships={overview.internships}
                       statistics={overview.statistics?.internships}
@@ -328,7 +330,7 @@ const Overview = () => {
 
                 {/* Documents and Certificates */}
 
-                <section>
+                <section className="min-w-0">
                   <div className="mb-3">
                     <h2 className="text-base font-semibold text-slate-800">
                       Documents & Certificates
@@ -339,7 +341,7 @@ const Overview = () => {
                     </p>
                   </div>
 
-                  <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-2">
+                  <div className="grid min-w-0 grid-cols-1 items-stretch gap-3 sm:gap-4 lg:grid-cols-2">
                     <UploadedDocuments
                       documents={overview.documents}
                     />

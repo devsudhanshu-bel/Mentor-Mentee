@@ -55,26 +55,26 @@ const actions = [
 
 const QuickActions = () => {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       {/* Header */}
-      <div className="mb-5">
-        <h2 className="text-[16px] font-semibold text-slate-800">
+      <div className="mb-4 sm:mb-5">
+        <h2 className="text-base font-semibold text-slate-800">
           Quick Actions
         </h2>
       </div>
 
       {/* Action Cards */}
-      <div className="grid grid-cols-2 gap-4 md:grid-cols-3 xl:grid-cols-6">
+      <div className="grid min-w-0 grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 lg:grid-cols-3 2xl:grid-cols-6">
         {actions.map((action, index) => {
           const Icon = action.icon;
 
           return (
             <button
               key={index}
-              className="group rounded-xl border border-slate-200 bg-white p-4 text-left transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md"
+              className="group flex min-w-0 items-start gap-3 rounded-xl border border-slate-200 bg-white p-3 text-left transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-md sm:block sm:p-4"
             >
               <div
-                className={`flex h-10 w-10 items-center justify-center rounded-lg ${action.bg}`}
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${action.bg}`}
               >
                 <Icon
                   size={20}
@@ -82,13 +82,15 @@ const QuickActions = () => {
                 />
               </div>
 
-              <h3 className="mt-3 text-[13px] font-semibold text-slate-800">
-                {action.title}
-              </h3>
+              <div className="min-w-0 sm:mt-3">
+                <h3 className="break-words text-[13px] font-semibold leading-5 text-slate-800">
+                  {action.title}
+                </h3>
 
-              <p className="mt-1 text-[11px] leading-4 text-slate-500">
-                {action.subtitle}
-              </p>
+                <p className="mt-1 break-words text-[11px] leading-4 text-slate-500">
+                  {action.subtitle}
+                </p>
+              </div>
             </button>
           );
         })}

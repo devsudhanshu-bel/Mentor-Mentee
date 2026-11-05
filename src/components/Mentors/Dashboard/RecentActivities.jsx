@@ -43,31 +43,31 @@ const activities = [
 
 const RecentActivities = () => {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       {/* Header */}
-      <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-[16px] font-semibold text-slate-800">
+      <div className="mb-4 flex min-w-0 items-center justify-between gap-3 sm:mb-5">
+        <h2 className="text-base font-semibold text-slate-800">
           Recent Activities
         </h2>
 
-        <button className="text-xs font-medium text-blue-600 hover:text-blue-700 transition">
+        <button className="shrink-0 text-xs font-medium text-blue-600 transition hover:text-blue-700">
           View All
         </button>
       </div>
 
       {/* Timeline */}
-      <div className="space-y-4">
+      <div className="min-w-0 space-y-3 sm:space-y-4">
         {activities.map((activity, index) => {
           const Icon = activity.icon;
 
           return (
             <div
               key={index}
-              className="flex items-start gap-3 border-b border-slate-100 pb-4 last:border-none last:pb-0"
+              className="flex min-w-0 items-start gap-2.5 border-b border-slate-100 pb-3 last:border-none last:pb-0 sm:gap-3 sm:pb-4"
             >
               {/* Icon */}
               <div
-                className={`flex h-10 w-10 items-center justify-center rounded-xl ${activity.bg}`}
+                className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-10 sm:w-10 ${activity.bg}`}
               >
                 <Icon
                   size={18}
@@ -77,12 +77,12 @@ const RecentActivities = () => {
               </div>
 
               {/* Content */}
-              <div className="flex-1">
-                <h3 className="text-[14px] font-semibold text-slate-800">
+              <div className="min-w-0 flex-1">
+                <h3 className="break-words text-[13px] font-semibold leading-5 text-slate-800 sm:text-[14px]">
                   {activity.title}
                 </h3>
 
-                <p className="mt-1 text-[12px] text-slate-500">
+                <p className="mt-1 break-words text-[12px] leading-4 text-slate-500">
                   {activity.student}
                 </p>
 

@@ -647,13 +647,13 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
   // --------------------------------------------------------
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <AdminSidebar />
 
-      <div className="ml-[290px] min-h-screen max-lg:ml-0">
+      <div className="ml-0 min-h-screen max-lg:ml-0 lg:ml-[290px] lg:w-[calc(100%-290px)] w-full min-w-0">
         <AdminHeader />
 
-        <main className="space-y-5 p-4 md:p-6">
+        <main className="space-y-5 p-4 md:p-3 sm:p-4 lg:p-6">
           {/* PAGE ACTIONS */}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -753,7 +753,7 @@ const AwardsAchievements = ({ studentId: studentIdProp }) => {
 
               <section
                 aria-label="Awards and achievements statistics"
-                className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5"
+                className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3 2xl:grid-cols-5"
               >
                 {stats.map((stat) => (
                   <AwardsAchievementsStatCard

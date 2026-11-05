@@ -192,24 +192,24 @@ const Students = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* Sidebar */}
 
       <MentorSidebar />
 
       {/* Main Content */}
 
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px]">
         <MentorHeader />
 
-        <main className="space-y-4 p-6">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:p-4 md:p-5 lg:p-6">
           {/* Dashboard Welcome Banner */}
 
           <WelcomeBanner />
 
           {/* Today's Schedule and Upcoming Deadlines */}
 
-          <section className="grid grid-cols-1 items-stretch gap-4 xl:grid-cols-2">
+          <section className="grid min-w-0 grid-cols-1 items-stretch gap-4 xl:grid-cols-2">
             <TodaysSchedule />
             <UpcomingDeadlines />
           </section>
@@ -222,10 +222,10 @@ const Students = () => {
 
           {/* My Students */}
 
-          <section id="my-students" className="space-y-4">
+          <section id="my-students" className="min-w-0 space-y-4">
             {/* Students Heading */}
 
-            <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+            <div className="flex min-w-0 flex-col justify-between gap-2 sm:flex-row sm:items-center">
               <div>
                 <h2 className="text-xl font-bold text-slate-800">
                   My Students
@@ -272,7 +272,7 @@ const Students = () => {
             {/* Loading State */}
 
             {loading && (
-              <section className="flex min-h-[250px] items-center justify-center rounded-2xl border border-slate-200 bg-white">
+              <section className="flex min-h-[250px] min-w-0 items-center justify-center rounded-2xl border border-slate-200 bg-white px-3 sm:px-5">
                 <div className="text-center">
                   <div className="mx-auto mb-3 h-9 w-9 animate-spin rounded-full border-4 border-slate-200 border-t-blue-600" />
 
@@ -290,7 +290,7 @@ const Students = () => {
             {/* Error State */}
 
             {!loading && error && (
-              <section className="flex min-h-[250px] items-center justify-center rounded-2xl border border-red-100 bg-white px-5">
+              <section className="flex min-h-[250px] min-w-0 items-center justify-center rounded-2xl border border-red-100 bg-white px-4 sm:px-5">
                 <div className="text-center">
                   <h3 className="text-base font-semibold text-red-600">
                     Unable to load students
@@ -316,7 +316,7 @@ const Students = () => {
             {!loading &&
               !error &&
               filteredStudents.length === 0 && (
-                <section className="flex min-h-[250px] items-center justify-center rounded-2xl border border-slate-200 bg-white px-5">
+                <section className="flex min-h-[250px] min-w-0 items-center justify-center rounded-2xl border border-slate-200 bg-white px-4 sm:px-5">
                   <div className="text-center">
                     <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
                       <svg
@@ -368,7 +368,7 @@ const Students = () => {
             {!loading &&
               !error &&
               filteredStudents.length > 0 && (
-                <section className="grid grid-cols-1 items-stretch gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                <section className="grid min-w-0 grid-cols-1 items-stretch gap-3 sm:gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                   {filteredStudents.map((student) => (
                     <StudentCard
                       key={student.assignmentId}

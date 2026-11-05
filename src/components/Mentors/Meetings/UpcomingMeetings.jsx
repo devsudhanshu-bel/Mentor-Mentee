@@ -1,4 +1,3 @@
-
 import React, { useMemo, useState } from "react";
 
 import {
@@ -377,21 +376,21 @@ const UpcomingMeetings = ({
   // =======================================================
 
   return (
-    <div className="h-full rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="h-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
 
       {/* Header */}
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:mb-4 sm:flex-nowrap sm:gap-3">
         <div className="flex min-w-0 items-center gap-2">
           <CalendarDays
             size={18}
             className="shrink-0 text-blue-600"
           />
 
-          <h2 className="text-[16px] font-semibold text-slate-800">
+          <h2 className="min-w-0 break-words text-[14px] font-semibold text-slate-800 sm:text-[16px]">
             Upcoming Meetings
           </h2>
 
-          <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
+          <span className="shrink-0 rounded-full bg-blue-50 px-2 py-0.5 text-[11px] font-semibold text-blue-700">
             {selectedWeekMeetings.length}
           </span>
         </div>
@@ -412,24 +411,24 @@ const UpcomingMeetings = ({
       </div>
 
       {/* Selected week */}
-      <div className="mb-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
-        <div className="flex items-center justify-between gap-2">
+      <div className="mb-3 rounded-xl border border-slate-200 bg-slate-50 p-2.5 sm:mb-4 sm:p-3">
+        <div className="flex items-center justify-between gap-1.5 sm:gap-2">
           <button
             type="button"
             onClick={handlePreviousWeek}
             aria-label="Show previous week"
             title="Previous week"
-            className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+            className="shrink-0 rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:p-2"
           >
             <ChevronLeft size={17} />
           </button>
 
           <div className="min-w-0 flex-1 text-center">
-            <p className="text-[13px] font-semibold text-slate-800">
+            <p className="text-[12px] font-semibold text-slate-800 sm:text-[13px]">
               {isCurrentWeek ? "This Week" : "Selected Week"}
             </p>
 
-            <p className="mt-0.5 text-[11px] text-slate-500">
+            <p className="mt-0.5 break-words text-[10px] text-slate-500 sm:text-[11px]">
               {formatDateRange(
                 selectedWeekStart,
                 selectedWeekEnd
@@ -442,7 +441,7 @@ const UpcomingMeetings = ({
             onClick={handleNextWeek}
             aria-label="Show next week"
             title="Next week"
-            className="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700"
+            className="shrink-0 rounded-lg border border-slate-200 bg-white p-1.5 text-slate-600 transition hover:border-blue-200 hover:bg-blue-50 hover:text-blue-700 sm:p-2"
           >
             <ChevronRight size={17} />
           </button>
@@ -466,7 +465,7 @@ const UpcomingMeetings = ({
           role="alert"
           className="mb-3 rounded-xl border border-red-100 bg-red-50 p-3"
         >
-          <p className="text-sm text-red-700">{error}</p>
+          <p className="break-words text-sm text-red-700">{error}</p>
 
           <button
             type="button"
@@ -481,7 +480,7 @@ const UpcomingMeetings = ({
 
       {/* Meeting list */}
       {!error && selectedWeekMeetings.length > 0 && (
-        <div className="space-y-2.5">
+        <div className="min-w-0 space-y-2.5">
           {displayedMeetings.map((meeting, index) => {
             const formattedMeeting = formatMeeting(meeting);
 
@@ -528,7 +527,7 @@ const UpcomingMeetings = ({
 
       {/* Empty state */}
       {!error && selectedWeekMeetings.length === 0 && (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 px-4 py-10 text-center">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 px-3 py-8 text-center sm:px-4 sm:py-10">
           <CalendarDays
             size={30}
             className="mb-3 text-slate-300"
@@ -560,7 +559,7 @@ const UpcomingMeetings = ({
         <button
           type="button"
           onClick={() => setShowAll((current) => !current)}
-          className="mt-4 flex w-full cursor-pointer items-center justify-center gap-1 text-[12px] font-semibold text-blue-600 transition hover:text-blue-700"
+          className="mt-4 flex w-full cursor-pointer items-center justify-center gap-1 text-center text-[12px] font-semibold text-blue-600 transition hover:text-blue-700"
         >
           {showAll
             ? "Show Less"

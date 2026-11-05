@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import {
   X,
@@ -221,13 +220,13 @@ const StartMeetingModal = ({
         role="dialog"
         aria-modal="true"
         aria-labelledby="start-meeting-title"
-        className="fixed left-1/2 top-1/2 z-[9999] max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-2xl"
+        className="fixed left-1/2 top-1/2 z-[9999] max-h-[92dvh] w-[calc(100%-1rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border border-slate-200 bg-white shadow-2xl sm:max-h-[90vh] sm:w-[calc(100%-2rem)] sm:rounded-2xl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between border-b border-slate-200 px-5 py-4">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3 sm:px-5 sm:py-4">
           <h2
             id="start-meeting-title"
-            className="text-[17px] font-semibold text-slate-800"
+            className="text-base font-semibold text-slate-800 sm:text-[17px]"
           >
             {isInProgress
               ? "Continue Meeting"
@@ -239,24 +238,24 @@ const StartMeetingModal = ({
             onClick={onClose}
             disabled={isStarting}
             aria-label="Close dialog"
-            className="rounded-lg p-2 transition hover:bg-slate-100 disabled:opacity-50"
+            className="shrink-0 rounded-lg p-2 transition hover:bg-slate-100 disabled:opacity-50"
           >
             <X size={18} className="text-slate-600" />
           </button>
         </div>
 
         {/* Body */}
-        <div className="space-y-5 p-5">
+        <div className="space-y-4 p-4 sm:space-y-5 sm:p-5">
           {/* Warning */}
-          <div className="flex items-start gap-3 rounded-xl border border-orange-200 bg-orange-50 px-4 py-3">
-            <div className="mt-0.5 rounded-full bg-orange-100 p-2">
+          <div className="flex items-start gap-2.5 rounded-xl border border-orange-200 bg-orange-50 px-3 py-3 sm:gap-3 sm:px-4">
+            <div className="mt-0.5 shrink-0 rounded-full bg-orange-100 p-2">
               <TriangleAlert
                 size={18}
                 className="text-orange-500"
               />
             </div>
 
-            <div>
+            <div className="min-w-0">
               <h3 className="text-[13px] font-semibold text-slate-800">
                 {isInProgress
                   ? "This meeting is already in progress"
@@ -272,40 +271,40 @@ const StartMeetingModal = ({
           </div>
 
           {/* Meeting Information */}
-          <div className="space-y-4 rounded-xl border border-slate-200 bg-slate-50 p-4">
-            <div className="grid grid-cols-[100px_1fr] items-start gap-2">
-              <span className="text-[12px] font-medium text-slate-500">
+          <div className="space-y-3 rounded-xl border border-slate-200 bg-slate-50 p-3 sm:space-y-4 sm:p-4">
+            <div className="grid grid-cols-[84px_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[100px_minmax(0,1fr)]">
+              <span className="text-[11px] font-medium text-slate-500 sm:text-[12px]">
                 Meeting
               </span>
 
-              <p className="break-words text-[13px] font-semibold text-slate-800">
+              <p className="break-words text-[12px] font-semibold text-slate-800 sm:text-[13px]">
                 {meeting.title || "Mentorship Meeting"}
               </p>
             </div>
 
-            <div className="grid grid-cols-[100px_1fr] items-start gap-2">
-              <span className="text-[12px] font-medium text-slate-500">
+            <div className="grid grid-cols-[84px_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[100px_minmax(0,1fr)]">
+              <span className="text-[11px] font-medium text-slate-500 sm:text-[12px]">
                 Date & Time
               </span>
 
-              <div className="flex items-start gap-2 text-[13px] text-slate-700">
+              <div className="flex min-w-0 items-start gap-2 text-[12px] text-slate-700 sm:text-[13px]">
                 <CalendarDays
                   size={15}
                   className="mt-0.5 shrink-0"
                 />
 
-                <span>
+                <span className="break-words">
                   {formatDate(meeting)} · {formatTime(meeting)}
                 </span>
               </div>
             </div>
 
-            <div className="grid grid-cols-[100px_1fr] items-start gap-2">
-              <span className="text-[12px] font-medium text-slate-500">
+            <div className="grid grid-cols-[84px_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[100px_minmax(0,1fr)]">
+              <span className="text-[11px] font-medium text-slate-500 sm:text-[12px]">
                 Location
               </span>
 
-              <div className="flex min-w-0 items-start gap-2 text-[13px] text-slate-700">
+              <div className="flex min-w-0 items-start gap-2 text-[12px] text-slate-700 sm:text-[13px]">
                 {isOnline ? (
                   <Video
                     size={15}
@@ -318,19 +317,19 @@ const StartMeetingModal = ({
                   />
                 )}
 
-                <span className="break-words">
+                <span className="break-words [overflow-wrap:anywhere]">
                   {location}
                 </span>
               </div>
             </div>
 
             {meeting.studentName && (
-              <div className="grid grid-cols-[100px_1fr] items-start gap-2">
-                <span className="text-[12px] font-medium text-slate-500">
+              <div className="grid grid-cols-[84px_minmax(0,1fr)] items-start gap-2 sm:grid-cols-[100px_minmax(0,1fr)]">
+                <span className="text-[11px] font-medium text-slate-500 sm:text-[12px]">
                   Student
                 </span>
 
-                <p className="text-[13px] text-slate-700">
+                <p className="break-words text-[12px] text-slate-700 sm:text-[13px]">
                   {meeting.studentName}
                 </p>
               </div>
@@ -338,7 +337,7 @@ const StartMeetingModal = ({
           </div>
 
           {/* Workspace Features */}
-          <div className="rounded-xl border border-blue-100 bg-blue-50 px-4 py-3">
+          <div className="rounded-xl border border-blue-100 bg-blue-50 px-3 py-3 sm:px-4">
             <p className="text-[12px] font-semibold text-slate-700">
               Meeting Workspace Includes
             </p>
@@ -355,7 +354,7 @@ const StartMeetingModal = ({
           {error && (
             <div
               role="alert"
-              className="rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700"
+              className="break-words rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[12px] text-red-700"
             >
               {error}
             </div>
@@ -363,12 +362,12 @@ const StartMeetingModal = ({
         </div>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 border-t border-slate-200 px-5 py-4">
+        <div className="flex flex-col-reverse gap-2.5 border-t border-slate-200 px-4 py-3 sm:flex-row sm:items-center sm:justify-end sm:gap-3 sm:px-5 sm:py-4">
           <button
             type="button"
             onClick={onClose}
             disabled={isStarting}
-            className="rounded-lg border border-slate-300 px-5 py-2 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+            className="w-full rounded-lg border border-slate-300 px-5 py-2.5 text-[13px] font-medium text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 sm:w-auto sm:py-2"
           >
             Cancel
           </button>
@@ -377,7 +376,7 @@ const StartMeetingModal = ({
             type="button"
             onClick={handleStartMeeting}
             disabled={isStarting || isTerminal}
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-2 text-[13px] font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-5 py-2.5 text-[13px] font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:py-2"
           >
             {isStarting && (
               <LoaderCircle

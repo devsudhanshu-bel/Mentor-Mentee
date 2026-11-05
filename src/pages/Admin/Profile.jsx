@@ -277,13 +277,13 @@ const Profile = () => {
   */
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <AdminSidebar />
 
-      <div className="ml-[290px] flex min-h-screen flex-col">
+      <div className="ml-0 flex min-h-screen w-full min-w-0 flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <AdminHeader />
 
-        <main className="flex-1 space-y-2 px-6 py-6">
+        <main className="min-w-0 flex-1 space-y-2 px-3 py-4 sm:px-4 sm:py-5 lg:px-6 lg:py-6">
           {/* Page Heading */}
           <div className="flex items-start justify-between">
             <PageTitle />
@@ -330,8 +330,8 @@ const Profile = () => {
           )}
 
           {/* Profile Hero */}
-          <div className="grid grid-cols-12 items-stretch gap-2">
-            <div className="col-span-5">
+          <div className="grid grid-cols-1 items-stretch gap-2 sm:grid-cols-12">
+            <div className="col-span-12 sm:col-span-5">
               <ProfileCard
                 admin={admin}
                 loading={loading}
@@ -339,7 +339,7 @@ const Profile = () => {
               />
             </div>
 
-            <div className="col-span-7">
+            <div className="col-span-12 sm:col-span-7">
               <ProfileOverview
                 stats={overviewStats}
                 loading={overviewLoading}
@@ -369,9 +369,9 @@ const Profile = () => {
           </div>
 
           {/* Profile Information */}
-          <div className="grid grid-cols-12 items-start gap-2">
+          <div className="grid grid-cols-1 items-start gap-2 sm:grid-cols-12">
             {/* Personal Information */}
-            <div className="col-span-4">
+            <div className="col-span-12 sm:col-span-4">
               <PersonalInformation
                 admin={admin}
                 loading={loading}
@@ -381,7 +381,7 @@ const Profile = () => {
             </div>
 
             {/* Professional Information */}
-            <div className="col-span-4">
+            <div className="col-span-12 sm:col-span-4">
               <ProfessionalInformation
                 admin={admin}
                 loading={loading}
@@ -390,7 +390,7 @@ const Profile = () => {
             </div>
 
             {/* About and Account Settings */}
-            <div className="col-span-4 space-y-2">
+            <div className="col-span-12 space-y-2 sm:col-span-4">
               <AboutMe
                 about={admin?.about ?? ""}
                 personalInfo={admin ?? {}}

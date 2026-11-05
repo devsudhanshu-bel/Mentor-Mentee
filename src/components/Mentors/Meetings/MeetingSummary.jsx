@@ -17,7 +17,7 @@ const normalizeStatus = (status) =>
   String(status ?? "SCHEDULED")
     .trim()
     .toUpperCase()
-    .replace(/[\s-]+/g, "_");
+    .replace(/[\\s-]+/g, "_");
 
 const getStartDate = (meeting) => {
   const value =
@@ -212,14 +212,14 @@ const MeetingSummary = ({
 
   return (
     <section
-      className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+      className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4"
       aria-labelledby="meeting-summary-heading"
       aria-busy={isLoading}
     >
-      <div className="mb-3 flex items-center justify-between gap-3">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <h2
           id="meeting-summary-heading"
-          className="text-[16px] font-semibold text-slate-800"
+          className="text-[15px] font-semibold text-slate-800 sm:text-[16px]"
         >
           Meeting Summary
         </h2>
@@ -234,17 +234,25 @@ const MeetingSummary = ({
         )}
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
-        {cards.map((card) => (
-          <SummaryCard
+      <div className="grid min-w-0 grid-cols-2 gap-3 min-[420px]:grid-cols-2 xl:grid-cols-3">
+        {cards.map((card, index) => (
+          <div
             key={card.key}
-            icon={card.icon}
-            iconBg={card.iconBg}
-            iconColor={card.iconColor}
-            title={card.title}
-            value={card.value}
-            subtitle={card.subtitle}
-          />
+            className={
+              index === cards.length - 1
+                ? "col-span-2 min-[420px]:col-span-1"
+                : "min-w-0"
+            }
+          >
+            <SummaryCard
+              icon={card.icon}
+              iconBg={card.iconBg}
+              iconColor={card.iconColor}
+              title={card.title}
+              value={card.value}
+              subtitle={card.subtitle}
+            />
+          </div>
         ))}
       </div>
     </section>

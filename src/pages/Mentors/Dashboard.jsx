@@ -13,17 +13,17 @@ import MentorAnnouncementsCard from "../../components/Mentors/Dashboard/MentorAn
 
 const Dashboard = () => {
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* Sidebar */}
       <MentorSidebar />
 
       {/* Main Content */}
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px]">
         {/* Header */}
         <MentorHeader />
 
         {/* Dashboard Content */}
-        <main className="space-y-2 p-6">
+        <main className="w-full min-w-0 space-y-3 p-3 sm:space-y-4 sm:p-4 md:p-5 lg:space-y-5 lg:p-6">
           {/* Welcome Banner */}
           <WelcomeBanner />
 
@@ -31,7 +31,7 @@ const Dashboard = () => {
           <KPICards />
 
           {/* Today's Schedule & Upcoming Deadlines */}
-          <div className="grid grid-cols-1 gap-2 xl:grid-cols-2">
+          <div className="grid min-w-0 grid-cols-1 gap-3 sm:gap-4 xl:grid-cols-2">
             <TodaysSchedule />
             <UpcomingDeadlines />
           </div>

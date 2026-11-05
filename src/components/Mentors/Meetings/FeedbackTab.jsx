@@ -1,4 +1,3 @@
-
 import React, { useMemo } from "react";
 import {
   Star,
@@ -94,23 +93,23 @@ const FeedbackTab = ({
   }, [normalizedStatus]);
 
   return (
-    <div className="p-5">
+    <div className="min-w-0 p-3 sm:p-5">
       {/* Header */}
-      <div className="mb-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-xl font-bold text-slate-800">
+      <div className="mb-4 sm:mb-6">
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          <h2 className="text-lg font-bold text-slate-800 sm:text-xl">
             Mentor Feedback
           </h2>
 
           {canRecordFeedback && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
-              <CheckCircle2 size={14} />
+            <span className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-green-50 px-2.5 py-1 text-[10px] font-medium text-green-700 sm:px-3 sm:text-xs">
+              <CheckCircle2 size={14} className="shrink-0" />
               Available during meeting
             </span>
           )}
         </div>
 
-        <p className="mt-1 text-[13px] text-slate-500">
+        <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-[13px] sm:leading-normal">
           Record your observations, suggestions and overall meeting
           feedback as the session progresses.
         </p>
@@ -120,34 +119,34 @@ const FeedbackTab = ({
       {statusMessage && (
         <div
           role="status"
-          className="mb-5 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800"
+          className="mb-4 break-words rounded-lg border border-amber-200 bg-amber-50 px-3 py-2.5 text-xs leading-5 text-amber-800 sm:mb-5 sm:px-4 sm:py-3 sm:text-sm"
         >
           {statusMessage}
         </div>
       )}
 
       {/* Rating */}
-      <div className="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <h3 className="font-semibold text-slate-700">
+      <div className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5">
+        <div className="flex min-w-0 items-start justify-between gap-2 sm:gap-3">
+          <div className="min-w-0">
+            <h3 className="text-sm font-semibold text-slate-700 sm:text-base">
               Overall Rating
             </h3>
 
-            <p className="mt-1 text-[12px] text-slate-500">
+            <p className="mt-1 text-[11px] leading-5 text-slate-500 sm:text-[12px]">
               Rate the mentee's performance during this session.
             </p>
           </div>
 
-          <div className="shrink-0 rounded-lg bg-blue-50 px-4 py-2">
-            <span className="text-lg font-bold text-blue-700">
+          <div className="shrink-0 rounded-lg bg-blue-50 px-3 py-2 sm:px-4">
+            <span className="text-base font-bold text-blue-700 sm:text-lg">
               {safeRating}/5
             </span>
           </div>
         </div>
 
         <div
-          className="mt-5 flex gap-2"
+          className="mt-4 flex flex-wrap gap-1.5 sm:mt-5 sm:gap-2"
           role="group"
           aria-label="Meeting rating out of five stars"
         >
@@ -163,36 +162,36 @@ const FeedbackTab = ({
                 aria-label={`Rate ${star} out of 5`}
                 aria-pressed={safeRating === star}
                 title={`${star} out of 5`}
-                className="rounded-md transition hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+                className="rounded-md p-0.5 transition hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:p-0"
               >
                 <Star
-                  size={30}
+                  size={25}
                   fill={selected ? "#FACC15" : "none"}
-                  className={
+                  className={`sm:h-[30px] sm:w-[30px] ${
                     selected
                       ? "text-yellow-400"
                       : "text-slate-300"
-                  }
+                  }`}
                 />
               </button>
             );
           })}
         </div>
 
-        <p className="mt-3 text-xs text-slate-400">
+        <p className="mt-3 text-[11px] text-slate-400 sm:text-xs">
           1 = Needs improvement · 5 = Excellent
         </p>
       </div>
 
       {/* Feedback / Remarks */}
-      <div className="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="mb-4 flex items-center gap-2">
+      <div className="mt-4 min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:mt-6 sm:p-5">
+        <div className="mb-3 flex min-w-0 items-center gap-2 sm:mb-4">
           <MessageSquareText
             size={18}
-            className="text-blue-600"
+            className="shrink-0 text-blue-600"
           />
 
-          <h3 className="font-semibold text-slate-700">
+          <h3 className="text-sm font-semibold text-slate-700 sm:text-base">
             Meeting Feedback & Remarks
           </h3>
         </div>
@@ -208,16 +207,16 @@ const FeedbackTab = ({
           maxLength={MAX_FEEDBACK_LENGTH}
           disabled={saving || !canRecordFeedback}
           aria-label="Meeting feedback and remarks"
-          className="h-[260px] w-full resize-y rounded-lg border border-slate-300 p-4 text-[13px] leading-6 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-50"
+          className="h-[220px] w-full min-w-0 resize-y rounded-lg border border-slate-300 p-3 text-xs leading-6 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-50 sm:h-[260px] sm:p-4 sm:text-[13px]"
         />
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <span className="text-[12px] text-slate-500">
+        <div className="mt-3 flex flex-col gap-2 sm:mt-4 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+          <span className="text-[11px] leading-5 text-slate-500 sm:text-[12px]">
             Keep your feedback clear, specific and constructive.
           </span>
 
           <span
-            className={`text-[12px] font-medium ${
+            className={`text-right text-[11px] font-medium sm:text-[12px] ${
               characterCount >= MAX_FEEDBACK_LENGTH
                 ? "text-amber-600"
                 : "text-slate-500"
@@ -231,8 +230,8 @@ const FeedbackTab = ({
 
         {/* Save feedback */}
         {onSaveFeedback && (
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
-            <p className="text-xs text-slate-400">
+          <div className="mt-4 flex flex-col gap-3 sm:mt-5 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-[11px] leading-5 text-slate-400 sm:text-xs">
               Your feedback is saved to the meeting record.
             </p>
 
@@ -240,7 +239,7 @@ const FeedbackTab = ({
               type="button"
               onClick={handleSave}
               disabled={!canSave}
-              className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-medium text-white transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:py-2 sm:text-sm"
             >
               {saving ? (
                 <LoaderCircle
@@ -257,7 +256,7 @@ const FeedbackTab = ({
         )}
 
         {feedbackIsEmpty && canRecordFeedback && (
-          <p className="mt-3 text-xs text-slate-400">
+          <p className="mt-3 text-[11px] leading-5 text-slate-400 sm:text-xs">
             You can add remarks now and update them as the meeting progresses.
           </p>
         )}

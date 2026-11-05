@@ -15,7 +15,7 @@ const AssignButton = ({
   const removeDisabled = studentCount === 0;
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-5">
+    <div className="flex w-full flex-row items-center justify-center gap-6 rounded-xl border border-slate-100 bg-slate-50/70 px-3 py-3 lg:h-full lg:flex-col lg:gap-5 lg:border-0 lg:bg-transparent lg:px-0 lg:py-0">
       {/* ================= Assign Selected ================= */}
 
       <div className="flex flex-col items-center gap-2">
@@ -56,6 +56,10 @@ const AssignButton = ({
       {/* ================= Remove ================= */}
 
       <div className="flex flex-col items-center gap-2">
+        <span className="whitespace-nowrap text-[11px] font-semibold text-slate-700">
+          Remove
+        </span>
+
         <button
           type="button"
           onClick={onRemove}
@@ -79,10 +83,6 @@ const AssignButton = ({
         >
           <ArrowLeft size={18} strokeWidth={2.5} />
         </button>
-
-        <span className="whitespace-nowrap text-[11px] font-semibold text-slate-700">
-          Remove
-        </span>
 
         <span className="whitespace-nowrap text-[11px] font-medium text-slate-500">
           0 Students

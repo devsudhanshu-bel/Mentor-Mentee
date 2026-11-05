@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   NavLink,
   useLocation,
@@ -44,6 +44,31 @@ const menuItems = [
 const MentorSidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [mobileOpen, setMobileOpen] = useState(false);
+
+  useEffect(() => {
+    const handleSidebarToggle = () => {
+      setMobileOpen((previous) => !previous);
+    };
+
+    const handleEscape = (event) => {
+      if (event.key === "Escape") {
+        setMobileOpen(false);
+      }
+    };
+
+    window.addEventListener("mentor-sidebar-toggle", handleSidebarToggle);
+    document.addEventListener("keydown", handleEscape);
+
+    return () => {
+      window.removeEventListener("mentor-sidebar-toggle", handleSidebarToggle);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   //--------------------------------------------------
   // Logged In User
@@ -75,23 +100,22 @@ const MentorSidebar = () => {
   };
 
   return (
-    <aside
-      className="
-      fixed
-      top-0
-      left-0
-      bottom-0
-      w-[290px]
-      bg-white
-      border-r
-      border-gray-200
-      shadow-xl
-      flex
-      flex-col
-      overflow-hidden
-      z-50
-      "
-    >
+    <>
+      {mobileOpen && (
+        <button
+          type="button"
+          aria-label="Close mentor sidebar"
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-slate-900/45 lg:hidden"
+        />
+      )}
+
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-[290px] flex-col overflow-hidden border-r border-gray-200 bg-white shadow-xl transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        }`}
+        aria-hidden={!mobileOpen ? undefined : false}
+      >
       {/* ================= Header ================= */}
 
       <div className="flex flex-col flex-1 overflow-hidden">
@@ -136,6 +160,7 @@ const MentorSidebar = () => {
               <NavLink
                 key={item.title}
                 to={item.path}
+                onClick={() => setMobileOpen(false)}
                 className={`
                   group
                   relative
@@ -312,7 +337,8 @@ const MentorSidebar = () => {
           </p>
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   );
 };
 

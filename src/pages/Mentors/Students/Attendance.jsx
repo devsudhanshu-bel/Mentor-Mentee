@@ -313,25 +313,25 @@ const Attendance = () => {
     subjects.length === 0;
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {isAdminRoute ? <AdminSidebar /> : <MentorSidebar />}
 
-      <div className="ml-[290px] min-h-screen min-w-0">
+      <div className="ml-0 min-h-screen min-w-0 w-full lg:ml-[290px] lg:w-[calc(100%-290px)]">
         {isAdminRoute ? <AdminHeader /> : <MentorHeader />}
 
-        <main className="space-y-4 p-5">
+        <main className="w-full min-w-0 space-y-4 p-3 sm:p-4 md:p-5 lg:p-6">
           {/* HEADER ACTIONS */}
-          <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex min-w-0 flex-col items-stretch justify-between gap-3 sm:flex-row sm:items-center">
             {isAdminRoute ? <AdminBackButton /> : <BackButton />}
 
-            <div className="flex items-center gap-2">
-              <label className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs text-slate-600">
-                Attendance for
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <label className="inline-flex w-auto min-w-0 flex-none items-center gap-2 whitespace-nowrap rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-xs font-medium text-slate-600">
+                <span className="shrink-0">Attendance for</span>
 
                 <select
                   value={selectedSemester}
                   onChange={handleSemesterChange}
-                  className="bg-transparent font-semibold text-[#142970] outline-none"
+                  className="w-auto min-w-0 max-w-full cursor-pointer bg-transparent font-semibold text-[#142970] outline-none"
                   aria-label="Select semester"
                 >
                   {[1, 2, 3, 4, 5, 6, 7, 8].map(
@@ -350,7 +350,7 @@ const Attendance = () => {
                 disabled={loading}
                 title="Refresh attendance"
                 aria-label="Refresh attendance"
-                className="rounded-xl border border-slate-200 bg-white p-2.5 text-blue-600 hover:bg-blue-50 disabled:opacity-50"
+                className="min-h-10 min-w-10 rounded-xl border border-slate-200 bg-white p-2.5 text-blue-600 hover:bg-blue-50 disabled:opacity-50"
               >
                 <RefreshCw
                   size={16}
@@ -363,25 +363,25 @@ const Attendance = () => {
           </div>
 
           {/* STUDENT PROFILE AND TABS */}
-          <div className="grid grid-cols-1 items-start gap-3 xl:grid-cols-[260px_minmax(0,1fr)]">
-            <aside className="min-w-0">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-3 xl:grid-cols-[240px_minmax(0,1fr)] 2xl:grid-cols-[260px_minmax(0,1fr)] xl:gap-4">
+            <aside className="w-full min-w-0">
               <StudentAttendanceProfile
                 student={student}
                 mentor={mentor}
               />
             </aside>
 
-            <section className="min-w-0 space-y-3">
-              <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
+            <section className="w-full min-w-0 space-y-3">
+              <div className="w-full min-w-0 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
                 {isAdminRoute ? <AdminStudentTabs /> : <StudentTabs />}
               </div>
 
               <div>
-                <h1 className="text-[28px] font-bold text-[#142970]">
+                <h1 className="break-words text-xl font-bold text-[#142970] sm:text-2xl lg:text-[28px]">
                   Attendance Overview
                 </h1>
 
-                <p className="mt-1 text-[13px] text-slate-500">
+                <p className="mt-1 text-xs text-slate-500 sm:text-[13px]">
                   Attendance details for Semester {selectedSemester}.
                 </p>
 
@@ -399,13 +399,13 @@ const Attendance = () => {
               {error && (
                 <div
                   role="alert"
-                  className="flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                  className="flex min-w-0 items-start gap-2 rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-sm text-red-700 sm:px-4"
                 >
                   <AlertCircle
                     size={18}
                     className="mt-0.5 shrink-0"
                   />
-                  <p>{error}</p>
+                  <p className="min-w-0 break-words">{error}</p>
                 </div>
               )}
 
@@ -435,15 +435,15 @@ const Attendance = () => {
               {!loading && !error && attendanceData && (
                 <>
                   {/* SUMMARY CARDS */}
-                  <div className="grid grid-cols-1 gap-3 2xl:grid-cols-3">
+                  <div className="grid min-w-0 grid-cols-1 gap-3 min-[520px]:grid-cols-2 2xl:grid-cols-3">
                     {/* OVERALL ATTENDANCE */}
-                    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5">
                       <h2 className="text-sm font-semibold text-blue-600">
                         Overall Attendance
                       </h2>
 
-                      <div className="mt-4 flex items-center justify-between gap-3">
-                        <div className="relative h-32 w-32 shrink-0">
+                      <div className="mt-4 flex flex-col items-center justify-between gap-4 min-[480px]:flex-row">
+                        <div className="relative h-28 w-28 shrink-0 sm:h-32 sm:w-32">
                           <ResponsiveContainer
                             width="100%"
                             height="100%"
@@ -560,7 +560,7 @@ const Attendance = () => {
                     </section>
 
                     {/* ATTENDANCE STATISTICS */}
-                    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5">
                       <h2 className="text-sm font-semibold text-blue-600">
                         Attendance Statistics
                       </h2>
@@ -651,13 +651,13 @@ const Attendance = () => {
                     </section>
 
                     {/* ATTENDANCE BY CATEGORY */}
-                    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+                    <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5">
                       <h2 className="text-sm font-semibold text-blue-600">
                         Attendance by Category
                       </h2>
 
-                      <div className="mt-4 flex items-center gap-3">
-                        <div className="h-32 w-32 shrink-0">
+                      <div className="mt-4 flex flex-col items-center gap-4 min-[480px]:flex-row">
+                        <div className="h-28 w-28 shrink-0 sm:h-32 sm:w-32">
                           <ResponsiveContainer
                             width="100%"
                             height="100%"
@@ -736,8 +736,8 @@ const Attendance = () => {
                   </div>
 
                   {/* SUBJECT-WISE ATTENDANCE */}
-                  <section className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-                    <div className="mb-4 flex items-center justify-between gap-2">
+                  <section className="w-full min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4">
+                    <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
                       <h2 className="text-sm font-semibold text-blue-600">
                         Subject-wise Attendance
                       </h2>
@@ -747,7 +747,7 @@ const Attendance = () => {
                       </span>
                     </div>
 
-                    <div className="overflow-x-auto rounded-xl border border-slate-200">
+                    <div className="w-full min-w-0 overflow-x-auto rounded-xl border border-slate-200">
                       <table className="w-full min-w-[650px]">
                         <thead className="bg-slate-50">
                           <tr className="text-left text-[11px] text-slate-600">

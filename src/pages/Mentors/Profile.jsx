@@ -175,7 +175,7 @@ const Profile = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-slate-100">
+      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
 
         {/* ====================================================
             SIDEBAR
@@ -187,7 +187,7 @@ const Profile = () => {
             MAIN CONTENT
         ==================================================== */}
 
-        <div className="ml-[290px] min-h-screen">
+        <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
 
           {/* ==================================================
               HEADER
@@ -199,7 +199,7 @@ const Profile = () => {
               PAGE CONTENT
           ================================================== */}
 
-          <main className="space-y-3 p-6">
+          <main className="min-w-0 space-y-3 p-3 sm:p-4 md:p-5 lg:p-6">
             {loading ? (
               <div className="flex min-h-[60vh] items-center justify-center">
                 <p className="text-slate-500">Loading profile...</p>
@@ -211,11 +211,11 @@ const Profile = () => {
                 PAGE HEADER
             ================================================== */}
 
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 
               <div>
 
-                <h1 className="text-2xl font-bold text-slate-900">
+                <h1 className="text-xl font-bold text-slate-900 sm:text-2xl">
                   Mentor Profile
                 </h1>
 
@@ -231,7 +231,7 @@ const Profile = () => {
                 onClick={() =>
                   setIsEditModalOpen(true)
                 }
-                className="rounded-lg border border-blue-600 px-5 py-2 text-sm font-semibold text-blue-600 transition-all duration-300 hover:bg-blue-600 hover:text-white"
+                className="w-full rounded-lg border border-blue-600 px-5 py-2 text-sm font-semibold text-blue-600 transition-all duration-300 hover:bg-blue-600 hover:text-white sm:w-auto"
               >
                 Edit Profile
               </button>
@@ -251,13 +251,13 @@ const Profile = () => {
                 TOP SECTION
             ================================================== */}
 
-            <div className="grid grid-cols-12 gap-3">
+            <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-12">
 
               {/* =================================================
                   PROFILE CARD
               ================================================= */}
 
-              <div className="col-span-5">
+              <div className="min-w-0 md:col-span-5">
 
                 <MentorProfileCard
                   mentor={mentor}
@@ -269,7 +269,7 @@ const Profile = () => {
                   MENTORING OVERVIEW
               ================================================= */}
 
-              <div className="col-span-7">
+              <div className="min-w-0 md:col-span-7">
 
                 <MentoringOverview
                   mentor={mentor}
@@ -283,13 +283,13 @@ const Profile = () => {
                 MIDDLE SECTION
             ================================================== */}
 
-            <div className="grid grid-cols-12 gap-3">
+            <div className="grid min-w-0 grid-cols-1 gap-3 md:grid-cols-12">
 
               {/* =================================================
                   PROFESSIONAL INFORMATION
               ================================================= */}
 
-              <div className="col-span-4">
+              <div className="min-w-0 md:col-span-4">
 
                 <ProfessionalInformation
                   mentor={mentor}
@@ -302,7 +302,7 @@ const Profile = () => {
                   ABOUT ME
               ================================================= */}
 
-              <div className="col-span-4">
+              <div className="min-w-0 md:col-span-4">
 
                 <AboutMe
                   mentor={mentor}
@@ -315,7 +315,7 @@ const Profile = () => {
                   RIGHT SIDE
               ================================================= */}
 
-              <div className="col-span-4 flex flex-col gap-3">
+              <div className="flex min-w-0 flex-col gap-3 md:col-span-4">
 
                 {/* =================================================
                     SOCIAL LINKS

@@ -97,20 +97,20 @@ export default function AddMentorModal({ open, departments = [], onClose, onCrea
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/40 p-4 backdrop-blur-[2px]" onMouseDown={(event) => { if (event.target === event.currentTarget && !submitting) onClose(); }}>
-      <section role="dialog" aria-modal="true" aria-labelledby="add-mentor-title" className="my-auto max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white shadow-2xl">
-        <header className="sticky top-0 z-10 flex items-start justify-between border-b border-slate-100 bg-white px-6 py-5">
-          <div className="flex items-start gap-3">
-            <div className="rounded-xl bg-blue-50 p-3 text-blue-600"><UserPlus size={21} /></div>
-            <div>
-              <h2 id="add-mentor-title" className="text-xl font-bold text-slate-900">Add Mentor</h2>
-              <p className="mt-1 text-sm text-slate-500">Create the login account and linked mentor record.</p>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center overflow-y-auto bg-slate-950/40 p-2 backdrop-blur-[2px] sm:p-4" onMouseDown={(event) => { if (event.target === event.currentTarget && !submitting) onClose(); }}>
+      <section role="dialog" aria-modal="true" aria-labelledby="add-mentor-title" className="my-auto max-h-[96dvh] w-full max-w-3xl overflow-y-auto rounded-xl bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-2xl">
+        <header className="sticky top-0 z-10 flex items-start justify-between gap-3 border-b border-slate-100 bg-white px-4 py-4 sm:px-6 sm:py-5">
+          <div className="flex min-w-0 items-start gap-3">
+            <div className="shrink-0 rounded-xl bg-blue-50 p-2.5 text-blue-600 sm:p-3"><UserPlus size={21} /></div>
+            <div className="min-w-0">
+              <h2 id="add-mentor-title" className="text-lg font-bold text-slate-900 sm:text-xl">Add Mentor</h2>
+              <p className="mt-1 text-xs text-slate-500 sm:text-sm">Create the login account and linked mentor record.</p>
             </div>
           </div>
-          <button type="button" onClick={onClose} disabled={submitting} aria-label="Close" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-50"><X size={20} /></button>
+          <button type="button" onClick={onClose} disabled={submitting} aria-label="Close" className="shrink-0 rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 disabled:opacity-50"><X size={20} /></button>
         </header>
 
-        <form onSubmit={handleSubmit} className="space-y-6 px-6 py-5">
+        <form onSubmit={handleSubmit} className="space-y-5 px-4 py-4 sm:space-y-6 sm:px-6 sm:py-5">
           <div>
             <h3 className="mb-3 text-sm font-bold text-slate-800">Required details</h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -129,15 +129,15 @@ export default function AddMentorModal({ open, departments = [], onClose, onCrea
               <label className={labelClass}>Phone number<input type="tel" className={inputClass} value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="Contact number" maxLength={30} /></label>
               <label className={labelClass}>Designation<input className={inputClass} value={form.designation} onChange={(e) => update("designation", e.target.value)} placeholder="e.g. Assistant Professor" maxLength={100} /></label>
               <label className={labelClass}>Maximum mentees<input type="number" min="1" max="500" step="1" className={inputClass} value={form.maxMentees} onChange={(e) => update("maxMentees", e.target.value)} required /></label>
-              <label className="flex items-center gap-3 self-end rounded-xl border border-slate-200 p-3 text-sm text-slate-700"><input type="checkbox" checked={form.isActive} onChange={(e) => update("isActive", e.target.checked)} className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500" /><span><span className="block font-semibold">Active mentor</span><span className="text-xs text-slate-500">Allow this mentor to sign in.</span></span></label>
+              <label className="flex items-center gap-3 self-end rounded-xl border border-slate-200 p-3 text-sm text-slate-700"><input type="checkbox" checked={form.isActive} onChange={(e) => update("isActive", e.target.checked)} className="h-4 w-4 shrink-0 rounded border-slate-300 text-blue-600 focus:ring-blue-500" /><span><span className="block font-semibold">Active mentor</span><span className="text-xs text-slate-500">Allow this mentor to sign in.</span></span></label>
             </div>
           </div>
 
           {error && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">{error}</div>}
 
           <div className="flex flex-col-reverse gap-3 border-t border-slate-100 pt-4 sm:flex-row sm:justify-end">
-            <button type="button" onClick={onClose} disabled={submitting} className="rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50">Cancel</button>
-            <button type="submit" disabled={submitting || sortedDepartments.length === 0} className="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60">{submitting ? <><Loader2 size={16} className="animate-spin" /> Creating...</> : <><UserPlus size={16} /> Create Mentor</>}</button>
+            <button type="button" onClick={onClose} disabled={submitting} className="w-full rounded-xl border border-slate-200 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 sm:w-auto">Cancel</button>
+            <button type="submit" disabled={submitting || sortedDepartments.length === 0} className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto">{submitting ? <><Loader2 size={16} className="animate-spin" /> Creating...</> : <><UserPlus size={16} /> Create Mentor</>}</button>
           </div>
         </form>
       </section>

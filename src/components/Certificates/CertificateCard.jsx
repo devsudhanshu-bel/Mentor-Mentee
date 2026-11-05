@@ -73,10 +73,7 @@ const CertificateCard = ({
     .toUpperCase()
     .replace(/[\s-]+/g, "_");
 
-  const isVerified = [
-    "VERIFIED",
-    "APPROVED",
-  ].includes(status);
+  const isVerified = ["VERIFIED", "APPROVED"].includes(status);
 
   const isCorrectionRequested = [
     "CORRECTIONS_REQUESTED",
@@ -99,33 +96,24 @@ const CertificateCard = ({
   const statusConfig = isVerified
     ? {
         label: "Verified",
-        className:
-          "bg-green-50 text-green-700 border-green-200",
+        className: "bg-green-50 text-green-700 border-green-200",
         icon: CircleCheck,
       }
     : isCorrectionRequested
       ? {
-          label:
-            status === "REJECTED"
-              ? "Rejected"
-              : "Corrections Requested",
-          className:
-            "bg-red-50 text-red-700 border-red-200",
+          label: status === "REJECTED" ? "Rejected" : "Corrections Requested",
+          className: "bg-red-50 text-red-700 border-red-200",
           icon: AlertCircle,
         }
       : isDraft
         ? {
             label: "Draft",
-            className:
-              "bg-slate-100 text-slate-600 border-slate-200",
+            className: "bg-slate-100 text-slate-600 border-slate-200",
             icon: FileText,
           }
         : {
-            label: isPending
-              ? "Pending Review"
-              : "Not Reviewed",
-            className:
-              "bg-amber-50 text-amber-700 border-amber-200",
+            label: isPending ? "Pending Review" : "Not Reviewed",
+            className: "bg-amber-50 text-amber-700 border-amber-200",
             icon: Clock3,
           };
 
@@ -147,38 +135,25 @@ const CertificateCard = ({
   // ==========================================================
 
   const getFileIcon = () => {
-    if (
-      ["jpg", "jpeg", "png", "webp"].includes(
-        fileExtension
-      )
-    ) {
+    if (["jpg", "jpeg", "png", "webp"].includes(fileExtension)) {
       return (
-        <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center shrink-0">
-          <FileImage
-            size={18}
-            className="text-purple-500"
-          />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-50">
+          <FileImage size={18} className="text-purple-500" />
         </div>
       );
     }
 
     if (fileExtension === "pdf") {
       return (
-        <div className="w-10 h-10 rounded-lg bg-red-50 flex items-center justify-center shrink-0">
-          <FileText
-            size={18}
-            className="text-red-500"
-          />
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-red-50">
+          <FileText size={18} className="text-red-500" />
         </div>
       );
     }
 
     return (
-      <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center shrink-0">
-        <FileText
-          size={18}
-          className="text-blue-500"
-        />
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+        <FileText size={18} className="text-blue-500" />
       </div>
     );
   };
@@ -188,9 +163,7 @@ const CertificateCard = ({
   // ==========================================================
 
   const formatDate = (date) => {
-    if (!date) {
-      return "Unknown date";
-    }
+    if (!date) return "Unknown date";
 
     const parsedDate = new Date(date);
 
@@ -210,15 +183,11 @@ const CertificateCard = ({
   // ==========================================================
 
   const formatFileSize = (bytes) => {
-    if (bytes == null || Number(bytes) <= 0) {
-      return "";
-    }
+    if (bytes == null || Number(bytes) <= 0) return "";
 
     const size = Number(bytes);
 
-    if (size < 1024) {
-      return `${size} B`;
-    }
+    if (size < 1024) return `${size} B`;
 
     if (size < 1024 * 1024) {
       return `${(size / 1024).toFixed(1)} KB`;
@@ -247,9 +216,7 @@ const CertificateCard = ({
     event.preventDefault();
     event.stopPropagation();
 
-    if (deleting || isVerified) {
-      return;
-    }
+    if (deleting || isVerified) return;
 
     onDelete?.(certificate);
   };
@@ -258,9 +225,7 @@ const CertificateCard = ({
     event.preventDefault();
     event.stopPropagation();
 
-    if (isVerified) {
-      return;
-    }
+    if (isVerified) return;
 
     onEdit?.(certificate);
   };
@@ -269,9 +234,7 @@ const CertificateCard = ({
     event.preventDefault();
     event.stopPropagation();
 
-    if (!isCorrectionRequested || isVerified) {
-      return;
-    }
+    if (!isCorrectionRequested || isVerified) return;
 
     if (onResubmit) {
       onResubmit(certificate);
@@ -285,26 +248,38 @@ const CertificateCard = ({
   // ==========================================================
 
   return (
-    <div className="border border-slate-200 rounded-lg px-4 py-3 hover:shadow-sm transition">
-      <div className="flex items-start justify-between gap-4">
-        {/* LEFT SIDE */}
+    <div className="w-full min-w-0 rounded-lg border border-slate-200 bg-white px-3 py-3 transition hover:shadow-sm sm:px-4">
 
-        <div className="flex items-start gap-3 min-w-0 flex-1">
+      {/* ======================================================
+          CARD HEADER AND CONTENT
+      ====================================================== */}
+
+      <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+
+        {/* ====================================================
+            LEFT SIDE — FILE INFORMATION
+        ==================================================== */}
+
+        <div className="flex min-w-0 flex-1 items-start gap-2.5 sm:gap-3">
+
           {getFileIcon()}
 
           <div className="min-w-0 flex-1">
+
+            {/* FILE NAME */}
+
             <h3
-              className="text-sm font-semibold text-slate-800 truncate max-w-[600px]"
+              className="break-words text-sm font-semibold leading-5 text-slate-800 sm:truncate sm:max-w-[600px]"
               title={certificate.documentName}
             >
-              {certificate.documentName ||
-                "Untitled Certificate"}
+              {certificate.documentName || "Untitled Certificate"}
             </h3>
 
             {/* CATEGORY + ISSUER */}
 
-            <div className="flex items-center gap-2 mt-1 flex-wrap">
-              <span className="px-2 py-0.5 rounded-full bg-blue-50 text-blue-600 text-[10px] font-medium">
+            <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+
+              <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-medium text-blue-600">
                 {certificate.certificateType ||
                   certificate.type ||
                   certificate.documentType ||
@@ -313,27 +288,25 @@ const CertificateCard = ({
 
               {certificate.issuer && (
                 <>
-                  <span className="text-slate-300">
-                    •
-                  </span>
+                  <span className="hidden text-slate-300 sm:inline">•</span>
 
-                  <span className="text-xs text-slate-500">
+                  <span className="break-words text-xs text-slate-500">
                     {certificate.issuer}
                   </span>
                 </>
               )}
+
             </div>
 
             {/* DATE + SIZE */}
 
-            <p className="text-xs text-slate-400 mt-1">
-              Uploaded{" "}
-              {formatDate(certificate.uploadedAt)}
+            <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-xs text-slate-400">
+              <span>Uploaded {formatDate(certificate.uploadedAt)}</span>
 
               {certificate.fileSize != null && (
                 <>
-                  <span className="mx-1.5">•</span>
-                  {formatFileSize(certificate.fileSize)}
+                  <span>•</span>
+                  <span>{formatFileSize(certificate.fileSize)}</span>
                 </>
               )}
             </p>
@@ -342,10 +315,10 @@ const CertificateCard = ({
 
             <div className="mt-2">
               <span
-                className={`inline-flex items-center gap-1 px-2 py-1 rounded-full border text-[10px] font-semibold ${statusConfig.className}`}
+                className={`inline-flex max-w-full items-center gap-1 rounded-full border px-2 py-1 text-[10px] font-semibold ${statusConfig.className}`}
               >
-                <StatusIcon size={12} />
-                {statusConfig.label}
+                <StatusIcon size={12} className="shrink-0" />
+                <span>{statusConfig.label}</span>
               </span>
             </div>
 
@@ -353,17 +326,17 @@ const CertificateCard = ({
 
             {mentorRemark && (
               <div
-                className={`mt-3 rounded-md border p-3 ${
+                className={`mt-3 min-w-0 rounded-md border p-2.5 sm:p-3 ${
                   isCorrectionRequested
-                    ? "bg-red-50 border-red-100"
-                    : "bg-slate-50 border-slate-200"
+                    ? "border-red-100 bg-red-50"
+                    : "border-slate-200 bg-slate-50"
                 }`}
               >
                 <p className="text-xs font-semibold text-slate-700">
                   Mentor Feedback
                 </p>
 
-                <p className="text-xs text-slate-600 mt-1 whitespace-pre-wrap break-words">
+                <p className="mt-1 break-words whitespace-pre-wrap text-xs leading-relaxed text-slate-600">
                   {mentorRemark}
                 </p>
               </div>
@@ -372,42 +345,50 @@ const CertificateCard = ({
             {/* REVIEW ACTIONS */}
 
             {!isVerified && (
-              <div className="flex items-center gap-2 mt-3 flex-wrap">
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+
                 {isCorrectionRequested ? (
                   <button
                     type="button"
                     onClick={handleResubmit}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
+                    className="inline-flex min-h-9 max-w-full items-center justify-center gap-1.5 rounded-md bg-blue-600 px-3 py-2 text-xs font-medium text-white transition hover:bg-blue-700 active:scale-[0.98]"
                   >
-                    <RefreshCw size={13} />
-                    Replace & Resubmit
+                    <RefreshCw size={13} className="shrink-0" />
+                    <span>Replace & Resubmit</span>
                   </button>
                 ) : (
                   onEdit && (
                     <button
                       type="button"
                       onClick={handleEdit}
-                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-blue-200 bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-medium transition"
+                      className="inline-flex min-h-9 max-w-full items-center justify-center gap-1.5 rounded-md border border-blue-200 bg-blue-50 px-3 py-2 text-xs font-medium text-blue-700 transition hover:bg-blue-100 active:scale-[0.98]"
                     >
-                      <Pencil size={13} />
-                      Edit / Replace
+                      <Pencil size={13} className="shrink-0" />
+                      <span>Edit / Replace</span>
                     </button>
                   )
                 )}
+
               </div>
             )}
+
           </div>
         </div>
 
-        {/* DOCUMENT ACTIONS */}
+        {/* ====================================================
+            DOCUMENT ACTIONS
+            Mobile: Right aligned below file information
+            Desktop: Right aligned beside file information
+        ==================================================== */}
 
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex shrink-0 items-center justify-end gap-1 border-t border-slate-100 pt-2 sm:border-0 sm:pt-0">
+
           <button
             type="button"
             onClick={handleView}
             title="View certificate"
             aria-label="View certificate"
-            className="p-2 rounded-md hover:bg-blue-50 text-slate-500 hover:text-blue-600 transition"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-blue-50 hover:text-blue-600"
           >
             <Eye size={17} />
           </button>
@@ -417,7 +398,7 @@ const CertificateCard = ({
             onClick={handleDownload}
             title="Download certificate"
             aria-label="Download certificate"
-            className="p-2 rounded-md hover:bg-slate-100 text-slate-500 hover:text-slate-700 transition"
+            className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
           >
             <Download size={17} />
           </button>
@@ -429,12 +410,14 @@ const CertificateCard = ({
               onClick={handleDelete}
               title="Delete certificate"
               aria-label="Delete certificate"
-              className="p-2 rounded-md hover:bg-red-50 text-slate-500 hover:text-red-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex h-9 w-9 items-center justify-center rounded-md text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
             >
               <Trash2 size={17} />
             </button>
           )}
+
         </div>
+
       </div>
     </div>
   );

@@ -9,11 +9,11 @@ import AdminHeader from "./AdminHeader";
  */
 export default function AdminProjectsLayout({ children }) {
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <AdminSidebar />
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="ml-0 flex min-h-screen w-full min-w-0 flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <AdminHeader />
-        <main className="flex-1 min-w-0">
+        <main className="min-w-0 flex-1">
           {children}
         </main>
       </div>

@@ -242,20 +242,20 @@ const AboutMe = ({ mentor, loading, onSave }) => {
   */
 
   return (
-    <div className="min-h-[600px] rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="min-h-[600px] min-w-0 rounded-xl border border-slate-200 bg-white shadow-sm">
 
       {/* ================= Header ================= */}
 
-      <div className="flex items-center justify-between border-b border-slate-100 p-4">
+      <div className="flex flex-col gap-3 border-b border-slate-100 p-3 sm:flex-row sm:items-center sm:justify-between sm:p-4">
 
         <div className="flex items-center gap-2">
 
           <User
             size={16}
-            className="text-blue-600"
+            className="shrink-0 text-blue-600"
           />
 
-          <h2 className="text-[16px] font-semibold text-slate-900">
+          <h2 className="text-[15px] font-semibold text-slate-900 sm:text-[16px]">
             About Me
           </h2>
 
@@ -267,19 +267,19 @@ const AboutMe = ({ mentor, loading, onSave }) => {
           <button
             type="button"
             onClick={handleEdit}
-            className="flex items-center gap-1.5 rounded-lg border border-blue-600 px-3 py-1.5 text-[11px] font-semibold text-blue-600 transition-all duration-200 hover:bg-blue-600 hover:text-white"
+            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-blue-600 px-3 py-2 text-[11px] font-semibold text-blue-600 transition-all duration-200 hover:bg-blue-600 hover:text-white sm:w-auto sm:py-1.5"
           >
             <Pencil size={12} />
             Edit
           </button>
         ) : (
-          <div className="flex items-center gap-2">
+          <div className="flex w-full items-center gap-2 sm:w-auto">
 
             <button
               type="button"
               onClick={handleCancel}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg border border-slate-300 px-3 py-1.5 text-[11px] font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-slate-300 px-3 py-2 text-[11px] font-semibold text-slate-600 transition-all duration-200 hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-1.5"
             >
               <X size={12} />
               Cancel
@@ -289,7 +289,7 @@ const AboutMe = ({ mentor, loading, onSave }) => {
               type="button"
               onClick={handleSave}
               disabled={isSaving}
-              className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-3 py-1.5 text-[11px] font-semibold text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-blue-600 px-3 py-2 text-[11px] font-semibold text-white transition-all duration-200 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:flex-none sm:py-1.5"
             >
               <Save size={12} />
 
@@ -305,11 +305,11 @@ const AboutMe = ({ mentor, loading, onSave }) => {
 
       {/* ================= Content ================= */}
 
-      <div className="p-4">
+      <div className="min-w-0 p-3 sm:p-4">
 
         {/* ================= Biography ================= */}
 
-        <div>
+        <div className="min-w-0">
 
           {isEditing ? (
             <>
@@ -327,11 +327,11 @@ const AboutMe = ({ mentor, loading, onSave }) => {
                 }
                 rows={7}
                 placeholder="Tell students a little about yourself..."
-                className="w-full resize-none rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] leading-6 text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                className="w-full min-w-0 resize-y rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] leading-6 text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
             </>
           ) : (
-            <p className="text-[12px] leading-6 text-slate-600">
+            <p className="break-words text-[12px] leading-6 text-slate-600">
               {mentor.about ||
                 "No biography available."}
             </p>
@@ -341,14 +341,14 @@ const AboutMe = ({ mentor, loading, onSave }) => {
 
         {/* ================= Divider ================= */}
 
-        <div className="my-5 border-t border-slate-100" />
+        <div className="my-4 border-t border-slate-100 sm:my-5" />
 
         {/* ================= Highlights ================= */}
 
-        <div>
+        <div className="min-w-0">
 
           <div className="mb-3">
-            <h3 className="text-[14px] font-semibold text-slate-900">
+            <h3 className="text-[13px] font-semibold text-slate-900 sm:text-[14px]">
               Highlights
             </h3>
           </div>
@@ -398,7 +398,7 @@ const AboutMe = ({ mentor, loading, onSave }) => {
                   (item, index) => (
                     <div
                       key={index}
-                      className="flex items-start gap-3"
+                      className="flex min-w-0 items-start gap-2 sm:gap-3"
                     >
 
                       <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50">
@@ -408,7 +408,7 @@ const AboutMe = ({ mentor, loading, onSave }) => {
                         />
                       </div>
 
-                      <p className="text-[12px] leading-5 text-slate-600">
+                      <p className="min-w-0 break-words text-[12px] leading-5 text-slate-600">
                         {item}
                       </p>
 
@@ -428,27 +428,27 @@ const AboutMe = ({ mentor, loading, onSave }) => {
 
         {/* ================= Divider ================= */}
 
-        <div className="my-5 border-t border-slate-100" />
+        <div className="my-4 border-t border-slate-100 sm:my-5" />
 
         {/* ================= Research Interests ================= */}
 
-        <div>
+        <div className="min-w-0">
 
           <div className="mb-3 flex items-center gap-2">
 
             <FlaskConical
               size={15}
-              className="text-blue-600"
+              className="shrink-0 text-blue-600"
             />
 
-            <h3 className="text-[14px] font-semibold text-slate-900">
+            <h3 className="text-[13px] font-semibold text-slate-900 sm:text-[14px]">
               Research Interests
             </h3>
 
           </div>
 
           {isEditing ? (
-            <div>
+            <div className="min-w-0">
 
               <label className="mb-2 block text-[11px] font-medium text-slate-600">
                 Research Interests
@@ -464,7 +464,7 @@ const AboutMe = ({ mentor, loading, onSave }) => {
                   )
                 }
                 placeholder="Machine Learning, NLP, Computer Vision"
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+                className="w-full min-w-0 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
               />
 
               {/* ================= Preview Chips ================= */}
@@ -486,7 +486,7 @@ const AboutMe = ({ mentor, loading, onSave }) => {
                       (interest, index) => (
                         <span
                           key={`${interest}-${index}`}
-                          className="rounded-md bg-slate-100 px-3 py-1 text-[11px] font-medium text-slate-700"
+                          className="max-w-full break-words rounded-md bg-slate-100 px-3 py-1 text-[11px] font-medium text-slate-700"
                         >
                           {interest}
                         </span>
@@ -512,7 +512,7 @@ const AboutMe = ({ mentor, loading, onSave }) => {
                   (interest, index) => (
                     <span
                       key={`${interest}-${index}`}
-                      className="rounded-md bg-slate-100 px-3 py-1 text-[11px] font-medium text-slate-700"
+                      className="max-w-full break-words rounded-md bg-slate-100 px-3 py-1 text-[11px] font-medium text-slate-700"
                     >
                       {interest}
                     </span>
@@ -553,7 +553,7 @@ const HighlightInput = ({
   placeholder,
 }) => {
   return (
-    <div className="flex items-start gap-3">
+    <div className="flex min-w-0 items-start gap-2 sm:gap-3">
 
       <div className="mt-2 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-green-50">
         <Check
@@ -569,7 +569,7 @@ const HighlightInput = ({
           onChange(e.target.value)
         }
         placeholder={placeholder}
-        className="w-full rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
+        className="w-full min-w-0 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2.5 text-[12px] text-slate-700 outline-none transition-all duration-200 placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-2 focus:ring-blue-100"
       />
 
     </div>

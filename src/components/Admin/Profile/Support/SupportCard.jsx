@@ -27,7 +27,7 @@ const SupportCard = () => {
         with your account or the mentoring portal.
       </p>
 
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-5 sm:gap-4">
         {/* Admin */}
         <div>
           <p className="mb-1 text-[12px] font-medium text-slate-500">

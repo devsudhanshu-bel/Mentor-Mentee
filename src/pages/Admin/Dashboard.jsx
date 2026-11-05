@@ -62,17 +62,17 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* Sidebar */}
       <AdminSidebar />
 
       {/* Main content */}
-      <div className="ml-[290px] min-h-screen flex flex-col">
+      <div className="ml-0 min-h-screen w-full min-w-0 flex flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
         {/* Header */}
         <AdminHeader />
 
         {/* Dashboard content */}
-        <main className="flex-1 px-6 py-6 space-y-5">
+        <main className="min-w-0 flex-1 space-y-4 px-3 py-4 sm:space-y-5 sm:px-4 sm:py-5 lg:px-6 lg:py-6">
           {/* Welcome banner */}
           <DashboardBanner />
 

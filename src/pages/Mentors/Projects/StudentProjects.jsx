@@ -269,7 +269,7 @@ export default function StudentProjects() {
               <button
                 type="button"
                 onClick={() => setViewingProjectId(project.id)}
-                className="mt-3 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-indigo-700 sm:text-sm"
+                className="mt-3 min-h-10 w-full rounded-lg bg-indigo-600 px-4 py-2.5 text-xs font-semibold text-white transition hover:bg-indigo-700 sm:text-sm"
               >
                 View Project
               </button>

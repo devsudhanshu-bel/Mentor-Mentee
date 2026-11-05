@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   X,
@@ -237,24 +236,24 @@ const AllDocumentsModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4"
       onMouseDown={(event) => {
         if (event.target === event.currentTarget) {
           onClose();
         }
       }}
     >
-      <div className="flex max-h-[90vh] w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+      <div className="flex max-h-[calc(100dvh-1rem)] w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-[90vh] sm:rounded-2xl">
 
         {/* HEADER */}
 
-        <div className="flex shrink-0 items-center justify-between border-b border-slate-200 px-6 py-5">
-          <div>
-            <h2 className="text-xl font-semibold text-slate-800">
+        <div className="flex shrink-0 items-center justify-between gap-3 border-b border-slate-200 px-4 py-3.5 sm:px-6 sm:py-5">
+          <div className="min-w-0">
+            <h2 className="text-base font-semibold text-slate-800 sm:text-xl">
               All Documents
             </h2>
 
-            <p className="mt-1 text-sm text-slate-500">
+            <p className="mt-1 text-xs text-slate-500 sm:text-sm">
               {documents.length} document
               {documents.length !== 1 ? "s" : ""}
             </p>
@@ -263,7 +262,8 @@ const AllDocumentsModal = ({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+            aria-label="Close documents"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
           >
             <X size={21} />
           </button>
@@ -271,9 +271,9 @@ const AllDocumentsModal = ({
 
         {/* DOCUMENT LIST */}
 
-        <div className="flex-1 overflow-y-auto p-5">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-3 sm:p-5">
           {documents.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16">
+            <div className="flex flex-col items-center justify-center py-12 sm:py-16">
               <div className="flex h-14 w-14 items-center justify-center rounded-full bg-slate-100">
                 <FileText
                   size={25}
@@ -285,7 +285,7 @@ const AllDocumentsModal = ({
                 No documents found
               </p>
 
-              <p className="mt-1 text-xs text-slate-400">
+              <p className="mt-1 text-xs text-center text-slate-400">
                 Upload a document to get started.
               </p>
             </div>
@@ -301,30 +301,37 @@ const AllDocumentsModal = ({
                 return (
                   <div
                     key={document.id}
-                    className="rounded-lg border border-slate-200 px-4 py-3 transition hover:bg-slate-50"
+                    className="min-w-0 rounded-lg border border-slate-200 px-3 py-3 transition hover:bg-slate-50 sm:px-4"
                   >
-                    <div className="flex items-center justify-between gap-4">
+                    {/* DOCUMENT INFORMATION + ACTIONS */}
+
+                    <div className="flex min-w-0 flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
 
                       {/* DOCUMENT INFORMATION */}
 
-                      <div className="flex min-w-0 items-center gap-3">
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                      <div className="flex min-w-0 items-start gap-2.5 sm:items-center sm:gap-3">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-50 sm:h-10 sm:w-10">
+                          <FileText
+                            size={19}
+                            className="text-blue-600 sm:hidden"
+                          />
+
                           <FileText
                             size={20}
-                            className="text-blue-600"
+                            className="hidden text-blue-600 sm:block"
                           />
                         </div>
 
-                        <div className="min-w-0">
+                        <div className="min-w-0 flex-1">
                           <p
-                            className="truncate text-sm font-semibold text-slate-800"
+                            className="break-words text-xs font-semibold leading-5 text-slate-800 sm:truncate sm:text-sm"
                             title={document.documentName}
                           >
                             {document.documentName}
                           </p>
 
-                          <div className="mt-1 flex flex-wrap items-center gap-2">
-                            <span className="text-xs text-slate-500">
+                          <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1">
+                            <span className="text-[11px] text-slate-500 sm:text-xs">
                               {formatCategory(document.category)}
                             </span>
 
@@ -332,7 +339,7 @@ const AllDocumentsModal = ({
                               •
                             </span>
 
-                            <span className="text-xs text-slate-500">
+                            <span className="text-[11px] text-slate-500 sm:text-xs">
                               {formatFileType(document.fileType)}
                             </span>
 
@@ -340,7 +347,7 @@ const AllDocumentsModal = ({
                               •
                             </span>
 
-                            <span className="text-xs text-slate-500">
+                            <span className="text-[11px] text-slate-500 sm:text-xs">
                               {formatDate(document.uploadedAt)}
                             </span>
                           </div>
@@ -349,7 +356,7 @@ const AllDocumentsModal = ({
 
                       {/* ACTIONS */}
 
-                      <div className="flex shrink-0 items-center gap-1">
+                      <div className="flex shrink-0 items-center justify-end gap-1 border-t border-slate-100 pt-2 sm:border-0 sm:pt-0">
 
                         {/* VIEW */}
 
@@ -358,7 +365,8 @@ const AllDocumentsModal = ({
                           onClick={() => handleView(document)}
                           disabled={isDeleting || isDownloading}
                           title="View document"
-                          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50"
+                          aria-label="View document"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           <Eye size={18} />
                         </button>
@@ -374,7 +382,8 @@ const AllDocumentsModal = ({
                             !document.fileUrl
                           }
                           title="Download document"
-                          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 disabled:opacity-50"
+                          aria-label="Download document"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-blue-50 hover:text-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {isDownloading ? (
                             <Loader2
@@ -393,7 +402,8 @@ const AllDocumentsModal = ({
                           onClick={() => handleDelete(document)}
                           disabled={isDeleting || isDownloading}
                           title="Delete document"
-                          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:opacity-50"
+                          aria-label="Delete document"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
                         >
                           {isDeleting ? (
                             <Loader2
@@ -410,7 +420,7 @@ const AllDocumentsModal = ({
                     {/* DESCRIPTION */}
 
                     {document.description && (
-                      <p className="ml-[52px] mt-2 line-clamp-2 text-xs text-slate-500">
+                      <p className="mt-2 break-words text-xs leading-5 text-slate-500 sm:ml-[52px]">
                         {document.description}
                       </p>
                     )}
@@ -423,11 +433,11 @@ const AllDocumentsModal = ({
 
         {/* FOOTER */}
 
-        <div className="flex shrink-0 justify-end border-t border-slate-200 px-6 py-4">
+        <div className="flex shrink-0 justify-end border-t border-slate-200 px-3 py-3 sm:px-6 sm:py-4">
           <button
             type="button"
             onClick={onClose}
-            className="h-9 rounded-md border border-slate-300 px-5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+            className="h-10 w-full rounded-md border border-slate-300 px-5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 sm:h-9 sm:w-auto sm:text-sm"
           >
             Close
           </button>

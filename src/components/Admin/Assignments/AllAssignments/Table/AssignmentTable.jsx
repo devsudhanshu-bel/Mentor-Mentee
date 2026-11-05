@@ -10,7 +10,7 @@ const AssignmentTable = ({
   removingAssignmentId = null,
 }) => {
   return (
-    <table className="w-full min-w-[960px] table-auto">
+    <div className="w-full min-w-0 overflow-x-auto"><table className="w-full min-w-[960px] table-auto">
       <AssignmentTableHeader />
 
       <tbody>
@@ -27,7 +27,7 @@ const AssignmentTable = ({
           )
         )}
       </tbody>
-    </table>
+    </table></div>
   );
 };
 

@@ -142,16 +142,16 @@ const TodaysSchedule = () => {
   const remainingMeetings = Math.max(meetings.length - 3, 0);
 
   return (
-    <section className="h-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="h-full min-w-0 w-full overflow-hidden rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-5">
       {/* Header */}
-      <div className="mb-5 flex items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 sm:mb-5">
+        <div className="flex min-w-0 items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50">
             <CalendarDays size={18} className="text-blue-600" />
           </div>
 
-          <div>
-            <h2 className="text-base font-semibold text-slate-800">
+          <div className="min-w-0">
+            <h2 className="text-sm font-semibold text-slate-800 sm:text-base">
               Today's Schedule
             </h2>
 
@@ -182,7 +182,7 @@ const TodaysSchedule = () => {
           {[1, 2, 3].map((item) => (
             <div
               key={item}
-              className="flex animate-pulse items-start gap-4 border-b border-slate-100 pb-4 last:border-0"
+              className="flex min-w-0 animate-pulse items-start gap-3 border-b border-slate-100 pb-4 last:border-0 sm:gap-4"
             >
               <div className="h-14 w-14 shrink-0 rounded-xl bg-slate-100" />
 
@@ -196,14 +196,14 @@ const TodaysSchedule = () => {
         </div>
       ) : error ? (
         /* Error */
-        <div className="flex flex-col items-center justify-center py-10 text-center">
+        <div className="flex min-w-0 flex-col items-center justify-center px-2 py-8 text-center sm:py-10">
           <AlertCircle size={28} className="mb-3 text-red-500" />
 
           <h3 className="text-sm font-semibold text-slate-800">
             Couldn't load schedule
           </h3>
 
-          <p className="mt-1 max-w-xs text-xs leading-5 text-slate-500">
+          <p className="mt-1 w-full max-w-xs break-words text-xs leading-5 text-slate-500">
             {error}
           </p>
 
@@ -217,7 +217,7 @@ const TodaysSchedule = () => {
         </div>
       ) : meetings.length === 0 ? (
         /* Empty state */
-        <div className="flex flex-col items-center justify-center py-10 text-center">
+        <div className="flex min-w-0 flex-col items-center justify-center px-2 py-8 text-center sm:py-10">
           <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-50">
             <CheckCircle2 size={24} className="text-emerald-600" />
           </div>
@@ -226,7 +226,7 @@ const TodaysSchedule = () => {
             No meetings scheduled
           </h3>
 
-          <p className="mt-1 max-w-xs text-xs leading-5 text-slate-500">
+          <p className="mt-1 w-full max-w-xs break-words text-xs leading-5 text-slate-500">
             You don't have any meetings scheduled for today.
           </p>
 
@@ -242,17 +242,17 @@ const TodaysSchedule = () => {
       ) : (
         <>
           {/* Meetings */}
-          <div className="space-y-4">
+          <div className="min-w-0 space-y-3 sm:space-y-4">
             {visibleMeetings.map((meeting, index) => {
               const { time, period } = formatTime(meeting.startAt);
 
               return (
                 <article
                   key={meeting.id || `${meeting.startAt}-${index}`}
-                  className="flex items-start gap-3 border-b border-slate-100 pb-4 last:border-none last:pb-0"
+                  className="flex min-w-0 items-start gap-2.5 border-b border-slate-100 pb-4 last:border-none last:pb-0 sm:gap-3"
                 >
                   {/* Meeting time */}
-                  <div className="flex h-14 w-14 shrink-0 flex-col items-center justify-center rounded-xl bg-blue-50">
+                  <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-blue-50 sm:h-14 sm:w-14">
                     <span className="text-[13px] font-bold text-blue-700">
                       {time}
                     </span>
@@ -264,13 +264,13 @@ const TodaysSchedule = () => {
 
                   {/* Meeting details */}
                   <div className="min-w-0 flex-1">
-                    <div className="flex flex-wrap items-start justify-between gap-2">
-                      <h3 className="min-w-0 text-sm font-semibold text-slate-800">
+                    <div className="flex min-w-0 flex-wrap items-start justify-between gap-1.5 sm:gap-2">
+                      <h3 className="min-w-0 flex-1 break-words text-sm font-semibold text-slate-800">
                         {meeting.title || "Mentoring Meeting"}
                       </h3>
 
                       <span
-                        className={`shrink-0 rounded-full px-2.5 py-1 text-[10px] font-semibold ${getStatusStyles(
+                        className={`max-w-full shrink-0 whitespace-normal rounded-full px-2 py-1 text-[10px] font-semibold ${getStatusStyles(
                           meeting.status,
                         )}`}
                       >
@@ -284,7 +284,7 @@ const TodaysSchedule = () => {
                         className="shrink-0"
                       />
 
-                      <span className="truncate">
+                      <span className="min-w-0 break-words">
                         {getStudentName(meeting)}
                       </span>
                     </div>
@@ -295,7 +295,7 @@ const TodaysSchedule = () => {
                         className="shrink-0"
                       />
 
-                      <span>
+                      <span className="min-w-0 break-words">
                         {formatTimeRange(
                           meeting.startAt,
                           meeting.endAt,
@@ -310,7 +310,7 @@ const TodaysSchedule = () => {
                           className="shrink-0"
                         />
 
-                        <span className="truncate">
+                        <span className="min-w-0 break-words">
                           {meeting.location}
                         </span>
                       </div>
@@ -322,8 +322,8 @@ const TodaysSchedule = () => {
           </div>
 
           {/* Footer */}
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
-            <span className="text-xs text-slate-500">
+          <div className="mt-4 flex flex-col items-start justify-between gap-2 border-t border-slate-100 pt-3 sm:mt-5 sm:flex-row sm:items-center sm:gap-3 sm:pt-4">
+            <span className="text-xs leading-5 text-slate-500">
               {remainingMeetings > 0
                 ? `+ ${remainingMeetings} more meeting${
                     remainingMeetings === 1 ? "" : "s"
@@ -336,7 +336,7 @@ const TodaysSchedule = () => {
             <button
               type="button"
               onClick={handleViewCalendar}
-              className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 transition hover:text-blue-700"
+              className="inline-flex max-w-full items-center gap-1 text-xs font-semibold text-blue-600 transition hover:text-blue-700"
             >
               View Calendar
               <ChevronRight size={14} />

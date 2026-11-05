@@ -14,13 +14,13 @@ const MentorTableFilters = ({
   departments = [],
 }) => {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-      <div className="grid grid-cols-12 items-end gap-3">
+    <div className="rounded-2xl border border-slate-200 bg-white p-3 sm:p-4">
+      <div className="grid grid-cols-2 items-end gap-3 xl:grid-cols-12">
         {/* ==================================================
             SEARCH
             ================================================== */}
 
-        <div className="col-span-12 xl:col-span-4">
+        <div className="col-span-2 xl:col-span-4">
           <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Search
           </label>
@@ -45,7 +45,7 @@ const MentorTableFilters = ({
             DEPARTMENT
             ================================================== */}
 
-        <div className="col-span-12 sm:col-span-4 xl:col-span-2">
+        <div className="col-span-2 sm:col-span-1 xl:col-span-2">
           <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Department
           </label>
@@ -53,7 +53,7 @@ const MentorTableFilters = ({
           <select
             value={departmentId}
             onChange={(event) => setDepartmentId(event.target.value)}
-            className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500"
+            className="h-10 w-full min-w-0 rounded-xl border border-slate-200 bg-white px-2 text-[12px] outline-none focus:border-blue-500 sm:px-3 sm:text-[13px]"
           >
             <option value="">All Departments</option>
 
@@ -69,7 +69,7 @@ const MentorTableFilters = ({
             STATUS
             ================================================== */}
 
-        <div className="col-span-12 sm:col-span-4 xl:col-span-2">
+        <div className="col-span-1 sm:col-span-1 xl:col-span-2">
           <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Status
           </label>
@@ -77,7 +77,7 @@ const MentorTableFilters = ({
           <select
             value={status}
             onChange={(event) => setStatus(event.target.value)}
-            className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500"
+            className="h-10 w-full min-w-0 rounded-xl border border-slate-200 bg-white px-2 text-[12px] outline-none focus:border-blue-500 sm:px-3 sm:text-[13px]"
           >
             <option value="">All Status</option>
 
@@ -91,7 +91,7 @@ const MentorTableFilters = ({
             WORKLOAD
             ================================================== */}
 
-        <div className="col-span-12 sm:col-span-4 xl:col-span-2">
+        <div className="col-span-1 sm:col-span-1 xl:col-span-2">
           <label className="mb-1 block text-[11px] font-medium text-slate-500">
             Workload
           </label>
@@ -99,7 +99,7 @@ const MentorTableFilters = ({
           <select
             value={workload}
             onChange={(event) => setWorkload(event.target.value)}
-            className="h-10 w-full rounded-xl border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-blue-500"
+            className="h-10 w-full min-w-0 rounded-xl border border-slate-200 bg-white px-2 text-[12px] outline-none focus:border-blue-500 sm:px-3 sm:text-[13px]"
           >
             <option value="">All</option>
 
@@ -115,10 +115,10 @@ const MentorTableFilters = ({
             FILTERS BUTTON
             ================================================== */}
 
-        <div className="col-span-12 sm:col-span-6 xl:col-span-1">
+        <div className="col-span-1 sm:col-span-1 xl:col-span-1">
           <button
             type="button"
-            className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-blue-200 text-[12px] font-semibold text-blue-600 hover:bg-blue-50"
+            className="flex h-10 w-full items-center justify-center gap-1 rounded-xl border border-blue-200 text-[11px] font-semibold text-blue-600 hover:bg-blue-50 sm:gap-1.5 sm:text-[12px]"
           >
             <SlidersHorizontal size={14} />
             Filters
@@ -129,10 +129,10 @@ const MentorTableFilters = ({
             EXPORT
             ================================================== */}
 
-        <div className="col-span-12 sm:col-span-6 xl:col-span-1">
+        <div className="col-span-1 sm:col-span-1 xl:col-span-1">
           <button
             type="button"
-            className="flex h-10 w-full items-center justify-center gap-1.5 rounded-xl border border-slate-200 text-[12px] font-semibold text-slate-600 hover:bg-slate-50"
+            className="flex h-10 w-full items-center justify-center gap-1 rounded-xl border border-slate-200 text-[11px] font-semibold text-slate-600 hover:bg-slate-50 sm:gap-1.5 sm:text-[12px]"
           >
             <Download size={14} />
             Export

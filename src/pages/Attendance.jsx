@@ -354,10 +354,10 @@ const Attendance = () => {
 
   if (initializing || selectedSemester === null) {
     return (
-      <div className="min-h-screen overflow-x-hidden bg-slate-100">
+      <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
         <Sidebar />
 
-        <div className="min-h-screen w-full lg:ml-[290px] lg:w-[calc(100%-290px)]">
+        <div className="min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
           <Header />
 
           <main className="flex min-h-[70vh] items-center justify-center px-4 py-8">
@@ -383,10 +383,10 @@ const Attendance = () => {
   ======================================================== */
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       <Sidebar />
 
-      <div className="flex min-h-screen w-full flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
+      <div className="flex min-h-screen w-full min-w-0 flex-col lg:ml-[290px] lg:w-[calc(100%-290px)]">
 
         {/* ==================================================
             HEADER
@@ -550,7 +550,7 @@ const Attendance = () => {
             bottom-4
             right-3
             z-[90]
-            max-w-[calc(100%-24px)]
+            max-w-[calc(100vw-24px)] break-words
             rounded-xl
             border
             border-slate-200

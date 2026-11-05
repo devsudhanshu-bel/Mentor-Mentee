@@ -1161,15 +1161,15 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
         role="dialog"
         aria-modal="true"
         aria-labelledby="meeting-summary-title"
-        className="fixed left-1/2 top-1/2 z-[9999] flex max-h-[90vh] w-[94vw] max-w-6xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-2xl bg-slate-50 shadow-2xl"
+        className="fixed left-1/2 top-1/2 z-[9999] flex max-h-[calc(100dvh-1rem)] w-[calc(100%-1rem)] max-w-6xl -translate-x-1/2 -translate-y-1/2 flex-col overflow-hidden rounded-xl bg-slate-50 shadow-2xl sm:max-h-[90vh] sm:w-[94vw] sm:rounded-2xl"
       >
         {/* Header */}
-        <div className="flex shrink-0 items-center justify-between gap-4 border-b border-slate-200 bg-white px-5 py-4 sm:px-6">
+        <div className="flex shrink-0 flex-col gap-3 border-b border-slate-200 bg-white px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:px-6 sm:py-4">
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
               <h1
                 id="meeting-summary-title"
-                className="break-words text-xl font-bold text-slate-800"
+                className="break-words text-base font-bold text-slate-800 sm:text-xl"
               >
                 {viewMeeting?.title || "Mentorship Meeting"}
               </h1>
@@ -1184,7 +1184,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               </span>
             </div>
 
-            <div className="mt-2 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-500">
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-2 text-xs text-slate-500 sm:gap-x-5 sm:text-sm">
               <div className="flex items-center gap-2">
                 <CalendarDays size={15} />
                 {formatDate(startAt)}
@@ -1205,12 +1205,12 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
             </div>
           </div>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex w-full shrink-0 items-center gap-2 sm:w-auto">
             <button
               type="button"
               onClick={handleDownloadReport}
               disabled={reportLoading}
-              className="flex items-center gap-2 rounded-lg border border-blue-200 bg-white px-3 py-2 text-sm font-semibold text-blue-600 transition hover:bg-blue-50 disabled:cursor-wait disabled:opacity-50 sm:px-4"
+              className="flex min-w-0 flex-1 items-center justify-center gap-2 rounded-lg border border-blue-200 bg-white px-3 py-2 text-xs font-semibold text-blue-600 transition hover:bg-blue-50 disabled:cursor-wait disabled:opacity-50 sm:flex-none sm:text-sm sm:px-4"
             >
               <Download size={16} />
               <span className="hidden sm:inline">
@@ -1231,9 +1231,9 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
         </div>
 
         {/* Report Content */}
-        <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-5">
+        <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden overflow-y-auto p-3 sm:p-5">
           {reportLoading && (
-            <div className="mb-4 rounded-lg border border-blue-100 bg-blue-50 px-4 py-3 text-sm text-blue-700">
+            <div className="mb-4 break-words rounded-lg border border-blue-100 bg-blue-50 px-3 py-3 text-xs leading-5 text-blue-700 sm:px-4 sm:text-sm">
               Loading the latest saved meeting details...
             </div>
           )}
@@ -1241,7 +1241,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
           {reportError && (
             <div
               role="alert"
-              className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+              className="mb-4 break-words rounded-lg border border-red-200 bg-red-50 px-3 py-3 text-xs leading-5 text-red-700 sm:px-4 sm:text-sm"
             >
               {reportError}
               <p className="mt-1 text-xs">
@@ -1252,7 +1252,7 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
             </div>
           )}
 
-          <div className="grid items-start gap-5 lg:grid-cols-[300px_minmax(0,1fr)]">
+          <div className="grid min-w-0 grid-cols-1 items-start gap-4 sm:gap-5 lg:grid-cols-[minmax(0,300px)_minmax(0,1fr)]">
             <StudentDetailsCard
               student={student}
               meeting={viewMeeting}
@@ -1271,19 +1271,19 @@ const MeetingSummaryModal = ({ open, onClose, meeting }) => {
               />
 
               {/* Agenda and meeting information */}
-              <section className="rounded-xl border border-slate-200 bg-white p-4">
-                <div className="mb-4 flex items-center gap-2">
+              <section className="min-w-0 rounded-xl border border-slate-200 bg-white p-3 sm:p-4">
+                <div className="mb-4 flex min-w-0 items-center gap-2">
                   <FileText
                     size={17}
                     className="text-blue-600"
                   />
 
-                  <h2 className="text-sm font-semibold text-slate-800">
+                  <h2 className="min-w-0 break-words text-sm font-semibold text-slate-800">
                     Meeting Notes and Agenda
                   </h2>
                 </div>
 
-                <div className="space-y-4 text-sm text-slate-600">
+                <div className="min-w-0 space-y-4 break-words text-xs leading-5 text-slate-600 sm:text-sm sm:leading-6">
                   <div>
                     <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
                       Agenda

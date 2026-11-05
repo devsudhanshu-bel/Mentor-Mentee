@@ -9,14 +9,14 @@ const MentorStatCard = ({
   bg,
 }) => {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-4 py-3 flex items-center gap-3 hover:shadow-md transition">
+    <div className="flex min-w-0 items-center gap-2 rounded-2xl border border-slate-200 bg-white px-2.5 py-3 shadow-sm transition hover:shadow-md sm:gap-3 sm:px-4">
       {/* Icon */}
 
       <div
-        className={`w-11 h-11 rounded-full flex items-center justify-center ${bg}`}
+        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full sm:h-11 sm:w-11 ${bg}`}
       >
         <Icon
-          size={22}
+          size={20}
           className={color}
           strokeWidth={2}
         />
@@ -24,16 +24,16 @@ const MentorStatCard = ({
 
       {/* Content */}
 
-      <div className="space-y-0.5">
-        <p className="text-[11px] font-medium text-slate-500">
+      <div className="min-w-0 space-y-0.5">
+        <p className="break-words text-[10px] font-medium leading-tight text-slate-500 sm:text-[11px]">
           {title}
         </p>
 
-        <h3 className="text-[18px] font-bold text-slate-800 leading-none">
+        <h3 className="break-words text-[17px] font-bold leading-none text-slate-800 sm:text-[18px]">
           {value}
         </h3>
 
-        <p className="text-[10px] text-slate-400">
+        <p className="break-words text-[9px] leading-snug text-slate-400 sm:text-[10px]">
           {subtitle}
         </p>
       </div>

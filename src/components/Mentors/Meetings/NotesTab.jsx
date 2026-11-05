@@ -38,14 +38,14 @@ const NotesTab = ({
   const isSaved = lastSaved === "Saved" && !saving;
 
   return (
-    <div className="p-5">
+    <div className="min-w-0 p-3 sm:p-5">
       {/* Save Button */}
-      <div className="mb-4 flex justify-end">
+      <div className="mb-4 flex justify-stretch sm:justify-end">
         <button
           type="button"
           onClick={handleSave}
           disabled={saving || typeof saveNotes !== "function"}
-          className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-[13px] font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-[13px] font-medium text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
         >
           {saving ? (
             <LoaderCircle
@@ -78,12 +78,12 @@ const NotesTab = ({
         maxLength={50000}
         aria-label="Meeting notes"
         disabled={saving}
-        className="h-[420px] w-full resize-y rounded-xl border border-slate-200 bg-white p-4 text-[13px] leading-6 text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-wait disabled:bg-slate-50"
+        className="h-[min(420px,55vh)] min-h-[240px] w-full resize-y rounded-xl border border-slate-200 bg-white p-3 text-[13px] leading-6 text-slate-700 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:cursor-wait disabled:bg-slate-50 sm:h-[420px] sm:p-4"
       />
 
       {/* Save Status and Character Count */}
-      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-[12px] text-slate-500">
+      <div className="mt-4 flex flex-col items-start justify-between gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-2 text-[12px] text-slate-500">
           {saving ? (
             <LoaderCircle
               size={14}
@@ -111,7 +111,7 @@ const NotesTab = ({
           </span>
         </div>
 
-        <div className="text-[12px] text-slate-400">
+        <div className="max-w-full break-words text-[12px] text-slate-400 sm:text-right">
           {characterCount.toLocaleString()} / 50,000 characters
         </div>
       </div>

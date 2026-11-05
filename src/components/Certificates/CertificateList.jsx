@@ -79,9 +79,7 @@ const CertificateList = ({
     try {
       setLoading(true);
 
-      const data = await getDocumentsDashboard(
-        "CERTIFICATES"
-      );
+      const data = await getDocumentsDashboard("CERTIFICATES");
 
       const documents = Array.isArray(data?.documents)
         ? data.documents
@@ -90,8 +88,7 @@ const CertificateList = ({
           : [];
 
       const certificateDocuments = documents.filter(
-        (document) =>
-          document?.category === "CERTIFICATES"
+        (document) => document?.category === "CERTIFICATES"
       );
 
       setCertificates(certificateDocuments);
@@ -146,9 +143,7 @@ const CertificateList = ({
   // ==========================================================
 
   const handleView = (certificate) => {
-    if (!certificate) {
-      return;
-    }
+    if (!certificate) return;
 
     setSelectedCertificate(certificate);
     setIsViewerOpen(true);
@@ -191,9 +186,7 @@ const CertificateList = ({
   // ==========================================================
 
   const handleEdit = (certificate) => {
-    if (!certificate?.id) {
-      return;
-    }
+    if (!certificate?.id) return;
 
     const status = String(
       certificate.certificateReviewStatus ??
@@ -255,10 +248,8 @@ const CertificateList = ({
         file,
       });
 
-      // Refresh the list immediately after a successful save.
       await refreshAfterChange();
 
-      // Close the viewer if it contains the edited certificate.
       if (selectedCertificate?.id === id) {
         setIsViewerOpen(false);
         setSelectedCertificate(null);
@@ -280,9 +271,7 @@ const CertificateList = ({
   // ==========================================================
 
   const handleDelete = (certificate) => {
-    if (!certificate?.id) {
-      return;
-    }
+    if (!certificate?.id) return;
 
     const status = String(
       certificate.certificateReviewStatus ??
@@ -311,9 +300,7 @@ const CertificateList = ({
   // ==========================================================
 
   const handleCancelDelete = () => {
-    if (deleting) {
-      return;
-    }
+    if (deleting) return;
 
     setIsDeleteModalOpen(false);
     setCertificateToDelete(null);
@@ -324,9 +311,7 @@ const CertificateList = ({
   // ==========================================================
 
   const handleConfirmDelete = async () => {
-    if (!certificateToDelete?.id || deleting) {
-      return;
-    }
+    if (!certificateToDelete?.id || deleting) return;
 
     try {
       setDeleting(true);
@@ -372,15 +357,22 @@ const CertificateList = ({
 
   return (
     <>
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4">
-        {/* HEADER */}
+      <div className="w-full min-w-0 rounded-xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4 lg:p-5">
 
-        <div className="flex items-center justify-between mb-5 gap-3 flex-wrap">
-          <h2 className="text-lg font-semibold text-slate-800">
+        {/* ====================================================
+            HEADER
+        ==================================================== */}
+
+        <div className="mb-4 flex flex-col gap-3 sm:mb-5 sm:flex-row sm:items-center sm:justify-between">
+
+          <h2 className="text-base font-semibold text-slate-800 sm:text-lg">
             Your Certificates
           </h2>
 
-          <div className="flex items-center gap-2">
+          {/* FILTER + UPLOAD */}
+
+          <div className="flex w-full flex-wrap items-center gap-2 sm:w-auto">
+
             <CertificateFilter
               value={filter}
               onChange={setFilter}
@@ -389,29 +381,47 @@ const CertificateList = ({
             <button
               type="button"
               onClick={onUploadClick}
-              className="h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium flex items-center gap-2 transition"
+              className="
+                inline-flex h-9 flex-1 items-center justify-center
+                gap-2 rounded-md bg-blue-600 px-3
+                text-xs font-medium text-white
+                transition hover:bg-blue-700
+                active:scale-[0.98]
+                sm:h-10 sm:flex-none sm:px-4
+              "
             >
-              <Plus size={15} />
-              Upload Certificate
+              <Plus size={15} className="shrink-0" />
+              <span className="whitespace-nowrap">
+                Upload Certificate
+              </span>
             </button>
+
           </div>
         </div>
 
-        {/* LOADING */}
+        {/* ====================================================
+            LOADING
+        ==================================================== */}
 
         {loading ? (
-          <div className="border border-slate-200 rounded-lg px-4 py-12 flex flex-col items-center justify-center">
-            <div className="w-8 h-8 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mb-3" />
+          <div className="flex flex-col items-center justify-center rounded-lg border border-slate-200 px-4 py-12">
 
-            <p className="text-sm text-slate-500">
+            <div className="mb-3 h-8 w-8 animate-spin rounded-full border-2 border-blue-600 border-t-transparent" />
+
+            <p className="text-center text-sm text-slate-500">
               Loading certificates...
             </p>
+
           </div>
         ) : filteredCertificates.length === 0 ? (
-          /* EMPTY STATE */
 
-          <div className="border-2 border-dashed border-slate-200 rounded-lg px-6 py-12 flex flex-col items-center justify-center text-center">
-            <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+          /* ==================================================
+              EMPTY STATE
+          ================================================== */
+
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-slate-200 px-4 py-10 text-center sm:px-6 sm:py-12">
+
+            <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-50">
               <FileSearch
                 size={23}
                 className="text-blue-600"
@@ -424,7 +434,7 @@ const CertificateList = ({
                 : "No certificates found"}
             </h3>
 
-            <p className="text-xs text-slate-400 mt-1 max-w-md">
+            <p className="mt-1 max-w-md text-xs leading-relaxed text-slate-400">
               {filter === "ALL"
                 ? "Upload your first course, professional, or learning certificate."
                 : "Try selecting a different certificate category."}
@@ -434,16 +444,21 @@ const CertificateList = ({
               <button
                 type="button"
                 onClick={onUploadClick}
-                className="mt-4 h-9 px-4 rounded-md bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium transition"
+                className="mt-4 inline-flex min-h-9 items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-xs font-medium text-white transition hover:bg-blue-700"
               >
                 Upload Certificate
               </button>
             )}
+
           </div>
         ) : (
-          /* CERTIFICATE LIST */
 
-          <div className="space-y-2.5">
+          /* ==================================================
+              CERTIFICATE LIST
+          ================================================== */
+
+          <div className="w-full min-w-0 space-y-2.5">
+
             {filteredCertificates.map((certificate) => (
               <CertificateCard
                 key={certificate.id}
@@ -456,11 +471,15 @@ const CertificateList = ({
                 deleting={deleting}
               />
             ))}
+
           </div>
         )}
+
       </div>
 
-      {/* EDIT / REPLACE / RESUBMIT MODAL */}
+      {/* ======================================================
+          EDIT / REPLACE / RESUBMIT MODAL
+      ====================================================== */}
 
       <EditCertificateModal
         isOpen={isEditModalOpen}
@@ -470,7 +489,9 @@ const CertificateList = ({
         onSuccess={refreshAfterChange}
       />
 
-      {/* DOCUMENT VIEWER */}
+      {/* ======================================================
+          DOCUMENT VIEWER
+      ====================================================== */}
 
       <CertificatesDocumentViewerModal
         isOpen={isViewerOpen}
@@ -478,7 +499,9 @@ const CertificateList = ({
         document={selectedCertificate}
       />
 
-      {/* DELETE CONFIRMATION */}
+      {/* ======================================================
+          DELETE CONFIRMATION
+      ====================================================== */}
 
       <CertificatesDeleteModal
         isOpen={isDeleteModalOpen}
@@ -487,6 +510,7 @@ const CertificateList = ({
         onConfirm={handleConfirmDelete}
         isDeleting={deleting}
       />
+
     </>
   );
 };

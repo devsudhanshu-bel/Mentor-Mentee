@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import {
   Search,
+  Menu,
   Bell,
   ChevronDown,
   UserRound,
@@ -323,7 +324,18 @@ const MentorHeader = () => {
   // --------------------------------------------------
 
   return (
-    <header className="sticky top-0 z-40 flex h-20 items-center justify-between gap-3 border-b border-slate-200 bg-white px-4 sm:px-5 lg:px-8">
+    <header className="sticky top-0 z-40 flex h-20 items-center justify-between gap-2 border-b border-slate-200 bg-white px-3 sm:gap-3 sm:px-5 lg:px-8">
+      {/* MENTOR SIDEBAR HAMBURGER */}
+      <button
+        type="button"
+        onClick={() => window.dispatchEvent(new Event("mentor-sidebar-toggle"))}
+        aria-label="Toggle mentor sidebar"
+        title="Toggle sidebar"
+        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-700 transition hover:bg-slate-100 hover:text-blue-600 lg:hidden"
+      >
+        <Menu size={22} />
+      </button>
+
       {/* SEARCH */}
       <div
         ref={searchContainerRef}

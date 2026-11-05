@@ -320,9 +320,9 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
   return (
     <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       {/* Header */}
-      <div className="border-b border-slate-100 p-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+      <div className="border-b border-slate-100 p-3 sm:p-4">
+        <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600 sm:h-10 sm:w-10">
             <List size={21} />
           </div>
 
@@ -363,7 +363,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
             onChange={(event) => setSearch(event.target.value)}
             placeholder="Search by announcement title or message..."
             aria-label="Search announcements"
-            className="w-full rounded-lg border border-slate-200 py-2.5 pl-9 pr-3 text-xs outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+            className="w-full min-w-0 rounded-lg border border-slate-200 py-2.5 pl-9 pr-3 text-xs outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
           />
         </div>
 
@@ -374,7 +374,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
             className="shrink-0 text-slate-400"
           />
 
-          <div className="grid min-w-0 flex-1 grid-cols-2 gap-2">
+          <div className="grid min-w-0 flex-1 grid-cols-1 gap-2 sm:grid-cols-2">
             <select
               value={audienceFilter}
               onChange={(event) =>
@@ -430,7 +430,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
           </div>
         </div>
 
-        <div className="mt-3 flex items-center justify-between gap-2">
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
           <p className="text-[11px] text-slate-500">
             {filteredAnnouncements.length} announcement
             {filteredAnnouncements.length === 1 ? "" : "s"} found
@@ -458,7 +458,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
 
       {/* Loading */}
       {loading ? (
-        <div className="flex min-h-64 flex-col items-center justify-center gap-3 p-6">
+        <div className="flex min-h-56 flex-col items-center justify-center gap-3 p-5 sm:min-h-64 sm:p-6">
           <LoaderCircle
             size={28}
             className="animate-spin text-blue-600"
@@ -468,7 +468,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
           </p>
         </div>
       ) : error ? (
-        <div className="px-5 py-12 text-center">
+        <div className="px-4 py-10 text-center sm:px-5 sm:py-12">
           <p className="text-sm font-semibold text-red-600">
             Could not load announcements
           </p>
@@ -508,7 +508,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
               return (
                 <article
                   key={announcement.id}
-                  className="group relative flex gap-3 p-4 transition hover:bg-slate-50/70 sm:gap-4"
+                  className="group relative flex min-w-0 gap-2 p-3 transition hover:bg-slate-50/70 sm:gap-4 sm:p-4"
                 >
                   <div
                     className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl sm:h-12 sm:w-12 ${
@@ -521,7 +521,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
                     <Megaphone size={22} strokeWidth={2.2} />
                   </div>
 
-                  <div className="min-w-0 flex-1 pr-5">
+                  <div className="min-w-0 flex-1 pr-5 sm:pr-6">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
                       <h3 className="break-words text-sm font-bold leading-5 text-slate-900">
                         {announcement.title}
@@ -546,7 +546,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
                       {announcement.message}
                     </p>
 
-                    <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 text-[11px] text-slate-500">
+                    <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-2 text-[10px] text-slate-500 sm:gap-x-3 sm:text-[11px]">
                       <span className="inline-flex items-center gap-1.5">
                         <AudienceIcon size={13} />
                         {audienceLabels[announcement.audience] ||
@@ -569,7 +569,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
                   </div>
 
                   {/* Actions menu */}
-                  <div className="absolute right-3 top-3">
+                  <div className="absolute right-2 top-2 sm:right-3 sm:top-3">
                     <button
                       type="button"
                       aria-label={`Actions for ${announcement.title}`}
@@ -581,13 +581,13 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
                             : announcement.id
                         )
                       }
-                      className="flex h-7 w-7 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 transition hover:bg-slate-200 hover:text-slate-700 sm:h-7 sm:w-7"
                     >
                       <MoreVertical size={17} />
                     </button>
 
                     {openMenuId === announcement.id && (
-                      <div className="absolute right-0 top-8 z-20 w-36 rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl">
+                      <div className="absolute right-0 top-8 z-20 w-40 max-w-[calc(100vw-2rem)] rounded-xl border border-slate-200 bg-white p-1.5 shadow-xl">
                         <button
                           type="button"
                           onClick={() =>
@@ -625,7 +625,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
             })}
 
             {paginatedAnnouncements.length === 0 && (
-              <div className="px-5 py-12 text-center">
+              <div className="px-4 py-10 text-center sm:px-5 sm:py-12">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-slate-100 text-slate-400">
                   <Megaphone size={23} />
                 </div>
@@ -643,7 +643,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
 
           {/* Pagination */}
           {filteredAnnouncements.length > 0 && (
-            <div className="flex flex-col gap-3 border-t border-slate-100 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-3 border-t border-slate-100 px-3 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
               <p className="text-[11px] text-slate-500">
                 Showing{" "}
                 {(safePage - 1) * PAGE_SIZE + 1}–
@@ -654,20 +654,20 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
                 of {filteredAnnouncements.length}
               </p>
 
-              <div className="flex items-center justify-between gap-2 sm:justify-end">
+              <div className="flex min-w-0 items-center justify-between gap-1 sm:justify-end sm:gap-2">
                 <button
                   type="button"
                   disabled={safePage === 1}
                   onClick={() =>
                     setCurrentPage((page) => Math.max(1, page - 1))
                   }
-                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-2 text-[11px] font-medium text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 sm:px-3 sm:text-xs"
                 >
                   <ChevronLeft size={14} />
                   Previous
                 </button>
 
-                <span className="whitespace-nowrap text-xs font-semibold text-slate-700">
+                <span className="whitespace-nowrap px-1 text-[11px] font-semibold text-slate-700 sm:text-xs">
                   Page {safePage} of {totalPages}
                 </span>
 
@@ -679,7 +679,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
                       Math.min(totalPages, page + 1)
                     )
                   }
-                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="inline-flex items-center gap-1 rounded-lg border border-slate-200 px-2 py-2 text-[11px] font-medium text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 sm:px-3 sm:text-xs"
                 >
                   Next
                   <ChevronRight size={14} />
@@ -700,7 +700,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
             role="dialog"
             aria-modal="true"
             aria-labelledby="announcement-detail-title"
-            className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl"
+            className="max-h-[90dvh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-4 shadow-2xl sm:max-h-[90vh] sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
             <div className="mb-5 flex items-start justify-between gap-3">
@@ -763,7 +763,7 @@ const PublishedAnnouncements = ({ announcements = [] }) => {
               </span>
             </div>
 
-            <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+            <div className="min-w-0 rounded-xl border border-slate-100 bg-slate-50 p-3 sm:p-4">
               <p className="whitespace-pre-wrap break-words text-sm leading-7 text-slate-700">
                 {selectedAnnouncement.message}
               </p>

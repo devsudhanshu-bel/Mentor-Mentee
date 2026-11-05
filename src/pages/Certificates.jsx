@@ -19,7 +19,6 @@ const Certificates = () => {
 
   // ==========================================================
   // REFRESH STATE
-  // Refreshes certificate statistics and list after changes.
   // ==========================================================
 
   const [refreshKey, setRefreshKey] = useState(0);
@@ -41,7 +40,8 @@ const Certificates = () => {
   // ==========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full overflow-x-hidden bg-slate-100">
+
       {/* ======================================================
           SIDEBAR
       ====================================================== */}
@@ -50,9 +50,12 @@ const Certificates = () => {
 
       {/* ======================================================
           MAIN CONTENT
+          Desktop: Sidebar offset
+          Tablet/Mobile: Full width
       ====================================================== */}
 
-      <div className="ml-[290px] flex min-h-screen flex-col">
+      <div className="flex min-h-screen min-w-0 flex-col md:ml-0 lg:ml-[290px]">
+
         {/* ====================================================
             HEADER
         ==================================================== */}
@@ -63,12 +66,13 @@ const Certificates = () => {
             PAGE CONTENT
         ==================================================== */}
 
-        <main className="flex-1 p-6">
+        <main className="w-full min-w-0 flex-1 p-3 sm:p-4 md:p-5 lg:p-6">
+
           {/* ==================================================
               BANNER
           ================================================== */}
 
-          <div className="mb-3">
+          <div className="mb-3 w-full min-w-0">
             <CertificatesBanner />
           </div>
 
@@ -76,7 +80,7 @@ const Certificates = () => {
               STATISTICS
           ================================================== */}
 
-          <div className="mb-3">
+          <div className="mb-3 w-full min-w-0">
             <CertificatesStats refreshKey={refreshKey} />
           </div>
 
@@ -84,12 +88,13 @@ const Certificates = () => {
               MAIN CONTENT
           ================================================== */}
 
-          <div className="grid grid-cols-12 items-start gap-3">
+          <div className="grid w-full min-w-0 grid-cols-1 items-start gap-3 xl:grid-cols-12">
+
             {/* ==================================================
                 LEFT SECTION — CERTIFICATE LIST
             ================================================== */}
 
-            <div className="col-span-8">
+            <div className="min-w-0 xl:col-span-8">
               <CertificateList
                 onUploadClick={handleOpenUploadModal}
                 refreshKey={refreshKey}
@@ -101,15 +106,20 @@ const Certificates = () => {
                 RIGHT SECTION — TIPS AND UPLOAD CARD
             ================================================== */}
 
-            <div className="col-span-4 flex flex-col gap-3">
+            <div className="flex min-w-0 flex-col gap-3 xl:col-span-4">
+
               <CertificatesTips />
 
               <UploadCertificateCard
                 onUploadClick={handleOpenUploadModal}
               />
+
             </div>
+
           </div>
+
         </main>
+
       </div>
 
       {/* ======================================================
@@ -124,6 +134,7 @@ const Certificates = () => {
           handleCloseUploadModal();
         }}
       />
+
     </div>
   );
 };

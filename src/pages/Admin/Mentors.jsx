@@ -132,7 +132,7 @@ const Mentors = () => {
   // ========================================================
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen w-full min-w-0 overflow-x-hidden bg-slate-100">
       {/* ==================================================
           SIDEBAR
       ================================================== */}
@@ -143,24 +143,26 @@ const Mentors = () => {
           MAIN
       ================================================== */}
 
-      <div className="ml-[290px] min-h-screen">
+      <div className="ml-0 min-h-screen w-full min-w-0 lg:ml-[290px] lg:w-[calc(100%-290px)]">
         <AdminHeader />
 
-        <main className="space-y-5 p-6">
+        <main className="min-w-0 space-y-4 p-3 sm:space-y-5 sm:p-4 lg:p-6">
           {/* ==================================================
               HEADER
           ================================================== */}
 
-          <div className="flex items-start justify-between">
-            <div>
-              <h1 className="text-4xl font-bold text-slate-900">Mentors</h1>
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div className="min-w-0">
+              <h1 className="text-2xl font-bold text-slate-900 sm:text-3xl lg:text-4xl">
+                Mentors
+              </h1>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-xs leading-5 text-slate-500 sm:text-sm">
                 View and manage all mentors across the institution.
               </p>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex w-full flex-col gap-2 min-[420px]:flex-row sm:w-auto sm:shrink-0">
               {/* Refresh */}
               <button
                 type="button"
@@ -168,20 +170,25 @@ const Mentors = () => {
                 disabled={loading}
                 className="
                   flex
+                  w-full
                   items-center
+                  justify-center
                   gap-2
                   rounded-xl
                   border
                   border-slate-200
                   bg-white
-                  px-4
-                  py-3
+                  px-3
+                  py-2.5
                   text-sm
                   font-semibold
                   text-slate-700
                   shadow-sm
                   hover:bg-slate-50
                   disabled:opacity-50
+                  min-[420px]:w-auto
+                  sm:px-4
+                  sm:py-3
                 "
               >
                 <RefreshCw
@@ -194,20 +201,28 @@ const Mentors = () => {
               {/* Add Mentor */}
               <button
                 type="button"
-                onClick={() => { setSuccessMessage(""); setShowAddMentor(true); }}
+                onClick={() => {
+                  setSuccessMessage("");
+                  setShowAddMentor(true);
+                }}
                 className="
                   flex
+                  w-full
                   items-center
+                  justify-center
                   gap-2
                   rounded-xl
                   bg-blue-600
-                  px-5
-                  py-3
+                  px-4
+                  py-2.5
                   text-sm
                   font-semibold
                   text-white
                   shadow-sm
                   hover:bg-blue-700
+                  min-[420px]:w-auto
+                  sm:px-5
+                  sm:py-3
                 "
               >
                 <Plus size={18} />
@@ -217,7 +232,7 @@ const Mentors = () => {
           </div>
 
           {successMessage && (
-            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
+            <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-3 text-xs leading-5 text-emerald-800 sm:px-4 sm:text-sm">
               {successMessage}
             </div>
           )}
@@ -249,7 +264,7 @@ const Mentors = () => {
           ================================================== */}
 
           {error && (
-            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            <div className="rounded-xl border border-red-200 bg-red-50 px-3 py-3 text-xs leading-5 text-red-700 sm:px-4 sm:text-sm">
               {error}
             </div>
           )}
@@ -258,16 +273,18 @@ const Mentors = () => {
               TABLE
           ================================================== */}
 
-          <MentorTable
-            mentors={paginatedMentors}
-            loading={loading}
-            totalMentors={totalMentors}
-            currentPage={safePage}
-            totalPages={totalPages}
-            rowsPerPage={rowsPerPage}
-            setRowsPerPage={setRowsPerPage}
-            setCurrentPage={setCurrentPage}
-          />
+          <div className="min-w-0">
+            <MentorTable
+              mentors={paginatedMentors}
+              loading={loading}
+              totalMentors={totalMentors}
+              currentPage={safePage}
+              totalPages={totalPages}
+              rowsPerPage={rowsPerPage}
+              setRowsPerPage={setRowsPerPage}
+              setCurrentPage={setCurrentPage}
+            />
+          </div>
 
           <AddMentorModal
             open={showAddMentor}

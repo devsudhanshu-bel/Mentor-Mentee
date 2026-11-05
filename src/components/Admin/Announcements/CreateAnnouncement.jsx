@@ -223,10 +223,10 @@ const CreateAnnouncement = ({
     <>
       <form
         onSubmit={handlePublish}
-        className="min-w-0 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm"
+        className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3 shadow-sm sm:p-4"
       >
         {/* Heading */}
-        <div className="mb-4 flex items-center gap-3">
+        <div className="mb-4 flex min-w-0 items-center gap-2 sm:gap-3">
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
             <Pencil size={19} />
           </div>
@@ -243,7 +243,7 @@ const CreateAnnouncement = ({
         </div>
 
         {/* Title */}
-        <div className="mb-4">
+        <div className="mb-4 min-w-0">
           <label
             htmlFor="announcement-title"
             className="mb-1.5 block text-sm font-semibold text-slate-800"
@@ -262,17 +262,17 @@ const CreateAnnouncement = ({
             placeholder="e.g. Internal Assessment Schedule"
             required
             disabled={isPublishing}
-            className="w-full rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+            className="w-full min-w-0 rounded-lg border border-slate-200 px-3 py-2.5 text-sm outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
           />
         </div>
 
         {/* Target audience */}
-        <fieldset className="mb-4">
+        <fieldset className="mb-4 min-w-0">
           <legend className="mb-2 text-sm font-semibold text-slate-800">
             Target Audience
           </legend>
 
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          <div className="grid min-w-0 grid-cols-1 gap-2 sm:grid-cols-3">
             {audienceOptions.map((option) => {
               const Icon = option.icon;
               const selected = form.audience === option.value;
@@ -309,11 +309,11 @@ const CreateAnnouncement = ({
                       <Icon size={17} />
                     </div>
 
-                    <p className="text-xs font-semibold leading-4 text-slate-800">
+                    <p className="break-words text-xs font-semibold leading-4 text-slate-800">
                       {option.label}
                     </p>
 
-                    <p className="mt-1 text-[11px] leading-4 text-slate-500">
+                    <p className="mt-1 break-words text-[11px] leading-4 text-slate-500">
                       {option.description}
                     </p>
                   </div>
@@ -324,12 +324,12 @@ const CreateAnnouncement = ({
         </fieldset>
 
         {/* Category */}
-        <fieldset className="mb-4">
+        <fieldset className="mb-4 min-w-0">
           <legend className="mb-2 text-sm font-semibold text-slate-800">
             Category
           </legend>
 
-          <div className="flex flex-wrap gap-x-4 gap-y-2">
+          <div className="flex flex-wrap gap-x-3 gap-y-2 sm:gap-x-4">
             {Object.keys(categoryMap).map((category) => (
               <label
                 key={category}
@@ -352,12 +352,12 @@ const CreateAnnouncement = ({
         </fieldset>
 
         {/* Priority */}
-        <fieldset className="mb-4">
+        <fieldset className="mb-4 min-w-0">
           <legend className="mb-2 text-sm font-semibold text-slate-800">
             Priority
           </legend>
 
-          <div className="flex flex-wrap gap-x-5 gap-y-2">
+          <div className="flex flex-wrap gap-x-4 gap-y-2 sm:gap-x-5">
             {Object.keys(priorityMap).map((priority) => (
               <label
                 key={priority}
@@ -380,7 +380,7 @@ const CreateAnnouncement = ({
         </fieldset>
 
         {/* Message */}
-        <div className="mb-4">
+        <div className="mb-4 min-w-0">
           <div className="mb-1.5 flex items-center justify-between gap-2">
             <label
               htmlFor="announcement-message"
@@ -405,12 +405,12 @@ const CreateAnnouncement = ({
             maxLength={1000}
             required
             disabled={isPublishing}
-            className="w-full resize-y rounded-lg border border-slate-200 px-3 py-2.5 text-sm leading-5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+            className="w-full min-w-0 resize-y rounded-lg border border-slate-200 px-3 py-2.5 text-sm leading-5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
           />
         </div>
 
         {/* Expiry date */}
-        <div className="mb-4">
+        <div className="mb-4 min-w-0">
           <label
             htmlFor="announcement-expiry"
             className="mb-1.5 block text-sm font-semibold text-slate-800"
@@ -436,7 +436,7 @@ const CreateAnnouncement = ({
                 updateField("expiryDate", event.target.value)
               }
               disabled={isPublishing}
-              className="w-full rounded-lg border border-slate-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
+              className="w-full min-w-0 rounded-lg border border-slate-200 py-2.5 pl-9 pr-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 disabled:bg-slate-50"
             />
           </div>
         </div>
@@ -457,7 +457,7 @@ const CreateAnnouncement = ({
             type="button"
             onClick={handleClear}
             disabled={isPublishing}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg border border-slate-200 px-3 py-2.5 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
           >
             <RotateCcw size={15} />
             Clear
@@ -466,7 +466,7 @@ const CreateAnnouncement = ({
           <button
             type="submit"
             disabled={isPublishing}
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
+            className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70 sm:w-auto"
           >
             {isPublishing ? (
               <>
@@ -493,7 +493,7 @@ const CreateAnnouncement = ({
             role="dialog"
             aria-modal="true"
             aria-labelledby="announcement-success-title"
-            className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-2xl"
+            className="max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-4 text-center shadow-2xl sm:p-6"
             onClick={(event) => event.stopPropagation()}
           >
             <button
@@ -520,9 +520,9 @@ const CreateAnnouncement = ({
               {successMessage[successAudience].description}
             </p>
 
-            <div className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-blue-50 px-3 py-3 text-sm font-medium text-blue-700">
+            <div className="mt-4 flex min-w-0 items-start justify-center gap-2 rounded-xl bg-blue-50 px-3 py-3 text-sm font-medium text-blue-700 sm:items-center">
               <Megaphone size={17} />
-              <span>{successMessage[successAudience].recipients}</span>
+              <span className="min-w-0 break-words">{successMessage[successAudience].recipients}</span>
             </div>
 
             <button
